@@ -10,6 +10,7 @@ import com.joiest.jpf.dto.GetValueResponse;
 import com.joiest.jpf.facade.DemoServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

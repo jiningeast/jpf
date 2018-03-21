@@ -154,7 +154,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <configuration>
                     <path>/jpf</path>
-                    <port>8082</port>
+                    <port>8089</port>
                     <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
                 </configuration>
             </plugin>
