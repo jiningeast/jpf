@@ -1,7 +1,7 @@
 package com.joiest.jpf.common.exception;
 
 /**
- * 支付交易系统通用异常
+ * 系统通用异常
  *
  * Created by zjf1650 on 05/07/2017.
  */
