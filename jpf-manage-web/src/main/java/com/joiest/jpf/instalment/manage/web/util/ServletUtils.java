@@ -1,4 +1,4 @@
-package com.joiest.jpf.manage.web.util;
+package com.joiest.jpf.instalment.manage.web.util;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
