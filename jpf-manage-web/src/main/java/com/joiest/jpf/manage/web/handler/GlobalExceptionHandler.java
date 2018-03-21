@@ -1,10 +1,10 @@
-package com.joiest.jpf.instalment.manage.web.handler;
+package com.joiest.jpf.manage.web.handler;
 
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.instalment.manage.web.util.ServletUtils;
+import com.joiest.jpf.manage.web.util.ServletUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -21,7 +21,7 @@ import java.util.List;
  * 统一异常处理
  * Created by zjf1650 on 09/08/2017.
  */
-@ControllerAdvice(basePackages = {"com.joiest.jpf.web"})
+@ControllerAdvice(basePackages = {"com.joiest.jpf.manage.web"})
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
