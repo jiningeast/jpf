@@ -23,3 +23,4 @@ create table sys_para_info
    unique key uk_sys_para_info (PARA_CODE)
 );
 
+SELECT * from sys_para_info where PARA_CODE = 'zjf' AND IS_USED = 1
