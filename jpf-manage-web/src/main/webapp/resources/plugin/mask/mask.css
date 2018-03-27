@@ -1,0 +1,26 @@
+#div_maskContainer
+{
+display: none;
+}
+/*�ɰ���ʽ*/
+#div_Mask{
+z-index:9999;
+/*filter:alpha(opacity=20);
+opacity: 0.3;*/
+background: rgba(255, 255, 255, 0.2) !important;
+filter: alpha(opacity=20);
+position: absolute;
+left:0px;
+top:0px;
+background-color: #000000;
+}
+/*��ʾ��Ϣ��ʽ*/
+#div_loading{
+ background: url("/zfPayBack/common/plugin/mask/loading_s.gif") no-repeat scroll 5px center #FFFFE0;
+    z-index: 10000;
+    border: 1px solid #F7CE39;
+    font-size: 12px;
+    padding: 5px 10px 5px 25px;
+    text-align: center;
+    position: absolute;
+}

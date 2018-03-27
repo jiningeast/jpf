@@ -19,229 +19,24 @@
     		"basic" : [ {
     			"menuid" : "1",
     			"icon" : "icon-sys",
-    			"menuname" : "基础管理",
-    			"menus" : [{
-    				"menuid" : "101",
-    				"menuname" : "银行卡BIN管理",
-    				"icon" : "icon-nav",
-    				"url" : "basic/cardBinQuery"
-    			},{
-    				"menuid" : "102",
-    				"menuname" : "金融机构管理",
-    				"icon" : "icon-nav",
-    				"url" : "basic/orgInfoQuery"
-    			},{
-    				"menuid" : "103",
-    				"menuname" : "渠道费率管理",
-    				"icon" : "icon-nav",
-    				"url" : "basic/feerateQuery"
-    			}]
-    		}, {
-    			"menuid" : "2",
-    			"icon" : "icon-sys",
-    			"menuname" : "对接渠道",
-    			"menus" : [{
-    				"menuid" : "201",
-    				"menuname" : "渠道账户管理",
-    				"icon" : "icon-nav",
-    				"url" : "chnAcct/chnAcctQuery"
-    			},{
-    				"menuid" : "202",
-    				"menuname" : "渠道账户支持机构管理",
-    				"icon" : "icon-nav",
-    				"url" : "chnSupportInfo/chnSupportInfoQuery"
-    			},{
-    				"menuid" : "203",
-    				"menuname" : "渠道账户配置管理",
-    				"icon" : "icon-nav",
-    				"url" : "chnAcctConfig/chnAcctConfigQuery"
-    			},{
-    				"menuid" : "204",
-    				"menuname" : "渠道管理",
-    				"icon" : "icon-nav",
-    				"url" : "channel/channelQuery"
-    			}]
-    		},{
-    			"menuid" : "3",
-    			"icon" : "icon-sys",
-    			"menuname" : "交易查询",
-    			"menus" : [ {
-    				"menuid" : "301",
-    				"menuname" : "交易查询",
-    				"icon" : "icon-nav",
-    				"url" : "business/toTransQuery"
-    			},{
-                    "menuid" : "302",
-                    "menuname" : "渠道订单查询",
-                    "icon" : "icon-nav",
-                    "url" : "chnPay/"
-                },{
-                    "menuid" : "303",
-                    "menuname" : "历史交易查询",
-                    "icon" : "icon-nav",
-                    "url" : "aprecPayHis/toAgrecPayHis"
-                },{
-                    "menuid" : "304",
-                    "menuname" : "历史渠道订单查询",
-                    "icon" : "icon-nav",
-                    "url" : "chnPayHis/toChnPayHis"
-                }]
-    		}, {
-    			"menuid" : "4",
-    			"icon" : "icon-sys",
-    			"menuname" : "其他查询",
-    			"menus" : [{
-    				"menuid" : "401",
-    				"menuname" : "渠道支付查询",
-    				"icon" : "icon-nav",
-    				"url" : "otherQuery/toChnPayQuery"
-    			},{
-    				"menuid" : "402",
-    				"menuname" : "收款账户查询",
-    				"icon" : "icon-nav",
-    				"url" : "otherQuery/toPayeeAcctQuery"
-    			}]
-    		}, {
-    			"menuid" : "5",
-    			"icon" : "icon-sys",
     			"menuname" : "系统管理",
     			"menus" : [{
-    				"menuid" : "501",
+    				"menuid" : "101",
     				"menuname" : "用户管理",
     				"icon" : "icon-nav",
-    				"url" : "system/toUserQuery"
-    			},{
-    				"menuid" : "502",
-    				"menuname" : "缓存清理",
-    				"icon" : "icon-nav",
-    				"url" : "reloadCache/index"
-    			}]
-    		}, {
-    			"menuid" : "6",
-    			"icon" : "icon-sys",
-    			"menuname" : "图形报表",
-    			"menus" : [{
-    				"menuid" : "601",
-    				"menuname" : "交易年度报表",
-    				"icon" : "icon-nav",
-    				"url" : "report/toYearReport"
-    			},{
-    				"menuid" : "602",
-    				"menuname" : "交易月份报表",
-    				"icon" : "icon-nav",
-    				"url" : "report/toMonthReport"
+    				"url" : ""
     			}]
     		},{
-    			"menuid" : "7",
+    			"menuid" : "2",
     			"icon" : "icon-sys",
     			"menuname" : "商户管理",
     			"menus" : [{
-    				"menuid" : "701",
-    				"menuname" : "商户列表",
+    				"menuid" : "201",
+    				"menuname" : "商户信息管理",
     				"icon" : "icon-nav",
-    				"url" : "merchant/toMerchantQuery"
-    			},{
-    				"menuid" : "702",
-    				"menuname" : "商户资金查询",
-    				"icon" : "icon-nav",
-    				"url" : "merchantFunds/merchantFundsQuery"
-    			},{
-                     "menuid" : "703",
-                     "menuname" : "商户信息管理",
-                     "icon" : "icon-nav",
-                     "url" : "merchant/toMerchantQuerynew"
-                },{
-                    "menuid" : "704",
-                    "menuname" : "商户费率审核",
-                    "icon" : "icon-nav",
-                    "url" : "merchant/toMechRateCheck"
-                }/*,{
-                    "menuid" : "705",
-                    "menuname" : "资金调账审核",
-                    "icon" : "icon-nav",
-                    "url" : "moneyAudit/toMoneyAudit"
-                }*//*,{
-                    "menuid" : "706",
-                    "menuname" : "渤海入件管理",
-                    "icon" : "icon-nav",
-                    "url" : "merchInfoFor/cbhb/index"
-                },{
-                    "menuid" : "707",
-                    "menuname" : "中信入件管理",
-                    "icon" : "icon-nav",
-                    "url" : "merchInfoFor/citic/index"
-                }*/]
-    		}, {
-    			"menuid" : "8",
-    			"icon" : "icon-sys",
-    			"menuname" : "产品管理",
-    			"menus" : [{
-    				"menuid" : "801",
-    				"menuname" : "二维码管理",
-    				"icon" : "icon-nav",
-    				"url" : "qrcode/toQRCodeQuery"
+    				"url" : ""
     			}]
-    		},{
-				"menuid" : "9",
-				"icon" : "icon-sys",
-				"menuname" : "路由管理",
-				"menus" :[{
-					"menuid" : "901",
-    				"menuname" : "路由管理",
-    				"icon" : "icon-nav",
-    				"url" : "agentRouting/toAgentRouting"
-				},{
-					"menuid" : "902",
-    				"menuname" : "路由审核管理",
-    				"icon" : "icon-nav",
-    				"url" : "routingCheck/toRoutingCheck"
-				}]
-			},{
-				"menuid" : "10",
-				"icon" : "icon-sys",
-				"menuname" : "代付管理",
-				"menus" :[{
-					"menuid" : "101",
-    				"menuname" : "系统订单管理",
-    				"icon" : "icon-nav",
-    				"url" : "agpayPay/toAgpayPay"
-				},{
-					"menuid" : "102",
-    				"menuname" : "渠道订单管理",
-    				"icon" : "icon-nav",
-    				"url" : "agpayChn/toAgpayChn"
-				},{
-					"menuid" : "103",
-    				"menuname" : "代付通知",
-    				"icon" : "icon-nav",
-    				"url" : "agpayNotify/toAgpayNotify"
-				},{
-                    "menuid" : "104",
-                    "menuname" : "历史系统订单管理",
-                    "icon" : "icon-nav",
-                    "url" : "hisAgpayPay/toHisAgpayPay"
-                },{
-                    "menuid" : "105",
-                    "menuname" : "历史渠道订单管理",
-                    "icon" : "icon-nav",
-                    "url" : "hisAgpayChn/toHisAgpayChn"
-                },{
-                    "menuid" : "106",
-                    "menuname" : "易宝订单结算",
-                    "icon" : "icon-nav",
-                    "url" : "agpayPay/yeepay"
-                }]
-			},{
-                "menuid" : "11",
-                "icon" : "icon-sys",
-                "menuname" : "审计管理",
-                "menus" :[{
-                    "menuid" : "1101",
-                    "menuname" : "审计日志查询",
-                    "icon" : "icon-nav",
-                    "url" : "audit/toAuditLogInfoQuery"
-                }]
-            }]
+    		}]
     	};
 
   	//设置登录窗口

@@ -21,27 +21,17 @@ public class LoginController {
 	 * 跳转到登陆页面
 	 * @return
 	 */
+//	@RequestMapping(value={"/", "/index"})
+//	public String showLoginPage() {
+//		return "login";
+//	}
 	@RequestMapping(value={"/", "/index"})
-	public String showLoginPage() {
-//		log.debug("**********invoke showLoginPage start ***********************************");
-//		// 清除Session
-//		if (getSession() != null) {
-//			getSession().removeAttribute(Constant.SESSION_OPERATORUSER);
-//			getSession().removeAttribute(Constant.SESSION_MOBILE_CODE);
-//			getSession().invalidate();
-//		}
-		System.out.println("跳转到登录页面");
-		
-//		log.debug("**********invoke showLoginPage end ***********************************");
-		return "login";
+	public ModelAndView showLoginPage() {
+		return new ModelAndView("redirect:/backIndex");
 	}
 	
 	@RequestMapping(value={"/logout"})
 	public ModelAndView logout(HttpServletRequest request, HttpSession httpSession) {
-//		if (httpSession.getAttribute(Constant.SESSION_OPERATORUSER) != null) {
-//			httpSession.getAttribute(Constant.SESSION_OPERATORUSER);
-//			httpSession.invalidate();
-//		}
 		return new ModelAndView("index");
 	}
 	
@@ -90,10 +80,10 @@ public class LoginController {
 //			userInfo.setLoginName(userByLoginNameRep.getLoginName());
 //			userInfo.setPassword(userByLoginNameRep.getPassword());
 //			httpSession.setAttribute(Constant.SESSION_OPERATORUSER, userInfo);
-//			return new ModelAndView("redirect:/backIndex");
+			return new ModelAndView("redirect:/backIndex");
 //		}
 //		modelMap.put("notice", "用户名或密码错误，登录失败！");
 //		logger.debug("**********invoke login end ***********************************");
-		return new ModelAndView("common/notice", modelMap);
+//		return new ModelAndView("common/notice", modelMap);
 	}
 }
