@@ -1,8 +1,12 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.dto.LoginVerifyResponse;
+import com.joiest.jpf.facade.UserServiceFacade;
+import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.joiest.jpf.manage.web.interceptor.LoginInterceptor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,31 +20,31 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
 	private static final Logger logger = LogManager.getLogger(LoginController.class);
+
+	@Autowired
+	private UserServiceFacade userServiceFacade;
 	
 	/**
 	 * 跳转到登陆页面
 	 * @return
 	 */
-//	@RequestMapping(value={"/", "/index"})
-//	public String showLoginPage() {
-//		return "login";
-//	}
 	@RequestMapping(value={"/", "/index"})
-	public ModelAndView showLoginPage() {
-		return new ModelAndView("redirect:/backIndex");
+	public String showLoginPage() {
+		return "login";
 	}
 	
 	@RequestMapping(value={"/logout"})
 	public ModelAndView logout(HttpServletRequest request, HttpSession httpSession) {
+        httpSession.removeAttribute(ManageConstants.USERINFO_SESSION);
 		return new ModelAndView("index");
 	}
 	
 	@RequestMapping(value={"/backIndex"}, method=RequestMethod.GET)
 	public ModelAndView backIndex(HttpServletRequest request, ModelMap modelMap) {
 //		JSONObject obj = new JSONObject();
-//		
+//
 //		JSONArray basic = new JSONArray();
-//		
+//
 //		JSONObject menuObj1 = new JSONObject();
 //		menuObj1.put("menuid", "1");
 //		menuObj1.put("icon", "icon-sys");
@@ -55,7 +59,7 @@ public class LoginController {
 //		menuObj1.put("menus", menuObj1Menus);
 //		basic.add(menuObj1);
 //		obj.put("basic", basic);
-//		
+//
 //		modelMap.put("menu", obj.toJSONString());
 		return new ModelAndView("backIndex", modelMap);
 	}
@@ -63,27 +67,15 @@ public class LoginController {
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
 	public ModelAndView login(HttpServletRequest request,
 			HttpSession httpSession, ModelMap modelMap) {
-//		logger.debug("**********invoke login start ***********************************");
-//		String loginName = request.getParameter("user");
-//		String password = request.getParameter("pwd");
-//
-//		UserByLoginNameReq userByLoginNameReq = new UserByLoginNameReq();
-//		userByLoginNameReq.setLoginName(loginName);
-//		userByLoginNameReq.setPassword(password);
-//		userByLoginNameReq.setType(MerchUserType.TOP_MERCH_USER.getValue());
-//		UserByLoginNameRep userByLoginNameRep = mgrMerchUserService.getUserByLoginName(userByLoginNameReq);
-//		String retCode = userByLoginNameRep.getRetCode();
-//		if (retCode.equals(UnipayRetInfo.OPERATION_COMPLETED.getValue())) {
-//			UserInfo userInfo = new UserInfo();
-//			userInfo.setId(userByLoginNameRep.getId());
-//			userInfo.setUserName(userByLoginNameRep.getUserName());
-//			userInfo.setLoginName(userByLoginNameRep.getLoginName());
-//			userInfo.setPassword(userByLoginNameRep.getPassword());
-//			httpSession.setAttribute(Constant.SESSION_OPERATORUSER, userInfo);
-			return new ModelAndView("redirect:/backIndex");
-//		}
-//		modelMap.put("notice", "用户名或密码错误，登录失败！");
-//		logger.debug("**********invoke login end ***********************************");
-//		return new ModelAndView("common/notice", modelMap);
+		String loginName = request.getParameter("user");
+		String password = request.getParameter("pwd");
+        LoginVerifyResponse loginVerifyResponse = userServiceFacade.loginVerify(loginName, password);
+        if(loginVerifyResponse==null||!loginVerifyResponse.getRetCode().equals("0000")){
+            modelMap.put("notice", "用户名或密码错误！");
+            return new ModelAndView("common/notice", modelMap);
+        }
+
+        httpSession.setAttribute(ManageConstants.USERINFO_SESSION,loginVerifyResponse.getUserInfo());
+        return new ModelAndView("redirect:/backIndex");
 	}
 }

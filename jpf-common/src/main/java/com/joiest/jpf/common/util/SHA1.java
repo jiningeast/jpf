@@ -1,6 +1,7 @@
-package com.joiest.jpf.manage.web.util;
+package com.joiest.jpf.common.util;
 
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class SHA1
 {
@@ -56,6 +57,6 @@ public class SHA1
     public static void main(String[] args)
     {
         SHA1 s = new SHA1();
-        System.out.println(s.getMySHA1Code("111111"));
+        System.out.println(s.getMySHA1Code("abc123,./"));
     }
 }

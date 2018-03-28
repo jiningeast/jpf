@@ -45,4 +45,17 @@ public abstract class EnumConstants {
             return value;
         }
     }
+
+    public enum UserStatus{
+        normal("0"),forbid("1");
+
+        private String value;
+
+        UserStatus(String value) {
+            this.value = value;
+        }
+        public final String value(){return value;}
+
+
+    }
 }

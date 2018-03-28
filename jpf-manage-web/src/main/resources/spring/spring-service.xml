@@ -4,5 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>
+	<bean id="userServiceFacade" class="com.joiest.jpf.facade.impl.UserServiceFacadeImpl"></bean>
 
 </beans>

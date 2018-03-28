@@ -78,6 +78,6 @@
 		<mime-type>image/x-icon</mime-type>
 	</mime-mapping>
 	<welcome-file-list>
-		<welcome-file>index.htm</welcome-file>
-	</welcome-file-list>
+	<welcome-file>index.htm</welcome-file>
+</welcome-file-list>
 </web-app>
