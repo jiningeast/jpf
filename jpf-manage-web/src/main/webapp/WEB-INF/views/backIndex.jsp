@@ -24,7 +24,7 @@
     				"menuid" : "101",
     				"menuname" : "用户管理",
     				"icon" : "icon-nav",
-    				"url" : ""
+    				"url" : "user/index"
     			}]
     		},{
     			"menuid" : "2",

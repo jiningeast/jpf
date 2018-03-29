@@ -14,7 +14,15 @@ public interface UserServiceFacade {
      * @param status
      * @return
      */
-    public List<UserInfo> getUsers(String userName,String status);
+    public List<UserInfo> getUsers(String userName,String status,long pageNo,long pageSize);
+
+    /**
+     * 获取用户列表统计
+     * @param userName
+     * @param status
+     * @return
+     */
+    public int getUsersCount(String userName,String status);
 
     /**
      * 添加用户
@@ -33,13 +41,21 @@ public interface UserServiceFacade {
     public LoginVerifyResponse loginVerify(String userName, String pwd);
 
     /**
-     * 重置密码
+     * 修改密码
      * @param userName
      * @param oldPwd
      * @param newPwd
      * @return
      */
-    public JpfResponseDto resetPwd(String userName,String oldPwd,String newPwd);
+    public JpfResponseDto modifyPwd(String userName,String oldPwd,String newPwd);
+
+
+    /**
+     * 重置密码
+     * @param userName
+     * @return
+     */
+    public JpfResponseDto resetPwd(String userName);
 
     /**
      * 变更状态（0：正常,1:禁用）

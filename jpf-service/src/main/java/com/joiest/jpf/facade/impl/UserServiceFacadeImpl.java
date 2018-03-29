@@ -26,8 +26,17 @@ public class UserServiceFacadeImpl implements UserServiceFacade {
     private PayUserMapper payUserMapper;
 
     @Override
-    public List<UserInfo> getUsers(String userName, String status) {
+    public List<UserInfo> getUsers(String userName, String status, long pageNo, long pageSize) {
+        if (pageNo<=0) {
+            pageNo = 1;
+        }
+        if (pageSize<=0) {
+            pageSize = 20;
+        }
         PayUserExample example = new PayUserExample();
+        example.setPageNo(pageNo);
+        example.setPageSize(pageSize);
+        example.setOrderByClause("CREATE_TIME DESC");
         PayUserExample.Criteria c = example.createCriteria();
         if (StringUtils.isNotBlank(userName)) {
             c.andUserNameEqualTo(userName);
@@ -37,22 +46,42 @@ public class UserServiceFacadeImpl implements UserServiceFacade {
         }
         List<PayUser> payUserList = payUserMapper.selectByExample(example);
         List<UserInfo> userInfoList = new ArrayList<>();
-        for(PayUser payUser:payUserList){
+        for (PayUser payUser : payUserList) {
             UserInfo userInfo = new UserInfo();
             BeanCopier beanCopier = BeanCopier.create(PayUser.class, UserInfo.class, false);
-            beanCopier.copy(payUser,userInfo,null);
+            beanCopier.copy(payUser, userInfo, null);
             userInfoList.add(userInfo);
         }
         return userInfoList;
     }
 
     @Override
+    public int getUsersCount(String userName,String status){
+        PayUserExample example = new PayUserExample();
+        PayUserExample.Criteria c = example.createCriteria();
+        if (StringUtils.isNotBlank(userName)) {
+            c.andUserNameEqualTo(userName);
+        }
+        if (StringUtils.isNotBlank(status)) {
+            c.andStatusEqualTo(status);
+        }
+        return payUserMapper.countByExample(example);
+    }
+
+    @Override
     public JpfResponseDto addUser(String userName, String pwd) {
         if (StringUtils.isBlank(userName)) {
-            return setResponse("", "");
+            return setResponse("9999", "用户名不能为空");
         }
         if(StringUtils.isBlank(pwd)){
-            return setResponse("", "");
+            return setResponse("9999", "密码不能为空");
+        }
+        PayUserExample example = new PayUserExample();
+        PayUserExample.Criteria c = example.createCriteria();
+        c.andUserNameEqualTo(userName.trim());
+        List<PayUser> payUserList = payUserMapper.selectByExample(example);
+        if(payUserList!=null&&!payUserList.isEmpty()){
+            return setResponse("9999", "用户已经存在");
         }
         PayUser payUser = new PayUser();
         payUser.setUserName(userName);
@@ -60,9 +89,9 @@ public class UserServiceFacadeImpl implements UserServiceFacade {
         payUser.setStatus(EnumConstants.UserStatus.normal.value());
         int index = payUserMapper.insertSelective(payUser);
         if(index !=1){
-            return setResponse("","");
+            return setResponse("9999","添加失败");
         }
-        return setResponse("","");
+        return setResponse("0000","操作成功");
     }
 
     @Override
@@ -113,45 +142,72 @@ public class UserServiceFacadeImpl implements UserServiceFacade {
     }
 
     @Override
-    public JpfResponseDto resetPwd(String userName, String oldPwd, String newPwd) {
+    public JpfResponseDto modifyPwd(String userName, String oldPwd, String newPwd) {
         if (StringUtils.isBlank(userName)) {
-            return setResponse("", "");
+            return setResponse("9999", "用户名不能为空");
         }
         if(StringUtils.isBlank(oldPwd)){
-            return setResponse("", "");
+            return setResponse("9999", "原密码不能为空");
         }
         if (StringUtils.isBlank(newPwd)) {
-            return setResponse("", "");
+            return setResponse("9999", "新密码不能为空");
         }
         PayUserExample example = new PayUserExample();
         PayUserExample.Criteria c = example.createCriteria();
-        c.andUserNameEqualTo(userName);
+        c.andUserNameEqualTo(userName.trim());
         List<PayUser> payUserList = payUserMapper.selectByExample(example);
         if(payUserList==null||payUserList.isEmpty()){
-            return setResponse("", "");
+            return setResponse("9999", "用户不存在");
         }
         PayUser payUser = payUserList.get(0);
         if(!SHA1.getInstance().getMySHA1Code(oldPwd).equals(payUser.getPassword())){
-            return setResponse("", "");
+            return setResponse("9999", "密码不正确");
+        }
+        if(!EnumConstants.UserStatus.normal.value().equals(payUser.getStatus())){
+            return setResponse("9999", "状态异常不可以操作");
         }
 
         PayUser user = new PayUser();
         user.setId(payUser.getId());
         user.setPassword(SHA1.getInstance().getMySHA1Code(newPwd));
         payUserMapper.updateByPrimaryKeySelective(user);
-        return null;
+        return setResponse("0000", "操作完成");
+    }
+
+    @Override
+    public JpfResponseDto resetPwd(String userName){
+        if (StringUtils.isBlank(userName)) {
+            return setResponse("9999", "用户名不能为空");
+        }
+        PayUserExample example = new PayUserExample();
+        PayUserExample.Criteria c = example.createCriteria();
+        c.andUserNameEqualTo(userName.trim());
+        List<PayUser> payUserList = payUserMapper.selectByExample(example);
+        if(payUserList==null||payUserList.isEmpty()){
+            return setResponse("9999", "用户不存在");
+        }
+        PayUser payUser = payUserList.get(0);
+        if(!EnumConstants.UserStatus.normal.value().equals(payUser.getStatus())){
+            return setResponse("9999", "状态异常不可以操作");
+        }
+
+        PayUser user = new PayUser();
+        user.setId(payUser.getId());
+        user.setPassword(SHA1.getInstance().getMySHA1Code("abc123"));
+        payUserMapper.updateByPrimaryKeySelective(user);
+        return setResponse("0000", "操作完成");
     }
 
     @Override
     public JpfResponseDto alterStatus(String userName, String status) {
-        if (StringUtils.isNotBlank(userName)) {
-            return setResponse("", "");
+        if (StringUtils.isBlank(userName)) {
+            return setResponse("9999", "用户名不能为空");
         }
-        if (StringUtils.isNotBlank(status)) {
-            return setResponse("", "");
+        if (StringUtils.isBlank(status)) {
+            return setResponse("9999", "状态不能为空");
         }
         if(!EnumConstants.UserStatus.normal.value().equals(status)||!EnumConstants.UserStatus.forbid.value().equals(status)){
-            return setResponse("", "");
+            return setResponse("9999", "状态不匹配");
         }
         PayUserExample example = new PayUserExample();
         PayUserExample.Criteria c = example.createCriteria();
@@ -159,12 +215,13 @@ public class UserServiceFacadeImpl implements UserServiceFacade {
         PayUser user = new PayUser();
         user.setStatus(status);
         payUserMapper.updateByExampleSelective(user,example);
-        return null;
+        return setResponse("0000", "操作完成");
     }
 
     private JpfResponseDto setResponse(String errorCode,String errorMsg) {
         JpfResponseDto jpfResponseDto = new JpfResponseDto();
-        jpfResponseDto.setResponseError(errorCode,errorMsg);
+        jpfResponseDto.setRetCode(errorCode);
+        jpfResponseDto.setRetMsg(errorMsg);
         return jpfResponseDto;
     }
 }
