@@ -35,7 +35,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		String contextPath = request.getContextPath();
         String requestURI =  request.getRequestURI();
 		String accessLink = "";
-		if (!StringUtils.isEmpty(contextPath)) {
+		if (StringUtils.isNotBlank(contextPath)) {
 			accessLink = requestURI.replace(
 					contextPath + "/", "");
 		} else {
