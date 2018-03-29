@@ -27,15 +27,15 @@ public class LoginController {
 	 * 跳转到登陆页面
 	 * @return
 	 */
-//	@RequestMapping(value={"/", "/index"})
-//	public String showLoginPage() {
-//		return "login";
-//	}
+	@RequestMapping(value={"/", "/index"})
+	public String showLoginPage() {
+		return "login";
+	}
 
-    @RequestMapping(value={"/", "/index"})
-    public String showLoginPage() {
-        return "backIndex";
-    }
+//    @RequestMapping(value={"/", "/index"})
+//    public String showLoginPage() {
+//        return "backIndex";
+//    }
 	
 	@RequestMapping(value={"/logout"})
 	public ModelAndView logout(HttpServletRequest request, HttpSession httpSession) {
@@ -43,8 +43,8 @@ public class LoginController {
 		return new ModelAndView("index");
 	}
 	
-//	@RequestMapping(value={"/backIndex"}, method=RequestMethod.GET)
-//	public ModelAndView backIndex(HttpServletRequest request, ModelMap modelMap) {
+	@RequestMapping(value={"/backIndex"}, method=RequestMethod.GET)
+	public ModelAndView backIndex(HttpServletRequest request, ModelMap modelMap) {
 //		JSONObject obj = new JSONObject();
 //
 //		JSONArray basic = new JSONArray();
@@ -65,8 +65,8 @@ public class LoginController {
 //		obj.put("basic", basic);
 //
 //		modelMap.put("menu", obj.toJSONString());
-//		return new ModelAndView("backIndex", modelMap);
-//	}
+		return new ModelAndView("backIndex", modelMap);
+	}
 	
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
 	public ModelAndView login(HttpServletRequest request,
@@ -80,6 +80,6 @@ public class LoginController {
         }
 
         httpSession.setAttribute(ManageConstants.USERINFO_SESSION,loginVerifyResponse.getUserInfo());
-        return new ModelAndView("backIndex");
+        return new ModelAndView("redirect:/backIndex");
 	}
 }

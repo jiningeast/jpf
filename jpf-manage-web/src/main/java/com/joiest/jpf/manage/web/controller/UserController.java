@@ -74,9 +74,8 @@ public class UserController {
     @RequestMapping("modifyPwd")
     @ResponseBody
     public JpfResponseDto modifyPwd(String oldPwd,String newPwd,HttpSession httpSession){
-//        UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
-//        String userName = userInfo.getUserName();
-        String userName = "admin";
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
+        String userName = userInfo.getUserName();
         return userServiceFacade.modifyPwd(userName,oldPwd,newPwd);
     }
 

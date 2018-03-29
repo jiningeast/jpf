@@ -1,5 +1,7 @@
 package com.joiest.jpf.manage.web.interceptor;
 
+import com.joiest.jpf.entity.UserInfo;
+import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +31,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		logger.info("===========LoginInterceptor preHandle===========");
 		String contextPath = request.getContextPath();
-		String requestURI =  request.getRequestURI();
+        String requestURI =  request.getRequestURI();
 		String accessLink = "";
 		if (!StringUtils.isEmpty(contextPath)) {
 			accessLink = requestURI.replace(
@@ -39,26 +41,22 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		}
 
 		HttpSession session = request.getSession();
-//		UserInfo userInfo = (UserInfo) session.getAttribute(Constant.SESSION_OPERATORUSER);
-//		if(userInfo!=null){
-//			logger.info("---------访问主机地址:" + request.getRemoteHost() + "------------------访问功能链接地址:" + accessLink+",userName="+userInfo.getUserName()+",LoginName="+userInfo.getLoginName());
-//		}else{
-			logger.info("---------访问主机地址:" + request.getRemoteHost() + "------------------访问功能链接地址:" + accessLink);
-//		}
-//		String uri = request.getRequestURI();
-//		// System.out.println("request path : " + uri);
-//		if (uri.indexOf("index") > -1 || uri.indexOf("login") > -1) { // 不需要过滤的地址
-//			// System.out.println("uri:" + uri);
-//			super.preHandle(request, response, handler);
-//		} else if (session != null && userInfo != null) {
-//			// System.out.println("session is not null");
-//			super.preHandle(request, response, handler);
-//		} else {
-//			// System.out.println("session is null");
-//			response.sendRedirect(request.getContextPath() + "/index");
-//			return false;
-//		}
-
-		return super.preHandle(request, response, handler);
+		UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+		if(userInfo!=null){
+			logger.info("---------访问主机地址:{}------------------访问功能链接地址:{}------------------userName:{}",request.getRemoteHost(),accessLink,userInfo.getUserName());
+		}else{
+			logger.info("---------访问主机地址:{}------------------访问功能链接地址:{}",request.getRemoteHost(),accessLink);
+		}
+		String uri = request.getRequestURI();
+		logger.info("request path : {}",uri);
+		if (uri.indexOf("index") > -1 || uri.indexOf("login") > -1) { // 不需要过滤的地址
+            super.preHandle(request, response, handler);
+		} else if (session != null && userInfo != null) {
+            super.preHandle(request, response, handler);
+		} else {
+			response.sendRedirect(request.getContextPath() + "/index");
+			return false;
+		}
+        return super.preHandle(request, response, handler);
 	}
 }
