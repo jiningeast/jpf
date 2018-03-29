@@ -30,6 +30,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		logger.info("===========LoginInterceptor preHandle===========");
+        HttpSession session = request.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 		String contextPath = request.getContextPath();
         String requestURI =  request.getRequestURI();
 		String accessLink = "";
@@ -39,14 +41,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		} else {
 			accessLink = requestURI.substring(1, requestURI.length());
 		}
-
-		HttpSession session = request.getSession();
-		UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
-		if(userInfo!=null){
-			logger.info("---------访问主机地址:{}------------------访问功能链接地址:{}------------------userName:{}",request.getRemoteHost(),accessLink,userInfo.getUserName());
-		}else{
-			logger.info("---------访问主机地址:{}------------------访问功能链接地址:{}",request.getRemoteHost(),accessLink);
-		}
+		logger.info("userName:{}---------访问主机地址:{}------------------访问功能链接地址:{}------------------",userInfo==null?"":userInfo.getUserName(),request.getRemoteHost(),accessLink);
 		String uri = request.getRequestURI();
 		logger.info("request path : {}",uri);
 		if (uri.indexOf("index") > -1 || uri.indexOf("login") > -1) { // 不需要过滤的地址
