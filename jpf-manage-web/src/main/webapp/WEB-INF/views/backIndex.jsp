@@ -78,20 +78,19 @@
         }
 
         var param = {}; 
-		param["oldpass"]=oldpass;
-		param["newpass"]=newpass;
-		param["rePass"]=rePass;
+		param["oldPwd"]=oldpass;
+		param["newPwd"]=rePass;
         
         $.ajax({
 			type:'post',
-			url:'system/modifyPass',
+			url:'user/modifyPwd',
 			data:param,
 			dataType:'json',
 			success:function(msg){
 				//var jsonData = JSON.parse(msg);
 				//alert(msg.retCode);
 				if (msg.retCode != '0000') {
-					$.messager.alert('消息提示','添加失败[' + msg.retMsg + ']!','error');
+					$.messager.alert('消息提示','修改失败[' + msg.retMsg + ']!','error');
 				} else {
 					$('#w').window('close');
 					$.messager.alert('消息提示','修改登录密码成功!','info');

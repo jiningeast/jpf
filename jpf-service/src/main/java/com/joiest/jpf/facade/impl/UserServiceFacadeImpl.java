@@ -206,7 +206,7 @@ public class UserServiceFacadeImpl implements UserServiceFacade {
         if (StringUtils.isBlank(status)) {
             return setResponse("9999", "状态不能为空");
         }
-        if(!EnumConstants.UserStatus.normal.value().equals(status)||!EnumConstants.UserStatus.forbid.value().equals(status)){
+        if(!EnumConstants.UserStatus.normal.value().equals(status)&&!EnumConstants.UserStatus.forbid.value().equals(status)){
             return setResponse("9999", "状态不匹配");
         }
         PayUserExample example = new PayUserExample();

@@ -23,79 +23,103 @@
                 iconCls:'icon-key-add',
                 handler:function(){
                     var rows = $('#dg').datagrid('getSelections');
-                    if (rows.length == 1) {
-                        $.messager.confirm('重置密码','确定要重置密码？',function(r){
-                            if(r){
-                                var param = {};
-                                param["id"]=rows[0].id;
-                                param["userName"]=rows[0].userName;
-                                $.ajax({
-                                    type:'post',
-                                    url:'resetPwd',
-                                    data:param,
-                                    dataType:'json',
-                                    success:function(msg){
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示','重置密码失败[' + msg.retMsg + ']!','error');
-                                        } else {
-                                            $('#addWin').window('close');
-                                            $('#dg').datagrid('reload');
-                                            $.messager.alert('消息提示','密码成功重置为：123456','info');
-                                        }
-                                    },
-                                    error:function(){
-                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        $.messager.alert('消息提示','只能选择一条数据！','info');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
                     }
+                    $.messager.confirm('重置密码','确定要重置密码？',function(r){
+                        if(r){
+                            var param = {};
+                            param["userName"]=rows[0].userName;
+                            $.ajax({
+                                type:'post',
+                                url:'resetPwd',
+                                data:param,
+                                dataType:'json',
+                                success:function(msg){
+                                    if (msg.retCode != '0000') {
+                                        $.messager.alert('消息提示','重置密码失败[' + msg.retMsg + ']!','error');
+                                    } else {
+                                        $('#addWin').window('close');
+                                        $('#dg').datagrid('reload');
+                                        $.messager.alert('消息提示','密码成功重置!','info');
+                                    }
+                                },
+                                error:function(){
+                                    $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
+                                }
+                            });
+                        }
+                    });
                 }
             },{
                 text:'禁用',
                 iconCls:'icon-no',
                 handler:function(){
                     var rows = $('#dg').datagrid('getSelections');
-                    if (rows.length >= 1) {
-                        $.messager.confirm('批量删除','是否删除，共删除' + rows.length+'条', function(r){
-                            if (r){
-                                var ids = "";
-                                $.each(rows, function(i, value){
-                                    var val = value.id;
-                                    if (i==0)
-                                        ids += val;
-                                    else
-                                        ids += ","+val;
-
-                                });
-
-                                var param = {};
-                                param["ids"]=ids;
-
-                                $.ajax({
-                                    type:'post',
-                                    url:'batchDeleteUser',
-                                    data:param,
-                                    dataType:'json',
-                                    success:function(msg){
-                                        //alert(msg.retCode);
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示','批量删除失败[' + msg.retMsg + ']!','error');
-                                        } else {
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error:function(){
-                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        $.messager.alert('消息提示','至少选择一条数据！','info');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
                     }
+                    $.messager.confirm('禁用', '确定禁用用户：' + rows[0].userName, function (r) {
+                        if (r) {
+                            var param = {};
+                            param["userName"] = rows[0].userName;
+                            param["status"] = '1';
+                            $.ajax({
+                                type: 'post',
+                                url: 'alertStatus',
+                                data: param,
+                                dataType: 'json',
+                                success: function (msg) {
+                                    //alert(msg.retCode);
+                                    if (msg.retCode != '0000') {
+                                        $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']!', 'error');
+                                    } else {
+                                        $.messager.alert('消息提示', '操作成功!', 'error');
+                                        $('#dg').datagrid('reload');
+                                    }
+                                },
+                                error: function () {
+                                    $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+                                }
+                            });
+                        }
+                    });
+
+                }
+            },{
+                text:'启用',
+                iconCls:'icon-no',
+                handler:function(){
+                    var rows = $('#dg').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
+                    }
+                    $.messager.confirm('启用', '确定启用用户：' + rows[0].userName, function (r) {
+                        if (r) {
+                            var param = {};
+                            param["userName"] = rows[0].userName;
+                            param["status"] = '0';
+                            $.ajax({
+                                type: 'post',
+                                url: 'alertStatus',
+                                data: param,
+                                dataType: 'json',
+                                success: function (msg) {
+                                    //alert(msg.retCode);
+                                    if (msg.retCode != '0000') {
+                                        $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']!', 'error');
+                                    } else {
+                                        $.messager.alert('消息提示', '操作成功!', 'error');
+                                        $('#dg').datagrid('reload');
+                                    }
+                                },
+                                error: function () {
+                                    $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+                                }
+                            });
+                        }
+                    });
+
                 }
             }];
 
@@ -158,9 +182,9 @@
                                 if (msg.retCode != '0000') {
                                     $.messager.alert('消息提示','添加失败[' + msg.retMsg + ']!','error');
                                 } else {
-                                    $.messager.alert('消息提示','添加成功!','error');
                                     $('#addWin').window('close')
                                     $('#dg').datagrid('reload');
+                                    $.messager.alert('消息提示','添加成功!','error');
                                 }
                             },
                             error:function(){

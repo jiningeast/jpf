@@ -1,12 +1,15 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.UserServiceFacade;
+import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,10 +56,10 @@ public class UserController {
     /**
      * 禁用/启用状态
      */
-    @RequestMapping("status")
+    @RequestMapping("alertStatus")
     @ResponseBody
-    public JpfResponseDto alertStatus(){
-        return null;
+    public JpfResponseDto alertStatus(String userName,String status){
+        return userServiceFacade.alterStatus(userName, status);
     }
 
     /**
@@ -70,8 +73,11 @@ public class UserController {
 
     @RequestMapping("modifyPwd")
     @ResponseBody
-    public JpfResponseDto modifyPwd(String userName,String oldPwd,String newPwd){
-        return null;
+    public JpfResponseDto modifyPwd(String oldPwd,String newPwd,HttpSession httpSession){
+//        UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
+//        String userName = userInfo.getUserName();
+        String userName = "admin";
+        return userServiceFacade.modifyPwd(userName,oldPwd,newPwd);
     }
 
 }
