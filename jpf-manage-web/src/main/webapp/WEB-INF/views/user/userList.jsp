@@ -25,6 +25,7 @@
                     var rows = $('#dg').datagrid('getSelections');
                     if (rows.length != 1) {
                         $.messager.alert('消息提示','请选择一条数据！','info');
+                        return
                     }
                     $.messager.confirm('重置密码','确定要重置密码？',function(r){
                         if(r){
@@ -58,6 +59,7 @@
                     var rows = $('#dg').datagrid('getSelections');
                     if (rows.length != 1) {
                         $.messager.alert('消息提示','请选择一条数据！','info');
+                        return
                     }
                     $.messager.confirm('禁用', '确定禁用用户：' + rows[0].userName, function (r) {
                         if (r) {
@@ -93,6 +95,7 @@
                     var rows = $('#dg').datagrid('getSelections');
                     if (rows.length != 1) {
                         $.messager.alert('消息提示','请选择一条数据！','info');
+                        return
                     }
                     $.messager.confirm('启用', '确定启用用户：' + rows[0].userName, function (r) {
                         if (r) {
@@ -129,12 +132,14 @@
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
                 // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
+                singleSelect:true,
                 multiselect:true,
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
+                // width:500,
                 url:'list',
                 columns:[[
-                    {field:'id',checkbox:true},
+                    {field:'id',hidden:true},
                     {field:'userName',title:'用户名',width:150},
                     {field:'status',title:'状态',width:100,
                         formatter: function(value,row,index){
