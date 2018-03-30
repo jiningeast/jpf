@@ -35,7 +35,12 @@
     				"menuname" : "商户信息管理",
     				"icon" : "icon-nav",
     				"url" : ""
-    			}]
+    			},{
+                    "menuid" : "202",
+                    "menuname" : "商户支付配置管理",
+                    "icon" : "icon-nav",
+                    "url" : ""
+                }]
     		}]
     	};
 
