@@ -34,12 +34,12 @@
     				"menuid" : "201",
     				"menuname" : "商户信息管理",
     				"icon" : "icon-nav",
-    				"url" : ""
+    				"url" : "merchant/index"
     			},{
                     "menuid" : "202",
                     "menuname" : "商户支付配置管理",
                     "icon" : "icon-nav",
-                    "url" : ""
+                    "url" : "merchant/paytype/index"
                 }]
     		}]
     	};

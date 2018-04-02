@@ -5,6 +5,7 @@ import com.joiest.jpf.common.po.PayMerchants;
 import com.joiest.jpf.common.po.PayMerchantsBank;
 import com.joiest.jpf.common.po.PayMerchantsBankExample;
 import com.joiest.jpf.common.po.PayMerchantsExample;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsBankMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsMapper;
 import com.joiest.jpf.dto.*;
@@ -46,6 +47,27 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         }
         if(StringUtils.isNotBlank(request.getMerchName())){
             c.andMerchNameLike("%"+request.getMerchName()+"%");
+        }
+        if(StringUtils.isNotBlank(request.getUsername())){
+            c.andUsernameEqualTo(request.getUsername());
+        }
+        if (StringUtils.isNotBlank(request.getCompanyname())) {
+            c.andCompanynameLike("%" + request.getCompanyname() + "%");
+        }
+        if(StringUtils.isNotBlank(request.getStartAddTime())&&StringUtils.isNotBlank(request.getEndAddTime())){
+            c.andAddtimeBetween(DateUtils.getFdate(request.getStartAddTime(),DateUtils.DATEFORMATSHORT),DateUtils.addInteger(request.getEndAddTime(),5,1,DateUtils.DATEFORMATSHORT));
+        }
+        if(request.getStatus()!=null){
+            c.andStatusEqualTo(request.getStatus());
+        }
+        if (StringUtils.isNotBlank(request.getBslicense())) {
+            c.andBslicenseEqualTo(request.getBslicense());
+        }
+        if(request.getAttestation()!=null){
+            c.andAttestationEqualTo(request.getAttestation());
+        }
+        if (request.getMuserid() != null) {
+            c.andMuseridEqualTo(request.getMuserid());
         }
 
         List<PayMerchants> list = payMerchantsMapper.selectByExample(example);

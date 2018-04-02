@@ -363,6 +363,42 @@ public class DateUtils {
 	}
 
 
+	/**
+	 * 增加日期中某类型的某数值。如增加日期
+	 * @param date 日期
+	 * @param dateType 类型
+	 * @param amount 数值
+	 * @return 计算后日期
+	 */
+	public static Date addInteger(String date, int dateType, int amount,String pattern)
+	{
+
+		Date date1 = getFdate(date,pattern);
+		if(date1==null){
+			return null;
+		}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date1);
+		calendar.add(dateType, amount);
+		return calendar.getTime();
+	}
+
+
+	public static Date getFdate(String date,String pattern)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		Date fDate = null;
+		try
+		{
+			fDate = sdf.parse(date);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		return fDate;
+	}
+
 
 
 	public static void main(String[] args) {
