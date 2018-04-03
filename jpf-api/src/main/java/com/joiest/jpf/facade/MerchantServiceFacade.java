@@ -16,10 +16,10 @@ public interface MerchantServiceFacade {
 
     /**
      * 获取商户信息
-     * @param merchNo
+     * @param id
      * @return
      */
-    public MerchantInfo getMerchant(String merchNo);
+    public MerchantInfo getMerchant(Long id);
 
     /**
      * 获取商户对公账户信息
@@ -27,13 +27,6 @@ public interface MerchantServiceFacade {
      * @return
      */
     public MerchantBankInfo getMerchBank(Long mtsid);
-
-    /**
-     * 添加商户（商户信息及商户对公账户信息）
-     * @param request
-     * @return
-     */
-    public JpfResponseDto addMerchant(AddMerchRequest request);
 
     /**
      * 修改商户（商户信息及商户对公账户信息）

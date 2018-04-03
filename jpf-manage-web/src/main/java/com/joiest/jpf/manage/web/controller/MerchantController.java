@@ -2,12 +2,16 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.dto.GetMerchsRequest;
 import com.joiest.jpf.dto.GetMerchsResponse;
+import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
+import com.joiest.jpf.facade.MerTypeServiceFacade;
 import com.joiest.jpf.facade.MerchantServiceFacade;
+import com.joiest.jpf.facade.PcaServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +26,12 @@ public class MerchantController {
 
     @Autowired
     private MerchantServiceFacade merchantServiceFacade;
+
+    @Autowired
+    private PcaServiceFacade pcaServiceFacade;
+
+    @Autowired
+    private MerTypeServiceFacade merTypeServiceFacade;
 
     @RequestMapping("/index")
     public ModelAndView index() {
@@ -58,5 +68,14 @@ public class MerchantController {
         map.put("total", response.getCount());
         map.put("rows", response.getList());
         return map;
+    }
+
+    @RequestMapping("/modify/page")
+    public ModelAndView modifyPage(ModelMap modelMap){
+        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant((long) 1);
+        MerchantBankInfo merchantBankInfo = merchantServiceFacade.getMerchBank((long) 1);
+        modelMap.addAttribute("merchantInfo", merchantInfo);
+        modelMap.addAttribute("merchantBankInfo", merchantBankInfo);
+        return new ModelAndView("merchant/merchantModify",modelMap);
     }
 }

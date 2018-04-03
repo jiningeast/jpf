@@ -1,6 +1,8 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayMerchants;
 import com.joiest.jpf.common.po.PayMerchantsBank;
 import com.joiest.jpf.common.po.PayMerchantsBankExample;
@@ -13,6 +15,8 @@ import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
 import com.joiest.jpf.facade.MerchantServiceFacade;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 
 public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
+
+    private static final Logger logger = LogManager.getLogger(MerchantServiceFacadeImpl.class);
 
     @Autowired
     private PayMerchantsMapper payMerchantsMapper;
@@ -79,6 +85,7 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
             MerchantInfo merchantInfo = new MerchantInfo();
             BeanCopier beanCopier = BeanCopier.create(PayMerchants.class, MerchantInfo.class, false);
             beanCopier.copy(payMerchants,merchantInfo,null);
+            infoList.add(merchantInfo);
         }
         GetMerchsResponse getMerchsResponse = new GetMerchsResponse();
         getMerchsResponse.setCount(count);
@@ -87,15 +94,12 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
     }
 
     @Override
-    public MerchantInfo getMerchant(String merchNo) {
-        PayMerchantsExample example = new PayMerchantsExample();
-        PayMerchantsExample.Criteria c = example.createCriteria();
-        c.andMerchNoEqualTo(merchNo);
-        List<PayMerchants> list = payMerchantsMapper.selectByExample(example);
-        if (list == null || list.isEmpty()) {
-            return null;
+    public MerchantInfo getMerchant(Long id) {
+        if (id == null) {
+            logger.info("求情参数id为空");
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
-        PayMerchants payMerchants = list.get(0);
+        PayMerchants payMerchants = payMerchantsMapper.selectByPrimaryKey(id);
         MerchantInfo merchantInfo = new MerchantInfo();
         BeanCopier beanCopier = BeanCopier.create(PayMerchants.class, MerchantInfo.class, false);
         beanCopier.copy(payMerchants,merchantInfo,null);
@@ -104,6 +108,10 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
 
     @Override
     public MerchantBankInfo getMerchBank(Long mtsid) {
+        if (mtsid == null) {
+            logger.info("mtsid");
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "mtsid不能为空");
+        }
         PayMerchantsBankExample example = new PayMerchantsBankExample();
         PayMerchantsBankExample.Criteria c = example.createCriteria();
         c.andMtsidEqualTo(mtsid);
@@ -118,43 +126,7 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         return merchantBankInfo;
     }
 
-    @Override
-    @Transactional
-    public JpfResponseDto addMerchant(AddMerchRequest request) {
-        PayMerchantsExample example = new PayMerchantsExample();
-        PayMerchantsExample.Criteria c = example.createCriteria();
-        c.andMerchNoEqualTo(request.getMerchNo());
-        List<PayMerchants> list = payMerchantsMapper.selectByExample(example);
-        if (list != null && !list.isEmpty()) {
-            setResponse("9999","商户信息已经存在");
-        }
-        example.clear();
-        c.andMerchNameEqualTo(request.getMerchName());
-        list = payMerchantsMapper.selectByExample(example);
-        if (list != null && !list.isEmpty()) {
-            setResponse("9999","商户信息已经存在");
-        }
-        example.clear();
-        c.andCompanynameEqualTo(request.getCompanyname());
-        list = payMerchantsMapper.selectByExample(example);
-        if (list != null && !list.isEmpty()) {
-            setResponse("9999","商户信息已经存在");
-        }
-
-        PayMerchants merchantsRecord = new PayMerchants();
-        BeanCopier beanCopier = BeanCopier.create(AddMerchRequest.class, PayMerchants.class, false);
-        beanCopier.copy(request, merchantsRecord, null);
-        merchantsRecord.setAddtime(new Date());
-        payMerchantsMapper.insertSelective(merchantsRecord);
-
-        PayMerchantsBank merchantsBankrecord = new PayMerchantsBank();
-        BeanCopier beanCopier1 = BeanCopier.create(AddMerchRequest.class, PayMerchantsBank.class, false);
-        beanCopier1.copy(request,merchantsBankrecord,null);
-        merchantsBankrecord.setCreated(new Date());
-        payMerchantsBankMapper.insertSelective(merchantsBankrecord);
-        return setResponse("0000", "操作完成");
-    }
-
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     @Override
     public JpfResponseDto modifyMerchant(ModifyMerchRequest request) {
         PayMerchantsExample example = new PayMerchantsExample();
@@ -162,7 +134,8 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         c.andMerchNoEqualTo(request.getMerchNo());
         List<PayMerchants> list = payMerchantsMapper.selectByExample(example);
         if (list == null || list.isEmpty()) {
-            return setResponse("9999","商户信息不存在");
+            logger.info("商户信息不存在");
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
         PayMerchants merchant = list.get(0);
 
@@ -171,44 +144,37 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         c1.andMtsidEqualTo(merchant.getId());
         List<PayMerchantsBank> merchantsBanks = payMerchantsBankMapper.selectByExample(example1);
         if(merchantsBanks==null||merchantsBanks.isEmpty()){
-            return setResponse("9999","商户信息不存在");
+            logger.info("商户信息-对公账户不存在");
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
         PayMerchantsBank merchantsBank = merchantsBanks.get(0);
 
         PayMerchants merchantsRecord = new PayMerchants();
         BeanCopier beanCopier = BeanCopier.create(AddMerchRequest.class, PayMerchants.class, false);
         beanCopier.copy(request, merchantsRecord, null);
-        merchantsRecord.setAddtime(new Date());
         merchantsRecord.setId(merchant.getId());
         payMerchantsMapper.updateByPrimaryKeySelective(merchantsRecord);
 
         PayMerchantsBank merchantsBankrecord = new PayMerchantsBank();
         BeanCopier beanCopier1 = BeanCopier.create(AddMerchRequest.class, PayMerchantsBank.class, false);
         beanCopier1.copy(request,merchantsBankrecord,null);
-        merchantsBankrecord.setCreated(new Date());
+        merchantsBankrecord.setUpdated(new Date());
         merchantsBankrecord.setId(merchantsBank.getId());
         payMerchantsBankMapper.updateByPrimaryKeySelective(merchantsBankrecord);
-        return setResponse("0000", "操作完成");
+        return new JpfResponseDto();
     }
 
     @Override
     public JpfResponseDto auditMerchant(AuditMerchRequest request) {
         PayMerchants merchant = payMerchantsMapper.selectByPrimaryKey(request.getId());
         if(merchant==null){
-            return setResponse("9999","商户信息不存在");
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
         PayMerchants merchantsRecord = new PayMerchants();
         merchantsRecord.setId(request.getId());
         merchantsRecord.setAttestation(request.getAttestation());
         payMerchantsMapper.updateByPrimaryKeySelective(merchantsRecord);
-        return setResponse("0000", "操作完成");
+        return new JpfResponseDto();
     }
 
-    private JpfResponseDto setResponse(String errorCode,String errorMsg) {
-        JpfResponseDto jpfResponseDto = new JpfResponseDto();
-        if(StringUtils.isNotBlank(errorCode)&&!errorCode.equals("0000")){
-            jpfResponseDto.setResponseError(errorCode,errorMsg);
-        }
-        return jpfResponseDto;
-    }
 }
