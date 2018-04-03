@@ -27,6 +27,10 @@ public enum JpfErrorInfo {
     SIGN_ERROR("签名错误"),
     MCHNO_NOT_EXIST("商户号不存在"),
     NO_AUTH("无此接口权限"),
+    RECORD_ALREADY_EXIST("记录已经存在"),
+    STATUS_ERROR("状态异常"),
+
+    PASSWORD_ERROR("密码错误"),
 
     ROUTE_ERROR("交易路由异常"),
 
@@ -34,6 +38,8 @@ public enum JpfErrorInfo {
 
     DAL_ERROR("数据层操作异常"),
     SYSTEM_ERROR("系统异常");
+
+
 
     private final String desc;
 
