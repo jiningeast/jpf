@@ -8,6 +8,13 @@
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script>
         $(function() {
+            $('#infoDiv').window({
+                title:'详情',
+                width:'1024px',
+                height:'512px',
+                closed:true,
+                modal:true
+            });
 
             var toolbar = [{
                 text:'详情',
@@ -20,8 +27,9 @@
                 text:'添加',
                 iconCls:'icon-add',
                 handler:function(){
-                    $('#addForm').form('reset');
-                    $('#addWin').window('open');
+                    // $('#addForm').form('reset');
+                    // $('#addWin').window('open');
+                    $('#infoDiv').window("open").window('refresh', 'modify/page');
                 }
             },{
                 text:'修改',
@@ -185,5 +193,6 @@
     <br/>
     <table id="dg"></table>
 </div>
+<div id="infoDiv"></div>
 </body>
 </html>

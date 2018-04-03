@@ -4,12 +4,15 @@ import com.joiest.jpf.dto.GetMerchPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeResponse;
 import com.joiest.jpf.dto.GetMerchsRequest;
 import com.joiest.jpf.dto.GetMerchsResponse;
+import com.joiest.jpf.entity.MerchantBankInfo;
+import com.joiest.jpf.entity.MerchantInfo;
 import com.joiest.jpf.entity.MerchantPayTypeInfo;
 import com.joiest.jpf.facade.MerPayTypeServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,5 +47,10 @@ public class MerchantPaytypeController {
         map.put("total", response.getCount());
         map.put("rows", response.getPayTypeInfos());
         return map;
+    }
+
+    @RequestMapping("/modify/page")
+    public ModelAndView modifyPage(ModelMap modelMap){
+        return new ModelAndView("merchant/merchantPaytypeAdd");
     }
 }
