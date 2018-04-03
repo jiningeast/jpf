@@ -1,10 +1,14 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayMerchants;
 import com.joiest.jpf.common.po.PayMerchantsPaytype;
 import com.joiest.jpf.common.po.PayMerchantsPaytypeExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
+import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsPaytypeMapper;
 import com.joiest.jpf.dto.AddMerPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeRequest;
@@ -23,6 +27,8 @@ import java.util.List;
 
 public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 
+    @Autowired
+    private PayMerchantsMapper payMerchantsMapper;
     @Autowired
     private PayMerchantsPaytypeMapper payMerchantsPaytypeMapper;
 
@@ -68,12 +74,17 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
     public JpfResponseDto addMerPayType(AddMerPayTypeRequest request) {
         ValidatorUtils.validate(AddMerPayTypeRequest.class);
 
+        PayMerchants payMerchants = payMerchantsMapper.selectByPrimaryKey(request.getMtsid());
+        if(payMerchants==null){
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
+        }
+
         PayMerchantsPaytype record = new PayMerchantsPaytype();
         BeanCopier beanCopier = BeanCopier.create(AddMerPayTypeRequest.class, PayMerchantsPaytype.class, false);
         beanCopier.copy(request, record,null);
         payMerchantsPaytypeMapper.insertSelective(record);
         record.setCreated(new Date());
-        return setResponse("","");
+        return new JpfResponseDto();
     }
 
     @Override
@@ -82,7 +93,7 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 
         PayMerchantsPaytype payMerchantsPaytype = payMerchantsPaytypeMapper.selectByPrimaryKey(request.getId());
         if(payMerchantsPaytype==null){
-            return setResponse("9999","记录不存在");
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户支付配置信息不存在");
         }
 
         PayMerchantsPaytype record = new PayMerchantsPaytype();
@@ -90,14 +101,6 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         beanCopier.copy(request, record,null);
         record.setUpdated(new Date());
         payMerchantsPaytypeMapper.updateByPrimaryKeySelective(record);
-        return setResponse("","");
-    }
-
-    private JpfResponseDto setResponse(String errorCode,String errorMsg) {
-        JpfResponseDto jpfResponseDto = new JpfResponseDto();
-        if(StringUtils.isNotBlank(errorCode)&&!errorCode.equals("0000")){
-            jpfResponseDto.setResponseError(errorCode,errorMsg);
-        }
-        return jpfResponseDto;
+        return new JpfResponseDto();
     }
 }
