@@ -104,6 +104,11 @@ public class PayMerchants implements Serializable {
      */
     private Integer muserid;
 
+    /**
+     * 审核备注
+     */
+    private String content;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -266,6 +271,14 @@ public class PayMerchants implements Serializable {
         this.muserid = muserid;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
+    }
+
     /**
      *
      */
@@ -295,6 +308,7 @@ public class PayMerchants implements Serializable {
         sb.append(", logo=").append(logo);
         sb.append(", attestation=").append(attestation);
         sb.append(", muserid=").append(muserid);
+        sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();
     }
@@ -334,7 +348,8 @@ public class PayMerchants implements Serializable {
             && (this.getAptitude() == null ? other.getAptitude() == null : this.getAptitude().equals(other.getAptitude()))
             && (this.getLogo() == null ? other.getLogo() == null : this.getLogo().equals(other.getLogo()))
             && (this.getAttestation() == null ? other.getAttestation() == null : this.getAttestation().equals(other.getAttestation()))
-            && (this.getMuserid() == null ? other.getMuserid() == null : this.getMuserid().equals(other.getMuserid()));
+            && (this.getMuserid() == null ? other.getMuserid() == null : this.getMuserid().equals(other.getMuserid()))
+            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
     }
 
     /**
@@ -364,6 +379,7 @@ public class PayMerchants implements Serializable {
         result = prime * result + ((getLogo() == null) ? 0 : getLogo().hashCode());
         result = prime * result + ((getAttestation() == null) ? 0 : getAttestation().hashCode());
         result = prime * result + ((getMuserid() == null) ? 0 : getMuserid().hashCode());
+        result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         return result;
     }
 }

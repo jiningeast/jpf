@@ -9,6 +9,11 @@ public class AuditMerchRequest {
      */
     private Boolean attestation;
 
+    /**
+     * 审核备注
+     */
+    private String content;
+
     public Long getId() {
         return id;
     }
@@ -23,5 +28,13 @@ public class AuditMerchRequest {
 
     public void setAttestation(Boolean attestation) {
         this.attestation = attestation;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -79,7 +79,7 @@
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
-                        <select id="attestation_audit" name="attestation" class="easyui-combobox" style="width:120px;" data-options="disabled:true">
+                        <select id="attestation_audit" name="attestation" class="easyui-combobox" style="width:120px;">
                             <option value=""></option>
                             <option value="0">未认证</option>
                             <option value="1">已认证</option>
@@ -173,6 +173,21 @@
                     </td>
                 </tr>
             </table>
+            <table cellpadding=3 class="table table-bordered">
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">审核：</td>
+                    <td>
+                        <select name="attestation" class="easyui-combobox" style="width:120px;">
+                            <option value=""></option>
+                            <option value="0">拒绝</option>
+                            <option value="1">通过</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input name="content" type="text" style="width:220px" class="easyui-textbox"/>
+                    </td>
+                </tr>
+            </table>
         </form>
     </div>
     <div region="south" border="false"
@@ -191,7 +206,7 @@
         $('#province_audit').combobox('select', '${merchantInfo.province}');
         $('#city_audit').combobox('select', '${merchantInfo.city}');
         $('#status_audit').combobox('select', '${merchantInfo.status}');
-        $('#attestation_audit').combobox('select', '${merchantInfo.attestation==true?0:1}');
+        <%--$('#attestation_audit').combobox('select', '${merchantInfo.attestation==true?0:1}');--%>
         $('#banktype_audit').combobox('select', '${merchantBankInfo.banktype}');
         $('#bankProvince_audit').combobox('select', '${merchantBankInfo.province}');
         $('#bankCity_audit').combobox('select', '${merchantBankInfo.city}');

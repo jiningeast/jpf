@@ -169,6 +169,7 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         PayMerchants merchantsRecord = new PayMerchants();
         merchantsRecord.setId(request.getId());
         merchantsRecord.setAttestation(request.getAttestation());
+        merchantsRecord.setContent(request.getContent());
         payMerchantsMapper.updateByPrimaryKeySelective(merchantsRecord);
         return new JpfResponseDto();
     }
