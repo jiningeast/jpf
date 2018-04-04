@@ -24,6 +24,8 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         PayPcaExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(pid)) {
             criteria.andPidEqualTo(Integer.valueOf(pid));
+        }else{
+            criteria.andPidEqualTo(0);
         }
         List<PayPca> pcas = payPcaMapper.selectByExample(example);
         List<PcaInfo> pcaInfos = new ArrayList<>();

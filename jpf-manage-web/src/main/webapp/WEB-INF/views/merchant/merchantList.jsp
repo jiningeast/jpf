@@ -8,24 +8,30 @@
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script>
         $(function() {
-
             var toolbar = [{
                 text:'详情',
-                iconCls:'icon-add',
+                iconCls:'icon-view-detail',
                 handler:function(){
-                    $('#addForm').form('reset');
-                    $('#addWin').window('open');
+                    var rows = $('#dg').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
+                        return
+                    }
+                    $('#infoDiv').window("open").window('refresh', 'detail?id='+rows[0].id).window('setTitle','详情');
                 }
             },{
-                text:'添加',
-                iconCls:'icon-add',
+                text:'编辑',
+                iconCls:'icon-edit',
                 handler:function(){
-                    // $('#addForm').form('reset');
-                    // $('#addWin').window('open');
-                    $('#infoDiv').window("open").window('refresh', 'modify/page');
+                    var rows = $('#dg').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
+                        return
+                    }
+                    $('#infoDiv').window("open").window('refresh', 'modify/page?id='+rows[0].id).window('setTitle','编辑');
                 }
             },{
-                text:'修改',
+                text:'审核',
                 iconCls:'icon-key-add',
                 handler:function(){
                     var rows = $('#dg').datagrid('getSelections');
@@ -33,30 +39,7 @@
                         $.messager.alert('消息提示','请选择一条数据！','info');
                         return
                     }
-                    $.messager.confirm('重置密码','确定要重置密码？',function(r){
-                        if(r){
-                            var param = {};
-                            param["userName"]=rows[0].userName;
-                            $.ajax({
-                                type:'post',
-                                url:'resetPwd',
-                                data:param,
-                                dataType:'json',
-                                success:function(msg){
-                                    if (msg.retCode != '0000') {
-                                        $.messager.alert('消息提示','重置密码失败[' + msg.retMsg + ']!','error');
-                                    } else {
-                                        $('#addWin').window('close');
-                                        $('#dg').datagrid('reload');
-                                        $.messager.alert('消息提示','密码成功重置!','info');
-                                    }
-                                },
-                                error:function(){
-                                    $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                }
-                            });
-                        }
-                    });
+                    $('#infoDiv').window("open").window('refresh', 'audit/page?id='+rows[0].id).window('setTitle','审核');
                 }
             }];
 
@@ -80,13 +63,11 @@
                     {field:'companyname',title:'企业名称',width:150},
                     // {field:'province',title:'省份',width:150},
                     // {field:'city',title:'城市',width:150},
-                    // {field:'linkname',title:'联系人',width:150},
-                    // {field:'linkphone',title:'联系电话',width:150},
-                    // {field:'registerip',title:'注册IP',width:150},
-                    // {field:'lastloginip',title:'最后登录IP',width:150},
-                    {field:'status',title:'状态',width:100,
+                    {field:'linkname',title:'联系人',width:150},
+                    {field:'linkphone',title:'联系电话',width:150},
+                    {field:'salerphone',title:'销售电话',width:150},
+                    {field:'status',title:'状态',width:70,
                         formatter: function(value,row,index){
-                            console.info("status="+value);
                             if (value == '0'){
                                 return "正常";
                             } else if (value == '1') {
@@ -97,9 +78,8 @@
                     // {field:'bslicense',title:'营业执照',width:150},
                     // {field:'aptitude',title:'企业资质',width:150},
                     // {field:'logo',title:'企业logo',width:150},
-                    {field:'attestation',title:'企业认证',width:100,
+                    {field:'attestation',title:'企业认证',width:70,
                         formatter: function(value,row,index){
-                            console.info("attestation=" + value);
                             if (value == '0'){
                                 return "未认证";
                             } else if (value == '1') {
@@ -107,6 +87,8 @@
                             }
                         }
                     },
+                    {field:'registerip',title:'注册IP',width:150},
+                    {field:'lastloginip',title:'最后登录IP',width:150},
                     {field:'addtime',title:'创建时间',width:150,formatter: formatDateStr}
                 ]]
             });
@@ -117,12 +99,10 @@
                     // var param = {};
                     // param["username"]=$('#username_s').textbox('getValue');
                     // param["status"]=$('#status_s').combobox('getValue');
-                    // console.info("param="+param);
                     // $('#dg').datagrid('reload', param);
 
                     var queryArray = $('#searchForm').serializeArray();
                     var postData = parsePostData(queryArray);
-                    console.info("postData="+postData);
                     $('#dg').datagrid('reload', postData);
                 }
             });
@@ -134,9 +114,8 @@
             });
 
             $('#infoDiv').window({
-                title:'详情',
                 width:'1024px',
-                height:'512px',
+                height:'550px',
                 closed:true,
                 modal:true
             });
@@ -144,7 +123,6 @@
 
         $(window).resize(function() {
             var width = $(window).width() - 20;
-            //console.info(width);
             $("div[name='contentDiv']").css("width", width);
 
             // 加上这个，form面板和grid面板右侧不会出现残缺
@@ -181,9 +159,7 @@
                         <td><input id="username_s" name="username" class="easyui-textbox" type="text" /></td>
                         <td>企业名称:</td>
                         <td><input id="companyname_s" name="companyname" class="easyui-textbox" type="text" /></td>
-                        <td>营业执照:</td>
-                        <td><input id="bslicense_s" name="bslicense" class="easyui-textbox" type="text" /></td>
-                        <td>注册时间：</td>
+                        <td>创建时间：</td>
                         <td colspan="3">
                             <input type="text" class="Wdate" style="width:158px;" id="startAddTime_s"
                                    name="startAddTime"

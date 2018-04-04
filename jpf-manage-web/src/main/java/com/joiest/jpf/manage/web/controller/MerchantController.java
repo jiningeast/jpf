@@ -1,7 +1,10 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.dto.AuditMerchRequest;
 import com.joiest.jpf.dto.GetMerchsRequest;
 import com.joiest.jpf.dto.GetMerchsResponse;
+import com.joiest.jpf.dto.ModifyMerchRequest;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
@@ -27,12 +30,6 @@ public class MerchantController {
     @Autowired
     private MerchantServiceFacade merchantServiceFacade;
 
-    @Autowired
-    private PcaServiceFacade pcaServiceFacade;
-
-    @Autowired
-    private MerTypeServiceFacade merTypeServiceFacade;
-
     @RequestMapping("/index")
     public ModelAndView index() {
         return new ModelAndView("merchant/merchantList");
@@ -42,28 +39,6 @@ public class MerchantController {
     @ResponseBody
     public Map<String, Object> list(GetMerchsRequest request) {
         GetMerchsResponse response = merchantServiceFacade.getMerchInfoList(request);
-
-//        List<MerchantInfo> merchantInfoList = new ArrayList<>();
-//        MerchantInfo merchantInfo = new MerchantInfo();
-//        merchantInfo.setId((long) 1);
-//        merchantInfo.setMerchNo("11111");
-//        merchantInfo.setMerchName("11111测试");
-//        merchantInfo.setUsername("mzq");
-//        merchantInfo.setCompanyname("企业名称");
-//        merchantInfo.setProvince((long) 1);
-//        merchantInfo.setCity((long) 1);
-//        merchantInfo.setLinkname("马泽强");
-//        merchantInfo.setLinkphone("18310231619");
-//        merchantInfo.setAddtime(new Date());
-//        merchantInfo.setRegisterip("192.168.11.111");
-//        merchantInfo.setLastloginip("192.168.222.222");
-//        merchantInfo.setStatus((byte) 0);
-//        merchantInfo.setBslicense("132465797987");
-//        merchantInfo.setAptitude("1111");
-//        merchantInfo.setLogo("aaaa");
-//        merchantInfo.setAttestation(true);
-//        merchantInfo.setMuserid(1);
-//        merchantInfoList.add(merchantInfo);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("total", response.getCount());
         map.put("rows", response.getList());
@@ -71,11 +46,41 @@ public class MerchantController {
     }
 
     @RequestMapping("/modify/page")
-    public ModelAndView modifyPage(ModelMap modelMap){
-        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant((long) 1);
-        MerchantBankInfo merchantBankInfo = merchantServiceFacade.getMerchBank((long) 1);
+    public ModelAndView modifyPage(String id,ModelMap modelMap){
+        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(id));
+        MerchantBankInfo merchantBankInfo = merchantServiceFacade.getMerchBank(Long.valueOf(id));
         modelMap.addAttribute("merchantInfo", merchantInfo);
         modelMap.addAttribute("merchantBankInfo", merchantBankInfo);
         return new ModelAndView("merchant/merchantModify",modelMap);
+    }
+
+    @RequestMapping("/modify/action")
+    @ResponseBody
+    public JpfResponseDto modifyAction(ModifyMerchRequest request){
+        return merchantServiceFacade.modifyMerchant(request);
+    }
+
+    @RequestMapping("/detail")
+    public ModelAndView detail(String id,ModelMap modelMap){
+        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(id));
+        MerchantBankInfo merchantBankInfo = merchantServiceFacade.getMerchBank(Long.valueOf(id));
+        modelMap.addAttribute("merchantInfo", merchantInfo);
+        modelMap.addAttribute("merchantBankInfo", merchantBankInfo);
+        return new ModelAndView("merchant/merchantDetail",modelMap);
+    }
+
+    @RequestMapping("/audit/page")
+    public ModelAndView audit(String id,ModelMap modelMap){
+        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(id));
+        MerchantBankInfo merchantBankInfo = merchantServiceFacade.getMerchBank(Long.valueOf(id));
+        modelMap.addAttribute("merchantInfo", merchantInfo);
+        modelMap.addAttribute("merchantBankInfo", merchantBankInfo);
+        return new ModelAndView("merchant/merchantAudit",modelMap);
+    }
+
+    @RequestMapping("/audit/action")
+    @ResponseBody
+    public JpfResponseDto auditAction(AuditMerchRequest request){
+        return merchantServiceFacade.auditMerchant(request);
     }
 }

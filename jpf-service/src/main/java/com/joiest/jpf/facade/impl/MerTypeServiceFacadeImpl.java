@@ -1,5 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayMerchantsPaytype;
 import com.joiest.jpf.common.po.PayMerchantsType;
 import com.joiest.jpf.common.po.PayMerchantsTypeExample;
@@ -21,11 +23,12 @@ public class MerTypeServiceFacadeImpl implements MerTypeServiceFacade {
 
     @Override
     public List<MerchantTypeInfo> getMerTypes(String pid) {
+        if(StringUtils.isBlank(pid)){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "pid不能为空");
+        }
         PayMerchantsTypeExample example = new PayMerchantsTypeExample();
         PayMerchantsTypeExample.Criteria c = example.createCriteria();
-        if(StringUtils.isNotBlank(pid)){
-            c.andPidEqualTo(pid);
-        }
+        c.andPidEqualTo(pid);
         List<PayMerchantsType> payMerchantsTypes = payMerchantsTypeMapper.selectByExample(example);
         List<MerchantTypeInfo> merchantTypeInfos = new ArrayList<>();
         for (PayMerchantsType payMerchantsType : payMerchantsTypes) {

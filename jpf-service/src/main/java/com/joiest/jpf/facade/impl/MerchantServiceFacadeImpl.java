@@ -129,19 +129,15 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     @Override
     public JpfResponseDto modifyMerchant(ModifyMerchRequest request) {
-        PayMerchantsExample example = new PayMerchantsExample();
-        PayMerchantsExample.Criteria c = example.createCriteria();
-        c.andMerchNoEqualTo(request.getMerchNo());
-        List<PayMerchants> list = payMerchantsMapper.selectByExample(example);
-        if (list == null || list.isEmpty()) {
+        PayMerchants payMerchants = payMerchantsMapper.selectByPrimaryKey(request.getId());
+        if (payMerchants == null) {
             logger.info("商户信息不存在");
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
-        PayMerchants merchant = list.get(0);
 
         PayMerchantsBankExample example1 = new PayMerchantsBankExample();
         PayMerchantsBankExample.Criteria c1 = example1.createCriteria();
-        c1.andMtsidEqualTo(merchant.getId());
+        c1.andMtsidEqualTo(payMerchants.getId());
         List<PayMerchantsBank> merchantsBanks = payMerchantsBankMapper.selectByExample(example1);
         if(merchantsBanks==null||merchantsBanks.isEmpty()){
             logger.info("商户信息-对公账户不存在");
@@ -152,7 +148,7 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         PayMerchants merchantsRecord = new PayMerchants();
         BeanCopier beanCopier = BeanCopier.create(AddMerchRequest.class, PayMerchants.class, false);
         beanCopier.copy(request, merchantsRecord, null);
-        merchantsRecord.setId(merchant.getId());
+        merchantsRecord.setId(payMerchants.getId());
         payMerchantsMapper.updateByPrimaryKeySelective(merchantsRecord);
 
         PayMerchantsBank merchantsBankrecord = new PayMerchantsBank();

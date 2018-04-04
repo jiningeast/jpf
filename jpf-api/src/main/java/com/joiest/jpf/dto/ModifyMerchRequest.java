@@ -1,6 +1,11 @@
 package com.joiest.jpf.dto;
 
 public class ModifyMerchRequest {
+
+    /**
+     * 自增ID
+     */
+    private Long id;
     /**
      * 聚合商户号
      */
@@ -90,6 +95,14 @@ public class ModifyMerchRequest {
      * 开户行全称
      */
     private String banksubname;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getMerchNo() {
         return merchNo;
