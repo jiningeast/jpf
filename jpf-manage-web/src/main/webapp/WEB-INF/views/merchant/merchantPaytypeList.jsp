@@ -52,42 +52,33 @@
                 }
             }];
 
+            $('#dg').datagrid({
+                title:'商户支付配置',
+                toolbar:toolbar,
+                // rownumbers:true,//如果为true，则显示一个行号列。
+                pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
+                // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
+                // singleSelect:true,
+                multiselect:true,
+                selectOnCheck:true,
+                remoteSort: false, // 服务端排序
+                // width:500,
+                url:'list',
+                columns:[[
+                    {field:'id',checkbox:true},
+                    {field:'mtsid',title:'商户Id',width:50},
+                    {field:'tpid',title:'支付类型',width:150},
+                    {field:'catpath',title:'支付类型catpath',width:150},
+                    {field:'created',title:'创建时间',width:150,formatter: formatDateStr},
+                    {field:'updated',title:'变更时间',width:150,formatter: formatDateStr}
+                ]]
+            });
+
             $('#searchBtn').linkbutton({
                 onClick: function(){
-                    // var param = {};
-                    // param["username"]=$('#username_s').textbox('getValue');
-                    // param["status"]=$('#status_s').combobox('getValue');
-                    // console.info("param="+param);
-                    // $('#dg').datagrid('reload', param);
-
                     var queryArray = $('#searchForm').serializeArray();
                     var postData = parsePostData(queryArray);
-                    // console.info("postData="+postData);
-                    // $('#dg').datagrid('reload', postData);
-
-                    $('#dg').datagrid({
-                        title:'商户支付配置',
-                        toolbar:toolbar,
-                        // rownumbers:true,//如果为true，则显示一个行号列。
-                        pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
-                        // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
-                        // singleSelect:true,
-                        multiselect:true,
-                        selectOnCheck:true,
-                        remoteSort: false, // 服务端排序
-                        // width:500,
-                        url:'list',
-                        queryParams:postData,
-
-                        columns:[[
-                            {field:'id',checkbox:true},
-                            {field:'mtsid',title:'商户Id',width:50},
-                            {field:'tpid',title:'支付类型',width:150},
-                            {field:'catpath',title:'支付类型catpath',width:150},
-                            {field:'created',title:'创建时间',width:150,formatter: formatDateStr},
-                            {field:'updated',title:'变更时间',width:150,formatter: formatDateStr}
-                        ]]
-                    });
+                    $('#dg').datagrid('reload', postData);
                 }
             });
 
