@@ -79,11 +79,13 @@
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
-                        <select id="attestation_audit" name="attestation" class="easyui-combobox" style="width:120px;">
-                            <option value=""></option>
-                            <option value="0">未认证</option>
-                            <option value="1">已认证</option>
-                        </select>
+                        <c:if test="${merchantInfo.attestation == true}">已认证</c:if>
+                        <c:if test="${merchantInfo.attestation == false}">未认证</c:if>
+                        <%--<select id="attestation_audit" name="attestation" class="easyui-combobox" style="width:120px;">--%>
+                            <%--<option value=""></option>--%>
+                            <%--<option value="0">未认证</option>--%>
+                            <%--<option value="1">已认证</option>--%>
+                        <%--</select>--%>
                     </td>
                 </tr>
                 <tr>

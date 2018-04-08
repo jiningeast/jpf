@@ -40,17 +40,17 @@
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">企业名称：</td>
                         <td>
-                            <input id="companyname_m" name="companyname" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.companyname}"/>
+                            <input id="companyname_m" name="companyname" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.companyname}" data-options="required:true"/>
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">联系人：</td>
                         <td>
-                            <input id="linkname_m" name="linkname" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.linkname}"/>
+                            <input id="linkname_m" name="linkname" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.linkname}" data-options="required:true"/>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">联系电话：</td>
                         <td>
-                            <input id="linkphone_m" name="linkphone" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.linkphone}"/>
+                            <input id="linkphone_m" name="linkphone" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.linkphone}" data-options="required:true"/>
                         </td>
                     </tr>
                     <tr>
@@ -62,12 +62,12 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">省份：</td>
                         <td>
-                            <select id="province_m" name="province" class="easyui-combobox" style="width:120px;">
+                            <select id="province_m" name="province" class="easyui-combobox" style="width:120px;" data-options="required:true">
                             </select>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">城市：</td>
                         <td>
-                            <select id="city_m" name="city" class="easyui-combobox" style="width:120px;">
+                            <select id="city_m" name="city" class="easyui-combobox" style="width:120px;" data-options="required:true">
                             </select>
                         </td>
                     </tr>
@@ -82,11 +82,13 @@
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                         <td>
-                            <select id="attestation_m" name="attestation" class="easyui-combobox" style="width:120px;">
-                                <option value=""></option>
-                                <option value="0">未认证</option>
-                                <option value="1">已认证</option>
-                            </select>
+                            <c:if test="${merchantInfo.attestation == true}">已认证</c:if>
+                            <c:if test="${merchantInfo.attestation == false}">未认证</c:if>
+                            <%--<select id="attestation_m" name="attestation" class="easyui-combobox" style="width:120px;">--%>
+                                <%--<option value=""></option>--%>
+                                <%--<option value="0">未认证</option>--%>
+                                <%--<option value="1">已认证</option>--%>
+                            <%--</select>--%>
                         </td>
                     </tr>
                     <tr>
@@ -157,16 +159,16 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">银行开户名称：</td>
                         <td>
-                            <input id="bankname_m" name="bankname" type="text" class="easyui-textbox" style="width:175px;" value="${merchantBankInfo.bankname}">
+                            <input id="bankname_m" name="bankname" type="text" class="easyui-textbox" style="width:175px;" value="${merchantBankInfo.bankname}" data-options="required:true">
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">省份：</td>
                         <td>
-                            <select id="bankProvince_m" name="bankProvince" class="easyui-combobox" style="width:100px;">
+                            <select id="bankProvince_m" name="bankProvince" class="easyui-combobox" style="width:100px;" data-options="required:true">
                             </select>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">城市：</td>
                         <td>
-                            <select id="bankCity_m" name="bankCity" class="easyui-combobox" style="width:100px;">
+                            <select id="bankCity_m" name="bankCity" class="easyui-combobox" style="width:100px;" data-options="required:true">
                             </select>
                         </td>
                     </tr>
@@ -199,7 +201,7 @@
         $('#province_m').combobox('select', '${merchantInfo.province}');
         $('#city_m').combobox('select', '${merchantInfo.city}');
         $('#status_m').combobox('select', '${merchantInfo.status}');
-        $('#attestation_m').combobox('select', '${merchantInfo.attestation==true?0:1}');
+        <%--$('#attestation_m').combobox('select', '${merchantInfo.attestation==true?0:1}');--%>
         $('#banktype_m').combobox('select', '${merchantBankInfo.banktype}');
         $('#bankProvince_m').combobox('select', '${merchantBankInfo.province}');
         $('#bankCity_m').combobox('select', '${merchantBankInfo.city}');
