@@ -1,10 +1,9 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.dto.*;
-import com.joiest.jpf.entity.MerchantBankInfo;
-import com.joiest.jpf.entity.MerchantInfo;
-import com.joiest.jpf.entity.MerchantPayTypeInfo;
+import com.joiest.jpf.dto.AddMerPayTypeRequest;
+import com.joiest.jpf.dto.GetMerchPayTypeRequest;
+import com.joiest.jpf.dto.GetMerchPayTypeResponse;
 import com.joiest.jpf.facade.MerPayTypeServiceFacade;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,9 +56,9 @@ public class MerchantPaytypeController {
 
     }
 
-    @RequestMapping("/modify/action")
+    @RequestMapping("/delete/action")
     @ResponseBody
-    public JpfResponseDto modifyAction(ModifyMerPayTypeRequest request){
-        return merPayTypeServiceFacade.modifyMerPayType(request);
+    public JpfResponseDto deleteAction(@RequestParam("id[]") List<Long> id){
+        return merPayTypeServiceFacade.deleteMerPayType(id);
     }
 }

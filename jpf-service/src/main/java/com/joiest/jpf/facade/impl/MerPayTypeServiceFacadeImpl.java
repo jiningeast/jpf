@@ -15,9 +15,7 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsTypeMapper;
 import com.joiest.jpf.dto.AddMerPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeResponse;
-import com.joiest.jpf.dto.ModifyMerPayTypeRequest;
 import com.joiest.jpf.entity.MerchantPayTypeInfo;
-import com.joiest.jpf.entity.PcaInfo;
 import com.joiest.jpf.facade.MerPayTypeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,17 +44,17 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         example.setPageNo(request.getPageNo());
         example.setPageSize(request.getPageSize());
         PayMerchantsPaytypeExample.Criteria c = example.createCriteria();
-        if(request!=null&&request.getMtsid()!=null){
+        if (request != null && request.getMtsid() != null) {
             c.andMtsidEqualTo(request.getMtsid());
         }
-        if (request!=null&&request.getTpid() != null) {
+        if (request != null && request.getTpid() != null) {
             c.andTpidEqualTo(request.getTpid());
         }
-        if(request!=null&&StringUtils.isNotBlank(request.getCatpath())){
+        if (request != null && StringUtils.isNotBlank(request.getCatpath())) {
             c.andCatpathEqualTo(request.getCatpath());
         }
-        if(request!=null&&StringUtils.isNotBlank(request.getCreateStartDate())&&StringUtils.isNotBlank(request.getCreateEndDate())){
-            c.andCreatedBetween(DateUtils.getString2ShortDate(request.getCreateStartDate()),DateUtils.getString2ShortDate(request.getCreateEndDate()));
+        if (request != null && StringUtils.isNotBlank(request.getCreateStartDate()) && StringUtils.isNotBlank(request.getCreateEndDate())) {
+            c.andCreatedBetween(DateUtils.getString2ShortDate(request.getCreateStartDate()), DateUtils.getString2ShortDate(request.getCreateEndDate()));
         }
         List<PayMerchantsPaytype> payMerchantsPaytypes = payMerchantsPaytypeMapper.selectByExample(example);
         example.clear();
@@ -79,11 +77,11 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         ValidatorUtils.validate(AddMerPayTypeRequest.class);
 
         PayMerchants payMerchants = payMerchantsMapper.selectByPrimaryKey(request.getMtsid());
-        if(payMerchants==null){
+        if (payMerchants == null) {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
 
-        for(int i = 0 ; i<request.getTpid().size();i++){
+        for (int i = 0; i < request.getTpid().size(); i++) {
             PayMerchantsType payMerchantsType = payMerchantsTypeMapper.selectByPrimaryKey(request.getTpid().get(i));
 
             PayMerchantsPaytypeExample example = new PayMerchantsPaytypeExample();
@@ -109,19 +107,10 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
     }
 
     @Override
-    public JpfResponseDto modifyMerPayType(ModifyMerPayTypeRequest request) {
-        ValidatorUtils.validate(ModifyMerPayTypeRequest.class);
-
-        PayMerchantsPaytype payMerchantsPaytype = payMerchantsPaytypeMapper.selectByPrimaryKey(request.getId());
-        if(payMerchantsPaytype==null){
-            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户支付配置信息不存在");
+    public JpfResponseDto deleteMerPayType(List<Long> id) {
+        for (int i = 0; i < id.size(); i++) {
+            payMerchantsPaytypeMapper.deleteByPrimaryKey(id.get(i));
         }
-
-        PayMerchantsPaytype record = new PayMerchantsPaytype();
-        BeanCopier beanCopier = BeanCopier.create(ModifyMerPayTypeRequest.class, PayMerchantsPaytype.class, false);
-        beanCopier.copy(request, record,null);
-        record.setUpdated(new Date());
-        payMerchantsPaytypeMapper.updateByPrimaryKeySelective(record);
         return new JpfResponseDto();
     }
 }

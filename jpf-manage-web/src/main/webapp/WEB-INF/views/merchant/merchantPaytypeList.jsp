@@ -20,16 +20,20 @@
                 text:'删除',
                 iconCls:'icon-remove',
                 handler:function(){
-                    var rows = $('#dg').datagrid('getSelections');
                     $.messager.confirm('删除','确认删除操作？',function(r){
                         if(r){
-                            var param = {};
-                            param["userName"]=rows[0].userName;
+                            var rows = $('#dg').datagrid('getSelections');
+                            var param = [];
+                            for(var i = 0 ;i<rows.length ;i++){
+                                param.push(rows[i].id);
+                            }
                             $.ajax({
-                                type:'post',
-                                url:'resetPwd',
-                                data:param,
-                                dataType:'json',
+                                type:'get',
+                                url:'delete/action',
+                                data:{"id":param},
+                                dataType:"json",
+                                contentType:"application/json",
+                                // data:JSON.stringify(param),
                                 success:function(msg){
                                     if (msg.retCode != '0000') {
                                         $.messager.alert('消息提示','重置密码失败[' + msg.retMsg + ']!','error');
@@ -67,15 +71,16 @@
                         // rownumbers:true,//如果为true，则显示一个行号列。
                         pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
                         // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
-                        singleSelect:true,
+                        // singleSelect:true,
                         multiselect:true,
                         selectOnCheck:true,
                         remoteSort: false, // 服务端排序
                         // width:500,
                         url:'list',
                         queryParams:postData,
+
                         columns:[[
-                            {field:'id',hidden:true},
+                            {field:'id',checkbox:true},
                             {field:'mtsid',title:'商户Id',width:50},
                             {field:'tpid',title:'支付类型',width:150},
                             {field:'catpath',title:'支付类型catpath',width:150},

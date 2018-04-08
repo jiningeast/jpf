@@ -4,8 +4,8 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.dto.AddMerPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeResponse;
-import com.joiest.jpf.dto.ModifyMerPayTypeRequest;
-import com.joiest.jpf.entity.PcaInfo;
+
+import java.util.List;
 
 public interface MerPayTypeServiceFacade {
 
@@ -13,5 +13,5 @@ public interface MerPayTypeServiceFacade {
 
     public JpfResponseDto addMerPayType(AddMerPayTypeRequest request);
 
-    public JpfResponseDto modifyMerPayType(ModifyMerPayTypeRequest request);
+    public JpfResponseDto deleteMerPayType(List<Long> id);
 }
