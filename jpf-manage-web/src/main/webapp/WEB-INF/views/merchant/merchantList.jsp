@@ -39,6 +39,10 @@
                         $.messager.alert('消息提示','请选择一条数据！','info');
                         return
                     }
+                    if(rows[0].attestation== '1'){
+                        $.messager.alert('消息提示','不可以重复认证！','info');
+                        return
+                    }
                     $('#infoDiv').window("open").window('refresh', 'audit/page?id='+rows[0].id).window('setTitle','审核');
                 }
             },{
@@ -75,8 +79,8 @@
                     // {field:'province',title:'省份',width:150},
                     // {field:'city',title:'城市',width:150},
                     {field:'linkname',title:'联系人',width:150},
-                    {field:'linkphone',title:'联系电话',width:150},
-                    {field:'salerphone',title:'销售电话',width:150},
+                    {field:'linkphone',title:'联系电话',width:100},
+                    {field:'salerphone',title:'销售电话',width:100},
                     {field:'status',title:'状态',width:70,
                         formatter: function(value,row,index){
                             if (value == '0'){
@@ -89,17 +93,19 @@
                     // {field:'bslicense',title:'营业执照',width:150},
                     // {field:'aptitude',title:'企业资质',width:150},
                     // {field:'logo',title:'企业logo',width:150},
-                    {field:'attestation',title:'企业认证',width:70,
+                    {field:'attestation',title:'企业认证',width:70,hidden:true},
+                    {field:'attestationDesc',title:'企业认证',width:70,
                         formatter: function(value,row,index){
-                            if (value == '0'){
+                            if (row.attestation == '0'){
                                 return "未认证";
-                            } else if (value == '1') {
+                            } else if (row.attestation == '1') {
                                 return "已认证";
                             }
                         }
                     },
-                    {field:'registerip',title:'注册IP',width:150},
-                    {field:'lastloginip',title:'最后登录IP',width:150},
+                    {field:'content',title:'审核备注',width:150},
+                    {field:'registerip',title:'注册IP',width:100},
+                    {field:'lastloginip',title:'最后登录IP',width:100},
                     {field:'addtime',title:'创建时间',width:150,formatter: formatDateStr}
                 ]]
             });

@@ -126,6 +126,7 @@
                         } else {
                             $.messager.alert('消息提示', '操作成功！', 'error');
                             $('#infoDiv').window('close');
+                            $('#dg').datagrid('reload');
                         }
                     },
                     error: function () {

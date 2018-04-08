@@ -36,11 +36,11 @@
                                 // data:JSON.stringify(param),
                                 success:function(msg){
                                     if (msg.retCode != '0000') {
-                                        $.messager.alert('消息提示','重置密码失败[' + msg.retMsg + ']!','error');
+                                        $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
                                     } else {
-                                        $('#addWin').window('close');
+                                        $.messager.alert('消息提示','操作成功!','info');
+                                        $('#infoDiv').window('close');
                                         $('#dg').datagrid('reload');
-                                        $.messager.alert('消息提示','密码成功重置!','info');
                                     }
                                 },
                                 error:function(){
