@@ -25,7 +25,27 @@
     				"menuname" : "用户管理",
     				"icon" : "icon-nav",
     				"url" : "user/index"
-    			}]
+    			},{
+                    "menuid" : "102",
+                    "menuname" : "角色管理",
+                    "icon" : "icon-nav",
+                    "url" : "roles/index"
+                    },{
+                    "menuid" : "103",
+                    "menuname" : "系统日志",
+                    "icon" : "icon-nav",
+                    "url" : "systemlog/index"
+                },{
+                    "menuid" : "104",
+                    "menuname" : "虚拟分类管理",
+                    "icon" : "icon-nav",
+                    "url" : "virtual/index"
+                },{
+                    "menuid" : "105",
+                    "menuname" : "地区管理",
+                    "icon" : "icon-nav",
+                    "url" : "pca/index"
+                }]
     		},{
     			"menuid" : "2",
     			"icon" : "icon-sys",
