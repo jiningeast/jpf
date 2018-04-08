@@ -83,14 +83,28 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
 
-        PayMerchantsType payMerchantsType = payMerchantsTypeMapper.selectByPrimaryKey(request.getTpid());
-        request.setCatpath(payMerchantsType.getCatpath());
+        for(int i = 0 ; i<request.getTpid().size();i++){
+            PayMerchantsType payMerchantsType = payMerchantsTypeMapper.selectByPrimaryKey(request.getTpid().get(i));
 
-        PayMerchantsPaytype record = new PayMerchantsPaytype();
-        BeanCopier beanCopier = BeanCopier.create(AddMerPayTypeRequest.class, PayMerchantsPaytype.class, false);
-        beanCopier.copy(request, record,null);
-        payMerchantsPaytypeMapper.insertSelective(record);
-        record.setCreated(new Date());
+            PayMerchantsPaytypeExample example = new PayMerchantsPaytypeExample();
+            PayMerchantsPaytypeExample.Criteria c = example.createCriteria();
+            c.andMtsidEqualTo(request.getMtsid());
+            c.andTpidEqualTo(request.getTpid().get(i));
+            c.andCatpathEqualTo(payMerchantsType.getCatpath());
+
+            List<PayMerchantsPaytype> payMerchantsPaytypes = payMerchantsPaytypeMapper.selectByExample(example);
+            if (payMerchantsPaytypes != null && !payMerchantsPaytypes.isEmpty()) {
+                continue;
+            }
+
+            PayMerchantsPaytype record = new PayMerchantsPaytype();
+            record.setMtsid(request.getMtsid());
+            record.setTpid(request.getTpid().get(i));
+            record.setCatpath(payMerchantsType.getCatpath());
+            record.setCreated(new Date());
+            payMerchantsPaytypeMapper.insertSelective(record);
+        }
+
         return new JpfResponseDto();
     }
 

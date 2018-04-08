@@ -45,8 +45,9 @@ public class MerchantPaytypeController {
     }
 
     @RequestMapping("/add/page")
-    public ModelAndView addPage(ModelMap modelMap){
-        return new ModelAndView("merchant/merchantPaytypeAdd");
+    public ModelAndView addPage(String id,ModelMap modelMap){
+        modelMap.put("mtsid",id);
+        return new ModelAndView("merchant/merchantPaytypeAdd",modelMap);
     }
 
     @RequestMapping("/add/action")
@@ -54,11 +55,6 @@ public class MerchantPaytypeController {
     public JpfResponseDto addAction(AddMerPayTypeRequest request){
         return merPayTypeServiceFacade.addMerPayType(request);
 
-    }
-
-    @RequestMapping("/modify/page")
-    public ModelAndView modifyPage(){
-        return new ModelAndView("merchant/merchantPaytypeModify");
     }
 
     @RequestMapping("/modify/action")
