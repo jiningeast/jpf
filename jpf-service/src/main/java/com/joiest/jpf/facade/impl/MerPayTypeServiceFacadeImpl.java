@@ -6,10 +6,12 @@ import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayMerchants;
 import com.joiest.jpf.common.po.PayMerchantsPaytype;
 import com.joiest.jpf.common.po.PayMerchantsPaytypeExample;
+import com.joiest.jpf.common.po.PayMerchantsType;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsPaytypeMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsTypeMapper;
 import com.joiest.jpf.dto.AddMerPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeResponse;
@@ -31,6 +33,8 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
     private PayMerchantsMapper payMerchantsMapper;
     @Autowired
     private PayMerchantsPaytypeMapper payMerchantsPaytypeMapper;
+    @Autowired
+    private PayMerchantsTypeMapper payMerchantsTypeMapper;
 
     @Override
     public GetMerchPayTypeResponse getMerPayTypes(GetMerchPayTypeRequest request) {
@@ -78,6 +82,9 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         if(payMerchants==null){
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
+
+        PayMerchantsType payMerchantsType = payMerchantsTypeMapper.selectByPrimaryKey(request.getTpid());
+        request.setCatpath(payMerchantsType.getCatpath());
 
         PayMerchantsPaytype record = new PayMerchantsPaytype();
         BeanCopier beanCopier = BeanCopier.create(AddMerPayTypeRequest.class, PayMerchantsPaytype.class, false);

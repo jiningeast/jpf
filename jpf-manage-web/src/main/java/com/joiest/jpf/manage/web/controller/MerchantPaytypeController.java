@@ -1,9 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.joiest.jpf.dto.GetMerchPayTypeRequest;
-import com.joiest.jpf.dto.GetMerchPayTypeResponse;
-import com.joiest.jpf.dto.GetMerchsRequest;
-import com.joiest.jpf.dto.GetMerchsResponse;
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
 import com.joiest.jpf.entity.MerchantPayTypeInfo;
@@ -40,17 +38,32 @@ public class MerchantPaytypeController {
     @ResponseBody
     public Map<String, Object> list(GetMerchPayTypeRequest request) {
         GetMerchPayTypeResponse response = merPayTypeServiceFacade.getMerPayTypes(request);
-//        List<MerchantPayTypeInfo> merchantPayTypeInfos = new ArrayList<>();
-//        MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
-//        merchantPayTypeInfos.add(merchantPayTypeInfo);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("total", response.getCount());
         map.put("rows", response.getPayTypeInfos());
         return map;
     }
 
-    @RequestMapping("/modify/page")
-    public ModelAndView modifyPage(ModelMap modelMap){
+    @RequestMapping("/add/page")
+    public ModelAndView addPage(ModelMap modelMap){
         return new ModelAndView("merchant/merchantPaytypeAdd");
+    }
+
+    @RequestMapping("/add/action")
+    @ResponseBody
+    public JpfResponseDto addAction(AddMerPayTypeRequest request){
+        return merPayTypeServiceFacade.addMerPayType(request);
+
+    }
+
+    @RequestMapping("/modify/page")
+    public ModelAndView modifyPage(){
+        return new ModelAndView("merchant/merchantPaytypeModify");
+    }
+
+    @RequestMapping("/modify/action")
+    @ResponseBody
+    public JpfResponseDto modifyAction(ModifyMerPayTypeRequest request){
+        return merPayTypeServiceFacade.modifyMerPayType(request);
     }
 }
