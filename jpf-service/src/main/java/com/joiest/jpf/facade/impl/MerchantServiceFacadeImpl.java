@@ -8,6 +8,7 @@ import com.joiest.jpf.common.po.PayMerchantsBank;
 import com.joiest.jpf.common.po.PayMerchantsBankExample;
 import com.joiest.jpf.common.po.PayMerchantsExample;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsBankMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsMapper;
 import com.joiest.jpf.dto.*;
@@ -129,6 +130,8 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     @Override
     public JpfResponseDto modifyMerchant(ModifyMerchRequest request) {
+        ValidatorUtils.validate(request);
+
         PayMerchants payMerchants = payMerchantsMapper.selectByPrimaryKey(request.getId());
         if (payMerchants == null) {
             logger.info("商户信息不存在");
@@ -162,6 +165,8 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
 
     @Override
     public JpfResponseDto auditMerchant(AuditMerchRequest request) {
+        ValidatorUtils.validate(request);
+
         PayMerchants merchant = payMerchantsMapper.selectByPrimaryKey(request.getId());
         if(merchant==null){
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
