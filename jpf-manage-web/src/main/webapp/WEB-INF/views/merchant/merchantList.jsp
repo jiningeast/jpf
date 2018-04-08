@@ -41,6 +41,17 @@
                     }
                     $('#infoDiv').window("open").window('refresh', 'audit/page?id='+rows[0].id).window('setTitle','审核');
                 }
+            },{
+                text:'配置支付类型',
+                iconCls:'icon-add',
+                handler:function(){
+                    var rows = $('#dg').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
+                        return
+                    }
+                    $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id='+rows[0].id).window('setTitle','配置支付类型');
+                }
             }];
 
             $('#dg').datagrid({
@@ -92,7 +103,6 @@
                     {field:'addtime',title:'创建时间',width:150,formatter: formatDateStr}
                 ]]
             });
-            $('#dg').datagrid().datagrid('getPager');
 
             $('#searchBtn').linkbutton({
                 onClick: function(){

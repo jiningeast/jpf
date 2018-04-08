@@ -1,5 +1,7 @@
 package com.joiest.jpf.dto;
 
+import java.util.List;
+
 public class AddMerPayTypeRequest {
 
     /**
@@ -10,12 +12,7 @@ public class AddMerPayTypeRequest {
     /**
      * 支付类型
      */
-    private Integer tpid;
-
-    /**
-     * 支付类型catpath
-     */
-    private String catpath;
+    private List<Integer> tpid;
 
     public Long getMtsid() {
         return mtsid;
@@ -25,19 +22,11 @@ public class AddMerPayTypeRequest {
         this.mtsid = mtsid;
     }
 
-    public Integer getTpid() {
+    public List<Integer> getTpid() {
         return tpid;
     }
 
-    public void setTpid(Integer tpid) {
+    public void setTpid(List<Integer> tpid) {
         this.tpid = tpid;
-    }
-
-    public String getCatpath() {
-        return catpath;
-    }
-
-    public void setCatpath(String catpath) {
-        this.catpath = catpath;
     }
 }

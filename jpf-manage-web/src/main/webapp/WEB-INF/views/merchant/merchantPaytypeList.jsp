@@ -17,30 +17,11 @@
             });
 
             var toolbar = [{
-                text:'详情',
-                iconCls:'icon-add',
-                handler:function(){
-                    $('#addForm').form('reset');
-                    $('#addWin').window('open');
-                }
-            },{
-                text:'添加',
-                iconCls:'icon-add',
-                handler:function(){
-                    // $('#addForm').form('reset');
-                    // $('#addWin').window('open');
-                    $('#infoDiv').window("open").window('refresh', 'modify/page');
-                }
-            },{
-                text:'修改',
-                iconCls:'icon-key-add',
+                text:'删除',
+                iconCls:'icon-remove',
                 handler:function(){
                     var rows = $('#dg').datagrid('getSelections');
-                    if (rows.length != 1) {
-                        $.messager.alert('消息提示','请选择一条数据！','info');
-                        return
-                    }
-                    $.messager.confirm('重置密码','确定要重置密码？',function(r){
+                    $.messager.confirm('删除','确认删除操作？',function(r){
                         if(r){
                             var param = {};
                             param["userName"]=rows[0].userName;
@@ -67,29 +48,6 @@
                 }
             }];
 
-            $('#dg').datagrid({
-                title:'商户支付配置',
-                toolbar:toolbar,
-                // rownumbers:true,//如果为true，则显示一个行号列。
-                pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
-                // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
-                singleSelect:true,
-                multiselect:true,
-                selectOnCheck:true,
-                remoteSort: false, // 服务端排序
-                // width:500,
-                url:'list',
-                columns:[[
-                    {field:'id',hidden:true},
-                    {field:'mtsid',title:'商户Id',width:50},
-                    {field:'tpid',title:'支付类型',width:150},
-                    {field:'catpath',title:'支付类型catpath',width:150},
-                    {field:'created',title:'创建时间',width:150,formatter: formatDateStr},
-                    {field:'updated',title:'变更时间',width:150,formatter: formatDateStr}
-                ]]
-            });
-            $('#dg').datagrid().datagrid('getPager');
-
             $('#searchBtn').linkbutton({
                 onClick: function(){
                     // var param = {};
@@ -100,8 +58,31 @@
 
                     var queryArray = $('#searchForm').serializeArray();
                     var postData = parsePostData(queryArray);
-                    console.info("postData="+postData);
-                    $('#dg').datagrid('reload', postData);
+                    // console.info("postData="+postData);
+                    // $('#dg').datagrid('reload', postData);
+
+                    $('#dg').datagrid({
+                        title:'商户支付配置',
+                        toolbar:toolbar,
+                        // rownumbers:true,//如果为true，则显示一个行号列。
+                        pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
+                        // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
+                        singleSelect:true,
+                        multiselect:true,
+                        selectOnCheck:true,
+                        remoteSort: false, // 服务端排序
+                        // width:500,
+                        url:'list',
+                        queryParams:postData,
+                        columns:[[
+                            {field:'id',hidden:true},
+                            {field:'mtsid',title:'商户Id',width:50},
+                            {field:'tpid',title:'支付类型',width:150},
+                            {field:'catpath',title:'支付类型catpath',width:150},
+                            {field:'created',title:'创建时间',width:150,formatter: formatDateStr},
+                            {field:'updated',title:'变更时间',width:150,formatter: formatDateStr}
+                        ]]
+                    });
                 }
             });
 
@@ -143,44 +124,8 @@
             <form id="searchForm" method="post">
                 <table cellpadding="5">
                     <tr>
-                        <td>聚合商户号:</td>
-                        <td><input id="merchNo_s" name="merchNo" class="easyui-textbox" type="text" /></td>
-                        <td>聚合商户名称:</td>
-                        <td><input id="merchName_s" name="merchName" class="easyui-textbox" type="text" /></td>
-                        <td>用户名:</td>
-                        <td><input id="username_s" name="username" class="easyui-textbox" type="text" /></td>
-                        <td>企业名称:</td>
-                        <td><input id="companyname_s" name="companyname" class="easyui-textbox" type="text" /></td>
-                        <td>营业执照:</td>
-                        <td><input id="bslicense_s" name="bslicense" class="easyui-textbox" type="text" /></td>
-                        <td>注册时间：</td>
-                        <td colspan="3">
-                            <input type="text" class="Wdate" style="width:158px;" id="startAddTime_s"
-                                   name="startAddTime"
-                                   onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endAddTime_s\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                            -
-                            <input type="text" class="Wdate" style="width:158px;" id="endAddTime_s"
-                                   name="endAddTime"
-                                   onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startAddTime_s\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>状态:</td>
-                        <td>
-                            <select id="status_s" name="status" class="easyui-combobox">
-                                <option value="">全部</option>
-                                <option value="0">正常</option>
-                                <option value="1">冻结金额</option>
-                            </select>
-                        </td>
-                        <td>企业认证:</td>
-                        <td>
-                            <select id="attestation_s" name="attestation" class="easyui-combobox">
-                                <option value="">全部</option>
-                                <option value="0">未认证</option>
-                                <option value="1">已认证</option>
-                            </select>
-                        </td>
+                        <td>商户Id:</td>
+                        <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" /></td>
                     </tr>
                 </table>
             </form>

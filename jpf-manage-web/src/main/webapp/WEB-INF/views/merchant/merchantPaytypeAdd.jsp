@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>商户信息</title>
+    <title>设置支付类型</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
 </head>
@@ -14,19 +14,32 @@
     <div region="center" border="false"
          style="padding: 10px; background: #fff; border: 1px solid #ccc;">
         <form id="addForm" method="post">
-            <input type="hidden" id="id_m" name="id" value="">
             <table cellpadding=3 class="table table-bordered">
                 <tr>
-                    <th>基本信息</th>
+                    <th>设置支付类型</th>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">商户Id：</td>
-                    <td><input id="mtsid_a" name="mtsid" type="text" readonly="readonly" style="width:220px" class="easyui-textbox"/></td>
-                    <td style="text-align: right;background-color: #f1f1f1;">付类型：</td>
+                    <td>${mtsid}</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
                     <td>
-                        <select id="tpid_a" name="tpid" class="easyui-combobox" style="width:100px;">
+                        <select id="tpid_a" name="tpid" class="easyui-combobox" style="width:100px;" data-options="required:true">
                         </select>
                     </td>
+                    <td colspan="2">
+                        <a id="affirmBtn" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'">确认</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <form id="savePaytype_From" method="post">
+            <input id="mtsid_a" name="mtsid" type="hidden" value = "${mtsid}" />
+            <%--<input type="hidden" name="tpid" />--%>
+            <table id="savePaytypeShow_Table" cellpadding=3 class="table table-bordered">
+                <tr>
+                    <td style="text-align: left;background-color: #f1f1f1;">支付类型</td>
+                    <td style="text-align: left;background-color: #f1f1f1;">操作</td>
                 </tr>
             </table>
         </form>
@@ -34,7 +47,7 @@
     <div region="south" border="false"
          style="text-align: right; height: 30px; line-height: 30px;">
         <a id="saveBtn_a" class="easyui-linkbutton" icon="icon-ok"
-           href="javascript:void(0)">确定</a>
+           href="javascript:void(0)">保存</a>
         <a id="cancelBtn_a" class="easyui-linkbutton" icon="icon-cancel"
            href="javascript:void(0)">取消</a>
     </div>
@@ -43,53 +56,88 @@
 <style>
 </style>
 <script>
-    function initData() {
-        $('#merProperty_a').combobox('select', '${merchInfo.merProperty}');
-        $('#merCorporationPaperType_a').combobox('select', '${merchInfo.merCorporationPaperType}');
-        $('#manageScope_a').combobox('select', '${merchInfo.manageScope}');
-        $('#virtualGoodsIsExist_a').combobox('select', '${merchInfo.virtualGoodsIsExist}');
-        $('#settleBankType_a').combobox('select', '${merchInfo.settleBankType}');
-        $('#proFtAcctNoType_a').combobox('select', '${merchInfo.proFtAcctNoType}');
-        $('#merStauts_a').combobox('select', '${merchInfo.merStauts}');
-        $('#merLevel_a').combobox('select', '${merchInfo.merLevel}');
-        $('#merTransType_a').combobox('select', '${merchInfo.merTransType}');
-        $('#merServiceType_a').combobox('select', '${merchInfo.merServiceType}');
-        $('#settleType_a').combobox('select', '${merchInfo.settleType}');
-        $('#settleMode_a').combobox('select', '${merchInfo.settleMode}');
-        $('#settlePeriod_a').combobox('select', '${merchInfo.settlePeriod}');
-        $('#settleFeePeriod_a').combobox('select', '${merchInfo.settleFeePeriod}');
-        $('#settleFeeMode_a').combobox('select', '${merchInfo.settleFeeMode}');
-        $('#parentMerIsExist_a').combobox('select', '${merchInfo.parentMerIsExist}');
+    var paytypes;
+    $.ajax({
+        type: "POST",
+        async: false,
+        url: "../param/getType?pid=5",
+        success: function(data){
+            paytypes = data;
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+
+        }
+    });
+
+    function removeInfo(tpid) {
+        $("#" + tpid + "_input").remove();
+        $("#" + tpid + "_text").remove();
     }
 
     $(function () {
+
+        $("#tpid_a").combobox({
+            data:paytypes,
+            valueField:'catid',
+            textField:'cat'
+        });
+
+        $("#affirmBtn").linkbutton({
+            onClick:function(){
+
+                var isValid = $("#addForm").form('enableValidation').form('validate');
+                if(!isValid){
+                    return;
+                }
+                var tpid = $("#tpid_a").combobox("getValue");
+
+                var tpidText = $("#tpid_a").combobox('getText');
+
+                var formInfo = "<input type='hidden' id='"+tpid+"_input' name='tpid' value='"+tpid+"' />";
+
+                var textInfo = "<tr id='"+tpid+"_text'>"
+                    +"<td style='text-align: left;'>"+tpidText+"</td>"
+                    +"<td style='text-align: left;'><a class='easyui-linkbutton' icon='icon-ok' href='javascript:removeInfo("+tpid+")'>移除</a></td>"
+                    +"</tr>";
+
+                $("#" + tpid + "_input").remove();
+                $("#" + tpid + "_text").remove();
+
+                $("#savePaytypeShow_Table tr:first").after(textInfo).after(formInfo);
+            }
+        });
+
+
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
         // setInterval("initData()", 500);
         // initData();
         $("#saveBtn_a").linkbutton({
             onClick: function () {
-                var isValid = $("#form_a").form('enableValidation').form('validate');
-                if (!isValid) {
-                    return;
-                }
-                var queryArray = $('#form_a').serializeArray();
+                var queryArray = $('#savePaytype_From').serializeArray();
                 var postData = parsePostData(queryArray);
                 $.ajax({
                     type: 'post',
-                    url: '/info/oper',
+                    url: '../merchant/paytype/add/action',
                     data: postData,
                     dataType: 'json',
                     success: function (msg) {
                         if (msg.retCode != '0000') {
-                            $.messager.alert('消息提示', '更新失败[' + msg.retMsg + ']！', 'error');
+                            $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '添加成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $('#infoDiv').window('close');
                         }
                     },
                     error: function () {
                         $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
                     }
                 });
+            }
+        });
+
+        $('#cancelBtn_a').linkbutton({
+            onClick: function(){
+                $('#infoDiv').window('close');
             }
         });
     })
