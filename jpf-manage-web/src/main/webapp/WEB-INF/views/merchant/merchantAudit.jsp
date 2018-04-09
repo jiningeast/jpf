@@ -79,11 +79,13 @@
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
-                        <select id="attestation_audit" name="attestation" class="easyui-combobox" style="width:120px;">
-                            <option value=""></option>
-                            <option value="0">未认证</option>
-                            <option value="1">已认证</option>
-                        </select>
+                        <c:if test="${merchantInfo.attestation == true}">已认证</c:if>
+                        <c:if test="${merchantInfo.attestation == false}">未认证</c:if>
+                        <%--<select id="attestation_audit" name="attestation" class="easyui-combobox" style="width:120px;">--%>
+                            <%--<option value=""></option>--%>
+                            <%--<option value="0">未认证</option>--%>
+                            <%--<option value="1">已认证</option>--%>
+                        <%--</select>--%>
                     </td>
                 </tr>
                 <tr>
@@ -177,12 +179,13 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">审核：</td>
                     <td>
-                        <select name="attestation" class="easyui-combobox" style="width:120px;">
+                        <select name="attestation" class="easyui-combobox" style="width:120px;" data-options="required:true">
                             <option value=""></option>
                             <option value="0">拒绝</option>
                             <option value="1">通过</option>
                         </select>
                     </td>
+                    <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
                     <td>
                         <input name="content" type="text" style="width:220px" class="easyui-textbox"/>
                     </td>
@@ -259,7 +262,7 @@
                 var postData = parsePostData(queryArray);
                 $.ajax({
                     type: 'post',
-                    url: '/audit/action',
+                    url: 'audit/action',
                     data: postData,
                     dataType: 'json',
                     success: function (msg) {
@@ -267,6 +270,8 @@
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', '操作成功！', 'error');
+                            $('#infoDiv').window('close');
+                            $('#dg').datagrid('reload');
                         }
                     },
                     error: function () {

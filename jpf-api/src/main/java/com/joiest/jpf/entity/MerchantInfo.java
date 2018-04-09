@@ -104,6 +104,8 @@ public class MerchantInfo {
      */
     private Integer muserid;
 
+    private String content;
+
     public Long getId() {
         return id;
     }
@@ -262,5 +264,13 @@ public class MerchantInfo {
 
     public void setMuserid(Integer muserid) {
         this.muserid = muserid;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

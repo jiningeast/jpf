@@ -36,9 +36,6 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 
     @Override
     public GetMerchPayTypeResponse getMerPayTypes(GetMerchPayTypeRequest request) {
-
-        ValidatorUtils.validate(GetMerchPayTypeRequest.class);
-
         PayMerchantsPaytypeExample example = new PayMerchantsPaytypeExample();
         example.setOrderByClause("created DESC");
         example.setPageNo(request.getPageNo());
@@ -74,7 +71,8 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 
     @Override
     public JpfResponseDto addMerPayType(AddMerPayTypeRequest request) {
-        ValidatorUtils.validate(AddMerPayTypeRequest.class);
+
+        ValidatorUtils.validate(request);
 
         PayMerchants payMerchants = payMerchantsMapper.selectByPrimaryKey(request.getMtsid());
         if (payMerchants == null) {
