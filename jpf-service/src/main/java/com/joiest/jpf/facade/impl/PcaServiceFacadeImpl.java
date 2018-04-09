@@ -37,4 +37,32 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         }
         return pcaInfos;
     }
+
+    @Override
+    public List<PcaInfo> getPca(long page, long pageSize) {
+        PayPcaExample example = new PayPcaExample();
+        PayPcaExample.Criteria c = example.createCriteria();
+        example.setPageNo(page);
+        example.setPageSize(pageSize);
+        List<PayPca> pcas = payPcaMapper.selectByExample(example);
+        List<PcaInfo> pcaInfos = new ArrayList<>();
+        for (PayPca payPca : pcas) {
+            PcaInfo pcaInfo = new PcaInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayPca.class, PcaInfo.class, false);
+            beanCopier.copy(payPca, pcaInfo, null);
+            pcaInfos.add(pcaInfo);
+        }
+
+        return pcaInfos;
+    }
+
+    @Override
+    public Integer getPcaCount(long page, long pageSize) {
+        PayPcaExample example = new PayPcaExample();
+        example.setPageNo(page);
+        example.setPageSize(pageSize);
+        Integer count = payPcaMapper.countByExample(example);
+
+        return count;
+    }
 }
