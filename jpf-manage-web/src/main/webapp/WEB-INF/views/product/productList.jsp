@@ -8,6 +8,10 @@
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script>
         $(function() {
+
+            $.ajax({
+
+            });
             var toolbar = [
                 {
                     text:'禁用',
@@ -84,53 +88,36 @@
                 // width:500,
                 url:'list',
                 columns:[[
-                    {field:'id',title:'商户Id',width:50},
-                    {field:'merchNo',title:'聚合商户号',width:150},
-                    {field:'merchName',title:'聚合商户名称',width:150},
-                    {field:'username',title:'用户名',width:150},
-                    {field:'companyname',title:'企业名称',width:150},
-                    // {field:'province',title:'省份',width:150},
-                    // {field:'city',title:'城市',width:150},
-                    {field:'linkname',title:'联系人',width:150},
-                    {field:'linkphone',title:'联系电话',width:150},
-                    {field:'salerphone',title:'销售电话',width:150},
-                    {field:'status',title:'状态',width:70,
+                    {field:'pid',title:'商品Id',width:50},
+                    {field:'mtsid',title:'商户ID',width:150},
+                    {field:'pname',title:'产品名称',width:150},
+                    {field:'pintro',title:'产品简介',width:150},
+                    {field:'pmoney',title:'产品价格',width:150},
+                    {field:'pdpicture',title:'产品图片',width:150,
+                        formatter:function(value,row,index){return '<img style="height:80px;width:100px;" src="'+ value +'" />';}
+                    },
+                    {field:'zftype',title:'支付方式',width:150},
+                    {field:'status',title:'商品状态',width:100,
                         formatter: function(value,row,index){
                             if (value == '0'){
-                                return "正常";
+                                return "下架";
                             } else if (value == '1') {
-                                return "禁用";
+                                return "上架";
                             }
                         }
                     },
-                    // {field:'bslicense',title:'营业执照',width:150},
-                    // {field:'aptitude',title:'企业资质',width:150},
-                    // {field:'logo',title:'企业logo',width:150},
-                    {field:'attestation',title:'企业认证',width:70,
-                        formatter: function(value,row,index){
-                            if (value == '0'){
-                                return "未认证";
-                            } else if (value == '1') {
-                                return "已认证";
-                            }
-                        }
-                    },
-                    {field:'registerip',title:'注册IP',width:150},
-                    {field:'lastloginip',title:'最后登录IP',width:150},
-                    {field:'addtime',title:'创建时间',width:150,formatter: formatDateStr}
+                    {field:'created',title:'创建时间',width:150,formatter: formatDateStr},
+                    {field:'updated',title:'更新时间',width:150,formatter: formatDateStr}
                 ]]
             });
 
             $('#searchBtn').linkbutton({
                 onClick: function(){
-                    // var param = {};
-                    // param["username"]=$('#username_s').textbox('getValue');
-                    // param["status"]=$('#status_s').combobox('getValue');
-                    // $('#dg').datagrid('reload', param);
-
-                    var queryArray = $('#searchForm').serializeArray();
-                    var postData = parsePostData(queryArray);
-                    $('#dg').datagrid('reload', postData);
+                    var param = {};
+                    param["mtsid"]=$('#mtsid').textbox('getValue');
+                    param["pname"]=$('#pname').textbox('getValue');
+                    param["status"]=$('#status_s').combobox('getValue');
+                    $('#dg').datagrid('reload', param);
                 }
             });
 
@@ -178,43 +165,21 @@
             <form id="searchForm" method="post">
                 <table cellpadding="5">
                     <tr>
+                        <td>商户ID:</td>
+                        <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" /></td>
                         <td>产品名称:</td>
-                        <td><input id="merchNo_s" name="merchNo" class="easyui-textbox" type="text" /></td>
-                        <%--<td>聚合商户名称:</td>--%>
-                        <%--<td><input id="merchName_s" name="merchName" class="easyui-textbox" type="text" /></td>--%>
-                        <%--<td>用户名:</td>--%>
-                        <%--<td><input id="username_s" name="username" class="easyui-textbox" type="text" /></td>--%>
-                        <%--<td>企业名称:</td>--%>
-                        <%--<td><input id="companyname_s" name="companyname" class="easyui-textbox" type="text" /></td>--%>
-                        <%--<td>创建时间：</td>--%>
-                        <%--<td colspan="3">--%>
-                            <%--<input type="text" class="Wdate" style="width:158px;" id="startAddTime_s"--%>
-                                   <%--name="startAddTime"--%>
-                                   <%--onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endAddTime_s\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>--%>
-                            <%-----%>
-                            <%--<input type="text" class="Wdate" style="width:158px;" id="endAddTime_s"--%>
-                                   <%--name="endAddTime"--%>
-                                   <%--onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startAddTime_s\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>--%>
-                        <%--</td>--%>
+                        <td><input id="pname" name="pname" class="easyui-textbox" type="text" /></td>
                     </tr>
-                    <%--<tr>--%>
-                        <%--<td>状态:</td>--%>
-                        <%--<td>--%>
-                            <%--<select id="status_s" name="status" class="easyui-combobox">--%>
-                                <%--<option value="">全部</option>--%>
-                                <%--<option value="0">正常</option>--%>
-                                <%--<option value="1">冻结金额</option>--%>
-                            <%--</select>--%>
-                        <%--</td>--%>
-                        <%--<td>企业认证:</td>--%>
-                        <%--<td>--%>
-                            <%--<select id="attestation_s" name="attestation" class="easyui-combobox">--%>
-                                <%--<option value="">全部</option>--%>
-                                <%--<option value="0">未认证</option>--%>
-                                <%--<option value="1">已认证</option>--%>
-                            <%--</select>--%>
-                        <%--</td>--%>
-                    <%--</tr>--%>
+                    <tr>
+                        <td>产品状态:</td>
+                        <td>
+                            <select id="status_s" name="status" class="easyui-combobox">
+                                <option value="">全部</option>
+                                <option value="1">上架</option>
+                                <option value="0">下架</option>
+                            </select>
+                        </td>
+                    </tr>
                 </table>
             </form>
         </div>

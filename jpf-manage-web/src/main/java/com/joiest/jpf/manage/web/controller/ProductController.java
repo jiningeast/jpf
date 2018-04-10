@@ -29,11 +29,10 @@ public class ProductController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list(GetProductRequest request) {
-        GetProductResponse response = productServiceFacade.getProductList(request);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("total", response.getCount());
-        map.put("rows", response.getList());
+    public Map<String, Object> list(Long mtsid, String pname, Byte status, long page,long rows) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("rows", productServiceFacade.getProductsList(mtsid,pname,status,page,rows));
+        map.put("total", productServiceFacade.getProductsCount(mtsid,pname, status));
         return map;
     }
 

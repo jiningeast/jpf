@@ -21,7 +21,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     @Autowired
     private PayMerchantsProductMapper payMerchantsProductMapper;
 
-    @Override
+    /*@Override
     public GetProductResponse getProductList(GetProductRequest request) {
         if(request.getPageNo()<=0){
             request.setPageNo(1);
@@ -52,8 +52,68 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         GetProductResponse getProductResponse = new GetProductResponse();
         getProductResponse.setCount(count);
         getProductResponse.setList(infoList);
-        return getProductResponse;
+        return getProductResponse;*//*
+    }*/
+
+    /**
+     * 获取用户列表
+     * @param pname
+     * @param status
+     * @return
+     */
+    public List<ProductInfo> getProductsList(Long mtsid, String pname, Byte status, long pageNo, long pageSize)
+    {
+        if (pageNo<=0) {
+            pageNo = 1;
+        }
+        if (pageSize<=0) {
+            pageSize = 20;
+        }
+        PayMerchantsProductExample example = new PayMerchantsProductExample();
+        example.setPageNo(pageNo);
+        example.setPageSize(pageSize);
+        example.setOrderByClause("updated DESC");
+        PayMerchantsProductExample.Criteria c = example.createCriteria();
+
+        if (mtsid != null) {
+            c.andMtsidEqualTo(mtsid);
+        }
+
+        if(StringUtils.isNotBlank(pname)){
+            c.andPnameLike( "%" + pname.trim() + "%" );
+        }
+        if (status != null) {
+            c.andStatusEqualTo(status);
+        }
+
+        List<PayMerchantsProduct> list = payMerchantsProductMapper.selectByExample(example);
+        List<ProductInfo> infoList = new ArrayList<>();
+        for(PayMerchantsProduct product:list){
+            ProductInfo productInfo = new ProductInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayMerchantsProduct.class, ProductInfo.class, false);
+            beanCopier.copy(product,productInfo,null);
+            infoList.add(productInfo);
+        }
+        return infoList;
     }
 
+    /**
+     * 获取用户列表统计
+     * @param pname
+     * @param status
+     * @return
+     */
+    public int getProductsCount(Long mtsid, String pname, Byte status)
+    {
+        PayMerchantsProductExample example = new PayMerchantsProductExample();
+        PayMerchantsProductExample.Criteria c = example.createCriteria();
+        if(StringUtils.isNotBlank(pname)){
+            c.andPnameEqualTo(pname);
+        }
+        if (status != null) {
+            c.andStatusEqualTo(status);
+        }
+        return  payMerchantsProductMapper.countByExample(example);
+    }
 
 }
