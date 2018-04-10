@@ -26,7 +26,7 @@ public class PcaController {
     @ResponseBody
     public Map<String,Object> list(long page, long rows){
         Map<String,Object> map = new HashMap<>();
-        map.put("total", pcaServiceFacade.getPcaCount(page, rows));
+        map.put("total", pcaServiceFacade.getPcaCount());
         map.put("rows", pcaServiceFacade.getPca(page, rows));
 
         return map;

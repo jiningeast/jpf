@@ -41,9 +41,20 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
     @Override
     public List<PcaInfo> getPca(long page, long pageSize) {
         PayPcaExample example = new PayPcaExample();
-        PayPcaExample.Criteria c = example.createCriteria();
-        example.setPageNo(page);
-        example.setPageSize(pageSize);
+        if ( page <= 0 )
+        {
+            page = 1;
+        }else
+        {
+            example.setPageNo(page);
+        }
+        if ( pageSize <= 0 )
+        {
+            pageSize = 10;
+        }else
+        {
+            example.setPageSize(pageSize);
+        }
         List<PayPca> pcas = payPcaMapper.selectByExample(example);
         List<PcaInfo> pcaInfos = new ArrayList<>();
         for (PayPca payPca : pcas) {
@@ -57,10 +68,8 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
     }
 
     @Override
-    public Integer getPcaCount(long page, long pageSize) {
+    public Integer getPcaCount() {
         PayPcaExample example = new PayPcaExample();
-        example.setPageNo(page);
-        example.setPageSize(pageSize);
         Integer count = payPcaMapper.countByExample(example);
 
         return count;
