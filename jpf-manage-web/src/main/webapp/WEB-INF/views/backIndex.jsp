@@ -61,7 +61,17 @@
                     "icon" : "icon-nav",
                     "url" : "merchant/paytype/index"
                 }]
-    		}]
+    		},{
+                "menuid" : "3",
+                "icon" : "icon-sys",
+                "menuname" : "产品管理",
+                "menus" : [{
+                    "menuid" : "301",
+                    "menuname" : "产品信息管理",
+                    "icon" : "icon-nav",
+                    "url" : "product/index"
+                }]
+            }]
     	};
 
   	//设置登录窗口
