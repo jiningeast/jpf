@@ -21,5 +21,5 @@ public interface PcaServiceFacade {
      */
     public List<PcaInfo> getPca(long page, long pageSize);
 
-    public Integer getPcaCount(long page, long pageSize);
+    public Integer getPcaCount();
 }
