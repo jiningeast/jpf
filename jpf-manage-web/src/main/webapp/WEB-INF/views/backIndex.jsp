@@ -69,7 +69,7 @@
                     "menuid" : "301",
                     "menuname" : "产品信息管理",
                     "icon" : "icon-nav",
-                    "url" : "merchant/index"
+                    "url" : "product/index"
                 }]
             }]
     	};

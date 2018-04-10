@@ -9,5 +9,6 @@
 	<bean id="merPayTypeServiceFacade" class="com.joiest.jpf.facade.impl.MerPayTypeServiceFacadeImpl"></bean>
 	<bean id="merTypeServiceFacade" class="com.joiest.jpf.facade.impl.MerTypeServiceFacadeImpl"></bean>
 	<bean id="pcaServiceFacade" class="com.joiest.jpf.facade.impl.PcaServiceFacadeImpl"></bean>
+	<bean id="productServiceFacde" class="com.joiest.jpf.facade.impl.ProductServiceFacadeImpl"></bean>
 
 </beans>
