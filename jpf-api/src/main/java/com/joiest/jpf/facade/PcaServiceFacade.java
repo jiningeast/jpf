@@ -13,4 +13,13 @@ public interface PcaServiceFacade {
      */
     public List<PcaInfo> getPcas(String pid);
 
+    /**
+     * 分页获取地区信息
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    public List<PcaInfo> getPca(long page, long pageSize);
+
+    public Integer getPcaCount(long page, long pageSize);
 }
