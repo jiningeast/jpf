@@ -1,15 +1,24 @@
 package com.joiest.jpf.facade;
 
-import com.joiest.jpf.dto.*;
+import com.joiest.jpf.entity.ProductInfo;
+
+import java.util.List;
 
 public interface ProductServiceFacade {
-
     /**
-     * 获取产品信息列表
-     * @param request
+     * 获取用户列表
+     * @param pname
+     * @param status
      * @return
      */
-    public GetProductResponse getProductList(GetProductRequest request);
+    public List<ProductInfo> getProductsList(Long mtsid, String pname, Byte status, long pageNo, long pageSize);
 
+    /**
+     * 获取用户列表统计
+     * @param pname
+     * @param status
+     * @return
+     */
+    public int getProductsCount(Long mtsid, String pname, Byte status);
 
 }

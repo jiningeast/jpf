@@ -43,7 +43,7 @@ public class PayMerchantsProduct implements Serializable {
     /**
      * 商品状态：1显示，0不显示
      */
-    private Boolean status;
+    private Byte status;
 
     /**
      * 创建时间
@@ -113,11 +113,11 @@ public class PayMerchantsProduct implements Serializable {
         this.zftype = zftype == null ? null : zftype.trim();
     }
 
-    public Boolean getStatus() {
+    public Byte getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Byte status) {
         this.status = status;
     }
 

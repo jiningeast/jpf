@@ -21,6 +21,11 @@ public class ProductInfo {
     private String pname;
 
     /**
+     * 产品简介
+     */
+    private String pintro;
+
+    /**
      * 产品价格
      */
     private BigDecimal pmoney;
@@ -36,6 +41,11 @@ public class ProductInfo {
     private String zftype;
 
     /**
+     * 商品状态：1显示，0不显示
+     */
+    private Byte status;
+
+    /**
      * 创建时间
      */
     private Date created;
@@ -45,10 +55,7 @@ public class ProductInfo {
      */
     private Date updated;
 
-    /**
-     * 产品简介
-     */
-    private String pintro;
+    private static final long serialVersionUID = 1L;
 
     public Long getPid() {
         return pid;
@@ -71,7 +78,15 @@ public class ProductInfo {
     }
 
     public void setPname(String pname) {
-        this.pname = pname;
+        this.pname = pname == null ? null : pname.trim();
+    }
+
+    public String getPintro() {
+        return pintro;
+    }
+
+    public void setPintro(String pintro) {
+        this.pintro = pintro == null ? null : pintro.trim();
     }
 
     public BigDecimal getPmoney() {
@@ -87,7 +102,7 @@ public class ProductInfo {
     }
 
     public void setPdpicture(String pdpicture) {
-        this.pdpicture = pdpicture;
+        this.pdpicture = pdpicture == null ? null : pdpicture.trim();
     }
 
     public String getZftype() {
@@ -95,7 +110,15 @@ public class ProductInfo {
     }
 
     public void setZftype(String zftype) {
-        this.zftype = zftype;
+        this.zftype = zftype == null ? null : zftype.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     public Date getCreated() {
@@ -112,13 +135,5 @@ public class ProductInfo {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
-    }
-
-    public String getPintro() {
-        return pintro;
-    }
-
-    public void setPintro(String pintro) {
-        this.pintro = pintro;
     }
 }
