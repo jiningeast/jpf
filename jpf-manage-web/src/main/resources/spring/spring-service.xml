@@ -11,5 +11,6 @@
 	<bean id="pcaServiceFacade" class="com.joiest.jpf.facade.impl.PcaServiceFacadeImpl"></bean>
 	<bean id="productServiceFacade" class="com.joiest.jpf.facade.impl.ProductServiceFacadeImpl"></bean>
 	<bean id="RolesServiceFacade" class="com.joiest.jpf.facade.impl.RolesServiceFacadeImpl"></bean>
+	<bean id="BankServiceFacade" class="com.joiest.jpf.facade.impl.BankServiceFacadeImpl"></bean>
 
 </beans>
