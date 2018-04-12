@@ -8,13 +8,46 @@
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script>
         $(function() {
-
-            $.ajax({
-
-            });
             var toolbar = [
                 {
-                    text:'禁用',
+                    text:'上架',
+                    iconCls:'icon-ok',
+                    handler:function(){
+                        var rows = $('#dg').datagrid('getSelections');
+                        if (rows.length != 1) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return
+                        }
+                        $.messager.confirm('上架', '确定上架此产品：' + rows[0].pname, function (r) {
+                            if (r) {
+                                var param = {};
+                                param["pname"] = rows[0].pname;
+                                param["status"] = '1';
+                                $.ajax({
+                                    type: 'post',
+                                    url: 'alertStatus',
+                                    data: param,
+                                    dataType: 'json',
+                                    success: function (msg) {
+                                        //alert(msg.retCode);
+                                        if (msg.retCode != '0000') {
+                                            $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']!', 'error');
+                                        } else {
+                                            $.messager.alert('消息提示', '操作成功!', 'error');
+                                            $('#dg').datagrid('reload');
+                                        }
+                                    },
+                                    error: function () {
+                                        $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+                                    }
+                                });
+                            }
+                        });
+
+                    }
+                },
+                {
+                    text:'下架',
                     iconCls:'icon-no',
                     handler:function(){
                         var rows = $('#dg').datagrid('getSelections');
@@ -22,11 +55,11 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $.messager.confirm('禁用', '确定禁用用户：' + rows[0].userName, function (r) {
+                        $.messager.confirm('下架', '确定下架此产品：' + rows[0].pname, function (r) {
                             if (r) {
                                 var param = {};
-                                param["userName"] = rows[0].userName;
-                                param["status"] = '1';
+                                param["pname"] = rows[0].pname;
+                                param["status"] = '0';
                                 $.ajax({
                                     type: 'post',
                                     url: 'alertStatus',
@@ -59,19 +92,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#infoDiv').window("open").window('refresh', 'modify/page?id='+rows[0].id).window('setTitle','编辑');
-                    }
-                },
-                {
-                    text:'审核',
-                    iconCls:'icon-key-add',
-                    handler:function(){
-                        var rows = $('#dg').datagrid('getSelections');
-                        if (rows.length != 1) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return
-                        }
-                        $('#infoDiv').window("open").window('refresh', 'audit/page?id='+rows[0].id).window('setTitle','审核');
+                        $('#infoDiv').window("open").window('refresh', 'modify/page?pid='+rows[0].pid).window('setTitle','编辑');
                     }
                 }];
 
@@ -88,15 +109,15 @@
                 // width:500,
                 url:'list',
                 columns:[[
-                    {field:'pid',title:'商品Id',width:50},
-                    {field:'mtsid',title:'商户ID',width:150},
-                    {field:'pname',title:'产品名称',width:150},
-                    {field:'pintro',title:'产品简介',width:150},
+                    {field:'pid',checkbox:true },
+                    {field:'mtsid',title:'商户ID',width:80},
+                    {field:'pname',title:'产品名称',width:200},
+                    {field:'pintro',title:'产品简介',width:200},
                     {field:'pmoney',title:'产品价格',width:150},
                     {field:'pdpicture',title:'产品图片',width:150,
                         formatter:function(value,row,index){return '<img style="height:80px;width:100px;" src="'+ value +'" />';}
                     },
-                    {field:'zftype',title:'支付方式',width:150},
+                    {field:'zftype',title:'支付方式',width:200},
                     {field:'status',title:'商品状态',width:100,
                         formatter: function(value,row,index){
                             if (value == '0'){
@@ -128,8 +149,8 @@
             });
 
             $('#infoDiv').window({
-                width:'1024px',
-                height:'550px',
+                width:'800px',
+                height:'500px',
                 closed:true,
                 modal:true
             });

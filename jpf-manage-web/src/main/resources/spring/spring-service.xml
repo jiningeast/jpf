@@ -10,5 +10,6 @@
 	<bean id="merTypeServiceFacade" class="com.joiest.jpf.facade.impl.MerTypeServiceFacadeImpl"></bean>
 	<bean id="pcaServiceFacade" class="com.joiest.jpf.facade.impl.PcaServiceFacadeImpl"></bean>
 	<bean id="productServiceFacade" class="com.joiest.jpf.facade.impl.ProductServiceFacadeImpl"></bean>
+	<bean id="RolesServiceFacade" class="com.joiest.jpf.facade.impl.RolesServiceFacadeImpl"></bean>
 
 </beans>
