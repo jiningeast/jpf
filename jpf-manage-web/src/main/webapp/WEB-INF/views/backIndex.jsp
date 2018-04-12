@@ -45,6 +45,11 @@
                     "menuname" : "地区管理",
                     "icon" : "icon-nav",
                     "url" : "pca/index"
+                },{
+    			    "menuid" : "106",
+                    "menuname" : "银行管理",
+                    "icon" : "icon-nav",
+                    "url" : "bank/index"
                 }]
     		},{
     			"menuid" : "2",
