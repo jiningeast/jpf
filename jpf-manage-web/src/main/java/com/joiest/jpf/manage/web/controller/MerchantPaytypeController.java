@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,7 +52,7 @@ public class MerchantPaytypeController {
 
     @RequestMapping("/add/action")
     @ResponseBody
-    public JpfResponseDto addAction(AddMerPayTypeRequest request){
+    public JpfResponseDto addAction(@RequestBody AddMerPayTypeRequest request){
         return merPayTypeServiceFacade.addMerPayType(request);
 
     }

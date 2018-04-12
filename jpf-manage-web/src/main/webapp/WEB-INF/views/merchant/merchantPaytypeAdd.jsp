@@ -118,8 +118,9 @@
                 $.ajax({
                     type: 'post',
                     url: '../merchant/paytype/add/action',
-                    data: postData,
+                    data: JSON.stringify(postData),
                     dataType: 'json',
+                    contentType : 'application/json;charset=utf-8',
                     success: function (msg) {
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
