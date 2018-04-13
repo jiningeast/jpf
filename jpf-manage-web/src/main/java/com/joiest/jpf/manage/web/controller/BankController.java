@@ -1,9 +1,11 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.entity.BankInfo;
 import com.joiest.jpf.facade.BankServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,9 +42,29 @@ public class BankController {
         return new ModelAndView("bank/bankAdd");
     }
 
-    @RequestMapping("/save")
+    @RequestMapping("/addSave")
     @ResponseBody
-    public JpfResponseDto save(String paybankname, String tpid, String bankcode) {
+    public JpfResponseDto addSave(String paybankname, String tpid, String bankcode) {
         return bankServiceFacade.addBank(paybankname, tpid, bankcode);
-    };
+    }
+
+    @RequestMapping("/edit")
+    @ResponseBody
+    public ModelAndView edit(String id, ModelMap modelMap){
+        BankInfo bankInfo = bankServiceFacade.getBankInfo(id);
+        modelMap.addAttribute("bankInfo", bankInfo);
+        return new ModelAndView("bank/bankEdit", modelMap);
+    }
+
+    @RequestMapping("/editSave")
+    @ResponseBody
+    public JpfResponseDto editSave(String id, String paybankname, String tpid, String bankcode){
+        return bankServiceFacade.editBank(id,paybankname,tpid,bankcode);
+    }
+
+    @RequestMapping("/delBank")
+    @ResponseBody
+    public JpfResponseDto delBank(String id){
+        return bankServiceFacade.delBank(id);
+    }
 }

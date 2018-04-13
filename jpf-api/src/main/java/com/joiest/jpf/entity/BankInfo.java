@@ -72,4 +72,12 @@ public class BankInfo {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    public Date getUpdated() {
+        return created;
+    }
+
+    public void setUpdated(Date created) {
+        this.created = created;
+    }
 }

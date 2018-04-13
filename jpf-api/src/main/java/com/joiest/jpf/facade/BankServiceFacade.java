@@ -13,4 +13,10 @@ public interface BankServiceFacade {
     public List<BankInfo> getBank(long page, long rows);
 
     public JpfResponseDto addBank(String paybankname, String tpid, String bankcode);
+
+    public BankInfo getBankInfo(String id);
+
+    public JpfResponseDto editBank(String id, String paybankname, String tpid, String bankcode);
+
+    public JpfResponseDto delBank(String id);
 }
