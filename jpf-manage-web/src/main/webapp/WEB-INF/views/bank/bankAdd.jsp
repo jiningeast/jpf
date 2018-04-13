@@ -23,7 +23,7 @@
                             <input id="tpid" class="easyui-combobox" name="tpid" data-options="required:true,
                                                                                      url:'../param/getType?pid=17',
                                                                                      method:'get',
-                                                                                     valueField:'tpid',
+                                                                                     valueField:'catpath',
                                                                                      textField:'cat',
                                                                                      panelHeight:'auto'">
                         </td>

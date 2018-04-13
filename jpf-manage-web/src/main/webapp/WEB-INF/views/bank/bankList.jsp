@@ -27,8 +27,8 @@
                     {field:'paybankname', title:'银行名称',width:'14%'},
                     {field:'tpid', title:'银行类型',width:'14%'},
                     {field:'bankcode', title:'银行编码',width:'14%'},
-                    {field:'created', title:'创建时间',width:'14%'},
-                    {field:'updated', title:'修改时间',width:'14%'}
+                    {field:'created', title:'创建时间',width:'14%',formatter: formatDateStr},
+                    {field:'updated', title:'修改时间',width:'14%',formatter: formatDateStr}
                 ]]
             });
             $('#dg').datagrid().datagrid('getPager');

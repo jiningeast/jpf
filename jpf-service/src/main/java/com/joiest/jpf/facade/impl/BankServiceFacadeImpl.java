@@ -75,10 +75,10 @@ public class BankServiceFacadeImpl implements BankServiceFacade {
         payBank.setPaybankname(paybankname);
         payBank.setTpid(tpid);
         payBank.setBankcode(bankcode);
-        /*Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateNowStr = sdf.format(d);
-        payBank.setCreated(dateNowStr);*/
+        Date d = new Date();
+        /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateNowStr = sdf.format(d);*/
+        payBank.setCreated(d);
 
         int index = payBankMapper.insertSelective(payBank);
         if(index !=1){
