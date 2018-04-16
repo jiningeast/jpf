@@ -67,8 +67,7 @@
                 columns:[[
                     {field:'id',checkbox:true},
                     {field:'mtsid',title:'商户Id',width:50},
-                    {field:'tpid',title:'支付类型',width:150},
-                    {field:'catpath',title:'支付类型catpath',width:150},
+                    {field:'catpath',title:'支付类型',width:150},
                     {field:'created',title:'创建时间',width:150,formatter: formatDateStr},
                     {field:'updated',title:'变更时间',width:150,formatter: formatDateStr}
                 ]]

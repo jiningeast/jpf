@@ -3,10 +3,7 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayMerchants;
-import com.joiest.jpf.common.po.PayMerchantsPaytype;
-import com.joiest.jpf.common.po.PayMerchantsPaytypeExample;
-import com.joiest.jpf.common.po.PayMerchantsType;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsMapper;
@@ -21,9 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 
@@ -53,11 +48,30 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         if (request != null && StringUtils.isNotBlank(request.getCreateStartDate()) && StringUtils.isNotBlank(request.getCreateEndDate())) {
             c.andCreatedBetween(DateUtils.getString2ShortDate(request.getCreateStartDate()), DateUtils.getString2ShortDate(request.getCreateEndDate()));
         }
+
         List<PayMerchantsPaytype> payMerchantsPaytypes = payMerchantsPaytypeMapper.selectByExample(example);
         example.clear();
         int count = payMerchantsPaytypeMapper.countByExample(example);
+        //获取支付类型数据
         List<MerchantPayTypeInfo> payTypeInfos = new ArrayList<>();
+        PayMerchantsTypeExample payMerchantsTypeExample = new PayMerchantsTypeExample();
+        PayMerchantsTypeExample.Criteria c1 = payMerchantsTypeExample.createCriteria();
+        //只拿支付类型数据
+        String pid = "5";
+        c1.andPidEqualTo(pid);
+        List<PayMerchantsType> payMerchantsTypes = payMerchantsTypeMapper.selectByExample(payMerchantsTypeExample);
+        Map<String,String> map = new HashMap<>();
+        if ( payMerchantsTypes.size() > 0 )
+        {
+            for (PayMerchantsType payType : payMerchantsTypes)
+            {
+                map.put(payType.getCatid().toString(), payType.getCat());
+            }
+        }
         for (PayMerchantsPaytype payMerchantsPaytype : payMerchantsPaytypes) {
+            String payType_tmp = new String();
+            payType_tmp = map.get(payMerchantsPaytype.getTpid().toString());
+            payMerchantsPaytype.setCatpath(payType_tmp);
             MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
             BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
             beanCopier.copy(payMerchantsPaytype, merchantPayTypeInfo, null);

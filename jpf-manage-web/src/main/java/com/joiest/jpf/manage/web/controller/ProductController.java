@@ -38,10 +38,10 @@ public class ProductController {
      */
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list(Long mtsid, String pname, Byte status, long page,long rows) {
+    public Map<String, Object> list(Long pid, Long mtsid, String pname, Byte status, long page,long rows) {
         Map<String, Object> map = new HashMap<>();
-        map.put("rows", productServiceFacade.getProductsList(mtsid,pname,status,page,rows));
-        map.put("total", productServiceFacade.getProductsCount(mtsid,pname, status));
+        map.put("rows", productServiceFacade.getProductsList(pid, mtsid, pname, status, page, rows));
+        map.put("total", productServiceFacade.getProductsCount(pid, mtsid, pname, status));
         return map;
     }
 
@@ -54,6 +54,9 @@ public class ProductController {
         return productServiceFacade.upStatus(pname,status);
     }
 
+    /**
+     * 产品编辑-获取单个产品信息
+     */
     @RequestMapping("/modify/page")
     public ModelAndView modifyPage(String pid, ModelMap modelMap){
         //产品详情
@@ -62,6 +65,9 @@ public class ProductController {
         return new ModelAndView("product/productModify",modelMap);
     }
 
+    /**
+     * 产品编辑
+     */
     @RequestMapping("/modify/action")
     @ResponseBody
     public JpfResponseDto modifyAction(@RequestBody ModifyProductRequest request){

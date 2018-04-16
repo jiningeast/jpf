@@ -9,11 +9,8 @@ import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsProductMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsTypeMapper;
 import com.joiest.jpf.dto.*;
-import com.joiest.jpf.entity.MerchantInfo;
-import com.joiest.jpf.entity.MerchantTypeInfo;
 import com.joiest.jpf.entity.ProductInfo;
 import com.joiest.jpf.facade.ProductServiceFacade;
-import com.sun.xml.internal.bind.v2.model.core.EnumConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
@@ -77,7 +71,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * @return
      */
     @Override
-    public List<ProductInfo> getProductsList(Long mtsid, String pname, Byte status, long pageNo, long pageSize)
+    public List<ProductInfo> getProductsList(Long pid, Long mtsid, String pname, Byte status, long pageNo, long pageSize)
     {
         if (pageNo<=0) {
             pageNo = 1;
@@ -94,7 +88,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         if (mtsid != null) {
             c.andMtsidEqualTo(mtsid);
         }
-
+        if ( pid != null ){
+            c.andPidEqualTo(pid);
+        }
         if(StringUtils.isNotBlank(pname)){
             c.andPnameLike( "%" + pname.trim() + "%" );
         }
@@ -144,12 +140,18 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * @return
      */
     @Override
-    public int getProductsCount(Long mtsid, String pname, Byte status)
+    public int getProductsCount(Long pid, Long mtsid, String pname, Byte status)
     {
         PayMerchantsProductExample example = new PayMerchantsProductExample();
         PayMerchantsProductExample.Criteria c = example.createCriteria();
+        if (mtsid != null) {
+            c.andMtsidEqualTo(mtsid);
+        }
+        if ( pid != null ){
+            c.andPidEqualTo(pid);
+        }
         if(StringUtils.isNotBlank(pname)){
-            c.andPnameEqualTo(pname);
+            c.andPnameLike( "%" + pname.trim() + "%" );
         }
         if (status != null) {
             c.andStatusEqualTo(status);
@@ -220,7 +222,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         product.setPintro(request.getPintro());
         product.setPmoney(request.getPmoney());
         product.setStatus(request.getStatus());
-//        product.setZftype(request.getZftype().toString());
+        product.setUpdated(new Date());
         String zftype_tmp = new String();
         String zftype = new String();
         for (int i=0; i < request.getZftype().size(); i++){

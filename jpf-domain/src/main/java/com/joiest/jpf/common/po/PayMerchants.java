@@ -45,6 +45,16 @@ public class PayMerchants implements Serializable {
     private Long city;
 
     /**
+     * 区县
+     */
+    private Long region;
+
+    /**
+     * 具体地址
+     */
+    private String address;
+
+    /**
      * 联系人
      */
     private String linkname;
@@ -80,17 +90,17 @@ public class PayMerchants implements Serializable {
     private Byte status;
 
     /**
-     * 营业执照
+     * 营业执照图片
      */
     private String bslicense;
 
     /**
-     * 企业资质
+     * 企业资质图片
      */
     private String aptitude;
 
     /**
-     * 企业logo
+     * 企业logo图片
      */
     private String logo;
 
@@ -108,6 +118,46 @@ public class PayMerchants implements Serializable {
      * 审核备注
      */
     private String content;
+
+    /**
+     * 法人姓名
+     */
+    private String legalname;
+
+    /**
+     * 法人身份证号
+     */
+    private String legalidcard;
+
+    /**
+     * 法人身份证正面地址
+     */
+    private String legalface;
+
+    /**
+     * 法人身份证反面地址
+     */
+    private String legalback;
+
+    /**
+     * 身份证有效期开始日期
+     */
+    private String idstartdate;
+
+    /**
+     * 身份证有效期结束日期
+     */
+    private String idenddate;
+
+    /**
+     * 法人手持身份证照片
+     */
+    private String lefalhand;
+
+    /**
+     * 营业执照号码
+     */
+    private String certificate;
 
     private static final long serialVersionUID = 1L;
 
@@ -173,6 +223,22 @@ public class PayMerchants implements Serializable {
 
     public void setCity(Long city) {
         this.city = city;
+    }
+
+    public Long getRegion() {
+        return region;
+    }
+
+    public void setRegion(Long region) {
+        this.region = region;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 
     public String getLinkname() {
@@ -279,6 +345,70 @@ public class PayMerchants implements Serializable {
         this.content = content == null ? null : content.trim();
     }
 
+    public String getLegalname() {
+        return legalname;
+    }
+
+    public void setLegalname(String legalname) {
+        this.legalname = legalname == null ? null : legalname.trim();
+    }
+
+    public String getLegalidcard() {
+        return legalidcard;
+    }
+
+    public void setLegalidcard(String legalidcard) {
+        this.legalidcard = legalidcard == null ? null : legalidcard.trim();
+    }
+
+    public String getLegalface() {
+        return legalface;
+    }
+
+    public void setLegalface(String legalface) {
+        this.legalface = legalface == null ? null : legalface.trim();
+    }
+
+    public String getLegalback() {
+        return legalback;
+    }
+
+    public void setLegalback(String legalback) {
+        this.legalback = legalback == null ? null : legalback.trim();
+    }
+
+    public String getIdstartdate() {
+        return idstartdate;
+    }
+
+    public void setIdstartdate(String idstartdate) {
+        this.idstartdate = idstartdate == null ? null : idstartdate.trim();
+    }
+
+    public String getIdenddate() {
+        return idenddate;
+    }
+
+    public void setIdenddate(String idenddate) {
+        this.idenddate = idenddate == null ? null : idenddate.trim();
+    }
+
+    public String getLefalhand() {
+        return lefalhand;
+    }
+
+    public void setLefalhand(String lefalhand) {
+        this.lefalhand = lefalhand == null ? null : lefalhand.trim();
+    }
+
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(String certificate) {
+        this.certificate = certificate == null ? null : certificate.trim();
+    }
+
     /**
      *
      */
@@ -296,6 +426,8 @@ public class PayMerchants implements Serializable {
         sb.append(", companyname=").append(companyname);
         sb.append(", province=").append(province);
         sb.append(", city=").append(city);
+        sb.append(", region=").append(region);
+        sb.append(", address=").append(address);
         sb.append(", linkname=").append(linkname);
         sb.append(", linkphone=").append(linkphone);
         sb.append(", salerphone=").append(salerphone);
@@ -309,6 +441,14 @@ public class PayMerchants implements Serializable {
         sb.append(", attestation=").append(attestation);
         sb.append(", muserid=").append(muserid);
         sb.append(", content=").append(content);
+        sb.append(", legalname=").append(legalname);
+        sb.append(", legalidcard=").append(legalidcard);
+        sb.append(", legalface=").append(legalface);
+        sb.append(", legalback=").append(legalback);
+        sb.append(", idstartdate=").append(idstartdate);
+        sb.append(", idenddate=").append(idenddate);
+        sb.append(", lefalhand=").append(lefalhand);
+        sb.append(", certificate=").append(certificate);
         sb.append("]");
         return sb.toString();
     }
@@ -337,6 +477,8 @@ public class PayMerchants implements Serializable {
             && (this.getCompanyname() == null ? other.getCompanyname() == null : this.getCompanyname().equals(other.getCompanyname()))
             && (this.getProvince() == null ? other.getProvince() == null : this.getProvince().equals(other.getProvince()))
             && (this.getCity() == null ? other.getCity() == null : this.getCity().equals(other.getCity()))
+            && (this.getRegion() == null ? other.getRegion() == null : this.getRegion().equals(other.getRegion()))
+            && (this.getAddress() == null ? other.getAddress() == null : this.getAddress().equals(other.getAddress()))
             && (this.getLinkname() == null ? other.getLinkname() == null : this.getLinkname().equals(other.getLinkname()))
             && (this.getLinkphone() == null ? other.getLinkphone() == null : this.getLinkphone().equals(other.getLinkphone()))
             && (this.getSalerphone() == null ? other.getSalerphone() == null : this.getSalerphone().equals(other.getSalerphone()))
@@ -349,7 +491,15 @@ public class PayMerchants implements Serializable {
             && (this.getLogo() == null ? other.getLogo() == null : this.getLogo().equals(other.getLogo()))
             && (this.getAttestation() == null ? other.getAttestation() == null : this.getAttestation().equals(other.getAttestation()))
             && (this.getMuserid() == null ? other.getMuserid() == null : this.getMuserid().equals(other.getMuserid()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
+            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
+            && (this.getLegalname() == null ? other.getLegalname() == null : this.getLegalname().equals(other.getLegalname()))
+            && (this.getLegalidcard() == null ? other.getLegalidcard() == null : this.getLegalidcard().equals(other.getLegalidcard()))
+            && (this.getLegalface() == null ? other.getLegalface() == null : this.getLegalface().equals(other.getLegalface()))
+            && (this.getLegalback() == null ? other.getLegalback() == null : this.getLegalback().equals(other.getLegalback()))
+            && (this.getIdstartdate() == null ? other.getIdstartdate() == null : this.getIdstartdate().equals(other.getIdstartdate()))
+            && (this.getIdenddate() == null ? other.getIdenddate() == null : this.getIdenddate().equals(other.getIdenddate()))
+            && (this.getLefalhand() == null ? other.getLefalhand() == null : this.getLefalhand().equals(other.getLefalhand()))
+            && (this.getCertificate() == null ? other.getCertificate() == null : this.getCertificate().equals(other.getCertificate()));
     }
 
     /**
@@ -367,6 +517,8 @@ public class PayMerchants implements Serializable {
         result = prime * result + ((getCompanyname() == null) ? 0 : getCompanyname().hashCode());
         result = prime * result + ((getProvince() == null) ? 0 : getProvince().hashCode());
         result = prime * result + ((getCity() == null) ? 0 : getCity().hashCode());
+        result = prime * result + ((getRegion() == null) ? 0 : getRegion().hashCode());
+        result = prime * result + ((getAddress() == null) ? 0 : getAddress().hashCode());
         result = prime * result + ((getLinkname() == null) ? 0 : getLinkname().hashCode());
         result = prime * result + ((getLinkphone() == null) ? 0 : getLinkphone().hashCode());
         result = prime * result + ((getSalerphone() == null) ? 0 : getSalerphone().hashCode());
@@ -380,6 +532,14 @@ public class PayMerchants implements Serializable {
         result = prime * result + ((getAttestation() == null) ? 0 : getAttestation().hashCode());
         result = prime * result + ((getMuserid() == null) ? 0 : getMuserid().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
+        result = prime * result + ((getLegalname() == null) ? 0 : getLegalname().hashCode());
+        result = prime * result + ((getLegalidcard() == null) ? 0 : getLegalidcard().hashCode());
+        result = prime * result + ((getLegalface() == null) ? 0 : getLegalface().hashCode());
+        result = prime * result + ((getLegalback() == null) ? 0 : getLegalback().hashCode());
+        result = prime * result + ((getIdstartdate() == null) ? 0 : getIdstartdate().hashCode());
+        result = prime * result + ((getIdenddate() == null) ? 0 : getIdenddate().hashCode());
+        result = prime * result + ((getLefalhand() == null) ? 0 : getLefalhand().hashCode());
+        result = prime * result + ((getCertificate() == null) ? 0 : getCertificate().hashCode());
         return result;
     }
 }

@@ -97,19 +97,19 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">营业执照：</td>
                     <td colspan="3">
-                        <img src="${merchantInfo.bslicense}">
+                        <img width="200" height="200" src="${merchantInfo.bslicense}">
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业资质：</td>
                     <td colspan="3">
-                        <img src="${merchantInfo.aptitude}">
+                        <img width="200" height="200" src="${merchantInfo.aptitude}">
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业logo：</td>
                     <td colspan="3">
-                        <img src="${merchantInfo.logo}">
+                        <img width="200" height="200" src="${merchantInfo.logo}">
                     </td>
                 </tr>
                 <tr>

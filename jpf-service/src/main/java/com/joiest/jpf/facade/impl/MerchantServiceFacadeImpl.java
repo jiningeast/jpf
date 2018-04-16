@@ -149,13 +149,13 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         PayMerchantsBank merchantsBank = merchantsBanks.get(0);
 
         PayMerchants merchantsRecord = new PayMerchants();
-        BeanCopier beanCopier = BeanCopier.create(AddMerchRequest.class, PayMerchants.class, false);
+        BeanCopier beanCopier = BeanCopier.create(ModifyMerchRequest.class, PayMerchants.class, false);
         beanCopier.copy(request, merchantsRecord, null);
         merchantsRecord.setId(payMerchants.getId());
         payMerchantsMapper.updateByPrimaryKeySelective(merchantsRecord);
 
         PayMerchantsBank merchantsBankrecord = new PayMerchantsBank();
-        BeanCopier beanCopier1 = BeanCopier.create(AddMerchRequest.class, PayMerchantsBank.class, false);
+        BeanCopier beanCopier1 = BeanCopier.create(ModifyMerchRequest.class, PayMerchantsBank.class, false);
         beanCopier1.copy(request,merchantsBankrecord,null);
         merchantsBankrecord.setUpdated(new Date());
         merchantsBankrecord.setId(merchantsBank.getId());

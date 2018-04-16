@@ -113,12 +113,18 @@
         // initData();
         $("#saveBtn_a").linkbutton({
             onClick: function () {
-                var queryArray = $('#savePaytype_From').serializeArray();
-                var postData = parsePostData(queryArray);
+                // var queryArray = $('#savePaytype_From').serializeArray();
+                // var postData = parsePostData(queryArray);;
+                var param = {};
+                param["mtsid"] = $("#mtsid_a").val();
+                param['tpid'] = new Array();
+                $("#savePaytypeShow_Table tbody input[name='tpid']").each(function (i) {
+                    param['tpid'][i] = $(this).val()
+                });
                 $.ajax({
                     type: 'post',
                     url: '../merchant/paytype/add/action',
-                    data: JSON.stringify(postData),
+                    data: JSON.stringify(param),
                     dataType: 'json',
                     contentType : 'application/json;charset=utf-8',
                     success: function (msg) {

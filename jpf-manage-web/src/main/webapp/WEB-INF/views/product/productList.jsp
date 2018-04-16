@@ -109,7 +109,8 @@
                 // width:500,
                 url:'list',
                 columns:[[
-                    {field:'pid',checkbox:true },
+                    {field:'id',checkbox:true },
+                    {field:'pid',title:'产品ID',width:80},
                     {field:'mtsid',title:'商户ID',width:80},
                     {field:'pname',title:'产品名称',width:200},
                     {field:'pintro',title:'产品简介',width:200},
@@ -129,12 +130,16 @@
                     },
                     {field:'created',title:'创建时间',width:150,formatter: formatDateStr},
                     {field:'updated',title:'更新时间',width:150,formatter: formatDateStr}
-                ]]
+                ]],
+                onLoadSuccess: function () {   //隐藏表头的checkbox
+                    $("#dg").parent().find("div .datagrid-header-check").children("input[type=\"checkbox\"]").eq(0).attr("style", "display:none;");
+                }
             });
 
             $('#searchBtn').linkbutton({
                 onClick: function(){
                     var param = {};
+                    param["pid"]=$('#pid').textbox('getValue');
                     param["mtsid"]=$('#mtsid').textbox('getValue');
                     param["pname"]=$('#pname').textbox('getValue');
                     param["status"]=$('#status_s').combobox('getValue');
@@ -188,6 +193,8 @@
                     <tr>
                         <td>商户ID:</td>
                         <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" /></td>
+                        <td>产品ID:</td>
+                        <td><input id="pid" name="pid" class="easyui-textbox" type="text" /></td>
                         <td>产品名称:</td>
                         <td><input id="pname" name="pname" class="easyui-textbox" type="text" /></td>
                     </tr>

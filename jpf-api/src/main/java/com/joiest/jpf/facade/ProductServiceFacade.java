@@ -14,7 +14,7 @@ public interface ProductServiceFacade {
      * @param status
      * @return
      */
-    public List<ProductInfo> getProductsList(Long mtsid, String pname, Byte status, long pageNo, long pageSize);
+    public List<ProductInfo> getProductsList(Long pid, Long mtsid, String pname, Byte status, long pageNo, long pageSize);
 
     /**
      * 获取用户列表统计
@@ -22,7 +22,7 @@ public interface ProductServiceFacade {
      * @param status
      * @return
      */
-    public int getProductsCount(Long mtsid, String pname, Byte status);
+    public int getProductsCount(Long pid, Long mtsid, String pname, Byte status);
 
     /**
      * 上下架
