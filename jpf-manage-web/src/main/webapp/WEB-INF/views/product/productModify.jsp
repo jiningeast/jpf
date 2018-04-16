@@ -65,7 +65,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">产品简介：</td>
                         <td colspan="3">
-                            <input id="pintro" name="pintro" type="text" style="width:100%;height: 60px;" class="easyui-textbox" value="${productInfo.pintro}" data-options="required:true,multiline:true"/>
+                            <input id="pintro" name="pintro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" value="${productInfo.pintro}" data-options="required:true,multiline:true"/>
                         </td>
                     </tr>
                     <tr>
@@ -128,10 +128,18 @@
                 }
                 var queryArray = $('#editForm').serializeArray();
                 var postData = parsePostData(queryArray);
+                var param = {};
+                param["pid"] = $("#id_m").val();
+                param["status"] = $("#editForm tbody input[name='status']").val();
+                param["pintro"] = $("#pintro").val();
+                param['zftype'] = new Array();
+                $("#editForm tbody input[name='zftype']").each(function (i) {
+                    param['zftype'][i] = $(this).val()
+                });
                 $.ajax({
                     type: 'post',
                     url: '../product/modify/action',
-                    data: JSON.stringify(postData),
+                    data: JSON.stringify(param),
                     dataType: 'json',
                     contentType : 'application/json;charset=utf-8',
                     success: function (msg) {

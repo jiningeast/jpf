@@ -54,6 +54,9 @@ public class ProductController {
         return productServiceFacade.upStatus(pname,status);
     }
 
+    /**
+     * 产品编辑-获取单个产品信息
+     */
     @RequestMapping("/modify/page")
     public ModelAndView modifyPage(String pid, ModelMap modelMap){
         //产品详情
@@ -62,6 +65,9 @@ public class ProductController {
         return new ModelAndView("product/productModify",modelMap);
     }
 
+    /**
+     * 产品编辑
+     */
     @RequestMapping("/modify/action")
     @ResponseBody
     public JpfResponseDto modifyAction(@RequestBody ModifyProductRequest request){

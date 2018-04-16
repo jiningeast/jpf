@@ -45,6 +45,16 @@ public class MerchantInfo {
     private Long city;
 
     /**
+     * 区县
+     */
+    private Long region;
+
+    /**
+     * 具体地址
+     */
+    private String address;
+
+    /**
      * 联系人
      */
     private String linkname;
@@ -104,7 +114,52 @@ public class MerchantInfo {
      */
     private Integer muserid;
 
+    /**
+     * 审核备注
+     */
     private String content;
+
+    /**
+     * 法人姓名
+     */
+    private String legalname;
+
+    /**
+     * 法人身份证号
+     */
+    private String legalidcard;
+
+    /**
+     * 法人身份证正面地址
+     */
+    private String legalface;
+
+    /**
+     * 法人身份证反面地址
+     */
+    private String legalback;
+
+    /**
+     * 身份证有效期开始日期
+     */
+    private String idstartdate;
+
+    /**
+     * 身份证有效期结束日期
+     */
+    private String idenddate;
+
+    /**
+     * 法人手持身份证照片
+     */
+    private String lefalhand;
+
+    /**
+     * 营业执照号码
+     */
+    private String certificate;
+
+    private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
@@ -168,6 +223,22 @@ public class MerchantInfo {
 
     public void setCity(Long city) {
         this.city = city;
+    }
+
+    public Long getRegion() {
+        return region;
+    }
+
+    public void setRegion(Long region) {
+        this.region = region;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 
     public String getLinkname() {
@@ -272,5 +343,68 @@ public class MerchantInfo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+ public String getLegalname() {
+        return legalname;
+    }
+
+    public void setLegalname(String legalname) {
+        this.legalname = legalname == null ? null : legalname.trim();
+    }
+
+    public String getLegalidcard() {
+        return legalidcard;
+    }
+
+    public void setLegalidcard(String legalidcard) {
+        this.legalidcard = legalidcard == null ? null : legalidcard.trim();
+    }
+
+    public String getLegalface() {
+        return legalface;
+    }
+
+    public void setLegalface(String legalface) {
+        this.legalface = legalface == null ? null : legalface.trim();
+    }
+
+    public String getLegalback() {
+        return legalback;
+    }
+
+    public void setLegalback(String legalback) {
+        this.legalback = legalback == null ? null : legalback.trim();
+    }
+
+    public String getIdstartdate() {
+        return idstartdate;
+    }
+
+    public void setIdstartdate(String idstartdate) {
+        this.idstartdate = idstartdate == null ? null : idstartdate.trim();
+    }
+
+    public String getIdenddate() {
+        return idenddate;
+    }
+
+    public void setIdenddate(String idenddate) {
+        this.idenddate = idenddate == null ? null : idenddate.trim();
+    }
+
+    public String getLefalhand() {
+        return lefalhand;
+    }
+
+    public void setLefalhand(String lefalhand) {
+        this.lefalhand = lefalhand == null ? null : lefalhand.trim();
+    }
+
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(String certificate) {
+        this.certificate = certificate == null ? null : certificate.trim();
     }
 }

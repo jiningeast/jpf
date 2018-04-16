@@ -101,7 +101,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">营业执照：</td>
                         <td colspan="3">
-                            <img src="${merchantInfo.bslicense}">
+                            <img width="200" height="200" src="${merchantInfo.bslicense}">
                         </td>
                     </tr>
                     <tr>
@@ -113,7 +113,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">企业logo：</td>
                         <td colspan="3">
-                            <img src="${merchantInfo.logo}">
+                            <img width="200" height="200" src="${merchantInfo.logo}">
                         </td>
                     </tr>
                     <tr>
@@ -180,6 +180,65 @@
                         <td style="text-align: right;background-color: #f1f1f1;">修改时间：</td>
                         <td>
                             <fmt:formatDate value="${merchantBankInfo.updated}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </td>
+                    </tr>
+                </table>
+                <table cellpadding=3 class="table table-bordered">
+                    <tr>
+                        <th colspan="6">法人信息</th>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">法人姓名：</td>
+                        <td>
+                            <input id="legalname" name="legalname" type="text" data-options="width:'175px'" width="120" class="easyui-textbox" value="${merchantInfo.legalname}"/>
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">法人身份证号：</td>
+                        <td>
+                            <input id="legalidcard" name="legalidcard" type="text" data-options="width:'175px'" width="120" class="easyui-textbox" value="${merchantInfo.legalidcard}"/>
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">营业执照号码：</td>
+                        <td>
+                            <%--<fmt:formatDate value="${merchantBankInfo.updated}" pattern="yyyy-MM-dd HH:mm:ss"/>--%>
+                            <%--<img width="200" height="200" src="${merchantInfo.logo}">--%>
+                            <input id="certificate" name="certificate" type="text" class="easyui-textbox" style="width:175px;" value="${merchantInfo.certificate}" data-options="required:true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">身份证有效期开始日期：</td>
+                        <td>
+                            <input id="idstartdate" name="idstartdate" type="text" class="Wdate" style="width:175px;" value="${merchantInfo.idstartdate}"
+                                   data-options="required:true,dateFmt:'yyyy-M-d"
+                                   onfocus="WdatePicker({startDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd'})"
+                            />
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">身份证有效期结束日期：</td>
+                        <td>
+                            <input id="idenddate" name="idenddate" type="text" class="Wdate" style="width:175px;"
+                                   value="${merchantInfo.idenddate}"
+                                   data-options="required:true"
+                                   onfocus="WdatePicker({startDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd'})"
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">法人身份证正面：</td>
+                        <td colspan="5">
+                            <input type="hidden" id="legalface" name="legalface" value="${merchantInfo.legalface}">
+                            <img width="200" height="200" src="${merchantInfo.legalface}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">法人身份证反面：</td>
+                        <td colspan="5">
+                            <input type="hidden" id="legalback" name="legalback" value="${merchantInfo.legalback}">
+                            <img width="200" height="200" src="${merchantInfo.legalback}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">法人手持身份证照片：</td>
+                        <td colspan="5">
+                            <input type="hidden" id="lefalhand" name="lefalhand" value="${merchantInfo.lefalhand}">
+                            <img width="200" height="200" src="${merchantInfo.lefalhand}">
                         </td>
                     </tr>
                 </table>
@@ -254,7 +313,7 @@
                 var postData = parsePostData(queryArray);
                 $.ajax({
                     type: 'post',
-                    url: '/modify/action',
+                    url: '../merchant/modify/action',
                     data: postData,
                     dataType: 'json',
                     success: function (msg) {
