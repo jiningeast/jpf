@@ -12,5 +12,6 @@
 	<bean id="productServiceFacade" class="com.joiest.jpf.facade.impl.ProductServiceFacadeImpl"></bean>
 	<bean id="RolesServiceFacade" class="com.joiest.jpf.facade.impl.RolesServiceFacadeImpl"></bean>
 	<bean id="BankServiceFacade" class="com.joiest.jpf.facade.impl.BankServiceFacadeImpl"></bean>
+	<bean id="SystemlogServiceFacade" class="com.joiest.jpf.facade.impl.SystemlogServiceFacadeImpl"></bean>
 
 </beans>
