@@ -1,11 +1,15 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.dto.ModifyRoleRequest;
+import com.joiest.jpf.entity.RolesInfo;
 import com.joiest.jpf.facade.RolesServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 
 import java.util.HashMap;
@@ -27,7 +31,7 @@ public class RolesController {
      */
     @RequestMapping("/index")
     public String index() {
-        return "user/rolesList";
+        return "roles/rolesList";
     }
 
     /**
@@ -51,6 +55,34 @@ public class RolesController {
         return rolesServiceFacade.addRole(name,intro);
     }
 
+    /**
+     * 角色编辑-页面加载
+     * @param id
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("modify/page")
+    public ModelAndView modifyView(String id, ModelMap modelMap){
+        RolesInfo rolesInfo = rolesServiceFacade.getRoleOne(Integer.valueOf(id));
+        modelMap.addAttribute("rolesInfo", rolesInfo);
+        return new ModelAndView("roles/roleModify", modelMap);
+    }
 
+    @RequestMapping("modify/action")
+    @ResponseBody
+    public JpfResponseDto modifyAction(ModifyRoleRequest request)
+    {
+        return rolesServiceFacade.modifyRole(request);
+    }
 
+    @RequestMapping("add/page")
+    public ModelAndView addView(){
+        return  new ModelAndView("roles/roleAdd");
+    }
+
+    @RequestMapping("add/action")
+    @ResponseBody
+    public JpfResponseDto addAction(ModifyRoleRequest request){
+        return rolesServiceFacade.ModifyRoleRequest(request);
+    }
 }

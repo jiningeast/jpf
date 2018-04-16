@@ -10,47 +10,32 @@
         $(function() {
             $('#infoDiv').window({
                 title:'详情',
-                width:'1024px',
-                height:'512px',
+                width:'600',
+                height:'400px',
                 closed:true,
                 modal:true
             });
-
-            var toolbar = [{
-                text:'删除',
-                iconCls:'icon-remove',
-                handler:function(){
-                    $.messager.confirm('删除','确认删除操作？',function(r){
-                        if(r){
-                            var rows = $('#dg').datagrid('getSelections');
-                            var param = [];
-                            for(var i = 0 ;i<rows.length ;i++){
-                                param.push(rows[i].id);
-                            }
-                            $.ajax({
-                                type:'get',
-                                url:'delete/action',
-                                data:{"id":param},
-                                dataType:"json",
-                                contentType:"application/json",
-                                // data:JSON.stringify(param),
-                                success:function(msg){
-                                    if (msg.retCode != '0000') {
-                                        $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                    } else {
-                                        $.messager.alert('消息提示','操作成功!','info');
-                                        $('#infoDiv').window('close');
-                                        $('#dg').datagrid('reload');
-                                    }
-                                },
-                                error:function(){
-                                    $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                }
-                            });
+            var toolbar = [
+                {
+                    text : '新增',
+                    iconCls : 'icon-add',
+                    handler : function(){
+                        $("#infoDiv").window("open").window('refresh', 'add/page').window('setTitle','新增');
+                    }
+                },
+                {
+                    text:'编辑',
+                    iconCls:'icon-edit',
+                    handler:function(){
+                        var rows = $('#dg').datagrid('getSelections');
+                        if (rows.length != 1) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return
                         }
-                    });
+                        $('#infoDiv').window("open").window('refresh', 'modify/page?id='+rows[0].id).window('setTitle','编辑');
+                    }
                 }
-            }];
+            ];
 
             $('#dg').datagrid({
                 title:'管理角色配置',
@@ -118,8 +103,8 @@
             <form id="searchForm" method="post">
                 <table cellpadding="5">
                     <tr>
-                        <td>用户Id:</td>
-                        <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" /></td>
+                        <td>关键词:</td>
+                        <td><input id="name" name="name" class="easyui-textbox" type="text" /></td>
                     </tr>
                 </table>
             </form>
@@ -133,5 +118,6 @@
     <table id="dg"></table>
 </div>
 <div id="infoDiv"></div>
+<div id="edit"></div>
 </body>
 </html>
