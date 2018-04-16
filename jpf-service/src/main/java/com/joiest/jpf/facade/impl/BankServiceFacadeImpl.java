@@ -5,7 +5,10 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayBank;
 import com.joiest.jpf.common.po.PayBankExample;
+import com.joiest.jpf.common.po.PayMerchantsType;
+import com.joiest.jpf.common.po.PayMerchantsTypeExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayBankMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsTypeMapper;
 import com.joiest.jpf.entity.BankInfo;
 import com.joiest.jpf.facade.BankServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -13,14 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class BankServiceFacadeImpl implements BankServiceFacade {
 
     @Autowired
     private PayBankMapper payBankMapper;
+
+    @Autowired
+    private  PayMerchantsTypeMapper payMerchantsTypeMapper;
 
     /**
      * 获取计数
@@ -42,26 +46,46 @@ public class BankServiceFacadeImpl implements BankServiceFacade {
      */
     @Override
     public List<BankInfo> getBank( long page, long rows){
-        PayBankExample example = new PayBankExample();
+        // 获取银行列表
+        PayBankExample PBExample = new PayBankExample();
         if ( page <= 0 ) {
             page = 1;
         }else
         {
-            example.setPageNo(page);
+            PBExample.setPageNo(page);
         }
 
         if ( rows <= 0 ) {
             rows = 10;
         }else
         {
-            example.setPageSize(rows);
+            PBExample.setPageSize(rows);
         }
-        List<PayBank> list = payBankMapper.selectByExample(example);
+        List<PayBank> list = payBankMapper.selectByExample(PBExample);
+
+        // 获取银行机构类型
+        PayMerchantsTypeExample PMTExample = new PayMerchantsTypeExample();
+        PayMerchantsTypeExample.Criteria c = PMTExample.createCriteria();
+        c.andPidEqualTo("17");
+        List<PayMerchantsType> typeList = payMerchantsTypeMapper.selectByExample(PMTExample);
+            // 组合银行类型map
+        Map<Integer, String> map = new HashMap();
+        for ( PayMerchantsType payMerchantsType : typeList ) {
+            map.put(payMerchantsType.getCatid(), payMerchantsType.getCat());
+        }
+
         List<BankInfo> infos = new ArrayList<>();
         for (PayBank payBank : list) {
             BankInfo bankInfo = new BankInfo();
             BeanCopier beanCopier = BeanCopier.create(PayBank.class, BankInfo.class, false);
             beanCopier.copy(payBank, bankInfo, null);
+
+            // 获取银行类型中文字
+            String tpid = bankInfo.getTpid();
+            String[] tpidArr = tpid.split(":");
+            String tpid_cn = map.get(Integer.parseInt(tpidArr[1]));
+            bankInfo.setTpid( tpid_cn );
+
             infos.add(bankInfo);
         }
 
