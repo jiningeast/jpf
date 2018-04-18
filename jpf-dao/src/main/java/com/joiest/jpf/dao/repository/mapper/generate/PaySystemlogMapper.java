@@ -41,12 +41,6 @@ public interface PaySystemlogMapper {
     int insertSelective(PaySystemlog record);
 
     /**
-     *
-     * @param example
-     */
-    List<PaySystemlog> selectByExampleWithBLOBs(PaySystemlogExample example);
-
-    /**
      * 根据条件查询列表
      *
      * @param example
@@ -74,14 +68,6 @@ public interface PaySystemlogMapper {
      * @param record
      * @param example
      */
-    int updateByExampleWithBLOBs(@Param("record") PaySystemlog record, @Param("example") PaySystemlogExample example);
-
-    /**
-     * 选择性更新数据库记录
-     *
-     * @param record
-     * @param example
-     */
     int updateByExample(@Param("record") PaySystemlog record, @Param("example") PaySystemlogExample example);
 
     /**
@@ -90,12 +76,6 @@ public interface PaySystemlogMapper {
      * @param record
      */
     int updateByPrimaryKeySelective(PaySystemlog record);
-
-    /**
-     *
-     * @param record
-     */
-    int updateByPrimaryKeyWithBLOBs(PaySystemlog record);
 
     /**
      * 根据主键来更新数据库记录

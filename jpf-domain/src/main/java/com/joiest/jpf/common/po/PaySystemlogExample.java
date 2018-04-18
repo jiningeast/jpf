@@ -245,52 +245,52 @@ public class PaySystemlogExample {
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeEqualTo(Boolean value) {
+        public Criteria andLogtypeEqualTo(Integer value) {
             addCriterion("logtype =", value, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeNotEqualTo(Boolean value) {
+        public Criteria andLogtypeNotEqualTo(Integer value) {
             addCriterion("logtype <>", value, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeGreaterThan(Boolean value) {
+        public Criteria andLogtypeGreaterThan(Integer value) {
             addCriterion("logtype >", value, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andLogtypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("logtype >=", value, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeLessThan(Boolean value) {
+        public Criteria andLogtypeLessThan(Integer value) {
             addCriterion("logtype <", value, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeLessThanOrEqualTo(Boolean value) {
+        public Criteria andLogtypeLessThanOrEqualTo(Integer value) {
             addCriterion("logtype <=", value, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeIn(List<Boolean> values) {
+        public Criteria andLogtypeIn(List<Integer> values) {
             addCriterion("logtype in", values, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeNotIn(List<Boolean> values) {
+        public Criteria andLogtypeNotIn(List<Integer> values) {
             addCriterion("logtype not in", values, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeBetween(Boolean value1, Boolean value2) {
+        public Criteria andLogtypeBetween(Integer value1, Integer value2) {
             addCriterion("logtype between", value1, value2, "logtype");
             return (Criteria) this;
         }
 
-        public Criteria andLogtypeNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andLogtypeNotBetween(Integer value1, Integer value2) {
             addCriterion("logtype not between", value1, value2, "logtype");
             return (Criteria) this;
         }
@@ -835,6 +835,76 @@ public class PaySystemlogExample {
             return (Criteria) this;
         }
 
+        public Criteria andContentIsNull() {
+            addCriterion("content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIsNotNull() {
+            addCriterion("content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentEqualTo(String value) {
+            addCriterion("content =", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentNotEqualTo(String value) {
+            addCriterion("content <>", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentGreaterThan(String value) {
+            addCriterion("content >", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentGreaterThanOrEqualTo(String value) {
+            addCriterion("content >=", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentLessThan(String value) {
+            addCriterion("content <", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentLessThanOrEqualTo(String value) {
+            addCriterion("content <=", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentLike(String value) {
+            addCriterion("content like", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentNotLike(String value) {
+            addCriterion("content not like", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIn(List<String> values) {
+            addCriterion("content in", values, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentNotIn(List<String> values) {
+            addCriterion("content not in", values, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentBetween(String value1, String value2) {
+            addCriterion("content between", value1, value2, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentNotBetween(String value1, String value2) {
+            addCriterion("content not between", value1, value2, "content");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedIsNull() {
             addCriterion("created is null");
             return (Criteria) this;
@@ -922,6 +992,11 @@ public class PaySystemlogExample {
 
         public Criteria andActionLikeInsensitive(String value) {
             addCriterion("upper(action) like", value.toUpperCase(), "action");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentLikeInsensitive(String value) {
+            addCriterion("upper(content) like", value.toUpperCase(), "content");
             return (Criteria) this;
         }
     }

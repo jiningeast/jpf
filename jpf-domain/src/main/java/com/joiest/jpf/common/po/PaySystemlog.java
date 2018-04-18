@@ -55,14 +55,14 @@ public class PaySystemlog implements Serializable {
     private String action;
 
     /**
-     * 时间
-     */
-    private Date created;
-
-    /**
      * 数据记录，sql语句集合
      */
     private String content;
+
+    /**
+     * 时间
+     */
+    private Date created;
 
     private static final long serialVersionUID = 1L;
 
@@ -146,20 +146,20 @@ public class PaySystemlog implements Serializable {
         this.action = action == null ? null : action.trim();
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     /**
@@ -181,8 +181,8 @@ public class PaySystemlog implements Serializable {
         sb.append(", tablename=").append(tablename);
         sb.append(", record=").append(record);
         sb.append(", action=").append(action);
-        sb.append(", created=").append(created);
         sb.append(", content=").append(content);
+        sb.append(", created=").append(created);
         sb.append("]");
         return sb.toString();
     }
@@ -213,8 +213,8 @@ public class PaySystemlog implements Serializable {
             && (this.getTablename() == null ? other.getTablename() == null : this.getTablename().equals(other.getTablename()))
             && (this.getRecord() == null ? other.getRecord() == null : this.getRecord().equals(other.getRecord()))
             && (this.getAction() == null ? other.getAction() == null : this.getAction().equals(other.getAction()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
+            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()));
     }
 
     /**
@@ -234,8 +234,8 @@ public class PaySystemlog implements Serializable {
         result = prime * result + ((getTablename() == null) ? 0 : getTablename().hashCode());
         result = prime * result + ((getRecord() == null) ? 0 : getRecord().hashCode());
         result = prime * result + ((getAction() == null) ? 0 : getAction().hashCode());
-        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
+        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         return result;
     }
 }

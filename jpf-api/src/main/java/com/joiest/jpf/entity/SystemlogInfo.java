@@ -12,7 +12,7 @@ public class SystemlogInfo {
     /**
      * 来源 0：前台 1：后台
      */
-    private Boolean logtype;
+    private Integer logtype;
 
     /**
      * 操作者uid
@@ -72,11 +72,11 @@ public class SystemlogInfo {
         this.id = id;
     }
 
-    public Boolean getLogtype() {
+    public Integer getLogtype() {
         return logtype;
     }
 
-    public void setLogtype(Boolean logtype) {
+    public void setLogtype(Integer logtype) {
         this.logtype = logtype;
     }
 

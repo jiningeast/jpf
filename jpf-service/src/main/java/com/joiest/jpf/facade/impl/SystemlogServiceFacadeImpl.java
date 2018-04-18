@@ -35,7 +35,7 @@ public class SystemlogServiceFacadeImpl implements SystemlogServiceFacade {
         PaySystemlogExample e = new PaySystemlogExample();
         e.setPageNo(page);
         e.setPageSize(rows);
-        List<PaySystemlog> list = paySystemlogMapper.selectByExampleWithBLOBs(e);
+        List<PaySystemlog> list = paySystemlogMapper.selectByExample(e);
         List<SystemlogInfo> infos = new ArrayList<>();
         for (PaySystemlog paySystemlog : list) {
             SystemlogInfo info = new SystemlogInfo();
