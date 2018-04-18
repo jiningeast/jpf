@@ -23,13 +23,11 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">聚合商户号：</td>
                         <td>
-                            ${merchantInfo.merchNo}
-                            <%--<input id="merchNo_m" name="merchNo" type="text" readonly="readonly" style="width:220px" class="easyui-textbox"/>--%>
+                            <input id="merchNo_m" name="merchNo" type="text" value="${merchantInfo.merchNo}" style="width:220px" class="easyui-textbox"/>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">聚合商户名称：</td>
                         <td>
-                            ${merchantInfo.merchName}
-                            <%--<input id="merchName_m" name="merchName" type="text" data-options="width:'220px'" class="easyui-textbox"/>--%>
+                            <input id="merchName_m" name="merchName" value="${merchantInfo.merchName}" type="text" data-options="width:'220px'" class="easyui-textbox"/>
                         </td>
                     </tr>
                     <tr>
