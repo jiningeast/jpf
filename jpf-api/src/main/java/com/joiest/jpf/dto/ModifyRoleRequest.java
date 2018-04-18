@@ -1,11 +1,11 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
 import java.util.Date;
 
-public class RolesInfo {
+public class ModifyRoleRequest {
 
     /**
-     * ID主键
+     * 主键ID
      */
     private Integer id;
 
@@ -15,24 +15,24 @@ public class RolesInfo {
     private String name;
 
     /**
-     * 简介
+     * 角色简介
      */
     private String intro;
 
     /**
-     * 状态：0：正常,1:禁用;default:0
+     * 禁用；0:正常
      */
     private Byte status;
 
     /**
-     * 创建日期
+     * 创建时间
      */
     private Date created;
 
     /**
-     * 更新日期
-
-    private Date updateTime;  */
+     * 权限ID集合
+     */
+    private String rights;
 
     public Integer getId() {
         return id;
@@ -47,7 +47,7 @@ public class RolesInfo {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? null : name.trim();
     }
 
     public String getIntro() {
@@ -55,7 +55,7 @@ public class RolesInfo {
     }
 
     public void setIntro(String intro) {
-        this.intro = intro;
+        this.intro = intro == null ? null : intro.trim();
     }
 
     public Byte getStatus() {
@@ -72,6 +72,14 @@ public class RolesInfo {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public String getRights() {
+        return rights;
+    }
+
+    public void setRights(String rights) {
+        this.rights = rights == null ? null : rights.trim();
     }
 
 }

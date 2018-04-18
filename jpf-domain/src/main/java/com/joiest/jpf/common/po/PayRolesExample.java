@@ -10,6 +10,7 @@ public class PayRolesExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
+
     protected long pageNo;
 
     protected long pageSize;
@@ -66,37 +67,6 @@ public class PayRolesExample {
         oredCriteria.add(criteria);
     }
 
-
-    /**
-     *
-     * @param pageNo
-     */
-    public void setPageNo(long pageNo) {
-        this.pageNo=pageNo;
-    }
-
-    /**
-     *
-     */
-    public long getPageNo() {
-        return pageNo;
-    }
-
-    /**
-     *
-     * @param pageSize
-     */
-    public void setPageSize(long pageSize) {
-        this.pageSize=pageSize;
-    }
-
-    /**
-     *
-     */
-    public long getPageSize() {
-        return pageSize;
-    }
-
     /**
      *
      */
@@ -132,6 +102,36 @@ public class PayRolesExample {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
+    }
+
+    /**
+     *
+     * @param pageNo
+     */
+    public void setPageNo(long pageNo) {
+        this.pageNo=pageNo;
+    }
+
+    /**
+     *
+     */
+    public long getPageNo() {
+        return pageNo;
+    }
+
+    /**
+     *
+     * @param pageSize
+     */
+    public void setPageSize(long pageSize) {
+        this.pageSize=pageSize;
+    }
+
+    /**
+     *
+     */
+    public long getPageSize() {
+        return pageSize;
     }
 
     protected abstract static class GeneratedCriteria {
@@ -385,52 +385,52 @@ public class PayRolesExample {
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Boolean value) {
+        public Criteria andStatusEqualTo(Byte value) {
             addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Boolean value) {
+        public Criteria andStatusNotEqualTo(Byte value) {
             addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Boolean value) {
+        public Criteria andStatusGreaterThan(Byte value) {
             addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
             addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Boolean value) {
+        public Criteria andStatusLessThan(Byte value) {
             addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Boolean value) {
+        public Criteria andStatusLessThanOrEqualTo(Byte value) {
             addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Boolean> values) {
+        public Criteria andStatusIn(List<Byte> values) {
             addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Boolean> values) {
+        public Criteria andStatusNotIn(List<Byte> values) {
             addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(Boolean value1, Boolean value2) {
+        public Criteria andStatusBetween(Byte value1, Byte value2) {
             addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
@@ -492,6 +492,16 @@ public class PayRolesExample {
 
         public Criteria andCreatedNotBetween(Date value1, Date value2) {
             addCriterion("created not between", value1, value2, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLikeInsensitive(String value) {
+            addCriterion("upper(name) like", value.toUpperCase(), "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntroLikeInsensitive(String value) {
+            addCriterion("upper(intro) like", value.toUpperCase(), "intro");
             return (Criteria) this;
         }
     }
