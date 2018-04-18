@@ -12,7 +12,7 @@ public class PaySystemlog implements Serializable {
     /**
      * 0:前台；1:后台
      */
-    private Boolean logtype;
+    private Integer logtype;
 
     /**
      * 登录用户ID
@@ -74,11 +74,11 @@ public class PaySystemlog implements Serializable {
         this.id = id;
     }
 
-    public Boolean getLogtype() {
+    public Integer getLogtype() {
         return logtype;
     }
 
-    public void setLogtype(Boolean logtype) {
+    public void setLogtype(Integer logtype) {
         this.logtype = logtype;
     }
 

@@ -1,11 +1,16 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.SystemlogServiceFacade;
+import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.joiest.jpf.manage.web.util.ServletUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,5 +36,16 @@ public class SystemlogController {
         return map;
     }
 
+    /*@RequestMapping("add")
+    @ResponseBody
+    public void add(Integer logtype, Integer clients, String action, String tablename, String content, HttpServletRequest request ){
+        // ip
+        ServletUtils su = new ServletUtils();
+        String ip = su.getIpAddr(request);
+        // 用户名
+        HttpSession session = request.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
+        systemlogServiceFacade.sysLog(logtype, userInfo.getId(), userInfo.getUserName(), ip, clients, tablename, userInfo.getId(), action, content );
+    }*/
 }

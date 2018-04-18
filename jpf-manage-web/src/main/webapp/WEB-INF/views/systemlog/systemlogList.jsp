@@ -11,6 +11,30 @@
     </style>
     <script>
         $(function () {
+            // 获取客户端中文字段
+            var typeArr = new Array();
+            $.ajax({
+                type : 'post',
+                url : '../param/getType?pid=31',
+                dataType: 'json',
+                success : function (res) {
+                    var res = JSON.stringify(res);
+                    // console.log(res);
+                    var newKsy;
+                    var newValue;
+                    JSON.parse(res,function(key, value){
+                        if ( key == 'catid' ) {
+                            newKsy = value;
+                        }
+                        if ( key == 'cat' ) {
+                            newValue = value;
+                        }
+                        typeArr[newKsy] = String(newValue);
+                    })
+                    // console.log(typeArr);
+                }
+            });
+
             $("#dg").datagrid({
                 title : '系统日志',
                 pagination : true,//如果为true，则在DataGrid控件底部显示分页工具栏。
@@ -32,7 +56,10 @@
                     {field:'operatorName', title:'操作者账号', width:'5%'},
                     {field:'ip', title:'IP地址', width:'6%'},
                     {field:'ip1', title:'用户设备识别码', width:'5%'},
-                    {field:'clients', title:'客户端', width:'5%'},
+                    {field:'clients', title:'客户端', width:'5%',
+                        formatter : function ( value, row, index ) {
+                            return typeArr[value];
+                        }},
                     {field:'tablename', title:'表名', width:'5%'},
                     {field:'record', title:'操作人ID', width:'5%'},
                     {field:'action', title:'操作类型', width:'5%'},
@@ -40,6 +67,7 @@
                     {field:'created', title:'创建时间', width:'8%',formatter: formatDateStr}
                 ]]
             })
+            $('#dg').datagrid().datagrid('getPager');
         })
     </script>
 </head>

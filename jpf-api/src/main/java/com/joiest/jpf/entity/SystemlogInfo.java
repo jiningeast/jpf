@@ -40,7 +40,7 @@ public class SystemlogInfo {
     private Integer clients;
 
     /**
-     * 表明
+     * 表名
      */
     private String tablename;
 
@@ -50,7 +50,7 @@ public class SystemlogInfo {
     private String record;
 
     /**
-     * 操作人ID
+     * 操作类型：删除数据，修改数据，添加数据，等
      */
     private String action;
 
