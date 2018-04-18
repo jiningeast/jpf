@@ -45,11 +45,7 @@
                         </td>
                     </tr>
                     <tr>
-                        </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">创建时间：</td>
-                        <td>
-                            <fmt:formatDate value="${rolesInfo.created}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                        </td>
+                        <td></td>
                     </tr>
                 </table>
             </form>

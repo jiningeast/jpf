@@ -159,4 +159,30 @@ public class RolesServiceFacadeImpl implements RolesServiceFacade {
         return  new JpfResponseDto();
     }
 
+    /**
+     * 删除角色
+     */
+    public JpfResponseDto delRole(String id)
+    {
+        if ( StringUtils.isBlank(id) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "ID不能为空");
+        }
+        PayRoles payRoles = payRolesMapper.selectByPrimaryKey(Integer.valueOf(id));
+
+        if ( payRoles == null )
+        {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "角色信息不存在");
+        }
+
+        PayRolesExample example = new PayRolesExample();
+        PayRolesExample.Criteria c = example.createCriteria();
+        c.andIdEqualTo(Integer.valueOf(id));
+        PayRoles payRoles1 = new PayRoles();
+        Byte status = 1;
+        payRoles1.setStatus(status);
+        payRolesMapper.updateByExampleSelective(payRoles1,example);
+        return new JpfResponseDto();
+    }
+
 }

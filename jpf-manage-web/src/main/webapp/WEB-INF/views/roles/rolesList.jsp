@@ -10,8 +10,8 @@
         $(function() {
             $('#infoDiv').window({
                 title:'详情',
-                width:'600',
-                height:'400px',
+                width:'1024',
+                height:'600px',
                 closed:true,
                 modal:true
             });
@@ -34,6 +34,38 @@
                         }
                         $('#infoDiv').window("open").window('refresh', 'modify/page?id='+rows[0].id).window('setTitle','编辑');
                     }
+                },
+                {
+                    text : '删除',
+                    iconCls : 'icon-remove',
+                    handler : function () {
+                        var rows = $("#dg").datagrid('getSelections');
+                        if ( rows.length != 1 ) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return false;
+                        }
+                        $.messager.confirm('删除','确认删除操作？',function(r){
+                            if (r){
+                                $.ajax({
+                                    type : 'get',
+                                    url : 'delRole?id='+rows[0].id,
+                                    dataType:"json",
+                                    contentType:"application/json",
+                                    success : function(msg){
+                                        if (msg.retCode != '0000') {
+                                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
+                                        } else {
+                                            $.messager.alert('消息提示','操作成功!','info');
+                                            $('#dg').datagrid('reload');
+                                        }
+                                    },
+                                    error : function () {
+                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
+                                    }
+                                })
+                            }
+                        })
+                    }
                 }
             ];
 
@@ -53,6 +85,15 @@
                     {field:'id',checkbox:true},
                     {field:'name',title:'角色名称',width:150},
                     {field:'intro',title:'角色简介',width:150},
+                    {field:'status',title:'状态',width:150,
+                        formatter: function(value,row,index){
+                            if (value == '0'){
+                                return "正常";
+                            } else if (value == '1') {
+                                return "禁用";
+                            }
+                        }
+                    },
                     {field:'created',title:'创建时间',width:150,formatter: formatDateStr}
                 ]]
             });

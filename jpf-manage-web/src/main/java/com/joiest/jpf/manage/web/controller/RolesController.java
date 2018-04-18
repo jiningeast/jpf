@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,9 +57,6 @@ public class RolesController {
 
     /**
      * 角色编辑-页面加载
-     * @param id
-     * @param modelMap
-     * @return
      */
     @RequestMapping("modify/page")
     public ModelAndView modifyView(String id, ModelMap modelMap){
@@ -68,6 +65,9 @@ public class RolesController {
         return new ModelAndView("roles/roleModify", modelMap);
     }
 
+    /**
+     * 角色编辑-action
+     */
     @RequestMapping("modify/action")
     @ResponseBody
     public JpfResponseDto modifyAction(ModifyRoleRequest request)
@@ -75,14 +75,30 @@ public class RolesController {
         return rolesServiceFacade.modifyRole(request);
     }
 
+    /**
+     * 添加角色-页面
+     */
     @RequestMapping("add/page")
     public ModelAndView addView(){
         return  new ModelAndView("roles/roleAdd");
     }
 
+    /**
+     * 添加角色-action
+     */
     @RequestMapping("add/action")
     @ResponseBody
     public JpfResponseDto addAction(ModifyRoleRequest request){
         return rolesServiceFacade.ModifyRoleRequest(request);
+    }
+
+    /**
+     * 删除角色
+     */
+    @RequestMapping("delRole")
+    @ResponseBody
+    public JpfResponseDto delRole(String id )
+    {
+        return rolesServiceFacade.delRole(id);
     }
 }

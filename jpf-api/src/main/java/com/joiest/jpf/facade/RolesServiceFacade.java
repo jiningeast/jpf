@@ -43,4 +43,9 @@ public interface RolesServiceFacade {
      */
     public JpfResponseDto ModifyRoleRequest(ModifyRoleRequest request);
 
+    /**
+     * 删除角色
+     */
+    public JpfResponseDto delRole(String id);
+
 }
