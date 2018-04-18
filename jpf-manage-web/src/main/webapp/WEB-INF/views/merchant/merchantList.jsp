@@ -31,6 +31,17 @@
                     $('#infoDiv').window("open").window('refresh', 'modify/page?id='+rows[0].id).window('setTitle','编辑');
                 }
             },{
+                text:'代理配置',
+                iconCls:'icon-key-add',
+                handler:function(){
+                    var rows = $('#dg').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
+                        return
+                    }
+                    $('#infoDiv').window("open").window('refresh', '../merchant/agent/modify/page?id='+rows[0].id).window('setTitle','编辑');
+                }
+            },{
                 text:'审核',
                 iconCls:'icon-key-add',
                 handler:function(){
