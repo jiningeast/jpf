@@ -20,7 +20,7 @@
                     <tr>
                         <td align="right">银行类型</td>
                         <td>
-                            <input id="tpid" class="easyui-combobox" name="tpid" readonly="true" data-options="required:true,
+                            <input id="tpid" class="easyui-combobox" name="tpid" data-options="required:true,
                                                                                      url:'../param/getType?pid=17',
                                                                                      method:'get',
                                                                                      valueField:'catpath',
@@ -51,14 +51,14 @@
             $('#tpid').combobox('select', '${bankInfo.tpid}'+':');
         }
         $(function(){
-            // 新增窗口的关闭按钮
+            // 编辑窗口的关闭按钮
             $("#editCancelBtn").linkbutton({
                 onClick : function(){
                     $("#edit").window('close');
                 }
             })
 
-            // 新增的确定按钮
+            // 编辑的确定按钮
             $("#editSaveBtn").linkbutton({
                 onClick : function(){
                     var isValid = $("#editForm").form('enableValidation').form('validate');
