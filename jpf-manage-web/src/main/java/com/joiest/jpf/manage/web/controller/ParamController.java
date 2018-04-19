@@ -1,7 +1,10 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.entity.MerchantAgentInfo;
+import com.joiest.jpf.entity.MerchantInfo;
 import com.joiest.jpf.entity.MerchantTypeInfo;
 import com.joiest.jpf.entity.PcaInfo;
+import com.joiest.jpf.facade.MerAgentServiceFacade;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
 import com.joiest.jpf.facade.PcaServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +29,9 @@ public class ParamController {
     @Autowired
     private MerTypeServiceFacade merTypeServiceFacade;
 
+    @Autowired
+    private MerAgentServiceFacade merAgentServiceFacade;
+
     private List<PcaInfo> pcaInfoList;
 
     @RequestMapping("/getPca")
@@ -42,5 +48,10 @@ public class ParamController {
         return merTypeServiceFacade.getMerTypes(pid);
     }
 
-
+    @RequestMapping("/getAgentInfo")
+    @ResponseBody
+    public List<MerchantInfo> getAgentInfo(String tpid)
+    {
+        return merAgentServiceFacade.getAgentInfoByTpid(tpid);
+    }
 }
