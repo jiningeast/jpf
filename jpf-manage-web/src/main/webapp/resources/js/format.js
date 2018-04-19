@@ -66,3 +66,28 @@ function parsePostData(array){
     });
     return postObj;
 }
+
+function formatPrice(value) {
+    if ( String(value).indexOf('.') < 0 )
+    {
+        // 如果是整数
+        return value.toFixed(2);
+    }else
+    {
+        // 如果是小数点后只有一位的小数
+        var start = String(value).indexOf('.');
+        start += 1;
+        var lengthAfterDot = String(value).length - start;
+        if ( lengthAfterDot == 1 )
+        {
+            return value.toFixed(2);
+        } else if (lengthAfterDot == 2)
+        {
+            // 如果是小数点后有两位小数
+            return value;
+        }else
+        {
+            console.log('抱歉，价格字段只接受小数点后保留最多两位的数字');
+        }
+    }
+}
