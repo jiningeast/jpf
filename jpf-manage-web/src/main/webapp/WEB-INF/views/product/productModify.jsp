@@ -65,7 +65,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">产品简介：</td>
                         <td colspan="3">
-                            <input id="pintro" name="pintro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" value="${productInfo.pintro}" data-options="required:true,multiline:true"/>
+                            <input id="pintro" name="pintro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" value="${productInfo.pintro}" data-options="required:true,multiline:true,formatter:formatPrice"/>
                         </td>
                     </tr>
                     <tr>
@@ -101,10 +101,10 @@
             message: '请输入正确的数字'
         }
     });
-    function isFloat(z_check_value){
-        var z_reg = /^((([0-9])|([1-9][0-9]+))(\.([0-9]{0,2}))?)$/;//.是特殊字符，需要转义
-        return z_reg.test($.trim(z_check_value));
-    }
+    // function isFloat(z_check_value){
+    //     var z_reg = /^((([0-9])|([1-9][0-9]+))(\.([0-9]{0,2}))?)$/;//.是特殊字符，需要转义
+    //     return z_reg.test($.trim(z_check_value));
+    // }
 
     $(function () {
         $('#paytype').combobox({

@@ -108,6 +108,9 @@ public class RolesServiceFacadeImpl implements RolesServiceFacade {
         return rolesInfo;
     }
 
+    /**
+     * 角色编辑
+     */
     @Override
     public JpfResponseDto modifyRole(ModifyRoleRequest request){
 
@@ -128,7 +131,10 @@ public class RolesServiceFacadeImpl implements RolesServiceFacade {
         return new JpfResponseDto();
     }
 
-
+    /**
+     * 角色添加
+     */
+    @Override
     public JpfResponseDto ModifyRoleRequest(ModifyRoleRequest request)
     {
         if ( StringUtils.isBlank(request.getName()))
@@ -160,8 +166,9 @@ public class RolesServiceFacadeImpl implements RolesServiceFacade {
     }
 
     /**
-     * 删除角色
+     * 删除角色 更改状态 1已删除 0正常
      */
+    @Override
     public JpfResponseDto delRole(String id)
     {
         if ( StringUtils.isBlank(id) )
