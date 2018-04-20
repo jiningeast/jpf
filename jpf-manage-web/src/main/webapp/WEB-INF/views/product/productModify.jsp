@@ -96,6 +96,7 @@
                 {
                     var price = parseFloat($(this).val()).toFixed(2);
                     $(this).val(price);
+                    $("#editForm tbody input[name='pmoney']").val(price);
                 }
             }
         })
@@ -139,10 +140,13 @@
                 }
                 var queryArray = $('#editForm').serializeArray();
                 var postData = parsePostData(queryArray);
+                // console.log(postData);
                 var param = {};
                 param["pid"] = $("#id_m").val();
                 param["status"] = $("#editForm tbody input[name='status']").val();
-                param["pintro"] = $("#pintro").val();
+                param["pname"]  = $("#editForm tbody input[name='pname']").val();
+                param["pintro"] = $("#editForm tbody input[name='pintro']").val();
+                param["pmoney"] = $("#editForm tbody input[name='pmoney']").val();
                 param['zftype'] = new Array();
                 $("#editForm tbody input[name='zftype']").each(function (i) {
                     param['zftype'][i] = $(this).val()
