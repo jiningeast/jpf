@@ -76,6 +76,26 @@
                     "icon" : "icon-nav",
                     "url" : "product/index"
                 }]
+            },{
+                "menuid" : "4",
+                "icon" : "icon-sys",
+                "menuname" : "订单管理",
+                "menus" : [{
+                    "menuid" : "401",
+                    "menuname" : "订单信息管理",
+                    "icon" : "icon-nav",
+                    "url" : "order/index"
+                },{
+                    "menuid" : "402",
+                    "menuname" : "退款信息管理",
+                    "icon" : "icon-nav",
+                    "url" : "tdorder/index"
+                },{
+                    "menuid" : "403",
+                    "menuname" : "退单记录管理",
+                    "icon" : "icon-nav",
+                    "url" : "orderCpsingle/index"
+                }]
             }]
     	};
 

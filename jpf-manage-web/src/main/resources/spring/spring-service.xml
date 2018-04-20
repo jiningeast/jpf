@@ -13,6 +13,9 @@
 	<bean id="RolesServiceFacade" class="com.joiest.jpf.facade.impl.RolesServiceFacadeImpl"></bean>
 	<bean id="BankServiceFacade" class="com.joiest.jpf.facade.impl.BankServiceFacadeImpl"></bean>
 	<bean id="SystemlogServiceFacade" class="com.joiest.jpf.facade.impl.SystemlogServiceFacadeImpl"></bean>
-	<bean id="MerAgentServiceFacade" class="com.joiest.jpf.facade.impl.MerAgentServiceFacadeImpl"></bean>
+    <bean id="OrderServiceFacade" class="com.joiest.jpf.facade.impl.OrderServiceFacadeImpl"></bean>
+    <bean id="MerAgentServiceFacade" class="com.joiest.jpf.facade.impl.MerAgentServiceFacadeImpl"></bean>
+	<bean id="TdorderServiceFacade" class="com.joiest.jpf.facade.impl.TdorderServiceFacadeImpl"></bean>
+	<bean id="OrderCpsingleServiceFacade" class="com.joiest.jpf.facade.impl.OrderCpsingleServiceFacadeImpl"></bean>
 
 </beans>
