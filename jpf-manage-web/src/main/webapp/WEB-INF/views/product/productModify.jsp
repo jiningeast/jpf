@@ -89,9 +89,20 @@
 <style>
 </style>
 <script>
+    $('#pmoney').textbox({
+        inputEvents: $.extend({},$.fn.textbox.defaults.inputEvents,{
+            blur:function(event){
+                if ( $(this).val() )
+                {
+                    var price = parseFloat($(this).val()).toFixed(2);
+                    $(this).val(price);
+                }
+            }
+        })
+    });
+
     function initData() {
         $('#status_p').combobox('select', '${productInfo.status}');
-        <%--$('#paytype').combobox('select', '${productInfo.zftype}');--%>
     }
     $.extend($.fn.validatebox.defaults.rules, {
         floatNumber : {//数字（包括正整数、0、浮点数）
@@ -101,10 +112,10 @@
             message: '请输入正确的数字'
         }
     });
-    // function isFloat(z_check_value){
-    //     var z_reg = /^((([0-9])|([1-9][0-9]+))(\.([0-9]{0,2}))?)$/;//.是特殊字符，需要转义
-    //     return z_reg.test($.trim(z_check_value));
-    // }
+    function isFloat(z_check_value){
+        var z_reg = /^((([0-9])|([1-9][0-9]+))(\.([0-9]{0,2}))?)$/;//.是特殊字符，需要转义
+        return z_reg.test($.trim(z_check_value));
+    }
 
     $(function () {
         $('#paytype').combobox({
