@@ -35,9 +35,14 @@ public class TdorderInfo {
     private Byte singletype;
 
     /**
-     * 运营审核：1:审核成功；2：审核失败，驳回
+     * 运营审核：0：审核中；1:审核成功；2：审核失败，驳回
      */
     private Byte singlestatus;
+
+    /**
+     * 运营驳回理由
+     */
+    private String refuseContent;
 
     /**
      * 图片地址 json
@@ -108,6 +113,14 @@ public class TdorderInfo {
 
     public void setSinglestatus(Byte singlestatus) {
         this.singlestatus = singlestatus;
+    }
+
+    public String getRefuseContent() {
+        return refuseContent;
+    }
+
+    public void setRefuseContent(String refuseContent) {
+        this.refuseContent = refuseContent;
     }
 
     public String getUrla() {

@@ -87,7 +87,7 @@
                     "url" : "order/index"
                 },{
                     "menuid" : "402",
-                    "menuname" : "退款信息管理",
+                    "menuname" : "退单信息管理",
                     "icon" : "icon-nav",
                     "url" : "tdorder/index"
                 },{
