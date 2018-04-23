@@ -114,7 +114,7 @@
                     {field:'mtsid',title:'商户ID',width:80},
                     {field:'pname',title:'产品名称',width:200},
                     {field:'pintro',title:'产品简介',width:200},
-                    {field:'pmoney',title:'产品价格',width:150},
+                    {field:'pmoney',title:'产品价格',width:150,formatter:formatPrice},
                     {field:'pdpicture',title:'产品图片',width:150,
                         formatter:function(value,row,index){return '<img style="height:80px;width:100px;" src="'+ value +'" />';}
                     },

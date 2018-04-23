@@ -65,7 +65,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">产品简介：</td>
                         <td colspan="3">
-                            <input id="pintro" name="pintro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" value="${productInfo.pintro}" data-options="required:true,multiline:true"/>
+                            <input id="pintro" name="pintro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" value="${productInfo.pintro}" data-options="required:true,multiline:true,formatter:formatPrice"/>
                         </td>
                     </tr>
                     <tr>
@@ -89,9 +89,21 @@
 <style>
 </style>
 <script>
+    $('#pmoney').textbox({
+        inputEvents: $.extend({},$.fn.textbox.defaults.inputEvents,{
+            blur:function(event){
+                if ( $(this).val() )
+                {
+                    var price = parseFloat($(this).val()).toFixed(2);
+                    $(this).val(price);
+                    $("#editForm tbody input[name='pmoney']").val(price);
+                }
+            }
+        })
+    });
+
     function initData() {
         $('#status_p').combobox('select', '${productInfo.status}');
-        <%--$('#paytype').combobox('select', '${productInfo.zftype}');--%>
     }
     $.extend($.fn.validatebox.defaults.rules, {
         floatNumber : {//数字（包括正整数、0、浮点数）
@@ -128,10 +140,13 @@
                 }
                 var queryArray = $('#editForm').serializeArray();
                 var postData = parsePostData(queryArray);
+                // console.log(postData);
                 var param = {};
                 param["pid"] = $("#id_m").val();
                 param["status"] = $("#editForm tbody input[name='status']").val();
-                param["pintro"] = $("#pintro").val();
+                param["pname"]  = $("#editForm tbody input[name='pname']").val();
+                param["pintro"] = $("#editForm tbody input[name='pintro']").val();
+                param["pmoney"] = $("#editForm tbody input[name='pmoney']").val();
                 param['zftype'] = new Array();
                 $("#editForm tbody input[name='zftype']").each(function (i) {
                     param['zftype'][i] = $(this).val()

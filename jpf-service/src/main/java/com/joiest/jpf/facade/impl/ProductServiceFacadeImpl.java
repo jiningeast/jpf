@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class ProductServiceFacadeImpl implements ProductServiceFacade {
@@ -208,7 +209,6 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     @Override
     public JpfResponseDto modifyProduct(ModifyProductRequest request){
         ValidatorUtils.validate(request);
-        request.getMtsid();
         PayMerchantsProduct payMerchantsProduct = payMerchantsProductMapper.selectByPrimaryKey(request.getPid());
         if ( payMerchantsProduct == null ){
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "产品信息不存在");
