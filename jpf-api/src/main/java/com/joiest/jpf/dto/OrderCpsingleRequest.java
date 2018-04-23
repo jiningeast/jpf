@@ -1,9 +1,9 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TdorderInfo {
+public class OrderCpsingleRequest {
     /**
      * 自增ID
      */
@@ -35,29 +35,21 @@ public class TdorderInfo {
     private Byte singletype;
 
     /**
-     * 运营审核：0：审核中；1:审核成功；2：审核失败，驳回
+     * 财务|运营|商服退款审核：0:待审核; 1:退单退款成功；2：退单退款失败
      */
     private Byte singlestatus;
 
     /**
-     * 运营驳回理由
+     * 财务通过/驳回原因
      */
     private String operateContent;
-
-    /**
-     * 图片地址 json
-     */
-    private String urla;
-
-    /**
-     * 申请理由
-     */
-    private String content;
 
     /**
      * 添加时间
      */
     private Date addtime;
+
+    private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
@@ -120,23 +112,7 @@ public class TdorderInfo {
     }
 
     public void setOperateContent(String operateContent) {
-        this.operateContent = operateContent;
-    }
-
-    public String getUrla() {
-        return urla;
-    }
-
-    public void setUrla(String urla) {
-        this.urla = urla;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+        this.operateContent = operateContent == null ? null : operateContent.trim();
     }
 
     public Date getAddtime() {

@@ -14,6 +14,7 @@
             // 支付方式中文字段
             var payTypeArr = new Array();
             $.post("../param/getType",{'pid':'5'},function (res) {
+                console.log(res);
                 var res = JSON.stringify(res);
                 var newKsy;
                 var newValue;
@@ -49,7 +50,7 @@
                     {field:'orderprice',title:'实付',width:'5%', formatter:formatPrice},
                     {field:'orderselprice',title:'实际金额',width:'5%', formatter:formatPrice},
                     {field:'ordernum',title:'商品数量',width:'5%'},
-                    {field:'ordername',title:'分期付款序列',width:'18%'},
+                    {field:'ordername',title:'分期信息',width:'30%', formatter:formatJSON},
                     {field:'orderstatus',title:'支付状态',width:'5%',
                         formatter:function (value, row, index) {
                             if ( value == 0 ){
@@ -65,11 +66,11 @@
                             if ( value == 1 ){
                                 return '正常订单';
                             }else if ( value == 2 ){
-                                return '退单处理';
+                                return '待运营审核';
                             }else if ( value == 3 ){
                                 return '退款撤销';
                             }else if ( value == 4 ){
-                                return '退单受理中';
+                                return '待财务审核';
                             }else if ( value == 5 ){
                                 return '退单处理完毕';
                             }

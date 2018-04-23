@@ -486,52 +486,52 @@ public class PayOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeEqualTo(Byte value) {
+        public Criteria andPaytypeEqualTo(Boolean value) {
             addCriterion("paytype =", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeNotEqualTo(Byte value) {
+        public Criteria andPaytypeNotEqualTo(Boolean value) {
             addCriterion("paytype <>", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeGreaterThan(Byte value) {
+        public Criteria andPaytypeGreaterThan(Boolean value) {
             addCriterion("paytype >", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeGreaterThanOrEqualTo(Byte value) {
+        public Criteria andPaytypeGreaterThanOrEqualTo(Boolean value) {
             addCriterion("paytype >=", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeLessThan(Byte value) {
+        public Criteria andPaytypeLessThan(Boolean value) {
             addCriterion("paytype <", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeLessThanOrEqualTo(Byte value) {
+        public Criteria andPaytypeLessThanOrEqualTo(Boolean value) {
             addCriterion("paytype <=", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeIn(List<Byte> values) {
+        public Criteria andPaytypeIn(List<Boolean> values) {
             addCriterion("paytype in", values, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeNotIn(List<Byte> values) {
+        public Criteria andPaytypeNotIn(List<Boolean> values) {
             addCriterion("paytype not in", values, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeBetween(Byte value1, Byte value2) {
+        public Criteria andPaytypeBetween(Boolean value1, Boolean value2) {
             addCriterion("paytype between", value1, value2, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeNotBetween(Byte value1, Byte value2) {
+        public Criteria andPaytypeNotBetween(Boolean value1, Boolean value2) {
             addCriterion("paytype not between", value1, value2, "paytype");
             return (Criteria) this;
         }
@@ -713,6 +713,76 @@ public class PayOrderExample {
 
         public Criteria andOrdernumNotBetween(Integer value1, Integer value2) {
             addCriterion("ordernum not between", value1, value2, "ordernum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameIsNull() {
+            addCriterion("ordername is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameIsNotNull() {
+            addCriterion("ordername is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameEqualTo(String value) {
+            addCriterion("ordername =", value, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameNotEqualTo(String value) {
+            addCriterion("ordername <>", value, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameGreaterThan(String value) {
+            addCriterion("ordername >", value, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameGreaterThanOrEqualTo(String value) {
+            addCriterion("ordername >=", value, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameLessThan(String value) {
+            addCriterion("ordername <", value, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameLessThanOrEqualTo(String value) {
+            addCriterion("ordername <=", value, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameLike(String value) {
+            addCriterion("ordername like", value, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameNotLike(String value) {
+            addCriterion("ordername not like", value, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameIn(List<String> values) {
+            addCriterion("ordername in", values, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameNotIn(List<String> values) {
+            addCriterion("ordername not in", values, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameBetween(String value1, String value2) {
+            addCriterion("ordername between", value1, value2, "ordername");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameNotBetween(String value1, String value2) {
+            addCriterion("ordername not between", value1, value2, "ordername");
             return (Criteria) this;
         }
 
@@ -1013,6 +1083,11 @@ public class PayOrderExample {
 
         public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
             addCriterion("updatetime not between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdernameLikeInsensitive(String value) {
+            addCriterion("upper(ordername) like", value.toUpperCase(), "ordername");
             return (Criteria) this;
         }
     }

@@ -40,6 +40,11 @@ public class OrderCpsingleInfo {
     private Byte singlestatus;
 
     /**
+     * 财务|运营|商服通过/驳回原因
+     */
+    private String operateContent;
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -98,6 +103,14 @@ public class OrderCpsingleInfo {
 
     public void setSinglestatus(Byte singlestatus) {
         this.singlestatus = singlestatus;
+    }
+
+    public String getOperateContent() {
+        return operateContent;
+    }
+
+    public void setOperateContent(String operateContent) {
+        this.operateContent = operateContent;
     }
 
     public Date getAddtime() {

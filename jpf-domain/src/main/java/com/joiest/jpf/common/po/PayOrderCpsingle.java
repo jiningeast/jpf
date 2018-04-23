@@ -36,19 +36,19 @@ public class PayOrderCpsingle implements Serializable {
     private Byte singletype;
 
     /**
-     * 财务|运营|商服退款审核：1:退单退款成功；2：退单退款失败
+     * 财务|运营|商服退款审核：0:待审核; 1:退单退款成功；2：退单退款失败
      */
     private Byte singlestatus;
+
+    /**
+     * 财务通过/驳回原因
+     */
+    private String operateContent;
 
     /**
      * 添加时间
      */
     private Date addtime;
-
-    /**
-     * 财务驳回原因
-     */
-    private String refuseContent;
 
     private static final long serialVersionUID = 1L;
 
@@ -108,20 +108,20 @@ public class PayOrderCpsingle implements Serializable {
         this.singlestatus = singlestatus;
     }
 
+    public String getOperateContent() {
+        return operateContent;
+    }
+
+    public void setOperateContent(String operateContent) {
+        this.operateContent = operateContent == null ? null : operateContent.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
 
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
-    }
-
-    public String getRefuseContent() {
-        return refuseContent;
-    }
-
-    public void setRefuseContent(String refuseContent) {
-        this.refuseContent = refuseContent == null ? null : refuseContent.trim();
     }
 
     /**
@@ -140,8 +140,8 @@ public class PayOrderCpsingle implements Serializable {
         sb.append(", mtsid=").append(mtsid);
         sb.append(", singletype=").append(singletype);
         sb.append(", singlestatus=").append(singlestatus);
+        sb.append(", operateContent=").append(operateContent);
         sb.append(", addtime=").append(addtime);
-        sb.append(", refuseContent=").append(refuseContent);
         sb.append("]");
         return sb.toString();
     }
@@ -169,8 +169,8 @@ public class PayOrderCpsingle implements Serializable {
             && (this.getMtsid() == null ? other.getMtsid() == null : this.getMtsid().equals(other.getMtsid()))
             && (this.getSingletype() == null ? other.getSingletype() == null : this.getSingletype().equals(other.getSingletype()))
             && (this.getSinglestatus() == null ? other.getSinglestatus() == null : this.getSinglestatus().equals(other.getSinglestatus()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getRefuseContent() == null ? other.getRefuseContent() == null : this.getRefuseContent().equals(other.getRefuseContent()));
+            && (this.getOperateContent() == null ? other.getOperateContent() == null : this.getOperateContent().equals(other.getOperateContent()))
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
 
     /**
@@ -187,8 +187,8 @@ public class PayOrderCpsingle implements Serializable {
         result = prime * result + ((getMtsid() == null) ? 0 : getMtsid().hashCode());
         result = prime * result + ((getSingletype() == null) ? 0 : getSingletype().hashCode());
         result = prime * result + ((getSinglestatus() == null) ? 0 : getSinglestatus().hashCode());
+        result = prime * result + ((getOperateContent() == null) ? 0 : getOperateContent().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
-        result = prime * result + ((getRefuseContent() == null) ? 0 : getRefuseContent().hashCode());
         return result;
     }
 }

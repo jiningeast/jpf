@@ -1,9 +1,10 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TdorderInfo {
+public class TdorderRequest {
+
     /**
      * 自增ID
      */

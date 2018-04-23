@@ -91,3 +91,115 @@ function formatPrice(value) {
         }
     }
 }
+
+function formatJSON(value) {
+    if ( value !== '' ){
+        var str = '';
+        JSON.parse(value,function(k, v){
+            if ( k !== '' && typeof(v) !== 'object' ){
+                switch (k){
+                    case 'payType':
+                        k = '支付类型ID';
+                        break;
+
+                    case 'payType_cn':
+                        k = '支付类型';
+                        break;
+
+                    case 'stageType':
+                        k = '分期类型ID';
+                        break;
+
+                    case 'stageType_cn':
+                        k = '分期类型';
+                        break;
+
+                    case 'payMoneyPerTerm':
+                        k = '每期支付';
+                        break;
+
+                    case 'serviceFeePerTerm':
+                        k = '每期服务费';
+                        break;
+
+                    case 'feePerMonth':
+                        k = '每月费率';
+                        break;
+
+                    case 'uid':
+                        k = '审核者uid';
+                        break;
+
+                    case 'username':
+                        k = '审核者';
+                        break;
+
+                    case 'content':
+                        k = '驳回原因';
+                        break;
+
+                    case 'date':
+                        k = '日期';
+                        break;
+                }
+                str += k+':'+v+';  '
+            }
+        })
+        return str;
+    }
+}
+
+function formatJSONOpCon(value) {
+    if ( value !== '' && value !== undefined ){
+        value = $.parseJSON(value);
+        var resStr = '';
+        console.log(value);
+        $.each(value,function (key, val) {
+            resStr += key+1+'：';
+            var valStr = JSON.stringify(val);
+            var valJSON = $.parseJSON(valStr);
+            $.each(valJSON,function (k, v) {
+                switch (k){
+                    case 'uid':
+                        k = '审核者uid';
+                        break;
+
+                    case 'username':
+                        k = '审核者';
+                        break;
+
+                    case 'content':
+                        k = '驳回原因';
+                        break;
+
+                    case 'date':
+                        k = '日期';
+                        break;
+                }
+                resStr += k+':'+v+';  &nbsp;&nbsp;';
+            })
+            resStr += '<br/>';
+        })
+
+        return resStr;
+    }
+}
+
+
+function formatJSONImg(value) {
+    if ( value !== '' && value !== undefined ){
+        value = $.parseJSON(value);
+        var resStr = '';
+        value.forEach(function(val, index, value){
+            resStr += index+1+'：';
+            var valStr = JSON.stringify(val);
+            var valJSON = $.parseJSON(valStr);
+            $.each(valJSON,function (key, val) {
+                 resStr += '<a href="'+val+'" target="_blank">图片'+key+'</a>&nbsp;&nbsp;';
+            })
+            resStr += '<br/>';
+        });
+
+        return resStr;
+    }
+}

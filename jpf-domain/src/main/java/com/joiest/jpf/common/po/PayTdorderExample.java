@@ -596,73 +596,73 @@ public class PayTdorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentIsNull() {
-            addCriterion("refuse_content is null");
+        public Criteria andOperateContentIsNull() {
+            addCriterion("operate_content is null");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentIsNotNull() {
-            addCriterion("refuse_content is not null");
+        public Criteria andOperateContentIsNotNull() {
+            addCriterion("operate_content is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentEqualTo(String value) {
-            addCriterion("refuse_content =", value, "refuseContent");
+        public Criteria andOperateContentEqualTo(String value) {
+            addCriterion("operate_content =", value, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentNotEqualTo(String value) {
-            addCriterion("refuse_content <>", value, "refuseContent");
+        public Criteria andOperateContentNotEqualTo(String value) {
+            addCriterion("operate_content <>", value, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentGreaterThan(String value) {
-            addCriterion("refuse_content >", value, "refuseContent");
+        public Criteria andOperateContentGreaterThan(String value) {
+            addCriterion("operate_content >", value, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentGreaterThanOrEqualTo(String value) {
-            addCriterion("refuse_content >=", value, "refuseContent");
+        public Criteria andOperateContentGreaterThanOrEqualTo(String value) {
+            addCriterion("operate_content >=", value, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentLessThan(String value) {
-            addCriterion("refuse_content <", value, "refuseContent");
+        public Criteria andOperateContentLessThan(String value) {
+            addCriterion("operate_content <", value, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentLessThanOrEqualTo(String value) {
-            addCriterion("refuse_content <=", value, "refuseContent");
+        public Criteria andOperateContentLessThanOrEqualTo(String value) {
+            addCriterion("operate_content <=", value, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentLike(String value) {
-            addCriterion("refuse_content like", value, "refuseContent");
+        public Criteria andOperateContentLike(String value) {
+            addCriterion("operate_content like", value, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentNotLike(String value) {
-            addCriterion("refuse_content not like", value, "refuseContent");
+        public Criteria andOperateContentNotLike(String value) {
+            addCriterion("operate_content not like", value, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentIn(List<String> values) {
-            addCriterion("refuse_content in", values, "refuseContent");
+        public Criteria andOperateContentIn(List<String> values) {
+            addCriterion("operate_content in", values, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentNotIn(List<String> values) {
-            addCriterion("refuse_content not in", values, "refuseContent");
+        public Criteria andOperateContentNotIn(List<String> values) {
+            addCriterion("operate_content not in", values, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentBetween(String value1, String value2) {
-            addCriterion("refuse_content between", value1, value2, "refuseContent");
+        public Criteria andOperateContentBetween(String value1, String value2) {
+            addCriterion("operate_content between", value1, value2, "operateContent");
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentNotBetween(String value1, String value2) {
-            addCriterion("refuse_content not between", value1, value2, "refuseContent");
+        public Criteria andOperateContentNotBetween(String value1, String value2) {
+            addCriterion("operate_content not between", value1, value2, "operateContent");
             return (Criteria) this;
         }
 
@@ -866,8 +866,8 @@ public class PayTdorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andRefuseContentLikeInsensitive(String value) {
-            addCriterion("upper(refuse_content) like", value.toUpperCase(), "refuseContent");
+        public Criteria andOperateContentLikeInsensitive(String value) {
+            addCriterion("upper(operate_content) like", value.toUpperCase(), "operateContent");
             return (Criteria) this;
         }
 

@@ -33,7 +33,7 @@ public class PayOrder implements Serializable {
     /**
      * 支付方式：pay_merchants_type 
      */
-    private Byte paytype;
+    private Boolean paytype;
 
     /**
      * 订单实际缴纳金额
@@ -49,6 +49,11 @@ public class PayOrder implements Serializable {
      * 订单商品数量
      */
     private Integer ordernum;
+
+    /**
+     * 分期付款序列（json格式）
+     */
+    private String ordername;
 
     /**
      * 支付时间
@@ -74,11 +79,6 @@ public class PayOrder implements Serializable {
      * 修改时间
      */
     private Date updatetime;
-
-    /**
-     * 分期付款序列（json格式）
-     */
-    private String ordername;
 
     private static final long serialVersionUID = 1L;
 
@@ -122,11 +122,11 @@ public class PayOrder implements Serializable {
         this.pid = pid;
     }
 
-    public Byte getPaytype() {
+    public Boolean getPaytype() {
         return paytype;
     }
 
-    public void setPaytype(Byte paytype) {
+    public void setPaytype(Boolean paytype) {
         this.paytype = paytype;
     }
 
@@ -152,6 +152,14 @@ public class PayOrder implements Serializable {
 
     public void setOrdernum(Integer ordernum) {
         this.ordernum = ordernum;
+    }
+
+    public String getOrdername() {
+        return ordername;
+    }
+
+    public void setOrdername(String ordername) {
+        this.ordername = ordername == null ? null : ordername.trim();
     }
 
     public Date getPaytime() {
@@ -194,14 +202,6 @@ public class PayOrder implements Serializable {
         this.updatetime = updatetime;
     }
 
-    public String getOrdername() {
-        return ordername;
-    }
-
-    public void setOrdername(String ordername) {
-        this.ordername = ordername == null ? null : ordername.trim();
-    }
-
     /**
      *
      */
@@ -220,12 +220,12 @@ public class PayOrder implements Serializable {
         sb.append(", orderprice=").append(orderprice);
         sb.append(", orderselprice=").append(orderselprice);
         sb.append(", ordernum=").append(ordernum);
+        sb.append(", ordername=").append(ordername);
         sb.append(", paytime=").append(paytime);
         sb.append(", orderstatus=").append(orderstatus);
         sb.append(", singlestatus=").append(singlestatus);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
-        sb.append(", ordername=").append(ordername);
         sb.append("]");
         return sb.toString();
     }
@@ -255,12 +255,12 @@ public class PayOrder implements Serializable {
             && (this.getOrderprice() == null ? other.getOrderprice() == null : this.getOrderprice().equals(other.getOrderprice()))
             && (this.getOrderselprice() == null ? other.getOrderselprice() == null : this.getOrderselprice().equals(other.getOrderselprice()))
             && (this.getOrdernum() == null ? other.getOrdernum() == null : this.getOrdernum().equals(other.getOrdernum()))
+            && (this.getOrdername() == null ? other.getOrdername() == null : this.getOrdername().equals(other.getOrdername()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getOrderstatus() == null ? other.getOrderstatus() == null : this.getOrderstatus().equals(other.getOrderstatus()))
             && (this.getSinglestatus() == null ? other.getSinglestatus() == null : this.getSinglestatus().equals(other.getSinglestatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getOrdername() == null ? other.getOrdername() == null : this.getOrdername().equals(other.getOrdername()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
 
     /**
@@ -279,12 +279,12 @@ public class PayOrder implements Serializable {
         result = prime * result + ((getOrderprice() == null) ? 0 : getOrderprice().hashCode());
         result = prime * result + ((getOrderselprice() == null) ? 0 : getOrderselprice().hashCode());
         result = prime * result + ((getOrdernum() == null) ? 0 : getOrdernum().hashCode());
+        result = prime * result + ((getOrdername() == null) ? 0 : getOrdername().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getOrderstatus() == null) ? 0 : getOrderstatus().hashCode());
         result = prime * result + ((getSinglestatus() == null) ? 0 : getSinglestatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
-        result = prime * result + ((getOrdername() == null) ? 0 : getOrdername().hashCode());
         return result;
     }
 }

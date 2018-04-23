@@ -36,14 +36,14 @@ public class PayTdorder implements Serializable {
     private Byte singletype;
 
     /**
-     * 运营审核：0：审核中；1:审核成功；2：审核失败，驳回
+     * 运营审核：0：审核中；1:审核成功；2：审核失败，驳回;3商户撤销
      */
     private Byte singlestatus;
 
     /**
-     * 运营驳回理由
+     * 运营通过/驳回理由
      */
-    private String refuseContent;
+    private String operateContent;
 
     /**
      * 图片地址 json
@@ -118,12 +118,12 @@ public class PayTdorder implements Serializable {
         this.singlestatus = singlestatus;
     }
 
-    public String getRefuseContent() {
-        return refuseContent;
+    public String getOperateContent() {
+        return operateContent;
     }
 
-    public void setRefuseContent(String refuseContent) {
-        this.refuseContent = refuseContent == null ? null : refuseContent.trim();
+    public void setOperateContent(String operateContent) {
+        this.operateContent = operateContent == null ? null : operateContent.trim();
     }
 
     public String getUrla() {
@@ -166,7 +166,7 @@ public class PayTdorder implements Serializable {
         sb.append(", mtsid=").append(mtsid);
         sb.append(", singletype=").append(singletype);
         sb.append(", singlestatus=").append(singlestatus);
-        sb.append(", refuseContent=").append(refuseContent);
+        sb.append(", operateContent=").append(operateContent);
         sb.append(", urla=").append(urla);
         sb.append(", content=").append(content);
         sb.append(", addtime=").append(addtime);
@@ -197,7 +197,7 @@ public class PayTdorder implements Serializable {
             && (this.getMtsid() == null ? other.getMtsid() == null : this.getMtsid().equals(other.getMtsid()))
             && (this.getSingletype() == null ? other.getSingletype() == null : this.getSingletype().equals(other.getSingletype()))
             && (this.getSinglestatus() == null ? other.getSinglestatus() == null : this.getSinglestatus().equals(other.getSinglestatus()))
-            && (this.getRefuseContent() == null ? other.getRefuseContent() == null : this.getRefuseContent().equals(other.getRefuseContent()))
+            && (this.getOperateContent() == null ? other.getOperateContent() == null : this.getOperateContent().equals(other.getOperateContent()))
             && (this.getUrla() == null ? other.getUrla() == null : this.getUrla().equals(other.getUrla()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
@@ -217,7 +217,7 @@ public class PayTdorder implements Serializable {
         result = prime * result + ((getMtsid() == null) ? 0 : getMtsid().hashCode());
         result = prime * result + ((getSingletype() == null) ? 0 : getSingletype().hashCode());
         result = prime * result + ((getSinglestatus() == null) ? 0 : getSinglestatus().hashCode());
-        result = prime * result + ((getRefuseContent() == null) ? 0 : getRefuseContent().hashCode());
+        result = prime * result + ((getOperateContent() == null) ? 0 : getOperateContent().hashCode());
         result = prime * result + ((getUrla() == null) ? 0 : getUrla().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());

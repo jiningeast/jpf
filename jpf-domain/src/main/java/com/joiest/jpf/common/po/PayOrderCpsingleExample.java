@@ -596,6 +596,76 @@ public class PayOrderCpsingleExample {
             return (Criteria) this;
         }
 
+        public Criteria andOperateContentIsNull() {
+            addCriterion("operate_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentIsNotNull() {
+            addCriterion("operate_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentEqualTo(String value) {
+            addCriterion("operate_content =", value, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentNotEqualTo(String value) {
+            addCriterion("operate_content <>", value, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentGreaterThan(String value) {
+            addCriterion("operate_content >", value, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentGreaterThanOrEqualTo(String value) {
+            addCriterion("operate_content >=", value, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentLessThan(String value) {
+            addCriterion("operate_content <", value, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentLessThanOrEqualTo(String value) {
+            addCriterion("operate_content <=", value, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentLike(String value) {
+            addCriterion("operate_content like", value, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentNotLike(String value) {
+            addCriterion("operate_content not like", value, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentIn(List<String> values) {
+            addCriterion("operate_content in", values, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentNotIn(List<String> values) {
+            addCriterion("operate_content not in", values, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentBetween(String value1, String value2) {
+            addCriterion("operate_content between", value1, value2, "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentNotBetween(String value1, String value2) {
+            addCriterion("operate_content not between", value1, value2, "operateContent");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
@@ -653,6 +723,11 @@ public class PayOrderCpsingleExample {
 
         public Criteria andAddtimeNotBetween(Date value1, Date value2) {
             addCriterion("addtime not between", value1, value2, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateContentLikeInsensitive(String value) {
+            addCriterion("upper(operate_content) like", value.toUpperCase(), "operateContent");
             return (Criteria) this;
         }
     }

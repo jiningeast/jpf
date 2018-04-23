@@ -41,12 +41,6 @@ public interface PayOrderCpsingleMapper {
     int insertSelective(PayOrderCpsingle record);
 
     /**
-     *
-     * @param example
-     */
-    List<PayOrderCpsingle> selectByExampleWithBLOBs(PayOrderCpsingleExample example);
-
-    /**
      * 根据条件查询列表
      *
      * @param example
@@ -74,14 +68,6 @@ public interface PayOrderCpsingleMapper {
      * @param record
      * @param example
      */
-    int updateByExampleWithBLOBs(@Param("record") PayOrderCpsingle record, @Param("example") PayOrderCpsingleExample example);
-
-    /**
-     * 选择性更新数据库记录
-     *
-     * @param record
-     * @param example
-     */
     int updateByExample(@Param("record") PayOrderCpsingle record, @Param("example") PayOrderCpsingleExample example);
 
     /**
@@ -90,12 +76,6 @@ public interface PayOrderCpsingleMapper {
      * @param record
      */
     int updateByPrimaryKeySelective(PayOrderCpsingle record);
-
-    /**
-     *
-     * @param record
-     */
-    int updateByPrimaryKeyWithBLOBs(PayOrderCpsingle record);
 
     /**
      * 根据主键来更新数据库记录

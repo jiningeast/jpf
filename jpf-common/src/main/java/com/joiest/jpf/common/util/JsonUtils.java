@@ -86,6 +86,11 @@ public class JsonUtils {
     	map.put("zjf", "hehe");
     	map.put("nyt", "hehe");
     	System.out.println(	JsonUtils.toJson(map));
+
+    	String ss = "{\"code\":10000,\"info\":\"SUCCESS\"}";
+        Map<String, String> map1 = JsonUtils.toCollection(ss, new TypeReference<HashMap<String, String>>(){});
+        System.out.println(	map1.get("code"));
+        System.out.println(	map1.get("info"));
     
     }
 }
