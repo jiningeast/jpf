@@ -104,6 +104,7 @@ function formatJSON(value) {
 
                     case 'payType_cn':
                         k = '支付类型';
+                        str += k+'：<span style="color: #777">'+v+'</span>;  ';
                         break;
 
                     case 'stageType':
@@ -112,6 +113,7 @@ function formatJSON(value) {
 
                     case 'stageType_cn':
                         k = '分期类型';
+                        str += k+'：<span style="color: #777">'+v+'</span>;  ';
                         break;
 
                     case 'payMoneyPerTerm':
@@ -142,7 +144,6 @@ function formatJSON(value) {
                         k = '日期';
                         break;
                 }
-                str += k+':'+v+';  '
             }
         })
         return str;
@@ -153,9 +154,9 @@ function formatJSONOpCon(value) {
     if ( value !== '' && value !== undefined ){
         value = $.parseJSON(value);
         var resStr = '';
-        console.log(value);
         $.each(value,function (key, val) {
-            resStr += key+1+'：';
+            var num = key+1;
+            resStr += '<p>'+num+'：';
             var valStr = JSON.stringify(val);
             var valJSON = $.parseJSON(valStr);
             $.each(valJSON,function (k, v) {
@@ -169,16 +170,16 @@ function formatJSONOpCon(value) {
                         break;
 
                     case 'content':
-                        k = '驳回原因';
+                        k = '内容';
                         break;
 
                     case 'date':
                         k = '日期';
                         break;
                 }
-                resStr += k+':'+v+';  &nbsp;&nbsp;';
+                resStr += k+':<span style="color: #777">'+v+'</span>;  &nbsp;&nbsp;';
             })
-            resStr += '<br/>';
+            resStr += '</p>';
         })
 
         return resStr;
@@ -190,12 +191,13 @@ function formatJSONImg(value) {
     if ( value !== '' && value !== undefined ){
         value = $.parseJSON(value);
         var resStr = '';
-        value.forEach(function(val, index, value){
+        value.forEach(function(val, index, k){
             resStr += index+1+'：';
             var valStr = JSON.stringify(val);
             var valJSON = $.parseJSON(valStr);
             $.each(valJSON,function (key, val) {
-                 resStr += '<a href="'+val+'" target="_blank">图片'+key+'</a>&nbsp;&nbsp;';
+                var num = key + 1;
+                 resStr += '<a href="'+val+'" target="_blank">图片'+num+'</a>&nbsp;&nbsp;';
             })
             resStr += '<br/>';
         });

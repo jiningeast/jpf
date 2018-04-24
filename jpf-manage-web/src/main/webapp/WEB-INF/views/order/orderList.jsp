@@ -14,7 +14,7 @@
             // 支付方式中文字段
             var payTypeArr = new Array();
             $.post("../param/getType",{'pid':'5'},function (res) {
-                console.log(res);
+                // console.log(res);
                 var res = JSON.stringify(res);
                 var newKsy;
                 var newValue;
@@ -27,7 +27,7 @@
                     }
                     payTypeArr[newKsy] = String(newValue);
                 });
-                // console.log(payTypeArr);
+                console.log(payTypeArr);
             })
 
             $("#dg").datagrid({
@@ -66,13 +66,15 @@
                             if ( value == 1 ){
                                 return '正常订单';
                             }else if ( value == 2 ){
-                                return '待运营审核';
+                                return '<span style="color: green">用户申请退单</span>';
                             }else if ( value == 3 ){
-                                return '退款撤销';
+                                return '用户撤销退款';
                             }else if ( value == 4 ){
-                                return '待财务审核';
+                                return '<span style="color: green">待审核</span>';
                             }else if ( value == 5 ){
-                                return '退单处理完毕';
+                                return '<span style="color: blue">退单处理完毕</span>';
+                            }else if ( value == 6 ){
+                                return '<span style="color: green">审核驳回</span>';
                             }
                         }},
                     {field:'paytime',title:'支付时间',width:'9%',formatter: formatDateStr},

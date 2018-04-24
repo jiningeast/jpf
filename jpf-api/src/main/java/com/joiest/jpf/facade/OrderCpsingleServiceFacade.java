@@ -15,7 +15,7 @@ public interface OrderCpsingleServiceFacade {
 
     public int insRecord(OrderCpsingleInfo info);
 
-    public JpfResponseDto checkOk(long tdorderid, long orderid);
+    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo);
 
     public JpfResponseDto checkNo(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo);
 }

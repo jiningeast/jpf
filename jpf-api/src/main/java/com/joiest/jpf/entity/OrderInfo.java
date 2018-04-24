@@ -32,7 +32,7 @@ public class OrderInfo {
     /**
      * 支付方式：pay_merchants_type
      */
-    private Byte paytype;
+    private Integer paytype;
 
     /**
      * 订单实际缴纳金额
@@ -119,11 +119,11 @@ public class OrderInfo {
         this.pid = pid;
     }
 
-    public Byte getPaytype() {
+    public Integer getPaytype() {
         return paytype;
     }
 
-    public void setPaytype(Byte paytype) {
+    public void setPaytype(Integer paytype) {
         this.paytype = paytype;
     }
 

@@ -39,8 +39,11 @@ public class TdorderController {
 
     @RequestMapping("/checkOk")
     @ResponseBody
-    public JpfResponseDto checkOk(TdorderRequest tdorderRequest){
-        return tdorderServiceFacade.checkOk(tdorderRequest);
+    public JpfResponseDto checkOk(TdorderRequest tdorderRequest, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+
+        return tdorderServiceFacade.checkOk(tdorderRequest,userInfo);
     }
 
     @RequestMapping("/checkNo")

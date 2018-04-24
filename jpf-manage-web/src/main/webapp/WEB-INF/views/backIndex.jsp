@@ -92,7 +92,7 @@
                     "url" : "tdorder/index"
                 },{
                     "menuid" : "403",
-                    "menuname" : "退单记录管理",
+                    "menuname" : "财务退单管理",
                     "icon" : "icon-nav",
                     "url" : "orderCpsingle/index"
                 }]

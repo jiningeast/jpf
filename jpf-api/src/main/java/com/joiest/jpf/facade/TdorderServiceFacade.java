@@ -12,7 +12,7 @@ public interface TdorderServiceFacade {
 
     public List<TdorderInfo> getTdorders(long page, long rows);
 
-    public JpfResponseDto checkOk(TdorderRequest tdorderRequest);
+    public JpfResponseDto checkOk(TdorderRequest tdorderRequest, UserInfo userInfo);
 
     public JpfResponseDto checkNo(TdorderRequest tdorderRequest, UserInfo userInfo);
 }

@@ -21,6 +21,11 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return false;
                         }
+                        if( rows[0].singlestatus !== 0 ){
+                            $.messager.alert('消息提示','此订单已处理，请不要重复处理','info');
+                            return false;
+                        }
+                        var id = rows[0].id;
                         var tdorderid = rows[0].tdorderid;
                         var orderid = rows[0].orderid;
                         var tdorderprice = rows[0].tdorderprice;
@@ -28,6 +33,7 @@
                         var singletype = rows[0].singletype;
 
                         $.post("checkOk",{
+                            id:id,
                             tdorderid:tdorderid,
                             orderid:orderid,
                             tdorderprice:tdorderprice,
@@ -53,6 +59,10 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return false;
                         }
+                        if( rows[0].singlestatus !== 0 ){
+                            $.messager.alert('消息提示','此订单已处理，请不要重复处理','info');
+                            return false;
+                        }
                         $("#opeCon").window('setTitle','驳回理由').window('refresh').window('open');
                     }
                 }
@@ -70,9 +80,9 @@
                     {field:'id', title:'ID', width:'3%'},
                     {field:'tdorderid',title:'退单ID', width:'10%'},
                     {field:'orderid',title:'订单ID', width:'10%'},
-                    {field:'tdorderprice',title:'退单金额', width:'10%'},
-                    {field:'mtsid',title:'商户ID', width:'10%'},
-                    {field:'singletype',title:'退单类型', width:'10%',
+                    {field:'tdorderprice',title:'退单金额', width:'5%',formatter:formatPrice},
+                    {field:'mtsid',title:'商户ID', width:'5%'},
+                    {field:'singletype',title:'退单类型', width:'5%',
                         formatter:function (value, row, index) {
                             if ( value == 1 ){
                                 return '支付后退款';
@@ -92,9 +102,13 @@
                                 return '<span style="color:gray">已撤单</span>';
                             }
                         }},
-                    {field:'operateContent', title:'审核信息', width:'35%', formatter:formatJSONOpCon },
+                    {field:'operateContent', title:'审核信息', width:'35%', align:'left', formatter:formatJSONOpCon},
                     {field:'urla',title:'图片', width:'10%', formatter:formatJSONImg, align:'left'},
-                    {field:'content',title:'退单理由', width:'10%'},
+                    {field:'content',title:'退单理由', width:'10%',
+                        formatter:function (value, row, index) {
+                            return JSON.parse(value);
+                            // console.log( JSON.parse(value) );
+                        }},
                     {field:'addtime',title:'添加时间',formatter:formatDateStr, width:'10%'}
                 ]]
             })

@@ -33,7 +33,7 @@ public class PayOrder implements Serializable {
     /**
      * 支付方式：pay_merchants_type 
      */
-    private Boolean paytype;
+    private Integer paytype;
 
     /**
      * 订单实际缴纳金额
@@ -66,7 +66,7 @@ public class PayOrder implements Serializable {
     private Byte orderstatus;
 
     /**
-     * 1:正常订单；2:退单处理；3:退款撤销；4:退单受理中，5:退单处理完毕
+     * 1:正常订单；2:退单处理；3:退款撤销；4:退单受理中，5:退单处理完毕, 6:审核失败
      */
     private Byte singlestatus;
 
@@ -122,11 +122,11 @@ public class PayOrder implements Serializable {
         this.pid = pid;
     }
 
-    public Boolean getPaytype() {
+    public Integer getPaytype() {
         return paytype;
     }
 
-    public void setPaytype(Boolean paytype) {
+    public void setPaytype(Integer paytype) {
         this.paytype = paytype;
     }
 

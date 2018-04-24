@@ -21,9 +21,14 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return false;
                         }
+                        if ( rows[0].singlestatus !== 0 ){
+                            $.messager.alert('消息提示','此订单已处理，请不要重复处理','info');
+                            return false;
+                        }
+                        var id = rows[0].id;
                         var tdorderid = rows[0].tdorderid;
                         var orderid = rows[0].orderid;
-                        $.post("checkOk",{tdorderid:tdorderid, orderid:orderid},function (msg) {
+                        $.post("checkOk",{id:id, tdorderid:tdorderid, orderid:orderid,},function (msg) {
                             if (msg.retCode != '0000') {
                                 $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
                                 return false;
@@ -42,6 +47,10 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return false;
                         }
+                        if ( rows[0].singlestatus !== 0 ){
+                            $.messager.alert('消息提示','此订单已处理，请不要重复处理','info');
+                            return false;
+                        }
                         $("#opeCon").window('setTitle','驳回理由').window('refresh').window('open');
                     }
                 }
@@ -58,9 +67,9 @@
                     {field:'id', title:'ID', width:'3%'},
                     {field:'tdorderid', title:'退单ID', width:'10%'},
                     {field:'orderid', title:'订单ID', width:'10%'},
-                    {field:'tdorderprice', title:'订单金额', width:'10%'},
-                    {field:'mtsid', title:'商户ID', width:'10%'},
-                    {field:'singletype', title:'退单类型', width:'10%',
+                    {field:'tdorderprice', title:'订单金额', width:'5%', formatter:formatPrice},
+                    {field:'mtsid', title:'商户ID', width:'5%'},
+                    {field:'singletype', title:'退单类型', width:'5%',
                         formatter:function (value, row, index) {
                             if ( value == 1 ){
                                 return '支付后退款';

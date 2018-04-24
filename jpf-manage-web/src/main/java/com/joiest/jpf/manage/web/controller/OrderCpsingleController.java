@@ -44,12 +44,12 @@ public class OrderCpsingleController {
 
     @RequestMapping("/checkOk")
     @ResponseBody
-    public JpfResponseDto checkOk(long tdorderid, long orderid){
+    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, HttpServletRequest request){
         // 准备请求接口，传入参数orderid
         OkHttpUtils okHttpUtils = new OkHttpUtils();
-        Map<String,Object> request = new HashMap<>();
-        request.put("orderid",orderid);
-        String response = okHttpUtils.postForm("http://testapi.7shengqian.com/index.php?r=YinjiaStage/PurchaseRefund",request);
+        Map<String,Object> posRequest = new HashMap<>();
+        posRequest.put("orderid",orderCpsingleRequest.getOrderid());
+        String response = okHttpUtils.postForm("http://testapi.7shengqian.com/index.php?r=YinjiaStage/PurchaseRefund",posRequest);
 
         JsonUtils jsonUtils = new JsonUtils();
         Map<String, String> responseMap = jsonUtils.toCollection(response, new TypeReference<HashMap<String, String>>(){});
@@ -57,7 +57,11 @@ public class OrderCpsingleController {
             // 退款接口如果没有返回成功
            throw new JpfException(JpfErrorInfo.DAL_ERROR, "请求接口失败，返回："+responseMap.get("info")+"，请检查");
         }
-        return orderCpsingleServiceFacade.checkOk(tdorderid, orderid);
+
+        HttpSession session = request.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+
+        return orderCpsingleServiceFacade.checkOk(orderCpsingleRequest, userInfo);
     }
 
     @RequestMapping("/checkNo")

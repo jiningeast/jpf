@@ -486,52 +486,52 @@ public class PayOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeEqualTo(Boolean value) {
+        public Criteria andPaytypeEqualTo(Integer value) {
             addCriterion("paytype =", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeNotEqualTo(Boolean value) {
+        public Criteria andPaytypeNotEqualTo(Integer value) {
             addCriterion("paytype <>", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeGreaterThan(Boolean value) {
+        public Criteria andPaytypeGreaterThan(Integer value) {
             addCriterion("paytype >", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andPaytypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("paytype >=", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeLessThan(Boolean value) {
+        public Criteria andPaytypeLessThan(Integer value) {
             addCriterion("paytype <", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeLessThanOrEqualTo(Boolean value) {
+        public Criteria andPaytypeLessThanOrEqualTo(Integer value) {
             addCriterion("paytype <=", value, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeIn(List<Boolean> values) {
+        public Criteria andPaytypeIn(List<Integer> values) {
             addCriterion("paytype in", values, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeNotIn(List<Boolean> values) {
+        public Criteria andPaytypeNotIn(List<Integer> values) {
             addCriterion("paytype not in", values, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeBetween(Boolean value1, Boolean value2) {
+        public Criteria andPaytypeBetween(Integer value1, Integer value2) {
             addCriterion("paytype between", value1, value2, "paytype");
             return (Criteria) this;
         }
 
-        public Criteria andPaytypeNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andPaytypeNotBetween(Integer value1, Integer value2) {
             addCriterion("paytype not between", value1, value2, "paytype");
             return (Criteria) this;
         }

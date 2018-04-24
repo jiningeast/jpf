@@ -68,21 +68,47 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     }
 
     @Override
-    public JpfResponseDto checkOk(long tdorderid, long orderid){
-        // 更新退款记录表order_cpsingle->singlestatus字段为1：退款处理成功
-        PayOrderCpsingleExample payOrderCpsingleExample = new PayOrderCpsingleExample();
-        PayOrderCpsingleExample.Criteria payOrderCpsingleC = payOrderCpsingleExample.createCriteria();
-        payOrderCpsingleC.andTdorderidEqualTo(tdorderid);
-        payOrderCpsingleC.andOrderidEqualTo(orderid);
+    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo){
 
-        PayOrderCpsingle payOrderCpsingle = new PayOrderCpsingle();
-        payOrderCpsingle.setSinglestatus((byte)1);
-        int res_orderCpsingle = payOrderCpsingleMapper.updateByExampleSelective(payOrderCpsingle, payOrderCpsingleExample);
+        // 查询此单的原operate_content审核内容字段
+        PayOrderCpsingle ordinaryRec = payOrderCpsingleMapper.selectByPrimaryKey(orderCpsingleRequest.getId());
+        String json = ordinaryRec.getOperateContent();
+
+        // 根据请求构建新的json记录
+        Map<String, Object> map = new HashMap<>();
+        map.put("uid", userInfo.getId());
+        map.put("username", userInfo.getUserName());
+        map.put("content", "<span style='color:blue'>审核通过</span>");
+        map.put("date", new Date());
+
+        JsonUtils jsonUtils = new JsonUtils();
+        List<Object> list = new ArrayList<>();
+        // 判断原审核内容是否为空
+        if ( org.apache.commons.lang3.StringUtils.isBlank(json) ){
+            // 建立一个空的list用来存储本次驳回操作的json记录
+            list.add(map);
+        }else
+        {
+            // 把原JSON转换成list
+            list = jsonUtils.toObject(json, List.class);
+
+            // 把新的json记录添加进原json
+            list.add(map);
+        }
+
+        // 得到新拼接的JSON数据
+        String newJson = jsonUtils.toJson(list);
+        PayOrderCpsingle newRec = new PayOrderCpsingle();
+        newRec.setId(orderCpsingleRequest.getId());
+        newRec.setOperateContent(newJson);
+        newRec.setSinglestatus((byte)1);
+
+        int res_orderCpsingle = payOrderCpsingleMapper.updateByPrimaryKeySelective(newRec);
         if ( res_orderCpsingle == 1 ){
             // 更新订单表order->singlestatus字段为5：退款处理完成
             PayOrderExample payOrderExample = new PayOrderExample();
             PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
-            payOrderC.andOrderidEqualTo(orderid);
+            payOrderC.andOrderidEqualTo(orderCpsingleRequest.getOrderid());
 
             PayOrder payOrder = new PayOrder();
             payOrder.setSinglestatus((byte)5);
@@ -107,7 +133,7 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         Map<String, Object> map = new HashMap<>();
         map.put("uid", userInfo.getId());
         map.put("username", userInfo.getUserName());
-        map.put("content", orderCpsingleRequest.getOperateContent());
+        map.put("content", "<span style='color:red'>"+orderCpsingleRequest.getOperateContent()+"</span>");
         map.put("date", new Date());
 
         JsonUtils jsonUtils = new JsonUtils();
@@ -136,6 +162,17 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新退单表失败，请联系管理员");
         }
 
+        // 更新订单表状态
+        PayOrderExample payOrderExample = new PayOrderExample();
+        PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
+        payOrderC.andOrderidEqualTo(orderCpsingleRequest.getOrderid());
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setSinglestatus((byte)6);
+        int res_order = payOrderMapper.updateByExampleSelective(payOrder, payOrderExample);
+        if ( res_order != 1 ){
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新订单表失败，请联系管理员");
+        }
         return new JpfResponseDto();
     }
 }
