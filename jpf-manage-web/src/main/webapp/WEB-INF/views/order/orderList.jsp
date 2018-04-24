@@ -61,7 +61,7 @@
                                 return '支付失败';
                             }
                         }},
-                    {field:'singlestatus',title:'退单状态',width:'7%',
+                    {field:'singlestatus',title:'退单状态',width:'8%',
                         formatter:function (value, row, index) {
                             if ( value == 1 ){
                                 return '正常订单';
