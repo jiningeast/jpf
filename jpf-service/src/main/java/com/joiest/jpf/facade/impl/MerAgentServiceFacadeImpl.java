@@ -100,7 +100,7 @@ public class MerAgentServiceFacadeImpl implements MerAgentServiceFacade{
     @Override
     public JpfResponseDto modifyAgent(ModifyAgentRequest request)
     {
-        Byte levelOne = 2;
+        Byte levelOne = 2;  //一级
         String superioridNew;   //新路径
         //区分新增or编辑
         //add

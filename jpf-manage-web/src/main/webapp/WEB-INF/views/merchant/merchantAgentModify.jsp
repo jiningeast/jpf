@@ -116,7 +116,14 @@
     }
 
     $(function () {
+        var levelArr = new Array();
+        levelArr[2] = "1级";
+        levelArr[3] = "2级";
+        levelArr[4] = "3级";
+
+        //隐藏所有
         $("tr.trlevel").hide();
+
         //等级信息
         $('#editForm #tpid').combobox({
             url:'../param/getType?pid=1',
@@ -155,19 +162,17 @@
                 dataType : 'json',
                 type: 'post',
                 success : function (data) {
-                    console.log(data);
                     if ( !data )
                     {
                         var msg = '';
                         if ( tpid == 2 )
                         {
-                            msg = "暂无1级代理商户，请先设置1级代理商户";
+                            msg = "暂无" + levelArr[tpid] + "代理商户，请先设置1级代理商户";
                         }else if ( tpid == 3 )
                         {
-                            msg = "暂无2级代理商户，请先设置2级代理商户";
+                            msg = "暂无" + levelArr[tpid] + "代理商户，请先设置2级代理商户";
                         }
                         $.messager.alert('消息提示', msg);
-
                         return false;
                     }
                     var prevPath = '${merchantAgentInfo.superiorid}';   //当前path
@@ -188,10 +193,15 @@
                             prevMtsid = str[1];
                         }
                     }
-
                     if ( data )
                     {
                         var html = "";
+                        //降级操作时：此等级只有1个且为当前商户时
+                        if ( data.length == 1 && tpid == '${merchantAgentInfo.tpid}' )
+                        {
+                            $.messager.alert('消息提示', "请先设置其它" + levelArr[tpid] + "代理商户");
+                            return false;
+                        }
                         for ( var i=0; i<data.length; i++)
                         {
                             //代理等级 降级操作时 ： 商户列表过滤掉其本身
