@@ -102,6 +102,7 @@ public class MerAgentServiceFacadeImpl implements MerAgentServiceFacade{
     {
         Byte levelOne = 2;  //一级
         String superioridNew;   //新路径
+        Long pid;   //父商户ID
         //区分新增or编辑
         //add
         if ( request.getId() == null )
@@ -111,6 +112,7 @@ public class MerAgentServiceFacadeImpl implements MerAgentServiceFacade{
             {
                 //1级代理
                 superioridNew = request.getMtsid() + ":";
+                pid = 0L;
             } else
             {
                 if ( request.getMtsidBelong() == null )
@@ -130,13 +132,14 @@ public class MerAgentServiceFacadeImpl implements MerAgentServiceFacade{
                 }
                 String superiorid = agentList.get(0).getSuperiorid();
                 superioridNew = superiorid + request.getMtsid() + ':';
-
+                pid = Long.valueOf(request.getMtsidBelong());
             }
             PayMerchantsAgent payMerchantsAgent = new PayMerchantsAgent();
             BeanCopier beanCopier = BeanCopier.create(ModifyAgentRequest.class, PayMerchantsAgent.class, false);
             beanCopier.copy(request,payMerchantsAgent,null);
             payMerchantsAgent.setCreated(new Date());
             payMerchantsAgent.setSuperiorid(superioridNew);
+            payMerchantsAgent.setPid(pid);
             //新增
             int res = payMerchantsAgentMapper.insertSelective(payMerchantsAgent);
             if ( res != 1 )
@@ -152,6 +155,7 @@ public class MerAgentServiceFacadeImpl implements MerAgentServiceFacade{
             {
                 //1级代理
                 superioridNew = request.getMtsid() + ":";
+                pid = 0L;
             }else
             {
                 if ( request.getMtsidBelong() == null )
@@ -169,6 +173,7 @@ public class MerAgentServiceFacadeImpl implements MerAgentServiceFacade{
                 }
                 String superiorid = agentList.get(0).getSuperiorid();
                 superioridNew = superiorid + request.getMtsid() + ":";
+                pid = Long.valueOf(request.getMtsidBelong());
             }
 
             PayMerchantsAgentExample exampleUpdate = new PayMerchantsAgentExample();
@@ -179,6 +184,7 @@ public class MerAgentServiceFacadeImpl implements MerAgentServiceFacade{
             beanCopier.copy(request, payMerchantsAgent, null);
             payMerchantsAgent.setSuperiorid(superioridNew);//赋值path
             payMerchantsAgent.setUpdated(new Date());
+            payMerchantsAgent.setPid(pid);
             int res = payMerchantsAgentMapper.updateByExampleSelective(payMerchantsAgent,exampleUpdate);
             if ( res != 1 )
             {

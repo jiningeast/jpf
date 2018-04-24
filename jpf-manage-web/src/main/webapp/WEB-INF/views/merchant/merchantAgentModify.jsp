@@ -39,7 +39,7 @@
                         <td style="text-align: right;background-color: #f1f1f1;">代理等级：</td>
                         <input type="hidden" name="tpid_curr" value="${merchantAgentInfo.tpid}">
                         <td>
-                            <select id="tpid" name="tpid" class="easyui-combobox" style="width:100px;">
+                            <select id="tpid" name="tpid" class="easyui-combobox" data-options="required:true" style="width:100px;">
                             </select>
                             <%--<input type="text" id="tpid" data-options="required:true" name="tpid">--%>
                         </td>
@@ -253,6 +253,19 @@
                 var isValid = $("#editForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
+                }
+                var tpid = $("input[name='tpid']").val();
+                var mtsidBelong = $("input[name='mtsidBelong']:checked").val();
+
+                if ( tpid != 2 )
+                {
+                    //排除1级的情况
+                    var mtsidBelong = $("input[name='mtsidBelong']:checked").val();
+                    if ( !mtsidBelong )
+                    {
+                        $.messager.alert('消息提示', "请选择" + levelArr[tpid-1] + "代理商户");
+                        return false;
+                    }
                 }
                 var queryArray = $('#editForm').serializeArray();
                 var postData = parsePostData(queryArray);
