@@ -34,6 +34,11 @@ public class PayMerchantsAgent implements Serializable {
      */
     private Date updated;
 
+    /**
+     * 父商户ID
+     */
+    private Long pid;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -84,6 +89,14 @@ public class PayMerchantsAgent implements Serializable {
         this.updated = updated;
     }
 
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
+    }
+
     /**
      *
      */
@@ -99,6 +112,7 @@ public class PayMerchantsAgent implements Serializable {
         sb.append(", superiorid=").append(superiorid);
         sb.append(", created=").append(created);
         sb.append(", updated=").append(updated);
+        sb.append(", pid=").append(pid);
         sb.append("]");
         return sb.toString();
     }
@@ -124,7 +138,8 @@ public class PayMerchantsAgent implements Serializable {
             && (this.getTpid() == null ? other.getTpid() == null : this.getTpid().equals(other.getTpid()))
             && (this.getSuperiorid() == null ? other.getSuperiorid() == null : this.getSuperiorid().equals(other.getSuperiorid()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
-            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
+            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()))
+            && (this.getPid() == null ? other.getPid() == null : this.getPid().equals(other.getPid()));
     }
 
     /**
@@ -140,6 +155,7 @@ public class PayMerchantsAgent implements Serializable {
         result = prime * result + ((getSuperiorid() == null) ? 0 : getSuperiorid().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
+        result = prime * result + ((getPid() == null) ? 0 : getPid().hashCode());
         return result;
     }
 }
