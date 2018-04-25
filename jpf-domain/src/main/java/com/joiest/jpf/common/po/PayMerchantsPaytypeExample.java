@@ -295,6 +295,66 @@ public class PayMerchantsPaytypeExample {
             return (Criteria) this;
         }
 
+        public Criteria andBankidIsNull() {
+            addCriterion("bankid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidIsNotNull() {
+            addCriterion("bankid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidEqualTo(Long value) {
+            addCriterion("bankid =", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidNotEqualTo(Long value) {
+            addCriterion("bankid <>", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidGreaterThan(Long value) {
+            addCriterion("bankid >", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidGreaterThanOrEqualTo(Long value) {
+            addCriterion("bankid >=", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidLessThan(Long value) {
+            addCriterion("bankid <", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidLessThanOrEqualTo(Long value) {
+            addCriterion("bankid <=", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidIn(List<Long> values) {
+            addCriterion("bankid in", values, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidNotIn(List<Long> values) {
+            addCriterion("bankid not in", values, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidBetween(Long value1, Long value2) {
+            addCriterion("bankid between", value1, value2, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidNotBetween(Long value1, Long value2) {
+            addCriterion("bankid not between", value1, value2, "bankid");
+            return (Criteria) this;
+        }
+
         public Criteria andTpidIsNull() {
             addCriterion("tpid is null");
             return (Criteria) this;
@@ -425,6 +485,76 @@ public class PayMerchantsPaytypeExample {
             return (Criteria) this;
         }
 
+        public Criteria andBankcatidIsNull() {
+            addCriterion("bankcatid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidIsNotNull() {
+            addCriterion("bankcatid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidEqualTo(String value) {
+            addCriterion("bankcatid =", value, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidNotEqualTo(String value) {
+            addCriterion("bankcatid <>", value, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidGreaterThan(String value) {
+            addCriterion("bankcatid >", value, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidGreaterThanOrEqualTo(String value) {
+            addCriterion("bankcatid >=", value, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidLessThan(String value) {
+            addCriterion("bankcatid <", value, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidLessThanOrEqualTo(String value) {
+            addCriterion("bankcatid <=", value, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidLike(String value) {
+            addCriterion("bankcatid like", value, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidNotLike(String value) {
+            addCriterion("bankcatid not like", value, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidIn(List<String> values) {
+            addCriterion("bankcatid in", values, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidNotIn(List<String> values) {
+            addCriterion("bankcatid not in", values, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidBetween(String value1, String value2) {
+            addCriterion("bankcatid between", value1, value2, "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidNotBetween(String value1, String value2) {
+            addCriterion("bankcatid not between", value1, value2, "bankcatid");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedIsNull() {
             addCriterion("created is null");
             return (Criteria) this;
@@ -547,6 +677,11 @@ public class PayMerchantsPaytypeExample {
 
         public Criteria andCatpathLikeInsensitive(String value) {
             addCriterion("upper(catpath) like", value.toUpperCase(), "catpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcatidLikeInsensitive(String value) {
+            addCriterion("upper(bankcatid) like", value.toUpperCase(), "bankcatid");
             return (Criteria) this;
         }
     }

@@ -39,4 +39,49 @@ public class MerTypeServiceFacadeImpl implements MerTypeServiceFacade {
         }
         return merchantTypeInfos;
     }
+
+    /**
+     * 获取单条信息 pay_merchants_type
+     * @param catid
+     */
+    public MerchantTypeInfo getOneTypeByCatid(String catid)
+    {
+        if ( StringUtils.isBlank(catid) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "catid不能为空");
+        }
+        PayMerchantsTypeExample example = new PayMerchantsTypeExample();
+        PayMerchantsTypeExample.Criteria c = example.createCriteria();
+        c.andCatidEqualTo(Integer.valueOf(catid));
+        PayMerchantsType payMerchantsType= payMerchantsTypeMapper.selectByPrimaryKey(Integer.valueOf(catid));
+        MerchantTypeInfo merchantTypeInfo = new MerchantTypeInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayMerchantsType.class, MerchantTypeInfo.class, false);
+        beanCopier.copy(payMerchantsType, merchantTypeInfo, null);
+        return merchantTypeInfo;
+    }
+
+    /**
+     * 获取单条信息 pay_merchants_type
+     * @param catid
+     */
+    public List<MerchantTypeInfo> getOneTypeByCatId(String catid)
+    {
+        if ( StringUtils.isBlank(catid) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "catid不能为空");
+        }
+        PayMerchantsTypeExample example = new PayMerchantsTypeExample();
+        PayMerchantsTypeExample.Criteria c = example.createCriteria();
+        c.andCatidEqualTo(Integer.valueOf(catid));
+        List<PayMerchantsType> payMerchantsTypes = payMerchantsTypeMapper.selectByExample(example);
+        List<MerchantTypeInfo> merchantTypeInfos = new ArrayList<>();
+        for (PayMerchantsType payMerchantsType : payMerchantsTypes) {
+            MerchantTypeInfo merchantTypeInfo = new MerchantTypeInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayMerchantsType.class, MerchantTypeInfo.class, false);
+            beanCopier.copy(payMerchantsType, merchantTypeInfo, null);
+            merchantTypeInfos.add(merchantTypeInfo);
+        }
+        return merchantTypeInfos;
+    }
+
 }

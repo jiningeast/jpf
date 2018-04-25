@@ -24,6 +24,11 @@ public class MerchantPayTypeInfo {
     private String catpath;
 
     /**
+     * 支付类型 zh
+     */
+    private String catpath_zh;
+
+    /**
      * 创建时间
      */
     private Date created;
@@ -79,5 +84,13 @@ public class MerchantPayTypeInfo {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public String getCatpath_zh() {
+        return catpath_zh;
+    }
+
+    public void setCatpath_zh(String catpath_zh) {
+        this.catpath_zh = catpath_zh;
     }
 }

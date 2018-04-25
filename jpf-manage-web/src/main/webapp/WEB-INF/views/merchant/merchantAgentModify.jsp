@@ -41,7 +41,6 @@
                         <td>
                             <select id="tpid" name="tpid" class="easyui-combobox" data-options="required:true" style="width:100px;">
                             </select>
-                            <%--<input type="text" id="tpid" data-options="required:true" name="tpid">--%>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>
                         <td>
