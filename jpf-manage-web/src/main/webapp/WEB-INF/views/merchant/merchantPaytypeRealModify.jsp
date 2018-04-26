@@ -15,25 +15,27 @@
          style="padding: 10px; background: #fff; border: 1px solid #ccc;">
         <form id="addForm" method="post">
             <input type="hidden" name="mtsid" id="mtsid" value="${merchantInfo.id}">
-            <input type="hidden" name="tpid" id="tpid" value="${merchantTypeInfo.catid}">
+            <input type="hidden" name="tpid" id="tpid" value="${merpayTypeInfoOne.tpid}">
+            <input type="hidden" name="id" id="id" value="${merpayTypeInfoOne.id}">
             <table cellpadding=3 class="table table-bordered" id="wx" class="paramTable" style="display: none">
                 <tr>
-                    <th>支付配置</th>
+                    <th>支付编辑</th>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>${merchantTypeInfo.cat}</td>
-                    <td></td><td></td>
+                    <td>${TypeInfoOne.cat}</td>
+                    <td style="text-align: right;width:25%" > </td>
+                    <td style="width:25%"></td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数1:
+                        <%--<input id="key1" name="key1" type="text" style="text-align: right;width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
-                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-numberbox" value="${merpayTypeInfoOne.param}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                     </td>
-                    <td style="text-align: right;width:25%" > </td>
-                    <td style="width:25%"></td>
+                    <td style="text-align: right;"></td><td></td>
                 </tr>
                 <tr class="wx_param">
                     <td style="text-align: right;background-color: #f1f1f1;">
@@ -51,7 +53,7 @@
                         <input id="wx_param4" name="wx_param4" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                 </tr>
-                <tr  class="wx_param">
+                <tr class="wx_param">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数5:
                         <%--<input id="key5" name="key5" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
@@ -74,7 +76,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>${merchantTypeInfo.cat}</td>
+                    <td>${TypeInfoOne.cat}</td>
                     <td style="width:25%;"></td><td style="width:25%;"></td>
                 </tr>
                 <tr class="paramTr">
@@ -132,7 +134,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>${merchantTypeInfo.cat}</td>
+                    <td>${TypeInfoOne.cat}</td>
                     <td style="width:25%;"></td><td style="width:25%;"></td>
                 </tr>
                 <tr class="paramTr">
@@ -190,7 +192,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>${merchantTypeInfo.cat}</td>
+                    <td>${TypeInfoOne.cat}</td>
                     <td style="width:25%;"></td><td style="width:25%;"></td>
                 </tr>
                 <tr class="paramTr">
@@ -264,8 +266,7 @@
         setTimeout("initData()", 500);
         $("table.paramDiv").hide();
         $("table tr.paramTr").hide();
-        //暂时隐藏除wx之外的类型的参数
-        var catid = '${merchantTypeInfo.catid}';
+        var catid = '${merpayTypeInfoOne.tpid}';
         if ( catid == 9 )
         {
             $("#wx").show();
@@ -280,28 +281,49 @@
             $("#zy").show();
         }
         $(".wx_param").hide();  //微信其它参数暂时隐藏
+
+        var param = '${merpayTypeInfoOne.param}';
+        if ( param != '' )
+        {
+            JSON.parse(param, function (k,v) {
+                if (  k !== '' && typeof(v) !== 'object' )
+                {
+                    switch (k)
+                    {
+                        case 'merSubMchid':
+                            $("#wx_merSubMchid").val(v);
+                            break;
+                    }
+                }
+            });
+        }
         $("#saveBtn_m").linkbutton({
             onClick: function () {
+
                 var isValid = $("#addForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
                 }
+
                 var queryArray = $("#addForm").serializeArray();
                 var postData = parsePostData(queryArray);
+                console.log(queryArray);
+                console.log(postData);
+                // return false;
                 $.ajax({
                     type: 'post',
-                    url: '../merchant/paytype/add/addMerPayTypeOne',
+                    url: '../merchant/paytype/modify/modifyMerPayTypeOne',
                     data: postData,
                     dataType: 'json',
                     success: function (msg) {
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-
                         } else {
+
                             $('#infoDiv2').window('close');
                             var mtsid = '${merchantInfo.id}';
                             $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id=' + mtsid).window('setTitle','配置支付类型');
-                            $.messager.alert('消息提示', '操作成功！', 'info');
+                            $.messager.alert('消息提示', '操作成功！', 'error');
                         }
                     },
                     error: function () {

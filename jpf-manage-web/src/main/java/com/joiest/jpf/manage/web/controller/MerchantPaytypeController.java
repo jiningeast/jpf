@@ -6,6 +6,7 @@ import com.joiest.jpf.dto.GetMerchPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeResponse;
 import com.joiest.jpf.dto.ModifyMerPayTypeRequest;
 import com.joiest.jpf.entity.MerchantInfo;
+import com.joiest.jpf.entity.MerchantPayTypeInfo;
 import com.joiest.jpf.entity.MerchantTypeInfo;
 import com.joiest.jpf.facade.MerPayTypeServiceFacade;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
@@ -97,16 +98,21 @@ public class MerchantPaytypeController {
 
     /**
      * 实际编辑页面
+     * @param  id pay_merchants_paytype.id
+     * @param tpid  pay_merchant_paytype.tpid 支付类型ID
      */
     @RequestMapping("modify/realpage")
     public ModelAndView modifyRealPage(String mtsid, String id, String tpid, ModelMap modelMap){
-      /*  //获取单个支付类型信息
-        MerchantTypeInfo merchantTypeInfo = merTypeServiceFacade.getOneTypeByCatid(catid);
+        //获取某个商户的单个支付类型
+        MerchantPayTypeInfo merpayTypeInfoOne = merPayTypeServiceFacade.getMerOnePayTypes(Long.valueOf(id));
+        //获取单个支付类型信息
+        MerchantTypeInfo TypeInfoOne = merTypeServiceFacade.getOneTypeByCatid(tpid);
         //商户信息
-        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(id));
+        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(mtsid));
+        modelMap.addAttribute("merpayTypeInfoOne", merpayTypeInfoOne);
+        modelMap.addAttribute("TypeInfoOne", TypeInfoOne);
         modelMap.addAttribute("merchantInfo", merchantInfo);
-        modelMap.addAttribute("merchantTypeInfo", merchantTypeInfo);*/
-        return new ModelAndView("merchant/merchantPaytypeRealAdd", modelMap);
+        return new ModelAndView("merchant/merchantPaytypeRealModify", modelMap);
     }
 
     @RequestMapping("/modify/modifyMerPayTypeOne")

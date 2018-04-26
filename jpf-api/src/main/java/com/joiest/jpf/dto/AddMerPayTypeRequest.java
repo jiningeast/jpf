@@ -14,6 +14,11 @@ public class AddMerPayTypeRequest {
      */
     private List<Integer> tpid;
 
+    /**
+     * 支付类型对应的参数
+     */
+    private String wx_merSubMchid;
+
     public Long getMtsid() {
         return mtsid;
     }
@@ -28,5 +33,13 @@ public class AddMerPayTypeRequest {
 
     public void setTpid(List<Integer> tpid) {
         this.tpid = tpid;
+    }
+
+    public String getWx_merSubMchid() {
+        return wx_merSubMchid;
+    }
+
+    public void setWx_merSubMchid(String wx_merSubMchid) {
+        this.wx_merSubMchid = wx_merSubMchid;
     }
 }

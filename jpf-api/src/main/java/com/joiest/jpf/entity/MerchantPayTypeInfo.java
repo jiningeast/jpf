@@ -38,6 +38,21 @@ public class MerchantPayTypeInfo {
      */
     private Date updated;
 
+    /**
+     * 属性配置
+     */
+    private String param;
+
+    /**
+     * 银行ID
+     */
+    private Long bankid;
+
+    /**
+     * 银行分期ID集合 :type表
+     */
+    private String bankcatid;
+
     public Long getId() {
         return id;
     }
@@ -93,4 +108,29 @@ public class MerchantPayTypeInfo {
     public void setCatpath_zh(String catpath_zh) {
         this.catpath_zh = catpath_zh;
     }
+
+    public String getParam() {
+        return param;
+    }
+
+    public void setParam(String param) {
+        this.param = param == null ? null : param.trim();
+    }
+
+    public Long getBankid() {
+        return bankid;
+    }
+
+    public void setBankid(Long bankid) {
+        this.bankid = bankid;
+    }
+
+    public String getBankcatid() {
+        return bankcatid;
+    }
+
+    public void setBankcatid(String bankcatid) {
+        this.bankcatid = bankcatid == null ? null : bankcatid.trim();
+    }
+
 }

@@ -5,6 +5,7 @@ import com.joiest.jpf.dto.AddMerPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeResponse;
 import com.joiest.jpf.dto.ModifyMerPayTypeRequest;
+import com.joiest.jpf.entity.MerchantPayTypeInfo;
 
 import java.util.List;
 
@@ -39,4 +40,9 @@ public interface MerPayTypeServiceFacade {
      * 获取某个商户的支付类型
      */
     public GetMerchPayTypeResponse getOneMerPayTypes(Long mtsid);
+
+    /**
+     * 获取某个商户的单个支付类型 by id
+     */
+    public MerchantPayTypeInfo getMerOnePayTypes(Long id);
 }

@@ -141,9 +141,10 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         c.andTpidEqualTo(request.getTpid());
         c.andCatpathEqualTo(payMerchantsType.getCatpath());
         List<PayMerchantsPaytype> payMerchantsPaytypes = payMerchantsPaytypeMapper.selectByExample(example);
-//        if (payMerchantsPaytypes != null && !payMerchantsPaytypes.isEmpty()) {
-//            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST);
-//        }
+
+        if (payMerchantsPaytypes != null && !payMerchantsPaytypes.isEmpty()) {
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST);
+        }
         Map<String, Object> jsonMap = new HashMap<>();
         List<Object> list = new ArrayList<>();
         String newJson = "";
@@ -154,8 +155,8 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             {
                 jsonMap.put( "merSubMchid", request.getWx_merSubMchid() );
             }
-            list.add(jsonMap);
-            newJson = jsonUtils.toJson(list);
+//            list.add(jsonMap);
+            newJson = jsonUtils.toJson(jsonMap);
         }
 
         PayMerchantsPaytype record = new PayMerchantsPaytype();
@@ -172,6 +173,9 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         return new JpfResponseDto();
     }
 
+    /**
+     * 编辑商户支付类型 --单个
+     */
     public JpfResponseDto modifyMerPayTypeOne(ModifyMerPayTypeRequest request)
     {
         JsonUtils jsonUtils = new JsonUtils();
@@ -191,7 +195,7 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         c.andTpidEqualTo(request.getTpid());
         c.andCatpathEqualTo(payMerchantsType.getCatpath());
         List<PayMerchantsPaytype> payMerchantsPaytypes = payMerchantsPaytypeMapper.selectByExample(example);
-        if (payMerchantsPaytypes != null && !payMerchantsPaytypes.isEmpty()) {
+        if (payMerchantsPaytypes == null && payMerchantsPaytypes.isEmpty()) {
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST);
         }
         Map<String, Object> jsonMap = new HashMap<>();
@@ -204,15 +208,15 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             {
                 jsonMap.put( "merSubMchid", request.getWx_merSubMchid() );
             }
-            list.add(jsonMap);
-            newJson = jsonUtils.toJson(list);
+//            list.add(jsonMap);
+            newJson = jsonUtils.toJson(jsonMap);
         }
 
         PayMerchantsPaytype record = new PayMerchantsPaytype();
         record.setMtsid(request.getMtsid());
         record.setTpid(request.getTpid());
         record.setCatpath(payMerchantsType.getCatpath());
-        record.setCreated(new Date());
+        record.setUpdated(new Date());
         if ( StringUtils.isNotBlank(newJson) )
         {
             record.setParam(newJson);
@@ -274,4 +278,22 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         response.setPayTypeInfos(payTypeInfos);
         return response;
     }
+
+    /**
+     * 获取某个商户的某个支付类型 by id
+     */
+    public MerchantPayTypeInfo getMerOnePayTypes(Long id)
+    {
+        if ( id == null )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        PayMerchantsPaytype payMerchantsPaytype = payMerchantsPaytypeMapper.selectByPrimaryKey(id);
+        MerchantPayTypeInfo payTypeInfo = new MerchantPayTypeInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
+        beanCopier.copy(payMerchantsPaytype, payTypeInfo, null);
+        List<Object> list = new ArrayList<>();
+        return payTypeInfo;
+    }
+
 }
