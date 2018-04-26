@@ -99,7 +99,7 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         Map<String, Object> map = new HashMap<>();
         map.put("uid", userInfo.getId());
         map.put("username", userInfo.getUserName());
-        map.put("content", "<span style='color:blue'>审核通过</span>");
+        map.put("content", "审核通过");
         map.put("date", new Date());    // 运营审核的时间
         map.put("applyTime", ordinaryRec.getLasttime());    // 用户申请退单的时间
 
@@ -189,7 +189,7 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         Map<String, Object> map = new HashMap<>();
         map.put("uid", userInfo.getId());
         map.put("username", userInfo.getUserName());
-        map.put("content", "<span style='color:red'>"+tdorderRequest.getOperateContent()+"</span>");
+        map.put("content", tdorderRequest.getOperateContent());
         map.put("date", new Date());    // 运营审核的时间
         map.put("applyTime", payTdorder.getLasttime()); // 用户申请退单的时间
 
