@@ -1,8 +1,12 @@
 package com.joiest.jpf.dto;
 
-import java.util.List;
 
-public class AddMerPayTypeRequest {
+public class ModifyMerPayTypeRequest {
+
+    /**
+     * 自增ID
+     */
+    private Long id;
 
     /**
      * 商户ID
@@ -12,7 +16,7 @@ public class AddMerPayTypeRequest {
     /**
      * 支付类型
      */
-    private List<Integer> tpid;
+    private Integer tpid;
 
     /**
      * 支付类型对应的参数
@@ -27,11 +31,11 @@ public class AddMerPayTypeRequest {
         this.mtsid = mtsid;
     }
 
-    public List<Integer> getTpid() {
+    public Integer getTpid() {
         return tpid;
     }
 
-    public void setTpid(List<Integer> tpid) {
+    public void setTpid(Integer tpid) {
         this.tpid = tpid;
     }
 
@@ -41,5 +45,13 @@ public class AddMerPayTypeRequest {
 
     public void setWx_merSubMchid(String wx_merSubMchid) {
         this.wx_merSubMchid = wx_merSubMchid;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

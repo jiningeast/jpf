@@ -56,7 +56,6 @@ public class MerAgentServiceFacadeImpl implements MerAgentServiceFacade{
 
     /**
      * 根据不同等级，获取不同等级商户信息
-     * @param tpid 等级
      */
     @Override
     public List<MerchantInfo> getAgentInfoByTpid(String tpid)

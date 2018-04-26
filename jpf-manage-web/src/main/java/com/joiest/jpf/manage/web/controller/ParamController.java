@@ -48,10 +48,29 @@ public class ParamController {
         return merTypeServiceFacade.getMerTypes(pid);
     }
 
+    /**
+     * 根据不同等级，获取不同等级商户信息
+     */
     @RequestMapping("/getAgentInfo")
     @ResponseBody
     public List<MerchantInfo> getAgentInfo(String tpid)
     {
         return merAgentServiceFacade.getAgentInfoByTpid(tpid);
     }
+
+    /**
+     * 获取单条信息 pay_merchants_type
+     */
+    @RequestMapping("/getTypeOne")
+    @ResponseBody
+    public MerchantTypeInfo getTypeByCatid(String catid){
+        return merTypeServiceFacade.getOneTypeByCatid(catid);
+    }
+
+    @RequestMapping("/getOneType")
+    @ResponseBody
+    public List<MerchantTypeInfo> getOneTypeByCatId(String catid) {
+        return merTypeServiceFacade.getOneTypeByCatId(catid);
+    }
+
 }

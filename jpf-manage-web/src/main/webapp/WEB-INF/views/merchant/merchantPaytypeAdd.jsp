@@ -13,100 +13,122 @@
 <div class="easyui-layout" fit="true">
     <div region="center" border="false"
          style="padding: 10px; background: #fff; border: 1px solid #ccc;">
-        <form id="addForm" method="post">
+        <form id="paytypeForm" method="post">
+            <input id="mtsid_a" name="mtsid" type="hidden" value = "${merchantInfo.id}" />
             <table cellpadding=3 class="table table-bordered">
                 <tr>
-                    <th>设置支付类型</th>
+                    <th colspan="4">商户信息</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">商户Id：</td>
-                    <td>${mtsid}</td>
-                    <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>
-                        <select id="tpid_a" name="tpid" class="easyui-combobox" style="width:100px;" data-options="required:true">
-                        </select>
-                    </td>
-                    <td colspan="2">
-                        <a id="affirmBtn" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'">确认</a>
-                    </td>
+                    <td style="text-align: right;background-color: #f1f1f1;">商户名称：</td>
+                    <td>${merchantInfo.merchName}</td>
+                    <td style="width:25%;"></td><td style="width:25%;"></td>
                 </tr>
+                <tr>
+                    <th colspan="4">已有支付类型</th>
+                </tr>
+                <%--<tr>--%>
+                <c:if test="${!empty payTypeList}">
+                    <c:forEach items="${payTypeList}" var="one">
+                        <tr>
+                            <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
+                            <input type="hidden" value="${one.id}">
+                            <td>${one.catpath_zh}</td>
+                            <input type="hidden" name="tpid" value="${one.tpid}">
+                            <td style="text-align: right;background-color: #f1f1f1;">操作：</td>
+                            <td style="padding-left: 1%;">
+                                <span><a href="javascript:void(0);" onclick="modify('${merchantInfo.id}', '${one.id}', '${one.tpid}')">编辑</a></span>&nbsp;&nbsp;||
+                                <span><a href="javascript:void(0);" onclick="delPayType('${one.id}')">删除</a></span>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
             </table>
         </form>
 
-        <form id="savePaytype_From" method="post">
-            <input id="mtsid_a" name="mtsid" type="hidden" value = "${mtsid}" />
-            <%--<input type="hidden" name="tpid" />--%>
-            <table id="savePaytypeShow_Table" cellpadding=3 class="table table-bordered">
-                <tr>
-                    <td style="text-align: left;background-color: #f1f1f1;">支付类型</td>
-                    <td style="text-align: left;background-color: #f1f1f1;">操作</td>
-                </tr>
-            </table>
-        </form>
     </div>
-    <div region="south" border="false"
-         style="text-align: right; height: 30px; line-height: 30px;">
-        <a id="saveBtn_a" class="easyui-linkbutton" icon="icon-ok"
-           href="javascript:void(0)">保存</a>
-        <a id="cancelBtn_a" class="easyui-linkbutton" icon="icon-cancel"
-           href="javascript:void(0)">取消</a>
+    <div id="downBar" region="south" border="false" style="text-align: right; height: 30px; line-height: 30px; padding: 0 10px 0 10px; overflow: visible;">
+        <div  style="float: left;">
+            <div class="wrap" style="position: relative;">
+                <a id="addBtn" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+                <span id="typeSelect" style="display: none;">
+                    <select id="tpid_a" name="tpid" class="easyui-combobox" style="width:100px;"></select>
+                </span>
+            </div>
+        </div>
+        <div style="float: right;">
+            <a id="cancelBtn_a" class="easyui-linkbutton" icon="icon-cancel"
+               href="javascript:void(0)">取消</a>
+        </div>
+
     </div>
 </div>
+<div id="infoDiv2"></div>
 <!-- /添加弹出窗口 -->
 <style>
 </style>
 <script>
-    var paytypes;
-    $.ajax({
-        type: "POST",
-        async: false,
-        url: "../param/getType?pid=5",
-        success: function(data){
-            paytypes = data;
-        },
-        error:function(XMLHttpRequest, textStatus, errorThrown){
-
-        }
-    });
-
-    function removeInfo(tpid) {
-        $("#" + tpid + "_input").remove();
-        $("#" + tpid + "_text").remove();
+    //编辑页面加载
+    function modify(mtsid, id, tpid) {
+        $('#infoDiv2').window("open").window('setTitle','支付编辑').window('refresh', '../merchant/paytype/modify/realpage?mtsid=' + mtsid + '&id=' + id + "&tpid=" + tpid);
     }
 
-    $(function () {
-
-        $("#tpid_a").combobox({
-            data:paytypes,
-            valueField:'catid',
-            textField:'cat'
+    //删除
+    function delPayType(id){
+        $.messager.confirm('删除','确认删除操作？',function(r){
+            if(r){
+                var param = [];
+                param.push(id);
+                $.ajax({
+                    type:'get',
+                    url:'../merchant/paytype/delete/action',
+                    data:{"id":param},
+                    dataType:"json",
+                    // contentType:"application/json",
+                    // data:JSON.stringify(param),
+                    success:function(msg){
+                        if (msg.retCode != '0000') {
+                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
+                        } else {
+                            var mtsid = '${merchantInfo.id}';
+                            $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id=' + mtsid).window('setTitle','配置支付类型');
+                            $.messager.alert('消息提示','操作成功!','info');
+                        }
+                    },
+                    error:function(){
+                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
+                    }
+                });
+            }
         });
+    }
 
-        $("#affirmBtn").linkbutton({
-            onClick:function(){
+    function initData() {
+        $('#tpid_a').next(".combo").hide();
+    }
+    $(function () {
+        setTimeout("initData()", 500);
 
-                var isValid = $("#addForm").form('enableValidation').form('validate');
-                if(!isValid){
-                    return;
-                }
-                var tpid = $("#tpid_a").combobox("getValue");
+        $("#typeSelect").hide();
 
-                var tpidText = $("#tpid_a").combobox('getText');
-
-                var formInfo = "<input type='hidden' id='"+tpid+"_input' name='tpid' value='"+tpid+"' />";
-
-                var textInfo = "<tr id='"+tpid+"_text'>"
-                    +"<td style='text-align: left;'>"+tpidText+"</td>"
-                    +"<td style='text-align: left;'><a class='easyui-linkbutton' icon='icon-ok' href='javascript:removeInfo("+tpid+")'>移除</a></td>"
-                    +"</tr>";
-
-                $("#" + tpid + "_input").remove();
-                $("#" + tpid + "_text").remove();
-
-                $("#savePaytypeShow_Table tr:first").after(textInfo).after(formInfo);
+        //下拉框点击事件
+        $("#tpid_a").combobox({
+            // data:paytypes,
+            url : '../param/getType?pid=5',
+            valueField:'catid',
+            textField:'cat',
+            onSelect: function () {
+                var catid = $('#tpid_a').combobox('getValue');
+                $('#infoDiv2').window("open").window('setTitle','支付配置').window('refresh', '../merchant/paytype/add/realpage?catid=' + catid + '&id=' + "${mtsid}");
             }
         });
 
+        $('#infoDiv2').window({
+            width:'800',
+            height:'500px',
+            closed:true,
+            modal:true
+        });
 
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
         // setInterval("initData()", 500);
@@ -148,6 +170,14 @@
                 $('#infoDiv').window('close');
             }
         });
+        
+        $('#addBtn').linkbutton({
+            onClick: function () {
+                $("#typeSelect").show();
+                $('#tpid_a').next(".combo").show();
+                $('#tpid_a').combobox('showPanel');
+            }
+        })
     })
 </script>
 </body>

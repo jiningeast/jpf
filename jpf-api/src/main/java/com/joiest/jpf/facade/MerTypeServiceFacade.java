@@ -13,4 +13,11 @@ public interface MerTypeServiceFacade {
      */
     public List<MerchantTypeInfo> getMerTypes(String pid);
 
+    /**
+     * 获取单个信息
+     * @param catid
+     */
+    public MerchantTypeInfo getOneTypeByCatid(String catid);
+
+    public List<MerchantTypeInfo> getOneTypeByCatId(String catid);
 }
