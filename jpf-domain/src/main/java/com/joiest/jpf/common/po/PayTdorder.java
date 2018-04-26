@@ -2,23 +2,24 @@ package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 public class PayTdorder implements Serializable {
     /**
      * 自增ID
      */
-    private Long id;
+    private BigInteger id;
 
     /**
      * 退单ID
      */
-    private Long tdorderid;
+    private String tdorderid;
 
     /**
      * 商品订单ID
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 退单金额
@@ -56,34 +57,39 @@ public class PayTdorder implements Serializable {
     private String content;
 
     /**
+     * 最后提交时间
+     */
+    private Date lasttime;
+
+    /**
      * 添加时间
      */
     private Date addtime;
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
-    public Long getTdorderid() {
+    public String getTdorderid() {
         return tdorderid;
     }
 
-    public void setTdorderid(Long tdorderid) {
-        this.tdorderid = tdorderid;
+    public void setTdorderid(String tdorderid) {
+        this.tdorderid = tdorderid == null ? null : tdorderid.trim();
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
-        this.orderid = orderid;
+    public void setOrderid(String orderid) {
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public BigDecimal getTdorderprice() {
@@ -142,6 +148,14 @@ public class PayTdorder implements Serializable {
         this.content = content == null ? null : content.trim();
     }
 
+    public Date getLasttime() {
+        return lasttime;
+    }
+
+    public void setLasttime(Date lasttime) {
+        this.lasttime = lasttime;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -169,6 +183,7 @@ public class PayTdorder implements Serializable {
         sb.append(", operateContent=").append(operateContent);
         sb.append(", urla=").append(urla);
         sb.append(", content=").append(content);
+        sb.append(", lasttime=").append(lasttime);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
         return sb.toString();
@@ -200,6 +215,7 @@ public class PayTdorder implements Serializable {
             && (this.getOperateContent() == null ? other.getOperateContent() == null : this.getOperateContent().equals(other.getOperateContent()))
             && (this.getUrla() == null ? other.getUrla() == null : this.getUrla().equals(other.getUrla()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
+            && (this.getLasttime() == null ? other.getLasttime() == null : this.getLasttime().equals(other.getLasttime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
 
@@ -220,6 +236,7 @@ public class PayTdorder implements Serializable {
         result = prime * result + ((getOperateContent() == null) ? 0 : getOperateContent().hashCode());
         result = prime * result + ((getUrla() == null) ? 0 : getUrla().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
+        result = prime * result + ((getLasttime() == null) ? 0 : getLasttime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
     }

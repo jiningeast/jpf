@@ -1,13 +1,16 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<!DOCTYPEhtml>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>退单记录</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <style>
-        td,th{ text-align: center; }
+        .datagrid-body td,.datagrid-body th{ text-align: center; }
+        #searchForm td:nth-child(odd) { text-align: right; }
+        #searchForm td:nth-child(even) { text-align: left; }
+        #searchForm td { width: 5%;  }
     </style>
     <script>
         $(function () {
@@ -129,10 +132,82 @@
                     })
                 }
             })
+
+            // 点击搜索按钮
+            $('#searchBtn').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serializeArray();
+                    var postData = parsePostData(queryArray);
+                    $('#dg').datagrid('reload', postData);
+                }
+            });
+
+            $('#searchRestBtn').linkbutton({
+                onClick: function(){
+                    $('#searchForm').form('reset');
+                }
+            });
         })
     </script>
 </head>
 <body>
+    <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'" style="padding: 20px;">
+        <form id="searchForm" method="post">
+            <table cellpadding="5" width="100%">
+                <tr>
+                    <td>退单ID：</td>
+                    <td><input id="tdorderid" name="tdorderid" class="easyui-textbox" type="text" /></td>
+                    <td>订单ID：</td>
+                    <td><input id="orderid" name="orderid" class="easyui-textbox" type="text" ></td>
+                    <td>商户ID：</td>
+                    <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" /></td>
+                </tr>
+                <tr>
+                    <td>退单类型：</td>
+                    <td>
+                        <select name="singletype" id="singletype" class="easyui-combobox">
+                            <option value="">全部</option>
+                            <option value="1">支付后退单</option>
+                            <option value="2">未支付退单</option>
+                        </select>
+                    </td>
+                    <td>退款状态：</td>
+                    <td>
+                        <select id="singlestatus" name="singlestatus" class="easyui-combobox">
+                            <option value="">全部</option>
+                            <option value="0">待审核</option>
+                            <option value="1">退单退款成功</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>添加时间：</td>
+                    <td>
+                        <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
+                               name="addtimeStart"
+                               onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'addtimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                        -
+                        <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
+                               name="addtimeEnd"
+                               onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                    </td>
+                    <td></td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="ft" style="padding:5px;">
+        <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
+        <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+    </div>
+    <br>
     <table id="dg"></table>
     <%--驳回理由窗口--%>
     <div id="opeCon" class="easyui-window" title="驳回理由" style="padding: 10px;">

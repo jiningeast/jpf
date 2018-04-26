@@ -1,13 +1,16 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<!DOCTYPEhtml>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>订单列表</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <style>
-        td,th{ text-align: center; }
+        .datagrid-body td,.datagrid-body th{ text-align: center; }
+        #searchForm td:nth-child(odd) { text-align: right; }
+        #searchForm td:nth-child(even) { text-align: left; }
+        #searchForm td { width: 5%;  }
     </style>
     <script>
         $(function () {
@@ -27,7 +30,7 @@
                     }
                     payTypeArr[newKsy] = String(newValue);
                 });
-                console.log(payTypeArr);
+                // console.log(payTypeArr);
             })
 
             $("#dg").datagrid({
@@ -78,29 +81,104 @@
                             }
                         }},
                     {field:'paytime',title:'支付时间',width:'9%',formatter: formatDateStr},
-                    {field:'addtime',title:'添加时间',width:'9%',formatter: formatDateStr},
-                    {field:'updatetime',title:'修改时间',width:'9%',formatter: formatDateStr}
+                    {field:'addtime',title:'生成时间',width:'9%',formatter: formatDateStr},
+                    // {field:'updatetime',title:'修改时间',width:'9%',formatter: formatDateStr}
                 ]]
             })
+
+            // 搜索 - 支付类型初始化
+            $('#paytype').combobox({
+                url:'../param/getType?pid=5',
+                valueField:'catid',
+                textField:'cat'
+            });
+
+            // 点击搜索按钮
+            $('#searchBtn').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serializeArray();
+                    var postData = parsePostData(queryArray);
+                    $('#dg').datagrid('reload', postData);
+                }
+            });
+
+            $('#searchRestBtn').linkbutton({
+                onClick: function(){
+                    $('#searchForm').form('reset');
+                }
+            });
         })
     </script>
 </head>
 <body>
-<%--`id` bigint(11) NOT NULL COMMENT '自增ID',
-`orderid` bigint(20) unsigned NOT NULL COMMENT '订单ID',
-`mtsid` bigint(11) DEFAULT NULL COMMENT '商户ID',
-`uid` bigint(10) NOT NULL COMMENT '用户uid',
-`pid` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品ID',
-`paytype` tinyint(1) NOT NULL DEFAULT '7' COMMENT '支付方式：pay_merchants_type ',
-`orderPrice` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '订单实际缴纳金额',
-`orderselprice` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '订单实际金额',
-`ordernum` int(10) NOT NULL DEFAULT '1' COMMENT '订单商品数量',
-`ordername` text NOT NULL COMMENT '分期付款序列（json格式）',
-`paytime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '支付时间',
-`orderstatus` tinyint(2) NOT NULL DEFAULT '0' COMMENT '0:未支付；1:支付成功；2:支付失败',
-`singlestatus` tinyint(2) NOT NULL DEFAULT '1' COMMENT '1:正常订单；2:退单处理；3:退款撤销；4:退单受理中，5:退单处理完毕',
-`addtime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '添加时间',
-`updatetime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',--%>
+    <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'" style="padding: 20px;">
+        <form id="searchForm" method="post">
+            <table cellpadding="5" width="100%">
+                <tr>
+                    <td>订单ID：</td>
+                    <td><input id="orderid" name="orderid" class="easyui-textbox" type="text" ></td>
+                    <td>商户ID：</td>
+                    <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" /></td>
+                    <td>产品ID：</td>
+                    <td><input id="pid" name="pid" class="easyui-textbox" type="text" /></td>
+                </tr>
+                <tr>
+                    <td>支付方式：</td>
+                    <td>
+                        <input id="paytype" name="paytype" class="easyui-combobox" style="width: 150px;" type="text">
+                    </td>
+                    <td>支付状态：</td>
+                    <td>
+                        <select id="orderstatus" name="orderstatus" class="easyui-combobox">
+                            <option value="">全部</option>
+                            <option value="0">未支付</option>
+                            <option value="1">已支付</option>
+                            <option value="2">支付失败</option>
+                        </select>
+                    </td>
+                    <td>退单状态：</td>
+                    <td>
+                        <select id="singlestatus" name="singlestatus" class="easyui-combobox">
+                            <option value="">全部</option>
+                            <option value="1">正常订单</option>
+                            <option value="2">用户申请退单</option>
+                            <option value="3">用户撤销退单</option>
+                            <option value="4">退单审核中</option>
+                            <option value="5">退单处理完毕</option>
+                            <option value="6">审核驳回</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>支付时间：</td>
+                    <td>
+                        <input type="text" class="Wdate" style="width:100px;" id="paytimeStart"
+                               name="paytimeStart"
+                               onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'paytimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                        -
+                        <input type="text" class="Wdate" style="width:100px;" id="paytimeEnd"
+                               name="paytimeEnd"
+                               onfocus="WdatePicker({minDate:'#F{$dp.$D(\'paytimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                    </td>
+                    <td>生成时间：</td>
+                    <td>
+                        <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
+                               name="addtimeStart"
+                               onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'addtimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                        -
+                        <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
+                               name="addtimeEnd"
+                               onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="ft" style="padding:5px;">
+        <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
+        <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+    </div>
+    <br/>
     <table id="dg"></table>
 </body>
 </html>

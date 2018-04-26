@@ -1,23 +1,24 @@
 package com.joiest.jpf.entity;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 public class TdorderInfo {
     /**
      * 自增ID
      */
-    private Long id;
+    private BigInteger id;
 
     /**
      * 退单ID
      */
-    private Long tdorderid;
+    private String tdorderid;
 
     /**
      * 商品订单ID
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 退单金额
@@ -55,31 +56,36 @@ public class TdorderInfo {
     private String content;
 
     /**
+     * 用户申请退单的时间
+     */
+    private Date lasttime;
+
+    /**
      * 添加时间
      */
     private Date addtime;
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
-    public Long getTdorderid() {
+    public String getTdorderid() {
         return tdorderid;
     }
 
-    public void setTdorderid(Long tdorderid) {
+    public void setTdorderid(String tdorderid) {
         this.tdorderid = tdorderid;
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
+    public void setOrderid(String orderid) {
         this.orderid = orderid;
     }
 
@@ -137,6 +143,14 @@ public class TdorderInfo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Date getLasttime() {
+        return lasttime;
+    }
+
+    public void setLasttime(Date lasttime) {
+        this.lasttime = lasttime;
     }
 
     public Date getAddtime() {

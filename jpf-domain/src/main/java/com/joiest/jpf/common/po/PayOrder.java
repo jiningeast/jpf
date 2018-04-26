@@ -2,18 +2,19 @@ package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 public class PayOrder implements Serializable {
     /**
      * 自增ID
      */
-    private Long id;
+    private BigInteger id;
 
     /**
      * 订单ID
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 商户ID
@@ -82,20 +83,20 @@ public class PayOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
-        this.orderid = orderid;
+    public void setOrderid(String orderid) {
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public Long getMtsid() {

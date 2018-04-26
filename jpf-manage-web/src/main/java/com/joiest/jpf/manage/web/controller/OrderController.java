@@ -1,6 +1,8 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.dto.OrderRequest;
+import com.joiest.jpf.dto.OrderResponse;
 import com.joiest.jpf.facade.OrderServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,10 +27,12 @@ public class OrderController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String,Object> list(long page, long rows){
+    public Map<String,Object> list(OrderRequest orderRequest){
+        OrderResponse orderResponse = orderServiceFacade.getOrders(orderRequest);
         Map<String, Object> map = new HashMap<>();
-        map.put("total", orderServiceFacade.getOrdersCount());
-        map.put("rows", orderServiceFacade.getOrders(page, rows));
+        map.put("total", orderResponse.getCount());
+        map.put("rows", orderResponse.getList());
+        map.put("request", orderRequest);
 
         return map;
     }

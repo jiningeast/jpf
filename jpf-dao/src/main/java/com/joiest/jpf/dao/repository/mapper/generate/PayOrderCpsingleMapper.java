@@ -2,6 +2,7 @@ package com.joiest.jpf.dao.repository.mapper.generate;
 
 import com.joiest.jpf.common.po.PayOrderCpsingle;
 import com.joiest.jpf.common.po.PayOrderCpsingleExample;
+import java.math.BigInteger;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,7 +25,7 @@ public interface PayOrderCpsingleMapper {
      *
      * @param id
      */
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(BigInteger id);
 
     /**
      * 插入数据库记录
@@ -52,7 +53,7 @@ public interface PayOrderCpsingleMapper {
      *
      * @param id
      */
-    PayOrderCpsingle selectByPrimaryKey(Long id);
+    PayOrderCpsingle selectByPrimaryKey(BigInteger id);
 
     /**
      * 选择性更新数据库记录

@@ -173,8 +173,12 @@ function formatJSONOpCon(value) {
                         k = '内容';
                         break;
 
-                    case 'date':
+                    case '审核时间':
                         k = '日期';
+                        break;
+
+                    case 'applyTime':
+                        k = '用户申请时间';
                         break;
                 }
                 resStr += k+':<span style="color: #777">'+v+'</span>;  &nbsp;&nbsp;';

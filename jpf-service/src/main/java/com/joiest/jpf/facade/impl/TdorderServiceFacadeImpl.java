@@ -4,17 +4,20 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderCpsingleMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayTdorderMapper;
 import com.joiest.jpf.dto.TdorderRequest;
+import com.joiest.jpf.dto.TdorderResponse;
 import com.joiest.jpf.entity.TdorderInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.TdorderServiceFacade;
 import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import java.math.BigInteger;
 
 import java.util.*;
 
@@ -36,10 +39,41 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
     }
 
     @Override
-    public List<TdorderInfo> getTdorders(long page, long rows){
+    public TdorderResponse getTdorders(TdorderRequest request){
+        TdorderResponse response = new TdorderResponse();
         PayTdorderExample e = new PayTdorderExample();
-        e.setPageNo(page);
-        e.setPageSize(rows);
+        PayTdorderExample.Criteria c = e.createCriteria();
+        e.setPageNo(request.getPage());
+        e.setPageSize(request.getRows());
+        if ( request.getTdorderid() != null ){
+            c.andTdorderidEqualTo( request.getTdorderid() );
+        }
+        if ( request.getOrderid() != null ){
+            c.andOrderidEqualTo(request.getOrderid());
+        }
+        if ( request.getMtsid() != null ){
+            c.andMtsidEqualTo( request.getMtsid() );
+        }
+        if ( request.getSingletype() != null ){
+            c.andSinglestatusEqualTo( request.getSingletype() );
+        }
+        if ( request.getSinglestatus() != null ){
+            c.andSinglestatusEqualTo( request.getSinglestatus() );
+        }
+        // 用户退单时间
+        Date addtimeStart = new Date();
+        if (org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeStart() )){
+            addtimeStart = DateUtils.getFdate( request.getAddtimeStart(), DateUtils.DATEFORMATLONG );
+            c.andAddtimeGreaterThanOrEqualTo( addtimeStart );
+        }
+        Date addtimeEnd = new Date();
+        if (org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeEnd() )){
+            addtimeEnd = DateUtils.getFdate( request.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
+            c.andAddtimeLessThanOrEqualTo( addtimeEnd );
+        }
+        if ( org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeStart() ) && org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeEnd() ) ){
+            c.andAddtimeBetween(addtimeStart, addtimeEnd);
+        }
         List<PayTdorder> list = payTdorderMapper.selectByExample(e);
         List<TdorderInfo> infos = new ArrayList<>();
         for (PayTdorder payTdorder:list){
@@ -49,7 +83,9 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
             infos.add(tdorderInfo);
         }
 
-        return infos;
+        response.setList(infos);
+        response.setCount(payTdorderMapper.countByExample(e));
+        return response;
     }
 
     @Override
@@ -64,7 +100,8 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         map.put("uid", userInfo.getId());
         map.put("username", userInfo.getUserName());
         map.put("content", "<span style='color:blue'>审核通过</span>");
-        map.put("date", new Date());
+        map.put("date", new Date());    // 运营审核的时间
+        map.put("applyTime", ordinaryRec.getLasttime());    // 用户申请退单的时间
 
         JsonUtils jsonUtils = new JsonUtils();
         List<Object> list = new ArrayList<>();
@@ -153,7 +190,8 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         map.put("uid", userInfo.getId());
         map.put("username", userInfo.getUserName());
         map.put("content", "<span style='color:red'>"+tdorderRequest.getOperateContent()+"</span>");
-        map.put("date", new Date());
+        map.put("date", new Date());    // 运营审核的时间
+        map.put("applyTime", payTdorder.getLasttime()); // 用户申请退单的时间
 
         JsonUtils jsonUtils = new JsonUtils();
         List<Object> list = new ArrayList<>();

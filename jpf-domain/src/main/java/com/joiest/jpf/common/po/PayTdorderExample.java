@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -186,52 +187,52 @@ public class PayTdorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Long value) {
+        public Criteria andIdEqualTo(BigInteger value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Long value) {
+        public Criteria andIdNotEqualTo(BigInteger value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Long value) {
+        public Criteria andIdGreaterThan(BigInteger value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andIdGreaterThanOrEqualTo(BigInteger value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Long value) {
+        public Criteria andIdLessThan(BigInteger value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Long value) {
+        public Criteria andIdLessThanOrEqualTo(BigInteger value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Long> values) {
+        public Criteria andIdIn(List<BigInteger> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Long> values) {
+        public Criteria andIdNotIn(List<BigInteger> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Long value1, Long value2) {
+        public Criteria andIdBetween(BigInteger value1, BigInteger value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Long value1, Long value2) {
+        public Criteria andIdNotBetween(BigInteger value1, BigInteger value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -246,52 +247,52 @@ public class PayTdorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidEqualTo(Long value) {
+        public Criteria andTdorderidEqualTo(String value) {
             addCriterion("tdorderid =", value, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidNotEqualTo(Long value) {
+        public Criteria andTdorderidNotEqualTo(String value) {
             addCriterion("tdorderid <>", value, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidGreaterThan(Long value) {
+        public Criteria andTdorderidGreaterThan(String value) {
             addCriterion("tdorderid >", value, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidGreaterThanOrEqualTo(Long value) {
+        public Criteria andTdorderidGreaterThanOrEqualTo(String value) {
             addCriterion("tdorderid >=", value, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidLessThan(Long value) {
+        public Criteria andTdorderidLessThan(String value) {
             addCriterion("tdorderid <", value, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidLessThanOrEqualTo(Long value) {
+        public Criteria andTdorderidLessThanOrEqualTo(String value) {
             addCriterion("tdorderid <=", value, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidIn(List<Long> values) {
+        public Criteria andTdorderidIn(List<String> values) {
             addCriterion("tdorderid in", values, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidNotIn(List<Long> values) {
+        public Criteria andTdorderidNotIn(List<String> values) {
             addCriterion("tdorderid not in", values, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidBetween(Long value1, Long value2) {
+        public Criteria andTdorderidBetween(String value1, String value2) {
             addCriterion("tdorderid between", value1, value2, "tdorderid");
             return (Criteria) this;
         }
 
-        public Criteria andTdorderidNotBetween(Long value1, Long value2) {
+        public Criteria andTdorderidNotBetween(String value1, String value2) {
             addCriterion("tdorderid not between", value1, value2, "tdorderid");
             return (Criteria) this;
         }
@@ -306,52 +307,52 @@ public class PayTdorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderidEqualTo(Long value) {
+        public Criteria andOrderidEqualTo(String value) {
             addCriterion("orderid =", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidNotEqualTo(Long value) {
+        public Criteria andOrderidNotEqualTo(String value) {
             addCriterion("orderid <>", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidGreaterThan(Long value) {
+        public Criteria andOrderidGreaterThan(String value) {
             addCriterion("orderid >", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidGreaterThanOrEqualTo(Long value) {
+        public Criteria andOrderidGreaterThanOrEqualTo(String value) {
             addCriterion("orderid >=", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidLessThan(Long value) {
+        public Criteria andOrderidLessThan(String value) {
             addCriterion("orderid <", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidLessThanOrEqualTo(Long value) {
+        public Criteria andOrderidLessThanOrEqualTo(String value) {
             addCriterion("orderid <=", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidIn(List<Long> values) {
+        public Criteria andOrderidIn(List<String> values) {
             addCriterion("orderid in", values, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidNotIn(List<Long> values) {
+        public Criteria andOrderidNotIn(List<String> values) {
             addCriterion("orderid not in", values, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidBetween(Long value1, Long value2) {
+        public Criteria andOrderidBetween(String value1, String value2) {
             addCriterion("orderid between", value1, value2, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidNotBetween(Long value1, Long value2) {
+        public Criteria andOrderidNotBetween(String value1, String value2) {
             addCriterion("orderid not between", value1, value2, "orderid");
             return (Criteria) this;
         }
@@ -803,6 +804,66 @@ public class PayTdorderExample {
 
         public Criteria andContentNotBetween(String value1, String value2) {
             addCriterion("content not between", value1, value2, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeIsNull() {
+            addCriterion("lasttime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeIsNotNull() {
+            addCriterion("lasttime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeEqualTo(Date value) {
+            addCriterion("lasttime =", value, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeNotEqualTo(Date value) {
+            addCriterion("lasttime <>", value, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeGreaterThan(Date value) {
+            addCriterion("lasttime >", value, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("lasttime >=", value, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeLessThan(Date value) {
+            addCriterion("lasttime <", value, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeLessThanOrEqualTo(Date value) {
+            addCriterion("lasttime <=", value, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeIn(List<Date> values) {
+            addCriterion("lasttime in", values, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeNotIn(List<Date> values) {
+            addCriterion("lasttime not in", values, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeBetween(Date value1, Date value2) {
+            addCriterion("lasttime between", value1, value2, "lasttime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLasttimeNotBetween(Date value1, Date value2) {
+            addCriterion("lasttime not between", value1, value2, "lasttime");
             return (Criteria) this;
         }
 

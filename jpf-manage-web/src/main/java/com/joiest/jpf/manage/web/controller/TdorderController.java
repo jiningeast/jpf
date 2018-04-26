@@ -2,6 +2,7 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.dto.TdorderRequest;
+import com.joiest.jpf.dto.TdorderResponse;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.TdorderServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import java.math.BigInteger;
 
 @Controller
 @RequestMapping("/tdorder")
@@ -29,10 +31,12 @@ public class TdorderController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list(long page, long rows){
+    public Map<String, Object> list( TdorderRequest request ){
+        TdorderResponse response = tdorderServiceFacade.getTdorders(request);
+
         Map<String, Object> map = new HashMap<>();
-        map.put("total", tdorderServiceFacade.getTdordersCount());
-        map.put("rows", tdorderServiceFacade.getTdorders(page, rows));
+        map.put("total", response.getCount());
+        map.put("rows", response.getList());
 
         return map;
     }

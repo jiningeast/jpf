@@ -1,23 +1,24 @@
 package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 public class OrderCpsingleRequest {
     /**
      * 自增ID
      */
-    private Long id;
+    private BigInteger id;
 
     /**
      * 退单ID
      */
-    private Long tdorderid;
+    private String tdorderid;
 
     /**
      * 商品订单ID
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 退单金额
@@ -47,31 +48,50 @@ public class OrderCpsingleRequest {
     /**
      * 添加时间
      */
-    private Date addtime;
+    private String addtime;
+
+    /**
+     * 添加时间的开始时间
+     */
+    private String addtimeStart;
+
+    /**
+     * 添加时间的结束时间
+     */
+    private String addtimeEnd;
+    /**
+     * 页码
+     */
+    private long page;
+
+    /**
+     * 查询条数
+     */
+    private long rows;
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
-    public Long getTdorderid() {
+    public String getTdorderid() {
         return tdorderid;
     }
 
-    public void setTdorderid(Long tdorderid) {
+    public void setTdorderid(String tdorderid) {
         this.tdorderid = tdorderid;
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
+    public void setOrderid(String orderid) {
         this.orderid = orderid;
     }
 
@@ -115,11 +135,43 @@ public class OrderCpsingleRequest {
         this.operateContent = operateContent == null ? null : operateContent.trim();
     }
 
-    public Date getAddtime() {
+    public String getAddtimeStart() {
+        return addtimeStart;
+    }
+
+    public void setAddtimeStart(String addtimeStart) {
+        this.addtimeStart = addtimeStart;
+    }
+
+    public String getAddtimeEnd() {
+        return addtimeEnd;
+    }
+
+    public void setAddtimeEnd(String addtimeEnd) {
+        this.addtimeEnd = addtimeEnd;
+    }
+
+    public String getAddtime() {
         return addtime;
     }
 
-    public void setAddtime(Date addtime) {
+    public void setAddtime(String addtime) {
         this.addtime = addtime;
+    }
+
+    public long getPage() {
+        return page;
+    }
+
+    public void setPage(long page) {
+        this.page = page;
+    }
+
+    public long getRows() {
+        return rows;
+    }
+
+    public void setRows(long rows) {
+        this.rows = rows;
     }
 }

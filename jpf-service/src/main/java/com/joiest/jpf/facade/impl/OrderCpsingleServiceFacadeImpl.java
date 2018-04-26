@@ -7,10 +7,12 @@ import com.joiest.jpf.common.po.PayOrder;
 import com.joiest.jpf.common.po.PayOrderCpsingle;
 import com.joiest.jpf.common.po.PayOrderCpsingleExample;
 import com.joiest.jpf.common.po.PayOrderExample;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderCpsingleMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderMapper;
 import com.joiest.jpf.dto.OrderCpsingleRequest;
+import com.joiest.jpf.dto.OrderCpsingleResponse;
 import com.joiest.jpf.entity.OrderCpsingleInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.OrderCpsingleServiceFacade;
@@ -35,10 +37,41 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     }
 
     @Override
-    public List<OrderCpsingleInfo> getCps(long page, long rows){
+    public OrderCpsingleResponse getCps(OrderCpsingleRequest request){
+        OrderCpsingleResponse response = new OrderCpsingleResponse();
+
         PayOrderCpsingleExample e = new PayOrderCpsingleExample();
-        e.setPageNo(page);
-        e.setPageSize(rows);
+        PayOrderCpsingleExample.Criteria c = e.createCriteria();
+        e.setPageNo( request.getPage() );
+        e.setPageSize( request.getRows() );
+        if (org.apache.commons.lang3.StringUtils.isNotBlank( request.getTdorderid() ) ){
+            c.andTdorderidEqualTo( request.getTdorderid() );
+        }
+        if (org.apache.commons.lang3.StringUtils.isNotBlank( request.getOrderid() )){
+            c.andOrderidEqualTo( request.getOrderid() );
+        }
+        if ( request.getMtsid() != null ){
+            c.andMtsidEqualTo(request.getMtsid());
+        }
+        if ( request.getSingletype() != null ){
+            c.andSingletypeEqualTo( request.getSingletype() );
+        }
+        if ( request.getSinglestatus() != null ){
+            c.andSinglestatusEqualTo( request.getSinglestatus() );
+        }
+        Date addtimeStart = new Date();
+        if ( org.apache.commons.lang3.StringUtils.isNotBlank(request.getAddtimeStart()) ){
+            addtimeStart = DateUtils.getFdate( request.getAddtimeStart(), DateUtils.DATEFORMATLONG );
+            c.andAddtimeGreaterThanOrEqualTo( addtimeStart );
+        }
+        Date addtimeEnd = new Date();
+        if ( org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeEnd() ) ){
+            addtimeEnd = DateUtils.getFdate( request.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
+            c.andAddtimeLessThanOrEqualTo(addtimeEnd);
+        }
+        if ( org.apache.commons.lang3.StringUtils.isNotBlank(request.getAddtimeStart()) && org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeEnd() ) ){
+            c.andAddtimeBetween(addtimeStart,addtimeEnd);
+        }
         List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
         List<OrderCpsingleInfo> infos = new ArrayList<>();
         for (PayOrderCpsingle payOrderCpsingle:list){
@@ -48,7 +81,9 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             infos.add(orderCpsingleInfo);
         }
 
-        return infos;
+        response.setList(infos);
+        response.setCount(payOrderCpsingleMapper.countByExample(e));
+        return response;
     }
 
     @Override
@@ -174,5 +209,22 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新订单表失败，请联系管理员");
         }
         return new JpfResponseDto();
+    }
+
+    @Override
+    public Map<String, Object> getPosRequest(String orderid){
+        // 查询此订单详细信息
+        PayOrderExample orderE = new PayOrderExample();
+        PayOrderExample.Criteria orderC = orderE.createCriteria();
+        orderC.andOrderidEqualTo(orderid);
+        List<PayOrder> orderList = payOrderMapper.selectByExample(orderE);
+
+        Map<String, Object> posRequest = new HashMap<>();
+        posRequest.put("orderid",orderid);
+        posRequest.put("paytype", orderList.get(0).getPaytype());
+        posRequest.put("money", orderList.get(0).getOrderprice());
+        posRequest.put("refundmoney", orderList.get(0).getOrderprice());
+
+        return posRequest;
     }
 }

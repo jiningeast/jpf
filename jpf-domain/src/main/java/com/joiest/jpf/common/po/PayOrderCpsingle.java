@@ -2,23 +2,24 @@ package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 public class PayOrderCpsingle implements Serializable {
     /**
      * 自增ID
      */
-    private Long id;
+    private BigInteger id;
 
     /**
      * 退单ID
      */
-    private Long tdorderid;
+    private String tdorderid;
 
     /**
      * 商品订单ID
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 退单金额
@@ -52,28 +53,28 @@ public class PayOrderCpsingle implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
-    public Long getTdorderid() {
+    public String getTdorderid() {
         return tdorderid;
     }
 
-    public void setTdorderid(Long tdorderid) {
-        this.tdorderid = tdorderid;
+    public void setTdorderid(String tdorderid) {
+        this.tdorderid = tdorderid == null ? null : tdorderid.trim();
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
-        this.orderid = orderid;
+    public void setOrderid(String orderid) {
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public BigDecimal getTdorderprice() {

@@ -1,13 +1,14 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
-public class OrderInfo {
+public class OrderRequest {
     /**
      * 自增ID
      */
-    private Long id;
+    private BigInteger id;
 
     /**
      * 订单ID
@@ -52,7 +53,17 @@ public class OrderInfo {
     /**
      * 支付时间
      */
-    private Date paytime;
+    private String paytime;
+
+    /**
+     * 支付时间的开始时间
+     */
+    private String paytimeStart;
+
+    /**
+     * 支付时间的结束时间
+     */
+    private String paytimeEnd;
 
     /**
      * 0:未支付；1:支付成功；2:支付失败
@@ -67,23 +78,43 @@ public class OrderInfo {
     /**
      * 添加时间
      */
-    private Date addtime;
+    private String addtime;
+
+    /**
+     * 添加时间的开始时间
+     */
+    private String addtimeStart;
+
+    /**
+     * 添加时间的结束时间
+     */
+    private String addtimeEnd;
 
     /**
      * 修改时间
      */
-    private Date updatetime;
+    private String updatetime;
 
     /**
      * 分期付款序列（json格式）
      */
     private String ordername;
 
-    public Long getId() {
+    /**
+     * 分页
+     */
+    private long page;
+
+    /**
+     * 查询数量
+     */
+    private long rows;
+
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -151,12 +182,28 @@ public class OrderInfo {
         this.ordernum = ordernum;
     }
 
-    public Date getPaytime() {
+    public String getPaytime() {
         return paytime;
     }
 
-    public void setPaytime(Date paytime) {
+    public void setPaytime(String paytime) {
         this.paytime = paytime;
+    }
+
+    public String getPaytimeStart() {
+        return paytimeStart;
+    }
+
+    public void setPaytimeStart(String paytimeStart) {
+        this.paytimeStart = paytimeStart;
+    }
+
+    public String getPaytimeEnd() {
+        return paytimeEnd;
+    }
+
+    public void setPaytimeEnd(String paytimeEnd) {
+        this.paytimeEnd = paytimeEnd;
     }
 
     public Byte getOrderstatus() {
@@ -175,19 +222,35 @@ public class OrderInfo {
         this.singlestatus = singlestatus;
     }
 
-    public Date getAddtime() {
+    public String getAddtime() {
         return addtime;
     }
 
-    public void setAddtime(Date addtime) {
+    public void setAddtime(String addtime) {
         this.addtime = addtime;
     }
 
-    public Date getUpdatetime() {
+    public String getAddtimeStart() {
+        return addtimeStart;
+    }
+
+    public void setAddtimeStart(String addtimeStart) {
+        this.addtimeStart = addtimeStart;
+    }
+
+    public String getAddtimeEnd() {
+        return addtimeEnd;
+    }
+
+    public void setAddtimeEnd(String addtimeEnd) {
+        this.addtimeEnd = addtimeEnd;
+    }
+
+    public String getUpdatetime() {
         return updatetime;
     }
 
-    public void setUpdatetime(Date updatetime) {
+    public void setUpdatetime(String updatetime) {
         this.updatetime = updatetime;
     }
 
@@ -197,5 +260,21 @@ public class OrderInfo {
 
     public void setOrdername(String ordername) {
         this.ordername = ordername;
+    }
+
+    public long getPage() {
+        return page;
+    }
+
+    public void setPage(long page) {
+        this.page = page;
+    }
+
+    public long getRows() {
+        return rows;
+    }
+
+    public void setRows(long rows) {
+        this.rows = rows;
     }
 }
