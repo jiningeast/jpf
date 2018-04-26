@@ -41,12 +41,6 @@ public interface PayMerchantsPaytypeMapper {
     int insertSelective(PayMerchantsPaytype record);
 
     /**
-     *
-     * @param example
-     */
-    List<PayMerchantsPaytype> selectByExampleWithBLOBs(PayMerchantsPaytypeExample example);
-
-    /**
      * 根据条件查询列表
      *
      * @param example
@@ -74,14 +68,6 @@ public interface PayMerchantsPaytypeMapper {
      * @param record
      * @param example
      */
-    int updateByExampleWithBLOBs(@Param("record") PayMerchantsPaytype record, @Param("example") PayMerchantsPaytypeExample example);
-
-    /**
-     * 选择性更新数据库记录
-     *
-     * @param record
-     * @param example
-     */
     int updateByExample(@Param("record") PayMerchantsPaytype record, @Param("example") PayMerchantsPaytypeExample example);
 
     /**
@@ -90,12 +76,6 @@ public interface PayMerchantsPaytypeMapper {
      * @param record
      */
     int updateByPrimaryKeySelective(PayMerchantsPaytype record);
-
-    /**
-     *
-     * @param record
-     */
-    int updateByPrimaryKeyWithBLOBs(PayMerchantsPaytype record);
 
     /**
      * 根据主键来更新数据库记录

@@ -33,7 +33,7 @@
                         <%--<input id="key1" name="key1" type="text" style="text-align: right;width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
-                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-numberbox" value="${merpayTypeInfoOne.param}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-numberbox" value="${merpayTypeInfoOne.param}" data-options="min:0,precision:0,prompt:'请输入数字'" />
                     </td>
                     <td style="text-align: right;"></td><td></td>
                 </tr>
@@ -307,9 +307,6 @@
 
                 var queryArray = $("#addForm").serializeArray();
                 var postData = parsePostData(queryArray);
-                console.log(queryArray);
-                console.log(postData);
-                // return false;
                 $.ajax({
                     type: 'post',
                     url: '../merchant/paytype/modify/modifyMerPayTypeOne',
@@ -318,6 +315,7 @@
                     success: function (msg) {
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
+                            $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id=' + mtsid).window('setTitle','配置支付类型');
                         } else {
 
                             $('#infoDiv2').window('close');

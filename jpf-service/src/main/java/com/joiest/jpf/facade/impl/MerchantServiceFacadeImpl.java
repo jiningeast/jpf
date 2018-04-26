@@ -38,15 +38,15 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
 
     @Override
     public GetMerchsResponse getMerchInfoList(GetMerchsRequest request) {
-        if(request.getPageNo()<=0){
-            request.setPageNo(1);
+        if(request.getPage()<=0){
+            request.setPage(1);
         }
-        if (request.getPageSize() <= 0) {
-            request.setPageSize(20);
+        if (request.getRows() <= 0) {
+            request.setRows(10);
         }
         PayMerchantsExample example = new PayMerchantsExample();
-        example.setPageNo(request.getPageNo());
-        example.setPageSize(request.getPageSize());
+        example.setPageNo(request.getPage());
+        example.setPageSize(request.getRows());
         example.setOrderByClause("ADDTIME DESC");
         PayMerchantsExample.Criteria c = example.createCriteria();
         if(StringUtils.isNotBlank(request.getMerchNo())){
@@ -78,8 +78,6 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         }
 
         List<PayMerchants> list = payMerchantsMapper.selectByExample(example);
-        example.setPageNo(0);
-        example.setPageSize(0);
         int count = payMerchantsMapper.countByExample(example);
         List<MerchantInfo> infoList = new ArrayList<>();
         for(PayMerchants payMerchants:list){

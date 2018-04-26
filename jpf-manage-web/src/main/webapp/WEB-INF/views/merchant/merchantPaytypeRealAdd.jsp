@@ -30,7 +30,7 @@
                         参数1:
                     </td>
                     <td>
-                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="min:0,precision:0,prompt:'请输入数字'" />
                     </td>
                     <td style="text-align: right;width:25%" > </td>
                     <td style="width:25%"></td>
@@ -288,6 +288,7 @@
                 }
                 var queryArray = $("#addForm").serializeArray();
                 var postData = parsePostData(queryArray);
+                var mtsid = '${merchantInfo.id}';
                 $.ajax({
                     type: 'post',
                     url: '../merchant/paytype/add/addMerPayTypeOne',
@@ -295,11 +296,12 @@
                     dataType: 'json',
                     success: function (msg) {
                         if (msg.retCode != '0000') {
+                            $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id=' + mtsid).window('setTitle','配置支付类型');
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
 
                         } else {
                             $('#infoDiv2').window('close');
-                            var mtsid = '${merchantInfo.id}';
+
                             $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id=' + mtsid).window('setTitle','配置支付类型');
                             $.messager.alert('消息提示', '操作成功！', 'info');
                         }
