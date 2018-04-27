@@ -81,6 +81,7 @@
                 columns:[[
                     {field:'id',title:"ID", width:50},
                     {field:'mtsid',title:'商户Id',width:50},
+                    {field:'merch_name',title:'商户名称',width:150},
                     {field:'catpath',title:'支付类型',width:150},
                     {field:'bankcatid',title:'分期类型',width:80},
                     {field:'created',title:'创建时间',width:150,formatter: formatDateStr},

@@ -64,7 +64,7 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         List<MerchantPayTypeInfo> payTypeInfos = new ArrayList<>();
         PayMerchantsTypeExample payMerchantsTypeExample = new PayMerchantsTypeExample();
         PayMerchantsTypeExample.Criteria c1 = payMerchantsTypeExample.createCriteria();
-        //只拿支付类型数据
+        //只获取支付类型数据
         String pid = "5";
         c1.andPidEqualTo(pid);
         //获取支付类型
@@ -93,10 +93,24 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             }
         }
 
+        //获取商户信息
+        PayMerchantsExample merchListExample = new PayMerchantsExample();
+        List<PayMerchants> merList = payMerchantsMapper.selectByExample(merchListExample);
+        Map<Long, String> merchsMap = new HashMap<>();
+        if ( merList.size() > 0 )
+        {
+            for ( PayMerchants mer : merList )
+            {
+                merchsMap.put(mer.getId(), mer.getMerchName());
+            }
+        }
+
         for (PayMerchantsPaytype payMerchantsPaytype : payMerchantsPaytypes) {
+            //支付类型zh
             String payType_tmp = new String();
             payType_tmp = map.get(payMerchantsPaytype.getTpid().toString());
             payMerchantsPaytype.setCatpath(payType_tmp);
+            //分期信息
             if ( StringUtils.isNotBlank(payMerchantsPaytype.getCatpath()) )
             {
                 String stage_tmp = new String();
@@ -110,9 +124,13 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
                 payMerchantsPaytype.setBankcatid(stage_tmp);
             }
 
+
+
             MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
             BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
             beanCopier.copy(payMerchantsPaytype, merchantPayTypeInfo, null);
+            //商户信息
+            merchantPayTypeInfo.setMerch_name(merchsMap.get(payMerchantsPaytype.getMtsid()));
             payTypeInfos.add(merchantPayTypeInfo);
         }
         GetMerchPayTypeResponse response = new GetMerchPayTypeResponse();
