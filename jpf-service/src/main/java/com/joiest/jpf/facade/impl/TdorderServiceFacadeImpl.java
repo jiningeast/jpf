@@ -45,10 +45,10 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         PayTdorderExample.Criteria c = e.createCriteria();
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
-        if ( request.getTdorderid() != null ){
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(request.getTdorderid()) ){
             c.andTdorderidEqualTo( request.getTdorderid() );
         }
-        if ( request.getOrderid() != null ){
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(request.getOrderid()) ){
             c.andOrderidEqualTo(request.getOrderid());
         }
         if ( request.getMtsid() != null ){

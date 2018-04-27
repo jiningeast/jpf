@@ -37,7 +37,7 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
         // 构建查询example
         PayOrderExample e = new PayOrderExample();
         PayOrderExample.Criteria c = e.createCriteria();
-        if ( orderRequest.getOrderid() != null ){
+        if ( StringUtils.isNotBlank(orderRequest.getOrderid()) ){
             c.andOrderidEqualTo(orderRequest.getOrderid());
         }
         if ( orderRequest.getMtsid() != null ){
