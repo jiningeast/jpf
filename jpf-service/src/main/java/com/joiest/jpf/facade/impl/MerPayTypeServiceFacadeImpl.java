@@ -67,6 +67,7 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         //只拿支付类型数据
         String pid = "5";
         c1.andPidEqualTo(pid);
+        //获取支付类型
         List<PayMerchantsType> payMerchantsTypes = payMerchantsTypeMapper.selectByExample(payMerchantsTypeExample);
         Map<String,String> map = new HashMap<>();
         if ( payMerchantsTypes.size() > 0 )
@@ -76,10 +77,39 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
                 map.put(payType.getCatid().toString(), payType.getCat());
             }
         }
+
+        //获取分期信息
+        PayMerchantsTypeExample stageExample = new PayMerchantsTypeExample();
+        PayMerchantsTypeExample.Criteria cStage = stageExample.createCriteria();
+        String pid_stage = "24";
+        cStage.andPidEqualTo(pid_stage);
+        List<PayMerchantsType> stageList = payMerchantsTypeMapper.selectByExample(stageExample);
+        Map<String,String> mapStage = new HashMap<>();
+        if ( stageList.size() > 0 )
+        {
+            for ( PayMerchantsType stageType : stageList )
+            {
+                mapStage.put(stageType.getCatid().toString(), stageType.getCat());
+            }
+        }
+
         for (PayMerchantsPaytype payMerchantsPaytype : payMerchantsPaytypes) {
             String payType_tmp = new String();
             payType_tmp = map.get(payMerchantsPaytype.getTpid().toString());
             payMerchantsPaytype.setCatpath(payType_tmp);
+            if ( StringUtils.isNotBlank(payMerchantsPaytype.getCatpath()) )
+            {
+                String stage_tmp = new String();
+                String bankcatid_str = payMerchantsPaytype.getBankcatid();
+                String[] bankcatid_arr = bankcatid_str.split("\\,");
+                for ( String x : bankcatid_arr )
+                {
+                    stage_tmp += mapStage.get(x) + "<br/>";
+                }
+                String stage_cn = stage_tmp.substring(0, stage_tmp.length()-1);
+                payMerchantsPaytype.setBankcatid(stage_tmp);
+            }
+
             MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
             BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
             beanCopier.copy(payMerchantsPaytype, merchantPayTypeInfo, null);
@@ -298,8 +328,32 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         MerchantPayTypeInfo payTypeInfo = new MerchantPayTypeInfo();
         BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
         beanCopier.copy(payMerchantsPaytype, payTypeInfo, null);
-        List<Object> list = new ArrayList<>();
         return payTypeInfo;
+    }
+
+    /**
+     * 商户分期类型配置
+     */
+    public JpfResponseDto modifyMerBankcatid(ModifyMerPayTypeRequest request)
+    {
+        if ( request.getId() == null )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "ID不能为空");
+        }
+        PayMerchantsPaytypeExample example = new PayMerchantsPaytypeExample();
+        PayMerchantsPaytypeExample.Criteria c = example.createCriteria();
+        c.andIdEqualTo(request.getId());
+        PayMerchantsPaytype payMerchantsPaytype = new PayMerchantsPaytype();
+        payMerchantsPaytype.setUpdated(new Date());
+        StringBuilder builder = new StringBuilder();
+        for ( int i=0; i< request.getBankcatid().length; i++ )
+        {
+            builder.append(request.getBankcatid()[i]+",");
+        }
+        String bankcatid = builder.substring(0, builder.length()-1).toString();
+        payMerchantsPaytype.setBankcatid(bankcatid);
+        payMerchantsPaytypeMapper.updateByExampleSelective(payMerchantsPaytype, example);
+        return new JpfResponseDto();
     }
 
 }

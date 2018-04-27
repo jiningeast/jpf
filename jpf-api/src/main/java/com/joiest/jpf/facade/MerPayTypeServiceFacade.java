@@ -45,4 +45,9 @@ public interface MerPayTypeServiceFacade {
      * 获取某个商户的单个支付类型 by id
      */
     public MerchantPayTypeInfo getMerOnePayTypes(Long id);
+
+    /**
+     * 商户分期类型配置
+     */
+    public JpfResponseDto modifyMerBankcatid(ModifyMerPayTypeRequest request);
 }

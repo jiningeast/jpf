@@ -56,6 +56,11 @@ public class MerchantPaytypeController {
         return map;
     }
 
+    /**
+     * 配置支付类型---页面
+     * @param id 商户ID
+     * @return
+     */
     @RequestMapping("/add/page")
     public ModelAndView addPage(String id,ModelMap modelMap){
         //商户信息
@@ -69,7 +74,7 @@ public class MerchantPaytypeController {
     }
 
     /**
-     * 实际添加页面
+     * 配置支付类型---实际添加页面
      */
     @RequestMapping("add/realpage")
     public ModelAndView addRealPage(String catid, String id, ModelMap modelMap){
@@ -82,6 +87,9 @@ public class MerchantPaytypeController {
         return new ModelAndView("merchant/merchantPaytypeRealAdd", modelMap);
     }
 
+    /**
+     * 添加支付类型
+     */
     @RequestMapping("/add/action")
     @ResponseBody
     public JpfResponseDto addAction(AddMerPayTypeRequest request){
@@ -89,6 +97,9 @@ public class MerchantPaytypeController {
 
     }
 
+    /**
+     * 添加支付类型&参数---action
+     */
     @RequestMapping("/add/addMerPayTypeOne")
     @ResponseBody
     public JpfResponseDto addMerPayTypeOne(ModifyMerPayTypeRequest request){
@@ -97,7 +108,7 @@ public class MerchantPaytypeController {
     }
 
     /**
-     * 实际编辑页面
+     * 支付类型实际编辑页面
      * @param  id pay_merchants_paytype.id
      * @param tpid  pay_merchant_paytype.tpid 支付类型ID
      */
@@ -115,6 +126,9 @@ public class MerchantPaytypeController {
         return new ModelAndView("merchant/merchantPaytypeRealModify", modelMap);
     }
 
+    /**
+     * 修改支付类型&参数---action
+     */
     @RequestMapping("/modify/modifyMerPayTypeOne")
     @ResponseBody
     public JpfResponseDto modifyMerPayTypeOne(ModifyMerPayTypeRequest request){
@@ -127,4 +141,32 @@ public class MerchantPaytypeController {
     public JpfResponseDto deleteAction(@RequestParam("id[]") List<Long> id){
         return merPayTypeServiceFacade.deleteMerPayType(id);
     }
+
+    /**
+     * 商户分期类型---页面
+     * @param id 商户支付类型id
+     * @param mtsid 商户ID
+     */
+    @RequestMapping("/stage/page")
+    public ModelAndView stagePage(String mtsid, String id, ModelMap modelMap){
+        //商户信息
+        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(mtsid));
+        //获取某个商户的单个支付类型
+        MerchantPayTypeInfo merpayTypeInfoOne = merPayTypeServiceFacade.getMerOnePayTypes(Long.valueOf(id));
+        modelMap.addAttribute("merchantInfo", merchantInfo);
+        modelMap.addAttribute("merpayTypeInfoOne", merpayTypeInfoOne);
+        return new ModelAndView("merchant/stageModify", modelMap);
+    }
+
+    /**
+     * 商户分期类型配置
+     */
+    @RequestMapping("/stage/action")
+    @ResponseBody
+    public JpfResponseDto modifyMerBankcatid(@RequestBody ModifyMerPayTypeRequest request){
+
+        JpfResponseDto jpfResponseDto = merPayTypeServiceFacade.modifyMerBankcatid(request);
+        return jpfResponseDto;
+    }
+
 }

@@ -83,7 +83,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         PayMerchantsProductExample example = new PayMerchantsProductExample();
         example.setPageNo(pageNo);
         example.setPageSize(pageSize);
-        example.setOrderByClause("updated DESC");
+        example.setOrderByClause("created DESC");
         PayMerchantsProductExample.Criteria c = example.createCriteria();
 
         if (mtsid != null) {

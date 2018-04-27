@@ -53,7 +53,7 @@
                     }
                 },*/
                 {
-                    text:'配置支付类型',
+                    text:'配置分期类型',
                     iconCls:'icon-add',
                     handler:function(){
                         var rows = $('#dg').datagrid('getSelections');
@@ -61,7 +61,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id='+rows[0].id).window('setTitle','配置支付类型');
+                        $('#infoDiv').window("open").window('refresh', 'stage/page?id='+rows[0].id + "&mtsid=" + rows[0].mtsid).window('setTitle','配置支付类型');
                     }
                 }
             ];
@@ -82,6 +82,7 @@
                     {field:'id',title:"ID", width:50},
                     {field:'mtsid',title:'商户Id',width:50},
                     {field:'catpath',title:'支付类型',width:150},
+                    {field:'bankcatid',title:'分期类型',width:80},
                     {field:'created',title:'创建时间',width:150,formatter: formatDateStr},
                     {field:'updated',title:'变更时间',width:150,formatter: formatDateStr}
                 ]]

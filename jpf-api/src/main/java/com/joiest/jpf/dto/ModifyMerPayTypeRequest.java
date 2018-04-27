@@ -1,6 +1,8 @@
 package com.joiest.jpf.dto;
 
 
+import java.util.List;
+
 public class ModifyMerPayTypeRequest {
 
     /**
@@ -22,6 +24,10 @@ public class ModifyMerPayTypeRequest {
      * 支付类型对应的参数
      */
     private String wx_merSubMchid;
+
+    private String[] bankcatid;
+
+//    private List<String> bankcatid;
 
     public Long getMtsid() {
         return mtsid;
@@ -53,5 +59,13 @@ public class ModifyMerPayTypeRequest {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String[] getBankcatid() {
+        return bankcatid;
+    }
+
+    public void setBankcatid(String[] bankcatid) {
+        this.bankcatid = bankcatid;
     }
 }
