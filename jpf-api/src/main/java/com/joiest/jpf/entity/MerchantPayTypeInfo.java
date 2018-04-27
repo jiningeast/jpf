@@ -53,6 +53,11 @@ public class MerchantPayTypeInfo {
      */
     private String bankcatid;
 
+    /**
+     * 聚合商户名称
+     */
+    private String merch_name;
+
     public Long getId() {
         return id;
     }
@@ -133,4 +138,11 @@ public class MerchantPayTypeInfo {
         this.bankcatid = bankcatid == null ? null : bankcatid.trim();
     }
 
+    public String getMerch_name() {
+        return merch_name;
+    }
+
+    public void setMerch_name(String merch_name) {
+        this.merch_name = merch_name;
+    }
 }
