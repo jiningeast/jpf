@@ -33,10 +33,16 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 
     @Override
     public GetMerchPayTypeResponse getMerPayTypes(GetMerchPayTypeRequest request) {
+        if(request.getPage()<=0){
+            request.setPage(1);
+        }
+        if (request.getRows() <= 0) {
+            request.setRows(10);
+        }
         PayMerchantsPaytypeExample example = new PayMerchantsPaytypeExample();
         example.setOrderByClause("created DESC");
-        example.setPageNo(request.getPageNo());
-        example.setPageSize(request.getPageSize());
+        example.setPageNo(request.getPage());
+        example.setPageSize(request.getRows());
         PayMerchantsPaytypeExample.Criteria c = example.createCriteria();
         if (request != null && request.getMtsid() != null) {
             c.andMtsidEqualTo(request.getMtsid());

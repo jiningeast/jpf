@@ -48,9 +48,9 @@ public class GetMerchsRequest {
      */
     private Integer muserid;
 
-    private long pageNo;
+    private long rows;
 
-    private long pageSize;
+    private long page;
 
     public String getMerchNo() {
         return merchNo;
@@ -132,19 +132,19 @@ public class GetMerchsRequest {
         this.muserid = muserid;
     }
 
-    public long getPageNo() {
-        return pageNo;
+    public long getRows() {
+        return rows;
     }
 
-    public void setPageNo(long pageNo) {
-        this.pageNo = pageNo;
+    public void setRows(long rows) {
+        this.rows = rows;
     }
 
-    public long getPageSize() {
-        return pageSize;
+    public long getPage() {
+        return page;
     }
 
-    public void setPageSize(long pageSize) {
-        this.pageSize = pageSize;
+    public void setPage(long page) {
+        this.page = page;
     }
 }

@@ -555,6 +555,76 @@ public class PayMerchantsPaytypeExample {
             return (Criteria) this;
         }
 
+        public Criteria andParamIsNull() {
+            addCriterion("param is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamIsNotNull() {
+            addCriterion("param is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamEqualTo(String value) {
+            addCriterion("param =", value, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamNotEqualTo(String value) {
+            addCriterion("param <>", value, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamGreaterThan(String value) {
+            addCriterion("param >", value, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamGreaterThanOrEqualTo(String value) {
+            addCriterion("param >=", value, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamLessThan(String value) {
+            addCriterion("param <", value, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamLessThanOrEqualTo(String value) {
+            addCriterion("param <=", value, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamLike(String value) {
+            addCriterion("param like", value, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamNotLike(String value) {
+            addCriterion("param not like", value, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamIn(List<String> values) {
+            addCriterion("param in", values, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamNotIn(List<String> values) {
+            addCriterion("param not in", values, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamBetween(String value1, String value2) {
+            addCriterion("param between", value1, value2, "param");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamNotBetween(String value1, String value2) {
+            addCriterion("param not between", value1, value2, "param");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedIsNull() {
             addCriterion("created is null");
             return (Criteria) this;
@@ -682,6 +752,11 @@ public class PayMerchantsPaytypeExample {
 
         public Criteria andBankcatidLikeInsensitive(String value) {
             addCriterion("upper(bankcatid) like", value.toUpperCase(), "bankcatid");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamLikeInsensitive(String value) {
+            addCriterion("upper(param) like", value.toUpperCase(), "param");
             return (Criteria) this;
         }
     }
