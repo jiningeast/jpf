@@ -36,16 +36,17 @@ public class SystemlogController {
         return map;
     }
 
-    /*@RequestMapping("add")
+    @RequestMapping("add")
     @ResponseBody
     public void add(Integer logtype, Integer clients, String action, String tablename, String content, HttpServletRequest request ){
+
         // ip
-        ServletUtils su = new ServletUtils();
-        String ip = su.getIpAddr(request);
-        // 用户名
+        String ip = ServletUtils.getIpAddr(request);
+
+        // 获取用户信息
         HttpSession session = request.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
-        systemlogServiceFacade.sysLog(logtype, userInfo.getId(), userInfo.getUserName(), ip, clients, tablename, userInfo.getId(), action, content );
-    }*/
+        systemlogServiceFacade.sysLog(logtype,userInfo,ip,"",clients,tablename,action,content);
+    }
 }
