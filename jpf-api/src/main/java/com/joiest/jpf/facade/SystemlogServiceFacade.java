@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.entity.SystemlogInfo;
+import com.joiest.jpf.entity.UserInfo;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface SystemlogServiceFacade {
      * @param logtype
      * @return
      */
-    public void sysLog( Integer logtype, Integer operator_uid, String operator_name, String ip, String ip1, Integer clients, String tablename, Integer record, String action, String content );
+    public void sysLog(Integer logtype, UserInfo userInfo, String ip, String ip1, Integer clients, String tablename, String action, String content );
 }

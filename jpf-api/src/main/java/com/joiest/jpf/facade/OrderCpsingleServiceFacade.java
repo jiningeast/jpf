@@ -23,4 +23,6 @@ public interface OrderCpsingleServiceFacade {
     public JpfResponseDto checkNo(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo);
 
     public Map<String, Object> getPosRequest(String orderid);
+
+    public void sysLog(Integer logtype, UserInfo userInfo, String ip, String ip1, Integer clients, String tablename, String action, String content);
 }

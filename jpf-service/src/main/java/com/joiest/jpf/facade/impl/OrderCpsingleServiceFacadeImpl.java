@@ -3,14 +3,12 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayOrder;
-import com.joiest.jpf.common.po.PayOrderCpsingle;
-import com.joiest.jpf.common.po.PayOrderCpsingleExample;
-import com.joiest.jpf.common.po.PayOrderExample;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderCpsingleMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PaySystemlogMapper;
 import com.joiest.jpf.dto.OrderCpsingleRequest;
 import com.joiest.jpf.dto.OrderCpsingleResponse;
 import com.joiest.jpf.entity.OrderCpsingleInfo;
@@ -29,6 +27,9 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
 
     @Autowired
     private PayOrderCpsingleMapper payOrderCpsingleMapper;
+
+    @Autowired
+    private PaySystemlogMapper paySystemlogMapper;
 
     @Override
     public int getCpsCount(){
@@ -226,5 +227,26 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         posRequest.put("refundmoney", orderList.get(0).getOrderprice());
 
         return posRequest;
+    }
+
+    @Override
+    public void sysLog(Integer logtype, UserInfo userInfo, String ip, String ip1, Integer clients, String tablename, String action, String content){
+
+        PaySystemlog paySystemlog = new PaySystemlog();
+        paySystemlog.setLogtype(logtype);
+        paySystemlog.setOperatorUid(userInfo.getId());
+        paySystemlog.setOperatorName(userInfo.getUserName());
+        paySystemlog.setIp(ip);
+        paySystemlog.setIp1(ip1);
+        paySystemlog.setClients(clients);
+        paySystemlog.setTablename(tablename);
+        String recordStr = Integer.toString(userInfo.getId());
+        paySystemlog.setRecord(recordStr);
+        paySystemlog.setAction(action);
+        paySystemlog.setContent(content);
+        Date date = new Date();
+        paySystemlog.setCreated(date);
+
+        paySystemlogMapper.insertSelective(paySystemlog);
     }
 }

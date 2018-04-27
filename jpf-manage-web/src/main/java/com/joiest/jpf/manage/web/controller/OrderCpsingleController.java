@@ -12,6 +12,7 @@ import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.OrderCpsingleServiceFacade;
 import com.joiest.jpf.facade.OrderServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import com.joiest.jpf.manage.web.util.ServletUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,16 +55,25 @@ public class OrderCpsingleController {
         posRequest = orderCpsingleServiceFacade.getPosRequest(orderCpsingleRequest.getOrderid());
 
         // 请求接口地址
-        String response = OkHttpUtils.postForm("http://testapi.7shengqian.com/index.php?r=YinjiaStage/PurchaseRefund",posRequest);
+        String postUrl = "http://testapi.7shengqian.com/index.php?r=YinjiaStage/PurchaseRefund";
+        String response = OkHttpUtils.postForm(postUrl,posRequest);
         Map<String, String> responseMap = JsonUtils.toCollection(response, new TypeReference<HashMap<String, String>>(){});
+
+        // 获取用户信息
+        HttpSession session = request.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+
+        // 获取IP
+        String ip = ServletUtils.getIpAddr(request);
+
+        // 记录日志
+        orderCpsingleServiceFacade.sysLog(0,userInfo,ip, "", 32, "noTable", "调用退单接口", "请求地址："+postUrl+"；返回结果："+responseMap.get("code")+','+responseMap.get("info"));
+
         if ( Integer.parseInt(responseMap.get("code")) != 10000 ){
             // 退款接口如果没有返回成功
            throw new JpfException(JpfErrorInfo.DAL_ERROR, "请求接口失败，返回："+responseMap.get("info")+"，请检查");
         }
 
-        // 获取用户信息
-        HttpSession session = request.getSession();
-        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
         return orderCpsingleServiceFacade.checkOk(orderCpsingleRequest, userInfo);
     }
