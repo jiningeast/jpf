@@ -208,6 +208,9 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             if ( StringUtils.isNotBlank(request.getWx_merSubMchid()) )
             {
                 jsonMap.put( "merSubMchid", request.getWx_merSubMchid() );
+            } else
+            {
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "微信商户号不能为空");
             }
 //            list.add(jsonMap);
             newJson = jsonUtils.toJson(jsonMap);
@@ -261,6 +264,9 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             if ( StringUtils.isNotBlank(request.getWx_merSubMchid()) )
             {
                 jsonMap.put( "merSubMchid", request.getWx_merSubMchid() );
+            } else
+            {
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "微信商户号不能为空");
             }
 //            list.add(jsonMap);
             newJson = jsonUtils.toJson(jsonMap);

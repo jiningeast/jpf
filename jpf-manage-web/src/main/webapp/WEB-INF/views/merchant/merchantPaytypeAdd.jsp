@@ -58,7 +58,7 @@
         </div>
         <div style="float: right;">
             <a id="cancelBtn_a" class="easyui-linkbutton" icon="icon-cancel"
-               href="javascript:void(0)">取消</a>
+               href="javascript:void(0)">关闭</a>
         </div>
 
     </div>
@@ -133,38 +133,6 @@
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
         // setInterval("initData()", 500);
         // initData();
-        $("#saveBtn_a").linkbutton({
-            onClick: function () {
-                // var queryArray = $('#savePaytype_From').serializeArray();
-                // var postData = parsePostData(queryArray);;
-                var param = {};
-                param["mtsid"] = $("#mtsid_a").val();
-                param['tpid'] = new Array();
-                $("#savePaytypeShow_Table tbody input[name='tpid']").each(function (i) {
-                    param['tpid'][i] = $(this).val()
-                });
-                $.ajax({
-                    type: 'post',
-                    url: '../merchant/paytype/add/action',
-                    data: JSON.stringify(param),
-                    dataType: 'json',
-                    contentType : 'application/json;charset=utf-8',
-                    success: function (msg) {
-                        if (msg.retCode != '0000') {
-                            $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-                        } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
-                            $('#infoDiv').window('close');
-                            $('#dg').datagrid('reload');
-                        }
-                    },
-                    error: function () {
-                        $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                    }
-                });
-            }
-        });
-
         $('#cancelBtn_a').linkbutton({
             onClick: function(){
                 $('#infoDiv').window('close');

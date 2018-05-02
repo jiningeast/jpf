@@ -1,6 +1,7 @@
 package com.joiest.jpf.dto;
 
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class ModifyMerPayTypeRequest {
@@ -23,6 +24,7 @@ public class ModifyMerPayTypeRequest {
     /**
      * 支付类型对应的参数
      */
+    @NotNull(message="微信商户号不能为空")
     private String wx_merSubMchid;
 
     private String[] bankcatid;

@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">
-                        参数1:
+                        微信商户号:
                         <%--<input id="key1" name="key1" type="text" style="text-align: right;width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
@@ -304,7 +304,7 @@
                 if (!isValid) {
                     return;
                 }
-
+                var mtsid = '${merchantInfo.id}';
                 var queryArray = $("#addForm").serializeArray();
                 var postData = parsePostData(queryArray);
                 $.ajax({
@@ -315,11 +315,8 @@
                     success: function (msg) {
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-                            $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id=' + mtsid).window('setTitle','配置支付类型');
                         } else {
-
                             $('#infoDiv2').window('close');
-                            var mtsid = '${merchantInfo.id}';
                             $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id=' + mtsid).window('setTitle','配置支付类型');
                             $.messager.alert('消息提示', '操作成功！', 'error');
                         }
