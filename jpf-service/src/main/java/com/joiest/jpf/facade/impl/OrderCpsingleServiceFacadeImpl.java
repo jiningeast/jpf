@@ -110,6 +110,12 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         PayOrderCpsingle ordinaryRec = payOrderCpsingleMapper.selectByPrimaryKey(orderCpsingleRequest.getId());
         String json = ordinaryRec.getOperateContent();
 
+        // 判断这个单是否已审核
+        byte singlestatus = ordinaryRec.getSinglestatus();
+        if ( singlestatus != 0 ){
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "此订单已处理，请不要重复处理");
+        }
+
         // 根据请求构建新的json记录
         Map<String, Object> map = new HashMap<>();
         map.put("uid", userInfo.getId());
@@ -164,6 +170,12 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         // 查询此单的原operate_content审核内容字段
         PayOrderCpsingle payOrderCpsingle = payOrderCpsingleMapper.selectByPrimaryKey(orderCpsingleRequest.getId());
         String json = payOrderCpsingle.getOperateContent();
+
+        // 判断这个单是否已审核
+        byte singlestatus = payOrderCpsingle.getSinglestatus();
+        if ( singlestatus != 0 ){
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "此订单已处理，请不要重复处理");
+        }
 
         // 根据请求构建新的json记录
         Map<String, Object> map = new HashMap<>();

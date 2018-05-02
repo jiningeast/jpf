@@ -41,14 +41,16 @@
                 multiselect:false,
                 electOnCheck:true,
                 columns:[[
-                    {field:'id',title:'ID',width:'3%'},
+                    // {field:'id',title:'ID',width:'3%'},
                     {field:'orderid',title:'订单ID',width:'9%'},
                     {field:'mtsid',title:'商户ID',width:'3%'},
                     {field:'uid',title:'用户uid',width:'3%'},
                     {field:'pid',title:'商品ID',width:'3%'},
                     {field:'paytype',title:'支付方式',width:'7%',
                         formatter:function (value, row, index) {
-                            return payTypeArr[value];
+                            if ( value.length > 0 ){
+                                return payTypeArr[value];
+                            }
                         }},
                     {field:'orderprice',title:'实付',width:'5%', formatter:formatPrice},
                     {field:'orderselprice',title:'实际金额',width:'5%', formatter:formatPrice},

@@ -109,7 +109,9 @@
                     {field:'urla',title:'图片', width:'10%', formatter:formatJSONImg, align:'left'},
                     {field:'content',title:'退单理由', width:'10%',
                         formatter:function (value, row, index) {
-                            return JSON.parse(value);
+                            if ( value != null ){
+                                return JSON.parse(value);
+                            }
                             // console.log( JSON.parse(value) );
                         }},
                     {field:'addtime',title:'用户退单时间',formatter:formatDateStr, width:'10%'}

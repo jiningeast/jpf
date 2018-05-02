@@ -95,6 +95,12 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         PayTdorder ordinaryRec = payTdorderMapper.selectByPrimaryKey(tdorderRequest.getId());
         String json = ordinaryRec.getOperateContent();
 
+        // 判断这个单是否已审核
+        byte singlestatus = ordinaryRec.getSinglestatus();
+        if ( singlestatus != 0 ){
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "此订单已处理，请不要重复处理");
+        }
+
         // 根据请求构建新的json记录
         Map<String, Object> map = new HashMap<>();
         map.put("uid", userInfo.getId());
@@ -184,6 +190,12 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         // 查询该退单记录原先的operate_content
         PayTdorder payTdorder = payTdorderMapper.selectByPrimaryKey(tdorderRequest.getId());
         String json = payTdorder.getOperateContent();
+
+        // 判断这个单是否已审核
+        byte singlestatus = payTdorder.getSinglestatus();
+        if ( singlestatus != 0 ){
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "此订单已处理，请不要重复处理");
+        }
 
         // 根据请求构建新的json记录
         Map<String, Object> map = new HashMap<>();

@@ -67,7 +67,7 @@ public class OrderCpsingleController {
         String ip = ServletUtils.getIpAddr(request);
 
         // 记录日志
-        orderCpsingleServiceFacade.sysLog(0,userInfo,ip, "", 32, "noTable", "调用退单接口", "请求地址："+postUrl+"；返回结果："+responseMap.get("code")+','+responseMap.get("info"));
+        orderCpsingleServiceFacade.sysLog(1,userInfo,ip, "", 32, "noTable", "调用退单接口", "请求地址："+postUrl+"；返回结果："+responseMap.get("code")+','+responseMap.get("info"));
 
         if ( Integer.parseInt(responseMap.get("code")) != 10000 ){
             // 退款接口如果没有返回成功
