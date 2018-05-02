@@ -204,11 +204,11 @@
         <span style="float:right; padding-right:20px;padding-top:10px" class="head">欢迎 ${sessionScope.SESSION_OPERATORUSER.userName} <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
 
         <span style="padding-left:10px; padding-top:5px; font-size: 16px; float:left; width: 385px; height: 50px">
-        	<%-- <img src="${basePath}/resources/images/seller1.png" align="absmiddle" /> --%>&nbsp;&nbsp;&nbsp;&nbsp;运营管理系统
+        	<%-- <img src="${basePath}/resources/images/seller1.png" align="absmiddle" /> --%>&nbsp;&nbsp;&nbsp;&nbsp;消费金融运营管理系统
         </span>
     </div>
     <div data-options="region:'south'" style="height: 30px; background: #D2E0F2; ">
-        <div class="footer">CopyRight &copy; 2015-2016 北京中欣银宝通支付服务有限公司</div>
+        <div class="footer">CopyRight &copy; 2015-2016 北京中欣银嘉服务有限公司</div>
     </div>
     <div data-options="region:'west',title:'导航菜单',split:true" style="width:180px;" id="west">
 		<div id='wnav' class="easyui-accordion" fit="true" border="false">
