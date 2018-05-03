@@ -323,27 +323,23 @@
         $("#saveBtn_m").linkbutton({
             onClick: function () {
                 var isValid = $("#addForm").form('enableValidation').form('validate');
-                console.log(isValid);
+
                 if (!isValid) {
                     return;
                 }
                 var queryArray = $("#addForm").serializeArray();
                 var postData = parsePostData(queryArray);
                 var mtsid = '${merchantInfo.id}';
-                console.log(queryArray);
-                console.log(postData);
+
                 var bankcatid = new Array;
                 $("#addForm table input[name='bankcatid']").each(function (i) {
                     bankcatid[i] = $(this).val();
                 });
                 postData['bankcatid'] = bankcatid;
-                console.log(postData);
-                // return false
                 $.ajax({
                     type: 'post',
                     url: '../merchant/paytype/add/addMerPayTypeOne',
                     data: JSON.stringify(postData),
-                    // data: postData,
                     dataType: 'json',
                     contentType : 'application/json;charset=utf-8',
                     success: function (msg) {
