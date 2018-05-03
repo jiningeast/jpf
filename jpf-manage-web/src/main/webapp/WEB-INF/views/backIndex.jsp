@@ -90,13 +90,19 @@
                     "menuname" : "退单信息管理",
                     "icon" : "icon-nav",
                     "url" : "tdorder/index"
-                },{
-                    "menuid" : "403",
+                }]
+            },{
+                "menuid" : "5",
+                "icon" : "icon-sys",
+                "menuname" : "财务管理",
+                "menus" : [{
+                    "menuid" : "501",
                     "menuname" : "财务退单管理",
                     "icon" : "icon-nav",
                     "url" : "orderCpsingle/index"
                 }]
-            }]
+            }
+            ]
     	};
 
   	//设置登录窗口
