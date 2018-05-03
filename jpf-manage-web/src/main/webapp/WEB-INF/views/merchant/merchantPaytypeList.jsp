@@ -51,7 +51,7 @@
                             }
                         });
                     }
-                },*/
+                },
                 {
                     text:'配置分期类型',
                     iconCls:'icon-add',
@@ -63,7 +63,7 @@
                         }
                         $('#infoDiv').window("open").window('refresh', 'stage/page?id='+rows[0].id + "&mtsid=" + rows[0].mtsid).window('setTitle','配置支付类型');
                     }
-                }
+                }*/
             ];
 
             $('#dg').datagrid({

@@ -22,48 +22,47 @@
                     <th>支付编辑</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>${TypeInfoOne.cat}</td>
-                    <td style="text-align: right;width:25%" > </td>
-                    <td style="width:25%"></td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
+                    <td width="30%">${TypeInfoOne.cat}</td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;" >分期设置：</td>
+                    <td width="30%">
+                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="multiple:true" style="width:100px;">
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         微信商户号:
-                        <%--<input id="key1" name="key1" type="text" style="text-align: right;width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
                         <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-numberbox" value="${merpayTypeInfoOne.param}" data-options="min:0,precision:0,prompt:'请输入数字'" />
                     </td>
-                    <td style="text-align: right;"></td><td></td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;" > </td>
+                    <td width="30%" ></td>
                 </tr>
-                <tr class="wx_param">
+                <tr class="wx_param paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数3:
-                        <%--<input id="key3" name="key3" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="wx_param3" name="wx_param3" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数4:
-                        <%--<input id="key4" name="key4" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="wx_param4" name="wx_param4" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                 </tr>
-                <tr class="wx_param">
+                <tr class="wx_param paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数5:
-                        <%--<input id="key5" name="key5" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="wx_param5" name="wx_param5" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数6:
-                        <%--<input id="key6" name="key6" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="wx_param6" name="wx_param6" type="text" style="width:220px" class="easyui-textbox" value="" />
@@ -75,21 +74,23 @@
                     <th>支付配置</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>${TypeInfoOne.cat}</td>
-                    <td style="width:25%;"></td><td style="width:25%;"></td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
+                    <td width="30%">${TypeInfoOne.cat}</td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">分期设置</td>
+                    <td width="30%">
+                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="multiple:true" style="width:100px;">
+                        </select>
+                    </td>
                 </tr>
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数1:
-                        <%--<input id="key1" name="key1" type="text" style="text-align: right;width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
                         <input id="hb_param1" name="hb_param1" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数2:
-                        <%--<input id="key2" name="key2" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
                         <input id="hb_param2" name="hb_param2" type="text" style="width:220px" class="easyui-textbox" value="" />
@@ -133,21 +134,23 @@
                     <th>支付配置</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>${TypeInfoOne.cat}</td>
-                    <td style="width:25%;"></td><td style="width:25%;"></td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
+                    <td width="30%" >${TypeInfoOne.cat}</td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">分期设置</td>
+                    <td width="30%" >
+                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="multiple:true" style="width:100px;">
+                        </select>
+                    </td>
                 </tr>
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数1:
-                        <%--<input id="key1" name="key1" type="text" style="text-align: right;width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
                         <input id="yl_param1" name="yl_param1" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数2:
-                        <%--<input id="key2" name="key2" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
                         <input id="yl_param2" name="yl_param2" type="text" style="width:220px" class="easyui-textbox" value="" />
@@ -156,14 +159,12 @@
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数3:
-                        <%--<input id="key3" name="key3" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="yl_param3" name="yl_param3" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数4:
-                        <%--<input id="key4" name="key4" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="yl_param4" name="yl_param4" type="text" style="width:220px" class="easyui-textbox" value="" />
@@ -172,14 +173,12 @@
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数5:
-                        <%--<input id="key5" name="key5" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="yl_param5" name="yl_param5" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数6:
-                        <%--<input id="key6" name="key6" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="yl_param6" name="yl_param6" type="text" style="width:220px" class="easyui-textbox" value="" />
@@ -191,21 +190,23 @@
                     <th>支付配置</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
-                    <td>${TypeInfoOne.cat}</td>
-                    <td style="width:25%;"></td><td style="width:25%;"></td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">支付类型：</td>
+                    <td width="30%">${TypeInfoOne.cat}</td>
+                    <td width="15%">分期设置</td>
+                    <td width="30%">
+                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="multiple:true" style="width:100px;">
+                        </select>
+                    </td>
                 </tr>
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数1:
-                        <%--<input id="key1" name="key1" type="text" style="text-align: right;width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
                         <input id="zy_param1" name="zy_param1" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数2:
-                        <%--<input id="key2" name="key2" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'" />--%>
                     </td>
                     <td>
                         <input id="zy_param2" name="zy_param2" type="text" style="width:220px" class="easyui-textbox" value="" />
@@ -221,7 +222,6 @@
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数4:
-                        <%--<input id="key4" name="key4" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="zy_param4" name="zy_param4" type="text" style="width:220px" class="easyui-textbox" value="" />
@@ -230,7 +230,6 @@
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数5:
-                        <%--<input id="key5" name="key5" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
                         <input id="zy_param5" name="zy_param5" type="text" style="width:220px" class="easyui-textbox" value="" />
@@ -240,7 +239,7 @@
                         <%--<input id="key6" name="key6" type="text" style="width:150px" class="easyui-textbox key" value="" data-options="prompt:'参数名称',validType:'englishCheckSub'"/>--%>
                     </td>
                     <td>
-                        <input id="zy_param6" name="zy_param5" type="text" style="width:220px" class="easyui-textbox" value="" />
+                        <input id="zy_param6" name="zy_param6" type="text" style="width:220px" class="easyui-textbox" value="" />
                     </td>
                 </tr>
             </table>
@@ -259,28 +258,66 @@
 </style>
 <script>
     function initData() {
-        // $('#tpid_a').combobox('showPanel');
-        // $('.key').combobox({prompt:"参数名称"})
+        //等级信息
+        var tpid = "${TypeInfoOne.catid}";
+        if ( tpid == 9 )
+        {
+            $('select.bankcatid').combobox({
+                url: '../param/getOneType?catid=35',
+                valueField: 'catid',
+                textField: 'cat',
+                onLoadSuccess : function (data) {
+                    $('select.bankcatid').combobox('setValues', "${merpayTypeInfoOne.bankcatid}");
+                }
+            });
+        } else if ( tpid != 9 )
+        {
+            $('select.bankcatid').combobox({
+                url:'../param/getType?pid=24',
+                valueField:'catid',
+                textField:'cat',
+                onLoadSuccess : function (data) {
+                    $('select.bankcatid').combobox('setValues', "${merpayTypeInfoOne.bankcatid}");
+                }
+            });
+        }
     }
     $(function () {
         setTimeout("initData()", 500);
-        $("table.paramDiv").hide();
-        $("table tr.paramTr").hide();
+        $("table tr.paramTr").hide();   //非微信之外的参数行，隐藏
+        $("table tr.wx_param").hide();  //微信其它参数暂时隐藏
         var catid = '${merpayTypeInfoOne.tpid}';
+        //清空其它类型table
+        //添加其它类型参数时，去掉tr类
         if ( catid == 9 )
         {
             $("#wx").show();
+            $("#wx tr.paramTr").remove();
+            doempty("wx");
         } else if ( catid == 8 )
         {
             $("#hb").show();
+            $("#hb tr.paramTr").remove();
+            doempty("hb");
         } else if ( catid == 7 )
         {
             $("#yl").show();
+            $("#yl tr.paramTr").remove();
+            doempty("yl");
         } else if ( catid == 6 )
         {
             $("#zy").show();
+            $("#zy tr.paramTr").remove();
+            doempty("zy");
         }
-        $(".wx_param").hide();  //微信其它参数暂时隐藏
+        function doempty(TableId) {
+            $("#addForm table").each(function (i) {
+                if ( $(this).attr('id') != TableId )
+                {
+                    $(this).empty();
+                }
+            })
+        }
 
         var param = '${merpayTypeInfoOne.param}';
         if ( param != '' )
@@ -307,11 +344,17 @@
                 var mtsid = '${merchantInfo.id}';
                 var queryArray = $("#addForm").serializeArray();
                 var postData = parsePostData(queryArray);
+                var bankcatid = new Array;
+                $("#addForm table input[name='bankcatid']").each(function (i) {
+                    bankcatid[i] = $(this).val();
+                });
+                postData['bankcatid'] = bankcatid;
                 $.ajax({
                     type: 'post',
                     url: '../merchant/paytype/modify/modifyMerPayTypeOne',
-                    data: postData,
+                    data: JSON.stringify(postData),
                     dataType: 'json',
+                    contentType : 'application/json;charset=utf-8',
                     success: function (msg) {
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');

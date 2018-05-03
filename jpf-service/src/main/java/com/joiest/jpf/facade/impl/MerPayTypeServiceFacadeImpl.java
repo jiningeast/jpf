@@ -199,6 +199,18 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         if (payMerchantsPaytypes != null && !payMerchantsPaytypes.isEmpty()) {
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST);
         }
+        if (request.getBankcatid().length == 0 )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请选择分期类型");
+        }
+        //分期类型
+        StringBuilder builder = new StringBuilder();
+        for ( int i=0; i< request.getBankcatid().length; i++ )
+        {
+            builder.append(request.getBankcatid()[i]+",");
+        }
+        String bankcatid = builder.substring(0, builder.length()-1).toString();
+
         Map<String, Object> jsonMap = new HashMap<>();
         List<Object> list = new ArrayList<>();
         String newJson = "";
@@ -212,7 +224,10 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "微信商户号不能为空");
             }
-//            list.add(jsonMap);
+            if ( Integer.valueOf(bankcatid) != 35 )
+            {
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, payMerchantsType.getCat() + "的分期只能设置为：不分期");
+            }
             newJson = jsonUtils.toJson(jsonMap);
         }
 
@@ -225,8 +240,9 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         {
             record.setParam(newJson);
         }
-        payMerchantsPaytypeMapper.insertSelective(record);
+        record.setBankcatid(bankcatid);
 
+        payMerchantsPaytypeMapper.insertSelective(record);
         return new JpfResponseDto();
     }
 
@@ -255,6 +271,18 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         if (payMerchantsPaytypes == null && payMerchantsPaytypes.isEmpty()) {
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST);
         }
+        if (request.getBankcatid().length == 0 )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请选择分期类型");
+        }
+        //分期类型
+        StringBuilder builder = new StringBuilder();
+        for ( int i=0; i< request.getBankcatid().length; i++ )
+        {
+            builder.append(request.getBankcatid()[i]+",");
+        }
+        String bankcatid = builder.substring(0, builder.length()-1).toString();
+
         Map<String, Object> jsonMap = new HashMap<>();
         List<Object> list = new ArrayList<>();
         String newJson = "";
@@ -268,7 +296,10 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "微信商户号不能为空");
             }
-//            list.add(jsonMap);
+            if ( Integer.valueOf(bankcatid) != 35 )
+            {
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, payMerchantsType.getCat() + "的分期只能设置为：不分期");
+            }
             newJson = jsonUtils.toJson(jsonMap);
         }
 
@@ -281,13 +312,13 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         {
             record.setParam(newJson);
         }
+        record.setBankcatid(bankcatid);
 
         PayMerchantsPaytypeExample paytypeExample = new PayMerchantsPaytypeExample();
         PayMerchantsPaytypeExample.Criteria c1 = paytypeExample.createCriteria();
         c1.andIdEqualTo(request.getId());
 
         payMerchantsPaytypeMapper.updateByExampleSelective(record,paytypeExample);
-
         return new JpfResponseDto();
     }
 
