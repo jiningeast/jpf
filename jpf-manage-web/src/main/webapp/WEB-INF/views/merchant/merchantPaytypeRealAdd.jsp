@@ -25,7 +25,7 @@
                     <td width="30%">${merchantTypeInfo.cat}</td>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;">分期设置：</td>
                     <td width="30%">
-                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="multiple:true" style="width:100px;">
+                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="required:true,multiple:true" style="width:100px;">
                         </select>
                     </td>
                 </tr>
@@ -34,7 +34,7 @@
                         微信商户号:
                     </td>
                     <td>
-                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:90%" class="easyui-numberbox" value="" data-options="min:0,precision:0,prompt:'请输入数字'" />
+                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:90%" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                     </td>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;" > </td>
                     <td width="30%" ></td>
@@ -77,7 +77,7 @@
                     <td width="30%">${merchantTypeInfo.cat}</td>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;">分期设置：</td>
                     <td width="30%" >
-                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="multiple:true" style="width:100px;">
+                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="required:true,multiple:true" style="width:100px;">
                         </select>
                     </td>
                 </tr>
@@ -137,7 +137,7 @@
                     <td width="30%">${merchantTypeInfo.cat}</td>
                     <td width="15%" >分期设置</td>
                     <td width="30%" >
-                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="multiple:true" style="width:100px;">
+                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="required:true,multiple:true" style="width:100px;">
                         </select>
                     </td>
                 </tr>
@@ -193,7 +193,7 @@
                     <td width="30%">${merchantTypeInfo.cat}</td>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;" >分期设置：</td>
                     <td width="30%" >
-                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="multiple:true" style="width:100px;">
+                        <select name="bankcatid" class="easyui-combobox bankcatid" data-options="required:true,multiple:true" style="width:100px;">
                         </select>
                     </td>
                 </tr>
