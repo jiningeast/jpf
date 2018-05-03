@@ -48,7 +48,7 @@
                     {field:'pid',title:'商品ID',width:'3%'},
                     {field:'paytype',title:'支付方式',width:'7%',
                         formatter:function (value, row, index) {
-                            if ( value.length > 0 ){
+                            if ( value !== null ){
                                 return payTypeArr[value];
                             }
                         }},
