@@ -142,7 +142,7 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         List<PayMerchantsBank> merchantsBanks = payMerchantsBankMapper.selectByExample(example1);
         if(merchantsBanks==null||merchantsBanks.isEmpty()){
             logger.info("商户信息-对公账户不存在");
-            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户对公账户信息不存在");
         }
         PayMerchantsBank merchantsBank = merchantsBanks.get(0);
 
