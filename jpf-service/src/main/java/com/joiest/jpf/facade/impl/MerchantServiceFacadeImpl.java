@@ -161,8 +161,8 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
             PayMerchantsBank merBankNew = new PayMerchantsBank();
             merBankNew.setMtsid(request.getId());
             //地址信息使用商户信息中的地址信息
-            merBankNew.setProvince(request.getProvince());
-            merBankNew.setCity(request.getCity());
+            merBankNew.setProvince(request.getBankProvince());
+            merBankNew.setCity(request.getBankCity());
             merBankNew.setBankid(Long.parseLong(request.getBankid()));
             merBankNew.setBankname(bankInfos.getPaybankname());
             merBankNew.setBanktype(request.getBanktype());
