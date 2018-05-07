@@ -42,7 +42,6 @@
         <ehcache_version>2.6.5</ehcache_version>
         <jcache_version>0.4</jcache_version>
         <commons_lang3_version>3.1</commons_lang3_version>
-        <ibatis_core_version>3.0</ibatis_core_version>
         <guava.version>22.0</guava.version>
         <commons_beanutils_version>1.9.2</commons_beanutils_version>
         <commons-codec_version>1.11</commons-codec_version>
@@ -217,16 +216,6 @@
                 <groupId>javax.cache</groupId>
                 <artifactId>cache-api</artifactId>
                 <version>${jcache_version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons_lang3_version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.ibatis</groupId>
-                <artifactId>ibatis-core</artifactId>
-                <version>${ibatis_core_version}</version>
             </dependency>
 
             <dependency>
