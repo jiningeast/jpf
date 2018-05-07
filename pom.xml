@@ -217,6 +217,11 @@
                 <artifactId>cache-api</artifactId>
                 <version>${jcache_version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons_lang3_version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.google.guava</groupId>
