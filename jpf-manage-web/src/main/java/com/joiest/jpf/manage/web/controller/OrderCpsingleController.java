@@ -10,9 +10,11 @@ import com.joiest.jpf.dto.OrderCpsingleRequest;
 import com.joiest.jpf.dto.OrderCpsingleResponse;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.OrderCpsingleServiceFacade;
-import com.joiest.jpf.facade.OrderServiceFacade;
+import com.joiest.jpf.facade.SystemlogServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.joiest.jpf.manage.web.util.ServletUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +25,18 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.joiest.jpf.manage.web.constant.ManageConstants.REFUND_URL;
+
 @Controller
 @RequestMapping("/orderCpsingle")
 public class OrderCpsingleController {
+    private static final Logger logger = LogManager.getLogger(OrderCpsingleController.class);
 
     @Autowired
     private OrderCpsingleServiceFacade orderCpsingleServiceFacade;
+
+    @Autowired
+    private SystemlogServiceFacade systemlogServiceFacade;
 
     @RequestMapping("/index")
     public String index(){
@@ -37,8 +45,16 @@ public class OrderCpsingleController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list( OrderCpsingleRequest request ){
-        OrderCpsingleResponse response = orderCpsingleServiceFacade.getCps(request);
+    public Map<String, Object> list( OrderCpsingleRequest request, HttpServletRequest httpRequest ){
+
+        // 获取用户信息
+        HttpSession session = httpRequest.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+
+        // 获取IP
+        String IP = ServletUtils.getIpAddr(httpRequest);
+
+        OrderCpsingleResponse response = orderCpsingleServiceFacade.getCps(request, userInfo, IP);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", response.getCount());
@@ -49,33 +65,35 @@ public class OrderCpsingleController {
 
     @RequestMapping("/checkOk")
     @ResponseBody
-    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, HttpServletRequest request){
+    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, HttpServletRequest httpRequest){
         // 构建请求参数
         Map<String,Object> posRequest;
         posRequest = orderCpsingleServiceFacade.getPosRequest(orderCpsingleRequest.getOrderid());
 
         // 请求接口地址
-        String postUrl = "http://testapi.7shengqian.com/index.php?r=YinjiaStage/PurchaseRefund";
+        String postUrl = REFUND_URL;
         String response = OkHttpUtils.postForm(postUrl,posRequest);
         Map<String, String> responseMap = JsonUtils.toCollection(response, new TypeReference<HashMap<String, String>>(){});
 
         // 获取用户信息
-        HttpSession session = request.getSession();
+        HttpSession session = httpRequest.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
         // 获取IP
-        String ip = ServletUtils.getIpAddr(request);
+        String IP = ServletUtils.getIpAddr(httpRequest);
 
-        // 记录日志
-        orderCpsingleServiceFacade.sysLog(1,userInfo,ip, "", 32, "noTable", "调用退单接口", "请求地址："+postUrl+"；返回结果："+responseMap.get("code")+','+responseMap.get("info"));
+        // 记录日志 - 数据库
+        String content = "请求地址："+postUrl+"；返回结果："+responseMap.get("code")+','+responseMap.get("info");
+
+        // 记录日志 - 文件
+        logger.info(content);
 
         if ( Integer.parseInt(responseMap.get("code")) != 10000 ){
             // 退款接口如果没有返回成功
            throw new JpfException(JpfErrorInfo.DAL_ERROR, "请求接口失败，返回："+responseMap.get("info")+"，请检查");
         }
 
-
-        return orderCpsingleServiceFacade.checkOk(orderCpsingleRequest, userInfo);
+        return orderCpsingleServiceFacade.checkOk(orderCpsingleRequest, userInfo, IP);
     }
 
     @RequestMapping("/checkNo")
@@ -84,6 +102,10 @@ public class OrderCpsingleController {
         HttpSession session = request.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
-        return orderCpsingleServiceFacade.checkNo(orderCpsingleRequest, userInfo);
+        // 获取IP
+        String IP = ServletUtils.getIpAddr(request);
+        orderCpsingleServiceFacade.checkNo(orderCpsingleRequest, userInfo, IP);
+
+        return new JpfResponseDto();
     }
 }

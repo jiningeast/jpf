@@ -14,15 +14,13 @@ public interface OrderCpsingleServiceFacade {
 
     public int getCpsCount();
 
-    public OrderCpsingleResponse getCps(OrderCpsingleRequest request);
+    public OrderCpsingleResponse getCps(OrderCpsingleRequest request, UserInfo userInfo, String IP);
 
     public int insRecord(OrderCpsingleInfo info);
 
-    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo);
+    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo, String IP);
 
-    public JpfResponseDto checkNo(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo);
+    public JpfResponseDto checkNo(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo, String IP);
 
     public Map<String, Object> getPosRequest(String orderid);
-
-    public void sysLog(Integer logtype, UserInfo userInfo, String ip, String ip1, Integer clients, String tablename, String action, String content);
 }

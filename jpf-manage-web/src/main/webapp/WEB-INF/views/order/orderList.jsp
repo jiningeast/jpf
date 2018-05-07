@@ -39,7 +39,7 @@
                 pagination:true,
                 singleSelect:true,
                 multiselect:false,
-                electOnCheck:true,
+                selectOnCheck:true,
                 columns:[[
                     // {field:'id',title:'ID',width:'3%'},
                     {field:'orderid',title:'订单ID',width:'9%'},

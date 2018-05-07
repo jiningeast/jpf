@@ -65,6 +65,11 @@
                     "menuname" : "商户支付配置管理",
                     "icon" : "icon-nav",
                     "url" : "merchant/paytype/index"
+                },{
+                    "menuid" : "203",
+                    "menuname" : "门店管理",
+                    "icon" : "icon-nav",
+                    "url" : "merShop/index"
                 }]
     		},{
                 "menuid" : "3",
