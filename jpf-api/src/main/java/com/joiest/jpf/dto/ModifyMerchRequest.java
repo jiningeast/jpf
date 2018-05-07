@@ -1,5 +1,11 @@
 package com.joiest.jpf.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class ModifyMerchRequest {
 
     /**
@@ -66,15 +72,6 @@ public class ModifyMerchRequest {
      */
     private String logo;
 
-    /**
-     * 省份
-     */
-    private Long bankProvince;
-
-    /**
-     * 城市
-     */
-    private Long bankCity;
 
     /**
      * 区县
@@ -87,24 +84,45 @@ public class ModifyMerchRequest {
     private String address;
 
     /**
-     * 银行开户名称
+     * 银行ID pay_merchants_bank中对应的 pay_bank的id
      */
-    private String bankname;
+    @Pattern(regexp = "\\d{1,10}", message = "请选择正确的开户银行")
+    private String bankid;
 
     /**
      * 开户银行类型
      */
+    @NotNull(message="请选择开户行类型")
     private Long banktype;
 
     /**
      * 企业对公账户
      */
+    @NotEmpty(message="请输入企业对公帐号")
     private String bankno;
 
     /**
      * 开户行全称
      */
+    @NotEmpty(message="请输入开户行全称")
     private String banksubname;
+
+    /**
+     * 银行开户名称
+     */
+    private String bankname;
+
+    /**
+     * 省份
+     */
+    @NotNull(message="请选择结算信息中的省份信息")
+    private Long bankProvince;
+
+    /**
+     * 城市
+     */
+    @NotNull(message="请选择结算信息中的城市信息")
+    private Long bankCity;
 
     /**
      * 法人姓名
@@ -145,6 +163,21 @@ public class ModifyMerchRequest {
      * 营业执照号码
      */
     private String certificate;
+
+    /**
+     * 联系电话
+     */
+    private String mobile;
+
+    /**
+     * 银行code
+     */
+    private String chinacode;
+
+    /**
+     * user 表uid
+     */
+    private Long muserid;
 
     public Long getId() {
         return id;
@@ -362,4 +395,27 @@ public class ModifyMerchRequest {
         this.certificate = certificate == null ? null : certificate.trim();
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getChinacode() {
+        return chinacode;
+    }
+
+    public void setChinacode(String chinacode) {
+        this.chinacode = chinacode;
+    }
+
+    public String getBankid() {
+        return bankid;
+    }
+
+    public void setBankid(String bankid) {
+        this.bankid = bankid;
+    }
 }

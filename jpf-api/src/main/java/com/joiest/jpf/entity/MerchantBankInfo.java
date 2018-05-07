@@ -14,11 +14,6 @@ public class MerchantBankInfo{
     private Long mtsid;
 
     /**
-     * 对应yifuwang库中user表
-     */
-    private Long muserid;
-
-    /**
      * 省份
      */
     private Long province;
@@ -29,7 +24,12 @@ public class MerchantBankInfo{
     private Long city;
 
     /**
-     * 银行开户名称
+     * 银行ID
+     */
+    private Long bankid;
+
+    /**
+     * 银行名称
      */
     private String bankname;
 
@@ -58,6 +58,21 @@ public class MerchantBankInfo{
      */
     private Date updated;
 
+    /**
+     * 联系电话
+     */
+    private String mobile;
+
+    /**
+     * 银行code
+     */
+    private String chinacode;
+
+    /**
+     * user 表uid
+     */
+    private Long muserid;
+
     public Long getId() {
         return id;
     }
@@ -72,14 +87,6 @@ public class MerchantBankInfo{
 
     public void setMtsid(Long mtsid) {
         this.mtsid = mtsid;
-    }
-
-    public Long getMuserid() {
-        return muserid;
-    }
-
-    public void setMuserid(Long muserid) {
-        this.muserid = muserid;
     }
 
     public Long getProvince() {
@@ -98,12 +105,20 @@ public class MerchantBankInfo{
         this.city = city;
     }
 
+    public Long getBankid() {
+        return bankid;
+    }
+
+    public void setBankid(Long bankid) {
+        this.bankid = bankid;
+    }
+
     public String getBankname() {
         return bankname;
     }
 
     public void setBankname(String bankname) {
-        this.bankname = bankname;
+        this.bankname = bankname == null ? null : bankname.trim();
     }
 
     public Long getBanktype() {
@@ -119,7 +134,7 @@ public class MerchantBankInfo{
     }
 
     public void setBankno(String bankno) {
-        this.bankno = bankno;
+        this.bankno = bankno == null ? null : bankno.trim();
     }
 
     public String getBanksubname() {
@@ -127,7 +142,7 @@ public class MerchantBankInfo{
     }
 
     public void setBanksubname(String banksubname) {
-        this.banksubname = banksubname;
+        this.banksubname = banksubname == null ? null : banksubname.trim();
     }
 
     public Date getCreated() {
@@ -144,5 +159,29 @@ public class MerchantBankInfo{
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    public String getChinacode() {
+        return chinacode;
+    }
+
+    public void setChinacode(String chinacode) {
+        this.chinacode = chinacode == null ? null : chinacode.trim();
+    }
+
+    public Long getMuserid() {
+        return muserid;
+    }
+
+    public void setMuserid(Long muserid) {
+        this.muserid = muserid;
     }
 }

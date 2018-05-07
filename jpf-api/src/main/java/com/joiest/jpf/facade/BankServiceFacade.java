@@ -19,4 +19,10 @@ public interface BankServiceFacade {
     public JpfResponseDto editBank(String id, String paybankname, String tpid, String bankcode);
 
     public JpfResponseDto delBank(String id);
+
+    /**
+     * 获取所有银行信息
+     */
+    public List<BankInfo> getBankAll();
+
 }

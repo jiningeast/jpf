@@ -142,22 +142,22 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">开户银行类型：</td>
                         <td>
-                            <select id="banktype_m" name="banktype" class="easyui-combobox" style="width:100px;">
+                            <select id="banktype_m" name="banktype" class="easyui-combobox" data-options="required:true" style="width:100px;">
                             </select>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">企业对公账户：</td>
                         <td>
-                            <input id="bankno_m" name="bankno" type="text" data-options="width:'175px'" width="120" class="easyui-textbox" value="${merchantBankInfo.bankno}"/>
+                            <input id="bankno_m" name="bankno" type="text" data-options="width:'175px',required:true"  width="120" class="easyui-textbox" value="${merchantBankInfo.bankno}"/>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">开户行全称：</td>
                         <td>
-                            <input id="banksubname_m" name="banksubname" type="text" data-options="width:'175px'" width="120" class="easyui-textbox" value="${merchantBankInfo.banksubname}"/>
+                            <input id="banksubname_m" name="banksubname" type="text" data-options="width:'175px',required:true" width="120" class="easyui-textbox" value="${merchantBankInfo.banksubname}"/>
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">银行开户名称：</td>
                         <td>
-                            <input id="bankname_m" name="bankname" type="text" class="easyui-textbox" style="width:175px;" value="${merchantBankInfo.bankname}" data-options="required:true">
+                            <input id="bankid" name="bankid" type="text" class="easyui-textbox" style="width:175px;" value="${merchantBankInfo.bankname}" data-options="required:true">
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">省份：</td>
                         <td>
@@ -265,6 +265,14 @@
     }
 
     $(function () {
+        $("#bankid").combobox({
+            url : '../param/getBankAll',
+            valueField : 'id',
+            textField : 'paybankname',
+            onLoadSuccess : function () {
+                $('#bankid').combobox('setValue', '${merchantBankInfo.bankid}');
+            }
+        });
         $('#editForm #province_m').combobox({
             url:'../param/getPca',
             valueField:'catid',

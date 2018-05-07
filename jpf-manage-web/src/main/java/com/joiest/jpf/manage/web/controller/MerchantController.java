@@ -7,6 +7,7 @@ import com.joiest.jpf.dto.GetMerchsResponse;
 import com.joiest.jpf.dto.ModifyMerchRequest;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
+import com.joiest.jpf.facade.BankServiceFacade;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
 import com.joiest.jpf.facade.MerchantServiceFacade;
 import com.joiest.jpf.facade.PcaServiceFacade;
@@ -48,6 +49,7 @@ public class MerchantController {
     @RequestMapping("/modify/page")
     public ModelAndView modifyPage(String id,ModelMap modelMap){
         MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(id));
+        //商户对公帐户信息
         MerchantBankInfo merchantBankInfo = merchantServiceFacade.getMerchBank(Long.valueOf(id));
         modelMap.addAttribute("merchantInfo", merchantInfo);
         modelMap.addAttribute("merchantBankInfo", merchantBankInfo);

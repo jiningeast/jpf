@@ -1,9 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.joiest.jpf.entity.MerchantAgentInfo;
-import com.joiest.jpf.entity.MerchantInfo;
-import com.joiest.jpf.entity.MerchantTypeInfo;
-import com.joiest.jpf.entity.PcaInfo;
+import com.joiest.jpf.entity.*;
+import com.joiest.jpf.facade.BankServiceFacade;
 import com.joiest.jpf.facade.MerAgentServiceFacade;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
 import com.joiest.jpf.facade.PcaServiceFacade;
@@ -31,6 +29,9 @@ public class ParamController {
 
     @Autowired
     private MerAgentServiceFacade merAgentServiceFacade;
+
+    @Autowired
+    private BankServiceFacade bankServiceFacade;
 
     private List<PcaInfo> pcaInfoList;
 
@@ -67,10 +68,17 @@ public class ParamController {
         return merTypeServiceFacade.getOneTypeByCatid(catid);
     }
 
+    //获取单条信息 pay_merchants_type
     @RequestMapping("/getOneType")
     @ResponseBody
     public List<MerchantTypeInfo> getOneTypeByCatId(String catid) {
         return merTypeServiceFacade.getOneTypeByCatId(catid);
     }
 
+    //获取所有的银行信息 pay_bank
+    @RequestMapping("/getBankAll")
+    @ResponseBody
+    public List<BankInfo> getBankAll(){
+        return bankServiceFacade.getBankAll();
+    }
 }
