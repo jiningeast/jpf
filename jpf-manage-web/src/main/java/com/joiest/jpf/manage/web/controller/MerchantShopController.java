@@ -1,5 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.dto.MerShopRequest;
+import com.joiest.jpf.dto.MerShopResponse;
 import com.joiest.jpf.facade.MerShopServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,10 +25,12 @@ public class MerchantShopController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list(long page, long rows) {
+    public Map<String, Object> list(MerShopRequest merShopRequest) {
+        MerShopResponse merShopResponse = merShopServiceFacade.getMerShops(merShopRequest);
+
         Map<String, Object> map = new HashMap<>();
-        map.put("total",merShopServiceFacade.getMerShopsCount() );
-        map.put("rows", merShopServiceFacade.getMerShops(page, rows));
+        map.put("total",merShopResponse.getCount() );
+        map.put("rows", merShopResponse.getList());
 
         return map;
     }

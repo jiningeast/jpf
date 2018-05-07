@@ -1,12 +1,11 @@
 package com.joiest.jpf.facade;
 
-import com.joiest.jpf.entity.MerchantShopInfo;
-
-import java.util.List;
+import com.joiest.jpf.dto.MerShopRequest;
+import com.joiest.jpf.dto.MerShopResponse;
 
 public interface MerShopServiceFacade {
 
     public Integer getMerShopsCount();
 
-    public List<MerchantShopInfo> getMerShops(long page, long rows);
+    public MerShopResponse getMerShops(MerShopRequest merShopRequest);
 }
