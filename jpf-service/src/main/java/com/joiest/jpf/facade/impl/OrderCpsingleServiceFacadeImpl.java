@@ -14,6 +14,7 @@ import com.joiest.jpf.dto.OrderCpsingleResponse;
 import com.joiest.jpf.entity.OrderCpsingleInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.OrderCpsingleServiceFacade;
+import com.joiest.jpf.facade.SystemlogServiceFacade;
 import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -31,6 +32,9 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     @Autowired
     private PaySystemlogMapper paySystemlogMapper;
 
+    @Autowired
+    private SystemlogServiceFacade systemlogServiceFacade;
+
     @Override
     public int getCpsCount(){
         PayOrderCpsingleExample e = new PayOrderCpsingleExample();
@@ -38,7 +42,7 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     }
 
     @Override
-    public OrderCpsingleResponse getCps(OrderCpsingleRequest request){
+    public OrderCpsingleResponse getCps(OrderCpsingleRequest request, UserInfo userInfo, String IP){
         OrderCpsingleResponse response = new OrderCpsingleResponse();
 
         PayOrderCpsingleExample e = new PayOrderCpsingleExample();
@@ -73,7 +77,14 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         if ( org.apache.commons.lang3.StringUtils.isNotBlank(request.getAddtimeStart()) && org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeEnd() ) ){
             c.andAddtimeBetween(addtimeStart,addtimeEnd);
         }
+
+        List<PayOrderCpsingleExample.Criterion> cList = c.getCriteria();    // 获取查询参数
+
         List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
+
+        // 插入日志记录
+//        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_spsingle","查询数据", "SELECT * FROM `pay_order_cpsingle` LIMIT ");
+
         List<OrderCpsingleInfo> infos = new ArrayList<>();
         for (PayOrderCpsingle payOrderCpsingle:list){
             OrderCpsingleInfo orderCpsingleInfo = new OrderCpsingleInfo();
@@ -84,6 +95,9 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
 
         response.setList(infos);
         response.setCount(payOrderCpsingleMapper.countByExample(e));
+
+        // 插入日志记录
+
         return response;
     }
 
@@ -104,10 +118,13 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     }
 
     @Override
-    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo){
+    public JpfResponseDto checkOk(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo, String IP){
 
         // 查询此单的原operate_content审核内容字段
         PayOrderCpsingle ordinaryRec = payOrderCpsingleMapper.selectByPrimaryKey(orderCpsingleRequest.getId());
+
+        // 插入日志记录
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_spsingle","查询数据", "SELECT * FROM `pay_order_cpsingle` WHERE id="+orderCpsingleRequest.getId());
         String json = ordinaryRec.getOperateContent();
 
         // 判断这个单是否已审核
@@ -146,6 +163,10 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         newRec.setSinglestatus((byte)1);
 
         int res_orderCpsingle = payOrderCpsingleMapper.updateByPrimaryKeySelective(newRec);
+
+        // 插入日志记录
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET operate_content="+newJson+",singlestatus=1 WHERE id="+orderCpsingleRequest.getId());
+
         if ( res_orderCpsingle == 1 ){
             // 更新订单表order->singlestatus字段为5：退款处理完成
             PayOrderExample payOrderExample = new PayOrderExample();
@@ -155,6 +176,10 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             PayOrder payOrder = new PayOrder();
             payOrder.setSinglestatus((byte)5);
             int res_order = payOrderMapper.updateByExampleSelective(payOrder, payOrderExample);
+
+            // 插入日志记录
+            systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order","更新数据","UPDATE `pay_order` SET singlestatus=5 WHERE orderid="+orderCpsingleRequest.getOrderid());
+
             if ( res_order == 1 ){
                 return new JpfResponseDto();
             }else{
@@ -166,10 +191,13 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     }
 
     @Override
-    public JpfResponseDto checkNo(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo){
+    public JpfResponseDto checkNo(OrderCpsingleRequest orderCpsingleRequest, UserInfo userInfo, String IP){
         // 查询此单的原operate_content审核内容字段
         PayOrderCpsingle payOrderCpsingle = payOrderCpsingleMapper.selectByPrimaryKey(orderCpsingleRequest.getId());
         String json = payOrderCpsingle.getOperateContent();
+
+        // 插入日志记录
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_spsingle","查询数据", "SELECT * FROM `pay_order_cpsingle` WHERE id="+orderCpsingleRequest.getId());
 
         // 判断这个单是否已审核
         byte singlestatus = payOrderCpsingle.getSinglestatus();
@@ -210,6 +238,9 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新退单表失败，请联系管理员");
         }
 
+        // 插入日志记录
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET operate_content="+newJson+",singlestatus=2 WHERE id="+orderCpsingleRequest.getId());
+
         // 更新订单表状态
         PayOrderExample payOrderExample = new PayOrderExample();
         PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
@@ -221,6 +252,10 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         if ( res_order != 1 ){
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新订单表失败，请联系管理员");
         }
+
+        // 插入日志记录
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order","更新数据","UPDATE `pay_order` SET singlestatus=2 WHERE orderid="+orderCpsingleRequest.getOrderid());
+
         return new JpfResponseDto();
     }
 
@@ -239,26 +274,5 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         posRequest.put("refundmoney", orderList.get(0).getOrderprice());
 
         return posRequest;
-    }
-
-    @Override
-    public void sysLog(Integer logtype, UserInfo userInfo, String ip, String ip1, Integer clients, String tablename, String action, String content){
-
-        PaySystemlog paySystemlog = new PaySystemlog();
-        paySystemlog.setLogtype(logtype);
-        paySystemlog.setOperatorUid(userInfo.getId());
-        paySystemlog.setOperatorName(userInfo.getUserName());
-        paySystemlog.setIp(ip);
-        paySystemlog.setIp1(ip1);
-        paySystemlog.setClients(clients);
-        paySystemlog.setTablename(tablename);
-        String recordStr = Integer.toString(userInfo.getId());
-        paySystemlog.setRecord(recordStr);
-        paySystemlog.setAction(action);
-        paySystemlog.setContent(content);
-        Date date = new Date();
-        paySystemlog.setCreated(date);
-
-        paySystemlogMapper.insertSelective(paySystemlog);
     }
 }
