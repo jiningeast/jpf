@@ -15,11 +15,6 @@ public class PayMerchantsBank implements Serializable {
     private Long mtsid;
 
     /**
-     * 对应yifuwang库中user表
-     */
-    private Long muserid;
-
-    /**
      * 省份
      */
     private Long province;
@@ -30,7 +25,12 @@ public class PayMerchantsBank implements Serializable {
     private Long city;
 
     /**
-     * 银行开户名称
+     * 银行ID
+     */
+    private Long bankid;
+
+    /**
+     * 银行名称
      */
     private String bankname;
 
@@ -59,6 +59,21 @@ public class PayMerchantsBank implements Serializable {
      */
     private Date updated;
 
+    /**
+     * 联系电话
+     */
+    private String mobile;
+
+    /**
+     * 银行code
+     */
+    private String chinacode;
+
+    /**
+     * user 表uid 
+     */
+    private Long muserid;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -77,14 +92,6 @@ public class PayMerchantsBank implements Serializable {
         this.mtsid = mtsid;
     }
 
-    public Long getMuserid() {
-        return muserid;
-    }
-
-    public void setMuserid(Long muserid) {
-        this.muserid = muserid;
-    }
-
     public Long getProvince() {
         return province;
     }
@@ -99,6 +106,14 @@ public class PayMerchantsBank implements Serializable {
 
     public void setCity(Long city) {
         this.city = city;
+    }
+
+    public Long getBankid() {
+        return bankid;
+    }
+
+    public void setBankid(Long bankid) {
+        this.bankid = bankid;
     }
 
     public String getBankname() {
@@ -149,6 +164,30 @@ public class PayMerchantsBank implements Serializable {
         this.updated = updated;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    public String getChinacode() {
+        return chinacode;
+    }
+
+    public void setChinacode(String chinacode) {
+        this.chinacode = chinacode == null ? null : chinacode.trim();
+    }
+
+    public Long getMuserid() {
+        return muserid;
+    }
+
+    public void setMuserid(Long muserid) {
+        this.muserid = muserid;
+    }
+
     /**
      *
      */
@@ -160,15 +199,18 @@ public class PayMerchantsBank implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", mtsid=").append(mtsid);
-        sb.append(", muserid=").append(muserid);
         sb.append(", province=").append(province);
         sb.append(", city=").append(city);
+        sb.append(", bankid=").append(bankid);
         sb.append(", bankname=").append(bankname);
         sb.append(", banktype=").append(banktype);
         sb.append(", bankno=").append(bankno);
         sb.append(", banksubname=").append(banksubname);
         sb.append(", created=").append(created);
         sb.append(", updated=").append(updated);
+        sb.append(", mobile=").append(mobile);
+        sb.append(", chinacode=").append(chinacode);
+        sb.append(", muserid=").append(muserid);
         sb.append("]");
         return sb.toString();
     }
@@ -191,15 +233,18 @@ public class PayMerchantsBank implements Serializable {
         PayMerchantsBank other = (PayMerchantsBank) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getMtsid() == null ? other.getMtsid() == null : this.getMtsid().equals(other.getMtsid()))
-            && (this.getMuserid() == null ? other.getMuserid() == null : this.getMuserid().equals(other.getMuserid()))
             && (this.getProvince() == null ? other.getProvince() == null : this.getProvince().equals(other.getProvince()))
             && (this.getCity() == null ? other.getCity() == null : this.getCity().equals(other.getCity()))
+            && (this.getBankid() == null ? other.getBankid() == null : this.getBankid().equals(other.getBankid()))
             && (this.getBankname() == null ? other.getBankname() == null : this.getBankname().equals(other.getBankname()))
             && (this.getBanktype() == null ? other.getBanktype() == null : this.getBanktype().equals(other.getBanktype()))
             && (this.getBankno() == null ? other.getBankno() == null : this.getBankno().equals(other.getBankno()))
             && (this.getBanksubname() == null ? other.getBanksubname() == null : this.getBanksubname().equals(other.getBanksubname()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
-            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
+            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()))
+            && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
+            && (this.getChinacode() == null ? other.getChinacode() == null : this.getChinacode().equals(other.getChinacode()))
+            && (this.getMuserid() == null ? other.getMuserid() == null : this.getMuserid().equals(other.getMuserid()));
     }
 
     /**
@@ -211,15 +256,18 @@ public class PayMerchantsBank implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getMtsid() == null) ? 0 : getMtsid().hashCode());
-        result = prime * result + ((getMuserid() == null) ? 0 : getMuserid().hashCode());
         result = prime * result + ((getProvince() == null) ? 0 : getProvince().hashCode());
         result = prime * result + ((getCity() == null) ? 0 : getCity().hashCode());
+        result = prime * result + ((getBankid() == null) ? 0 : getBankid().hashCode());
         result = prime * result + ((getBankname() == null) ? 0 : getBankname().hashCode());
         result = prime * result + ((getBanktype() == null) ? 0 : getBanktype().hashCode());
         result = prime * result + ((getBankno() == null) ? 0 : getBankno().hashCode());
         result = prime * result + ((getBanksubname() == null) ? 0 : getBanksubname().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
+        result = prime * result + ((getMobile() == null) ? 0 : getMobile().hashCode());
+        result = prime * result + ((getChinacode() == null) ? 0 : getChinacode().hashCode());
+        result = prime * result + ((getMuserid() == null) ? 0 : getMuserid().hashCode());
         return result;
     }
 }

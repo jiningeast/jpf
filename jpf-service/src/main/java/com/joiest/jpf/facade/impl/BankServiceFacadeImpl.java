@@ -197,4 +197,24 @@ public class BankServiceFacadeImpl implements BankServiceFacade {
 
         return new JpfResponseDto();
     }
+
+    /**
+     * 获取所有银行信息
+     */
+    @Override
+    public List<BankInfo> getBankAll()
+    {
+        PayBankExample payBankExample = new PayBankExample();
+        List<PayBank> list = payBankMapper.selectByExample(payBankExample);
+
+        List<BankInfo> infos = new ArrayList<>();
+        for ( PayBank payBank : list )
+        {
+            BankInfo bankInfo = new BankInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayBank.class, bankInfo.getClass(), false);
+            beanCopier.copy(payBank, bankInfo, null);
+            infos.add(bankInfo);
+        }
+        return infos;
+    }
 }

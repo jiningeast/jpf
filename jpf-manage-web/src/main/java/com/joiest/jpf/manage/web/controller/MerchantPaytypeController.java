@@ -102,7 +102,7 @@ public class MerchantPaytypeController {
      */
     @RequestMapping("/add/addMerPayTypeOne")
     @ResponseBody
-    public JpfResponseDto addMerPayTypeOne(ModifyMerPayTypeRequest request){
+    public JpfResponseDto addMerPayTypeOne(@RequestBody ModifyMerPayTypeRequest request){
         return merPayTypeServiceFacade.addMerPayTypeOne(request);
 
     }
@@ -131,7 +131,7 @@ public class MerchantPaytypeController {
      */
     @RequestMapping("/modify/modifyMerPayTypeOne")
     @ResponseBody
-    public JpfResponseDto modifyMerPayTypeOne(ModifyMerPayTypeRequest request){
+    public JpfResponseDto modifyMerPayTypeOne(@RequestBody ModifyMerPayTypeRequest request){
         return merPayTypeServiceFacade.modifyMerPayTypeOne(request);
 
     }
@@ -164,9 +164,7 @@ public class MerchantPaytypeController {
     @RequestMapping("/stage/action")
     @ResponseBody
     public JpfResponseDto modifyMerBankcatid(@RequestBody ModifyMerPayTypeRequest request){
-
-        JpfResponseDto jpfResponseDto = merPayTypeServiceFacade.modifyMerBankcatid(request);
-        return jpfResponseDto;
+        return merPayTypeServiceFacade.modifyMerBankcatid(request);
     }
 
 }

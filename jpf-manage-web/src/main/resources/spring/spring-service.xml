@@ -18,5 +18,6 @@
 	<bean id="TdorderServiceFacade" class="com.joiest.jpf.facade.impl.TdorderServiceFacadeImpl"></bean>
 	<bean id="OrderCpsingleServiceFacade" class="com.joiest.jpf.facade.impl.OrderCpsingleServiceFacadeImpl"></bean>
 	<bean id="MerShopServiceFacade" class="com.joiest.jpf.facade.impl.MerShopServiceFacadeImpl"></bean>
+	<bean id="VirtualServiceFacade" class="com.joiest.jpf.facade.impl.VirtualServiceFacadeImpl"></bean>
 
 </beans>

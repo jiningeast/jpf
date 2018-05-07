@@ -295,66 +295,6 @@ public class PayMerchantsBankExample {
             return (Criteria) this;
         }
 
-        public Criteria andMuseridIsNull() {
-            addCriterion("muserid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridIsNotNull() {
-            addCriterion("muserid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridEqualTo(Long value) {
-            addCriterion("muserid =", value, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridNotEqualTo(Long value) {
-            addCriterion("muserid <>", value, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridGreaterThan(Long value) {
-            addCriterion("muserid >", value, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridGreaterThanOrEqualTo(Long value) {
-            addCriterion("muserid >=", value, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridLessThan(Long value) {
-            addCriterion("muserid <", value, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridLessThanOrEqualTo(Long value) {
-            addCriterion("muserid <=", value, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridIn(List<Long> values) {
-            addCriterion("muserid in", values, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridNotIn(List<Long> values) {
-            addCriterion("muserid not in", values, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridBetween(Long value1, Long value2) {
-            addCriterion("muserid between", value1, value2, "muserid");
-            return (Criteria) this;
-        }
-
-        public Criteria andMuseridNotBetween(Long value1, Long value2) {
-            addCriterion("muserid not between", value1, value2, "muserid");
-            return (Criteria) this;
-        }
-
         public Criteria andProvinceIsNull() {
             addCriterion("province is null");
             return (Criteria) this;
@@ -472,6 +412,66 @@ public class PayMerchantsBankExample {
 
         public Criteria andCityNotBetween(Long value1, Long value2) {
             addCriterion("city not between", value1, value2, "city");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidIsNull() {
+            addCriterion("bankid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidIsNotNull() {
+            addCriterion("bankid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidEqualTo(Long value) {
+            addCriterion("bankid =", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidNotEqualTo(Long value) {
+            addCriterion("bankid <>", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidGreaterThan(Long value) {
+            addCriterion("bankid >", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidGreaterThanOrEqualTo(Long value) {
+            addCriterion("bankid >=", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidLessThan(Long value) {
+            addCriterion("bankid <", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidLessThanOrEqualTo(Long value) {
+            addCriterion("bankid <=", value, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidIn(List<Long> values) {
+            addCriterion("bankid in", values, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidNotIn(List<Long> values) {
+            addCriterion("bankid not in", values, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidBetween(Long value1, Long value2) {
+            addCriterion("bankid between", value1, value2, "bankid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankidNotBetween(Long value1, Long value2) {
+            addCriterion("bankid not between", value1, value2, "bankid");
             return (Criteria) this;
         }
 
@@ -865,6 +865,206 @@ public class PayMerchantsBankExample {
             return (Criteria) this;
         }
 
+        public Criteria andMobileIsNull() {
+            addCriterion("mobile is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileIsNotNull() {
+            addCriterion("mobile is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileEqualTo(String value) {
+            addCriterion("mobile =", value, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileNotEqualTo(String value) {
+            addCriterion("mobile <>", value, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileGreaterThan(String value) {
+            addCriterion("mobile >", value, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileGreaterThanOrEqualTo(String value) {
+            addCriterion("mobile >=", value, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileLessThan(String value) {
+            addCriterion("mobile <", value, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileLessThanOrEqualTo(String value) {
+            addCriterion("mobile <=", value, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileLike(String value) {
+            addCriterion("mobile like", value, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileNotLike(String value) {
+            addCriterion("mobile not like", value, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileIn(List<String> values) {
+            addCriterion("mobile in", values, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileNotIn(List<String> values) {
+            addCriterion("mobile not in", values, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileBetween(String value1, String value2) {
+            addCriterion("mobile between", value1, value2, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileNotBetween(String value1, String value2) {
+            addCriterion("mobile not between", value1, value2, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeIsNull() {
+            addCriterion("chinacode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeIsNotNull() {
+            addCriterion("chinacode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeEqualTo(String value) {
+            addCriterion("chinacode =", value, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeNotEqualTo(String value) {
+            addCriterion("chinacode <>", value, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeGreaterThan(String value) {
+            addCriterion("chinacode >", value, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeGreaterThanOrEqualTo(String value) {
+            addCriterion("chinacode >=", value, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeLessThan(String value) {
+            addCriterion("chinacode <", value, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeLessThanOrEqualTo(String value) {
+            addCriterion("chinacode <=", value, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeLike(String value) {
+            addCriterion("chinacode like", value, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeNotLike(String value) {
+            addCriterion("chinacode not like", value, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeIn(List<String> values) {
+            addCriterion("chinacode in", values, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeNotIn(List<String> values) {
+            addCriterion("chinacode not in", values, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeBetween(String value1, String value2) {
+            addCriterion("chinacode between", value1, value2, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeNotBetween(String value1, String value2) {
+            addCriterion("chinacode not between", value1, value2, "chinacode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridIsNull() {
+            addCriterion("muserid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridIsNotNull() {
+            addCriterion("muserid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridEqualTo(Long value) {
+            addCriterion("muserid =", value, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridNotEqualTo(Long value) {
+            addCriterion("muserid <>", value, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridGreaterThan(Long value) {
+            addCriterion("muserid >", value, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridGreaterThanOrEqualTo(Long value) {
+            addCriterion("muserid >=", value, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridLessThan(Long value) {
+            addCriterion("muserid <", value, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridLessThanOrEqualTo(Long value) {
+            addCriterion("muserid <=", value, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridIn(List<Long> values) {
+            addCriterion("muserid in", values, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridNotIn(List<Long> values) {
+            addCriterion("muserid not in", values, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridBetween(Long value1, Long value2) {
+            addCriterion("muserid between", value1, value2, "muserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMuseridNotBetween(Long value1, Long value2) {
+            addCriterion("muserid not between", value1, value2, "muserid");
+            return (Criteria) this;
+        }
+
         public Criteria andBanknameLikeInsensitive(String value) {
             addCriterion("upper(bankname) like", value.toUpperCase(), "bankname");
             return (Criteria) this;
@@ -877,6 +1077,16 @@ public class PayMerchantsBankExample {
 
         public Criteria andBanksubnameLikeInsensitive(String value) {
             addCriterion("upper(banksubname) like", value.toUpperCase(), "banksubname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileLikeInsensitive(String value) {
+            addCriterion("upper(mobile) like", value.toUpperCase(), "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinacodeLikeInsensitive(String value) {
+            addCriterion("upper(chinacode) like", value.toUpperCase(), "chinacode");
             return (Criteria) this;
         }
     }

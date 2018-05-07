@@ -20,9 +20,9 @@
                     <th colspan="4">商户信息</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">商户名称：</td>
-                    <td>${merchantInfo.merchName}</td>
-                    <td style="width:25%;"></td><td style="width:25%;"></td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">商户名称：</td>
+                    <td width="30%">${merchantInfo.merchName}</td>
+                    <td width="15%"></td><td width="30%"></td>
                 </tr>
                 <tr>
                     <th colspan="4">已有支付类型</th>

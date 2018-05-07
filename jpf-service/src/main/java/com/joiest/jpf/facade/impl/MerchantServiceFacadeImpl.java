@@ -9,11 +9,14 @@ import com.joiest.jpf.common.po.PayMerchantsBankExample;
 import com.joiest.jpf.common.po.PayMerchantsExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
+import com.joiest.jpf.dao.repository.mapper.generate.PayBankMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsBankMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsMapper;
 import com.joiest.jpf.dto.*;
+import com.joiest.jpf.entity.BankInfo;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
+import com.joiest.jpf.facade.BankServiceFacade;
 import com.joiest.jpf.facade.MerchantServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -35,6 +38,9 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
 
     @Autowired
     private PayMerchantsBankMapper payMerchantsBankMapper;
+
+    @Autowired
+    private BankServiceFacade bankServiceFacade;
 
     @Override
     public GetMerchsResponse getMerchInfoList(GetMerchsRequest request) {
@@ -136,28 +142,58 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
 
+        //商户对公帐户信息  insert or update
         PayMerchantsBankExample example1 = new PayMerchantsBankExample();
         PayMerchantsBankExample.Criteria c1 = example1.createCriteria();
         c1.andMtsidEqualTo(payMerchants.getId());
         List<PayMerchantsBank> merchantsBanks = payMerchantsBankMapper.selectByExample(example1);
         if(merchantsBanks==null||merchantsBanks.isEmpty()){
-            logger.info("商户信息-对公账户不存在");
-            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
-        }
-        PayMerchantsBank merchantsBank = merchantsBanks.get(0);
+//            logger.info("商户信息-对公账户不存在");
+//            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户对公账户信息不存在");
+            //insert
+            //获取银行信息
+            BankInfo bankInfos = bankServiceFacade.getBankInfo(request.getBankid());
+            if ( bankInfos == null )
+            {
+                throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "银行信息不正确");
+            }
 
+            PayMerchantsBank merBankNew = new PayMerchantsBank();
+            merBankNew.setMtsid(request.getId());
+            //地址信息使用商户信息中的地址信息
+            merBankNew.setProvince(request.getProvince());
+            merBankNew.setCity(request.getCity());
+            merBankNew.setBankid(Long.parseLong(request.getBankid()));
+            merBankNew.setBankname(bankInfos.getPaybankname());
+            merBankNew.setBanktype(request.getBanktype());
+            merBankNew.setBankno(request.getBankno());
+            merBankNew.setBanksubname(request.getBanksubname());
+            Date date_curr = new Date();
+            merBankNew.setCreated(date_curr);
+            merBankNew.setUpdated(date_curr);
+            merBankNew.setMobile(payMerchants.getLinkphone());
+            merBankNew.setChinacode(bankInfos.getBankcode());
+            payMerchantsBankMapper.insert(merBankNew);
+        } else
+        {
+            //update
+            PayMerchantsBank merchantsBank = merchantsBanks.get(0);
+            PayMerchantsBank merchantsBankrecord = new PayMerchantsBank();
+            BeanCopier beanCopier1 = BeanCopier.create(ModifyMerchRequest.class, PayMerchantsBank.class, false);
+            beanCopier1.copy(request,merchantsBankrecord,null);
+            merchantsBankrecord.setUpdated(new Date());
+            merchantsBankrecord.setId(merchantsBank.getId());
+            payMerchantsBankMapper.updateByPrimaryKeySelective(merchantsBankrecord);
+        }
+
+        //更新商户信息
         PayMerchants merchantsRecord = new PayMerchants();
         BeanCopier beanCopier = BeanCopier.create(ModifyMerchRequest.class, PayMerchants.class, false);
         beanCopier.copy(request, merchantsRecord, null);
         merchantsRecord.setId(payMerchants.getId());
         payMerchantsMapper.updateByPrimaryKeySelective(merchantsRecord);
 
-        PayMerchantsBank merchantsBankrecord = new PayMerchantsBank();
-        BeanCopier beanCopier1 = BeanCopier.create(ModifyMerchRequest.class, PayMerchantsBank.class, false);
-        beanCopier1.copy(request,merchantsBankrecord,null);
-        merchantsBankrecord.setUpdated(new Date());
-        merchantsBankrecord.setId(merchantsBank.getId());
-        payMerchantsBankMapper.updateByPrimaryKeySelective(merchantsBankrecord);
+
         return new JpfResponseDto();
     }
 
