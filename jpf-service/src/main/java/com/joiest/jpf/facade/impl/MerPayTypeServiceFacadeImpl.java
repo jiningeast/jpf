@@ -94,14 +94,28 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         }
 
         //获取商户信息
-        PayMerchantsExample merchListExample = new PayMerchantsExample();
-        List<PayMerchants> merList = payMerchantsMapper.selectByExample(merchListExample);
         Map<Long, String> merchsMap = new HashMap<>();
-        if ( merList.size() > 0 )
+        if ( payMerchantsPaytypes.size() > 0 )
         {
-            for ( PayMerchants mer : merList )
+            List<Long> mtsids = new ArrayList<>();
+            for ( PayMerchantsPaytype paytype : payMerchantsPaytypes )
             {
-                merchsMap.put(mer.getId(), mer.getMerchName());
+                mtsids.add(paytype.getMtsid());
+            }
+            PayMerchantsExample merchListExample = new PayMerchantsExample();
+            PayMerchantsExample.Criteria merchsC = merchListExample.createCriteria();
+            merchsC.andIdIn(mtsids);
+            HashSet h = new HashSet(mtsids);
+            mtsids.clear();
+            mtsids.addAll(h);
+            System.out.println(mtsids);
+            List<PayMerchants> merList = payMerchantsMapper.selectByExample(merchListExample);
+            if ( merList.size() > 0 )
+            {
+                for ( PayMerchants mer : merList )
+                {
+                    merchsMap.put(mer.getId(), mer.getMerchName());
+                }
             }
         }
 
@@ -113,18 +127,16 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             //分期信息
             if ( StringUtils.isNotBlank(payMerchantsPaytype.getCatpath()) )
             {
-                String stage_tmp = new String();
+                StringBuilder sbf = new StringBuilder();
                 String bankcatid_str = payMerchantsPaytype.getBankcatid();
                 String[] bankcatid_arr = bankcatid_str.split("\\,");
                 for ( String x : bankcatid_arr )
                 {
-                    stage_tmp += mapStage.get(x) + "<br/>";
+                    sbf.append(mapStage.get(x) + "<br/>");
                 }
-                String stage_cn = stage_tmp.substring(0, stage_tmp.length()-1);
-                payMerchantsPaytype.setBankcatid(stage_tmp);
+                String stage_cn = sbf.substring(0, sbf.length()-1);
+                payMerchantsPaytype.setBankcatid(stage_cn);
             }
-
-
 
             MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
             BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
