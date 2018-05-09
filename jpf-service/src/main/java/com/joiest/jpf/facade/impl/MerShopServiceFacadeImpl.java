@@ -104,6 +104,7 @@ public class MerShopServiceFacadeImpl implements MerShopServiceFacade {
         PayMerchantsShopExample.Criteria shopC = shopExample.createCriteria();
         shopC.andMtsidEqualTo(mtsid);
         shopC.andPidEqualTo(0L);
+        shopC.andIsDelEqualTo(0);
         List<PayMerchantsShop> shopList = payMerchantsShopMapper.selectByExample(shopExample);
         if ( shopList == null || shopList.isEmpty() )
         {
