@@ -47,6 +47,13 @@ public class MerShopRequest {
     @Min(10)
     private long rows;
 
+    private String path;
+
+    /**
+     * 是否删除
+     */
+    private Integer isDel;
+
     public Long getId() {
         return id;
     }
@@ -109,5 +116,21 @@ public class MerShopRequest {
 
     public void setRows(long rows) {
         this.rows = rows;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Integer getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Integer isDel) {
+        this.isDel = isDel;
     }
 }

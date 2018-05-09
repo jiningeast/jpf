@@ -112,14 +112,15 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         if ( list.size() > 0 && payTypeList.size() > 0 ){
             for(PayMerchantsProduct product:list){
-                String zftype_tmp = new String();
-
+//                String zftype_tmp = new String();
+                StringBuilder sbf = new StringBuilder();
                 String str = product.getZftype();
                 String[] strArr = str.split("\\,");
                 for (String x : strArr){
-                    zftype_tmp += map.get(Integer.parseInt(x))+"<br/>";
+//                    zftype_tmp += map.get(Integer.parseInt(x))+"<br/>";
+                    sbf.append(map.get(Integer.parseInt(x)) + "<br/>");
                 }
-                String zftype_cn = zftype_tmp.substring(0,zftype_tmp.length()-1);
+                String zftype_cn = sbf.substring(0,sbf.length()-1);
                 product.setZftype(zftype_cn);
             }
         }
@@ -223,12 +224,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         product.setPmoney(request.getPmoney());
         product.setStatus(request.getStatus());
         product.setUpdated(new Date());
-        String zftype_tmp = new String();
         String zftype = new String();
+        StringBuilder sbf = new StringBuilder();
         for (int i=0; i < request.getZftype().size(); i++){
-            zftype_tmp += request.getZftype().get(i) + ',';
+            sbf.append(request.getZftype().get(i) + ',');
         }
-        zftype = zftype_tmp.substring(0,zftype_tmp.length()-1);
+        zftype = sbf.substring(0,sbf.length()-1);
         product.setZftype(zftype);
         payMerchantsProductMapper.updateByExampleSelective(product,example);
         return new JpfResponseDto();

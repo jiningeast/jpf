@@ -7,10 +7,8 @@ import com.joiest.jpf.dto.GetMerchsResponse;
 import com.joiest.jpf.dto.ModifyMerchRequest;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
-import com.joiest.jpf.facade.BankServiceFacade;
-import com.joiest.jpf.facade.MerTypeServiceFacade;
-import com.joiest.jpf.facade.MerchantServiceFacade;
-import com.joiest.jpf.facade.PcaServiceFacade;
+import com.joiest.jpf.entity.MerchantShopInfo;
+import com.joiest.jpf.facade.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,9 @@ public class MerchantController {
 
     @Autowired
     private MerchantServiceFacade merchantServiceFacade;
+
+    @Autowired
+    private MerShopServiceFacade merShopServiceFacade;
 
     @RequestMapping("/index")
     public ModelAndView index() {
@@ -51,6 +52,17 @@ public class MerchantController {
         MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(id));
         //商户对公帐户信息
         MerchantBankInfo merchantBankInfo = merchantServiceFacade.getMerchBank(Long.valueOf(id));
+        //商户的商店信息
+        MerchantShopInfo merShopInfo = merShopServiceFacade.getOneMerShopInfo(Long.parseLong(id));
+        byte isHeadShop;
+        if ( merShopInfo == null )
+        {
+            isHeadShop = 0;
+        } else
+        {
+            isHeadShop = 1;
+        }
+        modelMap.put("isHeadShop", isHeadShop);
         modelMap.addAttribute("merchantInfo", merchantInfo);
         modelMap.addAttribute("merchantBankInfo", merchantBankInfo);
         return new ModelAndView("merchant/merchantModify",modelMap);

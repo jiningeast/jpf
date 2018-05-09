@@ -115,4 +115,31 @@ public class MerShopServiceFacadeImpl implements MerShopServiceFacade {
         }
         return new JpfResponseDto();
     }
+
+    /**
+     * 获取单个商户的门店信息
+     */
+    public MerchantShopInfo getOneMerShopInfo(Long mtsid)
+    {
+        if ( mtsid == null )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "商户ID不能为空");
+        }
+        PayMerchantsShopExample shopExample = new PayMerchantsShopExample();
+        PayMerchantsShopExample.Criteria shopC = shopExample.createCriteria();
+        shopC.andMtsidEqualTo(mtsid);
+        shopC.andPidEqualTo(0L);
+        shopC.andIsDelEqualTo(0);
+        List<PayMerchantsShop> shopList = payMerchantsShopMapper.selectByExample(shopExample);
+        if ( shopList == null || shopList.isEmpty() )
+        {
+            return null;
+        }
+        PayMerchantsShop shop = shopList.get(0);
+        MerchantShopInfo shopInfo_Entity = new MerchantShopInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayMerchantsShop.class, MerchantShopInfo.class , false);
+        beanCopier.copy(shop, shopInfo_Entity, null);
+        return shopInfo_Entity;
+    }
+
 }

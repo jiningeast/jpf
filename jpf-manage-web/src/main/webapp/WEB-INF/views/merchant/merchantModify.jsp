@@ -91,9 +91,16 @@
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">用户Id：</td>
-                        <td colspan="3">
+                        <td>
                             ${merchantInfo.muserid}
-                            <%--<input id="muserid_m" name="muserid" type="text" style="width:220px" class="easyui-textbox"/>--%>
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">是否为总店：</td>
+                        <td>
+                            <select id="isHeadShop" name="isHeadShop" class="easyui-combobox " style="width:120px;">
+                                <option value=""></option>
+                                <option value="1">是</option>
+                                <option value="0">否</option>
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -262,6 +269,7 @@
         $('#banktype_m').combobox('select', '${merchantBankInfo.banktype}');
         $('#bankProvince_m').combobox('select', '${merchantBankInfo.province}');
         $('#bankCity_m').combobox('select', '${merchantBankInfo.city}');
+        $('#isHeadShop').combobox('select', '${isHeadShop}');
     }
 
     $(function () {

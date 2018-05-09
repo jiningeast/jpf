@@ -3,20 +3,19 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayMerchants;
-import com.joiest.jpf.common.po.PayMerchantsBank;
-import com.joiest.jpf.common.po.PayMerchantsBankExample;
-import com.joiest.jpf.common.po.PayMerchantsExample;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayBankMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsBankMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsShopMapper;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.BankInfo;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
 import com.joiest.jpf.facade.BankServiceFacade;
+import com.joiest.jpf.facade.MerShopServiceFacade;
 import com.joiest.jpf.facade.MerchantServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -41,6 +40,9 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
 
     @Autowired
     private BankServiceFacade bankServiceFacade;
+
+    @Autowired
+    private PayMerchantsShopMapper payMerchantsShopMapper;
 
     @Override
     public GetMerchsResponse getMerchInfoList(GetMerchsRequest request) {
@@ -147,17 +149,17 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         PayMerchantsBankExample.Criteria c1 = example1.createCriteria();
         c1.andMtsidEqualTo(payMerchants.getId());
         List<PayMerchantsBank> merchantsBanks = payMerchantsBankMapper.selectByExample(example1);
-        if(merchantsBanks==null||merchantsBanks.isEmpty()){
+        //获取银行信息
+        BankInfo bankInfos = bankServiceFacade.getBankInfo(request.getBankid());
+        if ( bankInfos == null )
+        {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "银行信息不正确");
+        }
+
+        if( merchantsBanks == null || merchantsBanks.isEmpty() ){
 //            logger.info("商户信息-对公账户不存在");
 //            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户对公账户信息不存在");
             //insert
-            //获取银行信息
-            BankInfo bankInfos = bankServiceFacade.getBankInfo(request.getBankid());
-            if ( bankInfos == null )
-            {
-                throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "银行信息不正确");
-            }
-
             PayMerchantsBank merBankNew = new PayMerchantsBank();
             merBankNew.setMtsid(request.getId());
             merBankNew.setProvince(request.getBankProvince());
@@ -170,7 +172,7 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
             Date date_curr = new Date();
             merBankNew.setCreated(date_curr);
             merBankNew.setUpdated(date_curr);
-            merBankNew.setMobile(payMerchants.getLinkphone());
+            merBankNew.setMobile(request.getMobile());
             merBankNew.setChinacode(bankInfos.getBankcode());
             payMerchantsBankMapper.insert(merBankNew);
         } else
@@ -178,13 +180,50 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
             //update
             PayMerchantsBank merchantsBank = merchantsBanks.get(0);
             PayMerchantsBank merchantsBankrecord = new PayMerchantsBank();
-            BeanCopier beanCopier1 = BeanCopier.create(ModifyMerchRequest.class, PayMerchantsBank.class, false);
-            beanCopier1.copy(request,merchantsBankrecord,null);
-            merchantsBankrecord.setUpdated(new Date());
             merchantsBankrecord.setId(merchantsBank.getId());
+            merchantsBankrecord.setMtsid(request.getId());
+            merchantsBankrecord.setProvince(request.getBankProvince());
+            merchantsBankrecord.setCity(request.getBankCity());
+            merchantsBankrecord.setBankid(Long.parseLong(request.getBankid()));
+            merchantsBankrecord.setBankname(bankInfos.getPaybankname());
+            merchantsBankrecord.setBanktype(request.getBanktype());
+            merchantsBankrecord.setBankno(request.getBankno());
+            merchantsBankrecord.setBanksubname(request.getBanksubname());
+            merchantsBankrecord.setUpdated(new Date());
+            merchantsBankrecord.setMobile(request.getLinkphone());
+            merchantsBankrecord.setUpdated(new Date());
+            merchantsBankrecord.setChinacode(bankInfos.getBankcode());
             payMerchantsBankMapper.updateByPrimaryKeySelective(merchantsBankrecord);
         }
 
+        //添加门店信息
+        byte isHeadShop = 1;
+        if ( request.getIsHeadShop().equals(isHeadShop) )
+        {
+            //该商户的门店信息是否存在
+            Long mtsid = request.getId();
+            Long pid_level_0 = 0L;
+            String path = request.getId() + ":";
+            Integer isDel = 0;
+            PayMerchantsShopExample shopE = new PayMerchantsShopExample();
+            PayMerchantsShopExample.Criteria shopC = shopE.createCriteria();
+            shopC.andMtsidEqualTo(mtsid);
+            shopC.andIsDelEqualTo(isDel);
+            List<PayMerchantsShop> shopList = payMerchantsShopMapper.selectByExample(shopE);
+            if ( shopList == null || shopList.isEmpty() )
+            {
+                this.addShop(mtsid, pid_level_0, path);
+            } else
+            {
+                //之前为分店，删除&重新插入 ; 之前总店，不操作
+                PayMerchantsShop shopOne = shopList.get(0);
+                if ( !shopOne.getPid().equals(pid_level_0) )
+                {
+                    payMerchantsShopMapper.deleteByPrimaryKey(shopOne.getId());
+                    this.addShop(mtsid,pid_level_0, path);
+                }
+            }
+        }
         //更新商户信息
         PayMerchants merchantsRecord = new PayMerchants();
         BeanCopier beanCopier = BeanCopier.create(ModifyMerchRequest.class, PayMerchants.class, false);
@@ -192,8 +231,23 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         merchantsRecord.setId(payMerchants.getId());
         payMerchantsMapper.updateByPrimaryKeySelective(merchantsRecord);
 
-
         return new JpfResponseDto();
+    }
+
+    //添加总店信息
+    private int addShop(Long mtsid, Long pid, String path)
+    {
+        //添加pay_merchant_shop 总店信息
+        PayMerchantsShop shop = new PayMerchantsShop();
+        shop.setMtsid(mtsid);
+        shop.setPid(pid);
+        shop.setPath(path);
+        shop.setIsDel(0);
+        Date date = new Date();
+        shop.setCreated(date);
+        shop.setUpdated(date);
+        int res = payMerchantsShopMapper.insertSelective(shop);
+        return res;
     }
 
     @Override

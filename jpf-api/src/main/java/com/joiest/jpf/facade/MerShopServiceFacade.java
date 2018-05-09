@@ -3,6 +3,7 @@ package com.joiest.jpf.facade;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.dto.MerShopRequest;
 import com.joiest.jpf.dto.MerShopResponse;
+import com.joiest.jpf.entity.MerchantShopInfo;
 
 public interface MerShopServiceFacade {
 
@@ -11,4 +12,10 @@ public interface MerShopServiceFacade {
     public MerShopResponse getMerShops(MerShopRequest merShopRequest);
 
     public JpfResponseDto delMerShop(Long id);
+
+    /**
+     * 获取单个商户的门店信息
+     */
+    public MerchantShopInfo getOneMerShopInfo(Long mtsid);
+
 }
