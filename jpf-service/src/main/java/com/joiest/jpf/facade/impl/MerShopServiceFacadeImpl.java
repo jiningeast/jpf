@@ -1,5 +1,8 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayMerchants;
 import com.joiest.jpf.common.po.PayMerchantsShop;
 import com.joiest.jpf.common.po.PayMerchantsShopExample;
@@ -87,4 +90,30 @@ public class MerShopServiceFacadeImpl implements MerShopServiceFacade {
 
         return merShopResponse;
     }
+
+    /**
+     * 获取单个商户的门店信息
+     */
+    public MerchantShopInfo getOneMerShopInfo(Long mtsid)
+    {
+        if ( mtsid == null )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "商户ID不能为空");
+        }
+        PayMerchantsShopExample shopExample = new PayMerchantsShopExample();
+        PayMerchantsShopExample.Criteria shopC = shopExample.createCriteria();
+        shopC.andMtsidEqualTo(mtsid);
+        shopC.andPidEqualTo(0L);
+        List<PayMerchantsShop> shopList = payMerchantsShopMapper.selectByExample(shopExample);
+        if ( shopList == null || shopList.isEmpty() )
+        {
+            return null;
+        }
+        PayMerchantsShop shop = shopList.get(0);
+        MerchantShopInfo shopInfo_Entity = new MerchantShopInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayMerchantsShop.class, MerchantShopInfo.class , false);
+        beanCopier.copy(shop, shopInfo_Entity, null);
+        return shopInfo_Entity;
+    }
+
 }

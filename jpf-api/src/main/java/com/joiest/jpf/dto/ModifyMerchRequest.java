@@ -179,6 +179,12 @@ public class ModifyMerchRequest {
      */
     private Long muserid;
 
+    /**
+     * 是否为总店：如果为总店，添加pay_merchants_shop信息
+     * 1:总店 0：分店
+     */
+    private Byte isHeadShop;
+
     public Long getId() {
         return id;
     }
@@ -417,5 +423,13 @@ public class ModifyMerchRequest {
 
     public void setBankid(String bankid) {
         this.bankid = bankid;
+    }
+
+    public Byte getIsHeadShop() {
+        return isHeadShop;
+    }
+
+    public void setIsHeadShop(Byte isHeadShop) {
+        this.isHeadShop = isHeadShop;
     }
 }

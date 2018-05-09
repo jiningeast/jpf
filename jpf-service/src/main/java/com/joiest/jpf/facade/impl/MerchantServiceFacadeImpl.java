@@ -3,20 +3,19 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayMerchants;
-import com.joiest.jpf.common.po.PayMerchantsBank;
-import com.joiest.jpf.common.po.PayMerchantsBankExample;
-import com.joiest.jpf.common.po.PayMerchantsExample;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayBankMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsBankMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsShopMapper;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.BankInfo;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
 import com.joiest.jpf.facade.BankServiceFacade;
+import com.joiest.jpf.facade.MerShopServiceFacade;
 import com.joiest.jpf.facade.MerchantServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -41,6 +40,9 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
 
     @Autowired
     private BankServiceFacade bankServiceFacade;
+
+    @Autowired
+    private PayMerchantsShopMapper payMerchantsShopMapper;
 
     @Override
     public GetMerchsResponse getMerchInfoList(GetMerchsRequest request) {
@@ -184,6 +186,35 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
             merchantsBankrecord.setId(merchantsBank.getId());
             payMerchantsBankMapper.updateByPrimaryKeySelective(merchantsBankrecord);
         }
+        //添加门店信息
+        byte isHeadShop = 1;
+        if ( request.getIsHeadShop().equals(isHeadShop) )
+        {
+            //该商户的总店信息是否存在
+            Long mtsid = request.getId();
+            Long pid = 0L;
+            String path = request.getId() + ":";
+            PayMerchantsShopExample shopE = new PayMerchantsShopExample();
+            PayMerchantsShopExample.Criteria shopC = shopE.createCriteria();
+            shopC.andMtsidEqualTo(mtsid);
+            shopC.andPidEqualTo(pid);
+            List<PayMerchantsShop> shopList = payMerchantsShopMapper.selectByExample(shopE);
+            if ( shopList == null || shopList.isEmpty() )
+            {
+                //添加pay_merchant_shop 总店信息
+                PayMerchantsShop shop = new PayMerchantsShop();
+                shop.setMtsid(mtsid);
+                shop.setPid(pid);
+                shop.setPath(path);
+                shop.setIsDel(0);
+                Date date = new Date();
+                shop.setCreated(date);
+                shop.setUpdated(date);
+                int res = payMerchantsShopMapper.insertSelective(shop);
+                System.out.println(res);
+                System.out.println(res);
+            }
+        }
 
         //更新商户信息
         PayMerchants merchantsRecord = new PayMerchants();
@@ -191,7 +222,6 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         beanCopier.copy(request, merchantsRecord, null);
         merchantsRecord.setId(payMerchants.getId());
         payMerchantsMapper.updateByPrimaryKeySelective(merchantsRecord);
-
 
         return new JpfResponseDto();
     }
