@@ -17,10 +17,13 @@ import com.joiest.jpf.facade.TdorderServiceFacade;
 import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigInteger;
 
 import java.util.*;
 
+@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
 public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
 
     @Autowired

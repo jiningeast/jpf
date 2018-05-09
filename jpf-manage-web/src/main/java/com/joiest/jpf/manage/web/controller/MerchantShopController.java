@@ -1,5 +1,6 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.dto.MerShopRequest;
 import com.joiest.jpf.dto.MerShopResponse;
 import com.joiest.jpf.facade.MerShopServiceFacade;
@@ -33,5 +34,11 @@ public class MerchantShopController {
         map.put("rows", merShopResponse.getList());
 
         return map;
+    }
+
+    @RequestMapping("/delMerShop")
+    @ResponseBody
+    public JpfResponseDto del(Long id ){
+        return merShopServiceFacade.delMerShop( id );
     }
 }

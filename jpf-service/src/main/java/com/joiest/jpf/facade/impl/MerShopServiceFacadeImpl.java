@@ -1,5 +1,8 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayMerchants;
 import com.joiest.jpf.common.po.PayMerchantsShop;
 import com.joiest.jpf.common.po.PayMerchantsShopExample;
@@ -14,6 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,12 +75,22 @@ public class MerShopServiceFacadeImpl implements MerShopServiceFacade {
             // 根据商户ID查询商户信息
             PayMerchants payMerchants = new PayMerchants();
             payMerchants = payMerchantsMapper.selectByPrimaryKey(merchantShopInfo.getMtsid());
-            merchantShopInfo.setMtsName(payMerchants.getMerchName());
+            if ( StringUtils.isNotBlank( payMerchants.getMerchName() ) ){
+                merchantShopInfo.setMtsName(payMerchants.getMerchName());
+            }else
+            {
+                merchantShopInfo.setMtsName("");
+            }
+
 
             // 根据父商户ID查询商户信息
             if ( merchantShopInfo.getPid() > 0 ){
                 payMerchants = payMerchantsMapper.selectByPrimaryKey(merchantShopInfo.getPid());
-                merchantShopInfo.setParMtsName(payMerchants.getMerchName());
+                if ( StringUtils.isNotBlank(payMerchants.getMerchName()) ){
+                    merchantShopInfo.setParMtsName(payMerchants.getMerchName());
+                }else{
+                    merchantShopInfo.setParMtsName("");
+                }
             }
 
             infos.add(merchantShopInfo);
@@ -86,5 +101,18 @@ public class MerShopServiceFacadeImpl implements MerShopServiceFacade {
         merShopResponse.setCount(payMerchantsShopMapper.countByExample(e));
 
         return merShopResponse;
+    }
+
+    @Override
+    public JpfResponseDto delMerShop(@Min(1) Long id){
+        PayMerchantsShop payMerchantsShop = new PayMerchantsShop();
+        payMerchantsShop.setId(id);
+        payMerchantsShop.setIsDel(1);
+
+        int res = payMerchantsShopMapper.updateByPrimaryKeySelective(payMerchantsShop);
+        if ( res <= 0 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "删除失败");
+        }
+        return new JpfResponseDto();
     }
 }

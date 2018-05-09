@@ -14,8 +14,33 @@
     </style>
     <script>
         $(function () {
+            var toolbar = [
+                {
+                    text:'删除',
+                    iconCls:'icon-remove',
+                    handler:function () {
+                        var rows = $("#dg").datagrid('getSelections');
+                        if ( rows.length != 1 ) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return false;
+                        }
+                        var id = rows[0].id;
+                        $.post("delMerShop",{id:id},function (msg) {
+                            if (msg.retCode != '0000') {
+                                $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
+                                return false;
+                            } else {
+                                $.messager.alert('消息提示','操作成功!','info');
+                                $('#dg').datagrid('reload');
+                            }
+                        })
+                    }
+                }
+            ];
+
             $("#dg").datagrid({
                 title:"门店管理",
+                toolbar:toolbar,
                 url:'list',
                 pagination:true,
                 singleSelect:true,

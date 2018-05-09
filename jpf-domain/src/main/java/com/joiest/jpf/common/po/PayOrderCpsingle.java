@@ -51,6 +51,11 @@ public class PayOrderCpsingle implements Serializable {
      */
     private Date addtime;
 
+    /**
+     * 银联退款信息
+     */
+    private String chinaContent;
+
     private static final long serialVersionUID = 1L;
 
     public BigInteger getId() {
@@ -125,6 +130,14 @@ public class PayOrderCpsingle implements Serializable {
         this.addtime = addtime;
     }
 
+    public String getChinaContent() {
+        return chinaContent;
+    }
+
+    public void setChinaContent(String chinaContent) {
+        this.chinaContent = chinaContent == null ? null : chinaContent.trim();
+    }
+
     /**
      *
      */
@@ -143,6 +156,7 @@ public class PayOrderCpsingle implements Serializable {
         sb.append(", singlestatus=").append(singlestatus);
         sb.append(", operateContent=").append(operateContent);
         sb.append(", addtime=").append(addtime);
+        sb.append(", chinaContent=").append(chinaContent);
         sb.append("]");
         return sb.toString();
     }
@@ -171,7 +185,8 @@ public class PayOrderCpsingle implements Serializable {
             && (this.getSingletype() == null ? other.getSingletype() == null : this.getSingletype().equals(other.getSingletype()))
             && (this.getSinglestatus() == null ? other.getSinglestatus() == null : this.getSinglestatus().equals(other.getSinglestatus()))
             && (this.getOperateContent() == null ? other.getOperateContent() == null : this.getOperateContent().equals(other.getOperateContent()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+            && (this.getChinaContent() == null ? other.getChinaContent() == null : this.getChinaContent().equals(other.getChinaContent()));
     }
 
     /**
@@ -190,6 +205,7 @@ public class PayOrderCpsingle implements Serializable {
         result = prime * result + ((getSinglestatus() == null) ? 0 : getSinglestatus().hashCode());
         result = prime * result + ((getOperateContent() == null) ? 0 : getOperateContent().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
+        result = prime * result + ((getChinaContent() == null) ? 0 : getChinaContent().hashCode());
         return result;
     }
 }

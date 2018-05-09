@@ -727,8 +727,83 @@ public class PayOrderCpsingleExample {
             return (Criteria) this;
         }
 
+        public Criteria andChinaContentIsNull() {
+            addCriterion("china_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentIsNotNull() {
+            addCriterion("china_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentEqualTo(String value) {
+            addCriterion("china_content =", value, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentNotEqualTo(String value) {
+            addCriterion("china_content <>", value, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentGreaterThan(String value) {
+            addCriterion("china_content >", value, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentGreaterThanOrEqualTo(String value) {
+            addCriterion("china_content >=", value, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentLessThan(String value) {
+            addCriterion("china_content <", value, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentLessThanOrEqualTo(String value) {
+            addCriterion("china_content <=", value, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentLike(String value) {
+            addCriterion("china_content like", value, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentNotLike(String value) {
+            addCriterion("china_content not like", value, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentIn(List<String> values) {
+            addCriterion("china_content in", values, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentNotIn(List<String> values) {
+            addCriterion("china_content not in", values, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentBetween(String value1, String value2) {
+            addCriterion("china_content between", value1, value2, "chinaContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentNotBetween(String value1, String value2) {
+            addCriterion("china_content not between", value1, value2, "chinaContent");
+            return (Criteria) this;
+        }
+
         public Criteria andOperateContentLikeInsensitive(String value) {
             addCriterion("upper(operate_content) like", value.toUpperCase(), "operateContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andChinaContentLikeInsensitive(String value) {
+            addCriterion("upper(china_content) like", value.toUpperCase(), "chinaContent");
             return (Criteria) this;
         }
     }

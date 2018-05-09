@@ -91,6 +91,7 @@
                                 return '<span style="color:red">退单退款失败</span>';
                             }
                         }},
+                    {field:'chinaContent', title:'银联返回内容', width:'35%'},
                     {field:'addtime', title:'添加时间', width:'13%', formatter:formatDateStr}
                 ]]
             })

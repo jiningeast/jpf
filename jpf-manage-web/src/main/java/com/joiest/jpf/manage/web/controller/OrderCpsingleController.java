@@ -8,6 +8,7 @@ import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.dto.OrderCpsingleRequest;
 import com.joiest.jpf.dto.OrderCpsingleResponse;
+import com.joiest.jpf.dto.UnionPayRefundRequest;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.OrderCpsingleServiceFacade;
 import com.joiest.jpf.facade.SystemlogServiceFacade;
@@ -107,5 +108,16 @@ public class OrderCpsingleController {
         orderCpsingleServiceFacade.checkNo(orderCpsingleRequest, userInfo, IP);
 
         return new JpfResponseDto();
+    }
+
+    @RequestMapping("/unionPayRefundReturn")
+    @ResponseBody
+    public void unionPayRefundReturn(UnionPayRefundRequest request, HttpServletRequest httpRequest){
+        HttpSession session = httpRequest.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+
+        // 获取IP
+        String IP = ServletUtils.getIpAddr(httpRequest);
+        orderCpsingleServiceFacade.unionPayRefund(request, userInfo, IP);
     }
 }

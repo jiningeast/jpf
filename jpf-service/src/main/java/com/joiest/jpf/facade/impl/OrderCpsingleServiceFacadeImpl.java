@@ -8,19 +8,23 @@ import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderCpsingleMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PaySystemlogMapper;
 import com.joiest.jpf.dto.OrderCpsingleRequest;
 import com.joiest.jpf.dto.OrderCpsingleResponse;
+import com.joiest.jpf.dto.UnionPayRefundRequest;
 import com.joiest.jpf.entity.OrderCpsingleInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.OrderCpsingleServiceFacade;
 import com.joiest.jpf.facade.SystemlogServiceFacade;
 import com.mysql.jdbc.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
 public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacade {
 
     @Autowired
@@ -30,10 +34,9 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     private PayOrderCpsingleMapper payOrderCpsingleMapper;
 
     @Autowired
-    private PaySystemlogMapper paySystemlogMapper;
-
-    @Autowired
     private SystemlogServiceFacade systemlogServiceFacade;
+
+    private static final Logger logger = LogManager.getLogger(OrderCpsingleServiceFacadeImpl.class);
 
     @Override
     public int getCpsCount(){
@@ -79,6 +82,11 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         }
 
         List<PayOrderCpsingleExample.Criterion> cList = c.getCriteria();    // 获取查询参数
+        StringBuilder sb = new StringBuilder();
+        for (PayOrderCpsingleExample.Criterion criterion:cList ){
+            sb.append(criterion.getCondition()+criterion.getValue()+',');
+        }
+
 
         List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
 
@@ -162,32 +170,13 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         newRec.setOperateContent(newJson);
         newRec.setSinglestatus((byte)1);
 
-        int res_orderCpsingle = payOrderCpsingleMapper.updateByPrimaryKeySelective(newRec);
+        payOrderCpsingleMapper.updateByPrimaryKeySelective(newRec);
 
         // 插入日志记录
         systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET operate_content="+newJson+",singlestatus=1 WHERE id="+orderCpsingleRequest.getId());
 
-        if ( res_orderCpsingle == 1 ){
-            // 更新订单表order->singlestatus字段为5：退款处理完成
-            PayOrderExample payOrderExample = new PayOrderExample();
-            PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
-            payOrderC.andOrderidEqualTo(orderCpsingleRequest.getOrderid());
-
-            PayOrder payOrder = new PayOrder();
-            payOrder.setSinglestatus((byte)5);
-            int res_order = payOrderMapper.updateByExampleSelective(payOrder, payOrderExample);
-
-            // 插入日志记录
-            systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order","更新数据","UPDATE `pay_order` SET singlestatus=5 WHERE orderid="+orderCpsingleRequest.getOrderid());
-
-            if ( res_order == 1 ){
-                return new JpfResponseDto();
-            }else{
-                throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新订单表失败，请联系管理员");
-            }
-        }else{
-            throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新退单记录表失败，请联系管理员");
-        }
+        // 财务处理完毕，等待银联退款
+        return new JpfResponseDto();
     }
 
     @Override
@@ -274,5 +263,49 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         posRequest.put("refundmoney", orderList.get(0).getOrderprice());
 
         return posRequest;
+    }
+
+    @Override
+    public void unionPayRefund(UnionPayRefundRequest request, UserInfo userInfo, String IP){
+        logger.info("======================================接收银联返回信息 start=======================================================");
+        // 将银联返回信息更新到此订单的china_content字段
+        PayOrderCpsingleExample e = new PayOrderCpsingleExample();
+        PayOrderCpsingleExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(request.getOrderid());
+
+        PayOrderCpsingle payOrderCpsingle = new PayOrderCpsingle();
+        payOrderCpsingle.setChinaContent(request.getJson());
+
+        int res_orderCpsingle = payOrderCpsingleMapper.updateByExampleSelective(payOrderCpsingle,e);
+
+        // 如果返回退款成功
+        if ( request.getCode().equals("10000") ){
+
+            if ( res_orderCpsingle == 1 ){
+                // 更新订单表order->singlestatus字段为5：退款处理完成
+                PayOrderExample payOrderExample = new PayOrderExample();
+                PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
+                payOrderC.andOrderidEqualTo(request.getOrderid());
+
+                PayOrder payOrder = new PayOrder();
+                payOrder.setSinglestatus((byte)5);
+                int res_order = payOrderMapper.updateByExampleSelective(payOrder, payOrderExample);
+
+                // 插入日志记录
+                systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order","更新数据","UPDATE `pay_order` SET singlestatus=5 WHERE orderid="+request.getOrderid());
+
+                if ( res_order == 1 ){
+                    // do nothing.
+                }else{
+                    throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新订单表失败，请联系管理员");
+                }
+            }else{
+                throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新退单记录表失败，请联系管理员");
+            }
+        }else if ( request.getCode().equals("10008") ){
+            // 如果返回退款失败
+
+        }
+        logger.info("======================================接收银联返回信息 end=======================================================");
     }
 }
