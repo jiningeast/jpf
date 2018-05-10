@@ -47,4 +47,8 @@ public class UnionPayRefundRequest {
     public void setJson(String json) {
         this.json = json;
     }
+
+    public String toString(){
+        return "code="+this.code+",info="+this.info+",orderid="+this.orderid+",json="+this.json;
+    }
 }

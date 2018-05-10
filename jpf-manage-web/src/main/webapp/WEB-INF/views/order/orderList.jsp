@@ -75,11 +75,15 @@
                             }else if ( value == 3 ){
                                 return '用户撤销退款';
                             }else if ( value == 4 ){
-                                return '<span style="color: green">待审核</span>';
+                                return '<span style="color: green">运营已审核,待财务审核</span>';
                             }else if ( value == 5 ){
-                                return '<span style="color: blue">退单处理完毕</span>';
+                                return '<span style="color: green">财务已审核，银联退款中</span>';
                             }else if ( value == 6 ){
-                                return '<span style="color: green">审核驳回</span>';
+                                return '<span style="color: red">审核驳回</span>';
+                            }else if ( value == 7 ){
+                                return '<span style="color: green">银联退款成功</span>';
+                            }else if ( value == 8 ){
+                                return '<span style="color: red">银联退款失败</span>';
                             }
                         }},
                     {field:'paytime',title:'支付时间',width:'9%',formatter: formatDateStr},

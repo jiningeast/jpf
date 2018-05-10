@@ -86,9 +86,13 @@
                             if ( value == 0 ){
                                 return '待审核';
                             }else if ( value == 1 ){
-                                return '<span style="color:blue">退单退款成功</span>';
+                                return '<span style="color:blue">审核成功，等待银联退款</span>';
                             }else if ( value == 2 ){
-                                return '<span style="color:red">退单退款失败</span>';
+                                return '<span style="color:red">审核驳回</span>';
+                            }else if ( value == 3 ){
+                                return '<span style="color:green">银联退款成功</span>';
+                            }else if ( value == 4 ){
+                                return '<span style="color:red">银联退款失败</span>';
                             }
                         }},
                     {field:'chinaContent', title:'银联返回内容', width:'35%'},

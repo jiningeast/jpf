@@ -6,6 +6,7 @@ import com.joiest.jpf.dao.repository.mapper.generate.PaySystemlogMapper;
 import com.joiest.jpf.entity.SystemlogInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.SystemlogServiceFacade;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
@@ -65,13 +66,26 @@ public class SystemlogServiceFacadeImpl implements SystemlogServiceFacade {
 
         PaySystemlog paySystemlog = new PaySystemlog();
         paySystemlog.setLogtype(logtype);
-        paySystemlog.setOperatorUid(userInfo.getId());
-        paySystemlog.setOperatorName(userInfo.getUserName());
+        if ( userInfo.getId() != null && userInfo.getId() > 0 ){
+            paySystemlog.setOperatorUid(userInfo.getId());
+        }else{
+            paySystemlog.setOperatorUid(0);
+        }
+        if (StringUtils.isNotBlank(userInfo.getUserName()) ){
+            paySystemlog.setOperatorName(userInfo.getUserName());
+        }else{
+            paySystemlog.setOperatorName("");
+        }
         paySystemlog.setIp(ip);
         paySystemlog.setIp1(ip1);
         paySystemlog.setClients(clients);
         paySystemlog.setTablename(tablename);
-        String recordStr = Integer.toString(userInfo.getId());
+        String recordStr;
+        if ( userInfo.getId() != null ){
+            recordStr = userInfo.getId().toString();
+        }else{
+            recordStr = "0";
+        }
         paySystemlog.setRecord(recordStr);
         paySystemlog.setAction(action);
         paySystemlog.setContent(content);

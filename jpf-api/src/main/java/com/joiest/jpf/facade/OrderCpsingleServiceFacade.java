@@ -23,5 +23,5 @@ public interface OrderCpsingleServiceFacade {
 
     public Map<String, Object> getPosRequest(String orderid);
 
-    public void unionPayRefund(UnionPayRefundRequest request, UserInfo userInfo, String IP);
+    public void unionPayRefund(UnionPayRefundRequest request, String IP);
 }

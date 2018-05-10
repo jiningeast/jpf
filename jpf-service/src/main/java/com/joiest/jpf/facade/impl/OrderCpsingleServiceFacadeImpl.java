@@ -175,6 +175,17 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         // 插入日志记录
         systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET operate_content="+newJson+",singlestatus=1 WHERE id="+orderCpsingleRequest.getId());
 
+        // 更新订单表order->singlestatus字段为5：财务已审核，银联退款中
+        PayOrderExample payOrderExample = new PayOrderExample();
+        PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
+        payOrderC.andOrderidEqualTo(orderCpsingleRequest.getOrderid());
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setSinglestatus((byte)5);
+        payOrderMapper.updateByExampleSelective(payOrder, payOrderExample);
+
+        // 插入日志记录
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order","更新数据","UPDATE `pay_order` SET singlestatus=5 WHERE orderid="+orderCpsingleRequest.getOrderid());
         // 财务处理完毕，等待银联退款
         return new JpfResponseDto();
     }
@@ -266,45 +277,95 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     }
 
     @Override
-    public void unionPayRefund(UnionPayRefundRequest request, UserInfo userInfo, String IP){
+    public void unionPayRefund(UnionPayRefundRequest request, String IP){
         logger.info("======================================接收银联返回信息 start=======================================================");
-        // 将银联返回信息更新到此订单的china_content字段
+        logger.info(request.toString());
+        // 获取该退单原先的记录
         PayOrderCpsingleExample e = new PayOrderCpsingleExample();
         PayOrderCpsingleExample.Criteria c = e.createCriteria();
         c.andOrderidEqualTo(request.getOrderid());
 
-        PayOrderCpsingle payOrderCpsingle = new PayOrderCpsingle();
-        payOrderCpsingle.setChinaContent(request.getJson());
+        List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
 
-        int res_orderCpsingle = payOrderCpsingleMapper.updateByExampleSelective(payOrderCpsingle,e);
+        //插入日志记录，因为没有登录，所以创建一个空的userInfo
+        UserInfo userInfo = new UserInfo();
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","查询数据","SELECT * FROM `pay_order_cpsingle` WHERE orderid="+request.getOrderid());
+
+        PayOrderCpsingle oldRec = list.get(0);
+        PayOrderCpsingle newRec = new PayOrderCpsingle();
+        String oldJson = oldRec.getChinaContent();
+        String newJson;
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(oldJson) ){
+            // 如果原先记录的chinaContent字段不为空
+            oldJson = org.apache.commons.lang3.StringUtils.stripStart(oldJson,"[");
+            oldJson = org.apache.commons.lang3.StringUtils.stripEnd(oldJson,"]");
+            newJson = '[' + oldJson+ ',' + request.getJson() + ']';
+            newRec.setChinaContent(newJson);
+        }else{
+            newJson = request.getJson();
+            newRec.setChinaContent(newJson);
+        }
+
+        // 将银联返回信息中的json更新到此订单的china_content字段
+        payOrderCpsingleMapper.updateByExampleSelective(newRec,e);
+
+        // 插入日志记录
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET china_content="+newJson+" WHERE orderid="+request.getOrderid());
 
         // 如果返回退款成功
         if ( request.getCode().equals("10000") ){
+            // 更新此退单记录singlestatus字段为3：银联退款成功
+            PayOrderCpsingle payOrderCpsingle = new PayOrderCpsingle();
+            payOrderCpsingle.setSinglestatus((byte)3);
+            payOrderCpsingleMapper.updateByExampleSelective(payOrderCpsingle,e);
 
-            if ( res_orderCpsingle == 1 ){
-                // 更新订单表order->singlestatus字段为5：退款处理完成
-                PayOrderExample payOrderExample = new PayOrderExample();
-                PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
-                payOrderC.andOrderidEqualTo(request.getOrderid());
+            // 插入日志记录
+            systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET singlestatus=3 WHERE orderid="+request.getOrderid());
 
-                PayOrder payOrder = new PayOrder();
-                payOrder.setSinglestatus((byte)5);
-                int res_order = payOrderMapper.updateByExampleSelective(payOrder, payOrderExample);
+            // 更新订单表order->singlestatus字段为5：退款处理完成
+            PayOrderExample payOrderExample = new PayOrderExample();
+            PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
+            payOrderC.andOrderidEqualTo(request.getOrderid());
 
-                // 插入日志记录
-                systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order","更新数据","UPDATE `pay_order` SET singlestatus=5 WHERE orderid="+request.getOrderid());
+            PayOrder payOrder = new PayOrder();
+            payOrder.setSinglestatus((byte)7);
+            int res_order = payOrderMapper.updateByExampleSelective(payOrder, payOrderExample);
 
-                if ( res_order == 1 ){
-                    // do nothing.
-                }else{
-                    throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新订单表失败，请联系管理员");
-                }
+            // 插入日志记录
+            systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order","更新数据","UPDATE `pay_order` SET singlestatus=5 WHERE orderid="+request.getOrderid());
+
+            if ( res_order == 1 ){
+                // do nothing.
             }else{
-                throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新退单记录表失败，请联系管理员");
+                throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新订单表失败，请联系管理员");
             }
         }else if ( request.getCode().equals("10008") ){
             // 如果返回退款失败
+            // 更新此退单记录singlestatus字段为4：银联退款失败
+            PayOrderCpsingle payOrderCpsingle = new PayOrderCpsingle();
+            payOrderCpsingle.setSinglestatus((byte)4);
+            payOrderCpsingleMapper.updateByExampleSelective(payOrderCpsingle,e);
 
+            // 插入日志记录
+            systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET singlestatus=4 WHERE orderid="+request.getOrderid());
+
+            // 更新订单表order->singlestatus字段为8：银联退款失败
+            PayOrderExample payOrderExample = new PayOrderExample();
+            PayOrderExample.Criteria payOrderC = payOrderExample.createCriteria();
+            payOrderC.andOrderidEqualTo(request.getOrderid());
+
+            PayOrder payOrder = new PayOrder();
+            payOrder.setSinglestatus((byte)8);
+            int res_order = payOrderMapper.updateByExampleSelective(payOrder, payOrderExample);
+
+            // 插入日志记录
+            systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order","更新数据","UPDATE `pay_order` SET singlestatus=8 WHERE orderid="+request.getOrderid());
+
+            if ( res_order == 1 ){
+                // do nothing.
+            }else{
+                throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新订单表失败，请联系管理员");
+            }
         }
         logger.info("======================================接收银联返回信息 end=======================================================");
     }

@@ -113,11 +113,9 @@ public class OrderCpsingleController {
     @RequestMapping("/unionPayRefundReturn")
     @ResponseBody
     public void unionPayRefundReturn(UnionPayRefundRequest request, HttpServletRequest httpRequest){
-        HttpSession session = httpRequest.getSession();
-        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
         // 获取IP
         String IP = ServletUtils.getIpAddr(httpRequest);
-        orderCpsingleServiceFacade.unionPayRefund(request, userInfo, IP);
+        orderCpsingleServiceFacade.unionPayRefund(request,IP);
     }
 }
