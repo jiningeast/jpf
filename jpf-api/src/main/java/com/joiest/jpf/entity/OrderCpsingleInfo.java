@@ -46,6 +46,11 @@ public class OrderCpsingleInfo {
     private String operateContent;
 
     /**
+     * 退款时第三方机构（银联/微信/支付宝/花呗）返回的json串
+     */
+    private String refundContent;
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -120,5 +125,13 @@ public class OrderCpsingleInfo {
 
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
+    }
+
+    public String getRefundContent() {
+        return refundContent;
+    }
+
+    public void setRefundContent(String refundContent) {
+        this.refundContent = refundContent;
     }
 }
