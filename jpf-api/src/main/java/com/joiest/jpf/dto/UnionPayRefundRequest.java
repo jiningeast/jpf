@@ -40,12 +40,12 @@ public class UnionPayRefundRequest {
         this.orderid = orderid;
     }
 
-    public String getRefundContent() {
+    public String getRefund_content() {
         return refund_content;
     }
 
-    public void setRefundContentn(String json) {
-        this.refund_content = json;
+    public void setRefund_content(String refund_content) {
+        this.refund_content = refund_content;
     }
 
     public String toString(){

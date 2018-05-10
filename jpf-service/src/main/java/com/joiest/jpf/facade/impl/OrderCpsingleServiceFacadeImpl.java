@@ -302,10 +302,10 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             // 如果原先记录的refundContent字段不为空
             oldJson = org.apache.commons.lang3.StringUtils.stripStart(oldJson,"[");
             oldJson = org.apache.commons.lang3.StringUtils.stripEnd(oldJson,"]");
-            newJson = '[' + oldJson+ ',' + request.getRefundContent() + ']';
+            newJson = '[' + oldJson+ ',' + request.getRefund_content() + ']';
             newRec.setRefundContent(newJson);
         }else{
-            newJson = request.getRefundContent();
+            newJson = request.getRefund_content();
             newRec.setRefundContent(newJson);
         }
 
