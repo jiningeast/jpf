@@ -13,8 +13,8 @@ public class UnionPayRefundRequest {
     @NotNull(message="orderid参数不能为空")
     private String orderid;
 
-    @NotNull(message="json参数不能为空")
-    private String json;
+    @NotNull(message="refund_content参数不能为空")
+    private String refund_content;
 
     public String getCode() {
         return code;
@@ -40,15 +40,15 @@ public class UnionPayRefundRequest {
         this.orderid = orderid;
     }
 
-    public String getJson() {
-        return json;
+    public String getRefundContent() {
+        return refund_content;
     }
 
-    public void setJson(String json) {
-        this.json = json;
+    public void setRefundContentn(String json) {
+        this.refund_content = json;
     }
 
     public String toString(){
-        return "code="+this.code+",info="+this.info+",orderid="+this.orderid+",json="+this.json;
+        return "code="+this.code+",info="+this.info+",orderid="+this.orderid+",json="+this.refund_content;
     }
 }

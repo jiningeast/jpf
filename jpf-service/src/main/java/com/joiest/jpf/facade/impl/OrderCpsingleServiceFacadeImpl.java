@@ -291,18 +291,21 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         UserInfo userInfo = new UserInfo();
         systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","查询数据","SELECT * FROM `pay_order_cpsingle` WHERE orderid="+request.getOrderid());
 
+        if ( list.isEmpty() ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到订单信息");
+        }
         PayOrderCpsingle oldRec = list.get(0);
         PayOrderCpsingle newRec = new PayOrderCpsingle();
         String oldJson = oldRec.getRefundContent();
-        String newJson;
+        String newJson = "";
         if (org.apache.commons.lang3.StringUtils.isNotBlank(oldJson) ){
             // 如果原先记录的refundContent字段不为空
             oldJson = org.apache.commons.lang3.StringUtils.stripStart(oldJson,"[");
             oldJson = org.apache.commons.lang3.StringUtils.stripEnd(oldJson,"]");
-            newJson = '[' + oldJson+ ',' + request.getJson() + ']';
+            newJson = '[' + oldJson+ ',' + request.getRefundContent() + ']';
             newRec.setRefundContent(newJson);
         }else{
-            newJson = request.getJson();
+            newJson = request.getRefundContent();
             newRec.setRefundContent(newJson);
         }
 
