@@ -1,6 +1,8 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.dto.AddMerPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeRequest;
 import com.joiest.jpf.dto.GetMerchPayTypeResponse;
@@ -12,6 +14,7 @@ import com.joiest.jpf.facade.MerPayTypeServiceFacade;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
 import com.joiest.jpf.facade.MerchantServiceFacade;
 import com.joiest.jpf.facade.impl.MerTypeServiceFacadeImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +124,14 @@ public class MerchantPaytypeController {
         //商户信息
         MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(Long.valueOf(mtsid));
         modelMap.addAttribute("merpayTypeInfoOne", merpayTypeInfoOne);
+        // 银联分期配置信息如果不为空，则把json串解析出来
+        if (StringUtils.isNotBlank(merpayTypeInfoOne.getParam())){
+            Map<String,String> paramMap = JsonUtils.toCollection(merpayTypeInfoOne.getParam(), new TypeReference<HashMap<String, String>>(){});
+            modelMap.addAttribute("CP_Acctid", paramMap.get("CP_Acctid"));
+            modelMap.addAttribute("CP_MerchaNo", paramMap.get("CP_MerchaNo"));
+            modelMap.addAttribute("CP_Code", paramMap.get("CP_Code"));
+            modelMap.addAttribute("CP_Salt", paramMap.get("CP_Salt"));
+        }
         modelMap.addAttribute("TypeInfoOne", TypeInfoOne);
         modelMap.addAttribute("merchantInfo", merchantInfo);
         return new ModelAndView("merchant/merchantPaytypeRealModify", modelMap);

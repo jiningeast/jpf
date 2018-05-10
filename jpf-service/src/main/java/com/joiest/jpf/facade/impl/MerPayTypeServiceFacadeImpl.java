@@ -287,7 +287,7 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请选择分期类型");
         }
-        //分期类型
+        // 银联分期类型
         StringBuilder builder = new StringBuilder();
         for ( int i=0; i< request.getBankcatid().length; i++ )
         {
@@ -311,6 +311,23 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             if ( Integer.valueOf(bankcatid) != 35 )
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, payMerchantsType.getCat() + "的分期只能设置为：不分期");
+            }
+            newJson = jsonUtils.toJson(jsonMap);
+        }
+
+        // 银联参数
+        if ( request.getTpid() == 7 ){
+            if ( StringUtils.isNotBlank(request.getCp_MerchaNo()) ){
+                jsonMap.put("CP_MerchaNo", request.getCp_MerchaNo() );
+            }
+            if ( StringUtils.isNotBlank(request.getCp_Code()) ){
+                jsonMap.put("CP_Code", request.getCp_Code());
+            }
+            if ( StringUtils.isNotBlank(request.getCp_Acctid()) ){
+                jsonMap.put("CP_Acctid", request.getCp_Acctid());
+            }
+            if ( StringUtils.isNotBlank(request.getCp_Salt()) ){
+                jsonMap.put("CP_Salt", request.getCp_Salt());
             }
             newJson = jsonUtils.toJson(jsonMap);
         }

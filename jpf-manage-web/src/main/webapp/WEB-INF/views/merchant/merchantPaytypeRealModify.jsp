@@ -142,6 +142,18 @@
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">商户号：</td>
+                    <td><input type="text" name="cp_MerchaNo" class="easyui-textbox" value="${CP_MerchaNo}"></td>
+                    <td style="text-align: right;background-color: #f1f1f1;">渠道编码：</td>
+                    <td><input type="text" name="cp_Code" class="easyui-textbox" value="${CP_Code}"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">渠道账户编号：</td>
+                    <td><input type="text" name="cp_Acctid" class="easyui-textbox" value="${CP_Acctid}"></td>
+                    <td style="text-align: right;background-color: #f1f1f1;">商户签发密钥：</td>
+                    <td><input type="text" name="cp_Salt" class="easyui-textbox" value="${CP_Salt}"></td>
+                </tr>
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         参数1:
