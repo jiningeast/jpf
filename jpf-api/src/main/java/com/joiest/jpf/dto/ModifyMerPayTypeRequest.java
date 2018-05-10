@@ -1,8 +1,6 @@
 package com.joiest.jpf.dto;
 
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import org.hibernate.validator.constraints.NotBlank;
 
 public class ModifyMerPayTypeRequest {
 
@@ -33,25 +31,25 @@ public class ModifyMerPayTypeRequest {
     /**
      * 商户号
      */
-    @NotNull(message="商户号不能为空")
+    @NotBlank(message="商户号不能为空")
     private String cp_MerchaNo;
 
     /**
      * 渠道编码
      */
-    @NotNull(message="渠道编码不能为空")
+    @NotBlank(message="渠道编码不能为空")
     private String cp_Code;
 
     /**
      * 渠道账户编号
      */
-    @NotNull(message="渠道账户编号不能为空")
+    @NotBlank(message="渠道账户编号不能为空")
     private String cp_Acctid;
 
     /**
      * 商户签名秘钥
      */
-    @NotNull(message="商户签发密钥不能为空")
+    @NotBlank(message="商户签发密钥不能为空")
     private String cp_Salt;
 
     public Long getMtsid() {
