@@ -293,24 +293,24 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
 
         PayOrderCpsingle oldRec = list.get(0);
         PayOrderCpsingle newRec = new PayOrderCpsingle();
-        String oldJson = oldRec.getChinaContent();
+        String oldJson = oldRec.getRefundContent();
         String newJson;
         if (org.apache.commons.lang3.StringUtils.isNotBlank(oldJson) ){
-            // 如果原先记录的chinaContent字段不为空
+            // 如果原先记录的refundContent字段不为空
             oldJson = org.apache.commons.lang3.StringUtils.stripStart(oldJson,"[");
             oldJson = org.apache.commons.lang3.StringUtils.stripEnd(oldJson,"]");
             newJson = '[' + oldJson+ ',' + request.getJson() + ']';
-            newRec.setChinaContent(newJson);
+            newRec.setRefundContent(newJson);
         }else{
             newJson = request.getJson();
-            newRec.setChinaContent(newJson);
+            newRec.setRefundContent(newJson);
         }
 
-        // 将银联返回信息中的json更新到此订单的china_content字段
+        // 将银联返回信息中的json更新到此订单的refund_content字段
         payOrderCpsingleMapper.updateByExampleSelective(newRec,e);
 
         // 插入日志记录
-        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET china_content="+newJson+" WHERE orderid="+request.getOrderid());
+        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","更新数据","UPDATE `pay_order_cpsingle` SET refund_content="+newJson+" WHERE orderid="+request.getOrderid());
 
         // 如果返回退款成功
         if ( request.getCode().equals("10000") ){

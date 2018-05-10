@@ -727,73 +727,73 @@ public class PayOrderCpsingleExample {
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentIsNull() {
-            addCriterion("china_content is null");
+        public Criteria andRefundContentIsNull() {
+            addCriterion("refund_content is null");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentIsNotNull() {
-            addCriterion("china_content is not null");
+        public Criteria andRefundContentIsNotNull() {
+            addCriterion("refund_content is not null");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentEqualTo(String value) {
-            addCriterion("china_content =", value, "chinaContent");
+        public Criteria andRefundContentEqualTo(String value) {
+            addCriterion("refund_content =", value, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentNotEqualTo(String value) {
-            addCriterion("china_content <>", value, "chinaContent");
+        public Criteria andRefundContentNotEqualTo(String value) {
+            addCriterion("refund_content <>", value, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentGreaterThan(String value) {
-            addCriterion("china_content >", value, "chinaContent");
+        public Criteria andRefundContentGreaterThan(String value) {
+            addCriterion("refund_content >", value, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentGreaterThanOrEqualTo(String value) {
-            addCriterion("china_content >=", value, "chinaContent");
+        public Criteria andRefundContentGreaterThanOrEqualTo(String value) {
+            addCriterion("refund_content >=", value, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentLessThan(String value) {
-            addCriterion("china_content <", value, "chinaContent");
+        public Criteria andRefundContentLessThan(String value) {
+            addCriterion("refund_content <", value, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentLessThanOrEqualTo(String value) {
-            addCriterion("china_content <=", value, "chinaContent");
+        public Criteria andRefundContentLessThanOrEqualTo(String value) {
+            addCriterion("refund_content <=", value, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentLike(String value) {
-            addCriterion("china_content like", value, "chinaContent");
+        public Criteria andRefundContentLike(String value) {
+            addCriterion("refund_content like", value, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentNotLike(String value) {
-            addCriterion("china_content not like", value, "chinaContent");
+        public Criteria andRefundContentNotLike(String value) {
+            addCriterion("refund_content not like", value, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentIn(List<String> values) {
-            addCriterion("china_content in", values, "chinaContent");
+        public Criteria andRefundContentIn(List<String> values) {
+            addCriterion("refund_content in", values, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentNotIn(List<String> values) {
-            addCriterion("china_content not in", values, "chinaContent");
+        public Criteria andRefundContentNotIn(List<String> values) {
+            addCriterion("refund_content not in", values, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentBetween(String value1, String value2) {
-            addCriterion("china_content between", value1, value2, "chinaContent");
+        public Criteria andRefundContentBetween(String value1, String value2) {
+            addCriterion("refund_content between", value1, value2, "refundContent");
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentNotBetween(String value1, String value2) {
-            addCriterion("china_content not between", value1, value2, "chinaContent");
+        public Criteria andRefundContentNotBetween(String value1, String value2) {
+            addCriterion("refund_content not between", value1, value2, "refundContent");
             return (Criteria) this;
         }
 
@@ -802,8 +802,8 @@ public class PayOrderCpsingleExample {
             return (Criteria) this;
         }
 
-        public Criteria andChinaContentLikeInsensitive(String value) {
-            addCriterion("upper(china_content) like", value.toUpperCase(), "chinaContent");
+        public Criteria andRefundContentLikeInsensitive(String value) {
+            addCriterion("upper(refund_content) like", value.toUpperCase(), "refundContent");
             return (Criteria) this;
         }
     }

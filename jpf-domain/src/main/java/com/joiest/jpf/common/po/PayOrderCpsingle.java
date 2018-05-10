@@ -37,7 +37,7 @@ public class PayOrderCpsingle implements Serializable {
     private Byte singletype;
 
     /**
-     * 财务|运营|商服退款审核：0:待审核; 1:退单退款成功；2：退单退款失败
+     * 财务|运营|商服退款审核：0:待审核; 1:审核通过，银联退款中；2：审核驳回；3：银联退款成功；4：银联退款失败
      */
     private Byte singlestatus;
 
@@ -52,9 +52,9 @@ public class PayOrderCpsingle implements Serializable {
     private Date addtime;
 
     /**
-     * 银联退款信息
+     * 
      */
-    private String chinaContent;
+    private String refundContent;
 
     private static final long serialVersionUID = 1L;
 
@@ -130,12 +130,12 @@ public class PayOrderCpsingle implements Serializable {
         this.addtime = addtime;
     }
 
-    public String getChinaContent() {
-        return chinaContent;
+    public String getRefundContent() {
+        return refundContent;
     }
 
-    public void setChinaContent(String chinaContent) {
-        this.chinaContent = chinaContent == null ? null : chinaContent.trim();
+    public void setRefundContent(String refundContent) {
+        this.refundContent = refundContent == null ? null : refundContent.trim();
     }
 
     /**
@@ -156,7 +156,7 @@ public class PayOrderCpsingle implements Serializable {
         sb.append(", singlestatus=").append(singlestatus);
         sb.append(", operateContent=").append(operateContent);
         sb.append(", addtime=").append(addtime);
-        sb.append(", chinaContent=").append(chinaContent);
+        sb.append(", refundContent=").append(refundContent);
         sb.append("]");
         return sb.toString();
     }
@@ -186,7 +186,7 @@ public class PayOrderCpsingle implements Serializable {
             && (this.getSinglestatus() == null ? other.getSinglestatus() == null : this.getSinglestatus().equals(other.getSinglestatus()))
             && (this.getOperateContent() == null ? other.getOperateContent() == null : this.getOperateContent().equals(other.getOperateContent()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getChinaContent() == null ? other.getChinaContent() == null : this.getChinaContent().equals(other.getChinaContent()));
+            && (this.getRefundContent() == null ? other.getRefundContent() == null : this.getRefundContent().equals(other.getRefundContent()));
     }
 
     /**
@@ -205,7 +205,7 @@ public class PayOrderCpsingle implements Serializable {
         result = prime * result + ((getSinglestatus() == null) ? 0 : getSinglestatus().hashCode());
         result = prime * result + ((getOperateContent() == null) ? 0 : getOperateContent().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
-        result = prime * result + ((getChinaContent() == null) ? 0 : getChinaContent().hashCode());
+        result = prime * result + ((getRefundContent() == null) ? 0 : getRefundContent().hashCode());
         return result;
     }
 }

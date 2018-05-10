@@ -67,7 +67,7 @@ public class PayOrder implements Serializable {
     private Byte orderstatus;
 
     /**
-     * 1:正常订单；2:退单处理；3:退款撤销；4:退单受理中，5:退单处理完毕, 6:审核失败
+     * 1:正常订单；2:退单处理；3:退款撤销；4:运营已审核,待财务审核，5:财务已审核，银联退款中, 6:审核驳回,7:银联退款成功,8:银联退款失败
      */
     private Byte singlestatus;
 
