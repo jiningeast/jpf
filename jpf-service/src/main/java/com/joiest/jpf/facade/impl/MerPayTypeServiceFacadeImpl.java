@@ -243,6 +243,23 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             newJson = jsonUtils.toJson(jsonMap);
         }
 
+        // 银联参数
+        if ( request.getTpid() == 7 ){
+            if ( StringUtils.isNotBlank(request.getCp_MerchaNo()) ){
+                jsonMap.put("CP_MerchaNo", request.getCp_MerchaNo() );
+            }
+            if ( StringUtils.isNotBlank(request.getCp_Code()) ){
+                jsonMap.put("CP_Code", request.getCp_Code());
+            }
+            if ( StringUtils.isNotBlank(request.getCp_Acctid()) ){
+                jsonMap.put("CP_Acctid", request.getCp_Acctid());
+            }
+            if ( StringUtils.isNotBlank(request.getCp_Salt()) ){
+                jsonMap.put("CP_Salt", request.getCp_Salt());
+            }
+            newJson = jsonUtils.toJson(jsonMap);
+        }
+
         PayMerchantsPaytype record = new PayMerchantsPaytype();
         record.setMtsid(request.getMtsid());
         record.setTpid(request.getTpid());
