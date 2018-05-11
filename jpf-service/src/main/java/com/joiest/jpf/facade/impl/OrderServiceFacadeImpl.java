@@ -87,6 +87,7 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
 
         e.setPageNo(orderRequest.getPage());
         e.setPageSize(orderRequest.getRows());
+        e.setOrderByClause("id DESC");
         List<PayOrder> list = payOrderMapper.selectByExample(e);
         List<OrderInfo> infos = new ArrayList<OrderInfo>();
         for (PayOrder payOrder : list){

@@ -48,6 +48,7 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         PayTdorderExample.Criteria c = e.createCriteria();
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
+        e.setOrderByClause("id DESC");
         if (org.apache.commons.lang3.StringUtils.isNotBlank(request.getTdorderid()) ){
             c.andTdorderidEqualTo( request.getTdorderid() );
         }
