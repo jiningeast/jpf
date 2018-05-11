@@ -16,4 +16,6 @@ public interface TdorderServiceFacade {
     public JpfResponseDto checkOk(TdorderRequest tdorderRequest, UserInfo userInfo);
 
     public JpfResponseDto checkNo(TdorderRequest tdorderRequest, UserInfo userInfo);
+
+    public int isAfter24Hours(TdorderRequest tdorderRequest);
 }

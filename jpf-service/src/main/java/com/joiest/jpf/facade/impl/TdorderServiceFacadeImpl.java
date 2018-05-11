@@ -105,6 +105,12 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "此订单已处理，请不要重复处理");
         }
 
+        // 订单24小时候才可以退款
+        int cha = this.isAfter24Hours(tdorderRequest);
+        if ( this.isAfter24Hours(tdorderRequest) < 0 ){
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "抱歉，支付24小时后才可以退款");
+        }
+
         // 根据请求构建新的json记录
         Map<String, Object> map = new HashMap<>();
         map.put("uid", userInfo.getId());
@@ -249,4 +255,47 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
 
         return new JpfResponseDto();
     }
+
+    @Override
+    public int isAfter24Hours(TdorderRequest tdorderRequest){
+        // 查询该订单信息
+        PayOrderExample payOrderExample = new PayOrderExample();
+        PayOrderExample.Criteria payOrderCriteria = payOrderExample.createCriteria();
+        payOrderCriteria.andOrderidEqualTo(tdorderRequest.getOrderid());
+        List<PayOrder> list = payOrderMapper.selectByExample(payOrderExample);
+        if ( list.isEmpty() ){
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "查无此单");
+        }
+        PayOrder payOrder = list.get(0);
+
+        // 判断该订单是否已支付且支付时间不为空
+        if ( payOrder.getOrderstatus() != 1 || org.apache.commons.lang3.StringUtils.isBlank(payOrder.getPaytime().toString())){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "该订单尚未支付");
+        }
+        Date paytime = payOrder.getPaytime();
+        paytime = org.apache.commons.lang3.time.DateUtils.addHours(paytime,24);
+        Date now = DateUtils.getCurrentDate();
+        return now.compareTo(paytime);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -73,7 +73,7 @@
                             }else if ( value == 2 ){
                                 return '<span style="color: green">用户申请退单</span>';
                             }else if ( value == 3 ){
-                                return '用户撤销退款';
+                                return '用户撤销退单';
                             }else if ( value == 4 ){
                                 return '<span style="color: green">运营已审核,待财务审核</span>';
                             }else if ( value == 5 ){
@@ -149,9 +149,11 @@
                             <option value="1">正常订单</option>
                             <option value="2">用户申请退单</option>
                             <option value="3">用户撤销退单</option>
-                            <option value="4">退单审核中</option>
-                            <option value="5">退单处理完毕</option>
+                            <option value="4">运营已审核，待财务审核</option>
+                            <option value="5">财务已审核，退款中</option>
                             <option value="6">审核驳回</option>
+                            <option value="7">退款成功</option>
+                            <option value="8">退款失败</option>
                         </select>
                     </td>
                 </tr>

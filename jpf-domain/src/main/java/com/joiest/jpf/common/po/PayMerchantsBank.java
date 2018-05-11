@@ -25,6 +25,11 @@ public class PayMerchantsBank implements Serializable {
     private Long city;
 
     /**
+     * 状态
+     */
+    private Byte status;
+
+    /**
      * 银行ID
      */
     private Long bankid;
@@ -106,6 +111,14 @@ public class PayMerchantsBank implements Serializable {
 
     public void setCity(Long city) {
         this.city = city;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     public Long getBankid() {

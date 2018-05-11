@@ -26,7 +26,8 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.joiest.jpf.manage.web.constant.ManageConstants.REFUND_URL;
+import static com.joiest.jpf.manage.web.constant.ManageConstants.REFUND_URL_FORMAL;
+import static com.joiest.jpf.manage.web.constant.ManageConstants.REFUND_URL_TEST;
 
 @Controller
 @RequestMapping("/orderCpsingle")
@@ -72,7 +73,16 @@ public class OrderCpsingleController {
         posRequest = orderCpsingleServiceFacade.getPosRequest(orderCpsingleRequest.getOrderid());
 
         // 请求接口地址
-        String postUrl = REFUND_URL;
+        String uri = httpRequest.getServerName();   // 返回域名
+        String postUrl;
+        if ( uri.indexOf("7shengqian") > -1 ){
+            postUrl = REFUND_URL_FORMAL;
+        }else{
+            postUrl = REFUND_URL_TEST;
+        }
+        logger.info("接口地址为"+postUrl);
+        System.exit(0);
+
         String response = OkHttpUtils.postForm(postUrl,posRequest);
         Map<String, String> responseMap = JsonUtils.toCollection(response, new TypeReference<HashMap<String, String>>(){});
 

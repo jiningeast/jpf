@@ -125,6 +125,11 @@ public class ModifyMerchRequest {
     private Long bankCity;
 
     /**
+     * 状态
+     */
+    private Byte status;
+
+    /**
      * 法人姓名
      */
     private String legalname;
@@ -233,6 +238,14 @@ public class ModifyMerchRequest {
         this.city = city;
     }
 
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
     public String getLinkname() {
         return linkname;
     }
@@ -287,6 +300,30 @@ public class ModifyMerchRequest {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public Long getRegion() {
+        return region;
+    }
+
+    public void setRegion(Long region) {
+        this.region = region;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Long getMuserid() {
+        return muserid;
+    }
+
+    public void setMuserid(Long muserid) {
+        this.muserid = muserid;
     }
 
     public Long getBankProvince() {

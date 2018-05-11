@@ -82,17 +82,29 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             c.andAddtimeBetween(addtimeStart,addtimeEnd);
         }
 
+        List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
+
+        // =============================start========================================
+        // where
         List<PayOrderCpsingleExample.Criterion> cList = c.getCriteria();    // 获取查询参数
         StringBuilder sb = new StringBuilder();
         for (PayOrderCpsingleExample.Criterion criterion:cList ){
             sb.append(criterion.getCondition()+criterion.getValue()+',');
         }
+        String where = org.apache.commons.lang3.StringUtils.stripEnd(sb.toString(),",");
 
+        // orderby
+        String orderby = e.getOrderByClause();
 
-        List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
+        // limit
+        long pageNo = e.getPageNo();
+        long pageSize = e.getPageSize();
+        long limitStart = (pageNo-1)*pageSize;
+        String limit = " limit " + limitStart + "," + pageSize;
 
         // 插入日志记录
-//        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_spsingle","查询数据", "SELECT * FROM `pay_order_cpsingle` LIMIT ");
+//        systemlogServiceFacade.sysLog(1,userInfo,IP,"",32,"pay_order_cpsingle","查询数据", "SELECT * FROM `pay_order_cpsingle` " + where + orderby + limit);
+        // ==============================end=========================================
 
         List<OrderCpsingleInfo> infos = new ArrayList<>();
         for (PayOrderCpsingle payOrderCpsingle:list){

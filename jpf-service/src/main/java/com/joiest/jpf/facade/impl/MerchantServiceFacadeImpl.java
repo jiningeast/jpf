@@ -184,6 +184,7 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
             merchantsBankrecord.setMtsid(request.getId());
             merchantsBankrecord.setProvince(request.getBankProvince());
             merchantsBankrecord.setCity(request.getBankCity());
+            merchantsBankrecord.setStatus(request.getStatus());
             merchantsBankrecord.setBankid(Long.parseLong(request.getBankid()));
             merchantsBankrecord.setBankname(bankInfos.getPaybankname());
             merchantsBankrecord.setBanktype(request.getBanktype());

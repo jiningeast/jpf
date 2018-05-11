@@ -181,7 +181,10 @@
                         <select id="singlestatus" name="singlestatus" class="easyui-combobox">
                             <option value="">全部</option>
                             <option value="0">待审核</option>
-                            <option value="1">退单退款成功</option>
+                            <option value="1">审核成功，等待退款</option>
+                            <option value="2">审核驳回</option>
+                            <option value="3">退款成功</option>
+                            <option value="4">退款失败</option>
                         </select>
                     </td>
                     <td></td>
