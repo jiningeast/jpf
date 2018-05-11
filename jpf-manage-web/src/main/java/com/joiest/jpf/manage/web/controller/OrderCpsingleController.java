@@ -81,9 +81,6 @@ public class OrderCpsingleController {
             postUrl = REFUND_URL_TEST;
         }
         logger.info("接口地址为"+postUrl);
-        if ( true ){
-            throw new JpfException(JpfErrorInfo.DAL_ERROR,"测试断点，勿慌");
-        }
 
         String response = OkHttpUtils.postForm(postUrl,posRequest);
         Map<String, String> responseMap = JsonUtils.toCollection(response, new TypeReference<HashMap<String, String>>(){});

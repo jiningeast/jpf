@@ -19,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
-
 import java.util.*;
 
 @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
@@ -106,10 +104,9 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         }
 
         // 订单24小时候才可以退款
-        int cha = this.isAfter24Hours(tdorderRequest);
-        if ( this.isAfter24Hours(tdorderRequest) < 0 ){
+        /*if ( this.isAfter24Hours(tdorderRequest) < 0 ){
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "抱歉，支付24小时后才可以退款");
-        }
+        }*/
 
         // 根据请求构建新的json记录
         Map<String, Object> map = new HashMap<>();
