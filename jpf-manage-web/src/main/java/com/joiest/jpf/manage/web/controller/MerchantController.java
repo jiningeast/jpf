@@ -1,14 +1,17 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.dto.AuditMerchRequest;
-import com.joiest.jpf.dto.GetMerchsRequest;
-import com.joiest.jpf.dto.GetMerchsResponse;
-import com.joiest.jpf.dto.ModifyMerchRequest;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
+import com.joiest.jpf.entity.MerchantPayTypeInfo;
 import com.joiest.jpf.entity.MerchantShopInfo;
 import com.joiest.jpf.facade.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class MerchantController {
 
     @Autowired
     private MerShopServiceFacade merShopServiceFacade;
+
+    @Autowired
+    private MerPayTypeServiceFacade merPayTypeServiceFacade;
 
     @RequestMapping("/index")
     public ModelAndView index() {
@@ -95,6 +101,52 @@ public class MerchantController {
     @RequestMapping("/audit/action")
     @ResponseBody
     public JpfResponseDto auditAction(AuditMerchRequest request){
+        // 审核前先判断这个商户配置的支付方式有没有违规
+        GetMerchPayTypeResponse response = merPayTypeServiceFacade.getOneMerPayTypes(request.getId());
+        List<MerchantPayTypeInfo> list = response.getPayTypeInfos();
+        if ( list.isEmpty() ){
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND,"该商户尚未配置支付方式");
+        }
+        for (MerchantPayTypeInfo merchantPayTypeInfo:list){
+            switch (merchantPayTypeInfo.getTpid()){
+                case 6:
+                    // 中银消费金融分期支付
+                    if ( StringUtils.isBlank(merchantPayTypeInfo.getBankcatid()) ){
+                        throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND,"中银消费金融分期支付配置有误，请检查");
+                    }
+                    break;
+
+                case 7:
+                    // 银联信用卡分期支付
+                    if ( StringUtils.isBlank(merchantPayTypeInfo.getBankcatid()) || StringUtils.isBlank(merchantPayTypeInfo.getParam()) ){
+                        throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND,"银联信用卡分期支付配置有误，请检查");
+                    }
+                    Map<String,String> jsonMap = JsonUtils.toCollection(merchantPayTypeInfo.getParam(), new TypeReference<HashMap<String,String>>(){});
+                    if ( StringUtils.isBlank(jsonMap.get("CP_Acctid")) || StringUtils.isBlank(jsonMap.get("CP_MerchaNo")) || StringUtils.isBlank(jsonMap.get("CP_Code")) || StringUtils.isBlank(jsonMap.get("CP_Salt")) ){
+                        throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND,"银联信用卡分期支付配置有误，请检查。");
+                    }
+                    break;
+
+                case 8:
+                    // 花呗分期
+                    if (StringUtils.isBlank(merchantPayTypeInfo.getBankcatid()) && StringUtils.isBlank(merchantPayTypeInfo.getParam()) ){
+                        throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND,"花呗分期支付配置有误，请检查");
+                    }
+                    break;
+
+                case 9:
+                    // 微信全额支付微信商户号必须配置
+                    if ( StringUtils.isBlank(merchantPayTypeInfo.getParam()) ){
+                        throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND,"微信支付配置有误，请检查");
+                    }
+                    Map<String,String> jsonMapWX = JsonUtils.toCollection(merchantPayTypeInfo.getParam(), new TypeReference<HashMap<String,String>>(){});
+                    if ( StringUtils.isBlank(jsonMapWX.get("merSubMchid")) ){
+                        throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND,"银联信用卡分期支付配置有误，请检查。");
+                    }
+                    break;
+            }
+        }
+
         return merchantServiceFacade.auditMerchant(request);
     }
 }

@@ -26,8 +26,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.joiest.jpf.manage.web.constant.ManageConstants.REFUND_URL_FORMAL;
-import static com.joiest.jpf.manage.web.constant.ManageConstants.REFUND_URL_TEST;
+import static com.joiest.jpf.manage.web.constant.ManageConstants.*;
 
 @Controller
 @RequestMapping("/orderCpsingle")
@@ -104,6 +103,42 @@ public class OrderCpsingleController {
         }
 
         return orderCpsingleServiceFacade.checkOk(orderCpsingleRequest, userInfo, IP);
+    }
+
+    @ResponseBody
+    public JpfResponseDto purchaseCancel(String orderid, HttpServletRequest httpRequest){
+        // 请求接口地址
+        String uri = httpRequest.getServerName();   // 返回域名
+        String postUrl;
+        if ( uri.indexOf("7shengqian") > -1 ){
+            postUrl = CANCEL_URL_TEST;
+        }else{
+            postUrl = CANCEL_URL_FORMAL;
+        }
+        logger.info("接口地址为"+postUrl);
+
+        Map<String, Object> posRequest = new HashMap<>();
+        posRequest.put("orderid",orderid);
+        String response = OkHttpUtils.postForm(postUrl,posRequest);
+        Map<String, String> responseMap = JsonUtils.toCollection(response, new TypeReference<HashMap<String, String>>(){});
+
+        // 获取用户信息
+        HttpSession session = httpRequest.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+
+        // 获取IP
+        String IP = ServletUtils.getIpAddr(httpRequest);
+
+        // 记录日志 - 数据库
+        String content = "请求地址："+postUrl+"；返回结果："+responseMap.get("code")+','+responseMap.get("info");
+
+        if ( Integer.parseInt(responseMap.get("code")) != 10000 ){
+            // 撤单接口如果没有返回成功
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "请求接口失败，返回："+responseMap.get("info")+"，请检查");
+        }
+
+//        orderCpsingleServiceFacade.cancelOrder();
+        return new JpfResponseDto();
     }
 
     @RequestMapping("/checkNo")

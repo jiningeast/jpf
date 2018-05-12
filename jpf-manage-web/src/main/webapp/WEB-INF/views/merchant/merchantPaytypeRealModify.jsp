@@ -144,15 +144,18 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">商户号：</td>
-                    <td><input type="text" name="cp_MerchaNo" class="easyui-textbox" value="${CP_MerchaNo}"></td>
+                    <td><input type="text" name="cp_MerchaNo" class="easyui-textbox" value="${CP_MerchaNo}" data-options="required:true"></td>
                     <td style="text-align: right;background-color: #f1f1f1;">渠道编码：</td>
-                    <td><input type="text" name="cp_Code" class="easyui-textbox" value="${CP_Code}"></td>
+                    <td><input type="text" name="cp_Code" class="easyui-textbox" value="${CP_Code}" data-options="required:true"></td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">渠道账户编号：</td>
-                    <td><input type="text" name="cp_Acctid" class="easyui-textbox" value="${CP_Acctid}"></td>
+                    <td><input type="text" name="cp_Acctid" class="easyui-textbox" value="${CP_Acctid}" data-options="required:true"></td>
                     <td style="text-align: right;background-color: #f1f1f1;">商户签发密钥：</td>
-                    <td><input type="text" name="cp_Salt" class="easyui-textbox" value="${CP_Salt}"></td>
+                    <td><input type="text" name="cp_Salt" class="easyui-textbox" value="${CP_Salt}" data-options="required:true"></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><font style="color: red;">*以上信息支持数字、字母、‘,’、‘_’和‘-’，输入其他字符无效</font></td>
                 </tr>
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
@@ -361,6 +364,23 @@
                     bankcatid[i] = $(this).val();
                 });
                 postData['bankcatid'] = bankcatid;
+                var reg = /^[\w-]+$/;
+                if (!reg.test(postData['cp_MerchaNo'])){
+                    $.messager.alert('消息提示','商户号输入非法，请检查','error');
+                    return false;
+                }
+                if (!reg.test(postData['cp_Code'])){
+                    $.messager.alert('消息提示','渠道编码输入非法，请检查','error');
+                    return false;
+                }
+                if (!reg.test(postData['cp_Acctid'])){
+                    $.messager.alert('消息提示','渠道账户编号输入非法，请检查','error');
+                    return false;
+                }
+                if (!reg.test(postData['cp_Salt'])){
+                    $.messager.alert('消息提示','商户签发密钥输入非法，请检查','error');
+                    return false;
+                }
                 $.ajax({
                     type: 'post',
                     url: '../merchant/paytype/modify/modifyMerPayTypeOne',

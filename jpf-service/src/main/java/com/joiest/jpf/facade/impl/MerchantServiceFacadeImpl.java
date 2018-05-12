@@ -259,6 +259,7 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         if(merchant==null){
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "商户信息不存在");
         }
+
         PayMerchants merchantsRecord = new PayMerchants();
         merchantsRecord.setId(request.getId());
         merchantsRecord.setAttestation(request.getAttestation());
