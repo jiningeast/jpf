@@ -124,6 +124,10 @@
                     var tdorderid = rows[0].tdorderid;
                     var orderid = rows[0].orderid;
                     var operateContent = $("#operateContent").val();
+                    if ( operateContent.indexOf('"') > -1 ){
+                        alert('请将内容中的双引号""替换成中文版的双引号“”');
+                        return false;
+                    }
                     $.post("checkNo",{id:id, tdorderid:tdorderid, orderid:orderid, operateContent:operateContent},function (msg) {
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
@@ -224,7 +228,7 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>驳回理由：</td>
-                        <td><textarea id="operateContent" name="operateContent" style="width: 200px; height: 150px;"></textarea></td>
+                        <td><textarea id="operateContent" name="operateContent" data-options="required:true" style="width: 200px; height: 150px;"></textarea></td>
                     </tr>
                 </table>
             </form>
