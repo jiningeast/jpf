@@ -48,13 +48,13 @@
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">联系电话：</td>
                         <td>
-                            <input id="linkphone_m" name="linkphone" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.linkphone}" data-options="required:true"/>
+                            <input id="linkphone_m" name="linkphone" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.linkphone}" data-options="required:true,validType:'phone'"/>
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">销售电话：</td>
                         <td colspan="3">
-                            <input id="salerphone_m" name="salerphone" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.salerphone}"/>
+                            <input id="salerphone_m" name="salerphone" type="text" style="width:220px" class="easyui-textbox" value="${merchantInfo.salerphone}" data-options="validType:'phone'" />
                         </td>
                     </tr>
                     <tr>
@@ -154,7 +154,7 @@
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">企业对公账户：</td>
                         <td>
-                            <input id="bankno_m" name="bankno" type="text" data-options="width:'175px',required:true"  width="120" class="easyui-textbox" value="${merchantBankInfo.bankno}"/>
+                            <input id="bankno_m" name="bankno" type="text" data-options="width:'175px',required:true,validType:'isNumber'"  width="120" class="easyui-textbox" value="${merchantBankInfo.bankno}" />
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">开户行全称：</td>
                         <td>
@@ -261,6 +261,41 @@
 <style>
 </style>
 <script>
+    //手机号码验证-------Begin
+    $.extend($.fn.validatebox.defaults.rules, {
+        phone : {
+            validator: function(value, param){
+                return ChecnPhone(value);
+            },
+            message: '请输入正确的手机号码'
+        },
+        isNumber : {
+            validator: function(value, param){
+                return CheckIsNumber(value);
+            },
+            message: '请输入正确的的帐号信息'
+        }
+    });
+    function CheckIsNumber(z_check_value){
+        var z_reg = /^\d+$/;
+        return z_reg.test($.trim(z_check_value));
+    }
+    function isEmpty(str){
+        if(str == null || typeof str == "undefined" || str == ""){
+            return true;
+        }
+        return false;
+    }
+
+    function ChecnPhone(z_check_value){
+        if( isEmpty(z_check_value) || z_check_value.length != 11 ){
+            return false;
+        }
+        var reg_mobile = /^(13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|19[8|9]|16[6]\d{8}$/;
+        return reg_mobile.test($.trim(z_check_value));
+    }
+    //手机号码验证-------End
+
     function initData() {
         $('#province_m').combobox('select', '${merchantInfo.province}');
         $('#city_m').combobox('select', '${merchantInfo.city}');

@@ -277,7 +277,7 @@
 <script>
     //微信参数1：只能为数字-------Begin
     $.extend($.fn.validatebox.defaults.rules, {
-        isNumber : {//数字（包括正整数、0、浮点数）
+        isNumber : {
             validator: function(value, param){
                 return CheckIsNumber(value);
             },
@@ -285,7 +285,7 @@
         }
     });
     function CheckIsNumber(z_check_value){
-        var z_reg = /^\d+$/;//.是特殊字符，需要转义
+        var z_reg = /^\d+$/;
         return z_reg.test($.trim(z_check_value));
     }
     //微信参数1：只能为数字-------End
