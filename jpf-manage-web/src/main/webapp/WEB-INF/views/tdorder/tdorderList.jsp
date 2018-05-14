@@ -35,6 +35,7 @@
                         var mtsid = rows[0].mtsid;
                         var singletype = rows[0].singletype;
 
+
                         $.post("checkOk",{
                             id:id,
                             tdorderid:tdorderid,
@@ -142,8 +143,9 @@
                     var tdorderid = rows[0].tdorderid;
                     var orderid = rows[0].orderid;
                     var operateContent = $("#operateContent").val();
-                    if ( operateContent == '' ){
-                        $.messager.alert('消息提示','请输入驳回理由','info');
+                    if ( operateContent.indexOf('"') > -1 ){
+                        alert('请将内容中的双引号替换成中文版的双引号“”');
+                        return false;
                     }
                     $.post("checkNo",{id:id, tdorderid:tdorderid, orderid:orderid, operateContent:operateContent},function (msg) {
                         if (msg.retCode != '0000') {
@@ -244,7 +246,7 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>驳回理由：</td>
-                        <td><textarea id="operateContent" name="operateContent" style="width: 200px; height: 150px;"></textarea></td>
+                        <td><textarea id="operateContent" name="operateContent" data-options="required:true" style="width: 200px; height: 150px;"></textarea></td>
                     </tr>
                 </table>
             </form>
