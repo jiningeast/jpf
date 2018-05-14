@@ -34,7 +34,7 @@
                         微信商户号:
                     </td>
                     <td>
-                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:90%" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:90%" class="easyui-textbox" value="" data-options="required:true,validType:'isNumber'" />
                     </td>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;" > </td>
                     <td width="30%" ></td>
@@ -275,6 +275,21 @@
 <style>
 </style>
 <script>
+    //微信参数1：只能为数字-------Begin
+    $.extend($.fn.validatebox.defaults.rules, {
+        isNumber : {//数字（包括正整数、0、浮点数）
+            validator: function(value, param){
+                return CheckIsNumber(value);
+            },
+            message: '只能输入数字'
+        }
+    });
+    function CheckIsNumber(z_check_value){
+        var z_reg = /^\d+$/;//.是特殊字符，需要转义
+        return z_reg.test($.trim(z_check_value));
+    }
+    //微信参数1：只能为数字-------End
+
     function initData() {
         //等级信息
         var tpid = "${merchantTypeInfo.catid}";
