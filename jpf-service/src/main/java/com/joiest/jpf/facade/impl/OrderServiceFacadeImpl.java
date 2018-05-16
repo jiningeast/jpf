@@ -1,8 +1,10 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.custom.PayOrderCustom;
 import com.joiest.jpf.common.po.PayOrder;
 import com.joiest.jpf.common.po.PayOrderExample;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderMapper;
 import com.joiest.jpf.dto.OrderRequest;
 import com.joiest.jpf.dto.OrderResponse;
@@ -22,6 +24,9 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
     @Autowired
     private PayOrderMapper payOrderMapper;
 
+    @Autowired
+    private PayOrderCustomMapper payOrderCustomMapper;
+
     @Override
     public Long getOrdersCount(){
         PayOrderExample e = new PayOrderExample();
@@ -35,13 +40,17 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
         OrderResponse orderResponse = new OrderResponse();
 
         PayOrderExample e = new PayOrderExample();
+        e.setPageNo(orderRequest.getPage());
+        e.setPageSize(orderRequest.getRows());
+        e.setOrderByClause("id DESC");
         PayOrderExample.Criteria c = e.createCriteria();
 
         // 汇总统计
         orderResponse.setAllOrdersCount(this.getOrdersCount());
-        orderResponse.setAllOrdersMoney(payOrderMapper.selectOrderpriceSum(e));
+        payOrderMapper.countByExample(e);
+        orderResponse.setAllOrdersMoney(payOrderCustomMapper.selectOrderpriceSum(e));
         c.andSinglestatusEqualTo((byte)7);
-        orderResponse.setAllRefundMoney(payOrderMapper.selectOrderpriceSum(e));
+        orderResponse.setAllRefundMoney(payOrderCustomMapper.selectOrderpriceSum(e));
         e.clear();
 
         // 构建查询example
@@ -96,12 +105,12 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
         e.setPageNo(orderRequest.getPage());
         e.setPageSize(orderRequest.getRows());
         e.setOrderByClause("id DESC");
-        List<PayOrder> list = payOrderMapper.selectByExample(e);
+        List<PayOrderCustom> list = payOrderCustomMapper.selectJoinMerchants(e);
         List<OrderInfo> infos = new ArrayList<OrderInfo>();
-        for (PayOrder payOrder : list){
+        for (PayOrderCustom payOrderCustom : list){
             OrderInfo orderInfo = new OrderInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayOrder.class, OrderInfo.class, false);
-            beanCopier.copy(payOrder, orderInfo, null);
+            BeanCopier beanCopier = BeanCopier.create(PayOrderCustom.class, OrderInfo.class, false);
+            beanCopier.copy(payOrderCustom, orderInfo, null);
 
             infos.add(orderInfo);
         }

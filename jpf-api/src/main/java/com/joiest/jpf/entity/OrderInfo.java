@@ -79,6 +79,16 @@ public class OrderInfo {
      */
     private String ordername;
 
+    /**
+     * 聚合商户名称
+     */
+    private String merchName;
+
+    /**
+     * 企业名称
+     */
+    private String companyname;
+
     public Long getId() {
         return id;
     }
@@ -197,5 +207,21 @@ public class OrderInfo {
 
     public void setOrdername(String ordername) {
         this.ordername = ordername;
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
+    }
+
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
     }
 }

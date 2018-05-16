@@ -46,6 +46,7 @@
                     // {field:'id',title:'ID',width:'3%'},
                     {field:'orderid',title:'订单ID',width:'9%'},
                     {field:'mtsid',title:'商户ID',width:'3%'},
+                    {field:'companyname',title:'商户名称',width:'3%'},
                     {field:'uid',title:'用户uid',width:'3%'},
                     {field:'pid',title:'商品ID',width:'3%'},
                     {field:'paytype',title:'支付方式',width:'7%',
