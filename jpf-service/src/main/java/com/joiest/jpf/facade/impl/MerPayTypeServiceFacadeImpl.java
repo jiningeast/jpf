@@ -236,7 +236,8 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "微信商户号不能为空");
             }
-            if ( Integer.valueOf(bankcatid) != 35 )
+            String paytypeId_wx = "35";
+            if ( !bankcatid.equals(paytypeId_wx) )
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, payMerchantsType.getCat() + "的分期只能设置为：不分期");
             }
@@ -325,7 +326,8 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "微信商户号不能为空");
             }
-            if ( Integer.valueOf(bankcatid) != 35 )
+            String paytypeId_wx = "35";
+            if ( !bankcatid.equals(paytypeId_wx) )
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, payMerchantsType.getCat() + "的分期只能设置为：不分期");
             }

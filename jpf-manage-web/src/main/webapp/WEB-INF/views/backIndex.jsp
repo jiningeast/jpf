@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>中欣运营管理系统 </title>
+    <title>北京中欣消金运营管理系统 </title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
 	<script type="text/javascript" src="${basePath}/resources/easyui144/outlook.js"> </script>
     <style type="text/css">

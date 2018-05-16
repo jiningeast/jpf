@@ -69,8 +69,12 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
         if (StringUtils.isNotBlank(request.getCompanyname())) {
             c.andCompanynameLike("%" + request.getCompanyname() + "%");
         }
-        if(StringUtils.isNotBlank(request.getStartAddTime())&&StringUtils.isNotBlank(request.getEndAddTime())){
-            c.andAddtimeBetween(DateUtils.getFdate(request.getStartAddTime(),DateUtils.DATEFORMATSHORT),DateUtils.addInteger(request.getEndAddTime(),5,1,DateUtils.DATEFORMATSHORT));
+        if(StringUtils.isNotBlank(request.getStartAddTime())){
+//            c.andAddtimeBetween(DateUtils.getFdate(request.getStartAddTime(),DateUtils.DATEFORMATSHORT),DateUtils.addInteger(request.getEndAddTime(),5,1,DateUtils.DATEFORMATSHORT));
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getStartAddTime(),DateUtils.DATEFORMATSHORT));
+        }
+        if( StringUtils.isNotBlank(request.getEndAddTime())){
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getEndAddTime(),DateUtils.DATEFORMATSHORT));
         }
         if(request.getStatus()!=null){
             c.andStatusEqualTo(request.getStatus());
