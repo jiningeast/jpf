@@ -70,7 +70,7 @@
                             return false;
                         }
                         var id = rows[0].id;
-                        var orderid = rows[0].id;
+                        var orderid = rows[0].orderid;
                         $.post("rerefund",{id:id,orderid:orderid},function(msg){
                             if (msg.retCode != '0000') {
                                 $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
