@@ -34,9 +34,17 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
     public OrderResponse getOrders(OrderRequest orderRequest){
         OrderResponse orderResponse = new OrderResponse();
 
-        // 构建查询example
         PayOrderExample e = new PayOrderExample();
         PayOrderExample.Criteria c = e.createCriteria();
+
+        // 汇总统计
+        orderResponse.setAllOrdersCount(this.getOrdersCount());
+        orderResponse.setAllOrdersMoney(payOrderMapper.selectOrderpriceSum(e));
+        c.andSinglestatusEqualTo((byte)7);
+        orderResponse.setAllRefundMoney(payOrderMapper.selectOrderpriceSum(e));
+        e.clear();
+
+        // 构建查询example
         if ( StringUtils.isNotBlank(orderRequest.getOrderid()) ){
             c.andOrderidEqualTo(orderRequest.getOrderid());
         }

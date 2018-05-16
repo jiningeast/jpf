@@ -108,6 +108,11 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "抱歉，支付24小时后才可以退款");
         }*/
 
+        // 周末不能退款
+        if ( DateUtils.getDayOfWeek() == 6 || DateUtils.getDayOfWeek() == 7 ){
+            throw new JpfException(JpfErrorInfo.SYSTEM_ERROR,"抱歉，只能在工作日才能退款");
+        }
+
         // 根据请求构建新的json记录
         Map<String, Object> map = new HashMap<>();
         map.put("uid", userInfo.getId());

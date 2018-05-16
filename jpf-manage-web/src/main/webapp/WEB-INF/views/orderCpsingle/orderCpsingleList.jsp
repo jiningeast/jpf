@@ -56,6 +56,31 @@
                         }
                         $("#opeCon").window('setTitle','驳回理由').window('refresh').window('open');
                     }
+                },{
+                    text:'重新退款',
+                    iconCls:'icon-redo',
+                    handler:function(){
+                        var rows = $("#dg").datagrid('getSelections');
+                        if ( rows.length != 1 ) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return false;
+                        }
+                        if ( rows[0].singlestatus !== 4 ){
+                            $.messager.alert('消息提示','只能对退款失败的订单发起重新退款','info');
+                            return false;
+                        }
+                        var id = rows[0].id;
+                        var orderid = rows[0].id;
+                        $.post("rerefund",{id:id,orderid:orderid},function(msg){
+                            if (msg.retCode != '0000') {
+                                $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
+                                return false;
+                            } else {
+                                $.messager.alert('消息提示','操作成功!','info');
+                                $('#dg').datagrid('reload');
+                            }
+                        })
+                    }
                 }
             ]
             $("#dg").datagrid({

@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.*;
 
 @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
@@ -37,6 +38,16 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
     private SystemlogServiceFacade systemlogServiceFacade;
 
     private static final Logger logger = LogManager.getLogger(OrderCpsingleServiceFacadeImpl.class);
+
+    @Override
+    public OrderCpsingleInfo getCpByPK(BigInteger id){
+        PayOrderCpsingle payOrderCpsingle = payOrderCpsingleMapper.selectByPrimaryKey(id);
+        OrderCpsingleInfo orderCpsingleInfo = new OrderCpsingleInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayOrderCpsingle.class, OrderCpsingleInfo.class, false);
+        beanCopier.copy(payOrderCpsingle, orderCpsingleInfo, null);
+
+        return orderCpsingleInfo;
+    }
 
     @Override
     public int getCpsCount(){
@@ -85,6 +96,13 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
 
         // =============================start========================================
+        // tableName
+        String className = e.getClass().getName();
+        int start = className.lastIndexOf(".");
+        int end = className.lastIndexOf("Example");
+        String tableName = className.substring(start+1, end);
+
+
         // where
         List<PayOrderCpsingleExample.Criterion> cList = c.getCriteria();    // 获取查询参数
         StringBuilder sb = new StringBuilder();
@@ -154,6 +172,11 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "此订单已处理，请不要重复处理");
         }
 
+        // 周末不能退款
+        if ( DateUtils.getDayOfWeek() == 6 || DateUtils.getDayOfWeek() == 7 ){
+            throw new JpfException(JpfErrorInfo.SYSTEM_ERROR,"抱歉，只能在工作日才能退款");
+        }
+
         // 根据请求构建新的json记录
         Map<String, Object> map = new HashMap<>();
         map.put("uid", userInfo.getId());
@@ -161,7 +184,6 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         map.put("content", "<span style='color:blue'>审核通过</span>");
         map.put("date", new Date());
 
-        JsonUtils jsonUtils = new JsonUtils();
         List<Object> list = new ArrayList<>();
         // 判断原审核内容是否为空
         if ( org.apache.commons.lang3.StringUtils.isBlank(json) ){
@@ -170,14 +192,14 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         }else
         {
             // 把原JSON转换成list
-            list = jsonUtils.toObject(json, List.class);
+            list = JsonUtils.toObject(json, List.class);
 
             // 把新的json记录添加进原json
             list.add(map);
         }
 
         // 得到新拼接的JSON数据
-        String newJson = jsonUtils.toJson(list);
+        String newJson = JsonUtils.toJson(list);
         PayOrderCpsingle newRec = new PayOrderCpsingle();
         newRec.setId(orderCpsingleRequest.getId());
         newRec.setOperateContent(newJson);
@@ -384,5 +406,14 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             }
         }
         logger.info("======================================接收银联返回信息 end=======================================================");
+    }
+
+    @Override
+    public JpfResponseDto cancelOrder(String orderid, UserInfo userInfo, String IP){
+        logger.info("=====================================撤单处理 start=====================================");
+
+        logger.info("=====================================撤单处理 end=====================================");
+
+        return new JpfResponseDto();
     }
 }
