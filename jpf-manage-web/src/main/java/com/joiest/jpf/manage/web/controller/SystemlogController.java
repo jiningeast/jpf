@@ -1,6 +1,5 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.SystemlogServiceFacade;
@@ -32,7 +31,6 @@ public class SystemlogController {
     @RequestMapping("list")
     @ResponseBody
     public Map<String, Object> list(SystemlogRequest request){
-        ValidatorUtils.validate(request);
         SystemlogResponse response = systemlogServiceFacade.SystemlogList(request);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("total", response.getCount());
