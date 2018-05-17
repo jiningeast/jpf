@@ -1,5 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.common.util.ValidatorUtils;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.SystemlogServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.joiest.jpf.manage.web.util.ServletUtils;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,16 +25,18 @@ public class SystemlogController {
     private SystemlogServiceFacade systemlogServiceFacade;
 
     @RequestMapping("index")
-    public String index(){
-        return "systemlog/systemlogList";
+    public ModelAndView index() {
+        return new ModelAndView("systemlog/systemlogList");
     }
 
     @RequestMapping("list")
     @ResponseBody
-    public Map<String, Object> list( long page, long rows ){
-        Map<String, Object> map = new HashMap();
-        map.put("total", systemlogServiceFacade.getCount());
-        map.put("rows", systemlogServiceFacade.getLogs(page, rows));
+    public Map<String, Object> list(SystemlogRequest request){
+        ValidatorUtils.validate(request);
+        SystemlogResponse response = systemlogServiceFacade.SystemlogList(request);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("total", response.getCount());
+        map.put("rows", response.getList());
 
         return map;
     }
