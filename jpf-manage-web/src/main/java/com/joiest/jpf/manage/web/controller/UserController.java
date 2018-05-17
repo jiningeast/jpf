@@ -1,6 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.dto.ModifyUserRequest;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.UserServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.ModelMap;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -80,6 +83,27 @@ public class UserController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
         String userName = userInfo.getUserName();
         return userServiceFacade.modifyPwd(userName,oldPwd,newPwd);
+    }
+
+    /**
+     * 角色编辑-页面加载
+     */
+    @RequestMapping("editPwd")
+    public ModelAndView editPwd(Integer id, ModelMap modelMap){
+        UserInfo userInfo = userServiceFacade.getUserOne(id);
+        modelMap.addAttribute("userInfo", userInfo);
+
+        return new ModelAndView("user/userPwdModify", modelMap);
+    }
+
+    /**
+     * 角色编辑-action
+     */
+    @RequestMapping("modify/action")
+    @ResponseBody
+    public JpfResponseDto modifyAction(ModifyUserRequest request)
+    {
+        return userServiceFacade.modifyUserPwd(request);
     }
 
 }

@@ -10,13 +10,32 @@
         var id = 0;
 
         $(function() {
-
-            var toolbar = [{
+            $('#infoDiv').window({
+                title:'详情',
+                width:'400',
+                height:'500px',
+                closed:true,
+                modal:true
+            });
+            var toolbar = [
+                {
                 text:'新增',
                 iconCls:'icon-add',
                 handler:function(){
                     $('#addForm').form('reset');
                     $('#addWin').window('open');
+                }
+            },{
+                text:'密码修改',
+                iconCls:'icon-edit',
+                handler:function(){
+                    var rows = $("#dg").datagrid('getSelections');
+
+                    if ( rows.length != 1 ) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
+                        return false;
+                    }
+                    $('#infoDiv').window("open").window('refresh', 'editPwd?id='+rows[0].id).window('setTitle','密码修改');
                 }
             },{
                 text:'密码重置',
@@ -308,5 +327,8 @@
     </div>
 </div>
 <!-- /添加弹出窗口 -->
+<!-- /修改密码 -->
+<div id="infoDiv"></div>
+<!-- /修改密码 -->
 </body>
 </html>
