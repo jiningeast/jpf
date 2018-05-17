@@ -24,6 +24,7 @@
 
     <!--pay_merchants-->
     <result column="merch_name" jdbcType="VARCHAR" property="merchName" />
+    <result column="pname" jdbcType="VARCHAR" property="pname" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -37,16 +38,16 @@
             <foreach collection="criteria.criteria" item="criterion">
               <choose>
                 <when test="criterion.noValue">
-                  and ${criterion.condition}
+                  and o.${criterion.condition}
                 </when>
                 <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
+                  and o.${criterion.condition} #{criterion.value}
                 </when>
                 <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                  and o.${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
                 <when test="criterion.listValue">
-                  and ${criterion.condition}
+                  and o.${criterion.condition}
                   <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
@@ -100,8 +101,10 @@
     paytime, orderstatus, singlestatus, addtime, updatetime
   </sql>
   <select id="selectJoinMerchants" parameterType="com.joiest.jpf.common.po.PayOrderExample" resultMap="BaseResultMap">
-    select o.*,m.merch_name,m.companyname
-    from pay_order o join pay_merchants m ON o.mtsid=m.id
+    SELECT o.*,m.merch_name,m.companyname,p.pname
+    FROM pay_order o
+    JOIN pay_merchants m ON o.mtsid=m.id
+    JOIN pay_merchants_product p ON o.pid=p.pid
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -113,7 +116,7 @@
     </if>
   </select>
   <select id="selectOrderpriceSum" parameterType="com.joiest.jpf.common.po.PayOrderExample" resultType="java.math.BigDecimal">
-    SELECT SUM(orderprice) FROM pay_order
+    SELECT SUM(orderprice) FROM pay_order o
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
