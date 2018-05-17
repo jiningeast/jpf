@@ -56,6 +56,15 @@ public class JpfResponseDto implements java.io.Serializable
 		this.setRetMsg(errorMsg);
 	}
 
+	/**
+	 * Interface 设置错误代码和信息
+	 * @param errorCode
+	 * @param errorMsg
+	 */
+	public void setInterfaceResponseError(String errorCode, String errorMsg) {
+		this.setRetCode(errorCode);
+		this.setRetMsg(errorMsg);
+	}
 
 	@Override
 	public String toString() {

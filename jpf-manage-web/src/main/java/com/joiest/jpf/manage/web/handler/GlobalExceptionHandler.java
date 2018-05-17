@@ -4,6 +4,7 @@ package com.joiest.jpf.manage.web.handler;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.manage.web.util.ServletUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,6 +39,9 @@ public class GlobalExceptionHandler {
         } else if (ex instanceof JpfException) {
             JpfException ptsException = (JpfException) ex;
             response.setResponseError(ptsException.getErrorCode(), ptsException.getErrorMsg());
+        } else if (ex instanceof JpfInterfaceException) {
+            JpfInterfaceException ptsException = (JpfInterfaceException) ex;
+            response.setInterfaceResponseError(ptsException.getCode(), ptsException.getInfo());
         } else if (ex instanceof SQLException) {
             logger.error(ex.getMessage(), ex);
             response.setResponseError(JpfErrorInfo.DAL_ERROR.name(), "数据库访问异常");
