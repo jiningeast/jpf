@@ -89,6 +89,11 @@ public class OrderInfo {
      */
     private String companyname;
 
+    /**
+     * 产品名称
+     */
+    private String pname;
+
     public Long getId() {
         return id;
     }
@@ -223,5 +228,13 @@ public class OrderInfo {
 
     public void setCompanyname(String companyname) {
         this.companyname = companyname;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
     }
 }

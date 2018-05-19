@@ -2,7 +2,9 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PaySystemlog;
 import com.joiest.jpf.common.po.PaySystemlogExample;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PaySystemlogMapper;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.SystemlogInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.SystemlogServiceFacade;
@@ -10,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,7 +51,46 @@ public class SystemlogServiceFacadeImpl implements SystemlogServiceFacade {
 
         return infos;
     }
+    @Override
+    public SystemlogResponse SystemlogList(SystemlogRequest request ){
+        if(request.getPage()<=0){
+            request.setPage(1);
+        }
+        if (request.getRows() <= 0) {
+            request.setRows(10);
+        }
+        PaySystemlogExample example = new PaySystemlogExample();
+        example.setPageNo(request.getPage());
+        example.setPageSize(request.getRows());
+        PaySystemlogExample.Criteria c = example.createCriteria();
+        if(StringUtils.isNotBlank(request.getOperatorName())){
+            c.andOperatorNameEqualTo(request.getOperatorName());
+        }
 
+        if(StringUtils.isNotBlank(request.getStartAddTime())){
+            c.andCreatedGreaterThanOrEqualTo(DateUtils.getFdate(request.getStartAddTime(),DateUtils.DATEFORMATSHORT));
+        }
+        if( StringUtils.isNotBlank(request.getEndAddTime())){
+            c.andCreatedLessThanOrEqualTo(DateUtils.getFdate(request.getEndAddTime(),DateUtils.DATEFORMATSHORT));
+        }
+        if(request.getLogtype()!=null){
+            c.andLogtypeEqualTo(request.getLogtype());
+        }
+
+        List<PaySystemlog> list = paySystemlogMapper.selectByExample(example);
+        int count = paySystemlogMapper.countByExample(example);
+        List<SystemlogInfo> infoList = new ArrayList<>();
+        for(PaySystemlog PaySystemlog:list){
+            SystemlogInfo SystemlogInfo = new SystemlogInfo();
+            BeanCopier beanCopier = BeanCopier.create(PaySystemlog.class, SystemlogInfo.class, false);
+            beanCopier.copy(PaySystemlog,SystemlogInfo,null);
+            infoList.add(SystemlogInfo);
+        }
+        SystemlogResponse SystemlogResponse = new SystemlogResponse();
+        SystemlogResponse.setCount(count);
+        SystemlogResponse.setList(infoList);
+        return SystemlogResponse;
+    }
     /**
      *
      * @param logtype 0：前台 1：后台

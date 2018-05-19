@@ -10,6 +10,7 @@ import com.joiest.jpf.common.util.SHA1;
 import com.joiest.jpf.dao.repository.mapper.generate.PayUserMapper;
 import com.joiest.jpf.dto.GetValueResponse;
 import com.joiest.jpf.dto.LoginVerifyResponse;
+import com.joiest.jpf.dto.ModifyUserRequest;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.UserServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -207,6 +208,65 @@ public class UserServiceFacadeImpl implements UserServiceFacade {
         PayUser user = new PayUser();
         user.setStatus(status);
         payUserMapper.updateByExampleSelective(user,example);
+        return new JpfResponseDto();
+    }
+
+    @Override
+    public UserInfo getUserOne(Integer id) {
+
+        if ( id == null )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        PayUser payUser = payUserMapper.selectByPrimaryKey(id);
+        UserInfo userInfo = new UserInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayUser.class, UserInfo.class, false);
+        beanCopier.copy(payUser,userInfo,null);
+        return userInfo;
+    }
+
+    /**
+     * 密码修改
+     * @param oldPwd
+     * @return
+     */
+    public JpfResponseDto modifyUserPwd(ModifyUserRequest request){
+
+        if ( request.getId() == null )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "ID不能为空");
+        }
+        if ( request.getPassword()== null || request.getPassword().length() <6 )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "密码不能为空且长度不小于6位");
+        }
+
+        if ( request.getPassword().equals( request.getConfirmPassword()) == false )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "密码不一样");
+        }
+
+        PayUser payUser = payUserMapper.selectByPrimaryKey(request.getId());
+        if ( payUser == null )
+        {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "客户信息不存在");
+        }
+
+        /*//已下代码如果修改表单数据名 会导致数据一起修改   有漏洞
+        PayUser payUser1 = new PayUser();
+        BeanCopier beanCopier = BeanCopier.create(ModifyUserRequest.class,PayUser.class,false);
+        beanCopier.copy(request,payUser1,null);
+        payUser1.setId(request.getId());
+        payUserMapper.updateByPrimaryKeySelective(payUser1);*/
+
+        //修改指定数据表字段
+        PayUserExample example = new PayUserExample();
+        PayUserExample.Criteria c = example.createCriteria();
+        c.andIdEqualTo(request.getId());
+        PayUser payUser1 = new PayUser();
+        payUser1.setPassword(SHA1.getInstance().getMySHA1Code(request.getPassword()));
+        payUserMapper.updateByExampleSelective(payUser1,example);
+
         return new JpfResponseDto();
     }
 

@@ -1,7 +1,6 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayOrderCustom;
-import com.joiest.jpf.common.po.PayOrder;
 import com.joiest.jpf.common.po.PayOrderExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayOrderCustomMapper;
@@ -14,10 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class OrderServiceFacadeImpl implements OrderServiceFacade {
 
@@ -40,18 +37,7 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
         OrderResponse orderResponse = new OrderResponse();
 
         PayOrderExample e = new PayOrderExample();
-        e.setPageNo(orderRequest.getPage());
-        e.setPageSize(orderRequest.getRows());
-        e.setOrderByClause("id DESC");
         PayOrderExample.Criteria c = e.createCriteria();
-
-        // 汇总统计
-        orderResponse.setAllOrdersCount(this.getOrdersCount());
-        payOrderMapper.countByExample(e);
-        orderResponse.setAllOrdersMoney(payOrderCustomMapper.selectOrderpriceSum(e));
-        c.andSinglestatusEqualTo((byte)7);
-        orderResponse.setAllRefundMoney(payOrderCustomMapper.selectOrderpriceSum(e));
-        e.clear();
 
         // 构建查询example
         if ( StringUtils.isNotBlank(orderRequest.getOrderid()) ){
@@ -63,13 +49,13 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
         if ( orderRequest.getPid() != null ){
             c.andPidEqualTo(orderRequest.getPid());
         }
-        // 价格区间
         if ( orderRequest.getPaytype() != null ){
             c.andPaytypeEqualTo(orderRequest.getPaytype());
         }
         if ( orderRequest.getOrderstatus() != null ){
             c.andOrderstatusEqualTo(orderRequest.getOrderstatus());
         }
+        // 退单状态
         if ( orderRequest.getSinglestatus() != null ){
             c.andSinglestatusEqualTo(orderRequest.getSinglestatus());
         }
@@ -117,11 +103,83 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
 
         orderResponse.setList(infos);
         orderResponse.setCount(payOrderMapper.countByExample(e));
+
+        // 给统计赋值
+        Map<String, Object> map = this.getStatistics(orderRequest);
+        orderResponse.setAllOrdersCount((long)map.get("allOrdersCount"));
+        orderResponse.setAllOrdersMoney((BigDecimal)map.get("allOrdersMoney"));
+        orderResponse.setAllRefundMoney((BigDecimal)map.get("allRefundMoney"));
+
         return orderResponse;
     }
 
+    // 获取统计数据
     @Override
-    public Boolean refund(BigInteger oid){
-        return true;
+    public Map<String, Object> getStatistics(OrderRequest orderRequest){
+
+        PayOrderExample e = new PayOrderExample();
+        PayOrderExample.Criteria c = e.createCriteria();
+
+        // 构建查询example
+        if ( StringUtils.isNotBlank(orderRequest.getOrderid()) ){
+            c.andOrderidEqualTo(orderRequest.getOrderid());
+        }
+        if ( orderRequest.getMtsid() != null ){
+            c.andMtsidEqualTo(orderRequest.getMtsid());
+        }
+        if ( orderRequest.getPid() != null ){
+            c.andPidEqualTo(orderRequest.getPid());
+        }
+        if ( orderRequest.getPaytype() != null ){
+            c.andPaytypeEqualTo(orderRequest.getPaytype());
+        }
+        if ( orderRequest.getOrderstatus() != null ){
+            c.andOrderstatusEqualTo(orderRequest.getOrderstatus());
+        }
+        // 退单状态
+        if ( orderRequest.getSinglestatus() != null ){
+            c.andSinglestatusEqualTo(orderRequest.getSinglestatus());
+        }
+        // 支付时间搜索
+        Date paytimeStart = new Date();
+        if ( StringUtils.isNotBlank(orderRequest.getPaytimeStart()) ){
+            paytimeStart = DateUtils.getFdate( orderRequest.getPaytimeStart(), DateUtils.DATEFORMATLONG );
+            c.andPaytimeGreaterThanOrEqualTo( paytimeStart );
+        }
+        Date paytimeEnd = new Date();
+        if ( StringUtils.isNotBlank(orderRequest.getPaytimeEnd()) ){
+            paytimeEnd = DateUtils.getFdate( orderRequest.getPaytimeEnd(), DateUtils.DATEFORMATLONG );
+            c.andPaytimeLessThanOrEqualTo( paytimeEnd );
+        }
+        if ( StringUtils.isNotBlank(orderRequest.getPaytimeStart()) && StringUtils.isNotBlank(orderRequest.getPaytimeEnd()) ) {
+            c.andPaytimeBetween(paytimeStart,paytimeEnd);
+        }
+        // 添加时间搜索
+        Date addtimeStart = new Date();
+        if ( StringUtils.isNotBlank(orderRequest.getAddtimeStart()) ){
+            addtimeStart = DateUtils.getFdate( orderRequest.getAddtimeStart(), DateUtils.DATEFORMATLONG );
+            c.andAddtimeGreaterThan( addtimeStart );
+        }
+        Date addtimeEnd = new Date();
+        if ( StringUtils.isNotBlank(orderRequest.getAddtimeEnd()) ){
+            addtimeEnd = DateUtils.getFdate( orderRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
+            c.andAddtimeLessThan( addtimeEnd );
+        }
+        if ( StringUtils.isNotBlank(orderRequest.getAddtimeStart()) && StringUtils.isNotBlank(orderRequest.getAddtimeEnd()) ){
+            c.andAddtimeBetween(addtimeStart, addtimeEnd);
+        }
+
+        // 汇总统计
+        Map<String, Object> map = new HashMap<>();
+        map.put("allOrdersCount", (long)payOrderMapper.countByExample(e));
+        BigDecimal allOrdersMoney = payOrderCustomMapper.selectOrderpriceSum(e);
+        allOrdersMoney = allOrdersMoney == null ? new BigDecimal(0) : allOrdersMoney;
+        map.put("allOrdersMoney", allOrdersMoney);
+        c.andSinglestatusEqualTo((byte)7);
+        BigDecimal allRefundMoney = payOrderCustomMapper.selectOrderpriceSum(e);
+        allRefundMoney = allRefundMoney == null ? new BigDecimal(0) : allRefundMoney;
+        map.put("allRefundMoney", allRefundMoney);
+
+        return map;
     }
 }

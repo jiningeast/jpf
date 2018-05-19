@@ -2,6 +2,7 @@ package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.dto.LoginVerifyResponse;
+import com.joiest.jpf.dto.ModifyUserRequest;
 import com.joiest.jpf.entity.UserInfo;
 
 import java.util.List;
@@ -64,5 +65,17 @@ public interface UserServiceFacade {
      * @return
      */
     public JpfResponseDto alterStatus(String userName,String status);
+
+    /**
+     * 密码修改
+     * @param request
+     * @return
+     */
+    public JpfResponseDto modifyUserPwd(ModifyUserRequest request);
+
+    /**
+     * 获取单个角色信息
+     */
+    public UserInfo getUserOne(Integer id);
 
 }

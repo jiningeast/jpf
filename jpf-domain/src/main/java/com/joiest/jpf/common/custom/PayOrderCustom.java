@@ -91,6 +91,11 @@ public class PayOrderCustom implements Serializable {
      */
     private String companyname;
 
+    /**
+     * 产品名称
+     */
+    private String pname;
+
     private static final long serialVersionUID = 1L;
 
     public BigInteger getId() {
@@ -227,6 +232,14 @@ public class PayOrderCustom implements Serializable {
 
     public void setCompanyname(String companyname) {
         this.companyname = companyname;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
     }
 
     /**

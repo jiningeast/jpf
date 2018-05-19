@@ -68,10 +68,66 @@
                 ]]
             })
             $('#dg').datagrid().datagrid('getPager');
+            $('#searchBtn').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serializeArray();
+                    var postData = parsePostData(queryArray);
+                    $('#dg').datagrid('reload', postData);
+                }
+            });
+
+            $('#searchRestBtn').linkbutton({
+                onClick: function(){
+                    $('#searchForm').form('reset');
+                }
+            });
         })
     </script>
 </head>
 <body>
+<div name="contentDiv" style="width:1418px">
+    <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'">
+        <div style="padding:10px 60px 20px 60px">
+            <form id="searchForm" method="post">
+                <table cellpadding="5">
+                    <tr>
+                        <td>操作者帐号:</td>
+                        <td><input id="operatorName" name="operatorName" class="easyui-textbox" type="text" /></td>
+                        <td>创建时间：</td>
+                        <td colspan="3">
+                            <input type="text" class="Wdate" style="width:158px;" id="startAddTime_s"
+                                   name="startAddTime"
+                                   onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endAddTime_s\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                            -
+                            <input type="text" class="Wdate" style="width:158px;" id="endAddTime_s"
+                                   name="endAddTime"
+                                   onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startAddTime_s\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>状态:</td>
+                        <td>
+                            <select id="logtype" name="logtype" class="easyui-combobox">
+                                <option value="">全部</option>
+                                <option value="0">前台</option>
+                                <option value="1">后台</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div id="ft" style="padding:5px;">
+        <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
+        <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+    </div>
+    <br/>
+</div>
     <table id="dg"></table>
+</body>
+
+
+<div id="infoDiv"></div>
 </body>
 </html>

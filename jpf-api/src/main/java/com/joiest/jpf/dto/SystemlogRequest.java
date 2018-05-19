@@ -1,9 +1,14 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-public class SystemlogInfo {
-
+public class SystemlogRequest {
+    /**
+     * 操作时间
+     */
+    private String startAddTime;
+    private String endAddTime;
     /**
      * id
      */
@@ -63,10 +68,27 @@ public class SystemlogInfo {
      * sql语句
      */
     private String content;
+
+    @NotNull
     private long rows;
 
+    @NotNull
     private long page;
 
+    public String getStartAddTime() {
+        return startAddTime;
+    }
+
+    public void setStartAddTime(String startAddTime) {
+        this.startAddTime = startAddTime;
+    }
+
+    public String getEndAddTime() {
+        return endAddTime;
+    }
+    public void setEndAddTime(String endAddTime) {
+        this.endAddTime = endAddTime;
+    }
     public Long getId() {
         return id;
     }
@@ -162,6 +184,7 @@ public class SystemlogInfo {
     public void setContent(String content) {
         this.content = content;
     }
+
     public long getRows() {
         return rows;
     }
