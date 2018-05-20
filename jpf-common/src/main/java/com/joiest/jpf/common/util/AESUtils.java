@@ -147,8 +147,8 @@ public class AESUtils {
      *            加密需要的密码
      * @return 密文
      */
-    public static byte[] encrypt(String content, String SKEY) {
-        byte[] str = {};
+    public static String encrypt(String content, String SKEY) {
+        String str = "";
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");// 创建AES的Key生产者
 
@@ -171,9 +171,7 @@ public class AESUtils {
 
             byte[] result = cipher.doFinal(byteContent);// 加密
 
-            str = result;
-//            return result;
-
+            str = parseByte2HexStr(result);
         } catch (Exception e)
         {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), e.getMessage());
@@ -190,8 +188,8 @@ public class AESUtils {
      *            加密时的密码
      * @return 明文
      */
-    public static byte[] decrypt(byte[] content, String SKEY) {
-        byte[] str = {};
+    public static String decrypt(String content, String SKEY) {
+        String str = "";
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");// 创建AES的Key生产者
             kgen.init(128, new SecureRandom(SKEY.getBytes()));
@@ -200,12 +198,12 @@ public class AESUtils {
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");// 转换为AES专用密钥
             Cipher cipher = Cipher.getInstance("AES");// 创建密码器
             cipher.init(Cipher.DECRYPT_MODE, key);// 初始化为解密模式的密码器
-            byte[] result = cipher.doFinal(content);
-            str =  result; // 明文
-
+            byte[] contentByte = parseHexStr2Byte(content);
+            byte[] result = cipher.doFinal(contentByte);
+            str = new String(result, "UTF-8");
         }catch (Exception e)
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), e.getMessage().toString());
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), e.getMessage());
         }
 
         return str;
@@ -213,24 +211,17 @@ public class AESUtils {
 
 
     public static void main(String[] args) {
-        String content = "美女，约吗？";
-        String password = "12323423422223";
+        String content = "abc";
+        String password = "&*^&%^***()(";
         System.out.println("加密之前：" + content);
 
         // 加密
-        byte[] encrypt = AESUtils.encrypt(content, password);
-        System.out.println("加密后的内容：" + new String(encrypt));
-
-        //如果想要加密内容不显示乱码，可以先将密文转换为16进制
-        String hexStrResult = parseByte2HexStr(encrypt);
-        System.out.println("16进制的密文："  + hexStrResult);
-
-        //如果的到的是16进制密文，别忘了先转为2进制再解密
-        byte[] twoStrResult = parseHexStr2Byte(hexStrResult);
+        String encrypt = AESUtils.encrypt(content, password);
+        System.out.println("加密后的内容：" + encrypt);
 
         // 解密
-        byte[] decrypt = AESUtils.decrypt(twoStrResult, password);
-        System.out.println("解密后的内111111容：" + new String(decrypt));
+        String decrypt = AESUtils.decrypt(encrypt, password);
+        System.out.println("解密后的内容：" + decrypt);
 
     }
 
