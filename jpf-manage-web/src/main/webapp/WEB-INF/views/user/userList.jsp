@@ -205,6 +205,7 @@
                     $('#addWin').window('close')
                 }
             });
+
         });
 
         $(window).resize(function() {
@@ -308,5 +309,50 @@
     </div>
 </div>
 <!-- /添加弹出窗口 -->
+
+<!-- 修改弹出窗口 -->
+<div id="upWin" class="easyui-window" title="修改用户密码"
+     data-options="iconCls:'icon-save',closed:true,modal:true,minimizable:false"
+     style="width: 400px; height: 180px; padding: 10px;">
+    <div class="easyui-layout" fit="true">
+        <div region="center" border="false"
+             style="padding: 10px; background: #fff; ">
+            <form id="upForm" method="post" enctype="multipart/form-data">
+                <table cellpadding=3 class="table table-bordered">
+
+                    <tr id="userPwd_o_tr">
+                        <td style="text-align: right;width:30%" bgcolor="#f1f1f1">原密码：</td>
+                        <td>
+                            <input id="userPwd_o" type="password" data-options="required:true"
+                                   missingMessage="请输入原登录密码" width="120" class="easyui-textbox"/>
+                        </td>
+                    </tr>
+                    <tr id="userPwd_u_tr">
+                        <td style="text-align: right;width:30%" bgcolor="#f1f1f1">登录密码：</td>
+                        <td>
+                            <input id="userPwd_u" type="password" data-options="required:true"
+                                   missingMessage="请输入登录密码" width="120" class="easyui-textbox"/>
+                        </td>
+                    </tr>
+                    <tr id="confirmUserPwd_u_tr">
+                        <td style="text-align: right;width:30%" bgcolor="#f1f1f1">确认密码：</td>
+                        <td>
+                            <input id="confirmUserPwd_u" name="userPwd" type="password"
+                                   required="required" validType="equals['#userPwd']" width="120" class="easyui-textbox"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div region="south" border="false"
+             style="text-align: right; height: 30px; line-height: 30px;">
+            <a id="upSubmitBtn" class="easyui-linkbutton" icon="icon-ok"
+               href="javascript:void(0)">确定</a>
+            <a id="upCancelBtn" class="easyui-linkbutton" icon="icon-cancel"
+               href="javascript:void(0)">取消</a>
+        </div>
+    </div>
+</div>
+<!-- 修改弹出窗口 -->
 </body>
 </html>
