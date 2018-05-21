@@ -21,6 +21,11 @@ public class MerShopRequest {
     private Long pid;
 
     /**
+     * 层级筛选
+     */
+    private int type;
+
+    /**
      * 添加时间-起始时间
      */
     private String addtimeStart;
@@ -76,6 +81,14 @@ public class MerShopRequest {
 
     public void setPid(Long pid) {
         this.pid = pid;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getAddtimeStart() {

@@ -48,6 +48,7 @@
                 selectOnCheck:true,
                 columns:[[
                     {field:"id", title:"ID", width:"10%"},
+                    {field:"type", title:"层级", width:"10%"},
                     {field:"mtsid", title:"商户ID", width:"10%"},
                     {field:"mtsName", title:"商户名称", width:"10%"},
                     {field:"pid", title:"上线ID", width:"10%"},
@@ -93,6 +94,13 @@
                     <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" ></td>
                     <td>上线商户ID：</td>
                     <td><input id="pid" name="pid" class="easyui-textbox" type="text" /></td>
+                    <td>层级筛选</td>
+                    <td>
+                        <select name="type" id="type" class="easyui-combobox">
+                            <option value="0">总店</option>
+                            <option value="1">分店</option>
+                        </select>
+                    </td>
                     <td>生成时间：</td>
                     <td>
                         <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"

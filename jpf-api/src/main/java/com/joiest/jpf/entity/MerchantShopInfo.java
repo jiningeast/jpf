@@ -25,6 +25,11 @@ public class MerchantShopInfo {
     private Long pid;
 
     /**
+     * 层级属性
+     */
+    private String type;
+
+    /**
      * 上线商户名称
      */
     private String parMtsName;
@@ -79,6 +84,14 @@ public class MerchantShopInfo {
 
     public void setPid(Long pid) {
         this.pid = pid;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getParMtsName() {
