@@ -9,6 +9,7 @@ import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.dto.OrderCpsingleRequest;
 import com.joiest.jpf.dto.OrderCpsingleResponse;
 import com.joiest.jpf.dto.UnionPayRefundRequest;
+import com.joiest.jpf.entity.OrderCpsingleInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.OrderCpsingleServiceFacade;
 import com.joiest.jpf.facade.SystemlogServiceFacade;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,6 +83,7 @@ public class OrderCpsingleController {
         }
         logger.info("接口地址为"+postUrl);
 
+        // 请求接口
         String response = OkHttpUtils.postForm(postUrl,posRequest);
         Map<String, String> responseMap = JsonUtils.toCollection(response, new TypeReference<HashMap<String, String>>(){});
 
@@ -105,6 +108,7 @@ public class OrderCpsingleController {
         return orderCpsingleServiceFacade.checkOk(orderCpsingleRequest, userInfo, IP);
     }
 
+    @RequestMapping("/cancelOrder")
     @ResponseBody
     public JpfResponseDto purchaseCancel(String orderid, HttpServletRequest httpRequest){
         // 请求接口地址
@@ -117,6 +121,7 @@ public class OrderCpsingleController {
         }
         logger.info("接口地址为"+postUrl);
 
+        // 请求接口
         Map<String, Object> posRequest = new HashMap<>();
         posRequest.put("orderid",orderid);
         String response = OkHttpUtils.postForm(postUrl,posRequest);
@@ -132,13 +137,15 @@ public class OrderCpsingleController {
         // 记录日志 - 数据库
         String content = "请求地址："+postUrl+"；返回结果："+responseMap.get("code")+','+responseMap.get("info");
 
+        // 记录日志 - 文件
+        logger.info(content);
+
         if ( Integer.parseInt(responseMap.get("code")) != 10000 ){
             // 撤单接口如果没有返回成功
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "请求接口失败，返回："+responseMap.get("info")+"，请检查");
         }
 
-//        orderCpsingleServiceFacade.cancelOrder();
-        return new JpfResponseDto();
+        return orderCpsingleServiceFacade.cancelOrder(orderid, userInfo, IP);
     }
 
     @RequestMapping("/checkNo")
@@ -161,5 +168,16 @@ public class OrderCpsingleController {
         // 获取IP
         String IP = ServletUtils.getIpAddr(httpRequest);
         orderCpsingleServiceFacade.unionPayRefund(request,IP);
+    }
+
+    @RequestMapping("/rerefund")
+    @ResponseBody
+    public JpfResponseDto rerefund(OrderCpsingleRequest orderCpsingleRequest, HttpServletRequest httpRequest){
+        OrderCpsingleInfo orderCpsingleInfo = orderCpsingleServiceFacade.getCpByPK(orderCpsingleRequest.getId());
+        if ( orderCpsingleInfo.getSinglestatus() != 4 ){
+            throw new JpfException(JpfErrorInfo.SYSTEM_ERROR, "只能对退款失败的订单发起重新退款");
+        }
+
+        return this.checkOk(orderCpsingleRequest,httpRequest);
     }
 }

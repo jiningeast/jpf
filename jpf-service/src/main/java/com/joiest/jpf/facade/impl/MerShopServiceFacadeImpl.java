@@ -52,6 +52,11 @@ public class MerShopServiceFacadeImpl implements MerShopServiceFacade {
         if ( merShopRequest.getPid() != null ){
             c.andPidEqualTo(merShopRequest.getPid());
         }
+        if ( merShopRequest.getType() == 0 ){
+            c.andPidEqualTo((long)0);
+        }else{
+            c.andPidNotEqualTo((long)0);
+        }
         Date addtimeStart = new Date();
         if (StringUtils.isNotBlank(merShopRequest.getAddtimeStart()) ){
             addtimeStart = DateUtils.getFdate( merShopRequest.getAddtimeStart(),DateUtils.DATEFORMATLONG );
@@ -73,24 +78,29 @@ public class MerShopServiceFacadeImpl implements MerShopServiceFacade {
             beanCopier.copy(payMerchantsShop, merchantShopInfo, null);
 
             // 根据商户ID查询商户信息
-            PayMerchants payMerchants = new PayMerchants();
-            payMerchants = payMerchantsMapper.selectByPrimaryKey(merchantShopInfo.getMtsid());
-            if ( StringUtils.isNotBlank( payMerchants.getMerchName() ) ){
-                merchantShopInfo.setMtsName(payMerchants.getMerchName());
+            PayMerchants payMerchants = payMerchantsMapper.selectByPrimaryKey(merchantShopInfo.getMtsid());
+            if ( StringUtils.isNotBlank( payMerchants.getCompanyname() ) ){
+                merchantShopInfo.setMtsName(payMerchants.getCompanyname());
             }else
             {
                 merchantShopInfo.setMtsName("");
             }
 
-
             // 根据父商户ID查询商户信息
             if ( merchantShopInfo.getPid() > 0 ){
                 payMerchants = payMerchantsMapper.selectByPrimaryKey(merchantShopInfo.getPid());
-                if ( StringUtils.isNotBlank(payMerchants.getMerchName()) ){
-                    merchantShopInfo.setParMtsName(payMerchants.getMerchName());
+                if ( StringUtils.isNotBlank(payMerchants.getCompanyname()) ){
+                    merchantShopInfo.setParMtsName(payMerchants.getCompanyname());
                 }else{
                     merchantShopInfo.setParMtsName("");
                 }
+            }
+
+            // 判断门店是总店还是分店
+            if ( merchantShopInfo.getPid() == 0 ){
+                merchantShopInfo.setType("总店");
+            }else{
+                merchantShopInfo.setType("分店");
             }
 
             infos.add(merchantShopInfo);

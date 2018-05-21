@@ -2,10 +2,8 @@ package com.joiest.jpf.facade;
 
 import com.joiest.jpf.dto.OrderRequest;
 import com.joiest.jpf.dto.OrderResponse;
-import com.joiest.jpf.entity.OrderInfo;
 
-import java.math.BigInteger;
-import java.util.List;
+import java.util.Map;
 
 public interface OrderServiceFacade {
 
@@ -13,5 +11,5 @@ public interface OrderServiceFacade {
 
     public OrderResponse getOrders(OrderRequest orderRequest);
 
-    public Boolean refund(BigInteger oid);
+    public Map<String, Object> getStatistics(OrderRequest orderRequest);
 }

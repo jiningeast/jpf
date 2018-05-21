@@ -2,6 +2,8 @@ package com.joiest.jpf.dao.repository.mapper.generate;
 
 import com.joiest.jpf.common.po.PayOrder;
 import com.joiest.jpf.common.po.PayOrderExample;
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -84,4 +86,9 @@ public interface PayOrderMapper {
      * @param record
      */
     int updateByPrimaryKey(PayOrder record);
+
+    /**
+     * 自定义：查询订单总金额
+     */
+    BigDecimal selectOrderpriceSum(PayOrderExample example);
 }

@@ -7,9 +7,12 @@ import com.joiest.jpf.dto.UnionPayRefundRequest;
 import com.joiest.jpf.entity.OrderCpsingleInfo;
 import com.joiest.jpf.entity.UserInfo;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 public interface OrderCpsingleServiceFacade {
+
+    public OrderCpsingleInfo getCpByPK(BigInteger id);
 
     public int getCpsCount();
 
@@ -24,4 +27,6 @@ public interface OrderCpsingleServiceFacade {
     public Map<String, Object> getPosRequest(String orderid);
 
     public void unionPayRefund(UnionPayRefundRequest request, String IP);
+
+    public JpfResponseDto cancelOrder(String orderid, UserInfo userInfo, String IP);
 }

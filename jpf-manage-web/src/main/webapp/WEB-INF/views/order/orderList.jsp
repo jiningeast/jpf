@@ -11,6 +11,8 @@
         #searchForm td:nth-child(odd) { text-align: right; }
         #searchForm td:nth-child(even) { text-align: left; }
         #searchForm td { width: 5%;  }
+        .statistics td:nth-child(odd) { background-color: rgb(241,241,241); text-align: right;}
+        .statistics td:nth-child(even) { text-align: left; }
     </style>
     <script>
         $(function () {
@@ -44,8 +46,10 @@
                     // {field:'id',title:'ID',width:'3%'},
                     {field:'orderid',title:'订单ID',width:'9%'},
                     {field:'mtsid',title:'商户ID',width:'3%'},
-                    {field:'uid',title:'用户uid',width:'3%'},
-                    {field:'pid',title:'商品ID',width:'3%'},
+                    {field:'companyname',title:'企业名称',width:'5%'},
+                    // {field:'uid',title:'用户uid',width:'3%'},
+                    {field:'pid',title:'产品ID',width:'3%'},
+                    {field:'pname',title:'产品名称',width:'5%'},
                     {field:'paytype',title:'支付方式',width:'7%',
                         formatter:function (value, row, index) {
                             if ( value !== null ){
@@ -89,7 +93,13 @@
                     {field:'paytime',title:'支付时间',width:'9%',formatter: formatDateStr},
                     {field:'addtime',title:'生成时间',width:'9%',formatter: formatDateStr},
                     // {field:'updatetime',title:'修改时间',width:'9%',formatter: formatDateStr}
-                ]]
+                ]],
+                onLoadSuccess: function (msg) {
+                    $("#allOrdersCount").text(msg.allOrdersCount);
+                    $("#allOrdersMoney").text(msg.allOrdersMoney);
+                    $("#allRefundMoney").text(msg.allRefundMoney);
+                    $("#profitMoney").text(msg.profitMoney);
+                }
             })
 
             // 搜索 - 支付类型初始化
@@ -185,6 +195,21 @@
     <div id="ft" style="padding:5px;">
         <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
         <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+    </div>
+    <br/>
+    <div class="easyui-panel statistics" title="汇总统计">
+        <table width="100%" cellpadding="5%">
+            <tr>
+                <td width="10%">订单总笔数：</td>
+                <td width="10%" id="allOrdersCount"></td>
+                <td width="10%">订单总金额：</td>
+                <td width="10%" id="allOrdersMoney"></td>
+                <td width="10%">退款总金额：</td>
+                <td width="10%" id="allRefundMoney"></td>
+                <td width="10%">结算总金额：</td>
+                <td width="10%" id="profitMoney"></td>
+            </tr>
+        </table>
     </div>
     <br/>
     <table id="dg"></table>
