@@ -86,6 +86,7 @@
                     {field:'orderid',title:'订单ID', width:'10%'},
                     {field:'tdorderprice',title:'退单金额', width:'5%',formatter:formatPrice},
                     {field:'mtsid',title:'商户ID', width:'5%'},
+                    {field:'companyname',title:'商户公司名称', width:'5%'},
                     {field:'singletype',title:'退单类型', width:'5%',
                         formatter:function (value, row, index) {
                             if ( value == 1 ){
