@@ -9,6 +9,8 @@ import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderCpsingleMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayTdorderMapper;
+import com.joiest.jpf.common.custom.PayTdorderCustom;
+import com.joiest.jpf.dao.repository.mapper.custom.PayTdorderCustomMapper;
 import com.joiest.jpf.dto.TdorderRequest;
 import com.joiest.jpf.dto.TdorderResponse;
 import com.joiest.jpf.entity.TdorderInfo;
@@ -30,6 +32,8 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
     @Autowired
     private PayTdorderMapper payTdorderMapper;
 
+    @Autowired
+    private PayTdorderCustomMapper PayTdorderCustomMapper;
     @Autowired
     private PayOrderCpsingleMapper payOrderCpsingleMapper;
 
@@ -76,12 +80,12 @@ public class TdorderServiceFacadeImpl implements TdorderServiceFacade {
         if ( org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeStart() ) && org.apache.commons.lang3.StringUtils.isNotBlank( request.getAddtimeEnd() ) ){
             c.andAddtimeBetween(addtimeStart, addtimeEnd);
         }
-        List<PayTdorder> list = payTdorderMapper.selectByExample(e);
+        List<PayTdorderCustom> list = PayTdorderCustomMapper.selectJoinMerchants(e);
         List<TdorderInfo> infos = new ArrayList<>();
-        for (PayTdorder payTdorder:list){
+        for (PayTdorderCustom payTdorderCustom:list){
             TdorderInfo tdorderInfo = new TdorderInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayTdorder.class, TdorderInfo.class, false);
-            beanCopier.copy(payTdorder, tdorderInfo, null);
+            BeanCopier beanCopier = BeanCopier.create(PayTdorderCustom.class, TdorderInfo.class, false);
+            beanCopier.copy(payTdorderCustom, tdorderInfo, null);
             infos.add(tdorderInfo);
         }
 
