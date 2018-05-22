@@ -3,6 +3,8 @@ package com.joiest.jpf.common.util;
 
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.validation.ConstraintViolation;
@@ -37,6 +39,21 @@ public abstract class ValidatorUtils {
 					.next();
 			logger.info("#Param Validator throw exception: < "+convi.getMessage()+" >");
 			throw new JpfException(JpfErrorInfo.INVALID_PARAMETER,
+					convi.getMessage());
+		}
+	}
+
+	public static <T> void validateInterface(T target) {
+//		if(target == null){
+//			throw new PtsException(PtsErrorInfo.INVALID_PARAMETER,
+//					"参数不能为空");
+//		}
+		Set<ConstraintViolation<T>> constraintViolations = validator.validate(target);
+		if (constraintViolations != null && !constraintViolations.isEmpty()) {
+			ConstraintViolation<T> convi = constraintViolations.iterator()
+					.next();
+			logger.info("#Param Validator throw exception: < "+convi.getMessage()+" >");
+			throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(),
 					convi.getMessage());
 		}
 	}

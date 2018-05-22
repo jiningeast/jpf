@@ -46,8 +46,10 @@ public enum JpfInterfaceErrorInfo {
     SMS_VALI_FAIL("10005", "短信验证失败"),
     MER_CARD_NOTBIND("10006", "商户储蓄卡未绑定"),
     MER_SIGE_NOT("10010", "商户未签约"),
-    MER_SIGE_YES("10011", "商户已签约");
-
+    MER_SIGE_YES("10011", "商户已签约"),
+    INVALID_PARAMETER("10012", "参数无效"),
+    DECRYPT_FAIL("10013", "TOKEN无效"),
+    RECORD_NOT_EXIST("10014", "信息不存在");
 
     private final String desc;
 

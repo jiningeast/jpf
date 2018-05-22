@@ -19,5 +19,8 @@
 	<bean id="OrderCpsingleServiceFacade" class="com.joiest.jpf.facade.impl.OrderCpsingleServiceFacadeImpl"></bean>
 	<bean id="MerShopServiceFacade" class="com.joiest.jpf.facade.impl.MerShopServiceFacadeImpl"></bean>
 	<bean id="VirtualServiceFacade" class="com.joiest.jpf.facade.impl.VirtualServiceFacadeImpl"></bean>
+	<bean id="MerchantInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.MerchantInterfaceServiceFacadeImpl"></bean>
+	<bean id="OrderInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.OrderInterfaceServiceFacadeImpl"></bean>
+	<bean id="OrderCpServiceFacade" class="com.joiest.jpf.facade.impl.OrderCpServiceFacadeImpl"></bean>
 
 </beans>
