@@ -17,12 +17,16 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 
 public class AESUtils {
 
     private static String src = "中华人民共和国";
+
+    private static final Logger logger = LogManager.getLogger(AESUtils.class);
 
     public String jdkAES (String str, String SKey, String operation){
         String res = "";
@@ -174,7 +178,7 @@ public class AESUtils {
             str = parseByte2HexStr(result);
         } catch (Exception e)
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), e.getMessage());
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.DECRYPT_FAIL.getCode(), JpfInterfaceErrorInfo.DECRYPT_FAIL.getDesc());
         }
         return str;
     }
@@ -203,26 +207,11 @@ public class AESUtils {
             str = new String(result, "UTF-8");
         }catch (Exception e)
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), e.getMessage());
+            logger.error("解密：" + e.toString() );
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.DECRYPT_FAIL.getCode(), JpfInterfaceErrorInfo.DECRYPT_FAIL.getDesc());
         }
 
         return str;
-    }
-
-
-    public static void main(String[] args) {
-        String content = "abc";
-        String password = "&*^&%^***()(";
-        System.out.println("加密之前：" + content);
-
-        // 加密
-        String encrypt = AESUtils.encrypt(content, password);
-        System.out.println("加密后的内容：" + encrypt);
-
-        // 解密
-        String decrypt = AESUtils.decrypt(encrypt, password);
-        System.out.println("解密后的内容：" + decrypt);
-
     }
 
     /**将二进制转换成16进制
