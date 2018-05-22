@@ -53,15 +53,18 @@ public class SystemlogServiceFacadeImpl implements SystemlogServiceFacade {
     }
     @Override
     public SystemlogResponse SystemlogList(SystemlogRequest request ){
+
         if(request.getPage()<=0){
             request.setPage(1);
         }
         if (request.getRows() <= 0) {
             request.setRows(10);
         }
+
         PaySystemlogExample example = new PaySystemlogExample();
         example.setPageNo(request.getPage());
         example.setPageSize(request.getRows());
+        example.setOrderByClause("id DESC");
         PaySystemlogExample.Criteria c = example.createCriteria();
         if(StringUtils.isNotBlank(request.getOperatorName())){
             c.andOperatorNameEqualTo(request.getOperatorName());
@@ -89,6 +92,7 @@ public class SystemlogServiceFacadeImpl implements SystemlogServiceFacade {
         SystemlogResponse SystemlogResponse = new SystemlogResponse();
         SystemlogResponse.setCount(count);
         SystemlogResponse.setList(infoList);
+
         return SystemlogResponse;
     }
     /**

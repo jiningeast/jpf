@@ -65,6 +65,16 @@ public class TdorderInfo {
      */
     private Date addtime;
 
+    /**
+     * 聚合商户名称
+     */
+    private String merchName;
+
+    /**
+     * 聚合公司名称
+     */
+    private String companyname;
+
     public BigInteger getId() {
         return id;
     }
@@ -159,5 +169,21 @@ public class TdorderInfo {
 
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
+    }
+
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
     }
 }
