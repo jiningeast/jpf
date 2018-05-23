@@ -104,6 +104,11 @@ public class OrderInfo {
      */
     private String pname;
 
+    /**
+     * 外来请求字符串
+     */
+    private String foreignRequest;
+
     public Long getId() {
         return id;
     }
@@ -262,5 +267,13 @@ public class OrderInfo {
 
     public void setPname(String pname) {
         this.pname = pname;
+    }
+
+    public String getForeignRequest() {
+        return foreignRequest;
+    }
+
+    public void setForeignRequest(String foreignRequest) {
+        this.foreignRequest = foreignRequest;
     }
 }

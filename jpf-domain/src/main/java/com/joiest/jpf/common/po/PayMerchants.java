@@ -160,9 +160,9 @@ public class PayMerchants implements Serializable {
     private String certificate;
 
     /**
-     * 商户公玥
+     * 商户私钥，32位字符串
      */
-    private String publickey;
+    private String privateKey;
 
     private static final long serialVersionUID = 1L;
 
@@ -414,12 +414,12 @@ public class PayMerchants implements Serializable {
         this.certificate = certificate == null ? null : certificate.trim();
     }
 
-    public String getPublickey() {
-        return publickey;
+    public String getPrivateKey() {
+        return privateKey;
     }
 
-    public void setPublickey(String publickey) {
-        this.publickey = publickey == null ? null : publickey.trim();
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey == null ? null : privateKey.trim();
     }
 
     /**
@@ -462,7 +462,7 @@ public class PayMerchants implements Serializable {
         sb.append(", idenddate=").append(idenddate);
         sb.append(", lefalhand=").append(lefalhand);
         sb.append(", certificate=").append(certificate);
-        sb.append(", publickey=").append(publickey);
+        sb.append(", privateKey=").append(privateKey);
         sb.append("]");
         return sb.toString();
     }
@@ -514,7 +514,7 @@ public class PayMerchants implements Serializable {
             && (this.getIdenddate() == null ? other.getIdenddate() == null : this.getIdenddate().equals(other.getIdenddate()))
             && (this.getLefalhand() == null ? other.getLefalhand() == null : this.getLefalhand().equals(other.getLefalhand()))
             && (this.getCertificate() == null ? other.getCertificate() == null : this.getCertificate().equals(other.getCertificate()))
-            && (this.getPublickey() == null ? other.getPublickey() == null : this.getPublickey().equals(other.getPublickey()));
+            && (this.getPrivateKey() == null ? other.getPrivateKey() == null : this.getPrivateKey().equals(other.getPrivateKey()));
     }
 
     /**
@@ -555,7 +555,7 @@ public class PayMerchants implements Serializable {
         result = prime * result + ((getIdenddate() == null) ? 0 : getIdenddate().hashCode());
         result = prime * result + ((getLefalhand() == null) ? 0 : getLefalhand().hashCode());
         result = prime * result + ((getCertificate() == null) ? 0 : getCertificate().hashCode());
-        result = prime * result + ((getPublickey() == null) ? 0 : getPublickey().hashCode());
+        result = prime * result + ((getPrivateKey() == null) ? 0 : getPrivateKey().hashCode());
         return result;
     }
 }

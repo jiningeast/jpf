@@ -162,7 +162,7 @@ public class MerchantInfo {
     /**
      * 商户公钥
      */
-    private String publickey;
+    private String privateKey;
 
     private static final long serialVersionUID = 1L;
 
@@ -349,7 +349,8 @@ public class MerchantInfo {
     public void setContent(String content) {
         this.content = content;
     }
- public String getLegalname() {
+
+    public String getLegalname() {
         return legalname;
     }
 
@@ -413,11 +414,11 @@ public class MerchantInfo {
         this.certificate = certificate == null ? null : certificate.trim();
     }
 
-    public String getPublickey() {
-        return publickey;
+    public String getPrivateKey() {
+        return privateKey;
     }
 
-    public void setPublickey(String publickey) {
-        this.publickey = publickey;
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
     }
 }

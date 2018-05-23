@@ -2265,73 +2265,73 @@ public class PayMerchantsExample {
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyIsNull() {
-            addCriterion("publickey is null");
+        public Criteria andPrivateKeyIsNull() {
+            addCriterion("private_key is null");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyIsNotNull() {
-            addCriterion("publickey is not null");
+        public Criteria andPrivateKeyIsNotNull() {
+            addCriterion("private_key is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyEqualTo(String value) {
-            addCriterion("publickey =", value, "publickey");
+        public Criteria andPrivateKeyEqualTo(String value) {
+            addCriterion("private_key =", value, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyNotEqualTo(String value) {
-            addCriterion("publickey <>", value, "publickey");
+        public Criteria andPrivateKeyNotEqualTo(String value) {
+            addCriterion("private_key <>", value, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyGreaterThan(String value) {
-            addCriterion("publickey >", value, "publickey");
+        public Criteria andPrivateKeyGreaterThan(String value) {
+            addCriterion("private_key >", value, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyGreaterThanOrEqualTo(String value) {
-            addCriterion("publickey >=", value, "publickey");
+        public Criteria andPrivateKeyGreaterThanOrEqualTo(String value) {
+            addCriterion("private_key >=", value, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyLessThan(String value) {
-            addCriterion("publickey <", value, "publickey");
+        public Criteria andPrivateKeyLessThan(String value) {
+            addCriterion("private_key <", value, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyLessThanOrEqualTo(String value) {
-            addCriterion("publickey <=", value, "publickey");
+        public Criteria andPrivateKeyLessThanOrEqualTo(String value) {
+            addCriterion("private_key <=", value, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyLike(String value) {
-            addCriterion("publickey like", value, "publickey");
+        public Criteria andPrivateKeyLike(String value) {
+            addCriterion("private_key like", value, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyNotLike(String value) {
-            addCriterion("publickey not like", value, "publickey");
+        public Criteria andPrivateKeyNotLike(String value) {
+            addCriterion("private_key not like", value, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyIn(List<String> values) {
-            addCriterion("publickey in", values, "publickey");
+        public Criteria andPrivateKeyIn(List<String> values) {
+            addCriterion("private_key in", values, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyNotIn(List<String> values) {
-            addCriterion("publickey not in", values, "publickey");
+        public Criteria andPrivateKeyNotIn(List<String> values) {
+            addCriterion("private_key not in", values, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyBetween(String value1, String value2) {
-            addCriterion("publickey between", value1, value2, "publickey");
+        public Criteria andPrivateKeyBetween(String value1, String value2) {
+            addCriterion("private_key between", value1, value2, "privateKey");
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyNotBetween(String value1, String value2) {
-            addCriterion("publickey not between", value1, value2, "publickey");
+        public Criteria andPrivateKeyNotBetween(String value1, String value2) {
+            addCriterion("private_key not between", value1, value2, "privateKey");
             return (Criteria) this;
         }
 
@@ -2450,8 +2450,8 @@ public class PayMerchantsExample {
             return (Criteria) this;
         }
 
-        public Criteria andPublickeyLikeInsensitive(String value) {
-            addCriterion("upper(publickey) like", value.toUpperCase(), "publickey");
+        public Criteria andPrivateKeyLikeInsensitive(String value) {
+            addCriterion("upper(private_key) like", value.toUpperCase(), "privateKey");
             return (Criteria) this;
         }
     }

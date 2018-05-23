@@ -427,6 +427,76 @@ public class PayOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andForeignRequestIsNull() {
+            addCriterion("foreign_request is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestIsNotNull() {
+            addCriterion("foreign_request is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestEqualTo(String value) {
+            addCriterion("foreign_request =", value, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestNotEqualTo(String value) {
+            addCriterion("foreign_request <>", value, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestGreaterThan(String value) {
+            addCriterion("foreign_request >", value, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestGreaterThanOrEqualTo(String value) {
+            addCriterion("foreign_request >=", value, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestLessThan(String value) {
+            addCriterion("foreign_request <", value, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestLessThanOrEqualTo(String value) {
+            addCriterion("foreign_request <=", value, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestLike(String value) {
+            addCriterion("foreign_request like", value, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestNotLike(String value) {
+            addCriterion("foreign_request not like", value, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestIn(List<String> values) {
+            addCriterion("foreign_request in", values, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestNotIn(List<String> values) {
+            addCriterion("foreign_request not in", values, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestBetween(String value1, String value2) {
+            addCriterion("foreign_request between", value1, value2, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestNotBetween(String value1, String value2) {
+            addCriterion("foreign_request not between", value1, value2, "foreignRequest");
+            return (Criteria) this;
+        }
+
         public Criteria andMtsidIsNull() {
             addCriterion("mtsid is null");
             return (Criteria) this;
@@ -1219,6 +1289,11 @@ public class PayOrderExample {
 
         public Criteria andForeignOrderidLikeInsensitive(String value) {
             addCriterion("upper(foreign_orderid) like", value.toUpperCase(), "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestLikeInsensitive(String value) {
+            addCriterion("upper(foreign_request) like", value.toUpperCase(), "foreignRequest");
             return (Criteria) this;
         }
 

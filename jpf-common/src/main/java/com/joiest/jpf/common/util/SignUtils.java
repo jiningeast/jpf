@@ -59,7 +59,7 @@ public class SignUtils {
 			}
 		}
 		//String signParams = prestr + privateKey;
-		sb.append(privateKey);
+		sb.append("&key="+privateKey);
 		return sb.toString();
 	}
 
