@@ -297,6 +297,136 @@ public class PayOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andForeignOrderidIsNull() {
+            addCriterion("foreign_orderid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidIsNotNull() {
+            addCriterion("foreign_orderid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidEqualTo(String value) {
+            addCriterion("foreign_orderid =", value, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidNotEqualTo(String value) {
+            addCriterion("foreign_orderid <>", value, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidGreaterThan(String value) {
+            addCriterion("foreign_orderid >", value, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidGreaterThanOrEqualTo(String value) {
+            addCriterion("foreign_orderid >=", value, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidLessThan(String value) {
+            addCriterion("foreign_orderid <", value, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidLessThanOrEqualTo(String value) {
+            addCriterion("foreign_orderid <=", value, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidLike(String value) {
+            addCriterion("foreign_orderid like", value, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidNotLike(String value) {
+            addCriterion("foreign_orderid not like", value, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidIn(List<String> values) {
+            addCriterion("foreign_orderid in", values, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidNotIn(List<String> values) {
+            addCriterion("foreign_orderid not in", values, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidBetween(String value1, String value2) {
+            addCriterion("foreign_orderid between", value1, value2, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidNotBetween(String value1, String value2) {
+            addCriterion("foreign_orderid not between", value1, value2, "foreignOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidIsNull() {
+            addCriterion("sign_orderid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidIsNotNull() {
+            addCriterion("sign_orderid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidEqualTo(Long value) {
+            addCriterion("sign_orderid =", value, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidNotEqualTo(Long value) {
+            addCriterion("sign_orderid <>", value, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidGreaterThan(Long value) {
+            addCriterion("sign_orderid >", value, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidGreaterThanOrEqualTo(Long value) {
+            addCriterion("sign_orderid >=", value, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidLessThan(Long value) {
+            addCriterion("sign_orderid <", value, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidLessThanOrEqualTo(Long value) {
+            addCriterion("sign_orderid <=", value, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidIn(List<Long> values) {
+            addCriterion("sign_orderid in", values, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidNotIn(List<Long> values) {
+            addCriterion("sign_orderid not in", values, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidBetween(Long value1, Long value2) {
+            addCriterion("sign_orderid between", value1, value2, "signOrderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignOrderidNotBetween(Long value1, Long value2) {
+            addCriterion("sign_orderid not between", value1, value2, "signOrderid");
+            return (Criteria) this;
+        }
+
         public Criteria andMtsidIsNull() {
             addCriterion("mtsid is null");
             return (Criteria) this;
@@ -1084,6 +1214,11 @@ public class PayOrderExample {
 
         public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
             addCriterion("updatetime not between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderidLikeInsensitive(String value) {
+            addCriterion("upper(foreign_orderid) like", value.toUpperCase(), "foreignOrderid");
             return (Criteria) this;
         }
 

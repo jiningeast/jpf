@@ -15,6 +15,16 @@ public class OrderInfo {
     private String orderid;
 
     /**
+     * 外来订单号
+     */
+    private String foreignOrderid;
+
+    /**
+     * 签约订单号，对应pay_order_cp的orderid字段
+     */
+    private Long signOrderid;
+
+    /**
      * 商户ID
      */
     private Long mtsid;
@@ -108,6 +118,22 @@ public class OrderInfo {
 
     public void setOrderid(String orderid) {
         this.orderid = orderid;
+    }
+
+    public String getForeignOrderid() {
+        return foreignOrderid;
+    }
+
+    public void setForeignOrderid(String foreignOrderid) {
+        this.foreignOrderid = foreignOrderid;
+    }
+
+    public Long getSignOrderid() {
+        return signOrderid;
+    }
+
+    public void setSignOrderid(Long signOrderid) {
+        this.signOrderid = signOrderid;
     }
 
     public Long getMtsid() {
