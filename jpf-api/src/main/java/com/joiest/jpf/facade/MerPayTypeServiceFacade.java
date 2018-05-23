@@ -42,6 +42,15 @@ public interface MerPayTypeServiceFacade {
     public GetMerchPayTypeResponse getOneMerPayTypes(Long mtsid);
 
     /**
+     * 获取某个商户指定支付类型的详情
+     * 6：中银消费金融分期支付
+     * 7：银联信用卡分期支付
+     * 8：花呗分期支付
+     * 9：微信全额支付
+     */
+    public MerchantPayTypeInfo getOneMerPayTypeByTpid(Long mtsid, Integer tpid);
+
+    /**
      * 获取某个商户的单个支付类型 by id
      */
     public MerchantPayTypeInfo getMerOnePayTypes(Long id);

@@ -2265,6 +2265,76 @@ public class PayMerchantsExample {
             return (Criteria) this;
         }
 
+        public Criteria andPublickeyIsNull() {
+            addCriterion("publickey is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyIsNotNull() {
+            addCriterion("publickey is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyEqualTo(String value) {
+            addCriterion("publickey =", value, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyNotEqualTo(String value) {
+            addCriterion("publickey <>", value, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyGreaterThan(String value) {
+            addCriterion("publickey >", value, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyGreaterThanOrEqualTo(String value) {
+            addCriterion("publickey >=", value, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyLessThan(String value) {
+            addCriterion("publickey <", value, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyLessThanOrEqualTo(String value) {
+            addCriterion("publickey <=", value, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyLike(String value) {
+            addCriterion("publickey like", value, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyNotLike(String value) {
+            addCriterion("publickey not like", value, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyIn(List<String> values) {
+            addCriterion("publickey in", values, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyNotIn(List<String> values) {
+            addCriterion("publickey not in", values, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyBetween(String value1, String value2) {
+            addCriterion("publickey between", value1, value2, "publickey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyNotBetween(String value1, String value2) {
+            addCriterion("publickey not between", value1, value2, "publickey");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchNoLikeInsensitive(String value) {
             addCriterion("upper(merch_no) like", value.toUpperCase(), "merchNo");
             return (Criteria) this;
@@ -2377,6 +2447,11 @@ public class PayMerchantsExample {
 
         public Criteria andCertificateLikeInsensitive(String value) {
             addCriterion("upper(certificate) like", value.toUpperCase(), "certificate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublickeyLikeInsensitive(String value) {
+            addCriterion("upper(publickey) like", value.toUpperCase(), "publickey");
             return (Criteria) this;
         }
     }

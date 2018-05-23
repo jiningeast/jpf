@@ -49,7 +49,12 @@ public enum JpfInterfaceErrorInfo {
     MER_SIGE_YES("10011", "商户已签约"),
     INVALID_PARAMETER("10012", "参数无效"),
     DECRYPT_FAIL("10013", "TOKEN无效"),
-    RECORD_NOT_EXIST("10014", "信息不存在");
+    RECORD_NOT_EXIST("10014", "信息不存在"),
+    ILLEGAL_PUBLICKEY("10015", "公钥错误"),
+
+    // 获取分期错误参数 10020开头
+    NO_TERMS_CONFIGURATION("10020", "商户尚未配置银联信用卡分期支付信息");
+
 
     private final String desc;
 

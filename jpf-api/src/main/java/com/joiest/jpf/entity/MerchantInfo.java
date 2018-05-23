@@ -159,6 +159,11 @@ public class MerchantInfo {
      */
     private String certificate;
 
+    /**
+     * 商户公钥
+     */
+    private String publickey;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -406,5 +411,13 @@ public class MerchantInfo {
 
     public void setCertificate(String certificate) {
         this.certificate = certificate == null ? null : certificate.trim();
+    }
+
+    public String getPublickey() {
+        return publickey;
+    }
+
+    public void setPublickey(String publickey) {
+        this.publickey = publickey;
     }
 }

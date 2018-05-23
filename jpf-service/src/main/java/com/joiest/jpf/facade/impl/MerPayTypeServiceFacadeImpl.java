@@ -419,6 +419,26 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
     }
 
     /**
+     * 获取某个商户指定支付类型的详情
+     * @param mtsid 商户mtsid
+     * @param tpid 支付类型
+     * @return 支付配置信息
+     */
+    public MerchantPayTypeInfo getOneMerPayTypeByTpid(Long mtsid, Integer tpid){
+        PayMerchantsPaytypeExample e = new PayMerchantsPaytypeExample();
+        PayMerchantsPaytypeExample.Criteria c = e.createCriteria();
+        c.andMtsidEqualTo(mtsid);
+        c.andTpidEqualTo(tpid);
+        List<PayMerchantsPaytype> list = payMerchantsPaytypeMapper.selectByExample(e);
+
+        MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
+        beanCopier.copy(list.get(0), merchantPayTypeInfo, null);
+
+        return merchantPayTypeInfo;
+    }
+
+    /**
      * 获取某个商户的某个支付类型 by id
      */
     public MerchantPayTypeInfo getMerOnePayTypes(Long id)

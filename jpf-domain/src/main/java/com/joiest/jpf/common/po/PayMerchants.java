@@ -159,6 +159,11 @@ public class PayMerchants implements Serializable {
      */
     private String certificate;
 
+    /**
+     * 商户公玥
+     */
+    private String publickey;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -409,6 +414,14 @@ public class PayMerchants implements Serializable {
         this.certificate = certificate == null ? null : certificate.trim();
     }
 
+    public String getPublickey() {
+        return publickey;
+    }
+
+    public void setPublickey(String publickey) {
+        this.publickey = publickey == null ? null : publickey.trim();
+    }
+
     /**
      *
      */
@@ -449,6 +462,7 @@ public class PayMerchants implements Serializable {
         sb.append(", idenddate=").append(idenddate);
         sb.append(", lefalhand=").append(lefalhand);
         sb.append(", certificate=").append(certificate);
+        sb.append(", publickey=").append(publickey);
         sb.append("]");
         return sb.toString();
     }
@@ -499,7 +513,8 @@ public class PayMerchants implements Serializable {
             && (this.getIdstartdate() == null ? other.getIdstartdate() == null : this.getIdstartdate().equals(other.getIdstartdate()))
             && (this.getIdenddate() == null ? other.getIdenddate() == null : this.getIdenddate().equals(other.getIdenddate()))
             && (this.getLefalhand() == null ? other.getLefalhand() == null : this.getLefalhand().equals(other.getLefalhand()))
-            && (this.getCertificate() == null ? other.getCertificate() == null : this.getCertificate().equals(other.getCertificate()));
+            && (this.getCertificate() == null ? other.getCertificate() == null : this.getCertificate().equals(other.getCertificate()))
+            && (this.getPublickey() == null ? other.getPublickey() == null : this.getPublickey().equals(other.getPublickey()));
     }
 
     /**
@@ -540,6 +555,7 @@ public class PayMerchants implements Serializable {
         result = prime * result + ((getIdenddate() == null) ? 0 : getIdenddate().hashCode());
         result = prime * result + ((getLefalhand() == null) ? 0 : getLefalhand().hashCode());
         result = prime * result + ((getCertificate() == null) ? 0 : getCertificate().hashCode());
+        result = prime * result + ((getPublickey() == null) ? 0 : getPublickey().hashCode());
         return result;
     }
 }
