@@ -4,8 +4,11 @@ import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.AESUtils;
+import com.joiest.jpf.common.util.BigDecimalCalculateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.common.util.SignUtils;
 import com.joiest.jpf.dto.GetMerchPayTypeResponse;
+import com.joiest.jpf.dto.YinjiaCreateOrderRequest;
 import com.joiest.jpf.dto.YinjiaTermsRequest;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
@@ -20,9 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +48,10 @@ public class YinjiaStageController {
     @Autowired
     private MerPayTypeServiceFacade merPayTypeServiceFacade;
 
-    private MerchantInterfaceInfo merchInfo;
+    @Autowired
+    private OrderServiceFacade orderServiceFacade;
+
+    private MerchantInfo merchInfo;
     private String token;
     private Long mid; //商户ID
 
@@ -206,17 +211,56 @@ public class YinjiaStageController {
     // 检查公钥是否有误
     public String checkPublickey(String mtsid, String publickey){
         MerchantInfo merchant = merchantServiceFacade.getMerchant(Long.parseLong(mtsid));
-        if ( merchant.getPublickey().equals(publickey) ){
+        if ( merchant.getPrivateKey().equals(publickey) ){
             return "SUCCESS";
         }else{
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.ILLEGAL_PUBLICKEY,"公钥错误");
         }
     }
 
-    /*@ModelAttribute
+    /**
+     * 下单
+     * @param request 下单请求类
+     * @return 返回固定DTO
+     */
+    @RequestMapping("/createOrder")
+    @ResponseBody
+    public YjResponseDto createOrder(YinjiaCreateOrderRequest request){
+        // 验签
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderid", request.getOrderid());
+        map.put("mid", request.getMid());
+        map.put("productId", request.getProductId());
+        map.put("productName", request.getProductName());
+        map.put("productAmount", request.getProductAmount());
+        map.put("productUnitPrice", request.getProductUnitPrice());
+        map.put("productTotalPrice", request.getProductTotalPrice());
+        String mySign = SignUtils.getSign(map, this.merchInfo.getPrivateKey(), "UTF-8");
+        if ( !mySign.equals(request.getSign()) ){   // 判断我们计算的签名和对方传过来的签名是否一致
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode(),JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
+        }
+
+        // 计算价钱是否合理
+        Double totalPrice = new Double(request.getProductTotalPrice());
+        Double myTotalPrice = BigDecimalCalculateUtils.mul( Double.parseDouble(request.getProductUnitPrice()), Double.parseDouble(request.getProductAmount()) );
+        if ( myTotalPrice != totalPrice ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.WRONG_TOTAL_PRICE.getCode(), JpfInterfaceErrorInfo.WRONG_TOTAL_PRICE.getDesc());
+        }
+
+        // 生成订单
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setForeignOrderid(request.getOrderid());
+        orderInfo.setMtsid(Long.parseLong(request.getMid()));
+        orderInfo.setAddtime(new Date());
+        orderServiceFacade.insOrder(orderInfo);
+
+        return new YjResponseDto();
+    }
+
+    @ModelAttribute
     public void getMerInfo(HttpServletRequest request)
     {
-        String token = request.getParameter("token");
+        /*String token = request.getParameter("token");
         if (StringUtils.isBlank(token) )
         {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "TOKEN不能为空");
@@ -227,10 +271,12 @@ public class YinjiaStageController {
         {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.NOTlOGIN.getCode(), "1111");
         }
-        this.mid = Long.valueOf(mid);
+        this.mid = Long.valueOf(mid);*/
         //商户信息
-        this.merchInfo = merchantInterfaceServiceFacade.getMerchant(this.mid);
-    }*/
+        if ( StringUtils.isNotBlank(request.getParameter("mid")) ){
+            this.merchInfo = merchantServiceFacade.getMerchant(Long.parseLong(request.getParameter("mid")));
+        }
+    }
 
 
 }

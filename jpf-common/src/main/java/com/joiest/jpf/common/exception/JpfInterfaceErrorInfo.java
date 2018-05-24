@@ -51,9 +51,13 @@ public enum JpfInterfaceErrorInfo {
     DECRYPT_FAIL("10013", "TOKEN无效"),
     RECORD_NOT_EXIST("10014", "信息不存在"),
     ILLEGAL_PUBLICKEY("10015", "公钥错误"),
+    INCORRECT_SIGN("10016","验签失败"),
 
     // 获取分期错误参数 10020开头
-    NO_TERMS_CONFIGURATION("10020", "商户尚未配置银联信用卡分期支付信息");
+    NO_TERMS_CONFIGURATION("10020", "商户尚未配置银联信用卡分期支付信息"),
+
+    // 创建订单错误参数 10030开头
+    WRONG_TOTAL_PRICE("10030", "金额有误");
 
 
     private final String desc;
