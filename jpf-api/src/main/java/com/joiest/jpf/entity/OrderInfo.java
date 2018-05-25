@@ -10,6 +10,11 @@ public class OrderInfo {
     private Long id;
 
     /**
+     * 0：旅游分期，1：保险公司
+     */
+    private Byte ordertype;
+
+    /**
      * 订单ID
      */
     private String orderid;
@@ -109,8 +114,21 @@ public class OrderInfo {
      */
     private String foreignRequest;
 
+    /**
+     * 返回地址
+     */
+    private String returnUrl;
+
     public Long getId() {
         return id;
+    }
+
+    public Byte getOrdertype() {
+        return ordertype;
+    }
+
+    public void setOrdertype(Byte ordertype) {
+        this.ordertype = ordertype;
     }
 
     public void setId(Long id) {
@@ -275,5 +293,13 @@ public class OrderInfo {
 
     public void setForeignRequest(String foreignRequest) {
         this.foreignRequest = foreignRequest;
+    }
+
+    public String getReturnUrl() {
+        return returnUrl;
+    }
+
+    public void setReturnUrl(String returnUrl) {
+        this.returnUrl = returnUrl;
     }
 }

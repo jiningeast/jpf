@@ -8,7 +8,6 @@ import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.SignUtils;
 import com.joiest.jpf.dto.YinjiaCreateOrderRequest;
 import com.joiest.jpf.dto.YinjiaTermsRequest;
-import com.joiest.jpf.entity.MerchantInfo;
 import com.joiest.jpf.entity.MerchantInterfaceInfo;
 import com.joiest.jpf.entity.MerchantPayTypeInfo;
 import com.joiest.jpf.entity.OrderInfo;
@@ -127,7 +126,7 @@ public class YinjiaStageController {
      */
     @RequestMapping("/createOrder")
     @ResponseBody
-    public YjResponseDto createOrder(YinjiaCreateOrderRequest request, HttpServletRequest httpServletRequest){
+    public YjResponseDto createOrder(YinjiaCreateOrderRequest request){
         // 验签
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", request.getOrderid());
@@ -138,6 +137,7 @@ public class YinjiaStageController {
         map.put("productUnitPrice", request.getProductUnitPrice());
         map.put("productTotalPrice", request.getProductTotalPrice());
         map.put("term", request.getTerm());
+        map.put("returnUrl", request.getReturnUrl());
         String mySign = SignUtils.getSign(map, merchInfo.getPrivateKey(), "UTF-8");
         if ( !mySign.equals(request.getSign()) ){   // 判断我们计算的签名和对方传过来的签名是否一致
             yjResponseDto.clear();
@@ -215,10 +215,12 @@ public class YinjiaStageController {
         String ordernameJson = JsonUtils.toJson(ordernameMap);
 
         OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOrdertype((byte)1);
         orderInfo.setOrderid(orderid);
         orderInfo.setForeignOrderid(request.getOrderid());
         map.put("sign",request.getSign());
         orderInfo.setForeignRequest(map.toString().replaceAll(", ","&"));
+        orderInfo.setReturnUrl(request.getReturnUrl());
         orderInfo.setMtsid(Long.parseLong(request.getMid()));
         orderInfo.setUid((long)0);
         orderInfo.setPaytype(7);

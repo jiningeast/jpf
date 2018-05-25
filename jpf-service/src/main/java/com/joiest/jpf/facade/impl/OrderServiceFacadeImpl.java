@@ -187,9 +187,11 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
     @Override
     public int insOrder(OrderInfo orderInfo){
         PayOrder payOrder = new PayOrder();
+        payOrder.setOrdertype((byte)1);
         payOrder.setOrderid(orderInfo.getOrderid());
         payOrder.setForeignOrderid(orderInfo.getForeignOrderid());
         payOrder.setForeignRequest(orderInfo.getForeignRequest());
+        payOrder.setReturnUrl(orderInfo.getReturnUrl());
         payOrder.setMtsid(orderInfo.getMtsid());
         payOrder.setUid(orderInfo.getUid());
         payOrder.setPaytype(7);
