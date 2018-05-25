@@ -160,9 +160,7 @@ public class YinjiaStageController {
     @ResponseBody
     public YjResponseDto getTerms(YinjiaTermsRequest yinjiaTermsRequest){
         // 检查公钥是否有误
-        String mtsid = yinjiaTermsRequest.getMtsid();
-        String publickey = yinjiaTermsRequest.getPublickey();
-        this.checkPublickey(mtsid, publickey);
+        String mtsid = yinjiaTermsRequest.getMid();
 
         // 获取该商户银联信用卡分期支付的配置信息
         MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(mtsid),7);
@@ -213,6 +211,7 @@ public class YinjiaStageController {
         return yjResponseDto;
     }
 
+<<<<<<< HEAD
 
     // 检查公钥是否有误
     public String checkPublickey(String mtsid, String publickey){
@@ -324,6 +323,8 @@ public class YinjiaStageController {
         return dto;
     }
     /*@ModelAttribute
+=======
+>>>>>>> 64bf87facb67828e7a67d71329c997109c6b2ce2
     /**
      * 下单
      * @param request 下单请求类
@@ -355,6 +356,7 @@ public class YinjiaStageController {
 
         // 生成订单
         OrderInfo orderInfo = new OrderInfo();
+        getRandomInt(1000,9999);
         orderInfo.setForeignOrderid(request.getOrderid());
         orderInfo.setMtsid(Long.parseLong(request.getMid()));
         orderInfo.setAddtime(new Date());
@@ -380,6 +382,14 @@ public class YinjiaStageController {
         if ( StringUtils.isNotBlank(request.getParameter("mid")) ){
             this.merchInfo = merchantServiceFacade.getMerchant(Long.parseLong(request.getParameter("mid")));
         }
+    }
+
+    // 生成指定范围内的随机整数
+    public int getRandomInt(int min, int max){
+        Random random = new Random();
+        int randomInt = random.nextInt(max)%(max-min+1) + min;
+
+        return randomInt;
     }
 
 

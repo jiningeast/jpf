@@ -159,9 +159,10 @@ public class MerchantInterfaceInfo {
      */
     private String certificate;
 
-
-
-    private static final long serialVersionUID = 1L;
+    /**
+     * 商户公钥
+     */
+    private String privateKey;
 
     public Long getId() {
         return id;
@@ -240,7 +241,7 @@ public class MerchantInterfaceInfo {
     }
 
     public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+        this.address = address;
     }
 
     public String getLinkname() {
@@ -346,12 +347,13 @@ public class MerchantInterfaceInfo {
     public void setContent(String content) {
         this.content = content;
     }
- public String getLegalname() {
+
+    public String getLegalname() {
         return legalname;
     }
 
     public void setLegalname(String legalname) {
-        this.legalname = legalname == null ? null : legalname.trim();
+        this.legalname = legalname;
     }
 
     public String getLegalidcard() {
@@ -359,7 +361,7 @@ public class MerchantInterfaceInfo {
     }
 
     public void setLegalidcard(String legalidcard) {
-        this.legalidcard = legalidcard == null ? null : legalidcard.trim();
+        this.legalidcard = legalidcard;
     }
 
     public String getLegalface() {
@@ -367,7 +369,7 @@ public class MerchantInterfaceInfo {
     }
 
     public void setLegalface(String legalface) {
-        this.legalface = legalface == null ? null : legalface.trim();
+        this.legalface = legalface;
     }
 
     public String getLegalback() {
@@ -375,7 +377,7 @@ public class MerchantInterfaceInfo {
     }
 
     public void setLegalback(String legalback) {
-        this.legalback = legalback == null ? null : legalback.trim();
+        this.legalback = legalback;
     }
 
     public String getIdstartdate() {
@@ -383,7 +385,7 @@ public class MerchantInterfaceInfo {
     }
 
     public void setIdstartdate(String idstartdate) {
-        this.idstartdate = idstartdate == null ? null : idstartdate.trim();
+        this.idstartdate = idstartdate;
     }
 
     public String getIdenddate() {
@@ -391,7 +393,7 @@ public class MerchantInterfaceInfo {
     }
 
     public void setIdenddate(String idenddate) {
-        this.idenddate = idenddate == null ? null : idenddate.trim();
+        this.idenddate = idenddate;
     }
 
     public String getLefalhand() {
@@ -399,7 +401,7 @@ public class MerchantInterfaceInfo {
     }
 
     public void setLefalhand(String lefalhand) {
-        this.lefalhand = lefalhand == null ? null : lefalhand.trim();
+        this.lefalhand = lefalhand;
     }
 
     public String getCertificate() {
@@ -407,6 +409,14 @@ public class MerchantInterfaceInfo {
     }
 
     public void setCertificate(String certificate) {
-        this.certificate = certificate == null ? null : certificate.trim();
+        this.certificate = certificate;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
     }
 }

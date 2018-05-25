@@ -15,6 +15,7 @@
         <module>jpf-common</module>
         <module>jpf-web</module>
         <module>jpf-manage-web</module>
+        <module>jpf-yinjia-api</module>
     </modules>
     <packaging>pom</packaging>
 
