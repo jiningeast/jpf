@@ -14,7 +14,12 @@ public class YinjiaTermsRequest {
     private String mid;
 
     /**
+<<<<<<< HEAD
+     * 商户公钥
+     *
+=======
      * sign签名串
+>>>>>>> 64bf87facb67828e7a67d71329c997109c6b2ce2
      */
     @NotBlank(message = "签名串不能为空")
     private String sign;

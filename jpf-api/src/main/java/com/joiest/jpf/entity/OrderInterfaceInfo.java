@@ -16,6 +16,16 @@ public class OrderInterfaceInfo {
     private String orderid;
 
     /**
+     * 外来订单ID
+     */
+    private String foreign_orderid;
+
+    /**
+     * 签约订单ID
+     */
+    private String sign_orderid;
+
+    /**
      * 商户ID
      */
     private Long mtsid;
@@ -128,6 +138,20 @@ public class OrderInterfaceInfo {
         this.orderid = orderid;
     }
 
+    public String getForeignOrderid() {
+        return foreign_orderid;
+    }
+
+    public void setForeignOrderid(String foreign_orderid) {
+        this.foreign_orderid = foreign_orderid;
+    }
+    public String getSignOrderid() {
+        return sign_orderid;
+    }
+
+    public void setSignOrderid(String sign_orderid) {
+        this.sign_orderid = sign_orderid;
+    }
     public Long getMtsid() {
         return mtsid;
     }
