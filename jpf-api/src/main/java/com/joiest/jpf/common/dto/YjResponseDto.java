@@ -1,5 +1,7 @@
 package com.joiest.jpf.common.dto;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * 前台页面返回code
  */
@@ -45,5 +47,24 @@ public class YjResponseDto {
         Code = null;
         Info = null;
         data = null;
+    }
+
+    /**
+     * Interface 设置错误代码和信息
+     * @param errorCode
+     * @param errorMsg
+     */
+    public void setInterfaceResponseError(String errorCode, String errorMsg) {
+        this.setCode(errorCode);
+        this.setInfo(errorMsg);
+    }
+    
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("Code", Code)
+                .add("Info", Info)
+                .add("data", data)
+                .toString();
     }
 }
