@@ -55,10 +55,6 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
         </dependency>
-<<<<<<< HEAD
-
-=======
->>>>>>> 0c832885c5cbd30eab4eff6add8ba4845f5af861
     </dependencies>
 
 </project>
