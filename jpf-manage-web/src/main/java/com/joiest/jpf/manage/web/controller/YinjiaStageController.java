@@ -211,8 +211,6 @@ public class YinjiaStageController {
         return yjResponseDto;
     }
 
-<<<<<<< HEAD
-
     // 检查公钥是否有误
     public String checkPublickey(String mtsid, String publickey){
         MerchantInfo merchant = merchantServiceFacade.getMerchant(Long.parseLong(mtsid));
@@ -323,8 +321,6 @@ public class YinjiaStageController {
         return dto;
     }
     /*@ModelAttribute
-=======
->>>>>>> 64bf87facb67828e7a67d71329c997109c6b2ce2
     /**
      * 下单
      * @param request 下单请求类
