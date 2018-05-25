@@ -18,5 +18,9 @@ public class ManageConstants {
 
     public static final String SIGN_URL_TEST = "http://testwebchats.7shengqian.com/?#/travel/userinfo/7PqHEZAq7CEG/6115271574692993";
 
-    public static final String SIGN_URL_FORMAL = "http://webchats.7shengqian.com/?#/travel/userinfo/7PqHEZAq7CEG/6115271574692993";
+    public static final String SIGN_URL_FORMAL = "http://webchats.7shengqian.com/?#/travel/userinfo/";
+
+    public static final String TERMS_URL = "http://testwebchats.7shengqian.com/?#/travel/travelpay/";
+
+    public static final String AES_KEY = "tioB8c6esX1Cx84Y16NFcFascZQZXiGI";
 }

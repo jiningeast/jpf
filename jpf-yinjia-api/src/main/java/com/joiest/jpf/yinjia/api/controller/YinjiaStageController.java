@@ -3,6 +3,7 @@ package com.joiest.jpf.yinjia.api.controller;
 import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
+import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.BigDecimalCalculateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.SignUtils;
@@ -15,7 +16,6 @@ import com.joiest.jpf.facade.MerPayTypeServiceFacade;
 import com.joiest.jpf.facade.MerchantInterfaceServiceFacade;
 import com.joiest.jpf.facade.OrderServiceFacade;
 import com.joiest.jpf.yinjia.api.constant.ManageConstants;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,11 +25,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static com.joiest.jpf.yinjia.api.constant.ManageConstants.AES_KEY;
 
 @Controller
 @RequestMapping("yinjiastage")
@@ -136,8 +140,17 @@ public class YinjiaStageController {
         map.put("productAmount", request.getProductAmount());
         map.put("productUnitPrice", request.getProductUnitPrice());
         map.put("productTotalPrice", request.getProductTotalPrice());
-        map.put("term", request.getTerm());
-        map.put("returnUrl", request.getReturnUrl());
+        String returnUrl = null;
+        try{
+            returnUrl = URLEncoder.encode(request.getReturnUrl(),"UTF-8");
+        }catch (UnsupportedEncodingException e){
+            yjResponseDto.clear();
+            yjResponseDto.setCode(JpfInterfaceErrorInfo.RETURNURL_ENCODING_ERROR.getCode());
+            yjResponseDto.setInfo(JpfInterfaceErrorInfo.RETURNURL_ENCODING_ERROR.getDesc());
+
+            return yjResponseDto;
+        }
+        map.put("returnUrl", returnUrl.toLowerCase());
         String mySign = SignUtils.getSign(map, merchInfo.getPrivateKey(), "UTF-8");
         if ( !mySign.equals(request.getSign()) ){   // 判断我们计算的签名和对方传过来的签名是否一致
             yjResponseDto.clear();
@@ -159,7 +172,7 @@ public class YinjiaStageController {
         }
 
         // 判断用户是否有资格使用传过来的分期数
-        int catid = 0;
+        /*int catid = 0;
         switch (request.getTerm()){
             // 将传过来的分期数转换成数据库里相应的id
             case "3":
@@ -203,23 +216,22 @@ public class YinjiaStageController {
             yjResponseDto.setInfo(JpfInterfaceErrorInfo.UNSUPPORT_TERM.getDesc());
 
             return yjResponseDto;
-        }
+        }*/
 
         // 生成订单
         String orderid = createOrderid();
-        Map<String, Object> ordernameMap = new HashMap<>();
+        /*Map<String, Object> ordernameMap = new HashMap<>();
         ordernameMap.put("payType",7);
         ordernameMap.put("stageType", request.getTerm());
         ordernameMap.put("payType_cn","银联信用卡分期支付");
         ordernameMap.put("stageType_cn",request.getTerm()+"期");
-        String ordernameJson = JsonUtils.toJson(ordernameMap);
+        String ordernameJson = JsonUtils.toJson(ordernameMap);*/
 
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setOrdertype((byte)1);
         orderInfo.setOrderid(orderid);
         orderInfo.setForeignOrderid(request.getOrderid());
-        map.put("sign",request.getSign());
-        orderInfo.setForeignRequest(map.toString().replaceAll(", ","&"));
+        orderInfo.setForeignRequest(request.toString());
         orderInfo.setReturnUrl(request.getReturnUrl());
         orderInfo.setMtsid(Long.parseLong(request.getMid()));
         orderInfo.setUid((long)0);
@@ -227,7 +239,8 @@ public class YinjiaStageController {
         orderInfo.setOrderprice(new BigDecimal(request.getProductTotalPrice()));
         orderInfo.setOrderselprice(new BigDecimal(request.getProductTotalPrice()));
         orderInfo.setOrdernum(Integer.parseInt(request.getProductAmount()));
-        orderInfo.setOrdername(ordernameJson);
+//        orderInfo.setOrdername(ordernameJson);
+        orderInfo.setOrdername(" ");
         orderInfo.setOrderstatus((byte)0);
         orderInfo.setSinglestatus((byte)1);
         orderInfo.setAddtime(new Date());
@@ -244,16 +257,36 @@ public class YinjiaStageController {
         yjResponseDto.clear();
         yjResponseDto.setCode("10000");
         yjResponseDto.setInfo("创建订单成功,请跳转至signUrl");
-        Map<String, String> responseMap = new HashMap<>();
-        responseMap.put("signUrl",ManageConstants.SIGN_URL_FORMAL );
-        yjResponseDto.setData(responseMap);
+        // 构建H5 URL后缀
+        Map<String, String> tailMap = new HashMap<>();
+        tailMap.put("mid", request.getMid());
+        tailMap.put("orderid", request.getOrderid());
+        tailMap.put("platformOrderid", orderid);
+        String tailJson = JsonUtils.toJson(tailMap);
+        String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
+        // 构建返回的data
+        Map<String, String> dataMap = new HashMap<>();
+        String signUrl = null;
+        try{
+            signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+urlTail, "UTF-8");
+        }catch (UnsupportedEncodingException e){
+            yjResponseDto.clear();
+            yjResponseDto.setCode(JpfInterfaceErrorInfo.SIGNURL_ENCODING_ERROR.getCode());
+            yjResponseDto.setInfo(JpfInterfaceErrorInfo.SIGNURL_ENCODING_ERROR.getDesc());
+
+            return yjResponseDto;
+        }
+        dataMap.put("signUrl", signUrl);
+        dataMap.put("orderid", request.getOrderid());
+        dataMap.put("platformOrderid", orderid);
+        yjResponseDto.setData(dataMap);
 
         return yjResponseDto;
     }
 
     @ModelAttribute
     @ResponseBody
-    public void getMerInfo(HttpServletRequest request)
+    public void getMerInfo(HttpServletRequest request, HttpServletRequest httpServletRequest)
     {
         /*String token = request.getParameter("token");
         if (StringUtils.isBlank(token) )
@@ -275,9 +308,12 @@ public class YinjiaStageController {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
         }
 
-        // 签名串
-        if ( StringUtils.isBlank(request.getParameter("sign")) ){
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+        String serverName = httpServletRequest.getServerName();
+        if ( serverName.contains("/yinjiastage/createOrder") ){
+            // 签名串
+            if ( StringUtils.isBlank(request.getParameter("sign")) ){
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+            }
         }
     }
 

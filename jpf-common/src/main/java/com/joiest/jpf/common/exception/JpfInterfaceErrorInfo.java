@@ -61,7 +61,9 @@ public enum JpfInterfaceErrorInfo {
     WRONG_TOTAL_PRICE("10030", "金额有误"),
     CREATE_ORDER_FAILED("10031", "订单生成失败"),
     ILLEGAL_TERM("10032", "非法的分期期数"),
-    UNSUPPORT_TERM("10033", "不支持该分期数");
+    UNSUPPORT_TERM("10033", "不支持该分期数"),
+    RETURNURL_ENCODING_ERROR("10034", "returnUrl编码错误"),
+    SIGNURL_ENCODING_ERROR("10035", "返回signUrl编码错误");
 
 
     private final String desc;
