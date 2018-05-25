@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>
+	<bean id="userServiceFacade" class="com.joiest.jpf.facade.impl.UserServiceFacadeImpl"></bean>
+	<bean id="merchantServiceFacade" class="com.joiest.jpf.facade.impl.MerchantServiceFacadeImpl"></bean>
+	<bean id="merPayTypeServiceFacade" class="com.joiest.jpf.facade.impl.MerPayTypeServiceFacadeImpl"></bean>
+	<bean id="merTypeServiceFacade" class="com.joiest.jpf.facade.impl.MerTypeServiceFacadeImpl"></bean>
+	<bean id="pcaServiceFacade" class="com.joiest.jpf.facade.impl.PcaServiceFacadeImpl"></bean>
+	<bean id="productServiceFacade" class="com.joiest.jpf.facade.impl.ProductServiceFacadeImpl"></bean>
+	<bean id="RolesServiceFacade" class="com.joiest.jpf.facade.impl.RolesServiceFacadeImpl"></bean>
+	<bean id="BankServiceFacade" class="com.joiest.jpf.facade.impl.BankServiceFacadeImpl"></bean>
+	<bean id="SystemlogServiceFacade" class="com.joiest.jpf.facade.impl.SystemlogServiceFacadeImpl"></bean>
+	<bean id="OrderServiceFacade" class="com.joiest.jpf.facade.impl.OrderServiceFacadeImpl"></bean>
+	<bean id="MerAgentServiceFacade" class="com.joiest.jpf.facade.impl.MerAgentServiceFacadeImpl"></bean>
+	<bean id="TdorderServiceFacade" class="com.joiest.jpf.facade.impl.TdorderServiceFacadeImpl"></bean>
+	<bean id="OrderCpsingleServiceFacade" class="com.joiest.jpf.facade.impl.OrderCpsingleServiceFacadeImpl"></bean>
+	<bean id="MerShopServiceFacade" class="com.joiest.jpf.facade.impl.MerShopServiceFacadeImpl"></bean>
+	<bean id="VirtualServiceFacade" class="com.joiest.jpf.facade.impl.VirtualServiceFacadeImpl"></bean>
+	<bean id="MerchantInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.MerchantInterfaceServiceFacadeImpl"></bean>
+	<bean id="OrderInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.OrderInterfaceServiceFacadeImpl"></bean>
+	<bean id="OrderCpServiceFacade" class="com.joiest.jpf.facade.impl.OrderCpServiceFacadeImpl"></bean>
+	<bean id="yjResponseDto" class="com.joiest.jpf.common.dto.YjResponseDto"></bean>
+
+</beans>

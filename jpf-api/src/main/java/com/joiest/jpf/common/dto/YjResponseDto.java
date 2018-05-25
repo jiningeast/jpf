@@ -40,4 +40,10 @@ public class YjResponseDto {
     public void setData(Object data) {
         this.data = data;
     }
+
+    public void clear(){
+        Code = null;
+        Info = null;
+        data = null;
+    }
 }

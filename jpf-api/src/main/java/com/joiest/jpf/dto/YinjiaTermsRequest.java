@@ -11,27 +11,27 @@ public class YinjiaTermsRequest {
      * 商户号
      */
     @NotBlank(message = "商户号不能为空")
-    private String mtsid;
+    private String mid;
 
     /**
-     * 商户公钥
+     * sign签名串
      */
-    @NotBlank(message = "商户公玥不能为空")
-    private String publickey;
+    @NotBlank(message = "签名串不能为空")
+    private String sign;
 
-    public String getMtsid() {
-        return mtsid;
+    public String getMid() {
+        return mid;
     }
 
-    public void setMtsid(String mtsid) {
-        this.mtsid = mtsid;
+    public void setMid(String mid) {
+        this.mid = mid;
     }
 
-    public String getPublickey() {
-        return publickey;
+    public String getSign() {
+        return sign;
     }
 
-    public void setPublickey(String publickey) {
-        this.publickey = publickey;
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

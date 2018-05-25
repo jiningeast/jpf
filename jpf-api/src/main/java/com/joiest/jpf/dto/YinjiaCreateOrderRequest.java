@@ -50,6 +50,12 @@ public class YinjiaCreateOrderRequest {
     private String productTotalPrice;
 
     /**
+     * 分期数
+     */
+    @NotBlank(message = "分期数不能为空")
+    private String term;
+
+    /**
      * 签名串
      */
     @NotBlank(message = "签名串不能为空")
@@ -109,6 +115,14 @@ public class YinjiaCreateOrderRequest {
 
     public void setProductTotalPrice(String productTotalPrice) {
         this.productTotalPrice = productTotalPrice;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
     }
 
     public String getSign() {
