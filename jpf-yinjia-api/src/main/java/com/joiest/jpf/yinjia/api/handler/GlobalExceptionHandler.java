@@ -4,6 +4,7 @@ package com.joiest.jpf.yinjia.api.handler;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.yinjia.api.util.ServletUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +22,7 @@ import java.util.List;
  * 统一异常处理
  * Created by zjf1650 on 09/08/2017.
  */
-@ControllerAdvice(basePackages = {"com.joiest.jpf.web"})
+@ControllerAdvice(basePackages = {"com.joiest.jpf.yinjia.web"})
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
@@ -38,6 +39,9 @@ public class GlobalExceptionHandler {
         } else if (ex instanceof JpfException) {
             JpfException ptsException = (JpfException) ex;
             response.setResponseError(ptsException.getErrorCode(), ptsException.getErrorMsg());
+        } else if (ex instanceof JpfInterfaceException) {
+            JpfInterfaceException ptsException = (JpfInterfaceException) ex;
+            response.setInterfaceResponseError(ptsException.getCode(), ptsException.getInfo());
         } else if (ex instanceof SQLException) {
             logger.error(ex.getMessage(), ex);
             response.setResponseError(JpfErrorInfo.DAL_ERROR.name(), "数据库访问异常");
