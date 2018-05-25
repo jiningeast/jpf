@@ -444,7 +444,7 @@
 
   <select id="selectOrderAndProductAndPaytype" parameterType="java.math.BigInteger" resultMap="BaseResultMap" >
     SELECT
-	  a.id,a.orderid,a.mtsid,a.pid,a.paytype,a.orderprice,a.orderselprice,a.ordernum,a.ordername,a.paytime,a.orderstatus,a.singlestatus,a.addtime,b.pid as bpid,b.pname,b.pintro,b.pmoney,b.pdpicture,c.cat
+	  a.id,a.orderid,a.foreign_orderid,a.sign_orderid,a.mtsid,a.pid,a.paytype,a.orderprice,a.orderselprice,a.ordernum,a.ordername,a.paytime,a.orderstatus,a.singlestatus,a.addtime,b.pid as bpid,b.pname,b.pintro,b.pmoney,b.pdpicture,c.cat
     FROM
         pay_order a
     LEFT JOIN pay_merchants_product b ON a.pid = b.pid

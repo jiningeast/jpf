@@ -12,6 +12,7 @@ public class YinjiaTermsRequest {
 
     /**
      * 商户公钥
+     *
      */
     @NotNull(message = "商户公玥不能为空")
     private String publickey;
