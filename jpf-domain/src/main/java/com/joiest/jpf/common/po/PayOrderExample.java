@@ -237,6 +237,66 @@ public class PayOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrdertypeIsNull() {
+            addCriterion("ordertype is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeIsNotNull() {
+            addCriterion("ordertype is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeEqualTo(Byte value) {
+            addCriterion("ordertype =", value, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeNotEqualTo(Byte value) {
+            addCriterion("ordertype <>", value, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeGreaterThan(Byte value) {
+            addCriterion("ordertype >", value, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("ordertype >=", value, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeLessThan(Byte value) {
+            addCriterion("ordertype <", value, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeLessThanOrEqualTo(Byte value) {
+            addCriterion("ordertype <=", value, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeIn(List<Byte> values) {
+            addCriterion("ordertype in", values, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeNotIn(List<Byte> values) {
+            addCriterion("ordertype not in", values, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeBetween(Byte value1, Byte value2) {
+            addCriterion("ordertype between", value1, value2, "ordertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdertypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("ordertype not between", value1, value2, "ordertype");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderidIsNull() {
             addCriterion("orderid is null");
             return (Criteria) this;
@@ -494,6 +554,76 @@ public class PayOrderExample {
 
         public Criteria andForeignRequestNotBetween(String value1, String value2) {
             addCriterion("foreign_request not between", value1, value2, "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlIsNull() {
+            addCriterion("return_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlIsNotNull() {
+            addCriterion("return_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlEqualTo(String value) {
+            addCriterion("return_url =", value, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlNotEqualTo(String value) {
+            addCriterion("return_url <>", value, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlGreaterThan(String value) {
+            addCriterion("return_url >", value, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("return_url >=", value, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlLessThan(String value) {
+            addCriterion("return_url <", value, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlLessThanOrEqualTo(String value) {
+            addCriterion("return_url <=", value, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlLike(String value) {
+            addCriterion("return_url like", value, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlNotLike(String value) {
+            addCriterion("return_url not like", value, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlIn(List<String> values) {
+            addCriterion("return_url in", values, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlNotIn(List<String> values) {
+            addCriterion("return_url not in", values, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlBetween(String value1, String value2) {
+            addCriterion("return_url between", value1, value2, "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlNotBetween(String value1, String value2) {
+            addCriterion("return_url not between", value1, value2, "returnUrl");
             return (Criteria) this;
         }
 
@@ -1294,6 +1424,11 @@ public class PayOrderExample {
 
         public Criteria andForeignRequestLikeInsensitive(String value) {
             addCriterion("upper(foreign_request) like", value.toUpperCase(), "foreignRequest");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnUrlLikeInsensitive(String value) {
+            addCriterion("upper(return_url) like", value.toUpperCase(), "returnUrl");
             return (Criteria) this;
         }
 

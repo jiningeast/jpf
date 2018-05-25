@@ -56,6 +56,12 @@ public class YinjiaCreateOrderRequest {
     private String term;
 
     /**
+     * 返回地址
+     */
+    @NotBlank(message = "返回地址不能为空")
+    private String returnUrl;
+
+    /**
      * 签名串
      */
     @NotBlank(message = "签名串不能为空")
@@ -123,6 +129,14 @@ public class YinjiaCreateOrderRequest {
 
     public void setTerm(String term) {
         this.term = term;
+    }
+
+    public String getReturnUrl() {
+        return returnUrl;
+    }
+
+    public void setReturnUrl(String returnUrl) {
+        this.returnUrl = returnUrl;
     }
 
     public String getSign() {

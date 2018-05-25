@@ -12,6 +12,11 @@ public class PayOrder implements Serializable {
     private BigInteger id;
 
     /**
+     * 0：旅游分期，1：保险公司
+     */
+    private Byte ordertype;
+
+    /**
      * 订单ID
      */
     private String orderid;
@@ -30,6 +35,11 @@ public class PayOrder implements Serializable {
      * 外来请求字符串
      */
     private String foreignRequest;
+
+    /**
+     * 返回地址
+     */
+    private String returnUrl;
 
     /**
      * 商户ID
@@ -106,6 +116,14 @@ public class PayOrder implements Serializable {
         this.id = id;
     }
 
+    public Byte getOrdertype() {
+        return ordertype;
+    }
+
+    public void setOrdertype(Byte ordertype) {
+        this.ordertype = ordertype;
+    }
+
     public String getOrderid() {
         return orderid;
     }
@@ -136,6 +154,14 @@ public class PayOrder implements Serializable {
 
     public void setForeignRequest(String foreignRequest) {
         this.foreignRequest = foreignRequest == null ? null : foreignRequest.trim();
+    }
+
+    public String getReturnUrl() {
+        return returnUrl;
+    }
+
+    public void setReturnUrl(String returnUrl) {
+        this.returnUrl = returnUrl == null ? null : returnUrl.trim();
     }
 
     public Long getMtsid() {
@@ -252,10 +278,12 @@ public class PayOrder implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", ordertype=").append(ordertype);
         sb.append(", orderid=").append(orderid);
         sb.append(", foreignOrderid=").append(foreignOrderid);
         sb.append(", signOrderid=").append(signOrderid);
         sb.append(", foreignRequest=").append(foreignRequest);
+        sb.append(", returnUrl=").append(returnUrl);
         sb.append(", mtsid=").append(mtsid);
         sb.append(", uid=").append(uid);
         sb.append(", pid=").append(pid);
@@ -290,10 +318,12 @@ public class PayOrder implements Serializable {
         }
         PayOrder other = (PayOrder) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getOrdertype() == null ? other.getOrdertype() == null : this.getOrdertype().equals(other.getOrdertype()))
             && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
             && (this.getForeignOrderid() == null ? other.getForeignOrderid() == null : this.getForeignOrderid().equals(other.getForeignOrderid()))
             && (this.getSignOrderid() == null ? other.getSignOrderid() == null : this.getSignOrderid().equals(other.getSignOrderid()))
             && (this.getForeignRequest() == null ? other.getForeignRequest() == null : this.getForeignRequest().equals(other.getForeignRequest()))
+            && (this.getReturnUrl() == null ? other.getReturnUrl() == null : this.getReturnUrl().equals(other.getReturnUrl()))
             && (this.getMtsid() == null ? other.getMtsid() == null : this.getMtsid().equals(other.getMtsid()))
             && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
             && (this.getPid() == null ? other.getPid() == null : this.getPid().equals(other.getPid()))
@@ -317,10 +347,12 @@ public class PayOrder implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getOrdertype() == null) ? 0 : getOrdertype().hashCode());
         result = prime * result + ((getOrderid() == null) ? 0 : getOrderid().hashCode());
         result = prime * result + ((getForeignOrderid() == null) ? 0 : getForeignOrderid().hashCode());
         result = prime * result + ((getSignOrderid() == null) ? 0 : getSignOrderid().hashCode());
         result = prime * result + ((getForeignRequest() == null) ? 0 : getForeignRequest().hashCode());
+        result = prime * result + ((getReturnUrl() == null) ? 0 : getReturnUrl().hashCode());
         result = prime * result + ((getMtsid() == null) ? 0 : getMtsid().hashCode());
         result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
         result = prime * result + ((getPid() == null) ? 0 : getPid().hashCode());
