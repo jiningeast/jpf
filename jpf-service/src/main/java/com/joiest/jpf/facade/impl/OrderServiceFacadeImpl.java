@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayOrderCustom;
+import com.joiest.jpf.common.po.PayOrder;
 import com.joiest.jpf.common.po.PayOrderExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayOrderCustomMapper;
@@ -181,5 +182,12 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
         map.put("allRefundMoney", allRefundMoney);
 
         return map;
+    }
+
+    @Override
+    public int insOrder(OrderInfo orderInfo){
+        PayOrder payOrder = new PayOrder();
+        payOrder.setForeignOrderid(orderInfo.getForeignOrderid());
+        return payOrderMapper.insertSelective(payOrder);
     }
 }

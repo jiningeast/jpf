@@ -1,20 +1,23 @@
 package com.joiest.jpf.dto;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * 银嘉分期获取商户分期数接口请求类
+ */
 public class YinjiaTermsRequest {
 
     /**
      * 商户号
      */
-    @NotNull(message = "商户号不能为空")
+    @NotBlank(message = "商户号不能为空")
     private String mtsid;
 
     /**
      * 商户公钥
      *
      */
-    @NotNull(message = "商户公玥不能为空")
+    @NotBlank(message = "商户公玥不能为空")
     private String publickey;
 
     public String getMtsid() {
