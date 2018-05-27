@@ -6,6 +6,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -183,6 +185,15 @@ public class AESUtils {
         return str;
     }
 
+    public static void main(String[] args) {
+        Map<String,String> map = new HashMap<>();
+        map.put("orderid","115273888878865");
+        map.put("mid","117");
+        String tailJson = JsonUtils.toJson(map);
+        String abc = encrypt(tailJson,"tioB8c6esX1Cx84Y16NFcFascZQZXiGI");
+        System.out.println(abc);
+        System.out.println(abc);
+    }
     /**
      * 解密AES加密过的字符串
      *

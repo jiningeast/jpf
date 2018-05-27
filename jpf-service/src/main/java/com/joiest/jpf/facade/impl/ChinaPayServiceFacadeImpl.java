@@ -4,12 +4,14 @@ import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.facade.ChinaPayServiceFacade;
+import org.bouncycastle.crypto.tls.MACAlgorithm;
 //import com.joiest.jpf.manage.web.controller.OrderCpsingleController;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
    // private static final Logger logger = LogManager.getLogger(OrderCpsingleController.class);
@@ -49,5 +51,30 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
             result +=key+"="+map.get(key)+"&";
         }
         return result.substring(0,result.length()-1);
+    }
+
+    /**
+     * 银联分期---发起支付
+     * @param map
+     */
+    public YjResponseDto IntallPay(Map<String,Object> map, String backUrl)
+    {
+        map.put("inputCharset",this.charset);
+        String CP_Salt = map.get("CP_Salt").toString();
+        //移除该项
+        map.remove("CP_Salt");
+        // sort
+        TreeMap<String,Object> treemap = new TreeMap<>();
+        treemap.putAll(map);
+        String sortStr = this.signData(map);
+        String signStr = Md5Encrypt.md5(sortStr + CP_Salt);
+        String requestParam = sortStr + "&" + signStr + "&signType" + this.signType;
+
+        map.put("sign",signStr);
+        map.put("signType", this.signType);
+        //发起支付
+        String result = OkHttpUtils.postForm(backUrl, map);
+
+        return new YjResponseDto();
     }
 }

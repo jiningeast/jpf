@@ -23,4 +23,8 @@ public class ManageConstants {
     public static final String TERMS_URL = "http://testwebchats.7shengqian.com/?#/travel/travelpay/";
 
     public static final String AES_KEY = "tioB8c6esX1Cx84Y16NFcFascZQZXiGI";
+
+    //支付回调url---测试
+	public static final String ChinaPay_PayBackUrl = "http://testapi.7shengqian.com/index.php?r=YinjiaStage/ChinaPayReturn";
+
 }

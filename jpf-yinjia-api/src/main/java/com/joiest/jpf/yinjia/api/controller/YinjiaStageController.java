@@ -5,34 +5,27 @@ import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.dto.YinjiaConfirmRequest;
-import com.joiest.jpf.dto.YinjiaCreateOrderRequest;
-import com.joiest.jpf.dto.YinjiaSignUserInfoRequest;
-import com.joiest.jpf.dto.YinjiaTermsRequest;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
-import com.joiest.jpf.facade.MerPayTypeServiceFacade;
-import com.joiest.jpf.facade.MerchantInterfaceServiceFacade;
-import com.joiest.jpf.facade.OrderCpServiceFacade;
-import com.joiest.jpf.facade.OrderServiceFacade;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.yinjia.api.constant.ManageConstants;
 import com.joiest.jpf.yinjia.api.util.ServletUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.joiest.jpf.yinjia.api.constant.ManageConstants.AES_KEY;
+import static com.joiest.jpf.yinjia.api.constant.ManageConstants.ChinaPay_PayBackUrl;
 
 @Controller
 @RequestMapping("yinjiastage")
@@ -55,6 +48,11 @@ public class YinjiaStageController {
     @Autowired
     private YjResponseDto yjResponseDto;
 
+    @Autowired
+    private OrderInterfaceServiceFacade orderInterfaceServiceFacade;
+
+    @Autowired
+    private ChinaPayServiceFacade chinaPayServiceFacade;
     /**
      * 商户获取银联信用卡分期支付的期数
      * @param request 此接口请求类
@@ -507,4 +505,133 @@ public class YinjiaStageController {
 
         return payTypeCn;
     }
+
+    /**
+     * 联银分期 支付
+     */
+    @RequestMapping(value = "/installpay", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public YjResponseDto InstallPay(YinjiaPayRequest request, HttpServletRequest httpRequest)
+    {
+        if ( StringUtils.isBlank( request.getSmsCode() ) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "验证码错误");
+        }
+
+        String dataJson = AESUtils.decrypt(request.getData(), AES_KEY);
+        Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
+        if ( StringUtils.isBlank(dataMap.get("orderid")) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), "orderid不能为空");
+        }
+
+        //获取订单信息
+        OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(dataMap.get("orderid"));
+        if ( StringUtils.isBlank(orderInfo.getSignOrderid()) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约");
+        }
+        if( !orderInfo.getMtsid().toString().equals(dataMap.get("mid")) ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "订单与商户信息不匹配");
+        }
+        //商户签约信息
+        OrderCpInterfaceInfo orderCpInfo = orderCpServiceFacade.getOrderCpByorderid(orderInfo.getSignOrderid());
+        YjResponseDto dtoResponse = new YjResponseDto();
+        YjResponseDto dto = new YjResponseDto();
+        //验证
+        String stage_tmp = "";
+        if ( orderInfo != null && orderCpInfo != null )
+        {
+            dto.setCode(JpfInterfaceErrorInfo.FAIL.getCode());
+            dto.setInfo("订单或签约信息有误");
+            if ( orderInfo.getOrderstatus().equals(1) )
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "订单已支付");
+            }
+            if ( !orderCpInfo.getSignstatus().equals("2") )
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "签约受理中，稍后再试");
+            }
+            if ( StringUtils.isBlank(orderInfo.getOrdername()) )
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "订单分期信息非法");
+            }
+            Map<String,String> ordernameMap = new HashMap<>();
+            ordernameMap = JsonUtils.toObject(orderInfo.getOrdername(), Map.class);
+            String payType_cn = ordernameMap.get("stageType_cn");
+            if ( StringUtils.isBlank(ordernameMap.get("stageType_cn")) )
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息，请重试");
+            }
+            Pattern pattern = Pattern.compile("^\\d");
+            Matcher matcher = pattern.matcher(ordernameMap.get("stageType_cn"));
+            if ( matcher.find() )
+            {
+                stage_tmp = matcher.group(0);
+                if ( Integer.parseInt(stage_tmp) <= 9 )
+                {
+                    stage_tmp = "0" + stage_tmp;
+                }
+            } else
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息");
+            }
+
+            //获取商户信息 and 商户银嘉支付参数
+            MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchant(Long.parseLong(dataMap.get("mid")));
+            // 获取该商户银联信用卡分期支付的配置信息
+            MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")),7, true);
+            Map<String,String> paramMap = JsonUtils.toObject(merchantPayTypeInfo.getParam(),Map.class);
+            //验证支付参数是否正确
+            String[] keys = {"CP_MerchaNo","CP_Code","CP_Acctid","CP_Salt"};
+            for ( String key : keys )
+            {
+                if ( !paramMap.containsKey(key) ||  paramMap.get(key) == null  )
+                {
+                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "支付参数不正确");
+                }
+            }
+            //拼装商户信息数据
+            Map<String,Object> signMap = new HashMap<>();
+            signMap.put("service","installPay");
+            signMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
+            signMap.put("outOrderNo", dataMap.get("orderid"));
+            signMap.put("smsCode",request.getSmsCode());
+            signMap.put("backUrl",ChinaPay_PayBackUrl);
+            signMap.put("numberOfInstallments",stage_tmp);
+            // 设置IP
+            String IP = ServletUtils.getIpAddr(httpRequest);
+            signMap.put("clientIp", IP);
+            // 接口用到的参数
+            signMap.put("CP_Salt", paramMap.get("CP_Salt"));
+            String requestUrl;
+            String reUri = httpRequest.getServerName();   // 返回域名
+            if ( reUri.indexOf("cpapi.7shengqian.com") > -1 ){
+                requestUrl = CHINAPAY_URL_REQUEST;
+            }else{
+                requestUrl = CHINAPAY_URL_REQUEST+"smsCodeSend";
+            }
+
+            YjResponseDto dtoPayResult = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
+        } else
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.RECORD_NOT_EXIST, "信息不正确 ");
+        }
+        //JsonUtils.toJson("13");
+        //JsonUtils.toObject("13",Map.class);
+//        String ip = ServletUtils.getIpAddr(request);
+//        System.out.println("ip : =======" + ip);
+//        // 获取IP
+//        String IP = ServletUtils.getIpAddr(request);
+
+//        String stage = Integer.valueOf(stage_tmp) < 10 ? "0"+stage_tmp : stage_tmp;
+//        Map<String,String> mapParam = new HashMap<>();
+//        mapParam.put("outOrderNo", orderid);
+//        mapParam.put("smsCode", smsCode);
+//        mapParam.put("backUrl", ManageConstants.CHINAPAY_PAYBACKURL);
+//        mapParam.put("numberOfInstallments", stage);
+//
+        return dtoResponse;
+    }
+
+
 }
