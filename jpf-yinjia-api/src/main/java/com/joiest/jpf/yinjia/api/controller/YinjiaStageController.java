@@ -53,7 +53,6 @@ public class YinjiaStageController {
     private OrderInterfaceServiceFacade orderInterfaceServiceFacade;
 
     @Autowired
-
     private MerchantServiceFacade merchantServiceFacade;
 
     @Autowired
