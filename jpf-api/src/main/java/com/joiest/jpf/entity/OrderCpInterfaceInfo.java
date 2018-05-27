@@ -17,7 +17,7 @@ public class OrderCpInterfaceInfo {
     /**
      * 订单ID
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 商户ID
@@ -145,11 +145,11 @@ public class OrderCpInterfaceInfo {
         this.merchNo = merchNo;
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
+    public void setOrderid(String orderid) {
         this.orderid = orderid;
     }
 

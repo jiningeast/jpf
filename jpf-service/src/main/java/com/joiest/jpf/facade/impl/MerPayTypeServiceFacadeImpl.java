@@ -448,7 +448,7 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         c.andTpidEqualTo(tpid);
         List<PayMerchantsPaytype> list = payMerchantsPaytypeMapper.selectByExample(e);
 
-        if ( forInterface && list == null ){
+        if ( forInterface && list == null  && list.isEmpty() ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(),JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
         }
 
