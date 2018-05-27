@@ -42,8 +42,13 @@ public class YjResponseDto {
         return Data;
     }
 
+
+
     public void setData(Object data) {
         this.Data = data;
+    }
+    public void clearData() {
+        this.Data = null;
     }
 
     public void clear(){

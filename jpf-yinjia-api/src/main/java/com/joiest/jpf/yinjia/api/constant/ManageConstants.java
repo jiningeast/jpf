@@ -18,6 +18,14 @@ public class ManageConstants {
 
     public static final String SIGN_URL_TEST = "http://testwebchats.7shengqian.com/?#/travel/userinfo/7PqHEZAq7CEG/6115271574692993";
 
+    //银联接口请求测试地址
+    public static final String CHINAPAY_URL_REQUEST_TEST = "http://vip2.7shengqian.com/trade/install/";
+    public static final String CHINAPAY_URL_SELECT_TEST = "http://vip2.7shengqian.com/trade/api/";
+
+    //银联接口请求正式地址
+    public static final String CHINAPAY_URL_REQUEST = "http://vip.7shengqian.com/trade/install/";
+    public static final String CHINAPAY_URL_SELECT = "http://vip.7shengqian.com/trade/api/";
+
     public static final String SIGN_URL_FORMAL = "http://webchats.7shengqian.com/?#/travel/userinfo/";
 
     public static final String TERMS_URL = "http://testwebchats.7shengqian.com/?#/travel/travelpay/";

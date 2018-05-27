@@ -12,4 +12,5 @@ public interface ChinaPayServiceFacade {
      */
     public YjResponseDto IntallPay(Map<String,Object> map, String backUrl);
     public YjResponseDto ChinaPaySmsCodeSend(Map<String,Object> map,String requestUrl);
+    public YjResponseDto ChinaPayRefund(Map<String,Object> map,String requestUrl);
 }
