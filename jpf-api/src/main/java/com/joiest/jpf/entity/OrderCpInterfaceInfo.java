@@ -97,7 +97,7 @@ public class OrderCpInterfaceInfo {
     /**
      * 信用卡有效期
      */
-    private Date validitycard;
+    private String validitycard;
 
     /**
      * 有效期默认一年
@@ -273,11 +273,11 @@ public class OrderCpInterfaceInfo {
         this.cvn2 = cvn2;
     }
 
-    public Date getValiditycard() {
+    public String getValiditycard() {
         return validitycard;
     }
 
-    public void setValiditycard(Date validitycard) {
+    public void setValiditycard(String validitycard) {
         this.validitycard = validitycard;
     }
 

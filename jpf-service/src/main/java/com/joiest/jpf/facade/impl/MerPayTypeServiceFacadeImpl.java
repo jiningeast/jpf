@@ -3,6 +3,8 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
@@ -424,12 +426,31 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
      * @param tpid 支付类型
      * @return 支付配置信息
      */
+    @Override
     public MerchantPayTypeInfo getOneMerPayTypeByTpid(Long mtsid, Integer tpid){
         PayMerchantsPaytypeExample e = new PayMerchantsPaytypeExample();
         PayMerchantsPaytypeExample.Criteria c = e.createCriteria();
         c.andMtsidEqualTo(mtsid);
         c.andTpidEqualTo(tpid);
         List<PayMerchantsPaytype> list = payMerchantsPaytypeMapper.selectByExample(e);
+
+        MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
+        beanCopier.copy(list.get(0), merchantPayTypeInfo, null);
+
+        return merchantPayTypeInfo;
+    }
+    @Override
+    public MerchantPayTypeInfo getOneMerPayTypeByTpid(Long mtsid, Integer tpid, boolean forInterface){
+        PayMerchantsPaytypeExample e = new PayMerchantsPaytypeExample();
+        PayMerchantsPaytypeExample.Criteria c = e.createCriteria();
+        c.andMtsidEqualTo(mtsid);
+        c.andTpidEqualTo(tpid);
+        List<PayMerchantsPaytype> list = payMerchantsPaytypeMapper.selectByExample(e);
+
+        if ( forInterface && list == null ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(),JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+        }
 
         MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
         BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);

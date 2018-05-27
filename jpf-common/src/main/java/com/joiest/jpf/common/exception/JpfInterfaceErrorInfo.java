@@ -60,8 +60,16 @@ public enum JpfInterfaceErrorInfo {
     // 创建订单错误参数 10030开头
     WRONG_TOTAL_PRICE("10030", "金额有误"),
     CREATE_ORDER_FAILED("10031", "订单生成失败"),
-    ILLEGAL_TERM("10032", "非法的分期期数"),
-    UNSUPPORT_TERM("10033", "不支持该分期数");
+    RETURNURL_ENCODING_ERROR("10034", "returnUrl编码错误"),
+    SIGNURL_ENCODING_ERROR("10035", "返回signUrl编码错误"),
+
+    // H5 第一步 获取商户支付方式等信息
+    INCORRECT_DATA("10040","加密信息有误"),
+
+    // H5 第二步 选择分期数点击确认付款
+    ILLEGAL_TERM("10050", "非法的分期期数"),
+    UNSUPPORT_TERM("10051", "不支持该分期数"),
+    UPDATE_ORDERNAME_FAILED("10052", "保存分期期数失败");
 
 
     private final String desc;

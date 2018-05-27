@@ -50,12 +50,6 @@ public class YinjiaCreateOrderRequest {
     private String productTotalPrice;
 
     /**
-     * 分期数
-     */
-    @NotBlank(message = "分期数不能为空")
-    private String term;
-
-    /**
      * 返回地址
      */
     @NotBlank(message = "返回地址不能为空")
@@ -123,14 +117,6 @@ public class YinjiaCreateOrderRequest {
         this.productTotalPrice = productTotalPrice;
     }
 
-    public String getTerm() {
-        return term;
-    }
-
-    public void setTerm(String term) {
-        this.term = term;
-    }
-
     public String getReturnUrl() {
         return returnUrl;
     }
@@ -145,5 +131,9 @@ public class YinjiaCreateOrderRequest {
 
     public void setSign(String sign) {
         this.sign = sign;
+    }
+
+    public String toString(){
+        return "mid="+mid+"&orderid="+orderid+"&productAmount="+productAmount+"&productId="+productId+"&productName="+productName+"&productTotalPrice="+productTotalPrice+"&productUnitPrice="+productUnitPrice+"&returnUrl="+returnUrl+"&sign="+sign;
     }
 }

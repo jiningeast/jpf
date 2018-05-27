@@ -1,6 +1,8 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayOrderCustom;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayOrder;
 import com.joiest.jpf.common.po.PayOrderExample;
 import com.joiest.jpf.common.util.DateUtils;
@@ -204,5 +206,59 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
         payOrder.setAddtime(orderInfo.getAddtime());
 
         return payOrderMapper.insertSelective(payOrder);
+    }
+
+    @Override
+    public OrderInfo getOrderByOrderidAndForeignOrderid(String orderid, String platformOrderid, boolean forInterface){
+        PayOrderExample e = new PayOrderExample();
+        PayOrderExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(platformOrderid);
+        c.andForeignOrderidEqualTo(orderid);
+        List<PayOrder> list = payOrderMapper.selectByExample(e);
+
+        if ( forInterface && list == null){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+        }
+
+        OrderInfo orderInfo = new OrderInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayOrder.class, OrderInfo.class, false);
+        beanCopier.copy(list.get(0), orderInfo, null);
+
+        return orderInfo;
+    }
+
+    @Override
+    public int updateOrdername(OrderInfo orderInfo, boolean forInterface){
+        // 判断这条记录是否存在
+        getOrderByOrderid(orderInfo.getOrderid(),true);
+
+        // 开始更新
+        PayOrderExample e = new PayOrderExample();
+        PayOrderExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(orderInfo.getOrderid());
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setOrdername(orderInfo.getOrdername());
+
+        return payOrderMapper.updateByExampleSelective(payOrder, e);
+    }
+
+    @Override
+    public OrderInfo getOrderByOrderid(String orderid, boolean forInterface){
+        PayOrderExample e = new PayOrderExample();
+        PayOrderExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(orderid);
+
+        List<PayOrder> list = payOrderMapper.selectByExample(e);
+
+        if ( forInterface && list == null){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+        }
+
+        OrderInfo orderInfo = new OrderInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayOrder.class, OrderInfo.class, false);
+        beanCopier.copy(list.get(0), orderInfo, null);
+
+        return orderInfo;
     }
 }

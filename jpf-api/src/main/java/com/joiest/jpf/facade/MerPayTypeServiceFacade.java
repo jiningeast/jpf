@@ -49,6 +49,7 @@ public interface MerPayTypeServiceFacade {
      * 9：微信全额支付
      */
     public MerchantPayTypeInfo getOneMerPayTypeByTpid(Long mtsid, Integer tpid);
+    public MerchantPayTypeInfo getOneMerPayTypeByTpid(Long mtsid, Integer tpid, boolean forInterface);
 
     /**
      * 获取某个商户的单个支付类型 by id
