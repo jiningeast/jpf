@@ -15,4 +15,11 @@ public interface OrderServiceFacade {
     public Map<String, Object> getStatistics(OrderRequest orderRequest);
 
     public int insOrder(OrderInfo orderInfo);
+
+    public OrderInfo getOrderByOrderidAndForeignOrderid(String orderid, String platformOrderid, boolean forInterface);
+
+    public int updateOrdername(OrderInfo orderInfo, boolean forInterface);
+
+    // 根据orderid获取订单信息
+    public OrderInfo getOrderByOrderid(String orderid, boolean forInterface);
 }

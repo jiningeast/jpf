@@ -2,6 +2,9 @@ package com.joiest.jpf.common.dto;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 前台页面返回code
  */
@@ -17,7 +20,7 @@ public class YjResponseDto {
      */
     private String Info = "SUCCESS";
 
-    private Object data;
+    private Object Data;
 
     public String getCode() {
         return Code;
@@ -36,17 +39,17 @@ public class YjResponseDto {
     }
 
     public Object getData() {
-        return data;
+        return Data;
     }
 
     public void setData(Object data) {
-        this.data = data;
+        this.Data = data;
     }
 
     public void clear(){
         Code = null;
         Info = null;
-        data = null;
+        Data = null;
     }
 
     /**
@@ -64,7 +67,7 @@ public class YjResponseDto {
         return MoreObjects.toStringHelper(this)
                 .add("Code", Code)
                 .add("Info", Info)
-                .add("data", data)
+                .add("data", Data)
                 .toString();
     }
 }
