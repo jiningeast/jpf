@@ -235,7 +235,7 @@ public class YinjiaStageController {
 
         String requestUrl;
         if ( reUri.indexOf("cpapi.7shengqian.com") > -1 ){
-            requestUrl = CHINAPAY_URL_REQUEST;
+            requestUrl = CHINAPAY_URL_REQUEST+"smsCodeSend";
         }else{
             requestUrl = CHINAPAY_URL_REQUEST_TEST+"smsCodeSend";
         }
