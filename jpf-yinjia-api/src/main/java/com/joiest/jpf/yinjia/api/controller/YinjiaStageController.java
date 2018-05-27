@@ -770,33 +770,35 @@ public class YinjiaStageController {
      * 联银分期 支付
      */
     @RequestMapping(value = "/installpay", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public YjResponseDto InstallPay(YinjiaPayRequest request, HttpServletRequest httpRequest)
+    @ResponseBody
+    public String InstallPay(YinjiaPayRequest request, HttpServletRequest httpRequest)
     {
+        YjResponseDto dto = new YjResponseDto();
+        Map<String,String> responseMap = new HashMap<>();
         if ( StringUtils.isBlank( request.getSmsCode() ) )
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "验证码错误");
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "验证码错误", null);
         }
 
         String dataJson = AESUtils.decrypt(request.getData(), AES_KEY);
         Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
         if ( StringUtils.isBlank(dataMap.get("orderid")) )
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), "orderid不能为空");
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "orderid不能为空", null);
         }
 
         //获取订单信息
         OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(dataMap.get("orderid"));
         if ( StringUtils.isBlank(orderInfo.getSignOrderid()) )
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约");
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约", null);
         }
         if( !orderInfo.getMtsid().toString().equals(dataMap.get("mid")) ){
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "订单与商户信息不匹配");
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单与商户信息不匹配", null);
         }
         //商户签约信息
         OrderCpInterfaceInfo orderCpInfo = orderCpServiceFacade.getOrderCpByorderid(orderInfo.getSignOrderid());
-        YjResponseDto dtoResponse = new YjResponseDto();
-        YjResponseDto dto = new YjResponseDto();
+
         //验证
         String stage_tmp = "";
         if ( orderInfo != null && orderCpInfo != null )
@@ -805,22 +807,23 @@ public class YinjiaStageController {
             dto.setInfo("订单或签约信息有误");
             if ( orderInfo.getOrderstatus().equals(1) )
             {
-                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "订单已支付");
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单已支付", null);
             }
             if ( !orderCpInfo.getSignstatus().equals("2") )
             {
-                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "签约受理中，稍后再试");
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "签约受理中，稍后再试", null);
             }
             if ( StringUtils.isBlank(orderInfo.getOrdername()) )
             {
-                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "订单分期信息非法");
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单分期信息非法", null);
             }
             Map<String,String> ordernameMap = new HashMap<>();
             ordernameMap = JsonUtils.toObject(orderInfo.getOrdername(), Map.class);
             String payType_cn = ordernameMap.get("stageType_cn");
             if ( StringUtils.isBlank(ordernameMap.get("stageType_cn")) )
             {
-                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息，请重试");
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息，请重试", null);
+
             }
             Pattern pattern = Pattern.compile("^\\d");
             Matcher matcher = pattern.matcher(ordernameMap.get("stageType_cn"));
@@ -833,7 +836,7 @@ public class YinjiaStageController {
                 }
             } else
             {
-                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息");
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息", null);
             }
 
             //获取商户信息 and 商户银嘉支付参数
@@ -847,7 +850,7 @@ public class YinjiaStageController {
             {
                 if ( !paramMap.containsKey(key) ||  paramMap.get(key) == null  )
                 {
-                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "支付参数不正确");
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "支付参数不正确", null);
                 }
             }
             //拼装商户信息数据
@@ -868,29 +871,24 @@ public class YinjiaStageController {
             if ( reUri.indexOf("cpapi.7shengqian.com") > -1 ){
                 requestUrl = CHINAPAY_URL_REQUEST + "installPay";
             }else{
-                requestUrl = CHINAPAY_URL_REQUEST + "installPay";
+                requestUrl = CHINAPAY_URL_REQUEST_TEST + "installPay";
             }
 
-            YjResponseDto dtoPayResult = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
+            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
+            String resPay = resultPay.getData().toString();
+            Map<String,String> resultMap = JsonUtils.toObject(resPay,Map.class);
+            if ( resultMap.containsKey("retCode") && resultMap.get("retCode").equals("0000") )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"支付已受理",null);
+            }else
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"渠道受理有误，请重新下单支付",null);
+            }
         } else
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.RECORD_NOT_EXIST, "信息不正确 ");
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不正确", null);
         }
-        //JsonUtils.toJson("13");
-        //JsonUtils.toObject("13",Map.class);
-//        String ip = ServletUtils.getIpAddr(request);
-//        System.out.println("ip : =======" + ip);
-//        // 获取IP
-//        String IP = ServletUtils.getIpAddr(request);
 
-//        String stage = Integer.valueOf(stage_tmp) < 10 ? "0"+stage_tmp : stage_tmp;
-//        Map<String,String> mapParam = new HashMap<>();
-//        mapParam.put("outOrderNo", orderid);
-//        mapParam.put("smsCode", smsCode);
-//        mapParam.put("backUrl", ManageConstants.CHINAPAY_PAYBACKURL);
-//        mapParam.put("numberOfInstallments", stage);
-//
-        return dtoResponse;
     }
 
 

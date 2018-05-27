@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.dto.YjResponseDto;
+import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.facade.ChinaPayServiceFacade;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -94,7 +97,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
      * 银联分期---发起支付
      * @param map
      */
-    public YjResponseDto IntallPay(Map<String,Object> map, String backUrl)
+    public YjResponseDto IntallPay(Map<String,Object> map, String requestUrl)
     {
         map.put("inputCharset",this.charset);
         String CP_Salt = map.get("CP_Salt").toString();
@@ -103,15 +106,27 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         // sort
         TreeMap<String,Object> treemap = new TreeMap<>();
         treemap.putAll(map);
-        String sortStr = this.signData(map);
+        String sortStr = this.signData(treemap);
         String signStr = Md5Encrypt.md5(sortStr + CP_Salt);
         String requestParam = sortStr + "&" + signStr + "&signType" + this.signType;
 
-        map.put("sign",signStr);
-        map.put("signType", this.signType);
+        treemap.put("sign",signStr);
+        treemap.put("signType", this.signType);
         //发起支付
-        String result = OkHttpUtils.postForm(backUrl, map);
-        yjResponseDto.setData(result);
-        return yjResponseDto;
+        String result = OkHttpUtils.postForm(requestUrl, treemap);
+        YjResponseDto dto = new YjResponseDto();
+        dto.setData(requestParam);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + requestUrl);
+        sbf.append("\n接口参数：" + requestParam);
+        sbf.append("\n回调信息：" + result);
+        String filePath = "D:/project/jpf/loggggggg/ChinaLog.txt";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
+
+        return dto;
     }
 }
