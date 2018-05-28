@@ -22,4 +22,6 @@ public interface OrderServiceFacade {
 
     // 根据orderid获取订单信息
     public OrderInfo getOrderByOrderid(String orderid, boolean forInterface);
+
+    public int updataSignOrderid(OrderInfo orderInfo);
 }

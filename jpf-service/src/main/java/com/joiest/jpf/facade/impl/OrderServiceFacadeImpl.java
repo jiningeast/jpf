@@ -261,4 +261,16 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
 
         return orderInfo;
     }
+
+    @Override
+    public int updataSignOrderid(OrderInfo orderInfo){
+        PayOrderExample e = new PayOrderExample();
+        PayOrderExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(orderInfo.getOrderid());
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setSignOrderid(orderInfo.getSignOrderid());
+
+        return payOrderMapper.updateByExampleSelective(payOrder, e);
+    }
 }

@@ -1,10 +1,16 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayOrderRefund;
+import com.joiest.jpf.common.po.PayOrderRefundExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderRefundMapper;
 import com.joiest.jpf.entity.OrderRefundInfo;
 import com.joiest.jpf.facade.OrderRefundServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
+
+import java.util.List;
 
 public class OrderRefundServiceFacadeImpl implements OrderRefundServiceFacade {
 
@@ -26,8 +32,27 @@ public class OrderRefundServiceFacadeImpl implements OrderRefundServiceFacade {
 
         return payOrderRefundMapper.insertSelective(orderRe);
     }
+    @Override
+    public OrderRefundInfo getOrderRefund(String refundOrderid){
 
-    /*@Override
+
+        PayOrderRefundExample example = new PayOrderRefundExample();
+        PayOrderRefundExample.Criteria c = example.createCriteria();
+
+        List<PayOrderRefund> orderRefundlist = payOrderRefundMapper.selectByExample(example);
+        if ( orderRefundlist == null || orderRefundlist.isEmpty())
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.RECORD_NOT_EXIST.getCode(), "退单信息不存在");
+        }
+        PayOrderRefund payOrderRefund = orderRefundlist.get(0);
+
+        OrderRefundInfo orderRefundInfo = new OrderRefundInfo();
+        BeanCopier beanCopier = BeanCopier.create( PayOrderRefund.class, OrderRefundInfo.class, false);
+        beanCopier.copy(payOrderRefund, orderRefundInfo, null);
+
+        return orderRefundInfo;
+    }
+   /* @Override
     public OrderInfo getOrderByOrderid(String orderid, boolean forInterface){
         PayOrderExample e = new PayOrderExample();
         PayOrderExample.Criteria c = e.createCriteria();
