@@ -6,6 +6,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

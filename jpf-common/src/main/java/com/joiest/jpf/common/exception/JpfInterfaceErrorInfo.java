@@ -68,9 +68,13 @@ public enum JpfInterfaceErrorInfo {
 
     // H5 第二步 选择分期数点击确认付款
     ILLEGAL_TERM("10050", "非法的分期期数"),
-    UNSUPPORT_TERM("10051", "不支持该分期数"),
-    UPDATE_ORDERNAME_FAILED("10052", "保存分期期数失败");
+    UNSUPPORT_TERM("10051", "此商户不支持该分期数"),
+    UPDATE_ORDERNAME_FAILED("10052", "保存分期期数失败"),
 
+    // H5 第三步 点击签约页的提交
+    USER_NOT_SIGNED("10060", "用户未签约"),
+    USER_SIGNED("10061", "用户已签约"),
+    UPDATE_SIGN_ORDER_ERROR("10062", "更新签约信息失败");
 
     private final String desc;
 

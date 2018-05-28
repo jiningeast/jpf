@@ -5,16 +5,10 @@ import javax.validation.constraints.NotNull;
 public class YinjiaSignUserInfoRequest {
 
     /**
-     *
+     * AES加密数据
      */
     @NotNull(message = "加密数据不能为空")
     private String data;
-
-    /**
-     * 订单id
-     */
-    @NotNull(message = "订单号不能为空")
-    private String orderid;
 
     /**
      * 真实姓名
@@ -64,14 +58,6 @@ public class YinjiaSignUserInfoRequest {
 
     public void setData(String data) {
         this.data = data;
-    }
-
-    public String getOrderid() {
-        return orderid;
-    }
-
-    public void setOrderid(String orderid) {
-        this.orderid = orderid;
     }
 
     public String getSignedName() {

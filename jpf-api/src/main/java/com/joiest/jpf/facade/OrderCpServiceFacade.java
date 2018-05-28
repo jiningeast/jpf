@@ -18,4 +18,9 @@ public interface OrderCpServiceFacade {
      * 插入一条签约记录
      */
     public int insRecord(OrderCpInterfaceInfo orderCpInterfaceInfo);
+
+    /**
+     * 更新记录
+     */
+    public int updateRecord(OrderCpInterfaceInfo orderCpInterfaceInfo);
 }

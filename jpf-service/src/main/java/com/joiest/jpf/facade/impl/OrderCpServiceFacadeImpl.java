@@ -16,6 +16,7 @@ public class OrderCpServiceFacadeImpl implements OrderCpServiceFacade {
 
     @Autowired
     PayOrderCpMapper payOrderCpMapper;
+
     /**
      * 根据 orderid 获取商户签约信息
      */
@@ -68,6 +69,44 @@ public class OrderCpServiceFacadeImpl implements OrderCpServiceFacade {
         PayOrderCp payOrderCp = new PayOrderCp();
         payOrderCp.setOrderid(orderCpInterfaceInfo.getOrderid());
         payOrderCp.setMtsid(orderCpInterfaceInfo.getMtsid());
+        payOrderCp.setInterestmode(orderCpInterfaceInfo.getInterestmode());
+        payOrderCp.setSubmerid(orderCpInterfaceInfo.getSubmerid());
+        payOrderCp.setSubmername(orderCpInterfaceInfo.getSubmername());
+        payOrderCp.setSubmerabbr(orderCpInterfaceInfo.getSubmerabbr());
+        payOrderCp.setSignedname(orderCpInterfaceInfo.getSignedname());
+        payOrderCp.setIdtype(orderCpInterfaceInfo.getIdtype());
+        payOrderCp.setIdno(orderCpInterfaceInfo.getIdno());
+        payOrderCp.setMobileno(orderCpInterfaceInfo.getMobileno());
+        payOrderCp.setSelectfinacode(orderCpInterfaceInfo.getSelectfinacode());
+        payOrderCp.setBankaccounttype(orderCpInterfaceInfo.getBankaccounttype());
+        payOrderCp.setBankaccountnumber(orderCpInterfaceInfo.getBankaccountnumber());
+        payOrderCp.setCvn2(orderCpInterfaceInfo.getCvn2());
+        payOrderCp.setValiditycard(orderCpInterfaceInfo.getValiditycard());
+        payOrderCp.setValidityyear(orderCpInterfaceInfo.getValidityyear());
+        payOrderCp.setClientip(orderCpInterfaceInfo.getClientip());
+        payOrderCp.setSignstatus(orderCpInterfaceInfo.getSignstatus());
+        payOrderCp.setSysagreeno(orderCpInterfaceInfo.getSysagreeno());
+        payOrderCp.setCreated(orderCpInterfaceInfo.getCreated());
+
         return payOrderCpMapper.insertSelective(payOrderCp);
+    }
+
+    /**
+     * 更新聚合支付传过来的签约参数
+     */
+    @Override
+    public int updateRecord(OrderCpInterfaceInfo orderCpInterfaceInfo){
+        PayOrderCpExample e = new PayOrderCpExample();
+        PayOrderCpExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(Long.parseLong(orderCpInterfaceInfo.getOrderid()));
+
+        PayOrderCp payOrderCp = new PayOrderCp();
+        payOrderCp.setTranno(orderCpInterfaceInfo.getTranno());
+        payOrderCp.setSignstatus(orderCpInterfaceInfo.getSignstatus());
+        if ( orderCpInterfaceInfo.getSysagreeno() != null ){
+            payOrderCp.setSysagreeno(orderCpInterfaceInfo.getSysagreeno());
+        }
+
+        return payOrderCpMapper.updateByExampleSelective(payOrderCp, e);
     }
 }
