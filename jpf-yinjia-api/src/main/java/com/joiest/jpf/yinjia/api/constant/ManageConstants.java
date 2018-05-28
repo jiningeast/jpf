@@ -20,10 +20,10 @@ public class ManageConstants {
 
     //银联接口请求测试地址
     public static final String CHINAPAY_URL_REQUEST_TEST = "http://vip2.7shengqian.com/trade/install/";
-    public static final String CHINAPAY_URL_SELECT_TEST = "http://vip2.7shengqian.com/trade/api/";
 
     //银联接口请求正式地址
     public static final String CHINAPAY_URL_REQUEST = "http://vip.7shengqian.com/trade/install/";
+
     public static final String CHINAPAY_URL_SELECT = "http://vip.7shengqian.com/trade/api/";
 
     public static final String SIGN_URL_FORMAL = "http://webchats.7shengqian.com/?#/travel/userinfo/";
@@ -38,7 +38,7 @@ public class ManageConstants {
 
 
     // 银联签约成功后前台跳转地址
-    public static final String CHINAPAY_SIGN_RETURN_URL = "http://localhost:8080/paycode/";
+    public static final String CHINAPAY_SIGN_RETURN_URL = "http://10.10.18.14:8080/paycode/";
 
     // 银联签约后台通知地址
     public static final String CHINAPAY_SIGN_BACK_URL = "http://testapi.7shengqian.com/yinjia-api/yinjiastage/signNotify";

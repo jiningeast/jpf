@@ -25,5 +25,6 @@
 	<bean id="yjResponseDto" class="com.joiest.jpf.common.dto.YjResponseDto"></bean>
 	<bean id="ChinaPayServiceFacade" class="com.joiest.jpf.facade.impl.ChinaPayServiceFacadeImpl"></bean>
 	<bean id="orderRefundServiceFacade" class="com.joiest.jpf.facade.impl.OrderRefundServiceFacadeImpl"></bean>
+	<bean id="bankCardServiceFacade" class="com.joiest.jpf.facade.impl.BankCardServiceFacadeImpl"></bean>
 
 </beans>
