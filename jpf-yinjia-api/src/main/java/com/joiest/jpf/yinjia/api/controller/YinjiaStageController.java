@@ -16,7 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -467,10 +466,6 @@ public class YinjiaStageController {
                 // 构建返回加密串
                 Map<String , Object> frontMap = new HashMap<>();
                 frontMap.put("orderid",dataMap.get("orderid"));
-                frontMap.put("productName", foreignRequestMap.get("productName"));
-                frontMap.put("orderPrice", orderInfo.getOrderprice());
-                frontMap.put("bankAccountNumber", request.getAccountNumber());
-                frontMap.put("signedName", request.getSignedName());
                 String AESJson = JsonUtils.toJson(frontMap);
                 String frontAES = AESUtils.encrypt(AESJson,AES_KEY);
 
@@ -484,6 +479,7 @@ public class YinjiaStageController {
                 chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));
                 chinapayMap.put("outOrderNo", signOrderid);
                 chinapayMap.put("frontUrl", CHINAPAY_SIGN_RETURN_URL+frontAES);
+                logger.info("frontUrl="+CHINAPAY_SIGN_RETURN_URL+frontAES+" length="+CHINAPAY_SIGN_RETURN_URL.length()+frontAES.length());
                 chinapayMap.put("backUrl", CHINAPAY_SIGN_BACK_URL);
                 chinapayMap.put("subMerId", orderCpInsert.getSubmerid());
                 chinapayMap.put("subMerName", orderCpInsert.getSubmername());
@@ -580,10 +576,6 @@ public class YinjiaStageController {
         // 已签约
         Map<String, Object> responseDataMap = new HashMap<>();
         responseDataMap.put("orderid", dataMap.get("orderid"));
-        responseDataMap.put("productName", foreignRequestMap.get("productName"));
-        responseDataMap.put("orderPrice", orderInfo.getOrderprice());
-        responseDataMap.put("bankAccountNumber", request.getAccountNumber());
-        responseDataMap.put("signedName", request.getSignedName());
         String responseDataJson = JsonUtils.toJson(responseDataMap);
         String AESStr = AESUtils.encrypt(responseDataJson, AES_KEY);
 
@@ -602,8 +594,29 @@ public class YinjiaStageController {
     @RequestMapping(value = "/getPayInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getPayInfo(String data){
+        /*frontMap.put("productName", foreignRequestMap.get("productName"));
+        frontMap.put("orderPrice", orderInfo.getOrderprice());
+        frontMap.put("bankAccountNumber", request.getAccountNumber());
+        frontMap.put("signedName", request.getSignedName());*/
         String dataJson = AESUtils.decrypt(data, AES_KEY);
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(),dataJson);
+        Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
+
+        // 获取订单信息
+        OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
+        String foreignRequest = orderInfo.getForeignRequest();
+        Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);
+
+        // 获取签约信息
+        OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(orderInfo.getSignOrderid().toString());
+
+        Map<String, String> responseDataMap = new HashMap<>();
+        responseDataMap.put("productName", foreignRequestMap.get("productName"));
+        responseDataMap.put("orderPrice", orderInfo.getOrderprice().toString());
+        responseDataMap.put("bankAccountNumber", orderCpInterfaceInfo.getBankaccountnumber());
+        responseDataMap.put("signedName", orderCpInterfaceInfo.getSignedname());
+        String responseDataJson = JsonUtils.toJson(responseDataMap);
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(),responseDataJson);
     }
 
     /**
@@ -740,16 +753,16 @@ public class YinjiaStageController {
 
     }
 
-    /*
-     * 商户获取银联信用卡分期支付 短信
-     * @param yinjiaTermsRequest 此接口请求类
+    /**
+     * H5 第五步 商户获取银联信用卡分期支付 短信
+     * @param data 加密字符串
      * @param HttpServletRequest 请求接口参数类
      * */
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public YjResponseDto sendSms(String data, HttpServletRequest request)
     {
-        // 数据解码
+        // 加密串解码
         String dataStr = AESUtils.decrypt(data, AES_KEY);
         Map<String, String> dataMap = JsonUtils.toCollection(dataStr, new TypeReference<Map<String, String>>(){});
         String orderid = dataMap.get("orderid");
