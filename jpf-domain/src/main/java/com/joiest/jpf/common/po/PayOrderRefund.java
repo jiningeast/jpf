@@ -50,6 +50,11 @@ public class PayOrderRefund implements Serializable {
      */
     private Date created;
 
+    /**
+     * 回调响应参数
+     */
+    private String responsParam;
+
     private static final long serialVersionUID = 1L;
 
     public String getOrderid() {
@@ -124,6 +129,14 @@ public class PayOrderRefund implements Serializable {
         this.created = created;
     }
 
+    public String getResponsParam() {
+        return responsParam;
+    }
+
+    public void setResponsParam(String responsParam) {
+        this.responsParam = responsParam == null ? null : responsParam.trim();
+    }
+
     /**
      *
      */
@@ -142,6 +155,7 @@ public class PayOrderRefund implements Serializable {
         sb.append(", tranno=").append(tranno);
         sb.append(", notifyTime=").append(notifyTime);
         sb.append(", created=").append(created);
+        sb.append(", responsParam=").append(responsParam);
         sb.append("]");
         return sb.toString();
     }
@@ -170,7 +184,8 @@ public class PayOrderRefund implements Serializable {
             && (this.getTrantype() == null ? other.getTrantype() == null : this.getTrantype().equals(other.getTrantype()))
             && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
             && (this.getNotifyTime() == null ? other.getNotifyTime() == null : this.getNotifyTime().equals(other.getNotifyTime()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()));
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getResponsParam() == null ? other.getResponsParam() == null : this.getResponsParam().equals(other.getResponsParam()));
     }
 
     /**
@@ -189,6 +204,7 @@ public class PayOrderRefund implements Serializable {
         result = prime * result + ((getTranno() == null) ? 0 : getTranno().hashCode());
         result = prime * result + ((getNotifyTime() == null) ? 0 : getNotifyTime().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
+        result = prime * result + ((getResponsParam() == null) ? 0 : getResponsParam().hashCode());
         return result;
     }
 }
