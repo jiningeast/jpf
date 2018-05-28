@@ -74,7 +74,8 @@ public enum JpfInterfaceErrorInfo {
     // H5 第三步 点击签约页的提交
     USER_NOT_SIGNED("10060", "用户未签约"),
     USER_SIGNED("10061", "用户已签约"),
-    UPDATE_SIGN_ORDER_ERROR("10062", "更新签约信息失败");
+    UPDATE_SIGN_ORDER_ERROR("10062", "更新签约信息失败"),
+    SIGN_FAILED("10063", "签约接口返回失败");
 
     private final String desc;
 
