@@ -10,16 +10,11 @@ import java.util.Set;
 public class ToolUtils {
 
     /**
-<<<<<<< HEAD
-     * 接口返回信息 json and base64
-     * @return
-=======
      * 将异常以json并base64的方式返回
      * @param code 异常码
      * @param info 异常信息
      * @param data 返回数据
      * @return base64加密串
->>>>>>> 43bf8eeb110f9aef3826f8f156e5ffbc0a9c8032
      */
     public static String toJsonBase64(String code, String info, String data )
     {
