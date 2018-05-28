@@ -4,6 +4,7 @@ import com.joiest.jpf.common.custom.PayOrderCustom;
 import com.joiest.jpf.common.custom.PayOrderInterfaceCustom;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
+import com.joiest.jpf.common.po.PayOrder;
 import com.joiest.jpf.common.po.PayOrderExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayOrderCustomMapper;
@@ -29,6 +30,8 @@ public class OrderInterfaceServiceFacadeImpl implements OrderInterfaceServiceFac
     @Autowired
     private PayOrderInterfaceCustomMapper payOrderInterfaceCustomMapper;
 
+    @Autowired
+    private PayOrderMapper payOrderMapper;
     /**
      * 根据 orderid 获取商户信息&产品信息&订单支付方式
      */
@@ -43,5 +46,22 @@ public class OrderInterfaceServiceFacadeImpl implements OrderInterfaceServiceFac
         BeanCopier beanCopier = BeanCopier.create(PayOrderInterfaceCustom.class, OrderInterfaceInfo.class, false);
         beanCopier.copy(orderInfo, orderInterfaceInfo, null);
         return orderInterfaceInfo;
+    }
+
+    /**
+     * 支付回调--更新订单状态&paytime
+     * @param orderInfo
+     */
+    public int updateOrderStatus(OrderInterfaceInfo orderInfo)
+    {
+        PayOrderExample e = new PayOrderExample();
+        PayOrderExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(orderInfo.getOrderid());
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setOrderstatus(orderInfo.getOrderstatus());
+        payOrder.setPaytime(orderInfo.getPaytime());
+        payOrder.setUpdatetime(orderInfo.getUpdatetime());
+        return payOrderMapper.updateByExampleSelective(payOrder,e);
     }
 }

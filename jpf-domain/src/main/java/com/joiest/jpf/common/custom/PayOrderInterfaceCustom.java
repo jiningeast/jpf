@@ -12,19 +12,34 @@ public class PayOrderInterfaceCustom implements Serializable {
     private BigInteger id;
 
     /**
+     * 0：旅游分期，1：保险公司
+     */
+    private Byte ordertype;
+
+    /**
      * 订单ID
      */
     private String orderid;
 
     /**
-     * 外来订单ID
+     * 外来订单号
      */
-    private String foreign_orderid;
+    private String foreignOrderid;
 
     /**
-     * 签约订单ID
+     * 签约订单号，对应pay_order_cp的orderid字段
      */
-    private String sign_orderid;
+    private Long signOrderid;
+
+    /**
+     * 外来请求字符串
+     */
+    private String foreignRequest;
+
+    /**
+     * 返回地址
+     */
+    private String returnUrl;
 
     /**
      * 商户ID
@@ -42,7 +57,7 @@ public class PayOrderInterfaceCustom implements Serializable {
     private Long pid;
 
     /**
-     * 支付方式：pay_merchants_type 
+     * 支付方式：pay_merchants_type
      */
     private Integer paytype;
 
@@ -52,7 +67,7 @@ public class PayOrderInterfaceCustom implements Serializable {
     private BigDecimal orderprice;
 
     /**
-     * 订单实际金额
+     * 产品订单实际金额
      */
     private BigDecimal orderselprice;
 
@@ -141,20 +156,6 @@ public class PayOrderInterfaceCustom implements Serializable {
         this.orderid = orderid == null ? null : orderid.trim();
     }
 
-    public String getForeignOrderid() {
-        return foreign_orderid;
-    }
-
-    public void setForeignOrderid(String foreign_orderid) {
-        this.foreign_orderid = foreign_orderid;
-    }
-    public String getSignOrderid() {
-        return sign_orderid;
-    }
-
-    public void setSignOrderid(String sign_orderid) {
-        this.sign_orderid = sign_orderid;
-    }
     public Long getMtsid() {
         return mtsid;
     }
@@ -311,6 +312,46 @@ public class PayOrderInterfaceCustom implements Serializable {
         this.bpid = bpid;
     }
 
+    public Byte getOrdertype() {
+        return ordertype;
+    }
+
+    public void setOrdertype(Byte ordertype) {
+        this.ordertype = ordertype;
+    }
+
+    public String getForeignOrderid() {
+        return foreignOrderid;
+    }
+
+    public void setForeignOrderid(String foreignOrderid) {
+        this.foreignOrderid = foreignOrderid;
+    }
+
+    public Long getSignOrderid() {
+        return signOrderid;
+    }
+
+    public void setSignOrderid(Long signOrderid) {
+        this.signOrderid = signOrderid;
+    }
+
+    public String getForeignRequest() {
+        return foreignRequest;
+    }
+
+    public void setForeignRequest(String foreignRequest) {
+        this.foreignRequest = foreignRequest;
+    }
+
+    public String getReturnUrl() {
+        return returnUrl;
+    }
+
+    public void setReturnUrl(String returnUrl) {
+        this.returnUrl = returnUrl;
+    }
+
     /**
      *
      */
@@ -339,33 +380,40 @@ public class PayOrderInterfaceCustom implements Serializable {
 //        return sb.toString();
 //    }
 
-
     @Override
     public String toString() {
-        return "PayOrderInterfaceCustom{" +
-                "id=" + id +
-                ", orderid='" + orderid + '\'' +
-                ", mtsid=" + mtsid +
-                ", uid=" + uid +
-                ", pid=" + pid +
-                ", paytype=" + paytype +
-                ", orderprice=" + orderprice +
-                ", orderselprice=" + orderselprice +
-                ", ordernum=" + ordernum +
-                ", ordername='" + ordername + '\'' +
-                ", paytime=" + paytime +
-                ", orderstatus=" + orderstatus +
-                ", singlestatus=" + singlestatus +
-                ", addtime=" + addtime +
-                ", bpid=" + bpid +
-                ", updatetime=" + updatetime +
-                ", pname='" + pname + '\'' +
-                ", pintro='" + pintro + '\'' +
-                ", pmoney=" + pmoney +
-                ", pdpicture='" + pdpicture + '\'' +
-                ", cat='" + cat + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("PayOrderInterfaceCustom{");
+        sb.append("id=").append(id);
+        sb.append(", ordertype=").append(ordertype);
+        sb.append(", orderid='").append(orderid).append('\'');
+        sb.append(", foreignOrderid='").append(foreignOrderid).append('\'');
+        sb.append(", signOrderid=").append(signOrderid);
+        sb.append(", foreignRequest='").append(foreignRequest).append('\'');
+        sb.append(", returnUrl='").append(returnUrl).append('\'');
+        sb.append(", mtsid=").append(mtsid);
+        sb.append(", uid=").append(uid);
+        sb.append(", pid=").append(pid);
+        sb.append(", paytype=").append(paytype);
+        sb.append(", orderprice=").append(orderprice);
+        sb.append(", orderselprice=").append(orderselprice);
+        sb.append(", ordernum=").append(ordernum);
+        sb.append(", ordername='").append(ordername).append('\'');
+        sb.append(", paytime=").append(paytime);
+        sb.append(", orderstatus=").append(orderstatus);
+        sb.append(", singlestatus=").append(singlestatus);
+        sb.append(", addtime=").append(addtime);
+        sb.append(", updatetime=").append(updatetime);
+        sb.append(", bpid=").append(bpid);
+        sb.append(", pname='").append(pname).append('\'');
+        sb.append(", pintro='").append(pintro).append('\'');
+        sb.append(", pmoney=").append(pmoney);
+        sb.append(", pdpicture='").append(pdpicture).append('\'');
+        sb.append(", cat='").append(cat).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
+
+
 
     /**
      *

@@ -11,19 +11,34 @@ public class OrderInterfaceInfo {
     private BigInteger id;
 
     /**
+     * 0：旅游分期，1：保险公司
+     */
+    private Byte ordertype;
+
+    /**
      * 订单ID
      */
     private String orderid;
 
     /**
-     * 外来订单ID
+     * 外来订单号
      */
-    private String foreign_orderid;
+    private String foreignOrderid;
 
     /**
-     * 签约订单ID
+     * 签约订单号，对应pay_order_cp的orderid字段
      */
-    private String sign_orderid;
+    private Long signOrderid;
+
+    /**
+     * 外来请求字符串
+     */
+    private String foreignRequest;
+
+    /**
+     * 返回地址
+     */
+    private String returnUrl;
 
     /**
      * 商户ID
@@ -51,7 +66,7 @@ public class OrderInterfaceInfo {
     private BigDecimal orderprice;
 
     /**
-     * 订单实际金额
+     * 产品订单实际金额
      */
     private BigDecimal orderselprice;
 
@@ -138,20 +153,6 @@ public class OrderInterfaceInfo {
         this.orderid = orderid;
     }
 
-    public String getForeignOrderid() {
-        return foreign_orderid;
-    }
-
-    public void setForeignOrderid(String foreign_orderid) {
-        this.foreign_orderid = foreign_orderid;
-    }
-    public String getSignOrderid() {
-        return sign_orderid;
-    }
-
-    public void setSignOrderid(String sign_orderid) {
-        this.sign_orderid = sign_orderid;
-    }
     public Long getMtsid() {
         return mtsid;
     }
@@ -302,5 +303,45 @@ public class OrderInterfaceInfo {
 
     public void setBpid(Long bpid) {
         this.bpid = bpid;
+    }
+
+    public Byte getOrdertype() {
+        return ordertype;
+    }
+
+    public void setOrdertype(Byte ordertype) {
+        this.ordertype = ordertype;
+    }
+
+    public String getForeignOrderid() {
+        return foreignOrderid;
+    }
+
+    public void setForeignOrderid(String foreignOrderid) {
+        this.foreignOrderid = foreignOrderid;
+    }
+
+    public Long getSignOrderid() {
+        return signOrderid;
+    }
+
+    public void setSignOrderid(Long signOrderid) {
+        this.signOrderid = signOrderid;
+    }
+
+    public String getForeignRequest() {
+        return foreignRequest;
+    }
+
+    public void setForeignRequest(String foreignRequest) {
+        this.foreignRequest = foreignRequest;
+    }
+
+    public String getReturnUrl() {
+        return returnUrl;
+    }
+
+    public void setReturnUrl(String returnUrl) {
+        this.returnUrl = returnUrl;
     }
 }
