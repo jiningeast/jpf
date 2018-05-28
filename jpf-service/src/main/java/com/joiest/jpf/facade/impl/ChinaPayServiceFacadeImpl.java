@@ -108,7 +108,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         treemap.putAll(map);
         String sortStr = this.signData(treemap);
         String signStr = Md5Encrypt.md5(sortStr + CP_Salt);
-        String requestParam = sortStr + "&" + signStr + "&signType" + this.signType;
+        String requestParam = sortStr + "&sign=" + signStr + "&signType=" + this.signType;
 
         treemap.put("sign",signStr);
         treemap.put("signType", this.signType);
