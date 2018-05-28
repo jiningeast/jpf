@@ -4,12 +4,14 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayOrderRefund;
 import com.joiest.jpf.common.po.PayOrderRefundExample;
+import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderRefundMapper;
 import com.joiest.jpf.entity.OrderRefundInfo;
 import com.joiest.jpf.facade.OrderRefundServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.util.Date;
 import java.util.List;
 
 public class OrderRefundServiceFacadeImpl implements OrderRefundServiceFacade {
@@ -35,7 +37,6 @@ public class OrderRefundServiceFacadeImpl implements OrderRefundServiceFacade {
     @Override
     public OrderRefundInfo getOrderRefund(String refundOrderid){
 
-
         PayOrderRefundExample example = new PayOrderRefundExample();
         PayOrderRefundExample.Criteria c = example.createCriteria();
 
@@ -52,22 +53,22 @@ public class OrderRefundServiceFacadeImpl implements OrderRefundServiceFacade {
 
         return orderRefundInfo;
     }
-   /* @Override
-    public OrderInfo getOrderByOrderid(String orderid, boolean forInterface){
-        PayOrderExample e = new PayOrderExample();
-        PayOrderExample.Criteria c = e.createCriteria();
-        c.andOrderidEqualTo(orderid);
+    public int upOrderRefundByRefundOrder(OrderRefundInfo orderRefundInfo){
 
-        List<PayOrder> list = payOrderMapper.selectByExample(e);
+        PayOrderRefundExample example = new PayOrderRefundExample();
+        PayOrderRefundExample.Criteria c = example.createCriteria();
+        c.andOrderidEqualTo(orderRefundInfo.getRefundOrderid());
 
-        if ( forInterface && list == null){
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
-        }
+        PayOrderRefund orderRe = new PayOrderRefund();
 
-        OrderInfo orderInfo = new OrderInfo();
-        BeanCopier beanCopier = BeanCopier.create(PayOrder.class, OrderInfo.class, false);
-        beanCopier.copy(list.get(0), orderInfo, null);
+        orderRe.setTranno(orderRefundInfo.getTranno());
+        orderRe.setTrantype(orderRefundInfo.getTrantype());
+        orderRe.setNotifyTime(orderRefundInfo.getNotifyTime());
+        orderRe.setResponsParam(orderRefundInfo.getResponsParam());
+        //orderRefundInfo.setRefundOrderid(orderRefundInfo.getRefundOrderid());
+        orderRe.setStatus(orderRefundInfo.getStatus());
 
-        return orderInfo;
-    }*/
+        return payOrderRefundMapper.updateByExampleSelective(orderRe, example);
+    }
+
 }
