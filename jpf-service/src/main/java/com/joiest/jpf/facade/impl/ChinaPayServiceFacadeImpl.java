@@ -120,11 +120,12 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
         sbf.append("\n\nTime:" + myfmt.format(date));
         sbf.append("\n请求地址：" + requestUrl);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + result);
-        String filePath = "D:/project/jpf/loggggggg/ChinaLog.txt";
+        String filePath = "D:/project/jpf/log/ChinaLog" + myfmt2.format(date) + ".txt";
         LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
 
         return dto;

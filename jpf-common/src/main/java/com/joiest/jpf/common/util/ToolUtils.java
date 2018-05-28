@@ -10,6 +10,10 @@ import java.util.Set;
  */
 public class ToolUtils {
 
+    /**
+     * 接口返回信息 json and base64
+     * @return
+     */
     public static String toJsonBase64(String code, String info, String data )
     {
         Map<String,String> responseMap = new HashMap<>();
