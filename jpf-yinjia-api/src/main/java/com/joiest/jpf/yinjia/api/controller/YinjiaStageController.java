@@ -631,7 +631,7 @@ public class YinjiaStageController {
     /**
      * H5 第五步 商户获取银联信用卡分期支付 短信
      * @param data 加密字符串
-     * @param HttpServletRequest 请求接口参数类
+     * @param  // HttpServletRequest 请求接口参数类
      * */
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -654,10 +654,10 @@ public class YinjiaStageController {
         }
         //获取订单信息
         OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(orderid.trim());
-        if ( StringUtils.isBlank(orderInfo.getSignOrderid().toString()) )
+        if ( orderInfo.getSignOrderid()==null )
         {
             //throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约");
-            ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_NOT_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_NOT_SIGNED.getCode(), null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单相关用户信息", null);
         }
         //商户签约信息
         OrderCpInterfaceInfo orderCpInfo = orderCpServiceFacade.getOrderCpByorderid(orderInfo.getSignOrderid().toString());
@@ -860,7 +860,7 @@ public class YinjiaStageController {
             maptree.put("outOrderNo",orderid.trim());
             maptree.put("origOutOrderNo",origOrderid.trim());
             maptree.put("tranAmt",refundAmt);
-            maptree.put("backUrl",backUrl);
+            maptree.put("backUrl",CHINAPAY_REFUND_BACK_URL);
             maptree.put("privatekey",maparr.get("CP_Salt"));
 
             yjResponseDto = chinaPayServiceFacade.ChinaPayRefund(maptree,requestUrl);
@@ -940,7 +940,7 @@ public class YinjiaStageController {
             orderRefundInfo.setStatus("3");
         }
         orderRefundServiceFacade.upOrderRefundByRefundOrder(orderRefundInfo);
-
+        String backurl = getOrderRefund.getBackurl();
         return "SUCCESS";
     }
     @RequestMapping("/test")
