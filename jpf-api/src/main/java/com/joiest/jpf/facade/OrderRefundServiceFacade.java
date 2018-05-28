@@ -4,12 +4,20 @@ import com.joiest.jpf.entity.OrderRefundInfo;
 
 public interface OrderRefundServiceFacade {
 
+    /*
+    * 新增退单记录
+    * */
     public int insOrderRefund(OrderRefundInfo orderRefundInfo);
 
     /**
-     * 根据 orderid 获取商户信息&产品信息&订单支付方式
+     * 根据退单号获取退单信息
      */
     public OrderRefundInfo getOrderRefund(String refundOrderid);
+
+    /**
+     * 根据退单号更新退单信息
+     */
+    public int upOrderRefundByRefundOrder(OrderRefundInfo orderRefundInfo);
 
 
 }
