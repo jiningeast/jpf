@@ -37,8 +37,8 @@ public class ManageConstants {
 	public static final String ChinaPay_PayBackUrl = "http://testapi.7shengqian.com/index.php?r=YinjiaStage/ChinaPayReturn";
 
 
-    // 银联签约前台跳转地址
-    public static final String CHINAPAY_SIGN_RETURN_URL = "http://testwebchats.7shengqian.com/?#/travel/paycode/";
+    // 银联签约成功后前台跳转地址
+    public static final String CHINAPAY_SIGN_RETURN_URL = "http://localhost:8080/paycode/";
 
     // 银联签约后台通知地址
     public static final String CHINAPAY_SIGN_BACK_URL = "http://testapi.7shengqian.com/yinjia-api/yinjiastage/signNotify";

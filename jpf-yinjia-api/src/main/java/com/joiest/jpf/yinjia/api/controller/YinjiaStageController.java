@@ -139,6 +139,18 @@ public class YinjiaStageController {
     @RequestMapping("/createOrder")
     @ResponseBody
     public YjResponseDto createOrder(YinjiaCreateOrderRequest request){
+        // 商户号&商户信息
+        if ( StringUtils.isNotBlank(request.getMid()) ){
+            merchInfo = merchantInterfaceServiceFacade.getMerchant(Long.parseLong(request.getMid()));
+        }else{
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+        }
+
+        // 签名串
+        if ( StringUtils.isBlank(request.getSign()) ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+        }
+
         // 验签
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", request.getOrderid());
@@ -385,13 +397,13 @@ public class YinjiaStageController {
         responseMap.put("data", AESStr);
         String responseJson = JsonUtils.toJson(responseMap);
 
-        return Base64CustomUtils.base64Encoder(responseJson);
+        return Base64CustomUtils.base64Encoder(responseJson).replaceAll("\r","").replaceAll("\n","");
     }
 
     /**
      * H5 第三步 点击提交的签约操作
-     * @param request
-     * @return
+     * request的data加密串中包含orderid和mid
+     *
      */
     @RequestMapping(value = "/signUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -400,9 +412,14 @@ public class YinjiaStageController {
         Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
         String signOrderid = createOrderid();
 
+        // 获取订单信息
+        OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"), true);
+        String foreignRequest = orderInfo.getForeignRequest();
+        Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);
+
         // 判断用户有没有签约过
         OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpBybankaccountnumber(request.getAccountNumber());
-        if ( orderCpInterfaceInfo == null ){
+        if ( orderCpInterfaceInfo.getBankaccountnumber() == null ){
             // 未签约，准备插入一条签约记录
             OrderCpInterfaceInfo orderCpInsert = new OrderCpInterfaceInfo();
             orderCpInsert.setOrderid(signOrderid);
@@ -445,10 +462,12 @@ public class YinjiaStageController {
                 Map<String, String> paramMap = JsonUtils.toCollection(paramJson, new TypeReference<Map<String, String>>() {});
 
                 // 构建返回加密串
-                Map<String , String> frontMap = new HashMap<>();
-                frontMap.put("mid","");
-                frontMap.put("orderid","");
-                frontMap.put("signOrderid","");
+                Map<String , Object> frontMap = new HashMap<>();
+                frontMap.put("orderid",dataMap.get("orderid"));
+                frontMap.put("productName", foreignRequestMap.get("productName"));
+                frontMap.put("orderPrice", orderInfo.getOrderprice());
+                frontMap.put("bankAccountNumber", request.getAccountNumber());
+                frontMap.put("signedName", request.getSignedName());
                 String AESJson = JsonUtils.toJson(frontMap);
                 String frontAES = AESUtils.encrypt(AESJson,AES_KEY);
 
@@ -503,37 +522,44 @@ public class YinjiaStageController {
                 String response = OkHttpUtils.postForm(ChinaPay_Rurl+"sign",requestMap);
                 logger.info("签约返回："+response);
                 Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
-                Matcher matcher = null;
+                String html = null;
                 if ( signResponseMap.get("retCode").equals("0000") ){
                     // 更新签约表
                     OrderCpInterfaceInfo orderCpInfo = new OrderCpInterfaceInfo();
                     orderCpInfo.setOrderid(signOrderid);
-                    orderCpInfo.setTranno(signResponseMap.get("transNo"));
+                    orderCpInfo.setTranno(signResponseMap.get("tranNo"));
                     orderCpInfo.setSignstatus("1");
-                    if ( signResponseMap.get("sysAgreeNo") == null && !signResponseMap.get("sysAgreeNo").isEmpty() ){
+                    if ( signResponseMap.containsKey("sysAgreeNo") ){
                         orderCpInfo.setSysagreeno(signResponseMap.get("sysAgreeNo"));
                     }
-                    int updateRes = orderCpServiceFacade.updateRecord(orderCpInfo);
-                    if ( updateRes > 0 ){
-                        // 处理返回的url
-                        Pattern pattern = Pattern.compile("%<body.*?>(.*?)</body>%si");
-                        matcher = pattern.matcher(signResponseMap.get("autoSubmitForm"));
-                    }else{
-                        // 更新签约信息失败
-                        Map<String, String> responseMap = new HashMap<>();
-                        responseMap.put("code", JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode());
-                        responseMap.put("info", JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc());
-                        String responseJson = JsonUtils.toJson(responseMap);
-
-                        return Base64CustomUtils.base64Encoder(responseJson);
+                    int updateOrderCpRes = orderCpServiceFacade.updateRecord(orderCpInfo);
+                    if ( updateOrderCpRes <= 0 ){
+                        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
                     }
+
+                    // 更新订单表的signOrderid
+                    OrderInfo updateOrderinfo = new OrderInfo();
+                    updateOrderinfo.setOrderid(dataMap.get("orderid"));
+                    updateOrderinfo.setSignOrderid(Long.parseLong(signOrderid));
+                    int updateOrderRes = orderServiceFacade.updataSignOrderid(updateOrderinfo);
+                    if ( updateOrderRes <= 0 ){
+                        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
+                    }
+
+                    if ( updateOrderRes > 0 && updateOrderRes > 0 ){
+                        // 处理返回的url
+                        /*Pattern pattern = Pattern.compile("<form.*?>(.*?)</form>");
+                        matcher = pattern.matcher(signResponseMap.get("autoSubmitForm"));*/
+
+                        html = StringUtils.substringBetween(signResponseMap.get("autoSubmitForm"), "<body>","</body>");
+                    }
+                }else{
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), signResponseMap.get("retMsg"), null);
                 }
 
                 // 构建返回
                 Map<String, Object> responseDataMap = new HashMap<>();
-                responseDataMap.put("orderid", dataMap.get("orderid"));
-                responseDataMap.put("signOrderid", signOrderid);
-                responseDataMap.put("url",matcher.group(0));
+                responseDataMap.put("html", html);
                 String responseDataJson = JsonUtils.toJson(responseDataMap);
 
                 Map<String, String> responseMap = new HashMap<>();
@@ -541,36 +567,165 @@ public class YinjiaStageController {
                 responseMap.put("info", JpfInterfaceErrorInfo.USER_NOT_SIGNED.getDesc());
                 responseMap.put("data", responseDataJson);
                 String responseJson = JsonUtils.toJson(responseMap);
-                String responseBase64 = Base64CustomUtils.base64Encoder(responseJson);
 
-                return responseBase64;
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(),responseJson);
+            }else{
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
             }
-
-        }else{
-            // 已签约
-            Map<String, String> responseDataMap = new HashMap<>();
-            responseDataMap.put("orderid", dataMap.get("orderid"));
-            responseDataMap.put("signOrderid", signOrderid);
-            String responseDataJson = JsonUtils.toJson(responseDataMap);
-            String AESStr = AESUtils.encrypt(responseDataJson, AES_KEY);
-
-            Map<String, String> responseMap = new HashMap<>();
-            responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
-            responseMap.put("info", JpfInterfaceErrorInfo.SUCCESS.getDesc());
-            responseMap.put("data", AESStr);
-            String responseJson = JsonUtils.toJson(responseMap);
-
-            return Base64CustomUtils.base64Encoder(responseJson);
         }
 
-        return "";
+        // 已签约
+        Map<String, Object> responseDataMap = new HashMap<>();
+        responseDataMap.put("orderid", dataMap.get("orderid"));
+        responseDataMap.put("productName", foreignRequestMap.get("productName"));
+        responseDataMap.put("orderPrice", orderInfo.getOrderprice());
+        responseDataMap.put("bankAccountNumber", request.getAccountNumber());
+        responseDataMap.put("signedName", request.getSignedName());
+        String responseDataJson = JsonUtils.toJson(responseDataMap);
+        String AESStr = AESUtils.encrypt(responseDataJson, AES_KEY);
+
+        Map<String, String> responseMap = new HashMap<>();
+        responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
+        responseMap.put("info", JpfInterfaceErrorInfo.SUCCESS.getDesc());
+        responseMap.put("data", AESStr);
+        String responseJson = JsonUtils.toJson(responseMap);
+
+        return Base64CustomUtils.base64Encoder(responseJson).replaceAll("\r","").replaceAll("\n","");
     }
 
     /**
      * H5 第四步 渲染支付页
      */
-    @RequestMapping("InstallPay")
-    public void installPay(String data){
+    @RequestMapping(value = "/getPayInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getPayInfo(String data){
+        String dataJson = AESUtils.decrypt(data, AES_KEY);
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(),dataJson);
+    }
+
+    /**
+     * 联银分期 支付
+     * data中含有orderid，productName，orderPrice，bankAccountNumber，signedName
+     */
+    @RequestMapping(value = "/installpay", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String InstallPay(YinjiaPayRequest request, HttpServletRequest httpRequest)
+    {
+        YjResponseDto dto = new YjResponseDto();
+        Map<String,String> responseMap = new HashMap<>();
+        if ( StringUtils.isBlank( request.getSmsCode() ) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "验证码错误", null);
+        }
+
+        String dataJson = AESUtils.decrypt(request.getData(), AES_KEY);
+        Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
+        if ( StringUtils.isBlank(dataMap.get("orderid")) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "orderid不能为空", null);
+        }
+
+        //获取订单信息
+        OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(dataMap.get("orderid"));
+        if ( StringUtils.isBlank(orderInfo.getSignOrderid()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约", null);
+        }
+        if( !orderInfo.getMtsid().toString().equals(dataMap.get("mid")) ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单与商户信息不匹配", null);
+        }
+        //商户签约信息
+        OrderCpInterfaceInfo orderCpInfo = orderCpServiceFacade.getOrderCpByorderid(orderInfo.getSignOrderid());
+
+        //验证
+        String stage_tmp = "";
+        if ( orderInfo != null && orderCpInfo != null )
+        {
+            dto.setCode(JpfInterfaceErrorInfo.FAIL.getCode());
+            dto.setInfo("订单或签约信息有误");
+            if ( orderInfo.getOrderstatus().equals(1) )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单已支付", null);
+            }
+            if ( !orderCpInfo.getSignstatus().equals("2") )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "签约受理中，稍后再试", null);
+            }
+            if ( StringUtils.isBlank(orderInfo.getOrdername()) )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单分期信息非法", null);
+            }
+            Map<String,String> ordernameMap = new HashMap<>();
+            ordernameMap = JsonUtils.toObject(orderInfo.getOrdername(), Map.class);
+            String payType_cn = ordernameMap.get("stageType_cn");
+            if ( StringUtils.isBlank(ordernameMap.get("stageType_cn")) )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息，请重试", null);
+
+            }
+            Pattern pattern = Pattern.compile("^\\d");
+            Matcher matcher = pattern.matcher(ordernameMap.get("stageType_cn"));
+            if ( matcher.find() )
+            {
+                stage_tmp = matcher.group(0);
+                if ( Integer.parseInt(stage_tmp) <= 9 )
+                {
+                    stage_tmp = "0" + stage_tmp;
+                }
+            } else
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息", null);
+            }
+
+            //获取商户信息 and 商户银嘉支付参数
+            MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchant(Long.parseLong(dataMap.get("mid")));
+            // 获取该商户银联信用卡分期支付的配置信息
+            MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")),7, true);
+            Map<String,String> paramMap = JsonUtils.toObject(merchantPayTypeInfo.getParam(),Map.class);
+            //验证支付参数是否正确
+            String[] keys = {"CP_MerchaNo","CP_Code","CP_Acctid","CP_Salt"};
+            for ( String key : keys )
+            {
+                if ( !paramMap.containsKey(key) ||  paramMap.get(key) == null  )
+                {
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "支付参数不正确", null);
+                }
+            }
+            //拼装商户信息数据
+            Map<String,Object> signMap = new HashMap<>();
+            signMap.put("service","installPay");
+            signMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
+            signMap.put("outOrderNo", dataMap.get("orderid"));
+            signMap.put("smsCode",request.getSmsCode());
+            signMap.put("backUrl",ChinaPay_PayBackUrl);
+            signMap.put("numberOfInstallments",stage_tmp);
+            // 设置IP
+            String IP = ServletUtils.getIpAddr(httpRequest);
+            signMap.put("clientIp", IP);
+            // 接口用到的参数
+            signMap.put("CP_Salt", paramMap.get("CP_Salt"));
+            String requestUrl;
+            String reUri = httpRequest.getServerName();   // 返回域名
+            if ( reUri.indexOf("cpapi.7shengqian.com") > -1 ){
+                requestUrl = CHINAPAY_URL_REQUEST + "installPay";
+            }else{
+                requestUrl = CHINAPAY_URL_REQUEST_TEST + "installPay";
+            }
+
+            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
+            String resPay = resultPay.getData().toString();
+            Map<String,String> resultMap = JsonUtils.toObject(resPay,Map.class);
+            if ( resultMap.containsKey("retCode") && resultMap.get("retCode").equals("0000") )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"支付已受理",null);
+            }else
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"渠道受理有误，请重新下单支付",null);
+            }
+        } else
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不正确", null);
+        }
 
     }
 
@@ -589,32 +744,29 @@ public class YinjiaStageController {
      * */
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public YjResponseDto sendSms(HttpServletRequest request)
+    public YjResponseDto sendSms(String data, HttpServletRequest request)
     {
-        String orderid = request.getParameter("orderid");
-        String mid = request.getParameter("mid");
-        String reUri = request.getServerName();   // 返回域名
+        // 数据解码
+        String dataStr = AESUtils.decrypt(data, AES_KEY);
+        Map<String, String> dataMap = JsonUtils.toCollection(dataStr, new TypeReference<Map<String, String>>(){});
+        String orderid = dataMap.get("orderid");
+        String mid = dataMap.get("mid");
 
-        String requestUrl;
-        if ( reUri.indexOf("cpapi.7shengqian.com") > -1 ){
-            requestUrl = CHINAPAY_URL_REQUEST+"smsCodeSend";
-        }else{
-            requestUrl = CHINAPAY_URL_REQUEST_TEST+"smsCodeSend";
-        }
+        // 发送短信接口地址
+        String requestUrl = CHINAPAY_URL_REQUEST+"smsCodeSend";
 
-        //String publickey = request.getParameter("publickey");
         //定义银联支付方式id
         Integer tpid = 7;
 
         if ( StringUtils.isBlank(orderid) )
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), "orderid不能为空");
+            ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "orderid不能为空", null);
         }
         if ( StringUtils.isBlank(mid) )
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "mid不能为空");
+            ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "mid不能为空", null);
         }
-        //this.checkPublickey(mid, publickey);
+
         //获取订单信息
         OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(orderid.trim());
         if ( StringUtils.isBlank(orderInfo.getSignOrderid()) )
@@ -850,6 +1002,20 @@ public class YinjiaStageController {
         return urlTail;
     }
 
+    @RequestMapping("/test2")
+    @ResponseBody
+    public String test2(){
+        String html = "<body><form id = \\\"pay_form\\\" action=\\\"https://gateway.95516.com/gateway/api/frontTransReq.do\\\" method=\\\"post\\\"><input type=\\\"hidden\\\" name=\\\"accessType\\\" id=\\\"accessType\\\" value=\\\"0\\\"/><input type=\\\"hidden\\\" name=\\\"backUrl\\\" id=\\\"backUrl\\\" value=\\\"http://vip2.7shengqian.com/unipayNoti/chn/backNotify/UNIONPAY_INSTAL/99\\\"/><input type=\\\"hidden\\\" name=\\\"bizType\\\" id=\\\"bizType\\\" value=\\\"000301\\\"/><input type=\\\"hidden\\\" name=\\\"certId\\\" id=\\\"certId\\\" value=\\\"74778248003\\\"/><input type=\\\"hidden\\\" name=\\\"channelType\\\" id=\\\"channelType\\\" value=\\\"07\\\"/><input type=\\\"hidden\\\" name=\\\"encoding\\\" id=\\\"encoding\\\" value=\\\"UTF-8\\\"/><input type=\\\"hidden\\\" name=\\\"frontUrl\\\" id=\\\"frontUrl\\\" value=\\\"http://vip2.7shengqian.com/unipayNoti/chn/frontNotify/UNIONPAY_INSTAL/99\\\"/><input type=\\\"hidden\\\" name=\\\"merId\\\" id=\\\"merId\\\" value=\\\"802310048161356\\\"/><input type=\\\"hidden\\\" name=\\\"orderId\\\" id=\\\"orderId\\\" value=\\\"1000020141\\\"/><input type=\\\"hidden\\\" name=\\\"signMethod\\\" id=\\\"signMethod\\\" value=\\\"01\\\"/><input type=\\\"hidden\\\" name=\\\"signature\\\" id=\\\"signature\\\" value=\\\"cz+XJzC8gxPkvTOGyCad6nz9GgObvT6m2KC0tA3LrdAEiHpOQ9I5ip27+Z4GoyVwKTIn5kHxe+pKOhcaYdUMgq8w+gqtypH/lEUbHzKOmXGDHb0BXguMlnlNFbTmdPlt/xmASwsd49UhwpHxu3g2AZ2ZN2HRjD+Yhs1MER/8YkX6Bg4xyPtERi7/LqUGkyEuW6ELHpBtHu4lCGMPRSI2JBLmB5bUvo1tUrYn01IzXYvsJ4j20DBbGa6yhULif+OWn2x4Upqpl7az3fPFtKiyYWClxVSjKkBN5PCaLFHgxrTENhHCCEQx93puHEveA0RUyQl7oj59xBOnEsMV+mleCw==\\\"/><input type=\\\"hidden\\\" name=\\\"txnSubType\\\" id=\\\"txnSubType\\\" value=\\\"00\\\"/><input type=\\\"hidden\\\" name=\\\"txnTime\\\" id=\\\"txnTime\\\" value=\\\"20180528112220\\\"/><input type=\\\"hidden\\\" name=\\\"txnType\\\" id=\\\"txnType\\\" value=\\\"79\\\"/><input type=\\\"hidden\\\" name=\\\"version\\\" id=\\\"version\\\" value=\\\"5.1.0\\\"/></form></body><script type=\\\"text/javascript\\\">document.all.pay_form.submit();</script>";
+
+        /*Pattern pattern = Pattern.compile("<form.*?>(.*?)</form>");
+        Matcher matcher = pattern.matcher(html);
+        return matcher.group(0);*/
+
+        String newHtml = StringUtils.substringBetween(html, "<body>","</body>");
+
+        return newHtml;
+    }
+
     @ModelAttribute
     public void getMerInfo(HttpServletRequest request, HttpServletRequest httpServletRequest)
     {
@@ -866,8 +1032,8 @@ public class YinjiaStageController {
         }
         this.mid = Long.valueOf(mid);*/
 
-        String serverName = httpServletRequest.getServerName();
-        if ( serverName.contains("/yinjiastage/createOrder") ){
+        /*String serverName = httpServletRequest.getServerName();
+        if ( serverName.contains("/createOrder") ){
             // 商户号&商户信息
             if ( StringUtils.isNotBlank(request.getParameter("mid")) ){
                 merchInfo = merchantInterfaceServiceFacade.getMerchant(Long.parseLong(request.getParameter("mid")));
@@ -879,7 +1045,7 @@ public class YinjiaStageController {
             if ( StringUtils.isBlank(request.getParameter("sign")) ){
                 throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc());
             }
-        }
+        }*/
     }
 
     // 生成一个pay_order表的orderid
@@ -939,131 +1105,4 @@ public class YinjiaStageController {
 
         return map;
     }
-
-    /**
-     * 联银分期 支付
-     */
-    @RequestMapping(value = "/installpay", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String InstallPay(YinjiaPayRequest request, HttpServletRequest httpRequest)
-    {
-        YjResponseDto dto = new YjResponseDto();
-        Map<String,String> responseMap = new HashMap<>();
-        if ( StringUtils.isBlank( request.getSmsCode() ) )
-        {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "验证码错误", null);
-        }
-
-        String dataJson = AESUtils.decrypt(request.getData(), AES_KEY);
-        Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
-        if ( StringUtils.isBlank(dataMap.get("orderid")) )
-        {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "orderid不能为空", null);
-        }
-
-        //获取订单信息
-        OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(dataMap.get("orderid"));
-        if ( StringUtils.isBlank(orderInfo.getSignOrderid()) )
-        {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约", null);
-        }
-        if( !orderInfo.getMtsid().toString().equals(dataMap.get("mid")) ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单与商户信息不匹配", null);
-        }
-        //商户签约信息
-        OrderCpInterfaceInfo orderCpInfo = orderCpServiceFacade.getOrderCpByorderid(orderInfo.getSignOrderid());
-
-        //验证
-        String stage_tmp = "";
-        if ( orderInfo != null && orderCpInfo != null )
-        {
-            dto.setCode(JpfInterfaceErrorInfo.FAIL.getCode());
-            dto.setInfo("订单或签约信息有误");
-            if ( orderInfo.getOrderstatus().equals(1) )
-            {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单已支付", null);
-            }
-            if ( !orderCpInfo.getSignstatus().equals("2") )
-            {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "签约受理中，稍后再试", null);
-            }
-            if ( StringUtils.isBlank(orderInfo.getOrdername()) )
-            {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单分期信息非法", null);
-            }
-            Map<String,String> ordernameMap = new HashMap<>();
-            ordernameMap = JsonUtils.toObject(orderInfo.getOrdername(), Map.class);
-            String payType_cn = ordernameMap.get("stageType_cn");
-            if ( StringUtils.isBlank(ordernameMap.get("stageType_cn")) )
-            {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息，请重试", null);
-
-            }
-            Pattern pattern = Pattern.compile("^\\d");
-            Matcher matcher = pattern.matcher(ordernameMap.get("stageType_cn"));
-            if ( matcher.find() )
-            {
-                stage_tmp = matcher.group(0);
-                if ( Integer.parseInt(stage_tmp) <= 9 )
-                {
-                    stage_tmp = "0" + stage_tmp;
-                }
-            } else
-            {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到订单分期信息", null);
-            }
-
-            //获取商户信息 and 商户银嘉支付参数
-            MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchant(Long.parseLong(dataMap.get("mid")));
-            // 获取该商户银联信用卡分期支付的配置信息
-            MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")),7, true);
-            Map<String,String> paramMap = JsonUtils.toObject(merchantPayTypeInfo.getParam(),Map.class);
-            //验证支付参数是否正确
-            String[] keys = {"CP_MerchaNo","CP_Code","CP_Acctid","CP_Salt"};
-            for ( String key : keys )
-            {
-                if ( !paramMap.containsKey(key) ||  paramMap.get(key) == null  )
-                {
-                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "支付参数不正确", null);
-                }
-            }
-            //拼装商户信息数据
-            Map<String,Object> signMap = new HashMap<>();
-            signMap.put("service","installPay");
-            signMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
-            signMap.put("outOrderNo", dataMap.get("orderid"));
-            signMap.put("smsCode",request.getSmsCode());
-            signMap.put("backUrl",ChinaPay_PayBackUrl);
-            signMap.put("numberOfInstallments",stage_tmp);
-            // 设置IP
-            String IP = ServletUtils.getIpAddr(httpRequest);
-            signMap.put("clientIp", IP);
-            // 接口用到的参数
-            signMap.put("CP_Salt", paramMap.get("CP_Salt"));
-            String requestUrl;
-            String reUri = httpRequest.getServerName();   // 返回域名
-            if ( reUri.indexOf("cpapi.7shengqian.com") > -1 ){
-                requestUrl = CHINAPAY_URL_REQUEST + "installPay";
-            }else{
-                requestUrl = CHINAPAY_URL_REQUEST_TEST + "installPay";
-            }
-
-            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
-            String resPay = resultPay.getData().toString();
-            Map<String,String> resultMap = JsonUtils.toObject(resPay,Map.class);
-            if ( resultMap.containsKey("retCode") && resultMap.get("retCode").equals("0000") )
-            {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"支付已受理",null);
-            }else
-            {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"渠道受理有误，请重新下单支付",null);
-            }
-        } else
-        {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不正确", null);
-        }
-
-    }
-
-
 }
