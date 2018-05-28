@@ -2,6 +2,7 @@ package com.joiest.jpf.common.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 自定义函数工具类
@@ -49,4 +50,16 @@ public class ToolUtils {
         return map;
     }
 
+    //数组转换为键值
+    public static String signData(Map<String,Object> map){
+
+        String result="";
+        Set<String> keys = map.keySet();
+
+        for(String key :keys){
+
+            result +=key+"="+map.get(key)+"&";
+        }
+        return result.substring(0,result.length()-1);
+    }
 }
