@@ -977,11 +977,8 @@ public class YinjiaStageController {
             signMap.put("CP_Salt", paramMap.get("CP_Salt"));
             String requestUrl;
             String reUri = httpRequest.getServerName();   // 返回域名
-            if ( reUri.indexOf("cpapi.7shengqian.com") > -1 ){
-                requestUrl = CHINAPAY_URL_REQUEST + "installPay";
-            }else{
-                requestUrl = CHINAPAY_URL_REQUEST_TEST + "installPay";
-            }
+
+            requestUrl = CHINAPAY_URL_REQUEST + "installPay";
 
             YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
             String resPay = resultPay.getData().toString();
