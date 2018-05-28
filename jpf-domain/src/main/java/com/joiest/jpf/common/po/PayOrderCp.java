@@ -17,7 +17,7 @@ public class PayOrderCp implements Serializable {
     /**
      * 订单ID
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 商户ID
@@ -97,7 +97,7 @@ public class PayOrderCp implements Serializable {
     /**
      * 信用卡有效期
      */
-    private Date validitycard;
+    private String validitycard;
 
     /**
      * 有效期默认一年
@@ -147,11 +147,11 @@ public class PayOrderCp implements Serializable {
         this.merchNo = merchNo == null ? null : merchNo.trim();
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
+    public void setOrderid(String orderid) {
         this.orderid = orderid;
     }
 
@@ -275,11 +275,11 @@ public class PayOrderCp implements Serializable {
         this.cvn2 = cvn2;
     }
 
-    public Date getValiditycard() {
+    public String getValiditycard() {
         return validitycard;
     }
 
-    public void setValiditycard(Date validitycard) {
+    public void setValiditycard(String validitycard) {
         this.validitycard = validitycard;
     }
 

@@ -12,21 +12,22 @@ import com.joiest.jpf.yinjia.api.constant.ManageConstants;
 import com.joiest.jpf.yinjia.api.util.ServletUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-
-import static com.joiest.jpf.yinjia.api.constant.ManageConstants.*;
-
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.joiest.jpf.yinjia.api.constant.ManageConstants.*;
 
 @Controller
 @RequestMapping("yinjiastage")
@@ -49,6 +50,8 @@ public class YinjiaStageController {
     @Autowired
     private YjResponseDto yjResponseDto;
 
+    private static final Logger logger = LogManager.getLogger(YinjiaStageController.class);
+
     @Autowired
     private OrderInterfaceServiceFacade orderInterfaceServiceFacade;
 
@@ -69,7 +72,7 @@ public class YinjiaStageController {
         String mid = request.getMid();
 
         // 检查公钥是否有误
-        Map<String, Object> requestMap = new HashMap<String, Object>();
+        Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("mid",mid);
         String mySign = SignUtils.getSign(requestMap, merchInfo.getPrivateKey(),"UTF-8");
         String requestSign = request.getSign();
@@ -219,7 +222,7 @@ public class YinjiaStageController {
         Map<String, String> dataMap = new HashMap<>();
         String signUrl = null;
         try{
-            signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+"data="+urlTail, "UTF-8");
+            signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
             yjResponseDto.clear();
             yjResponseDto.setCode(JpfInterfaceErrorInfo.SIGNURL_ENCODING_ERROR.getCode());
@@ -240,7 +243,7 @@ public class YinjiaStageController {
      * @param "data中包含mid,orderid,platformOrderid"
      * @return 返回订单信息和商户信息，先json再base64
      */
-    @RequestMapping("/getMerPay")
+    @RequestMapping(value = "/getMerPay", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getMerPay(String data){
         String dataJson = AESUtils.decrypt(data, AES_KEY);
@@ -258,10 +261,23 @@ public class YinjiaStageController {
         responseDataMap.put("orderid", dataMap.get("platformOrderid"));
         responseDataMap.put("logo", merInfo.getLogo());
         responseDataMap.put("companyname", merInfo.getCompanyname());
-        responseDataMap.put("payType", orderInfo.getPaytype());
+        /*responseDataMap.put("payType", orderInfo.getPaytype());
         responseDataMap.put("payType_cn", getPayTypeCn(orderInfo.getPaytype()));
-        responseDataMap.put("bankcatid",merPayTypeInfo.getBankcatid());
+        responseDataMap.put("bankcatid",merPayTypeInfo.getBankcatid());*/
+        // 分期具体参数
+        List<Object> stageJsonList = new ArrayList<>();
+        String bankcatids[] = merPayTypeInfo.getBankcatid().split(",");
+        for (int i=0; i<bankcatids.length; i++){
+            Map<String, Object> stageMap = new HashMap<>();
+            Map<String, Object> termsMap = getPayTypeCn(Integer.parseInt(bankcatids[i]));
+            stageMap.put("catid",termsMap.get("term"));
+            stageMap.put("cat", termsMap.get("term_cn"));
+            stageJsonList.add(stageMap);
+        }
+        String stageJson = JsonUtils.toJson(stageJsonList);
+        responseDataMap.put("stage", stageJson);
         responseDataMap.put("money", orderInfo.getOrderprice().toString());
+        responseDataMap.put("bankName", SUPPORTED_BANKNAMES);
         String responseDataJson = JsonUtils.toJson(responseDataMap);
 
         Map<String, String> responseMap = new HashMap<>();
@@ -277,7 +293,7 @@ public class YinjiaStageController {
      * H5 第二步
      * 选择分期数点击确认付款
      */
-    @RequestMapping("confirmTerms")
+    @RequestMapping(value = "/confirmTerms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String corfirmTerms(YinjiaConfirmRequest request){
 
@@ -347,7 +363,7 @@ public class YinjiaStageController {
         orderInfoForUpdate.setOrdername(ordernameJson);
         int res = orderServiceFacade.updateOrdername(orderInfoForUpdate,true);
 
-        if ( res != 1 ){
+        if ( res <= 0 ){
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("code", JpfInterfaceErrorInfo.UPDATE_ORDERNAME_FAILED.getCode());
             responseMap.put("info", JpfInterfaceErrorInfo.UPDATE_ORDERNAME_FAILED.getDesc());
@@ -361,11 +377,12 @@ public class YinjiaStageController {
         responseDataMap.put("orderid", request.getOrderid());
         responseDataMap.put("mid", ""+mtsid);
         String responseDataJson = JsonUtils.toJson(responseDataMap);
+        String AESStr = AESUtils.encrypt(responseDataJson, AES_KEY);
 
         Map<String, String> responseMap = new HashMap<>();
-        responseMap.put("code", JpfInterfaceErrorInfo.UPDATE_ORDERNAME_FAILED.getCode());
-        responseMap.put("info", JpfInterfaceErrorInfo.UPDATE_ORDERNAME_FAILED.getDesc());
-        responseMap.put("data", responseDataJson);
+        responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
+        responseMap.put("info", JpfInterfaceErrorInfo.SUCCESS.getDesc());
+        responseMap.put("data", AESStr);
         String responseJson = JsonUtils.toJson(responseMap);
 
         return Base64CustomUtils.base64Encoder(responseJson);
@@ -376,18 +393,19 @@ public class YinjiaStageController {
      * @param request
      * @return
      */
-    @RequestMapping("/signUserInfo")
+    @RequestMapping(value = "/signUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public YjResponseDto signUserInfo(YinjiaSignUserInfoRequest request, HttpServletRequest httpRequest){
+    public String signUserInfo(YinjiaSignUserInfoRequest request, HttpServletRequest httpRequest){
         String dataJson = AESUtils.decrypt(request.getData(), AES_KEY);
-        Map<String, String> dataMap = JsonUtils.toObject(dataJson, Map.class);
+        Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
+        String signOrderid = createOrderid();
 
         // 判断用户有没有签约过
         OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpBybankaccountnumber(request.getAccountNumber());
         if ( orderCpInterfaceInfo == null ){
             // 未签约，准备插入一条签约记录
             OrderCpInterfaceInfo orderCpInsert = new OrderCpInterfaceInfo();
-            orderCpInsert.setOrderid(Long.parseLong(request.getOrderid()));
+            orderCpInsert.setOrderid(signOrderid);
             orderCpInsert.setMtsid(Long.parseLong(dataMap.get("mid")));
             orderCpInsert.setInterestmode((long)1);
             orderCpInsert.setSubmerid("2code");
@@ -403,13 +421,14 @@ public class YinjiaStageController {
             orderCpInsert.setBankaccounttype((byte)2);
             orderCpInsert.setBankaccountnumber(request.getAccountNumber());
             orderCpInsert.setCvn2(Long.parseLong(request.getCvn2()));
-            orderCpInsert.setValiditycard(request.getValidityCard().toString()+"-01");
+            orderCpInsert.setValiditycard(""+request.getValidityCard()+"-01");
             // 设置过期时间
-            String yearMonth[] = request.getValidityCard().split("-");
+            /*String yearMonth[] = request.getValidityCard().split("-");
             Long year = Long.parseLong(yearMonth[0]);
             Long newYear = year+1;
             String newYearMonth = ""+newYear+"-"+yearMonth[1];
-            Date validityyear = DateUtils.getFdate(request.getValidityCard()+"-"+DateUtils.getDay()+" "+DateUtils.getCurTimeString(),DateUtils.Date_FORMAT_YMDHMS);
+            Date validityyear = DateUtils.getFdate(newYearMonth+"-"+DateUtils.getDay()+" "+DateUtils.getCurTimeString(),DateUtils.Date_FORMAT_YMDHMS);*/
+            Date validityyear = org.apache.commons.lang3.time.DateUtils.addYears(new Date(),1);
             orderCpInsert.setValidityyear(validityyear);
             // 设置IP
             String IP = ServletUtils.getIpAddr(httpRequest);
@@ -418,13 +437,149 @@ public class YinjiaStageController {
             orderCpInsert.setSysagreeno("");
             orderCpInsert.setCreated(DateUtils.getCurrentDate());
 
-            orderCpServiceFacade.insRecord(orderCpInsert);
+            int res = orderCpServiceFacade.insRecord(orderCpInsert);
+            if ( res > 0 ){
+                // 获取银联签约接口url
+                MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), 7, true);
+                String paramJson = merchantPayTypeInfo.getParam();
+                Map<String, String> paramMap = JsonUtils.toCollection(paramJson, new TypeReference<Map<String, String>>() {});
+
+                // 构建返回加密串
+                Map<String , String> frontMap = new HashMap<>();
+                frontMap.put("mid","");
+                frontMap.put("orderid","");
+                frontMap.put("signOrderid","");
+                String AESJson = JsonUtils.toJson(frontMap);
+                String frontAES = AESUtils.encrypt(AESJson,AES_KEY);
+
+                // 构建银联签约接口request参数
+                Map<String,String> chinapayMap = new HashMap<>();
+                chinapayMap.put("service","sign");
+                chinapayMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
+                chinapayMap.put("inputCharset", "UTF-8");
+                chinapayMap.put("interestMode", "0"+orderCpInsert.getInterestmode());
+                chinapayMap.put("chnCode", paramMap.get("CP_Code"));
+                chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));
+                chinapayMap.put("outOrderNo", signOrderid);
+                chinapayMap.put("frontUrl", CHINAPAY_SIGN_RETURN_URL+frontAES);
+                chinapayMap.put("backUrl", CHINAPAY_SIGN_BACK_URL);
+                chinapayMap.put("subMerId", orderCpInsert.getSubmerid());
+                chinapayMap.put("subMerName", orderCpInsert.getSubmername());
+                chinapayMap.put("subMerAbbr", orderCpInsert.getSubmerabbr());
+                chinapayMap.put("signedName", request.getSignedName());
+                chinapayMap.put("idType", "0"+orderCpInsert.getIdtype());
+                chinapayMap.put("idNo", request.getIdNo());
+                chinapayMap.put("mobileNo", request.getMobileNo());
+                chinapayMap.put("selectFinaCode", request.getSelectFinaCode());
+                String accountType = orderCpInsert.getBankaccounttype() == 2 ? "CREDIT" : "DEBIT";
+                chinapayMap.put("accountType", accountType);
+                chinapayMap.put("accountNumber", request.getAccountNumber());
+                chinapayMap.put("clientIp", orderCpInsert.getClientip());
+                if ( accountType.equals("CREDIT") ){
+                    chinapayMap.put("cvn2", request.getCvn2());
+                    String yearMonth[] = request.getValidityCard().split("-");
+                    chinapayMap.put("validityYear", yearMonth[0]);
+                    chinapayMap.put("validityMonth", yearMonth[1]);
+                }
+                Map<String, String> treeMap = new TreeMap<>();
+                treeMap.putAll(chinapayMap);
+                Iterator<String> iter = treeMap.keySet().iterator();
+                StringBuilder sb = new StringBuilder();
+                Map<String, Object> requestMap = new HashMap<>();
+                while (iter.hasNext()){
+                    String k = (String)iter.next();
+                    String v = (String)treeMap.get(k);
+                    sb.append(k+"="+v+"&");
+
+                    requestMap.put(k,v);
+                }
+                String sbString = sb.toString();
+                sbString = StringUtils.stripEnd(sbString,"&");
+                String signMySign = Md5Encrypt.md5(sbString+paramMap.get("CP_Salt"),"UTF-8");
+                requestMap.put("sign",signMySign);
+                requestMap.put("signType","MD5");
+//                String requestString = sbString+"&sign="+signMySign+"&signType=MD5";
+                // 请求签约url
+                String response = OkHttpUtils.postForm(ChinaPay_Rurl+"sign",requestMap);
+                logger.info("签约返回："+response);
+                Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
+                Matcher matcher = null;
+                if ( signResponseMap.get("retCode").equals("0000") ){
+                    // 更新签约表
+                    OrderCpInterfaceInfo orderCpInfo = new OrderCpInterfaceInfo();
+                    orderCpInfo.setOrderid(signOrderid);
+                    orderCpInfo.setTranno(signResponseMap.get("transNo"));
+                    orderCpInfo.setSignstatus("1");
+                    if ( signResponseMap.get("sysAgreeNo") == null && !signResponseMap.get("sysAgreeNo").isEmpty() ){
+                        orderCpInfo.setSysagreeno(signResponseMap.get("sysAgreeNo"));
+                    }
+                    int updateRes = orderCpServiceFacade.updateRecord(orderCpInfo);
+                    if ( updateRes > 0 ){
+                        // 处理返回的url
+                        Pattern pattern = Pattern.compile("%<body.*?>(.*?)</body>%si");
+                        matcher = pattern.matcher(signResponseMap.get("autoSubmitForm"));
+                    }else{
+                        // 更新签约信息失败
+                        Map<String, String> responseMap = new HashMap<>();
+                        responseMap.put("code", JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode());
+                        responseMap.put("info", JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc());
+                        String responseJson = JsonUtils.toJson(responseMap);
+
+                        return Base64CustomUtils.base64Encoder(responseJson);
+                    }
+                }
+
+                // 构建返回
+                Map<String, Object> responseDataMap = new HashMap<>();
+                responseDataMap.put("orderid", dataMap.get("orderid"));
+                responseDataMap.put("signOrderid", signOrderid);
+                responseDataMap.put("url",matcher.group(0));
+                String responseDataJson = JsonUtils.toJson(responseDataMap);
+
+                Map<String, String> responseMap = new HashMap<>();
+                responseMap.put("code", JpfInterfaceErrorInfo.USER_NOT_SIGNED.getCode());
+                responseMap.put("info", JpfInterfaceErrorInfo.USER_NOT_SIGNED.getDesc());
+                responseMap.put("data", responseDataJson);
+                String responseJson = JsonUtils.toJson(responseMap);
+                String responseBase64 = Base64CustomUtils.base64Encoder(responseJson);
+
+                return responseBase64;
+            }
+
         }else{
             // 已签约
+            Map<String, String> responseDataMap = new HashMap<>();
+            responseDataMap.put("orderid", dataMap.get("orderid"));
+            responseDataMap.put("signOrderid", signOrderid);
+            String responseDataJson = JsonUtils.toJson(responseDataMap);
+            String AESStr = AESUtils.encrypt(responseDataJson, AES_KEY);
 
+            Map<String, String> responseMap = new HashMap<>();
+            responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
+            responseMap.put("info", JpfInterfaceErrorInfo.SUCCESS.getDesc());
+            responseMap.put("data", AESStr);
+            String responseJson = JsonUtils.toJson(responseMap);
+
+            return Base64CustomUtils.base64Encoder(responseJson);
         }
 
-        return yjResponseDto;
+        return "";
+    }
+
+    /**
+     * H5 第四步 渲染支付页
+     */
+    @RequestMapping("InstallPay")
+    public void installPay(String data){
+
+    }
+
+    /**
+     * 签约回调通知地址
+     */
+    @RequestMapping("/signNotify")
+    public void signNotify(YinjiaSignNotifyRequest request){
+
     }
 
     /*
@@ -682,8 +837,20 @@ public class YinjiaStageController {
 
         return yjResponseDto;
     }
-    @ModelAttribute
+    @RequestMapping("/test")
     @ResponseBody
+    public String test(){
+        Map<String, String> map = new HashMap<>();
+        map.put("mid","117");
+        map.put("orderid","201805231422031547");
+        map.put("platformOrderid", "6907334152323990");
+        String tailJson = JsonUtils.toJson(map);
+        String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
+
+        return urlTail;
+    }
+
+    @ModelAttribute
     public void getMerInfo(HttpServletRequest request, HttpServletRequest httpServletRequest)
     {
         /*String token = request.getParameter("token");
@@ -734,36 +901,43 @@ public class YinjiaStageController {
     }
 
     // 获取支付方式名称
-    public String getPayTypeCn(int payType){
-        String payTypeCn = "";
+    public Map<String, Object> getPayTypeCn(int payType){
+        Map<String, Object> map = new HashMap<>();
+
         switch (payType){
             // 将传过来的分期数转换成数据库里相应的id
             case 25:
-                payTypeCn = "3期";
+                map.put("term",3);
+                map.put("term_cn", "3期");
                 break;
 
             case 26:
-                payTypeCn = "6期";
+                map.put("term",6);
+                map.put("term_cn", "6期");
                 break;
 
             case 27:
-                payTypeCn = "9期";
+                map.put("term",9);
+                map.put("term_cn", "9期");
                 break;
 
             case 28:
-                payTypeCn = "12期";
+                map.put("term",12);
+                map.put("term_cn", "12期");
                 break;
 
             case 29:
-                payTypeCn = "15期";
+                map.put("term",15);
+                map.put("term_cn", "15期");
                 break;
 
             case 30:
-                payTypeCn = "24期";
+                map.put("term",24);
+                map.put("term_cn", "24期");
                 break;
         }
 
-        return payTypeCn;
+        return map;
     }
 
     /**
