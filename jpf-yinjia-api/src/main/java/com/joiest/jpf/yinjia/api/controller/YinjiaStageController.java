@@ -47,8 +47,6 @@ public class YinjiaStageController {
 
     private MerchantInterfaceInfo merchInfo;
 
-    @Autowired
-    private YjResponseDto yjResponseDto;
 
     private static final Logger logger = LogManager.getLogger(YinjiaStageController.class);
 
@@ -83,6 +81,7 @@ public class YinjiaStageController {
         String mySign = SignUtils.getSign(requestMap, merchInfo.getPrivateKey(),"UTF-8");
         String requestSign = request.getSign();
         if ( !mySign.equals(request.getSign()) ){   // 判断我们计算的签名和对方传过来的签名是否一致
+            YjResponseDto yjResponseDto = new YjResponseDto();
             yjResponseDto.clear();
             yjResponseDto.setCode(JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
             yjResponseDto.setInfo(JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
@@ -156,7 +155,7 @@ public class YinjiaStageController {
         if ( StringUtils.isBlank(request.getSign()) ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc());
         }
-
+        YjResponseDto yjResponseDto = new YjResponseDto();
         // 验签
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", request.getOrderid());
@@ -721,7 +720,7 @@ public class YinjiaStageController {
             maptree.put("tranAmt",orderInfo.getOrderselprice().toString());
             maptree.put("privatekey",maparr.get("CP_Salt"));
             maptree.put("numberOfInstallments",stage);
-
+            YjResponseDto yjResponseDto = new YjResponseDto();
             yjResponseDto = chinaPayServiceFacade.ChinaPaySmsCodeSend(maptree,requestUrl);
 
             String smeRes = yjResponseDto.getData().toString();
@@ -771,6 +770,7 @@ public class YinjiaStageController {
 
         if ( StringUtils.isBlank(orderid) || StringUtils.isBlank(origOrderid) || StringUtils.isBlank(mid) || StringUtils.isBlank(backUrl) || StringUtils.isBlank(refundAmt))
         {
+            YjResponseDto yjResponseDto = new YjResponseDto();
             yjResponseDto.setCode("10008");
             yjResponseDto.setInfo("请求参数不合法");
             return yjResponseDto;
@@ -783,7 +783,7 @@ public class YinjiaStageController {
         OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(origOrderid.trim());
         //获取商户信息
         MerchantInfo merchant = merchantServiceFacade.getMerchant(Long.parseLong(mid));
-
+        YjResponseDto yjResponseDto = new YjResponseDto();
         Map<String,Object> signParam = new HashMap<String,Object>();
         signParam.put("orderid",orderid);
         signParam.put("origOrderid",origOrderid);
