@@ -91,10 +91,10 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         sbf.append("\n请求地址：" + requestUrl);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + response);
-        String filePath = "ChinaLog";
+        String fileName = "ChinaLog";
         String dir = System.getProperty("user.dir");
         String home = System.getProperty("user.home");
-        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
 
         return yjResponseDto;
     }
@@ -131,8 +131,8 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         sbf.append("\n请求地址：" + requestUrl);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + result);
-        String filePath = "ChinaPayLog";
-        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
+        String fileName = "ChinaPayLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName, true);
 
         return dto;
     }
