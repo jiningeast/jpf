@@ -9,7 +9,7 @@ public class ManageConstants {
     public static final String CHINAPAY_PAYBACKURL = "http://testapi.7shengqian.com/index.php?r=YinjiaStage/ChinaPayReturn";
 
     // 银联签约成功后前台跳转地址
-    public static final String CHINAPAY_SIGN_RETURN_URL = "http://10.10.18.14:8080/paycode/";
+    public static final String CHINAPAY_SIGN_RETURN_URL = "https://tcpchats.7shengqian.com/paycode/";
 
     // 银联签约后台通知地址
     public static final String CHINAPAY_SIGN_BACK_URL = "http://testapi.7shengqian.com/yinjia-api/yinjiastage/signNotify";
@@ -18,10 +18,10 @@ public class ManageConstants {
     public static final String CHINAPAY_URL_SELECT = "http://vip2.7shengqian.com/trade/api/";
 
     // 银联退款异步回调地址
-    public static final String CHINAPAY_REFUND_BACK_URL = "http://localhost:8080/yinjia-api/yinjiastage/purchaseRefundReturn";
+    public static final String CHINAPAY_REFUND_BACK_URL = "https://testcpapi.7shengqian.com/yinjia-api/yinjiastage/purchaseRefundReturn";
 
     // H5首页地址（选择分期页）
-    public static final String TERMS_URL = "http://localhost:8080/#/HelloWorld/";
+    public static final String TERMS_URL = "https://tcpchats.7shengqian.com/#/instalment/";
 
     // AES加密key
     public static final String AES_KEY = "tioB8c6esX1Cx84Y16NFcFascZQZXiGI";
