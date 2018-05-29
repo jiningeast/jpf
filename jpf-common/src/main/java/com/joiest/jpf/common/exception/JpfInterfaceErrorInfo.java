@@ -61,6 +61,7 @@ public enum JpfInterfaceErrorInfo {
     WRONG_TOTAL_PRICE("10030", "金额有误"),
     CREATE_ORDER_FAILED("10031", "订单生成失败"),
     RETURNURL_ENCODING_ERROR("10034", "returnUrl编码错误"),
+    NOTIFYURL_ENCODING_ERROR("10036", "notifyUrl编码错误"),
     SIGNURL_ENCODING_ERROR("10035", "返回signUrl编码错误"),
 
     // H5 第一步 获取商户支付方式等信息

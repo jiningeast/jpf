@@ -176,6 +176,17 @@ public class YinjiaStageController {
             return yjResponseDto;
         }
         map.put("returnUrl", returnUrl.toLowerCase());
+        String notifyUrl = null;
+        try{
+            notifyUrl = URLEncoder.encode(request.getNotifyUrl(),"UTF-8");
+        }catch (UnsupportedEncodingException e){
+            yjResponseDto.clear();
+            yjResponseDto.setCode(JpfInterfaceErrorInfo.NOTIFYURL_ENCODING_ERROR.getCode());
+            yjResponseDto.setInfo(JpfInterfaceErrorInfo.NOTIFYURL_ENCODING_ERROR.getDesc());
+
+            return yjResponseDto;
+        }
+        map.put("notifyUrl", notifyUrl.toLowerCase());
         String mySign = SignUtils.getSign(map, merchInfo.getPrivateKey(), "UTF-8");
         if ( !mySign.equals(request.getSign()) ){   // 判断我们计算的签名和对方传过来的签名是否一致
             yjResponseDto.clear();

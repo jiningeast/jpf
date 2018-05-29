@@ -37,9 +37,14 @@ public class PayOrder implements Serializable {
     private String foreignRequest;
 
     /**
-     * 返回地址
+     * 
      */
     private String returnUrl;
+
+    /**
+     * 异步回调
+     */
+    private String notifyUrl;
 
     /**
      * 商户ID
@@ -164,6 +169,14 @@ public class PayOrder implements Serializable {
         this.returnUrl = returnUrl == null ? null : returnUrl.trim();
     }
 
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl == null ? null : notifyUrl.trim();
+    }
+
     public Long getMtsid() {
         return mtsid;
     }
@@ -284,6 +297,7 @@ public class PayOrder implements Serializable {
         sb.append(", signOrderid=").append(signOrderid);
         sb.append(", foreignRequest=").append(foreignRequest);
         sb.append(", returnUrl=").append(returnUrl);
+        sb.append(", notifyUrl=").append(notifyUrl);
         sb.append(", mtsid=").append(mtsid);
         sb.append(", uid=").append(uid);
         sb.append(", pid=").append(pid);
@@ -324,6 +338,7 @@ public class PayOrder implements Serializable {
             && (this.getSignOrderid() == null ? other.getSignOrderid() == null : this.getSignOrderid().equals(other.getSignOrderid()))
             && (this.getForeignRequest() == null ? other.getForeignRequest() == null : this.getForeignRequest().equals(other.getForeignRequest()))
             && (this.getReturnUrl() == null ? other.getReturnUrl() == null : this.getReturnUrl().equals(other.getReturnUrl()))
+            && (this.getNotifyUrl() == null ? other.getNotifyUrl() == null : this.getNotifyUrl().equals(other.getNotifyUrl()))
             && (this.getMtsid() == null ? other.getMtsid() == null : this.getMtsid().equals(other.getMtsid()))
             && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
             && (this.getPid() == null ? other.getPid() == null : this.getPid().equals(other.getPid()))
@@ -353,6 +368,7 @@ public class PayOrder implements Serializable {
         result = prime * result + ((getSignOrderid() == null) ? 0 : getSignOrderid().hashCode());
         result = prime * result + ((getForeignRequest() == null) ? 0 : getForeignRequest().hashCode());
         result = prime * result + ((getReturnUrl() == null) ? 0 : getReturnUrl().hashCode());
+        result = prime * result + ((getNotifyUrl() == null) ? 0 : getNotifyUrl().hashCode());
         result = prime * result + ((getMtsid() == null) ? 0 : getMtsid().hashCode());
         result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
         result = prime * result + ((getPid() == null) ? 0 : getPid().hashCode());

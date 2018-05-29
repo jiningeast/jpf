@@ -627,6 +627,76 @@ public class PayOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andNotifyUrlIsNull() {
+            addCriterion("notify_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlIsNotNull() {
+            addCriterion("notify_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlEqualTo(String value) {
+            addCriterion("notify_url =", value, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlNotEqualTo(String value) {
+            addCriterion("notify_url <>", value, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlGreaterThan(String value) {
+            addCriterion("notify_url >", value, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("notify_url >=", value, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlLessThan(String value) {
+            addCriterion("notify_url <", value, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlLessThanOrEqualTo(String value) {
+            addCriterion("notify_url <=", value, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlLike(String value) {
+            addCriterion("notify_url like", value, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlNotLike(String value) {
+            addCriterion("notify_url not like", value, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlIn(List<String> values) {
+            addCriterion("notify_url in", values, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlNotIn(List<String> values) {
+            addCriterion("notify_url not in", values, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlBetween(String value1, String value2) {
+            addCriterion("notify_url between", value1, value2, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlNotBetween(String value1, String value2) {
+            addCriterion("notify_url not between", value1, value2, "notifyUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andMtsidIsNull() {
             addCriterion("mtsid is null");
             return (Criteria) this;
@@ -1429,6 +1499,11 @@ public class PayOrderExample {
 
         public Criteria andReturnUrlLikeInsensitive(String value) {
             addCriterion("upper(return_url) like", value.toUpperCase(), "returnUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyUrlLikeInsensitive(String value) {
+            addCriterion("upper(notify_url) like", value.toUpperCase(), "notifyUrl");
             return (Criteria) this;
         }
 
