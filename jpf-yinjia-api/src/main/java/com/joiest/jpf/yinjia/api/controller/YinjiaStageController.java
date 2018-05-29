@@ -778,7 +778,7 @@ public class YinjiaStageController {
     public YjResponseDto chinaRefund(HttpServletRequest request)
     {
         String orderid = request.getParameter("orderid");//退款单号
-        String origOrderid = request.getParameter("origOrderid");//原始订单号
+        String origOrderid = request.getParameter("platformOrderid");//原始订单号
         String mid = request.getParameter("mid");
         String backUrl = request.getParameter("backUrl");//后台回调地址
         String refundAmt = request.getParameter("refundAmt");//退款金额
@@ -787,23 +787,18 @@ public class YinjiaStageController {
         String reUri = request.getServerName();   // 返回域名
 
         String requestUrl = CHINAPAY_URL_REQUEST+"purchaseRefund";
+        YjResponseDto yjResponseDto = new YjResponseDto();
 
         if ( StringUtils.isBlank(orderid) || StringUtils.isBlank(origOrderid) || StringUtils.isBlank(mid) || StringUtils.isBlank(backUrl) || StringUtils.isBlank(refundAmt))
         {
-            YjResponseDto yjResponseDto = new YjResponseDto();
             yjResponseDto.setCode("10008");
             yjResponseDto.setInfo("请求参数不合法");
             return yjResponseDto;
-        }
-        if ( StringUtils.isBlank(refundAmt) )
-        {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "退款金额不合法");
         }
         //获取订单信息
         OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(origOrderid.trim());
         //获取商户信息
         MerchantInfo merchant = merchantServiceFacade.getMerchant(Long.parseLong(mid));
-        YjResponseDto yjResponseDto = new YjResponseDto();
         Map<String,Object> signParam = new HashMap<String,Object>();
         signParam.put("orderid",orderid);
         signParam.put("origOrderid",origOrderid);
@@ -966,8 +961,8 @@ public class YinjiaStageController {
         postParam.put("mid",orderInfo.getMtsid());
         postParam.put("tranAmt",request.getParameter("tranAmt"));
         postParam.put("tranResult",request.getParameter("tranResult"));
-        postParam.put("oriOrderNo",request.getParameter("oriOrderNo"));
-        postParam.put("outOrderNo",request.getParameter("outOrderNo"));
+        postParam.put("platformOrderid",request.getParameter("oriOrderNo"));
+        postParam.put("orderid",request.getParameter("outOrderNo"));
 
         Map<String,Object> postParamTree= new TreeMap<String,Object>();
         postParamTree.putAll(postParam);
