@@ -521,7 +521,7 @@ public class YinjiaStageController {
                 requestMap.put("signType","MD5");
 //                String requestString = sbString+"&sign="+signMySign+"&signType=MD5";
                 // 请求签约url
-                String response = OkHttpUtils.postForm(ChinaPay_Rurl+"sign",requestMap);
+                String response = OkHttpUtils.postForm(CHINAPAY_URL_REQUEST+"sign",requestMap);
                 logger.info("签约返回："+response);
                 Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
                 String html = null;
@@ -571,6 +571,15 @@ public class YinjiaStageController {
         }
 
         // 已签约
+        // 更新订单表的signOrderid
+        OrderInfo updateOrderinfo = new OrderInfo();
+        updateOrderinfo.setOrderid(dataMap.get("orderid"));
+        updateOrderinfo.setSignOrderid(Long.parseLong(orderCpInterfaceInfo.getOrderid()));
+        int updateOrderRes = orderServiceFacade.updataSignOrderid(updateOrderinfo);
+        if ( updateOrderRes <= 0 ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
+        }
+
         Map<String, Object> responseDataMap = new HashMap<>();
         responseDataMap.put("orderid", dataMap.get("orderid"));
         String responseDataJson = JsonUtils.toJson(responseDataMap);
@@ -1161,7 +1170,7 @@ public class YinjiaStageController {
             signMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
             signMap.put("outOrderNo", dataMap.get("orderid"));
             signMap.put("smsCode",request.getSmsCode());
-            signMap.put("backUrl",ChinaPay_PayBackUrl);
+            signMap.put("backUrl",CHINAPAY_PAYBACKURL);
             signMap.put("numberOfInstallments",stage_tmp);
             // 设置IP
             String IP = ServletUtils.getIpAddr(httpRequest);
@@ -1174,8 +1183,7 @@ public class YinjiaStageController {
             requestUrl = CHINAPAY_URL_REQUEST + "installPay";
 
             YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
-            String resPay = resultPay.getData().toString();
-            Map<String,String> resultMap = JsonUtils.toObject(resPay,Map.class);
+            Map<String,String> resultMap = JsonUtils.toCollection(resultPay.getInfo(), new TypeReference<Map<String, String>>(){});
             if ( resultMap.containsKey("retCode") && resultMap.get("retCode").equals("0000") )
             {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"支付已受理",orderInfo.getReturnUrl());

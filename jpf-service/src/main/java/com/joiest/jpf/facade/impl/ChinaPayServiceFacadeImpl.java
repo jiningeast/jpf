@@ -117,7 +117,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         //发起支付
         String result = OkHttpUtils.postForm(requestUrl, treemap);
         YjResponseDto dto = new YjResponseDto();
-        dto.setData(requestParam);
+        dto.setInfo(result);
 
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
