@@ -4,17 +4,9 @@ import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.OkHttpUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.facade.ChinaPayServiceFacade;
 
-import org.bouncycastle.crypto.tls.MACAlgorithm;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-//import com.joiest.jpf.manage.web.controller.OrderCpsingleController;
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
-
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -22,9 +14,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
-   // private static final Logger logger = LogManager.getLogger(OrderCpsingleController.class);
-  // @Autowired
-   //private YjResponseDto yjResponseDto;
 
     private String signType = "MD5";
     private String charset = "UTF-8";
@@ -42,7 +31,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         map.remove("privatekey");
         map.put("inputCharset",this.charset);
 
-        String respos = this.signData(map);
+        String respos = ToolUtils.signData(map);
         String sign = Md5Encrypt.md5(respos+privatekey);
         String requestParam = respos+"&sign="+sign+"&signType="+this.signType;
 
@@ -51,7 +40,6 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
 
         //logger.info("接口地址为"+requestUrl);
         String response = OkHttpUtils.postForm(requestUrl,map);
-
         YjResponseDto yjResponseDto = new YjResponseDto();
         yjResponseDto.setData(response);
 
@@ -82,7 +70,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         map.remove("privatekey");
         map.put("inputCharset",this.charset);
 
-        String respos = this.signData(map);
+        String respos = ToolUtils.signData(map);
         String sign = Md5Encrypt.md5(respos+privatekey);
         String requestParam = respos+"&sign="+sign+"&signType="+this.signType;
 
@@ -135,9 +123,9 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         // sort
         TreeMap<String,Object> treemap = new TreeMap<>();
         treemap.putAll(map);
-        String sortStr = this.signData(treemap);
+        String sortStr = ToolUtils.signData (treemap);
         String signStr = Md5Encrypt.md5(sortStr + CP_Salt);
-        String requestParam = sortStr + "&" + signStr + "&signType" + this.signType;
+        String requestParam = sortStr + "&sign=" + signStr + "&signType=" + this.signType;
 
         treemap.put("sign",signStr);
         treemap.put("signType", this.signType);

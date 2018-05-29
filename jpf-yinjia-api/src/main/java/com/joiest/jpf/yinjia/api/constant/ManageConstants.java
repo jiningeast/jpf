@@ -35,7 +35,7 @@ public class ManageConstants {
     public static final String AES_KEY = "tioB8c6esX1Cx84Y16NFcFascZQZXiGI";
 
     //支付回调url---测试
-	public static final String ChinaPay_PayBackUrl = "http://testapi.7shengqian.com/index.php?r=YinjiaStage/ChinaPayReturn";
+	public static final String ChinaPay_PayBackUrl = "http://localhost:8080/yinjia-api/yinjiastage/Chinapayreturn";
 
 
     // 银联签约成功后前台跳转地址
