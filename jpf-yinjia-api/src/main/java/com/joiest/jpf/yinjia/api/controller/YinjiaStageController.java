@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
@@ -1021,8 +1022,13 @@ public class YinjiaStageController {
     }
 
     @ModelAttribute
-    public void getMerInfo(HttpServletRequest request, HttpServletRequest httpServletRequest)
+    public void getMerInfo(HttpServletRequest httpRequest, HttpServletResponse response)
     {
+        String originHeader = httpRequest.getHeader("Origin");
+        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
+        response.setHeader("Access-Control-Allow-Method", "POST");
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
+
         /*String token = request.getParameter("token");
         if (StringUtils.isBlank(token) )
         {
