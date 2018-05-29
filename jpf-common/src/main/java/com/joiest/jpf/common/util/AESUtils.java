@@ -209,7 +209,7 @@ public class AESUtils {
             str = new String(result, "UTF-8");
         }catch (Exception e)
         {
-            logger.error("解密：" + e.toString() );
+//            logger.error("解密：" + e.toString() );
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.DECRYPT_FAIL.getCode(), JpfInterfaceErrorInfo.DECRYPT_FAIL.getDesc());
         }
 
@@ -246,6 +246,11 @@ public class AESUtils {
             result[i] = (byte) (high * 16 + low);
         }
         return result;
+    }
+
+    public static void main(String[] arg){
+        String abc = decrypt("D4D94AE0A068DE915D128518DD30DB711599A94844C828032FC0CD595C1828DAA66E2915F11EE1022CB9F4AC70D1D299881BCA74FAE5CE51E2FD3459662C0BEF2C5CC495546765D655944334CA301B4A32FB78177915211E5E4FF914D6E0C748","tioB8c6esX1Cx84Y16NFcFascZQZXiGI");
+        System.out.print(abc);
     }
 
 }
