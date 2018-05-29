@@ -4,6 +4,7 @@ import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.OkHttpUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.facade.ChinaPayServiceFacade;
 
 import org.bouncycastle.crypto.tls.MACAlgorithm;
@@ -41,7 +42,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         map.remove("privatekey");
         map.put("inputCharset",this.charset);
 
-        String respos = this.signData(map);
+        String respos = ToolUtils.signData(map);
         String sign = Md5Encrypt.md5(respos+privatekey);
         String requestParam = respos+"&sign="+sign+"&signType="+this.signType;
 
@@ -67,7 +68,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         map.remove("privatekey");
         map.put("inputCharset",this.charset);
 
-        String respos = this.signData(map);
+        String respos = ToolUtils.signData(map);
         String sign = Md5Encrypt.md5(respos+privatekey);
         String requestParam = respos+"&sign="+sign+"&signType="+this.signType;
 
@@ -107,7 +108,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         // sort
         TreeMap<String,Object> treemap = new TreeMap<>();
         treemap.putAll(map);
-        String sortStr = this.signData(treemap);
+        String sortStr = ToolUtils.signData (treemap);
         String signStr = Md5Encrypt.md5(sortStr + CP_Salt);
         String requestParam = sortStr + "&sign=" + signStr + "&signType=" + this.signType;
 
