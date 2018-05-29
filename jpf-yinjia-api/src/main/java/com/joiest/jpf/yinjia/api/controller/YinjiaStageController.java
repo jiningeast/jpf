@@ -215,7 +215,8 @@ public class YinjiaStageController {
         orderInfo.setOrderid(orderid);
         orderInfo.setForeignOrderid(request.getOrderid());
         orderInfo.setForeignRequest(request.toString());
-        orderInfo.setReturnUrl(request.getReturnUrl());
+        orderInfo.setReturnUrl(returnUrl);
+        orderInfo.setNotifyUrl(notifyUrl);
         orderInfo.setMtsid(Long.parseLong(request.getMid()));
         orderInfo.setUid((long)0);
         orderInfo.setPaytype(7);
