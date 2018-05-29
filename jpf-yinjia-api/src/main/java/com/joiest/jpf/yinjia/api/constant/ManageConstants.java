@@ -21,7 +21,7 @@ public class ManageConstants {
     public static final String CHINAPAY_REFUND_BACK_URL = "https://testcpapi.7shengqian.com/yinjia-api/yinjiastage/purchaseRefundReturn";
 
     // H5首页地址（选择分期页）
-    public static final String TERMS_URL = "https://tcpchats.7shengqian.com/#/instalment/";
+    public static final String TERMS_URL = "https://tcpchats.7shengqian.com/instalment/";
 
     // AES加密key
     public static final String AES_KEY = "tioB8c6esX1Cx84Y16NFcFascZQZXiGI";
