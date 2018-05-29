@@ -10,7 +10,6 @@ import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.yinjia.api.constant.ManageConstants;
 import com.joiest.jpf.yinjia.api.util.ServletUtils;
-import com.sun.deploy.net.HttpResponse;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -1023,7 +1021,7 @@ public class YinjiaStageController {
     }
 
     @ModelAttribute
-    public void getMerInfo(HttpServletRequest httpRequest, HttpServletRequest httpServletRequest, HttpServletResponse response)
+    public void getMerInfo(HttpServletRequest httpRequest, HttpServletResponse response)
     {
         String originHeader = httpRequest.getHeader("Origin");
         response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
