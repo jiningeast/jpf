@@ -23,8 +23,8 @@ import java.util.TreeMap;
 
 public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
    // private static final Logger logger = LogManager.getLogger(OrderCpsingleController.class);
-   @Autowired
-   private YjResponseDto yjResponseDto;
+  // @Autowired
+   //private YjResponseDto yjResponseDto;
 
     private String signType = "MD5";
     private String charset = "UTF-8";
@@ -51,6 +51,8 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
 
         //logger.info("接口地址为"+requestUrl);
         String response = OkHttpUtils.postForm(requestUrl,map);
+
+        YjResponseDto yjResponseDto = new YjResponseDto();
         yjResponseDto.setData(response);
 
         StringBuilder sbf = new StringBuilder();
@@ -90,6 +92,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         //logger.info("接口地址为"+requestUrl);
         String response = OkHttpUtils.postForm(requestUrl,map);
 
+        YjResponseDto yjResponseDto = new YjResponseDto();
         yjResponseDto.setData(response);
 
         StringBuilder sbf = new StringBuilder();
