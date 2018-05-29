@@ -288,7 +288,7 @@ public class YinjiaStageController {
         String dataJson = null;
         DESEncryptUtils desEncryptUtils = new DESEncryptUtils();
         try{
-            dataJson = desEncryptUtils.encryption(dataJson, AES_KEY);
+            dataJson = desEncryptUtils.decryption(data, AES_KEY);
         }catch (Exception e){
 
         }
