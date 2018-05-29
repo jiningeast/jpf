@@ -767,7 +767,7 @@ public class YinjiaStageController {
     public YjResponseDto chinaRefund(HttpServletRequest request)
     {
         String orderid = request.getParameter("orderid");//退款单号
-        String origOrderid = request.getParameter("origOrderid");//原始订单号
+        String origOrderid = request.getParameter("platformOrderid");//原始订单号
         String mid = request.getParameter("mid");
         String backUrl = request.getParameter("backUrl");//后台回调地址
         String refundAmt = request.getParameter("refundAmt");//退款金额
@@ -950,7 +950,7 @@ public class YinjiaStageController {
         postParam.put("mid",orderInfo.getMtsid());
         postParam.put("tranAmt",request.getParameter("tranAmt"));
         postParam.put("tranResult",request.getParameter("tranResult"));
-        postParam.put("origOrderid",request.getParameter("oriOrderNo"));
+        postParam.put("platformOrderid",request.getParameter("oriOrderNo"));
         postParam.put("orderid",request.getParameter("outOrderNo"));
 
         Map<String,Object> postParamTree= new TreeMap<String,Object>();
