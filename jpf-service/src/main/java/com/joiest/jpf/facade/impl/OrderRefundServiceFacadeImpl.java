@@ -39,11 +39,12 @@ public class OrderRefundServiceFacadeImpl implements OrderRefundServiceFacade {
 
         PayOrderRefundExample example = new PayOrderRefundExample();
         PayOrderRefundExample.Criteria c = example.createCriteria();
-
+        c.andRefundOrderidEqualTo(refundOrderid);
         List<PayOrderRefund> orderRefundlist = payOrderRefundMapper.selectByExample(example);
         if ( orderRefundlist == null || orderRefundlist.isEmpty())
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.RECORD_NOT_EXIST.getCode(), "退单信息不存在");
+            return null;
+            //throw new JpfInterfaceException(JpfInterfaceErrorInfo.RECORD_NOT_EXIST.getCode(), "退单信息不存在");
         }
         PayOrderRefund payOrderRefund = orderRefundlist.get(0);
 
@@ -57,7 +58,7 @@ public class OrderRefundServiceFacadeImpl implements OrderRefundServiceFacade {
 
         PayOrderRefundExample example = new PayOrderRefundExample();
         PayOrderRefundExample.Criteria c = example.createCriteria();
-        c.andOrderidEqualTo(orderRefundInfo.getRefundOrderid());
+        c.andRefundOrderidEqualTo(orderRefundInfo.getRefundOrderid());
 
         PayOrderRefund orderRe = new PayOrderRefund();
 

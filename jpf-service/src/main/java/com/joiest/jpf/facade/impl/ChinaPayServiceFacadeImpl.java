@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -50,8 +51,20 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
 
         //logger.info("接口地址为"+requestUrl);
         String response = OkHttpUtils.postForm(requestUrl,map);
-
         yjResponseDto.setData(response);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + requestUrl);
+        sbf.append("\n接口参数：" + requestParam);
+        sbf.append("\n回调信息：" + response);
+        String filePath = "E:/JavaProject/jpf/log/ChinaLog" + myfmt2.format(date) + ".txt";
+        String dir = System.getProperty("user.dir");
+        String home = System.getProperty("user.home");
+        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
 
         return yjResponseDto;
     }
@@ -78,6 +91,19 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         String response = OkHttpUtils.postForm(requestUrl,map);
 
         yjResponseDto.setData(response);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + requestUrl);
+        sbf.append("\n接口参数：" + requestParam);
+        sbf.append("\n回调信息：" + response);
+        String filePath = "E:/JavaProject/jpf/log/ChinaLog" + myfmt2.format(date) + ".txt";
+        String dir = System.getProperty("user.dir");
+        String home = System.getProperty("user.home");
+        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
 
         return yjResponseDto;
     }
