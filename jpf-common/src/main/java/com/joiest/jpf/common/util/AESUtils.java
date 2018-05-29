@@ -28,7 +28,7 @@ public class AESUtils {
 
     private static String src = "中华人民共和国";
 
-    private static final Logger logger = LogManager.getLogger(AESUtils.class);
+//    private static final Logger logger = LogManager.getLogger(AESUtils.class);
 
     public String jdkAES (String str, String SKey, String operation){
         String res = "";
