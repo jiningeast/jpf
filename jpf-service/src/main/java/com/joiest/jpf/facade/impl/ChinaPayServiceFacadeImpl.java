@@ -7,14 +7,6 @@ import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.facade.ChinaPayServiceFacade;
 
-import org.bouncycastle.crypto.tls.MACAlgorithm;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-//import com.joiest.jpf.manage.web.controller.OrderCpsingleController;
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -22,9 +14,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
-   // private static final Logger logger = LogManager.getLogger(OrderCpsingleController.class);
-  // @Autowired
-   //private YjResponseDto yjResponseDto;
 
     private String signType = "MD5";
     private String charset = "UTF-8";
@@ -54,6 +43,19 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         YjResponseDto yjResponseDto = new YjResponseDto();
         yjResponseDto.setData(response);
 
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + requestUrl);
+        sbf.append("\n接口参数：" + requestParam);
+        sbf.append("\n回调信息：" + response);
+        String filePath = "E:/JavaProject/jpf/log/ChinaLog" + myfmt2.format(date) + ".txt";
+        String dir = System.getProperty("user.dir");
+        String home = System.getProperty("user.home");
+        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
+
         return yjResponseDto;
     }
 
@@ -80,6 +82,19 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
 
         YjResponseDto yjResponseDto = new YjResponseDto();
         yjResponseDto.setData(response);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + requestUrl);
+        sbf.append("\n接口参数：" + requestParam);
+        sbf.append("\n回调信息：" + response);
+        String filePath = "E:/JavaProject/jpf/log/ChinaLog" + myfmt2.format(date) + ".txt";
+        String dir = System.getProperty("user.dir");
+        String home = System.getProperty("user.home");
+        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
 
         return yjResponseDto;
     }

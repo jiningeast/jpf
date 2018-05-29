@@ -726,7 +726,7 @@ public class YinjiaStageController {
             maptree.put("accountNumber",orderCpInfo.getBankaccountnumber());
             maptree.put("phoneNo",orderCpInfo.getMobileno());
             maptree.put("sysAgreeNo",orderCpInfo.getSignedname());
-            maptree.put("tranAmt",orderInfo.getOrderselprice().toString());
+            maptree.put("tranAmt",orderInfo.getOrderprice().toString());
             maptree.put("privatekey",maparr.get("CP_Salt"));
             maptree.put("numberOfInstallments",stage);
             YjResponseDto yjResponseDto = new YjResponseDto();
@@ -827,7 +827,6 @@ public class YinjiaStageController {
         Byte status='1';
         Integer tpid=7;
         if(orderInfo!=null){
-
             if(!orderInfo.getOrderstatus().toString().equals("1")){
 
                 yjResponseDto.setCode("10008");
@@ -875,6 +874,7 @@ public class YinjiaStageController {
             chinaRe = JsonUtils.toCollection(smeRes,new TypeReference<HashMap<String, String>>(){});
             if(chinaRe.containsKey("retCode") && chinaRe.get("retCode").equals("0000")){
 
+                yjResponseDto.setCode("10000");
                 yjResponseDto.setInfo("退款已受理");
                 yjResponseDto.clearData();
             }else{
@@ -915,6 +915,8 @@ public class YinjiaStageController {
         OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(refundCancel.get("oriOrderNo").toString());
         //获取退单表信息
         OrderRefundInfo getOrderRefund = orderRefundServiceFacade.getOrderRefund(refundCancel.get("outOrderNo").toString());
+        //获取商户信息
+        MerchantInfo merchant = merchantServiceFacade.getMerchant(orderInfo.getMtsid());
 
         //获取商户银联支付方式配置
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(orderInfo.getMtsid(),orderInfo.getPaytype());
@@ -923,7 +925,7 @@ public class YinjiaStageController {
         Map<String,Object> treeRefundCancel = new TreeMap<String,Object>();
         treeRefundCancel.putAll(refundCancel);
         String getKeyVal = ToolUtils.signData(treeRefundCancel);
-        String getSign = "dc4ff1fb6774478849876ca63ed14d80";//Md5Encrypt.md5(getKeyVal+maparr.containsKey("CP_Salt"));
+        String getSign = Md5Encrypt.md5(getKeyVal+maparr.get("CP_Salt"));
 
         refundCancel.put("sign",sign);
         refundCancel.put("signType",signType);
@@ -933,7 +935,7 @@ public class YinjiaStageController {
         orderRefundInfo.setTrantype( Byte.valueOf(refundCancel.get("tranType").toString()));
         orderRefundInfo.setNotifyTime(new Date());
         orderRefundInfo.setResponsParam(JsonUtils.toJson(refundCancel));
-        orderRefundInfo.setRefundOrderid(refundCancel.get("oriOrderNo").toString());
+        orderRefundInfo.setRefundOrderid(refundCancel.get("outOrderNo").toString());
 
         if(!getSign.equals(sign)){
 
@@ -946,8 +948,28 @@ public class YinjiaStageController {
             orderRefundInfo.setStatus("3");
         }
         orderRefundServiceFacade.upOrderRefundByRefundOrder(orderRefundInfo);
-        String backurl = getOrderRefund.getBackurl();
-        return "SUCCESS";
+
+        Map<String,Object> postParam= new HashMap<String,Object>();
+
+        postParam.put("finishTime",request.getParameter("finishTime"));
+        postParam.put("mid",orderInfo.getMtsid());
+        postParam.put("tranAmt",request.getParameter("tranAmt"));
+        postParam.put("tranResult",request.getParameter("tranResult"));
+        postParam.put("oriOrderNo",request.getParameter("oriOrderNo"));
+        postParam.put("outOrderNo",request.getParameter("outOrderNo"));
+
+        Map<String,Object> postParamTree= new TreeMap<String,Object>();
+        postParamTree.putAll(postParam);
+
+        String postSign = SignUtils.getSign(postParamTree,merchant.getPrivateKey(),"UTF-8");
+        postParam.put("sign",postSign);
+
+        String response = OkHttpUtils.postForm(getOrderRefund.getBackurl(),postParam);
+        if(response == "SUCCESS"){
+
+            return "SUCCESS";
+        }
+        return "notice";
     }
 
     @RequestMapping("/checkCard")
