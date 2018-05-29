@@ -41,6 +41,11 @@ public class OrderInterfaceInfo {
     private String returnUrl;
 
     /**
+     * 异步回调地址
+     */
+    private String notifyUrl;
+
+    /**
      * 商户ID
      */
     private Long mtsid;
@@ -343,5 +348,13 @@ public class OrderInterfaceInfo {
 
     public void setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 }
