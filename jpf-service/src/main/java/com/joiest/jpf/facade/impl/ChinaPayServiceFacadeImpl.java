@@ -31,7 +31,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         map.remove("privatekey");
         map.put("inputCharset",this.charset);
 
-        String respos = ToolUtils.signData(map);
+        String respos = ToolUtils.mapToUrl(map);
         String sign = Md5Encrypt.md5(respos+privatekey);
         String requestParam = respos+"&sign="+sign+"&signType="+this.signType;
 
@@ -51,10 +51,10 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         sbf.append("\n请求地址：" + requestUrl);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + response);
-        String filePath = "E:/JavaProject/jpf/log/ChinaLog" + myfmt2.format(date) + ".txt";
+        String fileName = "ChinaLog";
         String dir = System.getProperty("user.dir");
         String home = System.getProperty("user.home");
-        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
 
         return yjResponseDto;
     }
@@ -70,7 +70,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         map.remove("privatekey");
         map.put("inputCharset",this.charset);
 
-        String respos = ToolUtils.signData(map);
+        String respos = ToolUtils.mapToUrl(map);
         String sign = Md5Encrypt.md5(respos+privatekey);
         String requestParam = respos+"&sign="+sign+"&signType="+this.signType;
 
@@ -91,23 +91,12 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         sbf.append("\n请求地址：" + requestUrl);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + response);
-        String filePath = "E:/JavaProject/jpf/log/ChinaLog" + myfmt2.format(date) + ".txt";
+        String filePath = "ChinaLog";
         String dir = System.getProperty("user.dir");
         String home = System.getProperty("user.home");
         LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
 
         return yjResponseDto;
-    }
-    public String signData(Map<String,Object> map){
-
-        String result="";
-        Set<String> keys = map.keySet();
-
-        for(String key :keys){
-
-            result +=key+"="+map.get(key)+"&";
-        }
-        return result.substring(0,result.length()-1);
     }
 
     /**
@@ -123,7 +112,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         // sort
         TreeMap<String,Object> treemap = new TreeMap<>();
         treemap.putAll(map);
-        String sortStr = ToolUtils.signData (treemap);
+        String sortStr = ToolUtils.mapToUrl (treemap);
         String signStr = Md5Encrypt.md5(sortStr + CP_Salt);
         String requestParam = sortStr + "&sign=" + signStr + "&signType=" + this.signType;
 
@@ -142,7 +131,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         sbf.append("\n请求地址：" + requestUrl);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + result);
-        String filePath = "D:/project/jpf/log/ChinaLog" + myfmt2.format(date) + ".txt";
+        String filePath = "ChinaPayLog";
         LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
 
         return dto;
