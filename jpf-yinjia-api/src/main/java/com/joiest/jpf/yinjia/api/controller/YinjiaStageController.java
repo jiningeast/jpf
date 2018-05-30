@@ -797,14 +797,12 @@ public class YinjiaStageController {
     @ResponseBody
     public YjResponseDto chinaRefund(HttpServletRequest request)
     {
+        String mid = request.getParameter("mid");
         String orderid = request.getParameter("orderid");//退款单号
         String origOrderid = request.getParameter("platformOrderid");//原始订单号
-        String mid = request.getParameter("mid");
         String backUrl = request.getParameter("backUrl");//后台回调地址
         String refundAmt = request.getParameter("refundAmt");//退款金额
         String sign = request.getParameter("sign");//签名
-
-        String reUri = request.getServerName();   // 返回域名
 
         String requestUrl = CHINAPAY_URL_REQUEST+"purchaseRefund";
         YjResponseDto yjResponseDto = new YjResponseDto();
@@ -820,10 +818,13 @@ public class YinjiaStageController {
         //获取商户信息
         MerchantInfo merchant = merchantServiceFacade.getMerchant(Long.parseLong(mid));
         Map<String,Object> signParam = new HashMap<String,Object>();
-        signParam.put("orderid",orderid);
-        signParam.put("origOrderid",origOrderid);
+
         signParam.put("mid",mid);
+        signParam.put("orderid",orderid);
+        signParam.put("platformOrderid",origOrderid);
         signParam.put("backUrl",backUrl);
+        signParam.put("refundAmt",refundAmt);
+
         String getSign = SignUtils.getSign(signParam,merchant.getPrivateKey(),"UTF-8");
         if(!getSign.equals(sign)){
 
@@ -847,10 +848,8 @@ public class YinjiaStageController {
         orderRefundInfo.setStatus("1");
         orderRefundInfo.setBackurl(backUrl);
         orderRefundInfo.setCreated(new Date());
+        orderRefundServiceFacade.insOrderRefund(orderRefundInfo);
 
-        int res = orderRefundServiceFacade.insOrderRefund(orderRefundInfo);
-
-        Byte status='1';
         Integer tpid=7;
         BigDecimal refundPrice =new BigDecimal(refundAmt);// Long.valueOf(refundAmt).longValue();
         if(orderInfo!=null){
@@ -894,7 +893,6 @@ public class YinjiaStageController {
             maptree.put("service","purchaseRefund");
             maptree.put("sysMerchNo",maparr.get("CP_MerchaNo"));
             maptree.put("tranClass","INSTALLMENT");
-
             maptree.put("outOrderNo",orderid.trim());
             maptree.put("origOutOrderNo",origOrderid.trim());
             maptree.put("tranAmt",refundAmt);
@@ -993,12 +991,12 @@ public class YinjiaStageController {
 
         Map<String,Object> postParam= new HashMap<String,Object>();
 
-        postParam.put("finishTime",request.getParameter("finishTime"));
         postParam.put("mid",orderInfo.getMtsid());
-        postParam.put("tranAmt",request.getParameter("tranAmt"));
-        postParam.put("tranResult",request.getParameter("tranResult"));
-        postParam.put("platformOrderid",request.getParameter("oriOrderNo"));
         postParam.put("orderid",request.getParameter("outOrderNo"));
+        postParam.put("platformOrderid",request.getParameter("oriOrderNo"));
+        postParam.put("tranResult",request.getParameter("tranResult"));
+        postParam.put("tranAmt",request.getParameter("tranAmt"));
+        postParam.put("finishTime",request.getParameter("finishTime"));
 
         Map<String,Object> postParamTree= new TreeMap<String,Object>();
         postParamTree.putAll(postParam);
