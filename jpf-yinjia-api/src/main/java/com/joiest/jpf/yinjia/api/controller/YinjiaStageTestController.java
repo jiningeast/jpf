@@ -16,7 +16,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,8 +35,8 @@ import java.util.regex.Pattern;
 import static com.joiest.jpf.yinjia.api.constant.ManageConstants.*;
 
 @Controller
-@RequestMapping("yinjiastage")
-public class YinjiaStageController {
+@RequestMapping("yinjiastagetest")
+public class YinjiaStageTestController {
 
     @Autowired
     private MerchantInterfaceServiceFacade merchantInterfaceServiceFacade;
@@ -50,7 +53,7 @@ public class YinjiaStageController {
     private MerchantInterfaceInfo merchInfo;
 
 
-    private static final Logger logger = LogManager.getLogger(YinjiaStageController.class);
+    private static final Logger logger = LogManager.getLogger(YinjiaStageTestController.class);
 
     @Autowired
     private OrderInterfaceServiceFacade orderInterfaceServiceFacade;
@@ -1235,8 +1238,8 @@ public class YinjiaStageController {
             String reUri = httpRequest.getServerName();   // 返回域名
 
             requestUrl = CHINAPAY_URL_REQUEST + "installPay";
-
-            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"支付已受理",orderInfo.getReturnUrl());
+/*            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
             Map<String,String> resultMap = JsonUtils.toCollection(resultPay.getInfo(), new TypeReference<Map<String, String>>(){});
             if ( resultMap.containsKey("retCode") && resultMap.get("retCode").equals("0000") )
             {
@@ -1244,7 +1247,7 @@ public class YinjiaStageController {
             }else
             {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"渠道受理有误，请重新下单支付",null);
-            }
+            }*/
         } else
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单或者签约信息有误", null);
