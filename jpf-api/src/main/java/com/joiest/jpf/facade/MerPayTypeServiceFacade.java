@@ -60,4 +60,12 @@ public interface MerPayTypeServiceFacade {
      * 商户分期类型配置
      */
     public JpfResponseDto modifyMerBankcatid(ModifyMerPayTypeRequest request);
+
+    /**
+     * 添加、修改商户密钥
+     * @param id
+     * @param pkey
+     * @return
+     */
+    public JpfResponseDto modifyMerPKey(String id,String pkey);
 }

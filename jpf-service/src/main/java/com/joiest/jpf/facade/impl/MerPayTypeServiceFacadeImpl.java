@@ -500,4 +500,30 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         return new JpfResponseDto();
     }
 
+    /**
+     * 添加、修改商户密钥
+     * @param id
+     * @param pkey
+     * @return
+     */
+    public JpfResponseDto modifyMerPKey(String id,String pkey)
+    {
+        if ( StringUtils.isBlank(id) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        if ( StringUtils.isBlank(pkey) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+
+        PayMerchantsExample example = new PayMerchantsExample();
+        PayMerchantsExample.Criteria c = example.createCriteria();
+        c.andIdEqualTo(Long.valueOf(id));
+        PayMerchants payMerchants = new PayMerchants();
+        payMerchants.setPrivateKey(pkey);
+        payMerchantsMapper.updateByExampleSelective(payMerchants,example);
+        return new JpfResponseDto();
+    }
+
 }

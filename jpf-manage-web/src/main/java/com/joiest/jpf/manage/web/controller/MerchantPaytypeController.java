@@ -178,4 +178,10 @@ public class MerchantPaytypeController {
         return merPayTypeServiceFacade.modifyMerBankcatid(request);
     }
 
+    @RequestMapping("/pk")
+    @ResponseBody
+    public JpfResponseDto modifyMerPrivateKey(String id,String pkey)
+    {
+        return merPayTypeServiceFacade.modifyMerPKey(id,pkey);
+    }
 }

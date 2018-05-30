@@ -22,7 +22,10 @@
                 <tr>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;">商户名称：</td>
                     <td width="30%">${merchantInfo.merchName}</td>
-                    <td width="15%"></td><td width="30%"></td>
+                    <td width="15%">商户密钥</td>
+                    <td width="30%"><input type="text" name="private_key" id="private_key" value="${merchantInfo.privateKey}" style="width:70%" validtype="length[0,32]" class="easyui-textbox" data-options="requeired:true">
+                        &nbsp;&nbsp;<a id="pKeyBtn_m" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">保存</a>
+                    </td>
                 </tr>
                 <tr>
                     <th colspan="4">已有支付类型</th>
@@ -68,6 +71,33 @@
 <style>
 </style>
 <script>
+
+    //保存密钥
+    $("#pKeyBtn_m").on("click", function () {
+        if ( $("#private_key").val() != '' )
+        {
+            var id = ${merchantInfo.id};
+            var pkey = $("#private_key").val();
+            $.ajax({
+                type: 'post',
+                url: '../merchant/paytype/pk',
+                data: {id:id,pkey:pkey},
+                dataType: 'json',
+                success: function (msg) {
+                    if (msg.retCode != '0000') {
+                        $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
+                    } else {
+                        $.messager.alert('消息提示', '操作成功！', 'info');
+                    }
+                },
+                error: function () {
+                    $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+                }
+            });
+            return false;
+        }
+    });
+
     //编辑页面加载
     function modify(mtsid, id, tpid) {
         $('#infoDiv2').window("open").window('setTitle','支付编辑').window('refresh', '../merchant/paytype/modify/realpage?mtsid=' + mtsid + '&id=' + id + "&tpid=" + tpid);
