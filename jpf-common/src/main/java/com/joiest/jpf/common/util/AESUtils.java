@@ -158,7 +158,10 @@ public class AESUtils {
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");// 创建AES的Key生产者
 
-            kgen.init(128, new SecureRandom(SKEY.getBytes()));// 利用用户密码作为随机数初始化出
+//            kgen.init(128, new SecureRandom(SKEY.getBytes()));// 利用用户密码作为随机数初始化出
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG" );
+            secureRandom.setSeed(SKEY.getBytes());
+            kgen.init(128, secureRandom);
             // 128位的key生产者
             //加密没关系，SecureRandom是生成安全随机数序列，password.getBytes()是种子，只要种子相同，序列就一样，所以解密只要有password就行
 
@@ -198,7 +201,10 @@ public class AESUtils {
         String str = "";
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");// 创建AES的Key生产者
-            kgen.init(128, new SecureRandom(SKEY.getBytes()));
+//            kgen.init(128, new SecureRandom(SKEY.getBytes()));
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG" );
+            secureRandom.setSeed(SKEY.getBytes());
+            kgen.init(128, secureRandom);
             SecretKey secretKey = kgen.generateKey();// 根据用户密码，生成一个密钥
             byte[] enCodeFormat = secretKey.getEncoded();// 返回基本编码格式的密钥
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");// 转换为AES专用密钥
@@ -249,8 +255,17 @@ public class AESUtils {
     }
 
     public static void main(String[] arg){
-        String abc = decrypt("D4D94AE0A068DE915D128518DD30DB711599A94844C828032FC0CD595C1828DAA66E2915F11EE1022CB9F4AC70D1D299881BCA74FAE5CE51E2FD3459662C0BEF2C5CC495546765D655944334CA301B4A32FB78177915211E5E4FF914D6E0C748","tioB8c6esX1Cx84Y16NFcFascZQZXiGI");
-        System.out.print(abc);
+        String content = "美女，约吗？";
+        String password = "123";
+        System.out.println("加密之前：" + content);
+        // 加密
+        String encrypt = AESUtils.encrypt(content, password);
+        System.out.println("加密后的内容：" + encrypt);
+
+
+        // 解密
+        String decrypt = AESUtils.decrypt(encrypt, password);
+        System.out.println("解密后的内容：" + decrypt);
     }
 
 }
