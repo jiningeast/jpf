@@ -263,9 +263,8 @@ public class YinjiaStageTestController {
 //        byte[] urlTail = AESCrptographyUtils.AES_CBC_Encrypt(tailJson.getBytes(),AES_KEY.getBytes(),iv.getBytes());
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
-        String signUrl = ManageConstants.TERMS_URL+urlTail;
         // 给输出的signUrl urlEncode一下
-        /*String signUrl = null;
+        String signUrl = null;
         try{
             signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
@@ -274,7 +273,7 @@ public class YinjiaStageTestController {
             yjResponseDto.setInfo(JpfInterfaceErrorInfo.SIGNURL_ENCODING_ERROR.getDesc());
 
             return yjResponseDto;
-        }*/
+        }
         dataMap.put("signUrl", signUrl);
         dataMap.put("orderid", request.getOrderid());
         dataMap.put("platformOrderid", orderid);
