@@ -248,18 +248,19 @@ public class YinjiaStageController {
         tailMap.put("orderid", request.getOrderid());
         tailMap.put("platformOrderid", orderid);
         String tailJson = JsonUtils.toJson(tailMap);
-        DESEncryptUtils desEncryptUtils = new DESEncryptUtils();
+        /*DESEncryptUtils desEncryptUtils = new DESEncryptUtils();
         String urlTail=null;
         try{
             urlTail = desEncryptUtils.encryption(tailJson, AES_KEY);
         }catch (Exception e){
 
-        }
+        }*/
 
-//        String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
+        String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
         String signUrl = ManageConstants.TERMS_URL+urlTail;
+        // 给输出的signUrl urlEncode一下
         /*String signUrl = null;
         try{
             signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+urlTail, "UTF-8");
@@ -286,14 +287,14 @@ public class YinjiaStageController {
     @RequestMapping(value = "/getMerPay", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getMerPay(String data){
-        String dataJson = null;
+        /*String dataJson = null;
         DESEncryptUtils desEncryptUtils = new DESEncryptUtils();
         try{
             dataJson = desEncryptUtils.decryption(data, AES_KEY);
         }catch (Exception e){
 
-        }
-//        String dataJson = AESUtils.decrypt(data, AES_KEY);
+        }*/
+        String dataJson = AESUtils.decrypt(data, AES_KEY);
         Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<HashMap<String,String>>(){});
         if ( dataMap.get("mid") == null || dataMap.get("orderid") == null || dataMap.get("platformOrderid") == null ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_DATA.getCode(), JpfInterfaceErrorInfo.INCORRECT_DATA.getDesc());
