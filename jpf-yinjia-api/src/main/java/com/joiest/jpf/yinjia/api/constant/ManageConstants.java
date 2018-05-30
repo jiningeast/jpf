@@ -6,7 +6,7 @@ public class ManageConstants {
     public static final String CHINAPAY_URL_REQUEST = "http://vip2.7shengqian.com/trade/install/";
 
     // 银联支付异步回调地址
-    public static final String CHINAPAY_PAYBACKURL = "http://testapi.7shengqian.com/index.php?r=YinjiaStage/ChinaPayReturn";
+    public static final String CHINAPAY_PAYBACKURL = "http://testcpapi.7shengqian.com/yinjia-api/yinjiastage/Chinapayreturn";
 
     // 银联签约成功后前台跳转地址
     public static final String CHINAPAY_SIGN_RETURN_URL = "https://tcpchats.7shengqian.com/paycode/";
@@ -18,7 +18,7 @@ public class ManageConstants {
     public static final String CHINAPAY_URL_SELECT = "http://vip2.7shengqian.com/trade/api/";
 
     // 银联退款异步回调地址
-    public static final String CHINAPAY_REFUND_BACK_URL = "https://testcpapi.7shengqian.com/yinjia-api/yinjiastage/purchaseRefundReturn";
+    public static final String CHINAPAY_REFUND_BACK_URL = "https://testcpapi.7shengqian.com/yinjiastage/purchaseRefundReturn";
 
     // H5首页地址（选择分期页）
     public static final String TERMS_URL = "https://tcpchats.7shengqian.com/instalment/";

@@ -840,15 +840,6 @@ public class YinjiaStageController {
             yjResponseDto.setInfo("请确保退款单号唯一");
             return yjResponseDto;
         }
-        //退单信息入库
-        OrderRefundInfo orderRefundInfo = new OrderRefundInfo();
-        orderRefundInfo.setOrderid(origOrderid);
-        orderRefundInfo.setRefundOrderid(orderid);
-        orderRefundInfo.setMoney(new BigDecimal(refundAmt));
-        orderRefundInfo.setStatus("1");
-        orderRefundInfo.setBackurl(backUrl);
-        orderRefundInfo.setCreated(new Date());
-        orderRefundServiceFacade.insOrderRefund(orderRefundInfo);
 
         Integer tpid=7;
         BigDecimal refundPrice =new BigDecimal(refundAmt);// Long.valueOf(refundAmt).longValue();
@@ -882,6 +873,24 @@ public class YinjiaStageController {
             yjResponseDto.setInfo("未获取到此单");
             return yjResponseDto;
         }
+        //退单信息入库
+        OrderRefundInfo orderRefundInfo = new OrderRefundInfo();
+        orderRefundInfo.setOrderid(origOrderid);
+        orderRefundInfo.setRefundOrderid(orderid);
+        orderRefundInfo.setMoney(new BigDecimal(refundAmt));
+        orderRefundInfo.setStatus("1");
+        orderRefundInfo.setBackurl(backUrl);
+        orderRefundInfo.setCreated(new Date());
+        orderRefundServiceFacade.insOrderRefund(orderRefundInfo);
+
+        //更新退单表相关退单状态信息
+        OrderInterfaceInfo orderStauts = new OrderInterfaceInfo();
+        orderStauts.setUpdatetime(new Date());
+        orderStauts.setOrderid(origOrderid.trim());
+        orderStauts.setSinglestatus(Byte.valueOf("2"));
+        //修改订单表信息
+        orderInterfaceServiceFacade.updateOrderRefund(orderStauts);
+
         //获取商户银联支付方式配置
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(orderInfo.getMtsid(),tpid);
         Map<String, String> maparr = JsonUtils.toCollection(merchantPayTypeInfo.getParam(),new TypeReference<HashMap<String, String>>(){});
@@ -899,7 +908,7 @@ public class YinjiaStageController {
             maptree.put("backUrl",CHINAPAY_REFUND_BACK_URL);
             maptree.put("privatekey",maparr.get("CP_Salt"));
 
-            yjResponseDto = chinaPayServiceFacade.ChinaPayRefund(maptree,requestUrl);
+           yjResponseDto = chinaPayServiceFacade.ChinaPayRefund(maptree,requestUrl);
 
             String smeRes = yjResponseDto.getData().toString();
             chinaRe = JsonUtils.toCollection(smeRes,new TypeReference<HashMap<String, String>>(){});
@@ -961,12 +970,18 @@ public class YinjiaStageController {
         refundCancel.put("sign",sign);
         refundCancel.put("signType",signType);
 
+        //更新退单表相关信息
         OrderRefundInfo orderRefundInfo = new OrderRefundInfo();
         orderRefundInfo.setTranno(refundCancel.get("tranNo").toString());
         orderRefundInfo.setTrantype( Byte.valueOf(refundCancel.get("tranType").toString()));
         orderRefundInfo.setNotifyTime(new Date());
         orderRefundInfo.setResponsParam(JsonUtils.toJson(refundCancel));
         orderRefundInfo.setRefundOrderid(refundCancel.get("outOrderNo").toString());
+
+        //更新退单表相关退单状态信息
+        OrderInterfaceInfo orderStauts = new OrderInterfaceInfo();
+        orderStauts.setUpdatetime(new Date());
+        orderStauts.setOrderid(refundCancel.get("oriOrderNo").toString());
 
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
@@ -978,16 +993,22 @@ public class YinjiaStageController {
 
             sbf.append("\n签名失败：回调签名sign="+sign+"，接口签名sign="+getSign);
             orderRefundInfo.setStatus("3");
+            orderStauts.setSinglestatus(Byte.valueOf("8"));
         }else if(refundCancel.get("tranResult").equals("SUCCESS")){
 
             sbf.append("\n退款成功");
             orderRefundInfo.setStatus("2");
+            orderStauts.setSinglestatus(Byte.valueOf("7"));
         }else{
 
             sbf.append("\n退款失败");
             orderRefundInfo.setStatus("3");
+            orderStauts.setSinglestatus(Byte.valueOf("8"));
         }
+        //修改退单表信息
         orderRefundServiceFacade.upOrderRefundByRefundOrder(orderRefundInfo);
+        //修改订单表信息
+        orderInterfaceServiceFacade.updateOrderRefund(orderStauts);
 
         Map<String,Object> postParam= new HashMap<String,Object>();
 
