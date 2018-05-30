@@ -119,6 +119,11 @@ public class OrderInfo {
      */
     private String returnUrl;
 
+    /**
+     * 异步回调地址
+     */
+    private String notifyUrl;
+
     public Long getId() {
         return id;
     }
@@ -301,5 +306,13 @@ public class OrderInfo {
 
     public void setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 }

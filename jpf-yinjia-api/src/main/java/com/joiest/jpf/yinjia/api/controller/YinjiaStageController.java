@@ -19,8 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -64,6 +66,8 @@ public class YinjiaStageController {
 
     @Autowired
     private BankCardServiceFacade bankCardServiceFacade;
+
+    private String iv = "iv";
 
     /**
      * 商户获取银联信用卡分期支付的期数
@@ -176,6 +180,17 @@ public class YinjiaStageController {
             return yjResponseDto;
         }
         map.put("returnUrl", returnUrl.toLowerCase());
+        String notifyUrl = null;
+        try{
+            notifyUrl = URLEncoder.encode(request.getNotifyUrl(),"UTF-8");
+        }catch (UnsupportedEncodingException e){
+            yjResponseDto.clear();
+            yjResponseDto.setCode(JpfInterfaceErrorInfo.NOTIFYURL_ENCODING_ERROR.getCode());
+            yjResponseDto.setInfo(JpfInterfaceErrorInfo.NOTIFYURL_ENCODING_ERROR.getDesc());
+
+            return yjResponseDto;
+        }
+        map.put("notifyUrl", notifyUrl.toLowerCase());
         String mySign = SignUtils.getSign(map, merchInfo.getPrivateKey(), "UTF-8");
         if ( !mySign.equals(request.getSign()) ){   // 判断我们计算的签名和对方传过来的签名是否一致
             yjResponseDto.clear();
@@ -204,7 +219,8 @@ public class YinjiaStageController {
         orderInfo.setOrderid(orderid);
         orderInfo.setForeignOrderid(request.getOrderid());
         orderInfo.setForeignRequest(request.toString());
-        orderInfo.setReturnUrl(request.getReturnUrl());
+        orderInfo.setReturnUrl(returnUrl);
+        orderInfo.setNotifyUrl(notifyUrl);
         orderInfo.setMtsid(Long.parseLong(request.getMid()));
         orderInfo.setUid((long)0);
         orderInfo.setPaytype(7);
@@ -234,10 +250,21 @@ public class YinjiaStageController {
         tailMap.put("orderid", request.getOrderid());
         tailMap.put("platformOrderid", orderid);
         String tailJson = JsonUtils.toJson(tailMap);
+        /*DESEncryptUtils desEncryptUtils = new DESEncryptUtils();
+        String urlTail=null;
+        try{
+            urlTail = desEncryptUtils.encryption(tailJson, AES_KEY);
+        }catch (Exception e){
+
+        }*/
+
         String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
+//        byte[] urlTail = AESCrptographyUtils.AES_CBC_Encrypt(tailJson.getBytes(),AES_KEY.getBytes(),iv.getBytes());
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
-        String signUrl = null;
+        String signUrl = ManageConstants.TERMS_URL+urlTail;
+        // 给输出的signUrl urlEncode一下
+        /*String signUrl = null;
         try{
             signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
@@ -246,7 +273,7 @@ public class YinjiaStageController {
             yjResponseDto.setInfo(JpfInterfaceErrorInfo.SIGNURL_ENCODING_ERROR.getDesc());
 
             return yjResponseDto;
-        }
+        }*/
         dataMap.put("signUrl", signUrl);
         dataMap.put("orderid", request.getOrderid());
         dataMap.put("platformOrderid", orderid);
@@ -263,6 +290,13 @@ public class YinjiaStageController {
     @RequestMapping(value = "/getMerPay", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getMerPay(String data){
+        /*String dataJson = null;
+        DESEncryptUtils desEncryptUtils = new DESEncryptUtils();
+        try{
+            dataJson = desEncryptUtils.decryption(data, AES_KEY);
+        }catch (Exception e){
+
+        }*/
         String dataJson = AESUtils.decrypt(data, AES_KEY);
         Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<HashMap<String,String>>(){});
         if ( dataMap.get("mid") == null || dataMap.get("orderid") == null || dataMap.get("platformOrderid") == null ){
@@ -926,7 +960,7 @@ public class YinjiaStageController {
 
         Map<String,Object> treeRefundCancel = new TreeMap<String,Object>();
         treeRefundCancel.putAll(refundCancel);
-        String getKeyVal = ToolUtils.signData(treeRefundCancel);
+        String getKeyVal = ToolUtils.mapToUrl(treeRefundCancel);
         String getSign = Md5Encrypt.md5(getKeyVal+maparr.get("CP_Salt"));
 
         refundCancel.put("sign",sign);
@@ -971,7 +1005,7 @@ public class YinjiaStageController {
 
             return "SUCCESS";
         }
-        return "notice";
+        return "NOTICE";
     }
 
     @RequestMapping("/checkCard")
@@ -1015,8 +1049,13 @@ public class YinjiaStageController {
     }
 
     @ModelAttribute
-    public void getMerInfo(HttpServletRequest request, HttpServletRequest httpServletRequest)
+    public void getMerInfo(HttpServletRequest httpRequest, HttpServletResponse response)
     {
+        String originHeader = httpRequest.getHeader("Origin");
+        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
+        response.setHeader("Access-Control-Allow-Method", "POST");
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
+
         /*String token = request.getParameter("token");
         if (StringUtils.isBlank(token) )
         {
@@ -1243,7 +1282,7 @@ public class YinjiaStageController {
         //获取订单信息
         OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(returnMap.get("outOrderNo").toString());
         //获取商户信息 and 商户银嘉支付参数
-        merchInfo = merchantInterfaceServiceFacade.getMerchant( orderInfo.getMtsid() );
+        MerchantInterfaceInfo merchInfo = merchantInterfaceServiceFacade.getMerchant( orderInfo.getMtsid() );
         // 获取该商户银联信用卡分期支付的配置信息
         MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong( orderInfo.getMtsid().toString() ),7, true);
         Map<String,String> paramMap = JsonUtils.toObject(merchantPayTypeInfo.getParam(),Map.class);
@@ -1253,7 +1292,7 @@ public class YinjiaStageController {
         TreeMap<String,Object> dataMap = new TreeMap<>();
         dataMap.putAll(returnMap);
         //签名
-        String sortStr = ToolUtils.signData(dataMap);
+        String sortStr = ToolUtils.mapToUrl(dataMap);
         String signMd5 = Md5Encrypt.md5(sortStr + paramMap.get("CP_Salt"));
 
         StringBuilder sbf = new StringBuilder();
@@ -1282,12 +1321,53 @@ public class YinjiaStageController {
         orderInterfaceServiceFacade.updateOrderStatus(orderInfoUpdate);
         //日志
         SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
-        String filePath = "D:/project/jpf/log/ChinaPayReturn" + myfmt2.format(date) + ".txt";
-//        String filePath = "/logs/jpf-yinjia-api/log/ChinaPayReturn" + myfmt2.format(date) + ".txt";
-        LogsCustomUtils.writeIntoFile(sbf.toString(),filePath,true);
+//        String filePath = "/project/jpf/log/ChinaPayReturn" + myfmt2.format(date) + ".txt";
+        String fileName = "ChinaPayReturn";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
 
-        //处理逻辑修改订单状态并返回输出success-----
-        return "SUCCESS";
+        //通知商户
+        Map<String,Object> merPostParamMap = new HashMap<>();
+        merPostParamMap.put("finishTime",request.getFinishTime());
+        merPostParamMap.put("mid",orderInfo.getMtsid().toString());
+        merPostParamMap.put("tranAmt",request.getTranAmt());
+        merPostParamMap.put("tranResult",request.getTranResult());
+        merPostParamMap.put("orderid",orderInfo.getForeignOrderid());    //商户订单号
+        merPostParamMap.put("platformOrderid",request.getOutOrderNo());    //平台订单号
+
+        Map<String,Object> postParamTree= new TreeMap<String,Object>();
+        postParamTree.putAll(merPostParamMap);
+
+        String postSign = SignUtils.getSign(postParamTree,merchInfo.getPrivateKey(),"UTF-8");
+        merPostParamMap.put("sign",postSign);
+
+        String notify_url = null;
+        StringBuilder sbf_mer = new StringBuilder();
+        String fileName_merNofity = "merPayNotify";
+        try{
+            notify_url = URLDecoder.decode(orderInfo.getNotifyUrl(), "UTF-8");
+            String response = OkHttpUtils.postForm(notify_url,merPostParamMap);
+            logger.info("支付回调--发送给商户: 请求地址：" + notify_url + "; 请求参数" + merPostParamMap);
+            sbf_mer.append("\n\nTime:" + myfmt.format(date) + "支付回调--发送给商户");
+            sbf_mer.append("\n请求地址：" + notify_url);
+            sbf_mer.append("\n接口参数：" + merPostParamMap);
+            if(response == "SUCCESS")
+            {
+                sbf_mer.append("\n回调信息：" + "SUCCESS");
+                LogsCustomUtils.writeIntoFile(sbf_mer.toString(),"", fileName_merNofity,true);
+
+                //处理逻辑修改订单状态并返回输出success-----
+                return "SUCCESS";
+            }
+            sbf_mer.append("\n回调信息：" + response);
+            LogsCustomUtils.writeIntoFile(sbf_mer.toString(),"", fileName_merNofity,true);
+
+        }catch (UnsupportedEncodingException e){
+            logger.info("支付回调--发送给商户: 商户回调 notify_url decode失败! 商户原notify_url为：" + orderInfo.getNotifyUrl());
+            sbf_mer.append("\n\nTime:" + myfmt.format(date) + "支付回调--发送给商户");
+            sbf_mer.append("\n异常：用户notify_url 解码异常: 待解码的notify_url为：" + orderInfo.getNotifyUrl());
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName_merNofity,true);
+        }
+        return "NOTICE";
     }
 
 }

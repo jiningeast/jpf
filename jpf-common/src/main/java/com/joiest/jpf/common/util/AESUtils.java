@@ -28,7 +28,7 @@ public class AESUtils {
 
     private static String src = "中华人民共和国";
 
-    private static final Logger logger = LogManager.getLogger(AESUtils.class);
+//    private static final Logger logger = LogManager.getLogger(AESUtils.class);
 
     public String jdkAES (String str, String SKey, String operation){
         String res = "";
@@ -158,7 +158,10 @@ public class AESUtils {
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");// 创建AES的Key生产者
 
-            kgen.init(128, new SecureRandom(SKEY.getBytes()));// 利用用户密码作为随机数初始化出
+//            kgen.init(128, new SecureRandom(SKEY.getBytes()));// 利用用户密码作为随机数初始化出
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG" );
+            secureRandom.setSeed(SKEY.getBytes());
+            kgen.init(128, secureRandom);
             // 128位的key生产者
             //加密没关系，SecureRandom是生成安全随机数序列，password.getBytes()是种子，只要种子相同，序列就一样，所以解密只要有password就行
 
@@ -198,7 +201,10 @@ public class AESUtils {
         String str = "";
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");// 创建AES的Key生产者
-            kgen.init(128, new SecureRandom(SKEY.getBytes()));
+//            kgen.init(128, new SecureRandom(SKEY.getBytes()));
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG" );
+            secureRandom.setSeed(SKEY.getBytes());
+            kgen.init(128, secureRandom);
             SecretKey secretKey = kgen.generateKey();// 根据用户密码，生成一个密钥
             byte[] enCodeFormat = secretKey.getEncoded();// 返回基本编码格式的密钥
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");// 转换为AES专用密钥
@@ -209,7 +215,7 @@ public class AESUtils {
             str = new String(result, "UTF-8");
         }catch (Exception e)
         {
-            logger.error("解密：" + e.toString() );
+//            logger.error("解密：" + e.toString() );
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.DECRYPT_FAIL.getCode(), JpfInterfaceErrorInfo.DECRYPT_FAIL.getDesc());
         }
 
@@ -246,6 +252,20 @@ public class AESUtils {
             result[i] = (byte) (high * 16 + low);
         }
         return result;
+    }
+
+    public static void main(String[] arg){
+        String content = "美女，约吗？";
+        String password = "123";
+        System.out.println("加密之前：" + content);
+        // 加密
+        String encrypt = AESUtils.encrypt(content, password);
+        System.out.println("加密后的内容：" + encrypt);
+
+
+        // 解密
+        String decrypt = AESUtils.decrypt(encrypt, password);
+        System.out.println("解密后的内容：" + decrypt);
     }
 
 }

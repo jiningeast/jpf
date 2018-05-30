@@ -106,6 +106,10 @@ public class PayOrderInterfaceCustom implements Serializable {
      */
     private Date updatetime;
 
+    /**
+     * 异步回调地址
+     */
+    private String notifyUrl;
     //=========产品信息 Begin==============
     /**
      * 产品ID
@@ -350,6 +354,14 @@ public class PayOrderInterfaceCustom implements Serializable {
 
     public void setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 
     /**

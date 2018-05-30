@@ -51,14 +51,14 @@ public class ToolUtils {
     }
 
     //数组转换为键值
-    public static String signData(Map<String,Object> map){
+    public static String mapToUrl(Map<String,Object> map){
 
         String result="";
         Set<String> keys = map.keySet();
 
         for(String key :keys){
 
-            result +=key+"="+map.get(key)+"&";
+            result += key + "=" + map.get(key) + "&";
         }
         return result.substring(0,result.length()-1);
     }

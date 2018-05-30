@@ -56,6 +56,12 @@ public class YinjiaCreateOrderRequest {
     private String returnUrl;
 
     /**
+     * 异步通知地址
+     */
+    @NotBlank(message = "异步通知地址不能为空")
+    private String notifyUrl;
+
+    /**
      * 签名串
      */
     @NotBlank(message = "签名串不能为空")
@@ -123,6 +129,14 @@ public class YinjiaCreateOrderRequest {
 
     public void setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 
     public String getSign() {

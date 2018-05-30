@@ -194,6 +194,8 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
         payOrder.setForeignOrderid(orderInfo.getForeignOrderid());
         payOrder.setForeignRequest(orderInfo.getForeignRequest());
         payOrder.setReturnUrl(orderInfo.getReturnUrl());
+        payOrder.setReturnUrl(orderInfo.getReturnUrl());
+        payOrder.setNotifyUrl(orderInfo.getNotifyUrl());
         payOrder.setMtsid(orderInfo.getMtsid());
         payOrder.setUid(orderInfo.getUid());
         payOrder.setPaytype(7);
