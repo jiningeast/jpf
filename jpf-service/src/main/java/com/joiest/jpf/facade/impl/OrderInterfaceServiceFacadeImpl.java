@@ -64,4 +64,22 @@ public class OrderInterfaceServiceFacadeImpl implements OrderInterfaceServiceFac
         payOrder.setUpdatetime(orderInfo.getUpdatetime());
         return payOrderMapper.updateByExampleSelective(payOrder,e);
     }
+
+    /**
+     * 退款回调--更新订单状态&updatetime
+     * @param orderInfo
+     */
+    public int updateOrderRefund(OrderInterfaceInfo orderInfo){
+
+        PayOrderExample e = new PayOrderExample();
+        PayOrderExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(orderInfo.getOrderid());
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setSinglestatus(orderInfo.getSinglestatus());
+        payOrder.setUpdatetime(orderInfo.getUpdatetime());
+
+        return payOrderMapper.updateByExampleSelective(payOrder,e);
+    }
+
 }

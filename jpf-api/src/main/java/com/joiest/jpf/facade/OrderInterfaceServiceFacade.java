@@ -19,4 +19,10 @@ public interface OrderInterfaceServiceFacade {
      * @param orderInfo
      */
     public int updateOrderStatus(OrderInterfaceInfo orderInfo);
+
+    /**
+     * 退款回调--更新订单状态&updatetime
+     * @param orderInfo
+     */
+    public int updateOrderRefund(OrderInterfaceInfo orderInfo);
 }
