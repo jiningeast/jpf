@@ -67,6 +67,8 @@ public class YinjiaStageController {
     @Autowired
     private BankCardServiceFacade bankCardServiceFacade;
 
+    private String iv = "iv";
+
     /**
      * 商户获取银联信用卡分期支付的期数
      * @param request 此接口请求类
@@ -257,6 +259,7 @@ public class YinjiaStageController {
         }*/
 
         String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
+//        byte[] urlTail = AESCrptographyUtils.AES_CBC_Encrypt(tailJson.getBytes(),AES_KEY.getBytes(),iv.getBytes());
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
         String signUrl = ManageConstants.TERMS_URL+urlTail;
