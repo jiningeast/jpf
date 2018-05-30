@@ -259,7 +259,8 @@ public class YinjiaStageController {
 //        String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
-        String signUrl = null;
+        String signUrl = ManageConstants.TERMS_URL+urlTail;
+        /*String signUrl = null;
         try{
             signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
@@ -268,7 +269,7 @@ public class YinjiaStageController {
             yjResponseDto.setInfo(JpfInterfaceErrorInfo.SIGNURL_ENCODING_ERROR.getDesc());
 
             return yjResponseDto;
-        }
+        }*/
         dataMap.put("signUrl", signUrl);
         dataMap.put("orderid", request.getOrderid());
         dataMap.put("platformOrderid", orderid);
