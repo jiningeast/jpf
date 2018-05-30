@@ -116,8 +116,8 @@ public class DESEncryptUtils {
     }
 
     public static void main(String[] a) throws Exception{
-        String input = "cy11Xlbrmzyh:604:301:1353064296";
-        String key = "37d5aed075525d4fa0fe635231cba447";
+        String input = "{\"mid:\":\"117\",\"orderid\":\"201805300925045487\",\"platformOrderid\":\"9457643815121663\",}";
+        String key = "tioB8c6esX1Cx84Y16NFcFascZQZXiGI";
 
         DESEncryptUtils des = new DESEncryptUtils();
 
