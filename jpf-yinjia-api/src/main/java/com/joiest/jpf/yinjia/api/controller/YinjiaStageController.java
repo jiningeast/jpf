@@ -973,14 +973,23 @@ public class YinjiaStageController {
         orderRefundInfo.setResponsParam(JsonUtils.toJson(refundCancel));
         orderRefundInfo.setRefundOrderid(refundCancel.get("outOrderNo").toString());
 
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n回调信息：" + getKeyVal+"&sign="+sign+"&signType="+signType);
+
         if(!getSign.equals(sign)){
 
+            sbf.append("\n签名失败：回调签名sign="+sign+"，接口签名sign="+getSign);
             orderRefundInfo.setStatus("3");
         }else if(refundCancel.get("tranResult").equals("SUCCESS")){
 
+            sbf.append("\n退款成功");
             orderRefundInfo.setStatus("2");
         }else{
 
+            sbf.append("\n退款失败");
             orderRefundInfo.setStatus("3");
         }
         orderRefundServiceFacade.upOrderRefundByRefundOrder(orderRefundInfo);
@@ -1000,8 +1009,18 @@ public class YinjiaStageController {
         String postSign = SignUtils.getSign(postParamTree,merchant.getPrivateKey(),"UTF-8");
         postParam.put("sign",postSign);
 
+        String postP = ToolUtils.mapToUrl(postParam);
+
+        sbf.append("\n请求地址："+getOrderRefund.getBackurl());
+        sbf.append("\n请求参数："+postP);
+
+        String fileName = "ChinaPurchaseCancelReturn";
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
+
         String response = OkHttpUtils.postForm(getOrderRefund.getBackurl(),postParam);
-        if(response == "SUCCESS"){
+
+        if(response.equals("SUCCESS") || response.equals("\"SUCCESS\"")){
 
             return "SUCCESS";
         }

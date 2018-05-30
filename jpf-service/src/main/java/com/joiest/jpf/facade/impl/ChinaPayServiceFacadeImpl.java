@@ -46,14 +46,11 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
         sbf.append("\n\nTime:" + myfmt.format(date));
         sbf.append("\n请求地址：" + requestUrl);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + response);
         String fileName = "ChinaLog";
-        String dir = System.getProperty("user.dir");
-        String home = System.getProperty("user.home");
         LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
 
         return yjResponseDto;
@@ -86,14 +83,11 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
         sbf.append("\n\nTime:" + myfmt.format(date));
         sbf.append("\n请求地址：" + requestUrl);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + response);
         String fileName = "ChinaLog";
-        String dir = System.getProperty("user.dir");
-        String home = System.getProperty("user.home");
         LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
 
         return yjResponseDto;
