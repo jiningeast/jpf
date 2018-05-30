@@ -16,7 +16,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,8 +35,8 @@ import java.util.regex.Pattern;
 import static com.joiest.jpf.yinjia.api.constant.ManageConstants.*;
 
 @Controller
-@RequestMapping("yinjiastage")
-public class YinjiaStageController {
+@RequestMapping("yinjiastagetest")
+public class YinjiaStageTestController {
 
     @Autowired
     private MerchantInterfaceServiceFacade merchantInterfaceServiceFacade;
@@ -50,7 +53,7 @@ public class YinjiaStageController {
     private MerchantInterfaceInfo merchInfo;
 
 
-    private static final Logger logger = LogManager.getLogger(YinjiaStageController.class);
+    private static final Logger logger = LogManager.getLogger(YinjiaStageTestController.class);
 
     @Autowired
     private OrderInterfaceServiceFacade orderInterfaceServiceFacade;
@@ -260,8 +263,9 @@ public class YinjiaStageController {
 //        byte[] urlTail = AESCrptographyUtils.AES_CBC_Encrypt(tailJson.getBytes(),AES_KEY.getBytes(),iv.getBytes());
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
+        String signUrl = ManageConstants.TERMS_URL+urlTail;
         // 给输出的signUrl urlEncode一下
-        String signUrl = null;
+        /*String signUrl = null;
         try{
             signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
@@ -270,7 +274,7 @@ public class YinjiaStageController {
             yjResponseDto.setInfo(JpfInterfaceErrorInfo.SIGNURL_ENCODING_ERROR.getDesc());
 
             return yjResponseDto;
-        }
+        }*/
         dataMap.put("signUrl", signUrl);
         dataMap.put("orderid", request.getOrderid());
         dataMap.put("platformOrderid", orderid);
@@ -836,7 +840,7 @@ public class YinjiaStageController {
         if(getOrderRefund!=null){
 
             yjResponseDto.setCode("10008");
-            yjResponseDto.setInfo("请确保退款单号唯一");
+            yjResponseDto.setInfo("退款订单号重复");
             return yjResponseDto;
         }
         //退单信息入库
@@ -852,14 +856,7 @@ public class YinjiaStageController {
 
         Byte status='1';
         Integer tpid=7;
-        BigDecimal refundPrice =new BigDecimal(refundAmt);// Long.valueOf(refundAmt).longValue();
         if(orderInfo!=null){
-            if(refundPrice.compareTo(orderInfo.getOrderprice())>0){
-
-                yjResponseDto.setCode("10008");
-                yjResponseDto.setInfo("退款金额有误");
-                return yjResponseDto;
-            }
             if(!orderInfo.getOrderstatus().toString().equals("1")){
 
                 yjResponseDto.setCode("10008");
@@ -970,23 +967,14 @@ public class YinjiaStageController {
         orderRefundInfo.setResponsParam(JsonUtils.toJson(refundCancel));
         orderRefundInfo.setRefundOrderid(refundCancel.get("outOrderNo").toString());
 
-        StringBuilder sbf = new StringBuilder();
-        Date date = new Date();
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sbf.append("\n\nTime:" + myfmt.format(date));
-        sbf.append("\n回调信息：" + getKeyVal+"&sign="+sign+"&signType="+signType);
-
         if(!getSign.equals(sign)){
 
-            sbf.append("\n签名失败：回调签名sign="+sign+"，接口签名sign="+getSign);
             orderRefundInfo.setStatus("3");
         }else if(refundCancel.get("tranResult").equals("SUCCESS")){
 
-            sbf.append("\n退款成功");
             orderRefundInfo.setStatus("2");
         }else{
 
-            sbf.append("\n退款失败");
             orderRefundInfo.setStatus("3");
         }
         orderRefundServiceFacade.upOrderRefundByRefundOrder(orderRefundInfo);
@@ -1006,18 +994,8 @@ public class YinjiaStageController {
         String postSign = SignUtils.getSign(postParamTree,merchant.getPrivateKey(),"UTF-8");
         postParam.put("sign",postSign);
 
-        String postP = ToolUtils.mapToUrl(postParam);
-
-        sbf.append("\n请求地址："+getOrderRefund.getBackurl());
-        sbf.append("\n请求参数："+postP);
-
-        String fileName = "ChinaPurchaseCancelReturn";
-
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
-
         String response = OkHttpUtils.postForm(getOrderRefund.getBackurl(),postParam);
-
-        if(response.equals("SUCCESS") || response.equals("\"SUCCESS\"")){
+        if(response == "SUCCESS"){
 
             return "SUCCESS";
         }
@@ -1260,8 +1238,8 @@ public class YinjiaStageController {
             String reUri = httpRequest.getServerName();   // 返回域名
 
             requestUrl = CHINAPAY_URL_REQUEST + "installPay";
-
-            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"支付已受理",orderInfo.getReturnUrl());
+/*            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
             Map<String,String> resultMap = JsonUtils.toCollection(resultPay.getInfo(), new TypeReference<Map<String, String>>(){});
             if ( resultMap.containsKey("retCode") && resultMap.get("retCode").equals("0000") )
             {
@@ -1269,7 +1247,7 @@ public class YinjiaStageController {
             }else
             {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"渠道受理有误，请重新下单支付",null);
-            }
+            }*/
         } else
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单或者签约信息有误", null);
