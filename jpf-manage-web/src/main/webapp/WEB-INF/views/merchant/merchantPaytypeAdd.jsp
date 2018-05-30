@@ -22,7 +22,7 @@
                 <tr>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;">商户名称：</td>
                     <td width="30%">${merchantInfo.merchName}</td>
-                    <td width="15%">商户密钥</td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">商户密钥：</td>
                     <td width="30%"><input type="text" name="private_key" id="private_key" value="${merchantInfo.privateKey}" style="width:70%" validtype="length[0,32]" class="easyui-textbox" data-options="requeired:true">
                         &nbsp;&nbsp;<a id="pKeyBtn_m" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">保存</a>
                     </td>
