@@ -6,13 +6,13 @@ public class ManageConstants {
     public static final String CHINAPAY_URL_REQUEST = "http://vip2.7shengqian.com/trade/install/";
 
     // 银联支付异步回调地址
-    public static final String CHINAPAY_PAYBACKURL = "http://testcpapi.7shengqian.com/yinjia-api/yinjiastage/Chinapayreturn";
+    public static final String CHINAPAY_PAYBACKURL = "https://testcpapi.7shengqian.com/yinjia-api/yinjiastage/Chinapayreturn";
 
     // 银联签约成功后前台跳转地址
     public static final String CHINAPAY_SIGN_RETURN_URL = "https://tcpchats.7shengqian.com/paycode/";
 
     // 银联签约后台通知地址
-    public static final String CHINAPAY_SIGN_BACK_URL = "http://testapi.7shengqian.com/yinjia-api/yinjiastage/signNotify";
+    public static final String CHINAPAY_SIGN_BACK_URL = "https://testcpapi.7shengqian.com/yinjia-api/yinjiastage/signNotify";
 
     // 银联接口查询接口
     public static final String CHINAPAY_URL_SELECT = "http://vip2.7shengqian.com/trade/api/";
