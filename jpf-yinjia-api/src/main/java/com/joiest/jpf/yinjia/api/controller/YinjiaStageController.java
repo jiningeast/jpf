@@ -805,7 +805,7 @@ public class YinjiaStageController {
         if(getOrderRefund!=null){
 
             yjResponseDto.setCode("10008");
-            yjResponseDto.setInfo("退款订单号重复");
+            yjResponseDto.setInfo("请确保退款单号唯一");
             return yjResponseDto;
         }
         //退单信息入库
@@ -821,7 +821,14 @@ public class YinjiaStageController {
 
         Byte status='1';
         Integer tpid=7;
+        BigDecimal refundPrice =new BigDecimal(refundAmt);// Long.valueOf(refundAmt).longValue();
         if(orderInfo!=null){
+            if(refundPrice.compareTo(orderInfo.getOrderprice())>0){
+
+                yjResponseDto.setCode("10008");
+                yjResponseDto.setInfo("退款金额有误");
+                return yjResponseDto;
+            }
             if(!orderInfo.getOrderstatus().toString().equals("1")){
 
                 yjResponseDto.setCode("10008");
