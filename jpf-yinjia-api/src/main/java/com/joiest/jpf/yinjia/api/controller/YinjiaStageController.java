@@ -899,7 +899,7 @@ public class YinjiaStageController {
             maptree.put("backUrl",CHINAPAY_REFUND_BACK_URL);
             maptree.put("privatekey",maparr.get("CP_Salt"));
 
-            yjResponseDto = chinaPayServiceFacade.ChinaPayRefund(maptree,requestUrl);
+           // yjResponseDto = chinaPayServiceFacade.ChinaPayRefund(maptree,requestUrl);
 
             String smeRes = yjResponseDto.getData().toString();
             chinaRe = JsonUtils.toCollection(smeRes,new TypeReference<HashMap<String, String>>(){});
