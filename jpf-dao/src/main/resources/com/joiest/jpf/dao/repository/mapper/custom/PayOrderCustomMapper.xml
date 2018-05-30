@@ -103,8 +103,8 @@
   <select id="selectJoinMerchants" parameterType="com.joiest.jpf.common.po.PayOrderExample" resultMap="BaseResultMap">
     SELECT o.*,m.merch_name,m.companyname,p.pname
     FROM pay_order o
-    JOIN pay_merchants m ON o.mtsid=m.id
-    JOIN pay_merchants_product p ON o.pid=p.pid
+    LEFT JOIN pay_merchants m ON o.mtsid=m.id
+    LEFT JOIN pay_merchants_product p ON o.pid=p.pid
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
