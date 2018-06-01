@@ -1,6 +1,12 @@
 package com.joiest.jpf.dto;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.URL;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Pattern;
 
 /**
  * 银嘉分期生成订单接口请求类
@@ -11,54 +17,66 @@ public class YinjiaCreateOrderRequest {
      * 外来订单id
      */
     @NotBlank(message = "订单号不能为空")
+    @Pattern( regexp = "[a-zA-Z0-9]{4,50}", message = "订单ID信息非法,请确认核对")
     private String orderid;
 
     /**
      * 商户号
      */
     @NotBlank(message = "商户号不能为空")
+    @Pattern(regexp = "\\d{1,17}", message = "商户号信息非法,请确认核对")
     private String mid;
 
     /**
      * 产品id
      */
     @NotBlank(message = "产品id不能为空")
+    @Pattern(regexp = "\\d{1,17}", message = "产品ID信息非法,请确认核对")
     private String productId;
 
     /**
      * 产品名称
      */
     @NotBlank(message = "产品名称不能为空")
+    @Pattern( regexp = "[a-zA-Z0-9_\\u4e00-\\u9fa5]{1,50}", message = "产品信息非法，请确认核对")
     private String productName;
 
     /**
      * 产品数量
      */
-    @NotBlank(message = "产品数量不能为空")
+    @NotBlank(message = "商品数量不能为空")
+    @Digits(integer = 3, fraction = 0, message = "商品数量非法，请确认核对")
+    @Range(min = 1, max = 999, message = "商品数量非法，请确认核对")
     private String productAmount;
 
     /**
      * 产品单价
      */
     @NotBlank(message = "产品单价不能为空")
+    @Digits(integer = 7, fraction = 2, message = "产品单价非法1，请确认核对")
+    @Range(min = 1, max = 1000000, message = "产品单价非法2，请确认核对")
     private String productUnitPrice;
 
     /**
      * 产品总价
      */
     @NotBlank(message = "产品总价不能为空")
+    @Digits(integer = 7, fraction = 2, message = "产品总价非法，请确认核对")
+    @Range(min = 1, max = 1000000, message = "产品总价非法，请确认核对")
     private String productTotalPrice;
 
     /**
      * 返回地址
      */
     @NotBlank(message = "返回地址不能为空")
+    @URL( message = "返回地址格式错误")
     private String returnUrl;
 
     /**
      * 异步通知地址
      */
     @NotBlank(message = "异步通知地址不能为空")
+    @URL( message = "异步通知地址格式错误")
     private String notifyUrl;
 
     /**
