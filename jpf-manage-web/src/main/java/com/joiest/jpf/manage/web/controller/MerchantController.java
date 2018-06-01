@@ -40,6 +40,10 @@ public class MerchantController {
     @Autowired
     private MerPayTypeServiceFacade merPayTypeServiceFacade;
 
+    //添加发送短信
+    @Autowired
+    private PcaServiceFacade pcaServiceFacade;
+
     @RequestMapping("/index")
     public ModelAndView index() {
         return new ModelAndView("merchant/merchantList");
@@ -159,6 +163,7 @@ public class MerchantController {
         Map<String,Object> smsMap = new HashMap<>();
         smsMap.put("mobile",merchantInfo.getLinkphone());
         String content = "";
+        String return_content = "";
         if ( jpfResponseDto.getRetCode().equals("0000") )
         {
             //发送信息
@@ -174,13 +179,29 @@ public class MerchantController {
             }
             smsMap.put("content",content);
             String smsRes = OkHttpUtils.postForm(sendSmsUrl,smsMap);
-            if ( smsRes.equals("1") )
+            Map<String,String> resSmsMap = JsonUtils.toCollection(smsRes, new TypeReference<HashMap<String,String>>(){});
+            AddSmsMessageRequest smsRequest = new AddSmsMessageRequest();
+            if ( resSmsMap.get("flag").equals("1") )
             {
+                smsRequest.setReturnContent("发送成功");
                 jpfResponseDto.setRetMsg("操作成功！ 短信发送成功");
             } else
             {
+                smsRequest.setReturnContent("发送失败");
                 jpfResponseDto.setRetMsg("操作成功！ 短信发送失败");
             }
+
+            smsRequest.setMtsid(merchantInfo.getId().toString());
+            smsRequest.setContent(content);
+            byte ptype = 2;
+            byte sendtype = 3;
+            smsRequest.setPtype(ptype);
+            smsRequest.setPtypeCn("产品类型描述");
+            smsRequest.setSendtype(sendtype);
+            smsRequest.setSendtypeCn("后台商户密钥发送");
+            smsRequest.setAddtime(new Date());
+            smsRequest.setReturnContent(smsRes);
+            int res = pcaServiceFacade.addSmsMessage(smsRequest);
         }
         return jpfResponseDto;
     }
