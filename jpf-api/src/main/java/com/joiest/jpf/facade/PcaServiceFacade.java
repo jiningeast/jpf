@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.dto.AddSmsMessageRequest;
 import com.joiest.jpf.entity.PcaInfo;
 
 import java.util.List;
@@ -22,4 +23,9 @@ public interface PcaServiceFacade {
     public List<PcaInfo> getPca(long page, long pageSize);
 
     public Integer getPcaCount();
+
+    /**
+     * 添加发送短信记录
+     */
+    public int addSmsMessage(AddSmsMessageRequest request);
 }

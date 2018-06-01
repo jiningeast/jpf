@@ -2,7 +2,10 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayPca;
 import com.joiest.jpf.common.po.PayPcaExample;
+import com.joiest.jpf.common.po.PaySmsMessage;
 import com.joiest.jpf.dao.repository.mapper.generate.PayPcaMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PaySmsMessageMapper;
+import com.joiest.jpf.dto.AddSmsMessageRequest;
 import com.joiest.jpf.entity.PcaInfo;
 import com.joiest.jpf.facade.PcaServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +19,9 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
 
     @Autowired
     private PayPcaMapper payPcaMapper;
+
+    @Autowired
+    private PaySmsMessageMapper paySmsMessageMapper;
 
     @Override
     public List<PcaInfo> getPcas(String pid) {
@@ -73,5 +79,19 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         Integer count = payPcaMapper.countByExample(example);
 
         return count;
+    }
+
+    /**
+     * 添加发送短信记录
+     * @param request
+     * @return
+     */
+    @Override
+    public int addSmsMessage(AddSmsMessageRequest request)
+    {
+        PaySmsMessage paySmsMessage = new PaySmsMessage();
+        BeanCopier beanCopier = BeanCopier.create(AddSmsMessageRequest.class, PaySmsMessage.class, false);
+        beanCopier.copy(request, paySmsMessage, null);
+        return paySmsMessageMapper.insertSelective(paySmsMessage);
     }
 }

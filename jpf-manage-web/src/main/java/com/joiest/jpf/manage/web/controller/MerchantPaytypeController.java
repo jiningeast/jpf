@@ -178,6 +178,9 @@ public class MerchantPaytypeController {
         return merPayTypeServiceFacade.modifyMerBankcatid(request);
     }
 
+    /**
+     * 配置商户密钥
+     */
     @RequestMapping("/pk")
     @ResponseBody
     public JpfResponseDto modifyMerPrivateKey(String id,String pkey)

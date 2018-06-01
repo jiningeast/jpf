@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayMerchants;
 import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.MerchantBankInfo;
 import com.joiest.jpf.entity.MerchantInfo;
@@ -37,6 +39,10 @@ public class MerchantController {
 
     @Autowired
     private MerPayTypeServiceFacade merPayTypeServiceFacade;
+
+    //添加发送短信
+    @Autowired
+    private PcaServiceFacade pcaServiceFacade;
 
     @RequestMapping("/index")
     public ModelAndView index() {
@@ -146,7 +152,57 @@ public class MerchantController {
                     break;
             }
         }
+        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(request.getId());
+        if ( StringUtils.isBlank(merchantInfo.getPrivateKey()) )
+        {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND,"商户密钥尚配置有误，请检查。");
+        }
+        JpfResponseDto jpfResponseDto = merchantServiceFacade.auditMerchant(request);
 
-        return merchantServiceFacade.auditMerchant(request);
+        String sendSmsUrl =  "http://testapi.7shengqian.com/index.php?r=Sms/YinjiaStageSend";
+        Map<String,Object> smsMap = new HashMap<>();
+        smsMap.put("mobile",merchantInfo.getLinkphone());
+        String content = "";
+        String return_content = "";
+        if ( jpfResponseDto.getRetCode().equals("0000") )
+        {
+            //发送信息
+            if ( request.getAttestation() )
+            {
+                //通过
+                String success_format = "尊敬的用户：%s，您在银嘉分期平台的对接信息如下：商户号：%s；密钥为：%s；请妥善保存。";
+                content = String.format(success_format,merchantInfo.getUsername(), merchantInfo.getMerchNo(),merchantInfo.getPrivateKey());
+            } else if ( !request.getAttestation() )
+            {
+                String success_format = "尊敬的用户：%s，您在银嘉分期平台的对接商户信息未能通过审核，请联系客服人员。";
+                content = String.format(success_format,merchantInfo.getUsername(), merchantInfo.getMerchNo(),merchantInfo.getPrivateKey());
+            }
+            smsMap.put("content",content);
+            String smsRes = OkHttpUtils.postForm(sendSmsUrl,smsMap);
+            Map<String,String> resSmsMap = JsonUtils.toCollection(smsRes, new TypeReference<HashMap<String,String>>(){});
+            AddSmsMessageRequest smsRequest = new AddSmsMessageRequest();
+            if ( resSmsMap.get("flag").equals("1") )
+            {
+                smsRequest.setReturnContent("发送成功");
+                jpfResponseDto.setRetMsg("操作成功！ 短信发送成功");
+            } else
+            {
+                smsRequest.setReturnContent("发送失败");
+                jpfResponseDto.setRetMsg("操作成功！ 短信发送失败");
+            }
+
+            smsRequest.setMtsid(merchantInfo.getId().toString());
+            smsRequest.setContent(content);
+            byte ptype = 2;
+            byte sendtype = 3;
+            smsRequest.setPtype(ptype);
+            smsRequest.setPtypeCn("产品类型描述");
+            smsRequest.setSendtype(sendtype);
+            smsRequest.setSendtypeCn("后台商户密钥发送");
+            smsRequest.setAddtime(new Date());
+            smsRequest.setReturnContent(smsRes);
+            int res = pcaServiceFacade.addSmsMessage(smsRequest);
+        }
+        return jpfResponseDto;
     }
 }
