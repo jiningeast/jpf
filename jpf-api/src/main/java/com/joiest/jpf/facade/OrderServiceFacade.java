@@ -24,4 +24,7 @@ public interface OrderServiceFacade {
     public OrderInfo getOrderByOrderid(String orderid, boolean forInterface);
 
     public int updataSignOrderid(OrderInfo orderInfo);
+
+    // 更新指定字段,必须指定orderid
+    public int updateColumnByOrderid(OrderInfo orderInfo);
 }

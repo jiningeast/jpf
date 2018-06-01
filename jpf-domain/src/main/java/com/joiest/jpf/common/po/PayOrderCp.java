@@ -65,16 +65,6 @@ public class PayOrderCp implements Serializable {
     private String mobileno;
 
     /**
-     * 渠道编码
-     */
-    private Long chncode;
-
-    /**
-     * 渠道账户编号
-     */
-    private Long chnacctid;
-
-    /**
      * 银行编码
      */
     private String selectfinacode;
@@ -83,6 +73,11 @@ public class PayOrderCp implements Serializable {
      * 银行卡类型:1:DEBIT借记卡:2:CREDIT 贷记卡
      */
     private Byte bankaccounttype;
+
+    /**
+     * 银行名称
+     */
+    private String bankname;
 
     /**
      * 银行卡号
@@ -129,6 +124,16 @@ public class PayOrderCp implements Serializable {
      */
     private Date created;
 
+    /**
+     * 签约同步返回参数
+     */
+    private String returnContent;
+
+    /**
+     * 签约异步返回参数
+     */
+    private String notifyContent;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -152,7 +157,7 @@ public class PayOrderCp implements Serializable {
     }
 
     public void setOrderid(String orderid) {
-        this.orderid = orderid;
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public Long getMtsid() {
@@ -227,22 +232,6 @@ public class PayOrderCp implements Serializable {
         this.mobileno = mobileno == null ? null : mobileno.trim();
     }
 
-    public Long getChncode() {
-        return chncode;
-    }
-
-    public void setChncode(Long chncode) {
-        this.chncode = chncode;
-    }
-
-    public Long getChnacctid() {
-        return chnacctid;
-    }
-
-    public void setChnacctid(Long chnacctid) {
-        this.chnacctid = chnacctid;
-    }
-
     public String getSelectfinacode() {
         return selectfinacode;
     }
@@ -257,6 +246,14 @@ public class PayOrderCp implements Serializable {
 
     public void setBankaccounttype(Byte bankaccounttype) {
         this.bankaccounttype = bankaccounttype;
+    }
+
+    public String getBankname() {
+        return bankname;
+    }
+
+    public void setBankname(String bankname) {
+        this.bankname = bankname == null ? null : bankname.trim();
     }
 
     public String getBankaccountnumber() {
@@ -280,7 +277,7 @@ public class PayOrderCp implements Serializable {
     }
 
     public void setValiditycard(String validitycard) {
-        this.validitycard = validitycard;
+        this.validitycard = validitycard == null ? null : validitycard.trim();
     }
 
     public Date getValidityyear() {
@@ -331,6 +328,22 @@ public class PayOrderCp implements Serializable {
         this.created = created;
     }
 
+    public String getReturnContent() {
+        return returnContent;
+    }
+
+    public void setReturnContent(String returnContent) {
+        this.returnContent = returnContent == null ? null : returnContent.trim();
+    }
+
+    public String getNotifyContent() {
+        return notifyContent;
+    }
+
+    public void setNotifyContent(String notifyContent) {
+        this.notifyContent = notifyContent == null ? null : notifyContent.trim();
+    }
+
     /**
      *
      */
@@ -352,10 +365,9 @@ public class PayOrderCp implements Serializable {
         sb.append(", idtype=").append(idtype);
         sb.append(", idno=").append(idno);
         sb.append(", mobileno=").append(mobileno);
-        sb.append(", chncode=").append(chncode);
-        sb.append(", chnacctid=").append(chnacctid);
         sb.append(", selectfinacode=").append(selectfinacode);
         sb.append(", bankaccounttype=").append(bankaccounttype);
+        sb.append(", bankname=").append(bankname);
         sb.append(", bankaccountnumber=").append(bankaccountnumber);
         sb.append(", cvn2=").append(cvn2);
         sb.append(", validitycard=").append(validitycard);
@@ -365,6 +377,8 @@ public class PayOrderCp implements Serializable {
         sb.append(", signstatus=").append(signstatus);
         sb.append(", sysagreeno=").append(sysagreeno);
         sb.append(", created=").append(created);
+        sb.append(", returnContent=").append(returnContent);
+        sb.append(", notifyContent=").append(notifyContent);
         sb.append("]");
         return sb.toString();
     }
@@ -397,10 +411,9 @@ public class PayOrderCp implements Serializable {
             && (this.getIdtype() == null ? other.getIdtype() == null : this.getIdtype().equals(other.getIdtype()))
             && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
             && (this.getMobileno() == null ? other.getMobileno() == null : this.getMobileno().equals(other.getMobileno()))
-            && (this.getChncode() == null ? other.getChncode() == null : this.getChncode().equals(other.getChncode()))
-            && (this.getChnacctid() == null ? other.getChnacctid() == null : this.getChnacctid().equals(other.getChnacctid()))
             && (this.getSelectfinacode() == null ? other.getSelectfinacode() == null : this.getSelectfinacode().equals(other.getSelectfinacode()))
             && (this.getBankaccounttype() == null ? other.getBankaccounttype() == null : this.getBankaccounttype().equals(other.getBankaccounttype()))
+            && (this.getBankname() == null ? other.getBankname() == null : this.getBankname().equals(other.getBankname()))
             && (this.getBankaccountnumber() == null ? other.getBankaccountnumber() == null : this.getBankaccountnumber().equals(other.getBankaccountnumber()))
             && (this.getCvn2() == null ? other.getCvn2() == null : this.getCvn2().equals(other.getCvn2()))
             && (this.getValiditycard() == null ? other.getValiditycard() == null : this.getValiditycard().equals(other.getValiditycard()))
@@ -409,7 +422,9 @@ public class PayOrderCp implements Serializable {
             && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
             && (this.getSignstatus() == null ? other.getSignstatus() == null : this.getSignstatus().equals(other.getSignstatus()))
             && (this.getSysagreeno() == null ? other.getSysagreeno() == null : this.getSysagreeno().equals(other.getSysagreeno()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()));
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getReturnContent() == null ? other.getReturnContent() == null : this.getReturnContent().equals(other.getReturnContent()))
+            && (this.getNotifyContent() == null ? other.getNotifyContent() == null : this.getNotifyContent().equals(other.getNotifyContent()));
     }
 
     /**
@@ -431,10 +446,9 @@ public class PayOrderCp implements Serializable {
         result = prime * result + ((getIdtype() == null) ? 0 : getIdtype().hashCode());
         result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
         result = prime * result + ((getMobileno() == null) ? 0 : getMobileno().hashCode());
-        result = prime * result + ((getChncode() == null) ? 0 : getChncode().hashCode());
-        result = prime * result + ((getChnacctid() == null) ? 0 : getChnacctid().hashCode());
         result = prime * result + ((getSelectfinacode() == null) ? 0 : getSelectfinacode().hashCode());
         result = prime * result + ((getBankaccounttype() == null) ? 0 : getBankaccounttype().hashCode());
+        result = prime * result + ((getBankname() == null) ? 0 : getBankname().hashCode());
         result = prime * result + ((getBankaccountnumber() == null) ? 0 : getBankaccountnumber().hashCode());
         result = prime * result + ((getCvn2() == null) ? 0 : getCvn2().hashCode());
         result = prime * result + ((getValiditycard() == null) ? 0 : getValiditycard().hashCode());
@@ -444,6 +458,8 @@ public class PayOrderCp implements Serializable {
         result = prime * result + ((getSignstatus() == null) ? 0 : getSignstatus().hashCode());
         result = prime * result + ((getSysagreeno() == null) ? 0 : getSysagreeno().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
+        result = prime * result + ((getReturnContent() == null) ? 0 : getReturnContent().hashCode());
+        result = prime * result + ((getNotifyContent() == null) ? 0 : getNotifyContent().hashCode());
         return result;
     }
 }

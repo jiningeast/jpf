@@ -65,16 +65,6 @@ public class OrderCpInterfaceInfo {
     private String mobileno;
 
     /**
-     * 渠道编码
-     */
-    private Long chncode;
-
-    /**
-     * 渠道账户编号
-     */
-    private Long chnacctid;
-
-    /**
      * 银行编码
      */
     private String selectfinacode;
@@ -128,6 +118,16 @@ public class OrderCpInterfaceInfo {
      * 创建时间
      */
     private Date created;
+
+    /**
+     * 签约同步返回参数
+     */
+    private String returnContent;
+
+    /**
+     * 签约异步返回参数
+     */
+    private String notifyContent;
 
     public Long getId() {
         return id;
@@ -225,22 +225,6 @@ public class OrderCpInterfaceInfo {
         this.mobileno = mobileno;
     }
 
-    public Long getChncode() {
-        return chncode;
-    }
-
-    public void setChncode(Long chncode) {
-        this.chncode = chncode;
-    }
-
-    public Long getChnacctid() {
-        return chnacctid;
-    }
-
-    public void setChnacctid(Long chnacctid) {
-        this.chnacctid = chnacctid;
-    }
-
     public String getSelectfinacode() {
         return selectfinacode;
     }
@@ -327,5 +311,21 @@ public class OrderCpInterfaceInfo {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public String getReturnContent() {
+        return returnContent;
+    }
+
+    public void setReturnContent(String returnContent) {
+        this.returnContent = returnContent;
+    }
+
+    public String getNotifyContent() {
+        return notifyContent;
+    }
+
+    public void setNotifyContent(String notifyContent) {
+        this.notifyContent = notifyContent;
     }
 }

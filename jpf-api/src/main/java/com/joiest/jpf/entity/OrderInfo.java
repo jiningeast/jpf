@@ -80,6 +80,12 @@ public class OrderInfo {
     private Byte singlestatus;
 
     /**
+     * 用户操作状态 0：订单生成，未选分期，1：订单生成，已选分期，待签约，2：签约通知成功，待返回签约成功，3：签约通知失败，4：签约返回成功，待获取支付短信，5：签约返回失败，6：短信发送成功，待支付，7：短信发送失败，8：支付通知成功，待返回成功，9：支付通知失败，10：支付返回成功，支付结束，11：支付返回失败
+     */
+    private Byte userOperateStatus;
+
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -242,6 +248,14 @@ public class OrderInfo {
 
     public void setSinglestatus(Byte singlestatus) {
         this.singlestatus = singlestatus;
+    }
+
+    public Byte getUserOperateStatus() {
+        return userOperateStatus;
+    }
+
+    public void setUserOperateStatus(Byte userOperateStatus) {
+        this.userOperateStatus = userOperateStatus;
     }
 
     public Date getAddtime() {

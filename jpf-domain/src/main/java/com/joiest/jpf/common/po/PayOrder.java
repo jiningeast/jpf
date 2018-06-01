@@ -102,6 +102,11 @@ public class PayOrder implements Serializable {
     private Byte singlestatus;
 
     /**
+     * 用户操作状态 0：订单生成，未选分期，1：订单生成，已选分期，待签约，2：签约通知成功，待返回签约成功，3：签约通知失败，4：签约返回成功，待获取支付短信，5：签约返回失败，6：短信发送成功，待支付，7：短信发送失败，8：支付通知成功，待返回成功，9：支付通知失败，10：支付返回成功，支付结束，11：支付返回失败
+     */
+    private Byte userOperateStatus;
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -265,6 +270,14 @@ public class PayOrder implements Serializable {
         this.singlestatus = singlestatus;
     }
 
+    public Byte getUserOperateStatus() {
+        return userOperateStatus;
+    }
+
+    public void setUserOperateStatus(Byte userOperateStatus) {
+        this.userOperateStatus = userOperateStatus;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -309,6 +322,7 @@ public class PayOrder implements Serializable {
         sb.append(", paytime=").append(paytime);
         sb.append(", orderstatus=").append(orderstatus);
         sb.append(", singlestatus=").append(singlestatus);
+        sb.append(", userOperateStatus=").append(userOperateStatus);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -350,6 +364,7 @@ public class PayOrder implements Serializable {
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getOrderstatus() == null ? other.getOrderstatus() == null : this.getOrderstatus().equals(other.getOrderstatus()))
             && (this.getSinglestatus() == null ? other.getSinglestatus() == null : this.getSinglestatus().equals(other.getSinglestatus()))
+            && (this.getUserOperateStatus() == null ? other.getUserOperateStatus() == null : this.getUserOperateStatus().equals(other.getUserOperateStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -380,6 +395,7 @@ public class PayOrder implements Serializable {
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getOrderstatus() == null) ? 0 : getOrderstatus().hashCode());
         result = prime * result + ((getSinglestatus() == null) ? 0 : getSinglestatus().hashCode());
+        result = prime * result + ((getUserOperateStatus() == null) ? 0 : getUserOperateStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;

@@ -241,6 +241,8 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
 
         PayOrder payOrder = new PayOrder();
         payOrder.setOrdername(orderInfo.getOrdername());
+        payOrder.setUserOperateStatus(orderInfo.getUserOperateStatus());
+        payOrder.setUpdatetime(new Date());
 
         return payOrderMapper.updateByExampleSelective(payOrder, e);
     }
@@ -272,6 +274,26 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
 
         PayOrder payOrder = new PayOrder();
         payOrder.setSignOrderid(orderInfo.getSignOrderid());
+        payOrder.setUpdatetime(new Date());
+
+        return payOrderMapper.updateByExampleSelective(payOrder, e);
+    }
+
+    // 更新指定字段,必须指定orderid
+    @Override
+    public int updateColumnByOrderid(OrderInfo orderInfo){
+        // 判断这条记录是否存在
+        getOrderByOrderid(orderInfo.getOrderid(),true);
+
+        PayOrderExample e = new PayOrderExample();
+        PayOrderExample.Criteria c = e.createCriteria();
+        c.andOrderidEqualTo(orderInfo.getOrderid());
+
+        PayOrder payOrder = new PayOrder();
+        if ( orderInfo.getUserOperateStatus() != null ){
+            payOrder.setUserOperateStatus(orderInfo.getUserOperateStatus());
+        }
+        payOrder.setUpdatetime(new Date());
 
         return payOrderMapper.updateByExampleSelective(payOrder, e);
     }

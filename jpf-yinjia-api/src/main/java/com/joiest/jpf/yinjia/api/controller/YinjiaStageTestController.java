@@ -149,6 +149,7 @@ public class YinjiaStageTestController {
     @RequestMapping("/createOrder")
     @ResponseBody
     public YjResponseDto createOrder(YinjiaCreateOrderRequest request){
+        ValidatorUtils.validateInterface(request);
         // 商户号&商户信息
         if ( StringUtils.isNotBlank(request.getMid()) ){
             merchInfo = merchantInterfaceServiceFacade.getMerchant(Long.parseLong(request.getMid()));
@@ -231,6 +232,8 @@ public class YinjiaStageTestController {
         orderInfo.setOrdername(" ");
         orderInfo.setOrderstatus((byte)0);
         orderInfo.setSinglestatus((byte)1);
+        orderInfo.setUserOperateStatus((byte)0);
+
         orderInfo.setAddtime(new Date());
         int res = orderServiceFacade.insOrder(orderInfo);
         if( res < 0 ){
@@ -412,6 +415,7 @@ public class YinjiaStageTestController {
         OrderInfo orderInfoForUpdate = new OrderInfo();
         orderInfoForUpdate.setOrderid(request.getOrderid());
         orderInfoForUpdate.setOrdername(ordernameJson);
+        orderInfoForUpdate.setUserOperateStatus((byte)1);
         int res = orderServiceFacade.updateOrdername(orderInfoForUpdate,true);
 
         if ( res <= 0 ){
@@ -452,156 +456,168 @@ public class YinjiaStageTestController {
         String signOrderid = createOrderid();
 
         // 获取订单信息
-        OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"), true);
+        /*OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"), true);
         String foreignRequest = orderInfo.getForeignRequest();
-        Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);
+        Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);*/
+
+        // 获取商户支付配置中的CP_MerchNO等参数
+        MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), 7, true);
+        String paramJson = merchantPayTypeInfo.getParam();
+        Map<String, String> paramMap = JsonUtils.toCollection(paramJson, new TypeReference<Map<String, String>>(){});
 
         // 判断用户有没有签约过
         OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpBybankaccountnumber(request.getAccountNumber());
-        if ( orderCpInterfaceInfo.getBankaccountnumber() == null ){
-            // 未签约，准备插入一条签约记录
-            OrderCpInterfaceInfo orderCpInsert = new OrderCpInterfaceInfo();
-            orderCpInsert.setOrderid(signOrderid);
-            orderCpInsert.setMtsid(Long.parseLong(dataMap.get("mid")));
-            orderCpInsert.setInterestmode((long)1);
-            orderCpInsert.setSubmerid("2code");
-            orderCpInsert.setSubmername("2name");
-            orderCpInsert.setSubmerabbr("2sj");
-            orderCpInsert.setSignedname(request.getSignedName());
-            orderCpInsert.setIdtype((byte)1);
-            orderCpInsert.setIdno(request.getIdNo());
-            orderCpInsert.setMobileno(request.getMobileNo());
-            orderCpInsert.setChncode((long)0);
-            orderCpInsert.setChnacctid((long)0);
-            orderCpInsert.setSelectfinacode(request.getSelectFinaCode());
-            orderCpInsert.setBankaccounttype((byte)2);
-            orderCpInsert.setBankaccountnumber(request.getAccountNumber());
-            orderCpInsert.setCvn2(Long.parseLong(request.getCvn2()));
-            orderCpInsert.setValiditycard(""+request.getValidityCard()+"-01");
-            // 设置过期时间
-            /*String yearMonth[] = request.getValidityCard().split("-");
-            Long year = Long.parseLong(yearMonth[0]);
-            Long newYear = year+1;
-            String newYearMonth = ""+newYear+"-"+yearMonth[1];
-            Date validityyear = DateUtils.getFdate(newYearMonth+"-"+DateUtils.getDay()+" "+DateUtils.getCurTimeString(),DateUtils.Date_FORMAT_YMDHMS);*/
-            Date validityyear = org.apache.commons.lang3.time.DateUtils.addYears(new Date(),1);
-            orderCpInsert.setValidityyear(validityyear);
-            // 设置IP
-            String IP = ServletUtils.getIpAddr(httpRequest);
-            orderCpInsert.setClientip(IP);
-            orderCpInsert.setSignstatus("1");
-            orderCpInsert.setSysagreeno("");
-            orderCpInsert.setCreated(DateUtils.getCurrentDate());
+        String bankNumber = orderCpInterfaceInfo.getBankaccountnumber();
+        String signStatus = orderCpInterfaceInfo.getSignstatus();
+        String IP = ServletUtils.getIpAddr(httpRequest);
+        // 从未签约过 || 签约过，但未成功
+        if ( bankNumber == null || ( StringUtils.isNotBlank(bankNumber) && signStatus.equals("1") ) ){
+            if ( bankNumber == null  ){
+                // 从未签约过，准备插入一条签约记录
+                OrderCpInterfaceInfo orderCpInsert = new OrderCpInterfaceInfo();
+                orderCpInsert.setMerchNo(paramMap.get("CP_MerchaNo"));
+                orderCpInsert.setOrderid(signOrderid);
+                orderCpInsert.setMtsid(Long.parseLong(dataMap.get("mid")));
+                orderCpInsert.setInterestmode((long)1);
+                orderCpInsert.setSignedname(request.getSignedName());
+                orderCpInsert.setIdtype((byte)1);
+                orderCpInsert.setIdno(request.getIdNo().toUpperCase());
+                orderCpInsert.setMobileno(request.getMobileNo());
+                orderCpInsert.setSelectfinacode(request.getSelectFinaCode());
+                orderCpInsert.setBankaccounttype((byte)2);
+                orderCpInsert.setBankaccountnumber(request.getAccountNumber());
+                orderCpInsert.setCvn2(Long.parseLong(request.getCvn2()));
+                orderCpInsert.setValiditycard(""+request.getValidityCard()+"-01");
+                // 设置过期时间
+                Date validityyear = org.apache.commons.lang3.time.DateUtils.addYears(new Date(),1);
+                orderCpInsert.setValidityyear(validityyear);
+                // 设置IP
+                orderCpInsert.setClientip(IP);
+                orderCpInsert.setSignstatus("1");
+                orderCpInsert.setSysagreeno("");
+                orderCpInsert.setCreated(DateUtils.getCurrentDate());
 
-            int res = orderCpServiceFacade.insRecord(orderCpInsert);
-            if ( res > 0 ){
-                // 获取银联签约接口url
-                MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), 7, true);
-                String paramJson = merchantPayTypeInfo.getParam();
-                Map<String, String> paramMap = JsonUtils.toCollection(paramJson, new TypeReference<Map<String, String>>() {});
-
-                // 构建返回加密串
-                Map<String , Object> frontMap = new HashMap<>();
-                frontMap.put("orderid",dataMap.get("orderid"));
-                String AESJson = JsonUtils.toJson(frontMap);
-                String frontAES = AESUtils.encrypt(AESJson,AES_KEY);
-
-                // 构建银联签约接口request参数
-                Map<String,String> chinapayMap = new HashMap<>();
-                chinapayMap.put("service","sign");
-                chinapayMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
-                chinapayMap.put("inputCharset", "UTF-8");
-                chinapayMap.put("interestMode", "0"+orderCpInsert.getInterestmode());
-                chinapayMap.put("chnCode", paramMap.get("CP_Code"));
-                chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));
-                chinapayMap.put("outOrderNo", signOrderid);
-                chinapayMap.put("frontUrl", CHINAPAY_SIGN_RETURN_URL+frontAES);
-                logger.info("frontUrl="+CHINAPAY_SIGN_RETURN_URL+frontAES+" length="+CHINAPAY_SIGN_RETURN_URL.length()+frontAES.length());
-                chinapayMap.put("backUrl", CHINAPAY_SIGN_BACK_URL);
-                chinapayMap.put("subMerId", orderCpInsert.getSubmerid());
-                chinapayMap.put("subMerName", orderCpInsert.getSubmername());
-                chinapayMap.put("subMerAbbr", orderCpInsert.getSubmerabbr());
-                chinapayMap.put("signedName", request.getSignedName());
-                chinapayMap.put("idType", "0"+orderCpInsert.getIdtype());
-                chinapayMap.put("idNo", request.getIdNo());
-                chinapayMap.put("mobileNo", request.getMobileNo());
-                chinapayMap.put("selectFinaCode", request.getSelectFinaCode());
-                String accountType = orderCpInsert.getBankaccounttype() == 2 ? "CREDIT" : "DEBIT";
-                chinapayMap.put("accountType", accountType);
-                chinapayMap.put("accountNumber", request.getAccountNumber());
-                chinapayMap.put("clientIp", orderCpInsert.getClientip());
-                if ( accountType.equals("CREDIT") ){
-                    chinapayMap.put("cvn2", request.getCvn2());
-                    String yearMonth[] = request.getValidityCard().split("-");
-                    chinapayMap.put("validityYear", yearMonth[0]);
-                    chinapayMap.put("validityMonth", yearMonth[1]);
+                int res = orderCpServiceFacade.insRecord(orderCpInsert);
+                if ( res <= 0 ){
+                    // 判断有没有成功添加新记录
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
                 }
-                Map<String, String> treeMap = new TreeMap<>();
-                treeMap.putAll(chinapayMap);
-                Iterator<String> iter = treeMap.keySet().iterator();
-                StringBuilder sb = new StringBuilder();
-                Map<String, Object> requestMap = new HashMap<>();
-                while (iter.hasNext()){
-                    String k = (String)iter.next();
-                    String v = (String)treeMap.get(k);
-                    sb.append(k+"="+v+"&");
-
-                    requestMap.put(k,v);
-                }
-                String sbString = sb.toString();
-                sbString = StringUtils.stripEnd(sbString,"&");
-                String signMySign = Md5Encrypt.md5(sbString+paramMap.get("CP_Salt"),"UTF-8");
-                requestMap.put("sign",signMySign);
-                requestMap.put("signType","MD5");
-//                String requestString = sbString+"&sign="+signMySign+"&signType=MD5";
-                // 请求签约url
-                String response = OkHttpUtils.postForm(CHINAPAY_URL_REQUEST+"sign",requestMap);
-                logger.info("签约返回："+response);
-                Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
-                String html = null;
-                if ( signResponseMap.get("retCode").equals("0000") ){
-                    // 更新签约表
-                    OrderCpInterfaceInfo orderCpInfo = new OrderCpInterfaceInfo();
-                    orderCpInfo.setOrderid(signOrderid);
-                    orderCpInfo.setTranno(signResponseMap.get("tranNo"));
-                    orderCpInfo.setSignstatus("2");
-                    if ( signResponseMap.containsKey("sysAgreeNo") ){
-                        orderCpInfo.setSysagreeno(signResponseMap.get("sysAgreeNo"));
-                    }
-                    int updateOrderCpRes = orderCpServiceFacade.updateRecord(orderCpInfo);
-                    if ( updateOrderCpRes <= 0 ){
-                        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
-                    }
-
-                    // 更新订单表的signOrderid
-                    OrderInfo updateOrderinfo = new OrderInfo();
-                    updateOrderinfo.setOrderid(dataMap.get("orderid"));
-                    updateOrderinfo.setSignOrderid(Long.parseLong(signOrderid));
-                    int updateOrderRes = orderServiceFacade.updataSignOrderid(updateOrderinfo);
-                    if ( updateOrderRes <= 0 ){
-                        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
-                    }
-
-                    if ( updateOrderRes > 0 && updateOrderRes > 0 ){
-                        // 处理返回的url
-                        /*Pattern pattern = Pattern.compile("<form.*?>(.*?)</form>");
-                        matcher = pattern.matcher(signResponseMap.get("autoSubmitForm"));*/
-
-                        html = StringUtils.substringBetween(signResponseMap.get("autoSubmitForm"), "<body>","</body>");
-                    }
-                }else{
-                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), signResponseMap.get("retMsg"), null);
-                }
-
-                // 构建返回
-                Map<String, Object> responseDataMap = new HashMap<>();
-                responseDataMap.put("html", html);
-                String responseDataJson = JsonUtils.toJson(responseDataMap);
-
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_NOT_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_NOT_SIGNED.getDesc(),responseDataJson);
-            }else{
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
             }
+
+            // 构建返回加密串
+            Map<String , Object> frontMap = new HashMap<>();
+            frontMap.put("orderid",dataMap.get("orderid"));
+            String AESJson = JsonUtils.toJson(frontMap);
+            String frontAES = AESUtils.encrypt(AESJson,AES_KEY);
+
+            // 构建银联签约接口request参数
+            Map<String,String> chinapayMap = new HashMap<>();
+            chinapayMap.put("service","sign");
+            chinapayMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
+            chinapayMap.put("inputCharset", "UTF-8");
+            chinapayMap.put("interestMode", "01");
+            /*chinapayMap.put("chnCode", paramMap.get("CP_Code"));
+            chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));*/
+            chinapayMap.put("outOrderNo", signOrderid);
+            chinapayMap.put("frontUrl", CHINAPAY_SIGN_RETURN_URL+frontAES);
+            logger.info("frontUrl="+CHINAPAY_SIGN_RETURN_URL+frontAES+" length="+CHINAPAY_SIGN_RETURN_URL.length()+frontAES.length());
+            chinapayMap.put("backUrl", CHINAPAY_SIGN_BACK_URL);
+            chinapayMap.put("signedName", request.getSignedName());
+            chinapayMap.put("idType", "01");
+            chinapayMap.put("idNo", request.getIdNo());
+            chinapayMap.put("mobileNo", request.getMobileNo());
+            chinapayMap.put("selectFinaCode", request.getSelectFinaCode());
+            String accountType = "CREDIT";
+            chinapayMap.put("accountType", accountType);
+            chinapayMap.put("accountNumber", request.getAccountNumber());
+            chinapayMap.put("clientIp", IP);
+            if ( accountType.equals("CREDIT") ){
+                chinapayMap.put("cvn2", request.getCvn2());
+                String yearMonth[] = request.getValidityCard().split("-");
+                chinapayMap.put("validityYear", yearMonth[0]);
+                chinapayMap.put("validityMonth", yearMonth[1]);
+            }
+            Map<String, String> treeMap = new TreeMap<>();
+            treeMap.putAll(chinapayMap);
+            Iterator<String> iter = treeMap.keySet().iterator();
+            StringBuilder sb = new StringBuilder();
+            Map<String, Object> requestMap = new HashMap<>();
+            while (iter.hasNext()){
+                String k = iter.next();
+                String v = treeMap.get(k);
+                sb.append(k+"="+v+"&");
+
+                requestMap.put(k,v);
+            }
+            String sbString = sb.toString();
+            sbString = StringUtils.stripEnd(sbString,"&");
+            String signMySign = Md5Encrypt.md5(sbString+paramMap.get("CP_Salt"),"UTF-8");
+            requestMap.put("sign",signMySign);
+            requestMap.put("signType","MD5");
+            // 请求签约url
+            String response = OkHttpUtils.postForm(CHINAPAY_URL_REQUEST+"sign",requestMap);
+            logger.info("签约返回："+response);
+            Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
+            String html = null;
+
+            // 更新签约表
+            OrderCpInterfaceInfo orderCpInfo = new OrderCpInterfaceInfo();
+            orderCpInfo.setOrderid(signOrderid);
+            orderCpInfo.setReturnContent(response);
+            if ( signResponseMap.get("retCode").equals("0000") ){
+                // 签约通知成功
+                orderCpInfo.setTranno(signResponseMap.get("tranNo"));
+                orderCpInfo.setSignstatus("2");
+                if ( signResponseMap.containsKey("sysAgreeNo") ){
+                    orderCpInfo.setSysagreeno(signResponseMap.get("sysAgreeNo"));
+                }
+                int updateOrderCpRes = orderCpServiceFacade.updateRecord(orderCpInfo);
+                if ( updateOrderCpRes <= 0 ){
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
+                }
+
+                // 更新订单表的signOrderid
+                OrderInfo updateOrderinfo = new OrderInfo();
+                updateOrderinfo.setOrderid(dataMap.get("orderid"));
+                updateOrderinfo.setSignOrderid(Long.parseLong(signOrderid));
+                updateOrderinfo.setUserOperateStatus((byte)2);
+                int updateOrderRes = orderServiceFacade.updataSignOrderid(updateOrderinfo);
+                if ( updateOrderRes <= 0 ){
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
+                }
+
+                if ( updateOrderCpRes > 0 && updateOrderRes > 0 ){
+                    // 处理返回的url
+                    /*Pattern pattern = Pattern.compile("<form.*?>(.*?)</form>");
+                    matcher = pattern.matcher(signResponseMap.get("autoSubmitForm"));*/
+
+                    html = StringUtils.substringBetween(signResponseMap.get("autoSubmitForm"), "<body>","</body>");
+                }
+            }else{
+                // 签约通知失败
+                // 更新签约表的同步回调结果
+                int updateOrderCpRes = orderCpServiceFacade.updateRecord(orderCpInfo);
+                if ( updateOrderCpRes <= 0 ){
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
+                }
+                // 更新订单表的用户状态为3：签约通知失败
+                OrderInfo updateOrderInfo = new OrderInfo();
+                updateOrderInfo.setUserOperateStatus((byte)3);
+                int updateOrderRes = orderServiceFacade.updateColumnByOrderid(updateOrderInfo);
+                if ( updateOrderRes <= 0 ){
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
+                }
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), signResponseMap.get("retMsg"), null);
+            }
+
+            // 构建返回
+            Map<String, Object> responseDataMap = new HashMap<>();
+            responseDataMap.put("html", html);
+            String responseDataJson = JsonUtils.toJson(responseDataMap);
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_NOT_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_NOT_SIGNED.getDesc(),responseDataJson);
+
         }
 
         // 已签约
@@ -634,10 +650,6 @@ public class YinjiaStageTestController {
     @RequestMapping(value = "/getPayInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getPayInfo(String data){
-        /*frontMap.put("productName", foreignRequestMap.get("productName"));
-        frontMap.put("orderPrice", orderInfo.getOrderprice());
-        frontMap.put("bankAccountNumber", request.getAccountNumber());
-        frontMap.put("signedName", request.getSignedName());*/
         String dataJson = AESUtils.decrypt(data, AES_KEY);
         Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
 
@@ -753,8 +765,8 @@ public class YinjiaStageTestController {
             maptree.put("reqType","02");//用于区分发送短信的类型
             maptree.put("clientIp",ServletUtils.getIpAddr(request));//ServletUtils.getIpAddr(request)
             //maptree.put("clientIp","10.10.18.17");
-            maptree.put("chnCode",maparr.get("CP_Code"));
-            maptree.put("chnAcctId",maparr.get("CP_Acctid"));
+            /*maptree.put("chnCode",maparr.get("CP_Code"));
+            maptree.put("chnAcctId",maparr.get("CP_Acctid"));*/
             maptree.put("selectFinaCode",orderCpInfo.getSelectfinacode());
             maptree.put("accountType","CREDIT");
             maptree.put("accountNumber",orderCpInfo.getBankaccountnumber());
