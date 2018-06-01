@@ -1367,6 +1367,66 @@ public class PayOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserOperateStatusIsNull() {
+            addCriterion("user_operate_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusIsNotNull() {
+            addCriterion("user_operate_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusEqualTo(Byte value) {
+            addCriterion("user_operate_status =", value, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusNotEqualTo(Byte value) {
+            addCriterion("user_operate_status <>", value, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusGreaterThan(Byte value) {
+            addCriterion("user_operate_status >", value, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("user_operate_status >=", value, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusLessThan(Byte value) {
+            addCriterion("user_operate_status <", value, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("user_operate_status <=", value, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusIn(List<Byte> values) {
+            addCriterion("user_operate_status in", values, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusNotIn(List<Byte> values) {
+            addCriterion("user_operate_status not in", values, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusBetween(Byte value1, Byte value2) {
+            addCriterion("user_operate_status between", value1, value2, "userOperateStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserOperateStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("user_operate_status not between", value1, value2, "userOperateStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;

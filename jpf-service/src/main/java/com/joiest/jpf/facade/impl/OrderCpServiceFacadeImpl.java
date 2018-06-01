@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderCpServiceFacadeImpl implements OrderCpServiceFacade {
 
     @Autowired
-    PayOrderCpMapper payOrderCpMapper;
+    private PayOrderCpMapper payOrderCpMapper;
 
     /**
      * 根据 orderid 获取商户签约信息
@@ -25,7 +25,7 @@ public class OrderCpServiceFacadeImpl implements OrderCpServiceFacade {
     {
         PayOrderCpExample example = new PayOrderCpExample();
         PayOrderCpExample.Criteria c = example.createCriteria();
-        c.andOrderidEqualTo(Long.valueOf(orderid));
+        c.andOrderidEqualTo(orderid);
         List<PayOrderCp> ordercpList = payOrderCpMapper.selectByExample(example);
         if ( ordercpList == null || ordercpList.isEmpty())
         {
@@ -45,7 +45,7 @@ public class OrderCpServiceFacadeImpl implements OrderCpServiceFacade {
     public OrderCpInterfaceInfo getOrderCpBybankaccountnumber(String bankaccountnumber){
         PayOrderCpExample example = new PayOrderCpExample();
         PayOrderCpExample.Criteria c = example.createCriteria();
-        c.andSignstatusEqualTo("2");
+//        c.andSignstatusEqualTo("2");
         c.andBankaccountnumberEqualTo(bankaccountnumber);
         List<PayOrderCp> ordercpList = payOrderCpMapper.selectByExample(example);
 
@@ -98,13 +98,20 @@ public class OrderCpServiceFacadeImpl implements OrderCpServiceFacade {
     public int updateRecord(OrderCpInterfaceInfo orderCpInterfaceInfo){
         PayOrderCpExample e = new PayOrderCpExample();
         PayOrderCpExample.Criteria c = e.createCriteria();
-        c.andOrderidEqualTo(Long.parseLong(orderCpInterfaceInfo.getOrderid()));
+        c.andOrderidEqualTo(orderCpInterfaceInfo.getOrderid());
 
         PayOrderCp payOrderCp = new PayOrderCp();
-        payOrderCp.setTranno(orderCpInterfaceInfo.getTranno());
-        payOrderCp.setSignstatus(orderCpInterfaceInfo.getSignstatus());
+        if ( orderCpInterfaceInfo.getTranno() != null ){
+            payOrderCp.setTranno(orderCpInterfaceInfo.getTranno());
+        }
+        if ( orderCpInterfaceInfo.getSignstatus() != null ){
+            payOrderCp.setSignstatus(orderCpInterfaceInfo.getSignstatus());
+        }
         if ( orderCpInterfaceInfo.getSysagreeno() != null ){
             payOrderCp.setSysagreeno(orderCpInterfaceInfo.getSysagreeno());
+        }
+        if ( orderCpInterfaceInfo.getReturnContent() != null ){
+            payOrderCp.setReturnContent(orderCpInterfaceInfo.getReturnContent());
         }
 
         return payOrderCpMapper.updateByExampleSelective(payOrderCp, e);
