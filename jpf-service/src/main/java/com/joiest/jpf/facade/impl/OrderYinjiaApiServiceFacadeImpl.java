@@ -96,9 +96,8 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
         c.andOrderidEqualTo(orderYinjiaApiInfo.getOrderid());
 
         PayOrderYinjiaApi payOrderYinjiaApi = new PayOrderYinjiaApi();
-        if ( orderYinjiaApiInfo.getUserOperateStatus() != null ){
-            payOrderYinjiaApi.setUserOperateStatus(orderYinjiaApiInfo.getUserOperateStatus());
-        }
+        BeanCopier beanCopier = BeanCopier.create(OrderYinjiaApiInfo.class, PayOrderYinjiaApi.class, false);
+        beanCopier.copy(orderYinjiaApiInfo, payOrderYinjiaApi, null);
         payOrderYinjiaApi.setUpdatetime(new Date());
 
         return payOrderYinjiaApiMapper.updateByExampleSelective(payOrderYinjiaApi, e);
