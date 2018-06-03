@@ -1,11 +1,13 @@
 package com.joiest.jpf.facade.impl;
 
-import com.joiest.jpf.common.po.PayPca;
-import com.joiest.jpf.common.po.PayPcaExample;
-import com.joiest.jpf.common.po.PaySmsMessage;
+import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.dao.repository.mapper.generate.PayOrderPayMerMessageMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayOrderPayMessageMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayPcaMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PaySmsMessageMapper;
 import com.joiest.jpf.dto.AddSmsMessageRequest;
+import com.joiest.jpf.dto.ModifyPayMessageRequest;
+import com.joiest.jpf.dto.ModifyPayOrderPayMerRequest;
 import com.joiest.jpf.entity.PcaInfo;
 import com.joiest.jpf.facade.PcaServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -20,8 +22,17 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
     @Autowired
     private PayPcaMapper payPcaMapper;
 
+    //添加短信
     @Autowired
     private PaySmsMessageMapper paySmsMessageMapper;
+
+    //添加编辑聚合支付流水
+    @Autowired
+    private PayOrderPayMessageMapper payOrderPayMessageMapper;
+
+    //添加编辑商户支付流水
+    @Autowired
+    private PayOrderPayMerMessageMapper payOrderPayMerMessageMapper;
 
     @Override
     public List<PcaInfo> getPcas(String pid) {
@@ -93,5 +104,56 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         BeanCopier beanCopier = BeanCopier.create(AddSmsMessageRequest.class, PaySmsMessage.class, false);
         beanCopier.copy(request, paySmsMessage, null);
         return paySmsMessageMapper.insertSelective(paySmsMessage);
+    }
+
+    /**
+     * 添加聚合订单回调信息
+     */
+    public int addPayMessage(ModifyPayMessageRequest request)
+    {
+        PayOrderPayMessage payOrderPayMessage = new PayOrderPayMessage();
+        BeanCopier beanCopier = BeanCopier.create(ModifyPayMessageRequest.class, PayOrderPayMessage.class, false);
+        beanCopier.copy(request,payOrderPayMessage,null);
+        return payOrderPayMessageMapper.insertSelective(payOrderPayMessage);
+    }
+
+    /**
+     *更新聚合订单回调信息
+     */
+    public int modifyPayMessage(ModifyPayMessageRequest request)
+    {
+        PayOrderPayMessage payOrderPayMessage = new PayOrderPayMessage();
+        BeanCopier beanCopier = BeanCopier.create(ModifyPayMessageRequest.class, PayOrderPayMessage.class, false);
+        beanCopier.copy(request,payOrderPayMessage,null);
+        PayOrderPayMessageExample example = new PayOrderPayMessageExample();
+        PayOrderPayMessageExample.Criteria c = example.createCriteria();
+        c.andOrderidEqualTo(request.getOrderid());
+        return payOrderPayMessageMapper.updateByExampleSelective(payOrderPayMessage,example);
+    }
+
+
+    /**
+     * 添加商户订单回调信息
+     */
+    public int addPayMerMessage(ModifyPayOrderPayMerRequest request)
+    {
+        PayOrderPayMerMessage payOrderPayMerMessage = new PayOrderPayMerMessage();
+        BeanCopier beanCopier = BeanCopier.create(ModifyPayOrderPayMerRequest.class, PayOrderPayMerMessage.class, false);
+        beanCopier.copy(request,payOrderPayMerMessage,null);
+        return payOrderPayMerMessageMapper.insertSelective(payOrderPayMerMessage);
+    }
+
+    /**
+     *更新商户订单回调信息
+     */
+    public int modifyPayMerMessage(ModifyPayOrderPayMerRequest request)
+    {
+        PayOrderPayMerMessage payOrderPayMerMessage = new PayOrderPayMerMessage();
+        BeanCopier beanCopier = BeanCopier.create(ModifyPayOrderPayMerRequest.class, PayOrderPayMerMessage.class, false);
+        beanCopier.copy(request,payOrderPayMerMessage,null);
+        PayOrderPayMerMessageExample example = new PayOrderPayMerMessageExample();
+        PayOrderPayMerMessageExample.Criteria c = example.createCriteria();
+        c.andOrderidEqualTo(request.getOrderid());
+        return payOrderPayMerMessageMapper.updateByExampleSelective(payOrderPayMerMessage,example);
     }
 }
