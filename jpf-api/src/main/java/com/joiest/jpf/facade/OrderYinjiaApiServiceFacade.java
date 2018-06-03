@@ -1,5 +1,7 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.dto.OrderYinjiaApiRequest;
+import com.joiest.jpf.dto.OrderYinjiaApiResponse;
 import com.joiest.jpf.entity.OrderYinjiaApiInfo;
 
 public interface OrderYinjiaApiServiceFacade {
@@ -15,4 +17,9 @@ public interface OrderYinjiaApiServiceFacade {
     public int updateColumnByOrderid(OrderYinjiaApiInfo orderYinjiaApiInfo);
 
     public int updateOrdername(OrderYinjiaApiInfo orderYinjiaApiInfo, boolean forInterface);
+
+    /**
+     * 获取 YinjinApi order List ---后台
+     */
+    public OrderYinjiaApiResponse getOrderYinjiaApi(OrderYinjiaApiRequest request);
 }

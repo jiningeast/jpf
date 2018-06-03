@@ -82,7 +82,7 @@ public class PayOrderYinjiaApi implements Serializable {
     private Byte payStatus;
 
     /**
-     * 1:正常订单；2:退单处理；3:退款撤销；4:运营已审核,待财务审核，5:财务已审核，银联退款中, 6:审核驳回,7:银联退款成功,8:银联退款失败
+     * 退款状态码1：未申请退款；2：退款通知成功,待接收异步返回信息；3：退款通知失败；4：异步返回成功，退款成功；5：异步返回失败，退款失败
      */
     private Byte refundStatus;
 

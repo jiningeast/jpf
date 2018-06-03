@@ -23,5 +23,6 @@
 	<bean id="OrderInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.OrderInterfaceServiceFacadeImpl"></bean>
 	<bean id="OrderCpServiceFacade" class="com.joiest.jpf.facade.impl.OrderCpServiceFacadeImpl"></bean>
 	<bean id="ChinaPayServiceFacade" class="com.joiest.jpf.facade.impl.ChinaPayServiceFacadeImpl"></bean>
+	<bean id="OrderYinjiaApiServiceFacade" class="com.joiest.jpf.facade.impl.OrderYinjiaApiServiceFacadeImpl"></bean>
 
 </beans>

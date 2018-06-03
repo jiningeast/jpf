@@ -1,10 +1,12 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.common.custom;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Objects;
 
-public class OrderInterfaceInfo {
+public class PayOrderYinjiaApiCustom implements Serializable {
     /**
      * 自增ID
      */
@@ -81,7 +83,7 @@ public class OrderInterfaceInfo {
     private Byte payStatus;
 
     /**
-     * 退款状态码1：未申请退款；2：退款通知成功,待接收异步返回信息；3：退款通知失败；4：异步返回成功，退款成功；5：异步返回失败，退款失败
+     * 1:正常订单；2:退单处理；3:退款撤销；4:运营已审核,待财务审核，5:财务已审核，银联退款中, 6:审核驳回,7:银联退款成功,8:银联退款失败
      */
     private Byte refundStatus;
 
@@ -99,39 +101,59 @@ public class OrderInterfaceInfo {
      * 修改时间
      */
     private Date updatetime;
-
-    //=========产品信息 Begin==============
-    /**
-     * 产品ID
-     */
-    private Long bpid;
+    //=========商户信息 Begin==============
 
     /**
-     * 产品名称
+     * 聚合商户名称
      */
-    private String pname;
+    private String merchName;
 
     /**
-     * 产品简介
+     * 用户名
      */
-    private String pintro;
+    private String username;
 
     /**
-     * 产品价格
+     * 企业名称
      */
-    private BigDecimal pmoney;
-
-    /**
-     * 产品图片地址
-     */
-    private String pdpicture;
-    //=========产品信息 End==============
+    private String companyname;
+    //=========商户信息 End==============
     //=========支付方式 Begin==============
 
     private String cat;
 
     //=========支付方式 End==============
 
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("PayOrderYinjiaApiCustom{");
+        sb.append("id=").append(id);
+        sb.append(", orderid='").append(orderid).append('\'');
+        sb.append(", foreignOrderid='").append(foreignOrderid).append('\'');
+        sb.append(", signOrderid=").append(signOrderid);
+        sb.append(", foreignRequest='").append(foreignRequest).append('\'');
+        sb.append(", returnUrl='").append(returnUrl).append('\'');
+        sb.append(", notifyUrl='").append(notifyUrl).append('\'');
+        sb.append(", mtsid=").append(mtsid);
+        sb.append(", paytype=").append(paytype);
+        sb.append(", orderPayPrice=").append(orderPayPrice);
+        sb.append(", orderStdPrice=").append(orderStdPrice);
+        sb.append(", productAccount=").append(productAccount);
+        sb.append(", payDetail='").append(payDetail).append('\'');
+        sb.append(", paytime=").append(paytime);
+        sb.append(", payStatus=").append(payStatus);
+        sb.append(", refundStatus=").append(refundStatus);
+        sb.append(", userOperateStatus=").append(userOperateStatus);
+        sb.append(", addtime=").append(addtime);
+        sb.append(", updatetime=").append(updatetime);
+        sb.append(", merchName='").append(merchName).append('\'');
+        sb.append(", username='").append(username).append('\'');
+        sb.append(", companyname='").append(companyname).append('\'');
+        sb.append(", cat='").append(cat).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 
     public BigInteger getId() {
         return id;
@@ -285,44 +307,28 @@ public class OrderInterfaceInfo {
         this.updatetime = updatetime;
     }
 
-    public Long getBpid() {
-        return bpid;
+    public String getMerchName() {
+        return merchName;
     }
 
-    public void setBpid(Long bpid) {
-        this.bpid = bpid;
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
     }
 
-    public String getPname() {
-        return pname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setPname(String pname) {
-        this.pname = pname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getPintro() {
-        return pintro;
+    public String getCompanyname() {
+        return companyname;
     }
 
-    public void setPintro(String pintro) {
-        this.pintro = pintro;
-    }
-
-    public BigDecimal getPmoney() {
-        return pmoney;
-    }
-
-    public void setPmoney(BigDecimal pmoney) {
-        this.pmoney = pmoney;
-    }
-
-    public String getPdpicture() {
-        return pdpicture;
-    }
-
-    public void setPdpicture(String pdpicture) {
-        this.pdpicture = pdpicture;
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
     }
 
     public String getCat() {

@@ -97,6 +97,16 @@
                     "url" : "tdorder/index"
                 }]
             },{
+                "menuid" : "6",
+                "icon" : "icon-sys",
+                "menuname" : "通道订单管理",
+                "menus" : [{
+                    "menuid" : "601",
+                    "menuname" : "通道订单管理",
+                    "icon" : "icon-nav",
+                    "url" : "orderyinjia/index"
+                }]
+            },{
                 "menuid" : "5",
                 "icon" : "icon-sys",
                 "menuname" : "财务管理",

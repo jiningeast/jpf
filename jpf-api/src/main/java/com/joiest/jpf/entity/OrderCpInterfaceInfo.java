@@ -129,6 +129,19 @@ public class OrderCpInterfaceInfo {
      */
     private String notifyContent;
 
+    /**
+     * 银行名称
+     */
+    private String bankname;
+
+    public String getBankname() {
+        return bankname;
+    }
+
+    public void setBankname(String bankname) {
+        this.bankname = bankname;
+    }
+
     public Long getId() {
         return id;
     }
