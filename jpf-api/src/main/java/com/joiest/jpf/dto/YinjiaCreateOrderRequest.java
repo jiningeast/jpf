@@ -21,6 +21,13 @@ public class YinjiaCreateOrderRequest {
     private String orderid;
 
     /**
+     * 支付方式
+     * 1：7银联分期信用卡支付
+     * 2：微信支付
+     */
+    private String payType;
+
+    /**
      * 商户号
      */
     @NotBlank(message = "商户号不能为空")
@@ -91,6 +98,14 @@ public class YinjiaCreateOrderRequest {
 
     public void setOrderid(String orderid) {
         this.orderid = orderid;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     public String getMid() {

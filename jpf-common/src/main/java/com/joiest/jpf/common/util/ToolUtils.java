@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.util;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -86,5 +87,31 @@ public class ToolUtils {
         htmlStr=m_html.replaceAll(""); //过滤html标签
 
         return htmlStr.trim(); //返回文本字符串
+    }
+
+    /**
+     * urlEncode后把转码字符替换成小写
+     */
+    public static String urlEncodeSmallCase(String url){
+        String urlEncoded = null;
+        try{
+            urlEncoded = URLEncoder.encode(url,"UTF-8");
+        }catch (Exception e){
+
+        }
+        urlEncoded = urlEncoded.replaceAll("%2A","%2a");
+        urlEncoded = urlEncoded.replaceAll("%2B","%2b");
+        urlEncoded = urlEncoded.replaceAll("%2C","%2c");
+        urlEncoded = urlEncoded.replaceAll("%2E","%2e");
+        urlEncoded = urlEncoded.replaceAll("%2F","%2f");
+        urlEncoded = urlEncoded.replaceAll("%3A","%3a");
+        urlEncoded = urlEncoded.replaceAll("%3B","%3b");
+        urlEncoded = urlEncoded.replaceAll("%3D","%3d");
+        urlEncoded = urlEncoded.replaceAll("%3F","%3f");
+        urlEncoded = urlEncoded.replaceAll("%5B","%5b");
+        urlEncoded = urlEncoded.replaceAll("%5C","%5c");
+        urlEncoded = urlEncoded.replaceAll("%5D","%5d");
+
+        return urlEncoded;
     }
 }

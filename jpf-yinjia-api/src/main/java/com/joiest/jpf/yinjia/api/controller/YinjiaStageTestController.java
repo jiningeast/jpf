@@ -181,34 +181,57 @@ public class YinjiaStageTestController {
         // 验签
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", request.getOrderid());
+        Integer payType;
+        // 验证传来的payType字段格式对不对
+        if ( StringUtils.isNotBlank(request.getPayType()) ){
+            try{
+                payType = Integer.parseInt(request.getPayType());
+            }catch (Exception e){
+                yjResponseDto.clear();
+                yjResponseDto.setCode(JpfInterfaceErrorInfo.INCORRECT_PAYTYPE.getCode());
+                yjResponseDto.setInfo(JpfInterfaceErrorInfo.INCORRECT_PAYTYPE.getDesc());
+
+                return yjResponseDto;
+            }
+            // 判断商户有没有资格使用传来的payType支付方式
+            // 1：银联信用卡分期支付
+            // 2：微信全额支付
+            if ( payType != 1 && payType != 2 ){
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_PAYTYPE.getCode(), JpfInterfaceErrorInfo.INCORRECT_PAYTYPE.getDesc());
+            }
+            switch (payType){
+                case 1:
+                    payType = 7;
+                    break;
+
+                case 2:
+                    payType = 9;
+                    break;
+            }
+            GetMerchPayTypeResponse response = merPayTypeServiceFacade.getOneMerPayTypes(Long.parseLong(request.getMid()));
+            List<MerchantPayTypeInfo> list = response.getPayTypeInfos();
+            List<Integer> payTypesList = new ArrayList();
+            for ( MerchantPayTypeInfo info:list){
+                payTypesList.add(info.getTpid());
+            }
+            if ( !payTypesList.contains(payType) ){
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.UNSUPPORT_PAYTYPE.getCode(), JpfInterfaceErrorInfo.UNSUPPORT_PAYTYPE.getDesc());
+            }
+
+            map.put("payType", payType);
+        }else{
+            payType = 7;
+        }
         map.put("mid", request.getMid());
         map.put("productId", request.getProductId());
         map.put("productName", request.getProductName());
         map.put("productAmount", request.getProductAmount());
         map.put("productUnitPrice", request.getProductUnitPrice());
         map.put("productTotalPrice", request.getProductTotalPrice());
-        String returnUrl = null;
-        try{
-            returnUrl = URLEncoder.encode(request.getReturnUrl(),"UTF-8");
-        }catch (UnsupportedEncodingException e){
-            yjResponseDto.clear();
-            yjResponseDto.setCode(JpfInterfaceErrorInfo.RETURNURL_ENCODING_ERROR.getCode());
-            yjResponseDto.setInfo(JpfInterfaceErrorInfo.RETURNURL_ENCODING_ERROR.getDesc());
-
-            return yjResponseDto;
-        }
-        map.put("returnUrl", returnUrl.toLowerCase());
-        String notifyUrl = null;
-        try{
-            notifyUrl = URLEncoder.encode(request.getNotifyUrl(),"UTF-8");
-        }catch (UnsupportedEncodingException e){
-            yjResponseDto.clear();
-            yjResponseDto.setCode(JpfInterfaceErrorInfo.NOTIFYURL_ENCODING_ERROR.getCode());
-            yjResponseDto.setInfo(JpfInterfaceErrorInfo.NOTIFYURL_ENCODING_ERROR.getDesc());
-
-            return yjResponseDto;
-        }
-        map.put("notifyUrl", notifyUrl.toLowerCase());
+        String returnUrl = ToolUtils.urlEncodeSmallCase(request.getReturnUrl());
+        map.put("returnUrl", returnUrl);
+        String notifyUrl = ToolUtils.urlEncodeSmallCase(request.getNotifyUrl());
+        map.put("notifyUrl", notifyUrl);
         String mySign = SignUtils.getSign(map, merchInfo.getPrivateKey(), "UTF-8");
         if ( !mySign.equals(request.getSign()) ){   // 判断我们计算的签名和对方传过来的签名是否一致
             yjResponseDto.clear();
@@ -239,7 +262,7 @@ public class YinjiaStageTestController {
         orderYinjiaApiInfo.setReturnUrl(returnUrl);
         orderYinjiaApiInfo.setNotifyUrl(notifyUrl);
         orderYinjiaApiInfo.setMtsid(Long.parseLong(request.getMid()));
-        orderYinjiaApiInfo.setPaytype(7);
+        orderYinjiaApiInfo.setPaytype(payType);
         orderYinjiaApiInfo.setOrderPayPrice(new BigDecimal(request.getProductTotalPrice()));
         orderYinjiaApiInfo.setOrderStdPrice(new BigDecimal(request.getProductTotalPrice()));
         orderYinjiaApiInfo.setProductAccount(Integer.parseInt(request.getProductAmount()));
@@ -419,10 +442,30 @@ public class YinjiaStageTestController {
 
         // 生成分期支付ordername字段值
         Map<String, Object> ordernameMap = new HashMap<>();
-        ordernameMap.put("payType",7);
-        ordernameMap.put("stageType", request.getTerm());
-        ordernameMap.put("payType_cn","银联信用卡分期支付");
-        ordernameMap.put("stageType_cn",request.getTerm()+"期");
+        ordernameMap.put("payType",orderYinjiaApiInfo.getPaytype());
+        String payType_cn = null;
+        switch (orderYinjiaApiInfo.getPaytype()){
+            case 6:
+                payType_cn = "中银消费金融分期支付";
+                break;
+
+            case 7:
+                payType_cn = "银联信用卡分期支付";
+                break;
+
+            case 8:
+                payType_cn = "花呗分期支付";
+                break;
+
+            case 9:
+                payType_cn = "微信全额支付";
+                break;
+        }
+        ordernameMap.put("payType_cn",payType_cn);
+        if ( StringUtils.isNotBlank(request.getTerm()) ){
+            ordernameMap.put("stageType", request.getTerm());
+            ordernameMap.put("stageType_cn",request.getTerm()+"期");
+        }
         String ordernameJson = JsonUtils.toJson(ordernameMap);
 
         OrderYinjiaApiInfo orderInfoForUpdate = new OrderYinjiaApiInfo();
@@ -1214,38 +1257,20 @@ public class YinjiaStageTestController {
     @ModelAttribute
     public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
     {
+        // 兼容跨域问题
         String originHeader = httpRequest.getHeader("Origin");
         response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
         response.setHeader("Access-Control-Allow-Method", "POST");
         response.setHeader("Access-Control-Allow-Origin", originHeader);
 
-        /*String token = request.getParameter("token");
-        if (StringUtils.isBlank(token) )
-        {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "TOKEN不能为空");
+        // 不允许正式服访问这个测试项目文件
+        if ( CHINAPAY_URL_REQUEST.equals("http://vip.7shengqian.com/trade/install/") ){
+            notCorrectAddress();
         }
-        String mid = AESUtils.decrypt(token, ManageConstants.SKEY);
+    }
 
-        if ( !Pattern.matches("^\\d+$", mid) )
-        {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.NOTlOGIN.getCode(), "1111");
-        }
-        this.mid = Long.valueOf(mid);*/
-
-        /*String serverName = httpServletRequest.getServerName();
-        if ( serverName.contains("/createOrder") ){
-            // 商户号&商户信息
-            if ( StringUtils.isNotBlank(request.getParameter("mid")) ){
-                merchInfo = merchantInterfaceServiceFacade.getMerchant(Long.parseLong(request.getParameter("mid")));
-            }else{
-                throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
-            }
-
-            // 签名串
-            if ( StringUtils.isBlank(request.getParameter("sign")) ){
-                throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc());
-            }
-        }*/
+    public YjResponseDto notCorrectAddress(){
+        throw new JpfInterfaceException("999", "请访问正确的接口文件");
     }
 
     // 生成一个pay_order表的orderid
@@ -1448,7 +1473,7 @@ public class YinjiaStageTestController {
             orderInterfaceServiceFacade.updateOrderStatus(orderInfoUpdate);
 
             //添加聚合流水  ---没有添加tranNo
-//            pcaServiceFacade.addPayMessage(modifyPayMessageRequest);
+            pcaServiceFacade.addPayMessage(modifyPayMessageRequest);
 
 /*            //添加返回给商户的流水
             ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();

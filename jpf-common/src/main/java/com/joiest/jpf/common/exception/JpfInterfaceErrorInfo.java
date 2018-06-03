@@ -63,6 +63,8 @@ public enum JpfInterfaceErrorInfo {
     RETURNURL_ENCODING_ERROR("10034", "returnUrl编码错误"),
     NOTIFYURL_ENCODING_ERROR("10036", "notifyUrl编码错误"),
     SIGNURL_ENCODING_ERROR("10035", "返回signUrl编码错误"),
+    INCORRECT_PAYTYPE("10036", "payType值有误，请检查"),
+    UNSUPPORT_PAYTYPE("10037", "商户无此支付方式"),
 
     // H5 第一步 获取商户支付方式等信息
     INCORRECT_DATA("10040","加密信息有误"),
