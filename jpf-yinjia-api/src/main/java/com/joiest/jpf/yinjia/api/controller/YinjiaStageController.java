@@ -1464,6 +1464,7 @@ public class YinjiaStageController {
         try{
             notify_url = URLDecoder.decode(orderInfo.getNotifyUrl(), "UTF-8");
             String response = OkHttpUtils.postForm(notify_url,merPostParamMap);
+            System.out.println(ToolUtils.delHTMLTag(response));
             //通知商户流水
 //            String response = "SUCCESS";
             ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
@@ -1472,7 +1473,7 @@ public class YinjiaStageController {
             merPayRequest.setForeignOrderid(orderInfo.getForeignOrderid());
             String merRequestStr = ToolUtils.mapToUrl(merPostParamMap);
             merPayRequest.setNotifyContent(notify_url + "?" + merRequestStr);
-            merPayRequest.setNotifyResult(JsonUtils.toJson(response));
+            merPayRequest.setNotifyResult(StringUtils.deleteWhitespace(ToolUtils.delHTMLTag(response)));
             pcaServiceFacade.addPayMerMessage(merPayRequest);
 
             //日志
