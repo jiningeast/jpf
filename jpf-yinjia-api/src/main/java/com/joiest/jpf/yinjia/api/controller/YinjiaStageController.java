@@ -1289,7 +1289,7 @@ public class YinjiaStageController {
     @ResponseBody
     public String InstallPay(YinjiaPayRequest request, HttpServletRequest httpRequest)
     {
-        YjResponseDto dto = new YjResponseDto();
+//        YjResponseDto dto = new YjResponseDto();
         if ( StringUtils.isBlank( request.getSmsCode() ) )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "验证码错误", null);
@@ -1303,7 +1303,7 @@ public class YinjiaStageController {
         }
 
         //获取订单信息
-        OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
+        OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(dataMap.get("orderid"));
         if ( orderInfo.getSignOrderid() == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约", null);
@@ -1380,19 +1380,64 @@ public class YinjiaStageController {
             // 接口用到的参数
             signMap.put("CP_Salt", paramMap.get("CP_Salt"));
             String requestUrl;
-            String reUri = httpRequest.getServerName();   // 返回域名
 
             requestUrl = CHINAPAY_URL_REQUEST + "installPay";
 
             YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
+            //请求结果
             Map<String,String> resultMap = JsonUtils.toCollection(resultPay.getInfo(), new TypeReference<Map<String, String>>(){});
+            //请求参数
+            ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
+            modifyPayMessageRequest.setOrderid(dataMap.get("orderid"));
+            modifyPayMessageRequest.setReturnContent(resultPay.getInfo());
+            modifyPayMessageRequest.setAddtime(new Date());
+            modifyPayMessageRequest.setContent(requestUrl + "?" + resultPay.getData().toString());
+
+            //更新用户操作状态
+            OrderInterfaceInfo orderInfoUpdate = new OrderInterfaceInfo();
+            String returnInfo;
+            String returnData;
+            String returnCode;
+            byte userOperateStatue;
             if ( resultMap.containsKey("retCode") && resultMap.get("retCode").equals("0000") )
             {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"支付已受理",orderInfo.getReturnUrl());
+                returnCode = JpfInterfaceErrorInfo.SUCCESS.getCode();
+                returnInfo = "支付已受理";
+                returnData = orderInfo.getReturnUrl();
+                userOperateStatue = 9;
+//                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"支付已受理",orderInfo.getReturnUrl());
             }else
             {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"渠道受理有误，请重新下单支付",null);
+                returnCode = JpfInterfaceErrorInfo.FAIL.getCode();
+                returnInfo = "渠道受理有误，请重新下单支付";
+                returnData = null;
+                userOperateStatue = 10;
+//                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"渠道受理有误，请重新下单支付",null);
             }
+
+            //更新用户操作状态
+            orderInfoUpdate.setOrderid(orderInfo.getOrderid());    //resultMap.get("outOrderNo")接口暂时没有返回
+            orderInfoUpdate.setUserOperateStatus(userOperateStatue);
+            orderInfoUpdate.setUpdatetime(new Date());
+            orderInterfaceServiceFacade.updateOrderStatus(orderInfoUpdate);
+
+            //添加聚合流水  ---没有添加tranNo
+            pcaServiceFacade.addPayMessage(modifyPayMessageRequest);
+
+/*            //添加返回给商户的流水
+            ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
+            merPayRequest.setAddtime(new Date());
+            merPayRequest.setForeignOrderid(orderInfo.getForeignOrderid());
+            merPayRequest.setOrderid(orderInfo.getOrderid());
+            Map<String,String> merPayRequestMap = new HashMap<>();
+            merPayRequestMap.put("code", returnCode);
+            merPayRequestMap.put("info", returnInfo);
+            merPayRequestMap.put("data", returnData);
+            String merPayRequestjson = JsonUtils.toJson(merPayRequestMap);
+            merPayRequest.setReturnContent(merPayRequestjson);
+            pcaServiceFacade.addPayMerMessage(merPayRequest);*/
+
+            return ToolUtils.toJsonBase64(returnCode,returnInfo, returnData);
         } else
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单或者签约信息有误", null);
@@ -1433,7 +1478,6 @@ public class YinjiaStageController {
         //签名
         String sortStr = ToolUtils.mapToUrl(dataMap);
         String signMd5 = Md5Encrypt.md5(sortStr + paramMap.get("CP_Salt"));
-
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1441,26 +1485,36 @@ public class YinjiaStageController {
         sbf.append("\n回调信息：" + returnMap);
         OrderInterfaceInfo orderInfoUpdate = new OrderInterfaceInfo();
         byte orderstatus;
+        byte user_operate_status;
         if ( !signMd5.equals(request.getSign()) || !request.getTranResult().equals("SUCCESS") )
         {
             sbf.append("\n支付失败：签名失败或者支付失败，订单状态更新为失败");
             sbf.append("\n回调签名：" + signMd5);
             orderstatus = 2;
+            user_operate_status = 12;
         }else
         {
             orderstatus = 1;
             sbf.append("\n回调签名：" + signMd5);
             sbf.append("\n支付成功修改数据库状态完成");
+            user_operate_status = 11;
         }
         //更新
         orderInfoUpdate.setPayStatus(orderstatus);
         orderInfoUpdate.setPaytime(date);
         orderInfoUpdate.setUpdatetime(date);
         orderInfoUpdate.setOrderid(returnMap.get("outOrderNo").toString());
+        orderInfoUpdate.setUserOperateStatus(user_operate_status);
         orderInterfaceServiceFacade.updateOrderStatus(orderInfoUpdate);
+        //流水
+        ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
+        modifyPayMessageRequest.setNotifyTranno(request.getTranNo());
+        modifyPayMessageRequest.setOrderid(request.getOutOrderNo());
+        modifyPayMessageRequest.setNotifyContent(request.toString());
+        modifyPayMessageRequest.setUpdatetime(new Date());
+        pcaServiceFacade.modifyPayMessage(modifyPayMessageRequest);
+
         //日志
-        SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM");
-//        String filePath = "/project/jpf/log/ChinaPayReturn" + myfmt2.format(date) + ".txt";
         String fileName = "ChinaPayReturn";
         LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
 
@@ -1485,6 +1539,18 @@ public class YinjiaStageController {
         try{
             notify_url = URLDecoder.decode(orderInfo.getNotifyUrl(), "UTF-8");
             String response = OkHttpUtils.postForm(notify_url,merPostParamMap);
+            //通知商户流水
+//            String response = "SUCCESS";
+            ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
+            merPayRequest.setAddtime(new Date());
+            merPayRequest.setOrderid(orderInfo.getOrderid());
+            merPayRequest.setForeignOrderid(orderInfo.getForeignOrderid());
+            String merRequestStr = ToolUtils.mapToUrl(merPostParamMap);
+            merPayRequest.setNotifyContent(notify_url + "?" + merRequestStr);
+            merPayRequest.setNotifyResult(StringUtils.deleteWhitespace(ToolUtils.delHTMLTag(response)));
+            pcaServiceFacade.addPayMerMessage(merPayRequest);
+
+            //日志
             logger.info("支付回调--发送给商户: 请求地址：" + notify_url + "; 请求参数" + merPostParamMap);
             sbf_mer.append("\n\nTime:" + myfmt.format(date) + "支付回调--发送给商户");
             sbf_mer.append("\n请求地址：" + notify_url);
@@ -1499,11 +1565,11 @@ public class YinjiaStageController {
             }
             sbf_mer.append("\n回调信息：" + response);
             LogsCustomUtils.writeIntoFile(sbf_mer.toString(),"", fileName_merNofity,true);
-
+            return "NOTICE";
         }catch (UnsupportedEncodingException e){
             logger.info("支付回调--发送给商户: 商户回调 notify_url decode失败! 商户原notify_url为：" + orderInfo.getNotifyUrl());
             sbf_mer.append("\n\nTime:" + myfmt.format(date) + "支付回调--发送给商户");
-            sbf_mer.append("\n异常：用户notify_url 解码异常: 待解码的notify_url为：" + orderInfo.getNotifyUrl());
+            sbf_mer.append("\n异常：用户notify_url 解码或发送异常: 待解码的notify_url为：" + orderInfo.getNotifyUrl());
             LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName_merNofity,true);
         }
         return "NOTICE";
