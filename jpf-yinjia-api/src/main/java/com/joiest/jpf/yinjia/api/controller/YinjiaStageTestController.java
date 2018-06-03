@@ -1016,12 +1016,22 @@ public class YinjiaStageTestController {
             orderRefundMessageInfo.setResponseContent(smeRes);
             orderRefundMessageServiceFacade.insRecord(orderRefundMessageInfo);
 
+            // 更新订单退款状态
+            OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+            orderYinjiaApiInfo.setOrderid(orderid);
+
             if(chinaRe.containsKey("retCode") && chinaRe.get("retCode").equals("0000")){
+
+                orderYinjiaApiInfo.setRefundStatus((byte)2);
+                orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
 
                 yjResponseDto.setCode("10000");
                 yjResponseDto.setInfo("退款已受理");
                 yjResponseDto.clearData();
             }else{
+
+                orderYinjiaApiInfo.setRefundStatus((byte)3);
+                orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
 
                 yjResponseDto.setCode("10008");
                 yjResponseDto.setInfo(chinaRe.get("retMsg"));
@@ -1082,12 +1092,6 @@ public class YinjiaStageTestController {
         orderRefundMessageInfo.setResponseContent(ToolUtils.mapToUrl(refundCancel));
         orderRefundMessageServiceFacade.insRecord(orderRefundMessageInfo);
 
-        // 更新订单的用户操作状态为
-        OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
-        orderYinjiaApiInfo.setOrderid(request.getParameter("outOrderNo"));
-        orderYinjiaApiInfo.setRefundStatus((byte)2);
-        orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
-
         OrderRefundInfo orderRefundInfo = new OrderRefundInfo();
         orderRefundInfo.setTranno(refundCancel.get("tranNo").toString());
         orderRefundInfo.setTrantype( Byte.valueOf(refundCancel.get("tranType").toString()));
@@ -1106,6 +1110,10 @@ public class YinjiaStageTestController {
         sbf.append("\n\nTime:" + myfmt.format(date));
         sbf.append("\n回调信息：" + getKeyVal+"&sign="+sign+"&signType="+signType);
 
+        // 更新订单的用户操作状态
+        OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+        orderYinjiaApiInfo.setOrderid(request.getParameter("outOrderNo"));
+
         if(!getSign.equals(sign)){
 
             sbf.append("\n签名失败：回调签名sign="+sign+"，接口签名sign="+getSign);
@@ -1113,10 +1121,18 @@ public class YinjiaStageTestController {
             orderStauts.setRefundStatus(Byte.valueOf("8"));
         }else if(refundCancel.get("tranResult").equals("SUCCESS")){
 
+            // 更新订单的用户操作状态为4：异步返回成功，退款成功
+            orderYinjiaApiInfo.setRefundStatus((byte)4);
+            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+
             sbf.append("\n退款成功");
             orderRefundInfo.setStatus("2");
             orderStauts.setRefundStatus(Byte.valueOf("7"));
         }else{
+
+            // 更新订单的用户操作状态为5：异步返回失败，退款失败
+            orderYinjiaApiInfo.setRefundStatus((byte)5);
+            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
 
             sbf.append("\n退款失败");
             orderRefundInfo.setStatus("3");

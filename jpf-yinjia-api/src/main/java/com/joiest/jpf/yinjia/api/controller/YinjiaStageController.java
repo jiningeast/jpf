@@ -80,6 +80,12 @@ public class YinjiaStageController {
     @Autowired
     private OrderYinjiaApiServiceFacade orderYinjiaApiServiceFacade;
 
+    @Autowired
+    private SmsMessageServiceFacade smsMessageServiceFacade;
+
+    @Autowired
+    private OrderRefundMessageServiceFacade orderRefundMessageServiceFacade;
+
     /**
      * 商户获取银联信用卡分期支付的期数
      * @param request 此接口请求类
@@ -826,6 +832,19 @@ public class YinjiaStageController {
                 yjResponseDto.setInfo("短信发送失败");
                 yjResponseDto.clearData();*/
             }
+
+            // 增加短信流水表
+            SmsMessageInfo smsMessageInfo = new SmsMessageInfo();
+            smsMessageInfo.setOrderid(orderid);
+            smsMessageInfo.setMtsid(orderInfo.getMtsid().toString());
+            smsMessageInfo.setPtype((byte)99);
+            smsMessageInfo.setPtypeCn(" ");
+            smsMessageInfo.setSendtype((byte)1);
+            smsMessageInfo.setSendtypeCn("支付");
+            String returnContent = "sysMerchNo="+chinaRe.get("sysMerchNo")+"&sign="+chinaRe.get("sign")+"&retCode="+chinaRe.get("retCode")+"&retMsg="+chinaRe.get("retMsg");
+            smsMessageInfo.setReturnContent(returnContent);
+            smsMessageServiceFacade.insRecord(smsMessageInfo);
+
         }else{
 
             code = JpfInterfaceErrorInfo.FAIL.getCode();
@@ -954,16 +973,36 @@ public class YinjiaStageController {
             maptree.put("backUrl",CHINAPAY_REFUND_BACK_URL);
             maptree.put("privatekey",maparr.get("CP_Salt"));
 
-           yjResponseDto = chinaPayServiceFacade.ChinaPayRefund(maptree,requestUrl);
+            yjResponseDto = chinaPayServiceFacade.ChinaPayRefund(maptree,requestUrl);
 
             String smeRes = yjResponseDto.getData().toString();
             chinaRe = JsonUtils.toCollection(smeRes,new TypeReference<HashMap<String, String>>(){});
+
+            // 新增退款流水信息
+            OrderRefundMessageInfo orderRefundMessageInfo = new OrderRefundMessageInfo();
+            orderRefundMessageInfo.setOrderid(orderid);
+            orderRefundMessageInfo.setType((byte)0);
+            orderRefundMessageInfo.setRequestContent(ToolUtils.mapToUrl(maptree));
+            orderRefundMessageInfo.setTranno(chinaRe.get("tranNo"));
+            orderRefundMessageInfo.setResponseContent(smeRes);
+            orderRefundMessageServiceFacade.insRecord(orderRefundMessageInfo);
+
+            // 更新订单退款状态
+            OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+            orderYinjiaApiInfo.setOrderid(orderid);
+
             if(chinaRe.containsKey("retCode") && chinaRe.get("retCode").equals("0000")){
+
+                orderYinjiaApiInfo.setRefundStatus((byte)2);
+                orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
 
                 yjResponseDto.setCode("10000");
                 yjResponseDto.setInfo("退款已受理");
                 yjResponseDto.clearData();
             }else{
+
+                orderYinjiaApiInfo.setRefundStatus((byte)3);
+                orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
 
                 yjResponseDto.setCode("10008");
                 yjResponseDto.setInfo(chinaRe.get("retMsg"));
@@ -1016,7 +1055,14 @@ public class YinjiaStageController {
         refundCancel.put("sign",sign);
         refundCancel.put("signType",signType);
 
-        //更新退单表相关信息
+        // 增加退款异步回调流水
+        OrderRefundMessageInfo orderRefundMessageInfo = new OrderRefundMessageInfo();
+        orderRefundMessageInfo.setOrderid(request.getParameter("outOrderNo"));
+        orderRefundMessageInfo.setType((byte)1);
+        orderRefundMessageInfo.setTranno(request.getParameter("tranNo"));
+        orderRefundMessageInfo.setResponseContent(ToolUtils.mapToUrl(refundCancel));
+        orderRefundMessageServiceFacade.insRecord(orderRefundMessageInfo);
+
         OrderRefundInfo orderRefundInfo = new OrderRefundInfo();
         orderRefundInfo.setTranno(refundCancel.get("tranNo").toString());
         orderRefundInfo.setTrantype( Byte.valueOf(refundCancel.get("tranType").toString()));
@@ -1035,6 +1081,10 @@ public class YinjiaStageController {
         sbf.append("\n\nTime:" + myfmt.format(date));
         sbf.append("\n回调信息：" + getKeyVal+"&sign="+sign+"&signType="+signType);
 
+        // 更新订单的用户操作状态
+        OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+        orderYinjiaApiInfo.setOrderid(request.getParameter("outOrderNo"));
+
         if(!getSign.equals(sign)){
 
             sbf.append("\n签名失败：回调签名sign="+sign+"，接口签名sign="+getSign);
@@ -1042,10 +1092,18 @@ public class YinjiaStageController {
             orderStauts.setRefundStatus(Byte.valueOf("8"));
         }else if(refundCancel.get("tranResult").equals("SUCCESS")){
 
+            // 更新订单的用户操作状态为4：异步返回成功，退款成功
+            orderYinjiaApiInfo.setRefundStatus((byte)4);
+            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+
             sbf.append("\n退款成功");
             orderRefundInfo.setStatus("2");
             orderStauts.setRefundStatus(Byte.valueOf("7"));
         }else{
+
+            // 更新订单的用户操作状态为5：异步返回失败，退款失败
+            orderYinjiaApiInfo.setRefundStatus((byte)5);
+            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
 
             sbf.append("\n退款失败");
             orderRefundInfo.setStatus("3");
