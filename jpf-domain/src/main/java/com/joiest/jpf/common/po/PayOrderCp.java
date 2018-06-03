@@ -120,11 +120,6 @@ public class PayOrderCp implements Serializable {
     private String sysagreeno;
 
     /**
-     * 创建时间
-     */
-    private Date created;
-
-    /**
      * 签约同步返回参数
      */
     private String returnContent;
@@ -133,6 +128,16 @@ public class PayOrderCp implements Serializable {
      * 签约异步返回参数
      */
     private String notifyContent;
+
+    /**
+     * 创建时间
+     */
+    private Date created;
+
+    /**
+     * 更新时间
+     */
+    private Date updated;
 
     private static final long serialVersionUID = 1L;
 
@@ -320,14 +325,6 @@ public class PayOrderCp implements Serializable {
         this.sysagreeno = sysagreeno == null ? null : sysagreeno.trim();
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
     public String getReturnContent() {
         return returnContent;
     }
@@ -342,6 +339,22 @@ public class PayOrderCp implements Serializable {
 
     public void setNotifyContent(String notifyContent) {
         this.notifyContent = notifyContent == null ? null : notifyContent.trim();
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     /**
@@ -376,9 +389,10 @@ public class PayOrderCp implements Serializable {
         sb.append(", tranno=").append(tranno);
         sb.append(", signstatus=").append(signstatus);
         sb.append(", sysagreeno=").append(sysagreeno);
-        sb.append(", created=").append(created);
         sb.append(", returnContent=").append(returnContent);
         sb.append(", notifyContent=").append(notifyContent);
+        sb.append(", created=").append(created);
+        sb.append(", updated=").append(updated);
         sb.append("]");
         return sb.toString();
     }
@@ -422,9 +436,10 @@ public class PayOrderCp implements Serializable {
             && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
             && (this.getSignstatus() == null ? other.getSignstatus() == null : this.getSignstatus().equals(other.getSignstatus()))
             && (this.getSysagreeno() == null ? other.getSysagreeno() == null : this.getSysagreeno().equals(other.getSysagreeno()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getReturnContent() == null ? other.getReturnContent() == null : this.getReturnContent().equals(other.getReturnContent()))
-            && (this.getNotifyContent() == null ? other.getNotifyContent() == null : this.getNotifyContent().equals(other.getNotifyContent()));
+            && (this.getNotifyContent() == null ? other.getNotifyContent() == null : this.getNotifyContent().equals(other.getNotifyContent()))
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
     }
 
     /**
@@ -457,9 +472,10 @@ public class PayOrderCp implements Serializable {
         result = prime * result + ((getTranno() == null) ? 0 : getTranno().hashCode());
         result = prime * result + ((getSignstatus() == null) ? 0 : getSignstatus().hashCode());
         result = prime * result + ((getSysagreeno() == null) ? 0 : getSysagreeno().hashCode());
-        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getReturnContent() == null) ? 0 : getReturnContent().hashCode());
         result = prime * result + ((getNotifyContent() == null) ? 0 : getNotifyContent().hashCode());
+        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
+        result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
         return result;
     }
 }
