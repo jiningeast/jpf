@@ -151,4 +151,22 @@ public class YinjiaPayNotifyRequest {
     public void setOriOrderNo(String oriOrderNo) {
         this.oriOrderNo = oriOrderNo;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("YinjiaPayNotifyRequest{");
+        sb.append("sysMerchNo='").append(sysMerchNo).append('\'');
+        sb.append(", inputCharset='").append(inputCharset).append('\'');
+        sb.append(", signType='").append(signType).append('\'');
+        sb.append(", sign='").append(sign).append('\'');
+        sb.append(", tranNo='").append(tranNo).append('\'');
+        sb.append(", outOrderNo='").append(outOrderNo).append('\'');
+        sb.append(", finishTime='").append(finishTime).append('\'');
+        sb.append(", tranType='").append(tranType).append('\'');
+        sb.append(", tranAmt='").append(tranAmt).append('\'');
+        sb.append(", tranResult='").append(tranResult).append('\'');
+        sb.append(", oriOrderNo='").append(oriOrderNo).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

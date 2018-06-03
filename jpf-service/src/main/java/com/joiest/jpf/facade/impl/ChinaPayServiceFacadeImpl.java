@@ -116,7 +116,7 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         String result = OkHttpUtils.postForm(requestUrl, treemap);
         YjResponseDto dto = new YjResponseDto();
         dto.setInfo(result);
-
+        dto.setData(requestParam);
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -126,6 +126,8 @@ public class ChinaPayServiceFacadeImpl implements ChinaPayServiceFacade{
         sbf.append("\n回调信息：" + result);
         String fileName = "ChinaPayLog";
         LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName, true);
+
+        //添加请求信息
 
         return dto;
     }

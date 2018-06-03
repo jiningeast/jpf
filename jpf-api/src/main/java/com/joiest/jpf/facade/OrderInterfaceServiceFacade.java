@@ -1,8 +1,5 @@
 package com.joiest.jpf.facade;
 
-import com.joiest.jpf.dto.OrderRequest;
-import com.joiest.jpf.dto.OrderResponse;
-import com.joiest.jpf.entity.OrderInfo;
 import com.joiest.jpf.entity.OrderInterfaceInfo;
 
 import java.util.Map;

@@ -1,10 +1,12 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.common.custom;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Objects;
 
-public class OrderInterfaceInfo {
+public class PayOrderYinjiaApiInterfaceCustom implements Serializable {
     /**
      * 自增ID
      */
@@ -99,32 +101,31 @@ public class OrderInterfaceInfo {
      * 修改时间
      */
     private Date updatetime;
-
     //=========产品信息 Begin==============
     /**
      * 产品ID
      */
-    private Long bpid;
-
-    /**
-     * 产品名称
-     */
-    private String pname;
-
-    /**
-     * 产品简介
-     */
-    private String pintro;
-
-    /**
-     * 产品价格
-     */
-    private BigDecimal pmoney;
-
-    /**
-     * 产品图片地址
-     */
-    private String pdpicture;
+//    private Long bpid;
+//
+//    /**
+//     * 产品名称
+//     */
+//    private String pname;
+//
+//    /**
+//     * 产品简介
+//     */
+//    private String pintro;
+//
+//    /**
+//     * 产品价格
+//     */
+//    private BigDecimal pmoney;
+//
+//    /**
+//     * 产品图片地址
+//     */
+//    private String pdpicture;
     //=========产品信息 End==============
     //=========支付方式 Begin==============
 
@@ -132,6 +133,7 @@ public class OrderInterfaceInfo {
 
     //=========支付方式 End==============
 
+    private static final long serialVersionUID = 1L;
 
     public BigInteger getId() {
         return id;
@@ -285,7 +287,7 @@ public class OrderInterfaceInfo {
         this.updatetime = updatetime;
     }
 
-    public Long getBpid() {
+    /*public Long getBpid() {
         return bpid;
     }
 
@@ -323,7 +325,7 @@ public class OrderInterfaceInfo {
 
     public void setPdpicture(String pdpicture) {
         this.pdpicture = pdpicture;
-    }
+    }*/
 
     public String getCat() {
         return cat;
@@ -331,5 +333,71 @@ public class OrderInterfaceInfo {
 
     public void setCat(String cat) {
         this.cat = cat;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("PayOrderYinjiaApiInterfaceCustom{");
+        sb.append("id=").append(id);
+        sb.append(", orderid='").append(orderid).append('\'');
+        sb.append(", foreignOrderid='").append(foreignOrderid).append('\'');
+        sb.append(", signOrderid=").append(signOrderid);
+        sb.append(", foreignRequest='").append(foreignRequest).append('\'');
+        sb.append(", returnUrl='").append(returnUrl).append('\'');
+        sb.append(", notifyUrl='").append(notifyUrl).append('\'');
+        sb.append(", mtsid=").append(mtsid);
+        sb.append(", paytype=").append(paytype);
+        sb.append(", orderPayPrice=").append(orderPayPrice);
+        sb.append(", orderStdPrice=").append(orderStdPrice);
+        sb.append(", productAccount=").append(productAccount);
+        sb.append(", payDetail='").append(payDetail).append('\'');
+        sb.append(", paytime=").append(paytime);
+        sb.append(", payStatus=").append(payStatus);
+        sb.append(", refundStatus=").append(refundStatus);
+        sb.append(", userOperateStatus=").append(userOperateStatus);
+        sb.append(", addtime=").append(addtime);
+        sb.append(", updatetime=").append(updatetime);
+        sb.append('}');
+        return sb.toString();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PayOrderYinjiaApiInterfaceCustom that = (PayOrderYinjiaApiInterfaceCustom) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(orderid, that.orderid) &&
+                Objects.equals(foreignOrderid, that.foreignOrderid) &&
+                Objects.equals(signOrderid, that.signOrderid) &&
+                Objects.equals(foreignRequest, that.foreignRequest) &&
+                Objects.equals(returnUrl, that.returnUrl) &&
+                Objects.equals(notifyUrl, that.notifyUrl) &&
+                Objects.equals(mtsid, that.mtsid) &&
+                Objects.equals(paytype, that.paytype) &&
+                Objects.equals(orderPayPrice, that.orderPayPrice) &&
+                Objects.equals(orderStdPrice, that.orderStdPrice) &&
+                Objects.equals(productAccount, that.productAccount) &&
+                Objects.equals(payDetail, that.payDetail) &&
+                Objects.equals(paytime, that.paytime) &&
+                Objects.equals(payStatus, that.payStatus) &&
+                Objects.equals(refundStatus, that.refundStatus) &&
+                Objects.equals(userOperateStatus, that.userOperateStatus) &&
+                Objects.equals(addtime, that.addtime) &&
+                Objects.equals(updatetime, that.updatetime) &&
+                Objects.equals(cat, that.cat);
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, orderid, foreignOrderid, signOrderid, foreignRequest, returnUrl, notifyUrl, mtsid, paytype, orderPayPrice, orderStdPrice, productAccount, payDetail, paytime, payStatus, refundStatus, userOperateStatus, addtime, updatetime, cat);
     }
 }
