@@ -1,15 +1,20 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.custom.PayOrderYinjiaApiCustom;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayOrderYinjiaApi;
 import com.joiest.jpf.common.po.PayOrderYinjiaApiExample;
+import com.joiest.jpf.dao.repository.mapper.custom.PayOrderYinjiaApiCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderYinjiaApiMapper;
+import com.joiest.jpf.dto.OrderYinjiaApiRequest;
+import com.joiest.jpf.dto.OrderYinjiaApiResponse;
 import com.joiest.jpf.entity.OrderYinjiaApiInfo;
 import com.joiest.jpf.facade.OrderYinjiaApiServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +22,9 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
 
     @Autowired
     private PayOrderYinjiaApiMapper payOrderYinjiaApiMapper;
+
+    @Autowired
+    private PayOrderYinjiaApiCustomMapper payOrderYinjiaApiCustomMapper;
 
     @Override
     public int insOrder(OrderYinjiaApiInfo orderYinjiaApiInfo){
@@ -112,5 +120,38 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
         payOrderYinjiaApi.setUpdatetime(new Date());
 
         return payOrderYinjiaApiMapper.updateByExampleSelective(payOrderYinjiaApi, e);
+    }
+
+    /**
+     * 获取 YinjinApi order List ---后台
+     */
+    public OrderYinjiaApiResponse getOrderYinjiaApi(OrderYinjiaApiRequest request)
+    {
+        if(request.getPage()<=0){
+            request.setPage(1);
+        }
+        if (request.getRows() <= 0) {
+            request.setRows(10);
+        }
+
+        PayOrderYinjiaApiExample example = new PayOrderYinjiaApiExample();
+        example.setPageNo(request.getPage());
+        example.setPageSize(request.getRows());
+        PayOrderYinjiaApiExample.Criteria c = example.createCriteria();
+        List<PayOrderYinjiaApiCustom> orderList = payOrderYinjiaApiCustomMapper.getOrderListYinJiaCustom(example);
+        List<OrderYinjiaApiInfo> ordersList = new ArrayList<>();
+        for (PayOrderYinjiaApiCustom one : orderList )
+        {
+            OrderYinjiaApiInfo info = new OrderYinjiaApiInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayOrderYinjiaApiCustom.class, OrderYinjiaApiInfo.class, false);
+            beanCopier.copy(one, info, null);
+            ordersList.add(info);
+        }
+
+        OrderYinjiaApiResponse response = new OrderYinjiaApiResponse();
+        response.setList(ordersList);
+        int count = payOrderYinjiaApiMapper.countByExample(example);
+        response.setCount(count);
+        return response;
     }
 }

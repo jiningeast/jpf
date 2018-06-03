@@ -100,6 +100,54 @@ public class OrderYinjiaApiInfo {
      */
     private Date updatetime;
 
+    //=========商户信息 for 后台列表展示 Begin==============
+
+    /**
+     * 聚合商户名称
+     */
+    private String merchName;
+
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 企业名称
+     */
+    private String companyname;
+    //=========商户信息 End==============
+    //=========支付方式 Begin==============
+
+    private String cat;
+
+    //=========支付方式 End==============
+
+    //=========页面展示需要 BEGIN =========
+    private String userOperateStatus_cn;
+
+    private String refundStatus_cn;
+
+    public String getUserOperateStatus_cn() {
+        return userOperateStatus_cn;
+    }
+
+    public void setUserOperateStatus_cn(String userOperateStatus_cn) {
+        this.userOperateStatus_cn = userOperateStatus_cn;
+    }
+
+    public String getRefundStatus_cn() {
+        return refundStatus_cn;
+    }
+
+    public void setRefundStatus_cn(String refundStatus_cn) {
+        this.refundStatus_cn = refundStatus_cn;
+    }
+
+    //=========页面展示需要 End =========
+
+
+
     public BigInteger getId() {
         return id;
     }
@@ -250,5 +298,37 @@ public class OrderYinjiaApiInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
+
+    public String getCat() {
+        return cat;
+    }
+
+    public void setCat(String cat) {
+        this.cat = cat;
     }
 }
