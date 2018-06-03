@@ -232,26 +232,23 @@ public class YinjiaStageController {
         // 生成订单
         String orderid = createOrderid();
 
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setOrdertype((byte)1);
-        orderInfo.setOrderid(orderid);
-        orderInfo.setForeignOrderid(request.getOrderid());
-        orderInfo.setForeignRequest(request.toString());
-        orderInfo.setReturnUrl(returnUrl);
-        orderInfo.setNotifyUrl(notifyUrl);
-        orderInfo.setMtsid(Long.parseLong(request.getMid()));
-        orderInfo.setUid((long)0);
-        orderInfo.setPaytype(7);
-        orderInfo.setOrderprice(new BigDecimal(request.getProductTotalPrice()));
-        orderInfo.setOrderselprice(new BigDecimal(request.getProductTotalPrice()));
-        orderInfo.setOrdernum(Integer.parseInt(request.getProductAmount()));
-        orderInfo.setOrdername(" ");
-        orderInfo.setOrderstatus((byte)0);
-        orderInfo.setSinglestatus((byte)1);
-        orderInfo.setUserOperateStatus((byte)0);
-
-        orderInfo.setAddtime(new Date());
-        int res = orderServiceFacade.insOrder(orderInfo);
+        OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+        orderYinjiaApiInfo.setOrderid(orderid);
+        orderYinjiaApiInfo.setForeignOrderid(request.getOrderid());
+        orderYinjiaApiInfo.setForeignRequest(request.toString());
+        orderYinjiaApiInfo.setReturnUrl(returnUrl);
+        orderYinjiaApiInfo.setNotifyUrl(notifyUrl);
+        orderYinjiaApiInfo.setMtsid(Long.parseLong(request.getMid()));
+        orderYinjiaApiInfo.setPaytype(7);
+        orderYinjiaApiInfo.setOrderPayPrice(new BigDecimal(request.getProductTotalPrice()));
+        orderYinjiaApiInfo.setOrderStdPrice(new BigDecimal(request.getProductTotalPrice()));
+        orderYinjiaApiInfo.setProductAccount(Integer.parseInt(request.getProductAmount()));
+        orderYinjiaApiInfo.setPayDetail(" ");
+        orderYinjiaApiInfo.setPayStatus((byte)0);
+        orderYinjiaApiInfo.setRefundStatus((byte)1);
+        orderYinjiaApiInfo.setUserOperateStatus((byte)0);
+        orderYinjiaApiInfo.setAddtime(new Date());
+        int res = orderYinjiaApiServiceFacade.insOrder(orderYinjiaApiInfo);
         if( res < 0 ){
             yjResponseDto.clear();
             yjResponseDto.setCode(JpfInterfaceErrorInfo.CREATE_ORDER_FAILED.getCode());
@@ -321,9 +318,9 @@ public class YinjiaStageController {
         if ( dataMap.get("mid") == null || dataMap.get("orderid") == null || dataMap.get("platformOrderid") == null ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_DATA.getCode(), JpfInterfaceErrorInfo.INCORRECT_DATA.getDesc());
         }
-        OrderInfo orderInfo = orderServiceFacade.getOrderByOrderidAndForeignOrderid(dataMap.get("orderid"), dataMap.get("platformOrderid"), true);
+        OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderidAndForeignOrderid(dataMap.get("orderid"), dataMap.get("platformOrderid"), true);
         MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchant(Long.parseLong(dataMap.get("mid")));
-        MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), orderInfo.getPaytype(), true);
+        MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), orderYinjiaApiInfo.getPaytype(), true);
 
         // 构建返回
         Map<String, Object> responseDataMap = new HashMap<>();
@@ -346,7 +343,7 @@ public class YinjiaStageController {
         }
         String stageJson = JsonUtils.toJson(stageJsonList);
         responseDataMap.put("stage", stageJson);
-        responseDataMap.put("money", orderInfo.getOrderprice().toString());
+        responseDataMap.put("money", orderYinjiaApiInfo.getOrderPayPrice().toString());
         responseDataMap.put("bankName", SUPPORTED_BANKNAMES);
         String responseDataJson = JsonUtils.toJson(responseDataMap);
 
@@ -406,8 +403,8 @@ public class YinjiaStageController {
         }
 
         // 获取此订单所有相关信息
-        OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(request.getOrderid(),true);
-        Long mtsid = orderInfo.getMtsid();
+        OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(request.getOrderid(),true);
+        Long mtsid = orderYinjiaApiInfo.getMtsid();
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(mtsid,7);
         String bankcatids[] = merchantPayTypeInfo.getBankcatid().split(",");
         if ( !ArrayUtils.contains(bankcatids, ""+catid) ){
@@ -428,11 +425,11 @@ public class YinjiaStageController {
         ordernameMap.put("stageType_cn",request.getTerm()+"期");
         String ordernameJson = JsonUtils.toJson(ordernameMap);
 
-        OrderInfo orderInfoForUpdate = new OrderInfo();
+        OrderYinjiaApiInfo orderInfoForUpdate = new OrderYinjiaApiInfo();
         orderInfoForUpdate.setOrderid(request.getOrderid());
-        orderInfoForUpdate.setOrdername(ordernameJson);
+        orderInfoForUpdate.setPayDetail(ordernameJson);
         orderInfoForUpdate.setUserOperateStatus((byte)1);
-        int res = orderServiceFacade.updateOrdername(orderInfoForUpdate,true);
+        int res = orderYinjiaApiServiceFacade.updateOrdername(orderInfoForUpdate,true);
 
         if ( res <= 0 ){
             Map<String, String> responseMap = new HashMap<>();
@@ -587,12 +584,7 @@ public class YinjiaStageController {
             orderCpMessageInfo.setReturnTranno(signResponseMap.get("tranNo"));
             orderCpMessageInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
             orderCpMessageInfo.setReturnContent(response);
-            int insRes = orderCpMessageServiceFacade.insRecord(orderCpMessageInfo);
-            if ( insRes > 0 ){
-                logger.info("新增签约流水记录成功");
-            }else{
-                logger.info("新增签约流水记录失败");
-            }
+            orderCpMessageServiceFacade.insRecord(orderCpMessageInfo);
 
             // 更新签约表
             OrderCpInterfaceInfo orderCpInfo = new OrderCpInterfaceInfo();
@@ -613,11 +605,11 @@ public class YinjiaStageController {
                 }
 
                 // 更新订单表的signOrderid
-                OrderInfo updateOrderinfo = new OrderInfo();
-                updateOrderinfo.setOrderid(dataMap.get("orderid"));
-                updateOrderinfo.setSignOrderid(Long.parseLong(signOrderid));
-                updateOrderinfo.setUserOperateStatus((byte)2);
-                int updateOrderRes = orderServiceFacade.updataSignOrderid(updateOrderinfo);
+                OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+                orderYinjiaApiInfo.setOrderid(dataMap.get("orderid"));
+                orderYinjiaApiInfo.setSignOrderid(Long.parseLong(signOrderid));
+                orderYinjiaApiInfo.setUserOperateStatus((byte)2);
+                int updateOrderRes = orderYinjiaApiServiceFacade.updataSignOrderid(orderYinjiaApiInfo);
                 if ( updateOrderRes <= 0 ){
                     return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
                 }
@@ -637,10 +629,10 @@ public class YinjiaStageController {
                     return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
                 }
                 // 更新订单表的用户状态为3：签约通知失败
-                OrderInfo updateOrderInfo = new OrderInfo();
+                OrderYinjiaApiInfo updateOrderInfo = new OrderYinjiaApiInfo();
                 updateOrderInfo.setOrderid(dataMap.get("orderid"));
                 updateOrderInfo.setUserOperateStatus((byte)3);
-                int updateOrderRes = orderServiceFacade.updateColumnByOrderid(updateOrderInfo);
+                int updateOrderRes = orderYinjiaApiServiceFacade.updateColumnByOrderid(updateOrderInfo);
                 if ( updateOrderRes <= 0 ){
                     return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
                 }
@@ -659,10 +651,10 @@ public class YinjiaStageController {
 
         // 已签约
         // 更新订单表的signOrderid
-        OrderInfo updateOrderinfo = new OrderInfo();
+        OrderYinjiaApiInfo updateOrderinfo = new OrderYinjiaApiInfo();
         updateOrderinfo.setOrderid(dataMap.get("orderid"));
         updateOrderinfo.setSignOrderid(Long.parseLong(orderCpInterfaceInfo.getOrderid()));
-        int updateOrderRes = orderServiceFacade.updataSignOrderid(updateOrderinfo);
+        int updateOrderRes = orderYinjiaApiServiceFacade.updataSignOrderid(updateOrderinfo);
         if ( updateOrderRes <= 0 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
         }
@@ -691,16 +683,16 @@ public class YinjiaStageController {
         Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
 
         // 获取订单信息
-        OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
-        String foreignRequest = orderInfo.getForeignRequest();
+        OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
+        String foreignRequest = orderYinjiaApiInfo.getForeignRequest();
         Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);
 
         // 获取签约信息
-        OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(orderInfo.getSignOrderid().toString());
+        OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(orderYinjiaApiInfo.getSignOrderid().toString());
 
         Map<String, String> responseDataMap = new HashMap<>();
         responseDataMap.put("productName", foreignRequestMap.get("productName"));
-        responseDataMap.put("orderPrice", orderInfo.getOrderprice().toString());
+        responseDataMap.put("orderPrice", orderYinjiaApiInfo.getOrderPayPrice().toString());
         responseDataMap.put("bankAccountNumber", orderCpInterfaceInfo.getBankaccountnumber());
         responseDataMap.put("signedName", orderCpInterfaceInfo.getSignedname());
         String responseDataJson = JsonUtils.toJson(responseDataMap);
@@ -711,9 +703,43 @@ public class YinjiaStageController {
     /**
      * 签约回调通知地址
      */
-    @RequestMapping("/signNotify")
-    public void signNotify(YinjiaSignNotifyRequest request){
+    @RequestMapping(value = "/signNotify", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public String signNotify(YinjiaSignNotifyRequest request, HttpServletRequest httpRequest){
+        logger.info("签约异步回调："+httpRequest);
 
+        // 签约流水表增加异步回调记录
+        String notifyContent = ToolUtils.mapToUrl(request.toMap());
+        OrderCpMessageInfo orderCpMessageInfo = new OrderCpMessageInfo();
+        orderCpMessageInfo.setNotifyTranno(request.getTranNO());
+        orderCpMessageInfo.setNotifyContent(notifyContent);
+        orderCpMessageServiceFacade.insRecord(orderCpMessageInfo);
+
+        // 更新订单表用户操作状态
+        OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+        orderYinjiaApiInfo.setOrderid(request.getOutOrderNo());
+
+        OrderCpInterfaceInfo orderCpInterfaceInfo = new OrderCpInterfaceInfo();
+        orderCpInterfaceInfo.setOrderid(request.getOutOrderNo());
+
+        if ( request.getSignStatus().equals("SUCCESS") ){
+            // 更新签约状态为已签约
+            orderCpInterfaceInfo.setSignstatus("2");
+            orderCpServiceFacade.updateRecord(orderCpInterfaceInfo);
+
+            // 更新用户操作状态为4：签约返回成功,待获取支付短信
+            orderYinjiaApiInfo.setUserOperateStatus((byte)4);
+            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+        }else if (request.getSignStatus().equals("FAIL")){
+            // 更新签约状态为签约失败
+            orderCpInterfaceInfo.setSignstatus("3");
+            orderCpServiceFacade.updateRecord(orderCpInterfaceInfo);
+
+            // 更新用户操作状态为4：签约返回成功,待获取支付短信
+            orderYinjiaApiInfo.setUserOperateStatus((byte)5);
+            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+        }
+
+        return "SUCCESS";
     }
 
     /**
@@ -741,7 +767,7 @@ public class YinjiaStageController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "orderid不能为空", null);
         }
         //获取订单信息
-        OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(orderid.trim());
+        OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(orderid.trim(),true);
         if ( orderInfo.getSignOrderid()==null )
         {
             //throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约");
@@ -802,8 +828,8 @@ public class YinjiaStageController {
             maptree.put("reqType","02");//用于区分发送短信的类型
             maptree.put("clientIp",ServletUtils.getIpAddr(request));//ServletUtils.getIpAddr(request)
             //maptree.put("clientIp","10.10.18.17");
-            maptree.put("chnCode",maparr.get("CP_Code"));
-            maptree.put("chnAcctId",maparr.get("CP_Acctid"));
+            /*maptree.put("chnCode",maparr.get("CP_Code"));
+            maptree.put("chnAcctId",maparr.get("CP_Acctid"));*/
             maptree.put("selectFinaCode",orderCpInfo.getSelectfinacode());
             maptree.put("accountType","CREDIT");
             maptree.put("accountNumber",orderCpInfo.getBankaccountnumber());
@@ -818,13 +844,20 @@ public class YinjiaStageController {
             String smeRes = yjResponseDto.getData().toString();
             chinaRe = JsonUtils.toCollection(smeRes,new TypeReference<HashMap<String, String>>(){});
 
+            OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+            orderYinjiaApiInfo.setOrderid(orderid);
             if(chinaRe.containsKey("retCode") && chinaRe.get("retCode").equals("0000")){
+                // 更新用户操作状态为7：短信发送成功,待支付
+                orderYinjiaApiInfo.setUserOperateStatus((byte)7);
+                orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
 
                 code = JpfInterfaceErrorInfo.SUCCESS.getCode();
                 msg = "短信发送成功";
                 //yjResponseDto.setInfo("短信发送成功");
                 //yjResponseDto.clearData();
             }else{
+                orderYinjiaApiInfo.setUserOperateStatus((byte)8);
+                orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
 
                 code = JpfInterfaceErrorInfo.FAIL.getCode();
                 msg = "短信发送失败";
@@ -1188,7 +1221,7 @@ public class YinjiaStageController {
     }
 
     @ModelAttribute
-    public void getMerInfo(HttpServletRequest httpRequest, HttpServletResponse response)
+    public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
     {
         String originHeader = httpRequest.getHeader("Origin");
         response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
@@ -1303,7 +1336,7 @@ public class YinjiaStageController {
         }
 
         //获取订单信息
-        OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(dataMap.get("orderid"));
+        OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
         if ( orderInfo.getSignOrderid() == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约", null);
