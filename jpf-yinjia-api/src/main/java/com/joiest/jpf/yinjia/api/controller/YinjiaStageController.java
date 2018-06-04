@@ -1327,7 +1327,7 @@ public class YinjiaStageController {
         }
 
         //获取订单信息
-        OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
+        OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(dataMap.get("orderid"));
         if ( orderInfo.getSignOrderid() == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约", null);
