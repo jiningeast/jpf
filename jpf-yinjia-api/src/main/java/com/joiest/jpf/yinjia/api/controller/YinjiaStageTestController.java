@@ -1352,7 +1352,7 @@ public class YinjiaStageTestController {
         }
 
         //获取订单信息
-        OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
+        OrderInterfaceInfo orderInfo = orderInterfaceServiceFacade.getOrder(dataMap.get("orderid"));
         if ( orderInfo.getSignOrderid() == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约", null);
@@ -1432,17 +1432,16 @@ public class YinjiaStageTestController {
 
             requestUrl = CHINAPAY_URL_REQUEST + "installPay";
 
-            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
-
+//            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
 
             //请求结果
 //            Map<String,String> resultMap = JsonUtils.toCollection(resultPay.getInfo(), new TypeReference<Map<String, String>>(){});
             //请求参数
-            ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
-            modifyPayMessageRequest.setOrderid(dataMap.get("orderid"));
-            modifyPayMessageRequest.setReturnContent(resultPay.getInfo());
-            modifyPayMessageRequest.setAddtime(new Date());
-            modifyPayMessageRequest.setContent(requestUrl + "?" + resultPay.getData().toString());
+//            ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
+//            modifyPayMessageRequest.setOrderid(dataMap.get("orderid"));
+//            modifyPayMessageRequest.setReturnContent(resultPay.getInfo());
+//            modifyPayMessageRequest.setAddtime(new Date());
+//            modifyPayMessageRequest.setContent(requestUrl + "?" + resultPay.getData().toString());
 
             //更新用户操作状态
             OrderInterfaceInfo orderInfoUpdate = new OrderInterfaceInfo();
@@ -1473,7 +1472,7 @@ public class YinjiaStageTestController {
             orderInterfaceServiceFacade.updateOrderStatus(orderInfoUpdate);
 
             //添加聚合流水  ---没有添加tranNo
-            pcaServiceFacade.addPayMessage(modifyPayMessageRequest);
+//            pcaServiceFacade.addPayMessage(modifyPayMessageRequest);
 
 /*            //添加返回给商户的流水
             ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
