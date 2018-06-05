@@ -27,6 +27,9 @@ public class ManageConstants {
     public static final String CHINAPAY_URL_REQUEST = "http://vip2.7shengqian.com/trade/install/";
     public static final String CHINAPAY_URL_SELECT = "http://vip2.7shengqian.com/trade/api/";
 
+    //后台商户认证发送短信
+    public static final String SEND_SMS_URL =  "http://testapi.7shengqian.com/index.php?r=Sms/YinjiaStageSend";
+
     public static final Map<String,String> USER_OPERATE_STATUS = new HashMap<String,String>(){
         {
             put("0","订单生成,未选分期");
