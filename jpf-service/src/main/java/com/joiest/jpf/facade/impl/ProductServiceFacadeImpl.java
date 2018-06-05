@@ -195,6 +195,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             logger.info("求情参数pid为空");
         }
         PayMerchantsProduct payMerchantsProduct = payMerchantsProductMapper.selectByPrimaryKey(pid);
+        if ( payMerchantsProduct == null ){
+            return new ProductInfo();
+        }
         ProductInfo productInfo = new ProductInfo();
         BeanCopier beanCopier = BeanCopier.create(PayMerchantsProduct.class, ProductInfo.class,false);
         beanCopier.copy(payMerchantsProduct,productInfo,null);

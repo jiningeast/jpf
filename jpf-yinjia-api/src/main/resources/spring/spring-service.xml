@@ -29,5 +29,6 @@
 	<bean id="OrderYinjiaApiServiceFacade" class="com.joiest.jpf.facade.impl.OrderYinjiaApiServiceFacadeImpl"></bean>
 	<bean id="SmsMessageServiceFacade" class="com.joiest.jpf.facade.impl.SmsMessageServiceFacadeImpl"></bean>
 	<bean id="OrderRefundMessageServiceFacade" class="com.joiest.jpf.facade.impl.OrderRefundMessageServiceFacadeImpl"></bean>
+	<bean id="OrdersServiceFacade" class="com.joiest.jpf.facade.impl.OrdersServiceFacadeImpl"></bean>
 
 </beans>
