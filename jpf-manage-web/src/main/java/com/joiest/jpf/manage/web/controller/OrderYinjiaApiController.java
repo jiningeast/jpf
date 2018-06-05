@@ -2,12 +2,8 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.dto.OrderYinjiaApiRequest;
 import com.joiest.jpf.dto.OrderYinjiaApiResponse;
-import com.joiest.jpf.entity.MerchantInfo;
-import com.joiest.jpf.entity.OrderCpInterfaceInfo;
-import com.joiest.jpf.entity.OrderYinjiaApiInfo;
-import com.joiest.jpf.facade.MerchantServiceFacade;
-import com.joiest.jpf.facade.OrderCpServiceFacade;
-import com.joiest.jpf.facade.OrderYinjiaApiServiceFacade;
+import com.joiest.jpf.entity.*;
+import com.joiest.jpf.facade.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,6 +34,14 @@ public class OrderYinjiaApiController {
     //获取商户信息
     @Autowired
     private MerchantServiceFacade merchantServiceFacade;
+
+    //支付回调流水信息
+    @Autowired
+    private OrderPayMessageServiceFacade orderPayMessageServiceFacade;
+
+    //支付回调给商户的流水信息
+    @Autowired
+    private OrderPayMerMessageServiceFacade orderPayMerMessageServiceFacade;
 
     @RequestMapping("/index")
     public String index(){
@@ -79,12 +83,15 @@ public class OrderYinjiaApiController {
      * 获取订单支付的银行卡信息
      */
     @RequestMapping("cpinfo")
-    public ModelAndView getOrderPayBankInfo(String id, ModelMap modelMap)
+    public ModelAndView getOrderPayBankInfo(String signOrderid, String orderid, ModelMap modelMap)
     {
-        OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(id);
+        OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(signOrderid);
 
         //支付回调信息
+        List<OrderPayMessageInfo> payMessagetList = orderPayMessageServiceFacade.getOrderPayMessageListByOrderId(orderid);
 
+        //支付回调给商户的信息
+        List<OrderPayMerMessageInfo> payMerMessageList = orderPayMerMessageServiceFacade.getOrderPayMerMessageListByOrderId(orderid);
 
         //商户信息
         MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(orderCpInterfaceInfo.getMtsid());

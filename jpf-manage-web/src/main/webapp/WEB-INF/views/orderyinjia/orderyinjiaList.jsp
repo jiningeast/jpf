@@ -25,7 +25,7 @@
                         $.messager.alert('消息提示','请选择一条数据！','info');
                         return
                     }
-                    $('#infoDiv').window("open").window('refresh', 'cpinfo?id='+rows[0].signOrderid).window('setTitle','详情');
+                    $('#infoDiv').window("open").window('refresh', 'cpinfo?signOrderid=' + rows[0].signOrderid + "&orderid=" + rows[0].orderid ).window('setTitle','详情');
                 }
             }];
 
