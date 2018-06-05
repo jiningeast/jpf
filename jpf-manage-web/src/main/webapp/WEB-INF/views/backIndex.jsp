@@ -84,17 +84,32 @@
             },{
                 "menuid" : "4",
                 "icon" : "icon-sys",
-                "menuname" : "订单管理",
+                "menuname" : "旅游分期订单管理",
                 "menus" : [{
                     "menuid" : "401",
-                    "menuname" : "订单信息管理",
+                    "menuname" : "旅游分期订单信息管理",
                     "icon" : "icon-nav",
                     "url" : "order/index"
                 },{
                     "menuid" : "402",
-                    "menuname" : "退单信息管理",
+                    "menuname" : "旅游分期退单信息管理",
                     "icon" : "icon-nav",
                     "url" : "tdorder/index"
+                }]
+            },{
+                "menuid" : "5",
+                "icon" : "icon-sys",
+                "menuname" : "财务管理",
+                "menus" : [{
+                    "menuid" : "501",
+                    "menuname" : "旅游分期退单管理",
+                    "icon" : "icon-nav",
+                    "url" : "orderCpsingle/index"
+                },{
+                    "menuid" : "501",
+                    "menuname" : "平台流水管理",
+                    "icon" : "icon-nav",
+                    "url" : "orderCpsingle/index"
                 }]
             },{
                 "menuid" : "6",
@@ -105,16 +120,6 @@
                     "menuname" : "通道订单管理",
                     "icon" : "icon-nav",
                     "url" : "orderyinjia/index"
-                }]
-            },{
-                "menuid" : "5",
-                "icon" : "icon-sys",
-                "menuname" : "财务管理",
-                "menus" : [{
-                    "menuid" : "501",
-                    "menuname" : "财务退单管理",
-                    "icon" : "icon-nav",
-                    "url" : "orderCpsingle/index"
                 }]
             }
             ]

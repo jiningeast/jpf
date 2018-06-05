@@ -22,7 +22,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.text.DecimalFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 
@@ -243,6 +245,16 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, payMerchantsType.getCat() + "的分期只能设置为：不分期");
             }
+            //支付限额
+            String reg_money = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$";
+            Boolean moneyIsTrue = Pattern.compile(reg_money).matcher(request.getWx_payLimit()).matches();
+            if ( StringUtils.isNotBlank(request.getWx_payLimit()) && ( Double.parseDouble(request.getWx_payLimit()) > 0 ) && moneyIsTrue )
+            {
+                jsonMap.put( "payLimit",  new DecimalFormat("#.00").format(Double.parseDouble(request.getWx_payLimit())) );
+            }else
+            {
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请输入正确的限额信息");
+            }
             newJson = jsonUtils.toJson(jsonMap);
         }
 
@@ -332,6 +344,15 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
             if ( !bankcatid.equals(paytypeId_wx) )
             {
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, payMerchantsType.getCat() + "的分期只能设置为：不分期");
+            }//支付限额
+            String reg_money = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$";
+            Boolean moneyIsTrue = Pattern.compile(reg_money).matcher(request.getWx_payLimit()).matches();
+            if ( StringUtils.isNotBlank(request.getWx_payLimit()) && ( Double.parseDouble(request.getWx_payLimit()) > 0 ) && moneyIsTrue )
+            {
+                jsonMap.put( "payLimit", new DecimalFormat("#.00").format(Double.parseDouble(request.getWx_payLimit())) );
+            }else
+            {
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请输入正确的限额信息");
             }
             newJson = jsonUtils.toJson(jsonMap);
         }

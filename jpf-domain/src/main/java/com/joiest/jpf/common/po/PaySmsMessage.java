@@ -25,7 +25,7 @@ public class PaySmsMessage implements Serializable {
     private String mtsid;
 
     /**
-     * 产品类型  0:旅游分期; 1:保险公司 2:后台操作
+     * 产品类型  0:旅游分期; 1:保险公司 2:后台操作 3:接口支付
      */
     private Byte ptype;
 

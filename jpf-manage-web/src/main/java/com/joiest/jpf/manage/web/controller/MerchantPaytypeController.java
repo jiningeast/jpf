@@ -127,10 +127,15 @@ public class MerchantPaytypeController {
         // 银联分期配置信息如果不为空，则把json串解析出来
         if (StringUtils.isNotBlank(merpayTypeInfoOne.getParam())){
             Map<String,String> paramMap = JsonUtils.toCollection(merpayTypeInfoOne.getParam(), new TypeReference<HashMap<String, String>>(){});
+            //银联分期支付参数
             modelMap.addAttribute("CP_Acctid", paramMap.get("CP_Acctid"));
             modelMap.addAttribute("CP_MerchaNo", paramMap.get("CP_MerchaNo"));
             modelMap.addAttribute("CP_Code", paramMap.get("CP_Code"));
             modelMap.addAttribute("CP_Salt", paramMap.get("CP_Salt"));
+
+            //微信全额支付参数
+            modelMap.addAttribute("merSubMchid", paramMap.get("merSubMchid"));
+            modelMap.addAttribute("payLimit", paramMap.get("payLimit"));
         }
         modelMap.addAttribute("TypeInfoOne", TypeInfoOne);
         modelMap.addAttribute("merchantInfo", merchantInfo);
