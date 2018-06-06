@@ -86,6 +86,9 @@ public class YinjiaStageController {
     @Autowired
     private OrderRefundMessageServiceFacade orderRefundMessageServiceFacade;
 
+    @Autowired
+    private OrdersServiceFacade ordersServiceFacade;
+
     /**
      * 商户获取银联信用卡分期支付的期数
      * @param request 此接口请求类
@@ -279,6 +282,19 @@ public class YinjiaStageController {
 
             return yjResponseDto;
         }
+        // 生成原始数据记录
+        OrdersInfo ordersInfo = new OrdersInfo();
+        ordersInfo.setOrderid(orderid);
+        ordersInfo.setMtsid(request.getMid());
+        ordersInfo.setMoney(new BigDecimal(request.getProductTotalPrice()));
+        ordersInfo.setPaytype(payType);
+        ordersInfo.setProductId(request.getProductId());
+        ordersInfo.setProductAmount(request.getProductAmount());
+        ordersInfo.setProductName(request.getProductName());
+        ordersInfo.setProductUnitPrice(new BigDecimal(request.getProductUnitPrice()));
+        ordersInfo.setSelfBusiness(1);
+        ordersInfo.setCreated(new Date());
+        ordersServiceFacade.insRecord(ordersInfo);
 
         // 成功返回
         yjResponseDto.clear();
