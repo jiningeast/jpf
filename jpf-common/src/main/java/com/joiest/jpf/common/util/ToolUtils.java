@@ -99,7 +99,7 @@ public class ToolUtils {
         }catch (Exception e){
 
         }
-        urlEncoded = urlEncoded.replaceAll("%2A","%2a");
+        /*urlEncoded = urlEncoded.replaceAll("%2A","%2a");
         urlEncoded = urlEncoded.replaceAll("%2B","%2b");
         urlEncoded = urlEncoded.replaceAll("%2C","%2c");
         urlEncoded = urlEncoded.replaceAll("%2E","%2e");
@@ -110,7 +110,7 @@ public class ToolUtils {
         urlEncoded = urlEncoded.replaceAll("%3F","%3f");
         urlEncoded = urlEncoded.replaceAll("%5B","%5b");
         urlEncoded = urlEncoded.replaceAll("%5C","%5c");
-        urlEncoded = urlEncoded.replaceAll("%5D","%5d");
+        urlEncoded = urlEncoded.replaceAll("%5D","%5d");*/
 
         return urlEncoded;
     }

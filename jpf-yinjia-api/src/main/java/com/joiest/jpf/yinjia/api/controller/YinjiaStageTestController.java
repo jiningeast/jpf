@@ -264,7 +264,7 @@ public class YinjiaStageTestController {
         orderYinjiaApiInfo.setForeignRequest(request.toString());
         orderYinjiaApiInfo.setReturnUrl(returnUrl);
         orderYinjiaApiInfo.setNotifyUrl(notifyUrl);
-        orderYinjiaApiInfo.setMtsid(Long.parseLong(request.getMid()));
+        orderYinjiaApiInfo.setMtsid(merchInfo.getId());
         orderYinjiaApiInfo.setPaytype(payType);
         orderYinjiaApiInfo.setOrderPayPrice(new BigDecimal(request.getProductTotalPrice()));
         orderYinjiaApiInfo.setOrderStdPrice(new BigDecimal(request.getProductTotalPrice()));
@@ -285,14 +285,14 @@ public class YinjiaStageTestController {
         // 生成原始数据记录
         OrdersInfo ordersInfo = new OrdersInfo();
         ordersInfo.setOrderid(orderid);
-        ordersInfo.setMtsid(request.getMid());
+        ordersInfo.setMtsid(""+merchInfo.getId());
         ordersInfo.setMoney(new BigDecimal(request.getProductTotalPrice()));
         ordersInfo.setPaytype(payType);
         ordersInfo.setProductId(request.getProductId());
         ordersInfo.setProductAmount(request.getProductAmount());
         ordersInfo.setProductName(request.getProductName());
         ordersInfo.setProductUnitPrice(new BigDecimal(request.getProductUnitPrice()));
-        ordersInfo.setSelfBusiness(1);
+        ordersInfo.setSelfBusiness(0);
         ordersInfo.setCreated(new Date());
         ordersServiceFacade.insRecord(ordersInfo);
 
@@ -354,12 +354,12 @@ public class YinjiaStageTestController {
         }*/
         String dataJson = AESUtils.decrypt(data, AES_KEY);
         Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<HashMap<String,String>>(){});
-        if ( dataMap.get("mid") == null || dataMap.get("orderid") == null || dataMap.get("platformOrderid") == null ){
+        if ( dataMap.get("merchNo") == null || dataMap.get("orderid") == null || dataMap.get("platformOrderid") == null ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_DATA.getCode(), JpfInterfaceErrorInfo.INCORRECT_DATA.getDesc());
         }
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderidAndForeignOrderid(dataMap.get("orderid"), dataMap.get("platformOrderid"), true);
         MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchantByMerchNo(dataMap.get("merchNo"));
-        MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), orderYinjiaApiInfo.getPaytype(), true);
+        MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(merInfo.getId(), orderYinjiaApiInfo.getPaytype(), true);
 
         // 构建返回
         Map<String, Object> responseDataMap = new HashMap<>();
@@ -630,9 +630,16 @@ public class YinjiaStageTestController {
             requestMap.put("sign",signMySign);
             requestMap.put("signType","MD5");
             // 请求签约url
-            String response = OkHttpUtils.postForm(CHINAPAY_URL_REQUEST+"sign",requestMap);
+//            String response = OkHttpUtils.postForm(CHINAPAY_URL_REQUEST+"sign",requestMap);
+            // 测试服务器固定返回签约成功
+            Map<String, String> testResponseMap = new HashMap<>();
+            testResponseMap.put("retCode","0000");
+            testResponseMap.put("tranNo","0000");
+            String response = JsonUtils.toJson(testResponseMap);
+
             logger.info("签约返回："+response);
 
+//            Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
             Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
             String html = null;
 
@@ -696,15 +703,28 @@ public class YinjiaStageTestController {
                     return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
                 }
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), signResponseMap.get("retMsg"), null);
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), JpfInterfaceErrorInfo.SIGN_FAILED.getDesc(), null);
             }
 
             // 构建返回
-            Map<String, Object> responseDataMap = new HashMap<>();
+            /*Map<String, Object> responseDataMap = new HashMap<>();
             responseDataMap.put("html", html);
             String responseDataJson = JsonUtils.toJson(responseDataMap);
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_NOT_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_NOT_SIGNED.getDesc(),responseDataJson);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_SIGNED.getDesc(),responseDataJson);*/
+
+            Map<String, Object> responseDataMap = new HashMap<>();
+            responseDataMap.put("orderid", dataMap.get("orderid"));
+            String responseDataJson = JsonUtils.toJson(responseDataMap);
+            String AESStr = AESUtils.encrypt(responseDataJson, AES_KEY);
+
+            Map<String, String> responseMap = new HashMap<>();
+            responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
+            responseMap.put("info", JpfInterfaceErrorInfo.SUCCESS.getDesc());
+            responseMap.put("data", AESStr);
+            String responseJson = JsonUtils.toJson(responseMap);
+
+            return Base64CustomUtils.base64Encoder(responseJson).replaceAll("\r","").replaceAll("\n","");
 
         }
 
@@ -1013,7 +1033,7 @@ public class YinjiaStageTestController {
                 yjResponseDto.setInfo("订单状态有误，请查看是否已支付");
                 return yjResponseDto;
             }
-            if(!orderInfo.getMtsid().toString().equals(mid) ){
+            if(!merchant.getMerchNo().equals(mid) ){
 
                 yjResponseDto.setCode("10008");
                 yjResponseDto.setInfo("订单与商户信息不匹配");
