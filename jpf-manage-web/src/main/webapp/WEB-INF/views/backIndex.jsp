@@ -106,10 +106,15 @@
                     "icon" : "icon-nav",
                     "url" : "orderCpsingle/index"
                 },{
-                    "menuid" : "501",
+                    "menuid" : "502",
                     "menuname" : "平台流水管理",
                     "icon" : "icon-nav",
                     "url" : "orderCpsingle/index"
+                },{
+                    "menuid" : "503",
+                    "menuname" : "通道订单数据",
+                    "icon" : "icon-nav",
+                    "url" : "orders/index"
                 }]
             }]
     	};
@@ -168,7 +173,7 @@
 					$.messager.alert('消息提示','修改失败[' + msg.retMsg + ']!','error');
 				} else {
 					$('#w').window('close');
-					$.messager.alert('消息提示','修改登录密码成功!','info');
+					$.messager.alert('消息提示','修改登录密码成功!','list');
 				}
 			},
 			error:function(){

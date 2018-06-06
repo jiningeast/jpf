@@ -1,16 +1,18 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.common.custom;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
-public class OrdersInfo {
+public class PayOrdersCustom implements Serializable {
     /**
-     * id
+     *
      */
     private String id;
 
     /**
-     * 订单id
+     *
      */
     private String orderid;
 
@@ -55,7 +57,7 @@ public class OrdersInfo {
     private Integer selfBusiness;
 
     /**
-     * 创建时间
+     *
      */
     private Date created;
     //=========商户信息 Begin==============
@@ -110,14 +112,17 @@ public class OrdersInfo {
     public void setCat(String cat) {
         this.cat = cat;
     }
+
     //================= 支付方式 End =====================
+
+    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     public String getOrderid() {
@@ -125,7 +130,7 @@ public class OrdersInfo {
     }
 
     public void setOrderid(String orderid) {
-        this.orderid = orderid;
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public String getMtsid() {
@@ -133,7 +138,7 @@ public class OrdersInfo {
     }
 
     public void setMtsid(String mtsid) {
-        this.mtsid = mtsid;
+        this.mtsid = mtsid == null ? null : mtsid.trim();
     }
 
     public BigDecimal getMoney() {
@@ -157,7 +162,7 @@ public class OrdersInfo {
     }
 
     public void setProductId(String productId) {
-        this.productId = productId;
+        this.productId = productId == null ? null : productId.trim();
     }
 
     public String getProductName() {
@@ -165,7 +170,7 @@ public class OrdersInfo {
     }
 
     public void setProductName(String productName) {
-        this.productName = productName;
+        this.productName = productName == null ? null : productName.trim();
     }
 
     public String getProductAmount() {
@@ -173,7 +178,7 @@ public class OrdersInfo {
     }
 
     public void setProductAmount(String productAmount) {
-        this.productAmount = productAmount;
+        this.productAmount = productAmount == null ? null : productAmount.trim();
     }
 
     public BigDecimal getProductUnitPrice() {
@@ -199,4 +204,30 @@ public class OrdersInfo {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    /**
+     *
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", orderid=").append(orderid);
+        sb.append(", mtsid=").append(mtsid);
+        sb.append(", money=").append(money);
+        sb.append(", paytype=").append(paytype);
+        sb.append(", productId=").append(productId);
+        sb.append(", productName=").append(productName);
+        sb.append(", productAmount=").append(productAmount);
+        sb.append(", productUnitPrice=").append(productUnitPrice);
+        sb.append(", selfBusiness=").append(selfBusiness);
+        sb.append(", created=").append(created);
+        sb.append(", cat=").append(cat);
+        sb.append("]");
+        return sb.toString();
+    }
+
 }
