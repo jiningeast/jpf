@@ -56,26 +56,6 @@ public class OrderYinjiaApiController {
         map.put("total", orderYinjiaApiResponse.getCount());
         map.put("request", orderRequest);
 
-        List<OrderYinjiaApiInfo> list = new ArrayList<>();
-        if ( Integer.parseInt(map.get("total").toString() )  > 0 )
-        {
-            for (OrderYinjiaApiInfo one : orderYinjiaApiResponse.getList() )
-            {
-                one.setUserOperateStatus_cn(USER_OPERATE_STATUS.get(one.getUserOperateStatus().toString()));
-                one.setRefundStatus_cn(REFUND_STATUS.get(one.getRefundStatus().toString()));
-                list.add(one);
-            }
-        }
-        map.put("refundStatus",REFUND_STATUS);
-        map.put("rows", list);
-        // 统计汇总
-//        BigDecimal allOrderMoney = orderYinjiaApiResponse.getAllOrdersMoney();
-//        BigDecimal allRefundMoney = orderYinjiaApiResponse.getAllRefundMoney();
-//        map.put("allOrdersCount", orderYinjiaApiResponse.getAllOrdersCount());
-//        map.put("allOrdersMoney", allOrderMoney);
-//        map.put("allRefundMoney", allRefundMoney);
-//        map.put("profitMoney", BigDecimalCalculateUtils.sub(allOrderMoney.doubleValue(), allRefundMoney.doubleValue()) );
-
         return map;
     }
 
