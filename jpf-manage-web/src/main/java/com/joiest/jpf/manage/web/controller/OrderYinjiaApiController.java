@@ -11,14 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.management.modelmbean.ModelMBean;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.joiest.jpf.manage.web.constant.ManageConstants.REFUND_STATUS;
-import static com.joiest.jpf.manage.web.constant.ManageConstants.USER_OPERATE_STATUS;
 
 @Controller
 @RequestMapping("/orderyinjia")
