@@ -264,7 +264,7 @@ public class YinjiaStageController {
         orderYinjiaApiInfo.setForeignRequest(request.toString());
         orderYinjiaApiInfo.setReturnUrl(returnUrl);
         orderYinjiaApiInfo.setNotifyUrl(notifyUrl);
-        orderYinjiaApiInfo.setMtsid(Long.parseLong(request.getMid()));
+        orderYinjiaApiInfo.setMtsid(merchInfo.getId());
         orderYinjiaApiInfo.setPaytype(payType);
         orderYinjiaApiInfo.setOrderPayPrice(new BigDecimal(request.getProductTotalPrice()));
         orderYinjiaApiInfo.setOrderStdPrice(new BigDecimal(request.getProductTotalPrice()));
@@ -285,14 +285,14 @@ public class YinjiaStageController {
         // 生成原始数据记录
         OrdersInfo ordersInfo = new OrdersInfo();
         ordersInfo.setOrderid(orderid);
-        ordersInfo.setMtsid(request.getMid());
+        ordersInfo.setMtsid(""+merchInfo.getId());
         ordersInfo.setMoney(new BigDecimal(request.getProductTotalPrice()));
         ordersInfo.setPaytype(payType);
         ordersInfo.setProductId(request.getProductId());
         ordersInfo.setProductAmount(request.getProductAmount());
         ordersInfo.setProductName(request.getProductName());
         ordersInfo.setProductUnitPrice(new BigDecimal(request.getProductUnitPrice()));
-        ordersInfo.setSelfBusiness(1);
+        ordersInfo.setSelfBusiness(0);
         ordersInfo.setCreated(new Date());
         ordersServiceFacade.insRecord(ordersInfo);
 
@@ -354,16 +354,16 @@ public class YinjiaStageController {
         }*/
         String dataJson = AESUtils.decrypt(data, AES_KEY);
         Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<HashMap<String,String>>(){});
-        if ( dataMap.get("mid") == null || dataMap.get("orderid") == null || dataMap.get("platformOrderid") == null ){
+        if ( dataMap.get("merchNo") == null || dataMap.get("orderid") == null || dataMap.get("platformOrderid") == null ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_DATA.getCode(), JpfInterfaceErrorInfo.INCORRECT_DATA.getDesc());
         }
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderidAndForeignOrderid(dataMap.get("orderid"), dataMap.get("platformOrderid"), true);
         MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchantByMerchNo(dataMap.get("mid"));
-        MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), orderYinjiaApiInfo.getPaytype(), true);
+        MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(merInfo.getId(), orderYinjiaApiInfo.getPaytype(), true);
 
         // 构建返回
         Map<String, Object> responseDataMap = new HashMap<>();
-        responseDataMap.put("mid",dataMap.get("mid"));
+        responseDataMap.put("merchNo",dataMap.get("merchNo"));
         responseDataMap.put("orderid", dataMap.get("platformOrderid"));
         responseDataMap.put("logo", merInfo.getLogo());
         responseDataMap.put("companyname", merInfo.getCompanyname());
