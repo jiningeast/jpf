@@ -297,4 +297,22 @@ public class OrderServiceFacadeImpl implements OrderServiceFacade {
 
         return payOrderMapper.updateByExampleSelective(payOrder, e);
     }
+
+    // 获取所有订单
+    @Override
+    public List<OrderInfo> getAllOrders(){
+        PayOrderExample e = new PayOrderExample();
+        List<OrderInfo> newList = new ArrayList<>();
+
+        List<PayOrder> list = payOrderMapper.selectByExample(e);
+        for (PayOrder payOrder:list){
+            OrderInfo orderInfo = new OrderInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayOrder.class, OrderInfo.class, false);
+            beanCopier.copy(payOrder, orderInfo, null);
+
+            newList.add(orderInfo);
+        }
+
+        return newList;
+    }
 }
