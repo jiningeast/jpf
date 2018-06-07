@@ -367,7 +367,7 @@ public class YinjiaStageTestController {
         String stageJson = JsonUtils.toJson(stageJsonList);
         responseDataMap.put("stage", stageJson);
         responseDataMap.put("money", orderYinjiaApiInfo.getOrderPayPrice().toString());
-        responseDataMap.put("bankName", ConfigUtil.getValue("SUPPORTED_BANKNAMES"));
+        responseDataMap.put("bankName", SUPPORTED_BANKNAMES);
         String responseDataJson = JsonUtils.toJson(responseDataMap);
 
         Map<String, String> responseMap = new HashMap<>();
