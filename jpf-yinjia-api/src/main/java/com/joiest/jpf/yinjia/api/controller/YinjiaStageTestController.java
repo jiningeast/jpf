@@ -589,7 +589,7 @@ public class YinjiaStageTestController {
             String accountType = "CREDIT";
             chinapayMap.put("accountType", accountType);
             chinapayMap.put("accountNumber", request.getAccountNumber());
-            chinapayMap.put("clientIp", IP);
+            chinapayMap.put("clientIp", "127.0.0.1");
             if ( accountType.equals("CREDIT") ){
                 chinapayMap.put("cvn2", request.getCvn2());
                 String yearMonth[] = request.getValidityCard().split("-");
