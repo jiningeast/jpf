@@ -548,7 +548,7 @@ public class YinjiaStageController {
                 Date validityyear = org.apache.commons.lang3.time.DateUtils.addYears(new Date(),1);
                 orderCpInsert.setValidityyear(validityyear);
                 // 设置IP
-                orderCpInsert.setClientip(IP);
+                orderCpInsert.setClientip("127.0.0.1");
                 orderCpInsert.setSignstatus("1");
                 orderCpInsert.setSysagreeno("");
                 orderCpInsert.setCreated(DateUtils.getCurrentDate());
