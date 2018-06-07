@@ -1,6 +1,8 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayOrderYinjiaApiCustom;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayOrderYinjiaApi;
@@ -152,5 +154,27 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
         int count = payOrderYinjiaApiMapper.countByExample(example);
         response.setCount(count);
         return response;
+    }
+
+    /**
+     * 根据 orderid  获取api订单信息
+     * @param orderid
+     * @return
+     */
+    public OrderYinjiaApiInfo getOrderYinjiaApiByOrderid(String orderid)
+    {
+        PayOrderYinjiaApiExample example = new PayOrderYinjiaApiExample();
+        PayOrderYinjiaApiExample.Criteria c = example.createCriteria();
+        c.andOrderidEqualTo(orderid);
+        List<PayOrderYinjiaApiCustom> list = payOrderYinjiaApiCustomMapper.getOrderListYinJiaCustom(example);
+        OrderYinjiaApiInfo info = new OrderYinjiaApiInfo();
+        if ( list == null || list.isEmpty() )
+        {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "信息不存在");
+        }
+        PayOrderYinjiaApiCustom one = list.get(0);
+        BeanCopier beanCopier = BeanCopier.create(PayOrderYinjiaApiCustom.class, OrderYinjiaApiInfo.class, false);
+        beanCopier.copy(one, info, null);
+        return info;
     }
 }

@@ -6,9 +6,10 @@ public interface MerchantInterfaceServiceFacade {
 
     /**
      * 获取商户信息
-     * @param id
+     * @param MerchNo
      * @return
      */
-    public MerchantInterfaceInfo getMerchant(Long id);
+    public MerchantInterfaceInfo getMerchantByMerchNo(String MerchNo);
 
+    public MerchantInterfaceInfo getMerchantByMid(Long id);
 }

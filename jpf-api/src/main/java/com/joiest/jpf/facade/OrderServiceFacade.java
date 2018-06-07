@@ -4,6 +4,7 @@ import com.joiest.jpf.dto.OrderRequest;
 import com.joiest.jpf.dto.OrderResponse;
 import com.joiest.jpf.entity.OrderInfo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface OrderServiceFacade {
@@ -27,4 +28,6 @@ public interface OrderServiceFacade {
 
     // 更新指定字段,必须指定orderid
     public int updateColumnByOrderid(OrderInfo orderInfo);
+
+    public List<OrderInfo> getAllOrders();
 }

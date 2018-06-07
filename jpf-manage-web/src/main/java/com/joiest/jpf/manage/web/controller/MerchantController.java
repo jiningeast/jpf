@@ -25,6 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 
+import static com.joiest.jpf.manage.web.constant.ManageConstants.SEND_SMS_URL;
+
 @Controller
 @RequestMapping("/merchant")
 public class MerchantController {
@@ -159,7 +161,6 @@ public class MerchantController {
         }
         JpfResponseDto jpfResponseDto = merchantServiceFacade.auditMerchant(request);
 
-        String sendSmsUrl =  "http://testapi.7shengqian.com/index.php?r=Sms/YinjiaStageSend";
         Map<String,Object> smsMap = new HashMap<>();
         smsMap.put("mobile",merchantInfo.getLinkphone());
         String content = "";
@@ -178,7 +179,7 @@ public class MerchantController {
                 content = String.format(success_format,merchantInfo.getUsername(), merchantInfo.getMerchNo(),merchantInfo.getPrivateKey());
             }
             smsMap.put("content",content);
-            String smsRes = OkHttpUtils.postForm(sendSmsUrl,smsMap);
+            String smsRes = OkHttpUtils.postForm(SEND_SMS_URL,smsMap);
             Map<String,String> resSmsMap = JsonUtils.toCollection(smsRes, new TypeReference<HashMap<String,String>>(){});
             AddSmsMessageRequest smsRequest = new AddSmsMessageRequest();
             if ( resSmsMap.get("flag").equals("1") )

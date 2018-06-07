@@ -84,27 +84,17 @@
             },{
                 "menuid" : "4",
                 "icon" : "icon-sys",
-                "menuname" : "订单管理",
+                "menuname" : "旅游分期订单管理",
                 "menus" : [{
                     "menuid" : "401",
-                    "menuname" : "订单信息管理",
+                    "menuname" : "旅游分期订单信息管理",
                     "icon" : "icon-nav",
                     "url" : "order/index"
                 },{
                     "menuid" : "402",
-                    "menuname" : "退单信息管理",
+                    "menuname" : "旅游分期退单信息管理",
                     "icon" : "icon-nav",
                     "url" : "tdorder/index"
-                }]
-            },{
-                "menuid" : "6",
-                "icon" : "icon-sys",
-                "menuname" : "通道订单管理",
-                "menus" : [{
-                    "menuid" : "601",
-                    "menuname" : "通道订单管理",
-                    "icon" : "icon-nav",
-                    "url" : "orderyinjia/index"
                 }]
             },{
                 "menuid" : "5",
@@ -112,12 +102,21 @@
                 "menuname" : "财务管理",
                 "menus" : [{
                     "menuid" : "501",
-                    "menuname" : "财务退单管理",
+                    "menuname" : "旅游分期退单管理",
                     "icon" : "icon-nav",
                     "url" : "orderCpsingle/index"
+                },{
+                    "menuid" : "502",
+                    "menuname" : "平台流水管理",
+                    "icon" : "icon-nav",
+                    "url" : "orderCpsingle/index"
+                },{
+                    "menuid" : "503",
+                    "menuname" : "通道订单数据",
+                    "icon" : "icon-nav",
+                    "url" : "orders/index"
                 }]
-            }
-            ]
+            }]
     	};
 
   	//设置登录窗口
@@ -174,7 +173,7 @@
 					$.messager.alert('消息提示','修改失败[' + msg.retMsg + ']!','error');
 				} else {
 					$('#w').window('close');
-					$.messager.alert('消息提示','修改登录密码成功!','info');
+					$.messager.alert('消息提示','修改登录密码成功!','list');
 				}
 			},
 			error:function(){

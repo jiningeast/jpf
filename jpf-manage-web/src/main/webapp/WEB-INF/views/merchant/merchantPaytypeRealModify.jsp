@@ -35,10 +35,14 @@
                         微信商户号:
                     </td>
                     <td>
-                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-textbox" value="${merpayTypeInfoOne.param}" data-options="required:true,validType:'isNumber'" />
+                        <input id="wx_merSubMchid" name="wx_merSubMchid" type="text" style="width:220px" class="easyui-textbox" value="${merSubMchid}" data-options="required:true,validType:'isNumber'" />
                     </td>
-                    <td width="15%" style="text-align: right;background-color: #f1f1f1;" > </td>
-                    <td width="30%" ></td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;" >
+                        支付限额:
+                    </td>
+                    <td width="30%" >
+                        <input id="wx_payLimit" name="wx_payLimit" type="text" style="width:90%" class="easyui-textbox" value="${payLimit}" data-options="required:true" />
+                    </td>
                 </tr>
                 <tr class="wx_param paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
@@ -279,12 +283,39 @@
                 return CheckIsNumber(value);
             },
             message: '只能输入数字'
+        },
+        floatNumber : {//数字（包括正整数、0、浮点数）
+            validator: function(value, param){
+                return checkMoney(value);
+            },
+            message: '请输入正确的金额'
         }
     });
+
+    var reg_money = /^((([0-9])|([1-9][0-9]+))(\.([0-9]{0,2}))?)$/;//.是特殊字符，需要转义
+    function checkMoney(z_check_value){
+        return reg_money.test($.trim(z_check_value));
+    }
+
     function CheckIsNumber(z_check_value){
         var z_reg = /^\d+$/;
         return z_reg.test($.trim(z_check_value));
     }
+
+    $('#wx_payLimit').textbox({
+        inputEvents: $.extend({},$.fn.textbox.defaults.inputEvents,{
+            blur:function(event){
+                var money = $(this).val();
+                if ( money && reg_money.test(money))
+                {
+                    var price = parseFloat($.trim($(this).val())).toFixed(2);
+                    $(this).val(price);
+                    $("#addForm tbody input[name='wx_payLimit']").val(price);
+                }
+            }
+        })
+    });
+
     //微信参数1：只能为数字-------End
 
     function initData() {
@@ -359,6 +390,9 @@
                     {
                         case 'merSubMchid':
                             $("#wx_merSubMchid").val(v);
+                            break;
+                        case 'payLimit':
+                            $("input[name='wx_payLimit']").val(v);
                             break;
                     }
                 }

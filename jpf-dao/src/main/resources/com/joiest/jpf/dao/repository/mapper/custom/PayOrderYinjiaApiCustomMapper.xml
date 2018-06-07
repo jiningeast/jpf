@@ -508,7 +508,6 @@
     FROM pay_order_yinjia_api a
     LEFT JOIN pay_merchants m ON a.mtsid = m.id
     LEFT JOIN pay_merchants_type t ON a.paytype = t.catid
-    ORDER BY a.addtime DESC
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

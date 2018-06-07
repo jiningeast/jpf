@@ -25,53 +25,34 @@
                         $.messager.alert('消息提示','请选择一条数据！','list');
                         return
                     }
-                    $('#infoDiv').window("open").window('refresh', 'cpinfo?signOrderid=' + rows[0].signOrderid + "&orderid=" + rows[0].orderid ).window('setTitle','详情');
+                    $('#infoDiv').window("open").window('refresh', 'paydetail?orderid=' + rows[0].orderid ).window('setTitle','详情');
                 }
             }];
 
             $("#dg").datagrid({
                 title:'订单列表',
                 toolbar:toolbar,
-                url:'../orderyinjia/list',
+                url:'list',
                 pagination:true,
                 singleSelect:true,
                 multiselect:false,
                 selectOnCheck:true,
                 columns:[[
-                    {field:'id',title:'ID',width:'3%'},
+                    {field:'id',title:'ID',width:'3%',},
                     {field:'orderid',title:'订单ID',width:'9%'},
-                    {field:'foreignOrderid',title:'商户订单号',width:'9%'},
                     {field:'mtsid',title:'商户ID',width:'3%'},
-                    {field:'merchName',title:'商户名称',width:'8%'},
-                    {field:'companyname',title:'企业名称',width:'8%'},
-                    {field:'cat',title:'支付方式',width:'8%'},
-                    {field:'orderPayPrice',title:'实付',width:'5%', formatter:formatPrice},
-                    {field:'orderStdPrice',title:'订单原价',width:'5%', formatter:formatPrice},
-                    {field:'productAccount',title:'商品数量',width:'5%'},
-                    {field:'payDetail',title:'分期信息',width:'20%', formatter:formatJSON},
-                    {field:'payStatus',title:'支付状态',width:'5%',
-                        formatter:function (value, row, index) {
-                            if ( value == 0 ){
-                                return '未支付';
-                            }else if ( value == 1 ){
-                                return '支付成功';
-                            }else if ( value == 2 ){
-                                return '支付失败';
-                            }
-                        }},
-                    {field:'paytime',title:'支付时间',width:'9%',formatter: formatDateStr},
-                    {field:'refundStatus_cn',title:'退单状态',width:'8%'},
-                    {field:'userOperateStatus_cn',title:'用户流程',width:'8%'},
-                    {field:'addtime',title:'下单时间',width:'9%',formatter: formatDateStr},
-                    // {field:'updatetime',title:'修改时间',width:'9%',formatter: formatDateStr}
+                    {field:'merchName',title:'商户名称',width:'13%'},
+                    {field:'money',title:'金额',width:'8%', formatter:formatPrice},
+                    {field:'cat',title:'支付方式',width:'10%'},
+                    {field:'productId',title:'商品ID',width:'5%'},
+                    {field:'productName',title:'商品名称',width:'10%'},
+                    {field:'productAmount',title:'商品数量',width:'5%'},
+                    {field:'productUnitPrice',title:'商品单价',width:'5%', formatter:formatPrice},
+                    {field:'created',title:'添加时间',width:'9%',formatter: formatDateStr}
                 ]],
                 onLoadSuccess: function (msg) {
-                    // $("#allOrdersCount").text(msg.allOrdersCount);
-                    // $("#allOrdersMoney").text(msg.allOrdersMoney);
-                    // $("#allRefundMoney").text(msg.allRefundMoney);
-                    // $("#profitMoney").text(msg.profitMoney);
                 }
-            })
+            });
 
             // 搜索 - 支付类型初始化
             $('#paytype').combobox({
@@ -102,7 +83,8 @@
                 modal:true
             });
 
-        })
+        });
+
     </script>
 </head>
 <body>

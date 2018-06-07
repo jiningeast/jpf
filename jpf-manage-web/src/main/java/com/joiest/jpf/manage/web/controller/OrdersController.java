@@ -1,6 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.joiest.jpf.dto.OrderYinjiaApiRequest;
+import com.joiest.jpf.dto.GetOrdersRequest;
+import com.joiest.jpf.dto.GetOrdersResponse;
 import com.joiest.jpf.dto.OrderYinjiaApiResponse;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
@@ -16,11 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/orderyinjia")
-public class OrderYinjiaApiController {
+@RequestMapping("/orders")
+public class OrdersController {
 
     @Autowired
-    private OrderYinjiaApiServiceFacade orderYinjiaApiServiceFacade;
+    private OrdersServiceFacade ordersServiceFacade;
 
     //获取签约信息
     @Autowired
@@ -38,29 +39,41 @@ public class OrderYinjiaApiController {
     @Autowired
     private OrderPayMerMessageServiceFacade orderPayMerMessageServiceFacade;
 
+    //支付订单信息
+    @Autowired
+    private OrderYinjiaApiServiceFacade orderYinjiaApiServiceFacade;
+
     @RequestMapping("/index")
-    public String index(){
-        return "orderyinjia/orderyinjiaList";
+    public String index()
+    {
+        return "orders/orderslist";
     }
 
-    @RequestMapping("/list")
+    //列表
+    @RequestMapping("list")
     @ResponseBody
-    public Map<String,Object> list(OrderYinjiaApiRequest orderRequest){
-        OrderYinjiaApiResponse orderYinjiaApiResponse = orderYinjiaApiServiceFacade.getOrderYinjiaApi(orderRequest);
-        Map<String, Object> map = new HashMap<>();
-        map.put("total", orderYinjiaApiResponse.getCount());
-        map.put("request", orderRequest);
-
+    public Map<String,Object> list(GetOrdersRequest request)
+    {
+        GetOrdersResponse response = ordersServiceFacade.getOrdersList(request);
+        Map<String,Object> map = new HashMap<>();
+        map.put("total", response.getCount());
+        map.put("rows", response.getList());
         return map;
     }
 
     /**
      * 获取订单支付的银行卡信息
      */
-    @RequestMapping("cpinfo")
-    public ModelAndView getOrderPayBankInfo(String signOrderid, String orderid, ModelMap modelMap)
+    @RequestMapping("paydetail")
+    public ModelAndView getOrderPayBankInfo(String orderid, ModelMap modelMap)
     {
-        OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(signOrderid);
+
+        OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderYinjiaApiByOrderid(orderid);
+        OrderCpInterfaceInfo orderCpInterfaceInfo = new OrderCpInterfaceInfo();
+        if ( orderYinjiaApiInfo.getSignOrderid() != null )
+        {
+            orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(orderYinjiaApiInfo.getSignOrderid().toString());
+        }
 
         //支付回调信息
         List<OrderPayMessageInfo> payMessagetList = orderPayMessageServiceFacade.getOrderPayMessageListByOrderId(orderid);
@@ -69,7 +82,8 @@ public class OrderYinjiaApiController {
         List<OrderPayMerMessageInfo> payMerMessageList = orderPayMerMessageServiceFacade.getOrderPayMerMessageListByOrderId(orderid);
 
         //商户信息
-        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(orderCpInterfaceInfo.getMtsid());
+        MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(orderYinjiaApiInfo.getMtsid());
+        modelMap.addAttribute("apiInfo", orderYinjiaApiInfo);
         modelMap.addAttribute("orderCpInfo", orderCpInterfaceInfo);
         modelMap.addAttribute("merchantInfo", merchantInfo);
         return new ModelAndView("orderyinjia/ordercpinfo", modelMap);

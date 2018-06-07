@@ -1,7 +1,5 @@
 package com.joiest.jpf.dto;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 public class ModifyMerPayTypeRequest {
 
     /**
@@ -22,12 +20,20 @@ public class ModifyMerPayTypeRequest {
     /**
      * 支付类型对应的参数
      */
+    //============= 微信支付参数 Begin ==================
+    //商户号
     private String wx_merSubMchid;
 
+    //支付限额
+    private String wx_payLimit;
+    //=============微信支付参数 Begin ==================
+
+    //分期类型集合
     private String[] bankcatid;
 
 //    private List<String> bankcatid;
 
+    //=============银联分期支付参数 Begin ==================
     /**
      * 商户号
      */
@@ -47,6 +53,7 @@ public class ModifyMerPayTypeRequest {
      * 商户签名秘钥
      */
     private String cp_Salt;
+    //=============银联分期支付参数 End ==================
 
     public Long getMtsid() {
         return mtsid;
@@ -118,5 +125,13 @@ public class ModifyMerPayTypeRequest {
 
     public void setCp_Salt(String cp_Salt) {
         this.cp_Salt = cp_Salt;
+    }
+
+    public String getWx_payLimit() {
+        return wx_payLimit;
+    }
+
+    public void setWx_payLimit(String wx_payLimit) {
+        this.wx_payLimit = wx_payLimit;
     }
 }
