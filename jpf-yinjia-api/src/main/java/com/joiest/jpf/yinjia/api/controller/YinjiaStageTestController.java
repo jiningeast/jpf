@@ -593,7 +593,7 @@ public class YinjiaStageTestController {
             if ( accountType.equals("CREDIT") ){
                 chinapayMap.put("cvn2", request.getCvn2());
                 String yearMonth[] = request.getValidityCard().split("-");
-                chinapayMap.put("validityYear", yearMonth[0]);
+                chinapayMap.put("validityYear", StringUtils.substring(yearMonth[0],2));
                 chinapayMap.put("validityMonth", yearMonth[1]);
             }
             Map<String, String> treeMap = new TreeMap<>();
