@@ -107,12 +107,17 @@ public class MerchantServiceFacadeImpl implements MerchantServiceFacade {
 
     @Override
     public MerchantInfo getMerchant(Long id) {
+
         if (id == null) {
             logger.info("求情参数id为空");
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
         PayMerchants payMerchants = payMerchantsMapper.selectByPrimaryKey(id);
         MerchantInfo merchantInfo = new MerchantInfo();
+        if ( payMerchants == null ){
+            return  merchantInfo;
+        }
+
         BeanCopier beanCopier = BeanCopier.create(PayMerchants.class, MerchantInfo.class, false);
         beanCopier.copy(payMerchants,merchantInfo,null);
         return merchantInfo;

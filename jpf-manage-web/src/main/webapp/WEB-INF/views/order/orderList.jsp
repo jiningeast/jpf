@@ -123,6 +123,25 @@
                     $('#searchForm').form('reset');
                 }
             });
+            //导出excel
+            $('#importExcel').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serializeArray();
+                    var postData = parsePostData(queryArray);
+                    var importExcel = "";
+                    $.ajax({
+                        url:"imprtExcel",
+                        type:'post',
+                        data:postData,
+                        dataType:'json',
+                        success:function(re){
+                            console.dir(re);
+                        },
+
+                    });
+                    //$('#dg').datagrid('reload', postData);
+                }
+            });
         })
     </script>
 </head>
@@ -194,7 +213,8 @@
     </div>
     <div id="ft" style="padding:5px;">
         <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
-        <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+        <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>&nbsp;&nbsp;
+        <a id="importExcel" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-download'">导出</a>
     </div>
     <br/>
     <div class="easyui-panel statistics" title="汇总统计">

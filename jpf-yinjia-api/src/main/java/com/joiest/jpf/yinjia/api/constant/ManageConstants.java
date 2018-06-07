@@ -3,7 +3,7 @@ package com.joiest.jpf.yinjia.api.constant;
 public class ManageConstants {
 
     // 银联接口请求地址
-    public static final String CHINAPAY_URL_REQUEST = "http://vip.7shengqian.com/trade/install/";
+    public static final String CHINAPAY_URL_REQUEST = "http://vip2.7shengqian.com/trade/install/";
 
     // 银联支付异步回调地址
     public static final String CHINAPAY_PAYBACKURL = "https://cpapi.7shengqian.com/yinjiastage/Chinapayreturn";

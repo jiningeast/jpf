@@ -523,6 +523,7 @@ public class YinjiaStageTestController {
     @RequestMapping(value = "/signUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String signUserInfo(YinjiaSignUserInfoRequest request, HttpServletRequest httpRequest){
+
         String dataJson = AESUtils.decrypt(request.getData(), AES_KEY);
         Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
         String signOrderid = createOrderid();
@@ -542,6 +543,12 @@ public class YinjiaStageTestController {
         String bankNumber = orderCpInterfaceInfo.getBankaccountnumber();
         String signStatus = orderCpInterfaceInfo.getSignstatus();
         String IP = ServletUtils.getIpAddr(httpRequest);
+
+        BankCardInfo bankCardInfo = bankCardServiceFacade.getBankCardByCardNO(request.getAccountNumber());
+        if(bankCardInfo.getType() == null || bankCardInfo.getType().equals("借记卡")){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请输入贷记卡信息",null);
+        }
         // 从未签约过 || 签约过，但未成功
         if ( bankNumber == null || ( StringUtils.isNotBlank(bankNumber) && signStatus.equals("1") ) ){
             if ( bankNumber == null  ){
@@ -1257,9 +1264,29 @@ public class YinjiaStageTestController {
 
     @RequestMapping("/checkCard")
     @ResponseBody
-    public String checkCard(String cardNo ){
-        BankCardInfo bankCardInfo = bankCardServiceFacade.getBankCardByCardNO(cardNo);
+    /*
+    * @param cardNo银行卡号
+    * @param cardType银行卡类型 1 借记卡，2贷记卡
+    * */
+    public String checkCard(String cardNo ,String cardType){
 
+        BankCardInfo bankCardInfo = bankCardServiceFacade.getBankCardByCardNO(cardNo);
+        if(StringUtils.isBlank(cardType)){
+
+            cardType = "2";
+        }
+        if(cardType.equals("2")){
+
+            if(bankCardInfo.getType() == null || bankCardInfo.getType().equals("借记卡")){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请输入贷记卡信息",null);
+            }
+        }else{
+            if(bankCardInfo.getType() == null || !bankCardInfo.getType().equals("借记卡")){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请输入借记卡信息",null);
+            }
+        }
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("id",bankCardInfo.getFindcode());
         responseMap.put("bankName",bankCardInfo.getBankname());
