@@ -22,4 +22,11 @@ public interface OrderYinjiaApiServiceFacade {
      * 获取 YinjinApi order List ---后台
      */
     public OrderYinjiaApiResponse getOrderYinjiaApi(OrderYinjiaApiRequest request);
+
+    /**
+     * 根据 orderid 获取订单信息 ---后台
+     * @param orderid
+     * @return
+     */
+    public OrderYinjiaApiInfo getOrderYinjiaApiByOrderid(String orderid);
 }

@@ -1,16 +1,16 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrdersInfo {
+public class GetOrdersRequest {
     /**
-     * id
+     *
      */
     private String id;
 
     /**
-     * 订单id
+     *
      */
     private String orderid;
 
@@ -55,69 +55,22 @@ public class OrdersInfo {
     private Integer selfBusiness;
 
     /**
-     * 创建时间
+     *
      */
     private Date created;
-    //=========商户信息 Begin==============
 
-    /**
-     * 聚合商户名称
-     */
-    private String merchName;
+    private long rows;
 
-    /**
-     * 用户名
-     */
-    private String username;
+    private long page;
 
-    /**
-     * 企业名称
-     */
-    private String companyname;
-
-    public String getMerchName() {
-        return merchName;
-    }
-
-    public void setMerchName(String merchName) {
-        this.merchName = merchName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getCompanyname() {
-        return companyname;
-    }
-
-    public void setCompanyname(String companyname) {
-        this.companyname = companyname;
-    }
-
-    //=========商户信息 End==============
-    //================= 支付方式 Begin =====================
-    private String cat;
-
-    public String getCat() {
-        return cat;
-    }
-
-    public void setCat(String cat) {
-        this.cat = cat;
-    }
-    //================= 支付方式 End =====================
+    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     public String getOrderid() {
@@ -125,7 +78,7 @@ public class OrdersInfo {
     }
 
     public void setOrderid(String orderid) {
-        this.orderid = orderid;
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public String getMtsid() {
@@ -133,7 +86,7 @@ public class OrdersInfo {
     }
 
     public void setMtsid(String mtsid) {
-        this.mtsid = mtsid;
+        this.mtsid = mtsid == null ? null : mtsid.trim();
     }
 
     public BigDecimal getMoney() {
@@ -157,7 +110,7 @@ public class OrdersInfo {
     }
 
     public void setProductId(String productId) {
-        this.productId = productId;
+        this.productId = productId == null ? null : productId.trim();
     }
 
     public String getProductName() {
@@ -165,7 +118,7 @@ public class OrdersInfo {
     }
 
     public void setProductName(String productName) {
-        this.productName = productName;
+        this.productName = productName == null ? null : productName.trim();
     }
 
     public String getProductAmount() {
@@ -173,7 +126,7 @@ public class OrdersInfo {
     }
 
     public void setProductAmount(String productAmount) {
-        this.productAmount = productAmount;
+        this.productAmount = productAmount == null ? null : productAmount.trim();
     }
 
     public BigDecimal getProductUnitPrice() {
@@ -199,4 +152,49 @@ public class OrdersInfo {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+
+    public long getRows() {
+        return rows;
+    }
+
+    public void setRows(long rows) {
+        this.rows = rows;
+    }
+
+    public long getPage() {
+        return page;
+    }
+
+    public void setPage(long page) {
+        this.page = page;
+    }
+
+    /**
+     *
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", orderid=").append(orderid);
+        sb.append(", mtsid=").append(mtsid);
+        sb.append(", money=").append(money);
+        sb.append(", paytype=").append(paytype);
+        sb.append(", productId=").append(productId);
+        sb.append(", productName=").append(productName);
+        sb.append(", productAmount=").append(productAmount);
+        sb.append(", productUnitPrice=").append(productUnitPrice);
+        sb.append(", selfBusiness=").append(selfBusiness);
+        sb.append(", created=").append(created);
+        sb.append(", created=").append(created);
+        sb.append(", rows=").append(rows);
+        sb.append(", page=").append(page);
+        sb.append("]");
+        return sb.toString();
+    }
+
 }

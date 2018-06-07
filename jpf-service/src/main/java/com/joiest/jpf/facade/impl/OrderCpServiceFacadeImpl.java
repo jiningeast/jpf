@@ -27,12 +27,13 @@ public class OrderCpServiceFacadeImpl implements OrderCpServiceFacade {
         PayOrderCpExample.Criteria c = example.createCriteria();
         c.andOrderidEqualTo(orderid);
         List<PayOrderCp> ordercpList = payOrderCpMapper.selectByExample(example);
+        OrderCpInterfaceInfo orderCpInterfaceInfo = new OrderCpInterfaceInfo();
         if ( ordercpList == null || ordercpList.isEmpty())
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.RECORD_NOT_EXIST.getCode(), "签约信息不存在");
+            return null;
         }
         PayOrderCp payOrderCp = ordercpList.get(0);
-        OrderCpInterfaceInfo orderCpInterfaceInfo = new OrderCpInterfaceInfo();
+
         BeanCopier beanCopier = BeanCopier.create( PayOrderCp.class, OrderCpInterfaceInfo.class, false);
         beanCopier.copy(payOrderCp, orderCpInterfaceInfo, null);
         return orderCpInterfaceInfo;

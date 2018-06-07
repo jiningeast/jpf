@@ -1042,7 +1042,6 @@ public class YinjiaStageTestController {
         orderRefundInfo.setStatus("1");
         orderRefundInfo.setBackurl(backUrl);
         orderRefundInfo.setCreated(new Date());
-        orderRefundServiceFacade.insOrderRefund(orderRefundInfo);
 
         //获取商户银联支付方式配置
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(orderInfo.getMtsid(),tpid);
@@ -1065,6 +1064,10 @@ public class YinjiaStageTestController {
 
             String smeRes = yjResponseDto.getData().toString();
             chinaRe = JsonUtils.toCollection(smeRes,new TypeReference<HashMap<String, String>>(){});
+
+            //退单信息入库
+            orderRefundInfo.setReturnContent(smeRes);
+            orderRefundServiceFacade.insOrderRefund(orderRefundInfo);
 
             // 新增退款流水信息
             OrderRefundMessageInfo orderRefundMessageInfo = new OrderRefundMessageInfo();
@@ -1163,6 +1166,7 @@ public class YinjiaStageTestController {
 //        orderStauts.setUpdatetime(new Date());
         orderStauts.setOrderid(refundCancel.get("oriOrderNo").toString());
 
+        //日志记录
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1201,6 +1205,7 @@ public class YinjiaStageTestController {
         //修改订单表信息
         orderYinjiaApiServiceFacade.updateColumnByOrderid(orderStauts);
 
+        //触发请求第三方
         Map<String,Object> postParam= new HashMap<String,Object>();
 
         postParam.put("mid",orderInfo.getMtsid());
