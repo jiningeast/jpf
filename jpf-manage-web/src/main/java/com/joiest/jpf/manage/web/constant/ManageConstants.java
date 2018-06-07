@@ -28,6 +28,6 @@ public class ManageConstants {
     public static final String CHINAPAY_URL_SELECT = "http://vip2.7shengqian.com/trade/api/";
 
     //后台商户认证发送短信
-    public static final String SEND_SMS_URL =  "http://api.7shengqian.com/index.php?r=Sms/YinjiaStageSend";
+    public static final String SEND_SMS_URL =  "https://api.7shengqian.com/index.php?r=Sms/YinjiaStageSend";
     
 }
