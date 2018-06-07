@@ -26,7 +26,7 @@ public class MerchantInterfaceServiceFacadeImpl implements MerchantInterfaceServ
         PayMerchantsExample.Criteria c = e.createCriteria();
         c.andMerchNoEqualTo(MerchNo);
         List<PayMerchants> list = payMerchantsMapper.selectByExample(e);
-        if ( list.get(0).getId() == null ){
+        if ( list.isEmpty() ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(),JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
         }
         MerchantInterfaceInfo merchantInterfaceInfo = new MerchantInterfaceInfo();

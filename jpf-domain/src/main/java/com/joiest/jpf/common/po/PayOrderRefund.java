@@ -41,6 +41,16 @@ public class PayOrderRefund implements Serializable {
     private String tranno;
 
     /**
+     * 退款同步响应参数
+     */
+    private String returnContent;
+
+    /**
+     * 回调响应参数
+     */
+    private String responsParam;
+
+    /**
      * 退款成功通知时间
      */
     private Date notifyTime;
@@ -49,11 +59,6 @@ public class PayOrderRefund implements Serializable {
      * 创建时间
      */
     private Date created;
-
-    /**
-     * 回调响应参数
-     */
-    private String responsParam;
 
     private static final long serialVersionUID = 1L;
 
@@ -113,6 +118,22 @@ public class PayOrderRefund implements Serializable {
         this.tranno = tranno == null ? null : tranno.trim();
     }
 
+    public String getReturnContent() {
+        return returnContent;
+    }
+
+    public void setReturnContent(String returnContent) {
+        this.returnContent = returnContent == null ? null : returnContent.trim();
+    }
+
+    public String getResponsParam() {
+        return responsParam;
+    }
+
+    public void setResponsParam(String responsParam) {
+        this.responsParam = responsParam == null ? null : responsParam.trim();
+    }
+
     public Date getNotifyTime() {
         return notifyTime;
     }
@@ -127,14 +148,6 @@ public class PayOrderRefund implements Serializable {
 
     public void setCreated(Date created) {
         this.created = created;
-    }
-
-    public String getResponsParam() {
-        return responsParam;
-    }
-
-    public void setResponsParam(String responsParam) {
-        this.responsParam = responsParam == null ? null : responsParam.trim();
     }
 
     /**
@@ -153,9 +166,10 @@ public class PayOrderRefund implements Serializable {
         sb.append(", backurl=").append(backurl);
         sb.append(", trantype=").append(trantype);
         sb.append(", tranno=").append(tranno);
+        sb.append(", returnContent=").append(returnContent);
+        sb.append(", responsParam=").append(responsParam);
         sb.append(", notifyTime=").append(notifyTime);
         sb.append(", created=").append(created);
-        sb.append(", responsParam=").append(responsParam);
         sb.append("]");
         return sb.toString();
     }
@@ -183,9 +197,10 @@ public class PayOrderRefund implements Serializable {
             && (this.getBackurl() == null ? other.getBackurl() == null : this.getBackurl().equals(other.getBackurl()))
             && (this.getTrantype() == null ? other.getTrantype() == null : this.getTrantype().equals(other.getTrantype()))
             && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
+            && (this.getReturnContent() == null ? other.getReturnContent() == null : this.getReturnContent().equals(other.getReturnContent()))
+            && (this.getResponsParam() == null ? other.getResponsParam() == null : this.getResponsParam().equals(other.getResponsParam()))
             && (this.getNotifyTime() == null ? other.getNotifyTime() == null : this.getNotifyTime().equals(other.getNotifyTime()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
-            && (this.getResponsParam() == null ? other.getResponsParam() == null : this.getResponsParam().equals(other.getResponsParam()));
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()));
     }
 
     /**
@@ -202,9 +217,10 @@ public class PayOrderRefund implements Serializable {
         result = prime * result + ((getBackurl() == null) ? 0 : getBackurl().hashCode());
         result = prime * result + ((getTrantype() == null) ? 0 : getTrantype().hashCode());
         result = prime * result + ((getTranno() == null) ? 0 : getTranno().hashCode());
+        result = prime * result + ((getReturnContent() == null) ? 0 : getReturnContent().hashCode());
+        result = prime * result + ((getResponsParam() == null) ? 0 : getResponsParam().hashCode());
         result = prime * result + ((getNotifyTime() == null) ? 0 : getNotifyTime().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
-        result = prime * result + ((getResponsParam() == null) ? 0 : getResponsParam().hashCode());
         return result;
     }
 }

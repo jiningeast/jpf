@@ -50,6 +50,11 @@ public class OrderRefundInfo {
     private Date created;
 
     /**
+     * 退款同步响应参数
+     */
+    private String returnContent;
+
+    /**
      * 回调响应参数
      */
     private String responsParam;
@@ -128,6 +133,13 @@ public class OrderRefundInfo {
         this.created = created;
     }
 
+    public String getReturnContent() {
+        return returnContent;
+    }
+
+    public void setReturnContent(String returnContent) {
+        this.returnContent = returnContent == null ? null : returnContent.trim();
+    }
     public String getResponsParam() {
         return responsParam;
     }

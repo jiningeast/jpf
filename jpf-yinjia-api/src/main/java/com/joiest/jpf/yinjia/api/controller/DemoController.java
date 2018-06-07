@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -51,7 +53,7 @@ public class DemoController {
     }
 
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
-    @RequestMapping("/historyData")
+    @RequestMapping("/historyData9999999999999999999")
     public void historyData() {
         List<OrderInfo> list = orderServiceFacade.getAllOrders();
         for(OrderInfo orderInfo:list){
@@ -139,6 +141,24 @@ public class DemoController {
                 }
         }
     }
+
+    /**
+     * 测试获取配置文件的信息
+     */
+    public static String getProperties(String filePath, String keyWord){
+        Properties properties = new Properties();
+        String value = null;
+        try{
+            InputStream inputStream = DemoController.class.getResourceAsStream(filePath);
+            properties.load(inputStream);
+            value = properties.getProperty(keyWord);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return value;
+    }
+
+
     // 生成一个pay_order表的orderid
     public String createOrderid(){
         int pre = getRandomInt(100,999);
@@ -155,5 +175,9 @@ public class DemoController {
         int randomInt = random.nextInt(max)%(max-min+1) + min;
 
         return randomInt;
+    }
+
+    public void main(String[] args){
+//        this.getProperties();
     }
 }
