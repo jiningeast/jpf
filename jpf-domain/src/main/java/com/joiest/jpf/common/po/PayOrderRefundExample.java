@@ -616,6 +616,146 @@ public class PayOrderRefundExample {
             return (Criteria) this;
         }
 
+        public Criteria andReturnContentIsNull() {
+            addCriterion("return_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentIsNotNull() {
+            addCriterion("return_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentEqualTo(String value) {
+            addCriterion("return_content =", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentNotEqualTo(String value) {
+            addCriterion("return_content <>", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentGreaterThan(String value) {
+            addCriterion("return_content >", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentGreaterThanOrEqualTo(String value) {
+            addCriterion("return_content >=", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentLessThan(String value) {
+            addCriterion("return_content <", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentLessThanOrEqualTo(String value) {
+            addCriterion("return_content <=", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentLike(String value) {
+            addCriterion("return_content like", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentNotLike(String value) {
+            addCriterion("return_content not like", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentIn(List<String> values) {
+            addCriterion("return_content in", values, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentNotIn(List<String> values) {
+            addCriterion("return_content not in", values, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentBetween(String value1, String value2) {
+            addCriterion("return_content between", value1, value2, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentNotBetween(String value1, String value2) {
+            addCriterion("return_content not between", value1, value2, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamIsNull() {
+            addCriterion("respons_param is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamIsNotNull() {
+            addCriterion("respons_param is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamEqualTo(String value) {
+            addCriterion("respons_param =", value, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamNotEqualTo(String value) {
+            addCriterion("respons_param <>", value, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamGreaterThan(String value) {
+            addCriterion("respons_param >", value, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamGreaterThanOrEqualTo(String value) {
+            addCriterion("respons_param >=", value, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamLessThan(String value) {
+            addCriterion("respons_param <", value, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamLessThanOrEqualTo(String value) {
+            addCriterion("respons_param <=", value, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamLike(String value) {
+            addCriterion("respons_param like", value, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamNotLike(String value) {
+            addCriterion("respons_param not like", value, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamIn(List<String> values) {
+            addCriterion("respons_param in", values, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamNotIn(List<String> values) {
+            addCriterion("respons_param not in", values, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamBetween(String value1, String value2) {
+            addCriterion("respons_param between", value1, value2, "responsParam");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamNotBetween(String value1, String value2) {
+            addCriterion("respons_param not between", value1, value2, "responsParam");
+            return (Criteria) this;
+        }
+
         public Criteria andNotifyTimeIsNull() {
             addCriterion("notify_time is null");
             return (Criteria) this;
@@ -743,6 +883,16 @@ public class PayOrderRefundExample {
 
         public Criteria andTrannoLikeInsensitive(String value) {
             addCriterion("upper(tranNo) like", value.toUpperCase(), "tranno");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentLikeInsensitive(String value) {
+            addCriterion("upper(return_content) like", value.toUpperCase(), "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andResponsParamLikeInsensitive(String value) {
+            addCriterion("upper(respons_param) like", value.toUpperCase(), "responsParam");
             return (Criteria) this;
         }
     }

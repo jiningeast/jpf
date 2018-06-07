@@ -31,6 +31,7 @@ public class OrderRefundServiceFacadeImpl implements OrderRefundServiceFacade {
         orderRe.setStatus(orderRefundInfo.getStatus());
         orderRe.setBackurl(orderRefundInfo.getBackurl());
         orderRe.setCreated(orderRefundInfo.getCreated());
+        orderRe.setReturnContent(orderRefundInfo.getReturnContent());
 
         return payOrderRefundMapper.insertSelective(orderRe);
     }

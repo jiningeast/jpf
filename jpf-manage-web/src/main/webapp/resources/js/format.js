@@ -208,4 +208,5 @@ function formatJSONImg(value) {
 
         return resStr;
     }
+
 }
