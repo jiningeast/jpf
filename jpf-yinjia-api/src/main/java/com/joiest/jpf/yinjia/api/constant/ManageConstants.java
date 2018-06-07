@@ -3,25 +3,25 @@ package com.joiest.jpf.yinjia.api.constant;
 public class ManageConstants {
 
     // 银联接口请求地址
-    public static final String CHINAPAY_URL_REQUEST = "http://vip.7shengqian.com/trade/install/";
+    public static final String CHINAPAY_URL_REQUEST = "http://vip2.7shengqian.com/trade/install/";
 
     // 银联支付异步回调地址
-    public static final String CHINAPAY_PAYBACKURL = "https://cpapi.7shengqian.com/yinjiastage/Chinapayreturn";
+    public static final String CHINAPAY_PAYBACKURL = "https://testcpapi.7shengqian.com/yinjiastage/Chinapayreturn";
 
     // 银联签约成功后前台跳转地址
-    public static final String CHINAPAY_SIGN_RETURN_URL = "https://cpchats.7shengqian.com/paycode/";
+    public static final String CHINAPAY_SIGN_RETURN_URL = "https://tcpchats.7shengqian.com/paycode/";
 
     // 银联签约后台通知地址
-    public static final String CHINAPAY_SIGN_BACK_URL = "https://cpapi.7shengqian.com/yinjiastage/signNotify";
+    public static final String CHINAPAY_SIGN_BACK_URL = "https://testcpapi.7shengqian.com/yinjiastage/signNotify";
 
     // 银联接口查询接口
-    public static final String CHINAPAY_URL_SELECT = "http://vip.7shengqian.com/trade/api/";
+    public static final String CHINAPAY_URL_SELECT = "http://vip2.7shengqian.com/trade/api/";
 
     // 银联退款异步回调地址
-    public static final String CHINAPAY_REFUND_BACK_URL = "https://cpapi.7shengqian.com/yinjiastage/purchaseRefundReturn";
+    public static final String CHINAPAY_REFUND_BACK_URL = "https://testcpapi.7shengqian.com/yinjiastage/purchaseRefundReturn";
 
     // H5首页地址（选择分期页）
-    public static final String TERMS_URL = "https://cpchats.7shengqian.com/instalment/";
+    public static final String TERMS_URL = "https://tcpchats.7shengqian.com/instalment/";
 
     // AES加密key
     public static final String AES_KEY = "tioB8c6esX1Cx84Y16NFcFascZQZXiGI";

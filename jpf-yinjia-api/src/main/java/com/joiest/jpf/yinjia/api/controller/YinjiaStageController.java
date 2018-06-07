@@ -306,22 +306,13 @@ public class YinjiaStageController {
         tailMap.put("orderid", request.getOrderid());
         tailMap.put("platformOrderid", orderid);
         String tailJson = JsonUtils.toJson(tailMap);
-        /*DESEncryptUtils desEncryptUtils = new DESEncryptUtils();
-        String urlTail=null;
-        try{
-            urlTail = desEncryptUtils.encryption(tailJson, AES_KEY);
-        }catch (Exception e){
-
-        }*/
-
-        String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
-//        byte[] urlTail = AESCrptographyUtils.AES_CBC_Encrypt(tailJson.getBytes(),AES_KEY.getBytes(),iv.getBytes());
+        String urlTail = AESUtils.encrypt(tailJson,ConfigUtil.getValue("AES_KEY"));
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
         // 给输出的signUrl urlEncode一下
         String signUrl = null;
         try{
-            signUrl = URLEncoder.encode(ManageConstants.TERMS_URL+urlTail, "UTF-8");
+            signUrl = URLEncoder.encode(ConfigUtil.getValue("TERMS_URL")+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
             yjResponseDto.clear();
             yjResponseDto.setCode(JpfInterfaceErrorInfo.SIGNURL_ENCODING_ERROR.getCode());
@@ -345,20 +336,13 @@ public class YinjiaStageController {
     @RequestMapping(value = "/getMerPay", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getMerPay(String data){
-        /*String dataJson = null;
-        DESEncryptUtils desEncryptUtils = new DESEncryptUtils();
-        try{
-            dataJson = desEncryptUtils.decryption(data, AES_KEY);
-        }catch (Exception e){
-
-        }*/
-        String dataJson = AESUtils.decrypt(data, AES_KEY);
+        String dataJson = AESUtils.decrypt(data, ConfigUtil.getValue("AES_KEY"));
         Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<HashMap<String,String>>(){});
         if ( dataMap.get("merchNo") == null || dataMap.get("orderid") == null || dataMap.get("platformOrderid") == null ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_DATA.getCode(), JpfInterfaceErrorInfo.INCORRECT_DATA.getDesc());
         }
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderidAndForeignOrderid(dataMap.get("orderid"), dataMap.get("platformOrderid"), true);
-        MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchantByMerchNo(dataMap.get("mid"));
+        MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchantByMerchNo(dataMap.get("merchNo"));
         MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(merInfo.getId(), orderYinjiaApiInfo.getPaytype(), true);
 
         // 构建返回
@@ -383,7 +367,7 @@ public class YinjiaStageController {
         String stageJson = JsonUtils.toJson(stageJsonList);
         responseDataMap.put("stage", stageJson);
         responseDataMap.put("money", orderYinjiaApiInfo.getOrderPayPrice().toString());
-        responseDataMap.put("bankName", SUPPORTED_BANKNAMES);
+        responseDataMap.put("bankName", ConfigUtil.getValue("SUPPORTED_BANKNAMES"));
         String responseDataJson = JsonUtils.toJson(responseDataMap);
 
         Map<String, String> responseMap = new HashMap<>();
@@ -504,7 +488,7 @@ public class YinjiaStageController {
         responseDataMap.put("orderid", request.getOrderid());
         responseDataMap.put("mid", ""+mtsid);
         String responseDataJson = JsonUtils.toJson(responseDataMap);
-        String AESStr = AESUtils.encrypt(responseDataJson, AES_KEY);
+        String AESStr = AESUtils.encrypt(responseDataJson, ConfigUtil.getValue("AES_KEY"));
 
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
@@ -523,7 +507,7 @@ public class YinjiaStageController {
     @RequestMapping(value = "/signUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String signUserInfo(YinjiaSignUserInfoRequest request, HttpServletRequest httpRequest){
-        String dataJson = AESUtils.decrypt(request.getData(), AES_KEY);
+        String dataJson = AESUtils.decrypt(request.getData(), ConfigUtil.getValue("AES_KEY"));
         Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
         String signOrderid = createOrderid();
 
@@ -583,7 +567,7 @@ public class YinjiaStageController {
             Map<String , Object> frontMap = new HashMap<>();
             frontMap.put("orderid",dataMap.get("orderid"));
             String AESJson = JsonUtils.toJson(frontMap);
-            String frontAES = AESUtils.encrypt(AESJson,AES_KEY);
+            String frontAES = AESUtils.encrypt(AESJson,ConfigUtil.getValue("AES_KEY"));
 
             // 构建银联签约接口request参数
             Map<String,String> chinapayMap = new HashMap<>();
@@ -594,9 +578,9 @@ public class YinjiaStageController {
             /*chinapayMap.put("chnCode", paramMap.get("CP_Code"));
             chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));*/
             chinapayMap.put("outOrderNo", signOrderid);
-            chinapayMap.put("frontUrl", CHINAPAY_SIGN_RETURN_URL+frontAES);
-            logger.info("frontUrl="+CHINAPAY_SIGN_RETURN_URL+frontAES+" length="+CHINAPAY_SIGN_RETURN_URL.length()+frontAES.length());
-            chinapayMap.put("backUrl", CHINAPAY_SIGN_BACK_URL);
+            chinapayMap.put("frontUrl", ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES);
+            logger.info("frontUrl="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES+" length="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL").length()+frontAES.length());
+            chinapayMap.put("backUrl", ConfigUtil.getValue("CHINAPAY_SIGN_BACK_URL"));
             chinapayMap.put("signedName", request.getSignedName());
             chinapayMap.put("idType", "01");
             chinapayMap.put("idNo", request.getIdNo());
@@ -630,7 +614,7 @@ public class YinjiaStageController {
             requestMap.put("sign",signMySign);
             requestMap.put("signType","MD5");
             // 请求签约url
-            String response = OkHttpUtils.postForm(CHINAPAY_URL_REQUEST+"sign",requestMap);
+            String response = OkHttpUtils.postForm(ConfigUtil.getValue("CHINAPAY_URL_REQUEST")+"sign",requestMap);
             logger.info("签约返回："+response);
 
             Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
@@ -721,7 +705,7 @@ public class YinjiaStageController {
         Map<String, Object> responseDataMap = new HashMap<>();
         responseDataMap.put("orderid", dataMap.get("orderid"));
         String responseDataJson = JsonUtils.toJson(responseDataMap);
-        String AESStr = AESUtils.encrypt(responseDataJson, AES_KEY);
+        String AESStr = AESUtils.encrypt(responseDataJson, ConfigUtil.getValue("AES_KEY"));
 
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
@@ -738,7 +722,7 @@ public class YinjiaStageController {
     @RequestMapping(value = "/getPayInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getPayInfo(String data){
-        String dataJson = AESUtils.decrypt(data, AES_KEY);
+        String dataJson = AESUtils.decrypt(data, ConfigUtil.getValue("AES_KEY"));
         Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
 
         // 获取订单信息
@@ -811,12 +795,12 @@ public class YinjiaStageController {
     public String sendSms(String data, HttpServletRequest request)
     {
         // 加密串解码
-        String dataStr = AESUtils.decrypt(data, AES_KEY);
+        String dataStr = AESUtils.decrypt(data, ConfigUtil.getValue("AES_KEY"));
         Map<String, String> dataMap = JsonUtils.toCollection(dataStr, new TypeReference<Map<String, String>>(){});
         String orderid = dataMap.get("orderid");
 
         // 发送短信接口地址
-        String requestUrl = CHINAPAY_URL_REQUEST+"smsCodeSend";
+        String requestUrl = ConfigUtil.getValue("CHINAPAY_URL_REQUEST")+"smsCodeSend";
 
         //定义银联支付方式id
         Integer tpid = 7;
@@ -961,7 +945,7 @@ public class YinjiaStageController {
         String refundAmt = request.getParameter("refundAmt");//退款金额
         String sign = request.getParameter("sign");//签名
 
-        String requestUrl = CHINAPAY_URL_REQUEST+"purchaseRefund";
+        String requestUrl = ConfigUtil.getValue("CHINAPAY_URL_REQUEST")+"purchaseRefund";
         YjResponseDto yjResponseDto = new YjResponseDto();
 
         if ( StringUtils.isBlank(orderid) || StringUtils.isBlank(origOrderid) || StringUtils.isBlank(mid) || StringUtils.isBlank(backUrl) || StringUtils.isBlank(refundAmt))
@@ -1013,7 +997,7 @@ public class YinjiaStageController {
                 yjResponseDto.setInfo("订单状态有误，请查看是否已支付");
                 return yjResponseDto;
             }
-            if(!orderInfo.getMtsid().toString().equals(mid) ){
+            if(!merchant.getMerchNo().equals(mid) ){
 
                 yjResponseDto.setCode("10008");
                 yjResponseDto.setInfo("订单与商户信息不匹配");
@@ -1054,7 +1038,7 @@ public class YinjiaStageController {
             maptree.put("outOrderNo",orderid.trim());
             maptree.put("origOutOrderNo",origOrderid.trim());
             maptree.put("tranAmt",refundAmt);
-            maptree.put("backUrl",CHINAPAY_REFUND_BACK_URL);
+            maptree.put("backUrl",ConfigUtil.getValue("CHINAPAY_REFUND_BACK_URL"));
             maptree.put("privatekey",maparr.get("CP_Salt"));
 
             yjResponseDto = chinaPayServiceFacade.ChinaPayRefund(maptree,requestUrl);
@@ -1252,7 +1236,7 @@ public class YinjiaStageController {
         map.put("orderid","201805231422031547");
         map.put("platformOrderid", "6907334152323990");
         String tailJson = JsonUtils.toJson(map);
-        String urlTail = AESUtils.encrypt(tailJson,AES_KEY);
+        String urlTail = AESUtils.encrypt(tailJson,ConfigUtil.getValue("AES_KEY"));
 
         return urlTail;
     }
@@ -1265,7 +1249,7 @@ public class YinjiaStageController {
         Map<String , Object> frontMap = new HashMap<>();
         frontMap.put("orderid", "1447487259621113");
         String AESJson = JsonUtils.toJson(frontMap);
-        String frontAES = AESUtils.encrypt(AESJson,AES_KEY);
+        String frontAES = AESUtils.encrypt(AESJson,ConfigUtil.getValue("AES_KEY"));
 
         return frontAES;
     }
@@ -1280,7 +1264,7 @@ public class YinjiaStageController {
         response.setHeader("Access-Control-Allow-Origin", originHeader);
 
         // 不允许正式服访问这个测试项目文件
-        if ( CHINAPAY_URL_REQUEST.equals("http://vip2.7shengqian.com/trade/install/") ){
+        if ( ConfigUtil.getValue("CHINAPAY_URL_REQUEST").equals("http://vip2.7shengqian.com/trade/install/") ){
             notCorrectAddress();
         }
     }
@@ -1360,7 +1344,7 @@ public class YinjiaStageController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "验证码错误", null);
         }
 
-        String dataJson = AESUtils.decrypt(request.getData(), AES_KEY);
+        String dataJson = AESUtils.decrypt(request.getData(), ConfigUtil.getValue("AES_KEY"));
         Map<String,String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
         if ( StringUtils.isBlank(dataMap.get("orderid")) )
         {
@@ -1437,7 +1421,7 @@ public class YinjiaStageController {
             signMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
             signMap.put("outOrderNo", dataMap.get("orderid"));
             signMap.put("smsCode",request.getSmsCode());
-            signMap.put("backUrl",CHINAPAY_PAYBACKURL);
+            signMap.put("backUrl",ConfigUtil.getValue("CHINAPAY_PAYBACKURL"));
             signMap.put("numberOfInstallments",stage_tmp);
             // 设置IP
             String IP = ServletUtils.getIpAddr(httpRequest);
@@ -1446,7 +1430,7 @@ public class YinjiaStageController {
             signMap.put("CP_Salt", paramMap.get("CP_Salt"));
             String requestUrl;
 
-            requestUrl = CHINAPAY_URL_REQUEST + "installPay";
+            requestUrl = ConfigUtil.getValue("CHINAPAY_URL_REQUEST") + "installPay";
 
             YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
             //请求结果
