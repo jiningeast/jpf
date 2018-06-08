@@ -1,6 +1,8 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.dao.repository.mapper.custom.PayOrderPayMerMessageCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.custom.PayOrderPayMessageCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderPayMerMessageMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderPayMessageMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayPcaMapper;
@@ -30,9 +32,15 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
     @Autowired
     private PayOrderPayMessageMapper payOrderPayMessageMapper;
 
+    @Autowired
+    private PayOrderPayMessageCustomMapper payOrderPayMessageCustomMapper;
+
     //添加编辑商户支付流水
     @Autowired
     private PayOrderPayMerMessageMapper payOrderPayMerMessageMapper;
+
+    @Autowired
+    private PayOrderPayMerMessageCustomMapper payOrderPayMerMessageCustomMapper;
 
     @Override
     public List<PcaInfo> getPcas(String pid) {
@@ -114,7 +122,8 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         PayOrderPayMessage payOrderPayMessage = new PayOrderPayMessage();
         BeanCopier beanCopier = BeanCopier.create(ModifyPayMessageRequest.class, PayOrderPayMessage.class, false);
         beanCopier.copy(request,payOrderPayMessage,null);
-        return payOrderPayMessageMapper.insertSelective(payOrderPayMessage);
+        int res = payOrderPayMessageCustomMapper.insertSelective(payOrderPayMessage);
+        return new Long(payOrderPayMessage.getId()).intValue();
     }
 
     /**
@@ -127,8 +136,8 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         beanCopier.copy(request,payOrderPayMessage,null);
         PayOrderPayMessageExample example = new PayOrderPayMessageExample();
         PayOrderPayMessageExample.Criteria c = example.createCriteria();
-        c.andOrderidEqualTo(request.getOrderid());
-        return payOrderPayMessageMapper.updateByExampleSelective(payOrderPayMessage,example);
+        c.andIdEqualTo(request.getId());
+        return payOrderPayMessageCustomMapper.updateByExampleSelective(payOrderPayMessage,example);
     }
 
 
@@ -140,7 +149,8 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         PayOrderPayMerMessage payOrderPayMerMessage = new PayOrderPayMerMessage();
         BeanCopier beanCopier = BeanCopier.create(ModifyPayOrderPayMerRequest.class, PayOrderPayMerMessage.class, false);
         beanCopier.copy(request,payOrderPayMerMessage,null);
-        return payOrderPayMerMessageMapper.insertSelective(payOrderPayMerMessage);
+        int res = payOrderPayMerMessageCustomMapper.insertSelective(payOrderPayMerMessage);
+        return new Long(payOrderPayMerMessage.getId()).intValue();
     }
 
     /**
@@ -153,7 +163,7 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         beanCopier.copy(request,payOrderPayMerMessage,null);
         PayOrderPayMerMessageExample example = new PayOrderPayMerMessageExample();
         PayOrderPayMerMessageExample.Criteria c = example.createCriteria();
-        c.andOrderidEqualTo(request.getOrderid());
-        return payOrderPayMerMessageMapper.updateByExampleSelective(payOrderPayMerMessage,example);
+        c.andIdEqualTo(request.getId());
+        return payOrderPayMerMessageCustomMapper.updateByExampleSelective(payOrderPayMerMessage,example);
     }
 }

@@ -39,6 +39,16 @@ public class ModifyPayMessageRequest {
     private String notifyContent;
 
     /**
+     * 类型: 1:同步; 2:异步;
+     */
+    private Byte type;
+
+    /**
+     * 发送给商户的异步回调信息ID
+     */
+    private Long mermessageId;
+
+    /**
      *
      */
     private Date addtime;
@@ -104,6 +114,22 @@ public class ModifyPayMessageRequest {
 
     public void setNotifyContent(String notifyContent) {
         this.notifyContent = notifyContent == null ? null : notifyContent.trim();
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public Long getMermessageId() {
+        return mermessageId;
+    }
+
+    public void setMermessageId(Long mermessageId) {
+        this.mermessageId = mermessageId;
     }
 
     public Date getAddtime() {

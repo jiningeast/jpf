@@ -1462,6 +1462,7 @@ public class YinjiaStageController {
             modifyPayMessageRequest.setOrderid(dataMap.get("orderid"));
             modifyPayMessageRequest.setReturnContent(resultPay.getInfo());
             modifyPayMessageRequest.setAddtime(new Date());
+            modifyPayMessageRequest.setType((byte)1);
             modifyPayMessageRequest.setContent(requestUrl + "?" + resultPay.getData().toString());
 
             //更新用户操作状态
@@ -1492,7 +1493,7 @@ public class YinjiaStageController {
             orderInfoUpdate.setUpdatetime(new Date());
             orderInterfaceServiceFacade.updateOrderStatus(orderInfoUpdate);
 
-            //添加聚合流水  ---没有添加tranNo
+            //添加同步聚合流水  ---没有添加tranNo
             pcaServiceFacade.addPayMessage(modifyPayMessageRequest);
 
 /*            //添加返回给商户的流水
@@ -1524,6 +1525,17 @@ public class YinjiaStageController {
     @ResponseBody
     public String ChinaPayReturn(YinjiaPayNotifyRequest request)
     {
+        //添加回调流水
+        ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
+        modifyPayMessageRequest.setNotifyTranno(request.getTranNo());
+        modifyPayMessageRequest.setOrderid(request.getOutOrderNo());
+        Map<String,Object> requestMap = ClassUtil.requestToMap(request);
+        String requestStr = ToolUtils.mapToUrl(requestMap);
+        modifyPayMessageRequest.setNotifyContent(requestStr);
+        modifyPayMessageRequest.setAddtime(new Date());
+        modifyPayMessageRequest.setType((byte)2);
+        int insertPayMsgRes = pcaServiceFacade.addPayMessage(modifyPayMessageRequest);
+
         Map<String,Object> returnMap = new HashMap<>();
         returnMap.put("finishTime", request.getFinishTime());
         returnMap.put("sysMerchNo", request.getSysMerchNo());
@@ -1570,22 +1582,14 @@ public class YinjiaStageController {
             sbf.append("\n支付成功修改数据库状态完成");
             user_operate_status = 11;
         }
-        //更新
+
+        //更新订单用户操作状态
         orderInfoUpdate.setPayStatus(orderstatus);
         orderInfoUpdate.setPaytime(date);
         orderInfoUpdate.setUpdatetime(date);
         orderInfoUpdate.setOrderid(returnMap.get("outOrderNo").toString());
         orderInfoUpdate.setUserOperateStatus(user_operate_status);
         orderInterfaceServiceFacade.updateOrderStatus(orderInfoUpdate);
-        //流水
-        ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
-        modifyPayMessageRequest.setNotifyTranno(request.getTranNo());
-        modifyPayMessageRequest.setOrderid(request.getOutOrderNo());
-        Map<String,Object> requestMap = ClassUtil.requestToMap(request);
-        String requestStr = ToolUtils.mapToUrl(requestMap);
-        modifyPayMessageRequest.setNotifyContent(requestStr);
-        modifyPayMessageRequest.setUpdatetime(new Date());
-        pcaServiceFacade.modifyPayMessage(modifyPayMessageRequest);
 
         //日志
         String fileName = "ChinaPayReturn";
@@ -1609,19 +1613,33 @@ public class YinjiaStageController {
         String notify_url = null;
         StringBuilder sbf_mer = new StringBuilder();
         String fileName_merNofity = "merPayNotify";
+
+        //添加通知商户流水
+        ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
+        merPayRequest.setAddtime(new Date());
+        merPayRequest.setOrderid(orderInfo.getOrderid());
+        merPayRequest.setForeignOrderid(orderInfo.getForeignOrderid());
+        String merRequestStr = ToolUtils.mapToUrl(merPostParamMap);
+        merPayRequest.setNotifyContent(notify_url + "?" + merRequestStr);
+        int insertMerMessageRes = pcaServiceFacade.addPayMerMessage(merPayRequest);
+
+        //更新聚合回调流水
+        ModifyPayMessageRequest modifyPayMessageRequestUp = new ModifyPayMessageRequest();
+        modifyPayMessageRequestUp.setId(new Long(insertPayMsgRes).longValue());
+        modifyPayMessageRequestUp.setUpdatetime(new Date());
+        modifyPayMessageRequestUp.setMermessageId(new Long(insertMerMessageRes).longValue());
+        pcaServiceFacade.modifyPayMessage(modifyPayMessageRequestUp);
         try{
+
             notify_url = URLDecoder.decode(orderInfo.getNotifyUrl(), "UTF-8");
             String response = OkHttpUtils.postForm(notify_url,merPostParamMap);
-            //通知商户流水
 //            String response = "SUCCESS";
-            ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
-            merPayRequest.setAddtime(new Date());
-            merPayRequest.setOrderid(orderInfo.getOrderid());
-            merPayRequest.setForeignOrderid(orderInfo.getForeignOrderid());
-            String merRequestStr = ToolUtils.mapToUrl(merPostParamMap);
-            merPayRequest.setNotifyContent(notify_url + "?" + merRequestStr);
-            merPayRequest.setNotifyResult(StringUtils.deleteWhitespace(ToolUtils.delHTMLTag(response)));
-            pcaServiceFacade.addPayMerMessage(merPayRequest);
+            //更新通知商户流水
+            ModifyPayOrderPayMerRequest merPayRequestUp = new ModifyPayOrderPayMerRequest();
+            merPayRequestUp.setId(new Long(insertMerMessageRes).longValue());
+            merPayRequestUp.setUpdatetime(new Date());
+            merPayRequestUp.setNotifyResult(StringUtils.deleteWhitespace(ToolUtils.delHTMLTag(response)));
+            int upMerMessageRes = pcaServiceFacade.modifyPayMerMessage(merPayRequestUp);
 
             //日志
             logger.info("支付回调--发送给商户: 请求地址：" + notify_url + "; 请求参数" + merPostParamMap);
