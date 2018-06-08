@@ -40,6 +40,16 @@ public class PayOrderPayMessage implements Serializable {
     private String notifyContent;
 
     /**
+     * 类型: 1:同步; 2:异步;
+     */
+    private Byte type;
+
+    /**
+     * 发送给商户的异步回调信息ID
+     */
+    private Long mermessageId;
+
+    /**
      * 
      */
     private Date addtime;
@@ -107,6 +117,22 @@ public class PayOrderPayMessage implements Serializable {
         this.notifyContent = notifyContent == null ? null : notifyContent.trim();
     }
 
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public Long getMermessageId() {
+        return mermessageId;
+    }
+
+    public void setMermessageId(Long mermessageId) {
+        this.mermessageId = mermessageId;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -139,6 +165,8 @@ public class PayOrderPayMessage implements Serializable {
         sb.append(", notifyTranno=").append(notifyTranno);
         sb.append(", returnContent=").append(returnContent);
         sb.append(", notifyContent=").append(notifyContent);
+        sb.append(", type=").append(type);
+        sb.append(", mermessageId=").append(mermessageId);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -168,6 +196,8 @@ public class PayOrderPayMessage implements Serializable {
             && (this.getNotifyTranno() == null ? other.getNotifyTranno() == null : this.getNotifyTranno().equals(other.getNotifyTranno()))
             && (this.getReturnContent() == null ? other.getReturnContent() == null : this.getReturnContent().equals(other.getReturnContent()))
             && (this.getNotifyContent() == null ? other.getNotifyContent() == null : this.getNotifyContent().equals(other.getNotifyContent()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getMermessageId() == null ? other.getMermessageId() == null : this.getMermessageId().equals(other.getMermessageId()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -186,6 +216,8 @@ public class PayOrderPayMessage implements Serializable {
         result = prime * result + ((getNotifyTranno() == null) ? 0 : getNotifyTranno().hashCode());
         result = prime * result + ((getReturnContent() == null) ? 0 : getReturnContent().hashCode());
         result = prime * result + ((getNotifyContent() == null) ? 0 : getNotifyContent().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getMermessageId() == null) ? 0 : getMermessageId().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
