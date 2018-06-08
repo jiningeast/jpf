@@ -1561,7 +1561,9 @@ public class YinjiaStageController {
         ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
         modifyPayMessageRequest.setNotifyTranno(request.getTranNo());
         modifyPayMessageRequest.setOrderid(request.getOutOrderNo());
-        modifyPayMessageRequest.setNotifyContent(request.toString());
+        Map<String,Object> requestMap = ClassUtil.requestToMap(request);
+        String requestJson = JsonUtils.toJson(requestMap);
+        modifyPayMessageRequest.setNotifyContent(requestJson);
         modifyPayMessageRequest.setUpdatetime(new Date());
         pcaServiceFacade.modifyPayMessage(modifyPayMessageRequest);
 
@@ -1606,7 +1608,7 @@ public class YinjiaStageController {
             sbf_mer.append("\n\nTime:" + myfmt.format(date) + "支付回调--发送给商户");
             sbf_mer.append("\n请求地址：" + notify_url);
             sbf_mer.append("\n接口参数：" + merPostParamMap);
-            if(response == "SUCCESS")
+            if( response.equals("SUCCESS") )
             {
                 sbf_mer.append("\n回调信息：" + "SUCCESS");
                 LogsCustomUtils.writeIntoFile(sbf_mer.toString(),"", fileName_merNofity,true);
