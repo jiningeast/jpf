@@ -27,7 +27,7 @@ public class YinjiaSignNotifyRequest {
     /**
      * 交易流水号
      */
-    private String tranNO;
+    private String tranNo;
 
     /**
      * 商户订单号
@@ -81,12 +81,12 @@ public class YinjiaSignNotifyRequest {
         this.sign = sign;
     }
 
-    public String getTranNO() {
-        return tranNO;
+    public String getTranNo() {
+        return tranNo;
     }
 
-    public void setTranNO(String tranNO) {
-        this.tranNO = tranNO;
+    public void setTranNo(String tranNo) {
+        this.tranNo = tranNo;
     }
 
     public String getOutOrderNo() {
@@ -123,15 +123,15 @@ public class YinjiaSignNotifyRequest {
 
     public Map<String, Object> toMap(){
         Map<String,Object> map = new HashMap<>();
-        map.put("sysMerchNo", sysMerchNo);
-        map.put("inputCharset", inputCharset);
-        map.put("signType", signType);
-        map.put("sign", sign);
-        map.put("tranNO", tranNO);
-        map.put("outOrderNo", outOrderNo);
         map.put("signStatus", signStatus);
+        map.put("sysMerchNo", sysMerchNo);
+        map.put("sign", sign);
+        map.put("signType", signType);
         map.put("chnCode", chnCode);
+        map.put("inputCharset", inputCharset);
+        map.put("tranNo", tranNo);
         map.put("chnAcctId", chnAcctId);
+        map.put("outOrderNo", outOrderNo);
 
         /*TreeMap<String, String> treeMap = new TreeMap<>();
         treeMap.putAll(map);*/
