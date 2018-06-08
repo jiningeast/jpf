@@ -310,8 +310,10 @@ public class YinjiaStageController {
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
         // 给输出的signUrl urlEncode一下
+        String signUrlUndecode = null;
         String signUrl = null;
         try{
+            signUrlUndecode = ConfigUtil.getValue("TERMS_URL")+urlTail;
             signUrl = URLEncoder.encode(ConfigUtil.getValue("TERMS_URL")+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
             yjResponseDto.clear();
@@ -320,7 +322,14 @@ public class YinjiaStageController {
 
             return yjResponseDto;
         }
+        // 获取signUrl的二进制流
+        Map<String,Object> imageStreamRequest = new HashMap<>();
+        imageStreamRequest.put("content",signUrlUndecode);
+        String imageStream = OkHttpUtils.postForm(ConfigUtil.getValue("GET_IMAGE_STREAM_URL"), imageStreamRequest);
+
+        // 返回参数
         dataMap.put("signUrl", signUrl);
+        dataMap.put("imageStream", imageStream);
         dataMap.put("orderid", request.getOrderid());
         dataMap.put("platformOrderid", orderid);
         yjResponseDto.setData(dataMap);
@@ -576,8 +585,8 @@ public class YinjiaStageController {
             chinapayMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
             chinapayMap.put("inputCharset", "UTF-8");
             chinapayMap.put("interestMode", "01");
-            /*chinapayMap.put("chnCode", paramMap.get("CP_Code"));
-            chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));*/
+            chinapayMap.put("chnCode", paramMap.get("CP_Code"));
+            chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));
             chinapayMap.put("outOrderNo", newSignOrderid);
             chinapayMap.put("frontUrl", ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES);
             logger.info("frontUrl="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES+" length="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL").length()+frontAES.length());
@@ -877,8 +886,8 @@ public class YinjiaStageController {
             maptree.put("reqType","02");//用于区分发送短信的类型
             maptree.put("clientIp",ServletUtils.getIpAddr(request));//ServletUtils.getIpAddr(request)
             //maptree.put("clientIp","10.10.18.17");
-            /*maptree.put("chnCode",maparr.get("CP_Code"));
-            maptree.put("chnAcctId",maparr.get("CP_Acctid"));*/
+            maptree.put("chnCode",maparr.get("CP_Code"));
+            maptree.put("chnAcctId",maparr.get("CP_Acctid"));
             maptree.put("selectFinaCode",orderCpInfo.getSelectfinacode());
             maptree.put("accountType","CREDIT");
             maptree.put("accountNumber",orderCpInfo.getBankaccountnumber());
