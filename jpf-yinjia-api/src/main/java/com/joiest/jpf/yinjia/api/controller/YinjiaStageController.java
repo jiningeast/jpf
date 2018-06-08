@@ -576,8 +576,8 @@ public class YinjiaStageController {
             chinapayMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
             chinapayMap.put("inputCharset", "UTF-8");
             chinapayMap.put("interestMode", "01");
-            /*chinapayMap.put("chnCode", paramMap.get("CP_Code"));
-            chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));*/
+            chinapayMap.put("chnCode", paramMap.get("CP_Code"));
+            chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));
             chinapayMap.put("outOrderNo", newSignOrderid);
             chinapayMap.put("frontUrl", ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES);
             logger.info("frontUrl="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES+" length="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL").length()+frontAES.length());
@@ -877,8 +877,8 @@ public class YinjiaStageController {
             maptree.put("reqType","02");//用于区分发送短信的类型
             maptree.put("clientIp",ServletUtils.getIpAddr(request));//ServletUtils.getIpAddr(request)
             //maptree.put("clientIp","10.10.18.17");
-            /*maptree.put("chnCode",maparr.get("CP_Code"));
-            maptree.put("chnAcctId",maparr.get("CP_Acctid"));*/
+            maptree.put("chnCode",maparr.get("CP_Code"));
+            maptree.put("chnAcctId",maparr.get("CP_Acctid"));
             maptree.put("selectFinaCode",orderCpInfo.getSelectfinacode());
             maptree.put("accountType","CREDIT");
             maptree.put("accountNumber",orderCpInfo.getBankaccountnumber());
