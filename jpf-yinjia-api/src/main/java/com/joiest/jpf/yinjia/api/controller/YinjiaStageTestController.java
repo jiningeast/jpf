@@ -509,7 +509,8 @@ public class YinjiaStageTestController {
     public String signUserInfo(YinjiaSignUserInfoRequest request, HttpServletRequest httpRequest){
         String dataJson = AESUtils.decrypt(request.getData(), ConfigUtil.getValue("AES_KEY"));
         Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
-        String signOrderid = createOrderid();
+        String newSignOrderid = createOrderid();
+        String oldSignOrderid = "";
 
         // 获取订单信息
         /*OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"), true);
@@ -532,7 +533,7 @@ public class YinjiaStageTestController {
                 // 从未签约过，准备插入一条签约记录
                 OrderCpInterfaceInfo orderCpInsert = new OrderCpInterfaceInfo();
                 orderCpInsert.setMerchNo(paramMap.get("CP_MerchaNo"));
-                orderCpInsert.setOrderid(signOrderid);
+                orderCpInsert.setOrderid(newSignOrderid);
                 orderCpInsert.setMtsid(Long.parseLong(dataMap.get("mid")));
                 orderCpInsert.setInterestmode((long)1);
                 orderCpInsert.setSignedname(request.getSignedName());
@@ -560,7 +561,7 @@ public class YinjiaStageTestController {
                 }
             }else{
                 // 如果不是第一次签约则将老的orderid获取到
-                signOrderid = orderCpInterfaceInfo.getOrderid();
+                oldSignOrderid = orderCpInterfaceInfo.getOrderid();
             }
 
             // 构建返回加密串
@@ -577,7 +578,7 @@ public class YinjiaStageTestController {
             chinapayMap.put("interestMode", "01");
             /*chinapayMap.put("chnCode", paramMap.get("CP_Code"));
             chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));*/
-            chinapayMap.put("outOrderNo", signOrderid);
+            chinapayMap.put("outOrderNo", newSignOrderid);
             chinapayMap.put("frontUrl", ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES);
             logger.info("frontUrl="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES+" length="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL").length()+frontAES.length());
             chinapayMap.put("backUrl", ConfigUtil.getValue("CHINAPAY_SIGN_BACK_URL"));
@@ -630,7 +631,7 @@ public class YinjiaStageTestController {
             // 增加签约流水记录
             OrderCpMessageInfo orderCpMessageInfo = new OrderCpMessageInfo();
             orderCpMessageInfo.setOrderid(dataMap.get("orderid"));
-            orderCpMessageInfo.setSignOrderid(signOrderid);
+            orderCpMessageInfo.setSignOrderid(newSignOrderid);
             orderCpMessageInfo.setReturnTranno(signResponseMap.get("tranNo"));
             orderCpMessageInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
             orderCpMessageInfo.setReturnContent(response);
@@ -638,6 +639,13 @@ public class YinjiaStageTestController {
 
             // 更新签约表
             OrderCpInterfaceInfo orderCpInfo = new OrderCpInterfaceInfo();
+            String signOrderid = "";
+            // 判断更新数据时取的是老orderid还是新orderid
+            if ( StringUtils.isBlank(oldSignOrderid) ){
+                signOrderid = newSignOrderid;
+            }else{
+                signOrderid = oldSignOrderid;
+            }
             orderCpInfo.setOrderid(signOrderid);
             orderCpInfo.setReturnContent(response);
             logger.info(signResponseMap);
@@ -933,7 +941,7 @@ public class YinjiaStageTestController {
             SmsMessageInfo smsMessageInfo = new SmsMessageInfo();
             smsMessageInfo.setOrderid(orderid);
             smsMessageInfo.setMtsid(orderInfo.getMtsid().toString());
-            smsMessageInfo.setPtype((byte)99);
+            smsMessageInfo.setPtype((byte)3);
             smsMessageInfo.setPtypeCn(" ");
             smsMessageInfo.setSendtype((byte)1);
             smsMessageInfo.setSendtypeCn("支付");
