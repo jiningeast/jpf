@@ -310,8 +310,10 @@ public class YinjiaStageTestController {
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
         // 给输出的signUrl urlEncode一下
+        String signUrlUndecode = null;
         String signUrl = null;
         try{
+            signUrlUndecode = ConfigUtil.getValue("TERMS_URL")+urlTail;
             signUrl = URLEncoder.encode(ConfigUtil.getValue("TERMS_URL")+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
             yjResponseDto.clear();
@@ -320,7 +322,14 @@ public class YinjiaStageTestController {
 
             return yjResponseDto;
         }
+        // 获取signUrl的二进制流
+        Map<String,Object> imageStreamRequest = new HashMap<>();
+        imageStreamRequest.put("content",signUrlUndecode);
+        String imageStream = OkHttpUtils.postForm(ConfigUtil.getValue("GET_IMAGE_STREAM_URL"), imageStreamRequest);
+
+        // 返回参数
         dataMap.put("signUrl", signUrl);
+        dataMap.put("imageStream", imageStream);
         dataMap.put("orderid", request.getOrderid());
         dataMap.put("platformOrderid", orderid);
         yjResponseDto.setData(dataMap);
