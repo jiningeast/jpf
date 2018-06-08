@@ -1571,8 +1571,8 @@ public class YinjiaStageController {
         modifyPayMessageRequest.setNotifyTranno(request.getTranNo());
         modifyPayMessageRequest.setOrderid(request.getOutOrderNo());
         Map<String,Object> requestMap = ClassUtil.requestToMap(request);
-        String requestJson = JsonUtils.toJson(requestMap);
-        modifyPayMessageRequest.setNotifyContent(requestJson);
+        String requestStr = ToolUtils.mapToUrl(requestMap);
+        modifyPayMessageRequest.setNotifyContent(requestStr);
         modifyPayMessageRequest.setUpdatetime(new Date());
         pcaServiceFacade.modifyPayMessage(modifyPayMessageRequest);
 
