@@ -352,6 +352,9 @@ public class YinjiaStageTestController {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_DATA.getCode(), JpfInterfaceErrorInfo.INCORRECT_DATA.getDesc());
         }
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderidAndForeignOrderid(dataMap.get("orderid"), dataMap.get("platformOrderid"), true);
+        if ( orderYinjiaApiInfo.getPayStatus() == 1 ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.ORDER_CLOSED.getCode(), JpfInterfaceErrorInfo.ORDER_CLOSED.getDesc());
+        }
         MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchantByMerchNo(dataMap.get("merchNo"));
         MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(merInfo.getId(), orderYinjiaApiInfo.getPaytype(), true);
 
@@ -437,6 +440,9 @@ public class YinjiaStageTestController {
 
         // 获取此订单所有相关信息
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(request.getOrderid(),true);
+        if ( orderYinjiaApiInfo.getPayStatus() == 1 ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.ORDER_CLOSED.getCode(), JpfInterfaceErrorInfo.ORDER_CLOSED.getDesc());
+        }
         Long mtsid = orderYinjiaApiInfo.getMtsid();
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(mtsid,7);
         String bankcatids[] = merchantPayTypeInfo.getBankcatid().split(",");
@@ -741,6 +747,9 @@ public class YinjiaStageTestController {
 
         // 获取订单信息
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
+        if ( orderYinjiaApiInfo.getPayStatus() == 1 ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.ORDER_CLOSED.getCode(), JpfInterfaceErrorInfo.ORDER_CLOSED.getDesc());
+        }
         String foreignRequest = orderYinjiaApiInfo.getForeignRequest();
         Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);
 
@@ -830,6 +839,9 @@ public class YinjiaStageTestController {
         }
         //获取订单信息
         OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(orderid.trim(),true);
+        if ( orderInfo.getPayStatus() == 1 ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.ORDER_CLOSED.getCode(), JpfInterfaceErrorInfo.ORDER_CLOSED.getDesc());
+        }
         if ( orderInfo.getSignOrderid()==null )
         {
             //throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约");
