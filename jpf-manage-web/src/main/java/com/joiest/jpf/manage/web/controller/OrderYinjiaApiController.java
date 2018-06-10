@@ -63,7 +63,7 @@ public class OrderYinjiaApiController {
         OrderCpInterfaceInfo orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(signOrderid);
 
         //支付回调信息
-        List<OrderPayMessageInfo> payMessagetList = orderPayMessageServiceFacade.getOrderPayMessageListByOrderId(orderid);
+        List<OrderPayMessageInfo> payMessagetList = orderPayMessageServiceFacade.getOrderPayMessageReturnListByOrderId(orderid);
 
         //支付回调给商户的信息
         List<OrderPayMerMessageInfo> payMerMessageList = orderPayMerMessageServiceFacade.getOrderPayMerMessageListByOrderId(orderid);

@@ -8,8 +8,12 @@ import java.util.List;
 public interface OrderPayMessageServiceFacade {
 
     /**
-     * 根据 orderid 获取订单支付流水
+     * 根据 orderid 获取订单支付同步流水 同步信息
      */
-    List<OrderPayMessageInfo> getOrderPayMessageListByOrderId(String orderid);
+    List<OrderPayMessageInfo> getOrderPayMessageReturnListByOrderId(String orderid);
+    /**
+     * 根据 orderid 获取订单支付回调流水 异步信息
+     */
+    List<OrderPayMessageInfo> getOrderPayMessageNotifyListByOrderId(String orderid);
 
 }

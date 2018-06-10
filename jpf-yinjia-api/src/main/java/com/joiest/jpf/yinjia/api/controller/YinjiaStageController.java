@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -88,6 +89,14 @@ public class YinjiaStageController {
 
     @Autowired
     private OrdersServiceFacade ordersServiceFacade;
+
+    //获取分期费率信息
+    @Autowired
+    private VirtualInterfaceServiceFacade virtualInterfaceServiceFacade;
+
+    //订单费率金额详情
+    @Autowired
+    private OrdersMoneyInterfaceServiceFacade ordersMoneyInterfaceServiceFacade;
 
     /**
      * 商户获取银联信用卡分期支付的期数
@@ -296,6 +305,17 @@ public class YinjiaStageController {
         ordersInfo.setCreated(new Date());
         ordersServiceFacade.insRecord(ordersInfo);
 
+        //创建费率信息
+        OrdersMoneyInterfaceInfo moneyInterfaceInfo = new OrdersMoneyInterfaceInfo();
+        moneyInterfaceInfo.setOrderid(Long.parseLong(orderid));
+        moneyInterfaceInfo.setMoney(new BigDecimal(request.getProductTotalPrice()));
+        moneyInterfaceInfo.setMtsid(merchInfo.getId());
+        moneyInterfaceInfo.setMerchRate(merchInfo.getRate());
+        Double merRateMoney = BigDecimalCalculateUtils.mul(totalPrice, new Double(merchInfo.getRate()));
+        moneyInterfaceInfo.setMerchMoney(new BigDecimal(new DecimalFormat("#.00").format(merRateMoney)));
+        moneyInterfaceInfo.setAddtime(new Date());
+        ordersMoneyInterfaceServiceFacade.addRecord(moneyInterfaceInfo);
+
         // 成功返回
         yjResponseDto.clear();
         yjResponseDto.setCode("10000");
@@ -499,6 +519,21 @@ public class YinjiaStageController {
             return Base64CustomUtils.base64Encoder(responseJson);
         }
 
+        //获取分期费率
+        VirtualInfo stageRateInfo = virtualInterfaceServiceFacade.getInfoByRelateId(catid);
+        //更新订单费率信息表
+        OrdersMoneyInterfaceInfo moneyInterfaceInfo = new OrdersMoneyInterfaceInfo();
+        moneyInterfaceInfo.setOrderid(Long.parseLong(orderYinjiaApiInfo.getOrderid()));
+        moneyInterfaceInfo.setStageId(Integer.toString(catid));
+        moneyInterfaceInfo.setStageName(request.getTerm()+"期");
+        moneyInterfaceInfo.setStageRate(stageRateInfo.getIntro());
+        Double orderMoney = new Double(orderYinjiaApiInfo.getOrderPayPrice().toString());
+        Double stageRate = new Double(stageRateInfo.getIntro());
+        Double stageRateMoney = BigDecimalCalculateUtils.mul(orderMoney, stageRate);
+        moneyInterfaceInfo.setStageMoney(new BigDecimal(new DecimalFormat("#.00").format(stageRateMoney)));
+        moneyInterfaceInfo.setUpdatetime(new Date());
+        ordersMoneyInterfaceServiceFacade.modifyRecord(moneyInterfaceInfo);
+
         // 正确返回
         Map<String, String> responseDataMap = new HashMap<>();
         responseDataMap.put("orderid", request.getOrderid());
@@ -519,8 +554,7 @@ public class YinjiaStageController {
      * H5 第三步 点击提交的签约操作
      * request的data加密串中包含orderid和mid
      *
-     */
-    @RequestMapping(value = "/signUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+     */@RequestMapping(value = "/signUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String signUserInfo(YinjiaSignUserInfoRequest request, HttpServletRequest httpRequest){
         String dataJson = AESUtils.decrypt(request.getData(), ConfigUtil.getValue("AES_KEY"));
