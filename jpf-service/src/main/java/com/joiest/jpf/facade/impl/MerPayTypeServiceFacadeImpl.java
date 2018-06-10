@@ -565,7 +565,7 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 //        }
 
         Double mrate = Double.parseDouble(rate);
-        if ( mrate > 1 )
+        if ( mrate > 0.1 )
         {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请输入正确的商户费率");
         }
