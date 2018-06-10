@@ -334,6 +334,7 @@ public class YinjiaStageController {
         dataMap.put("platformOrderid", orderid);
         yjResponseDto.setData(dataMap);
 
+        logger.info(dataMap);
         return yjResponseDto;
     }
 
@@ -521,11 +522,6 @@ public class YinjiaStageController {
         String newSignOrderid = createOrderid();
         String oldSignOrderid = "";
 
-        // 获取订单信息
-        /*OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"), true);
-        String foreignRequest = orderInfo.getForeignRequest();
-        Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);*/
-
         // 获取商户支付配置中的CP_MerchNO等参数
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), 7, true);
         String paramJson = merchantPayTypeInfo.getParam();
@@ -649,13 +645,14 @@ public class YinjiaStageController {
                 signOrderid = oldSignOrderid;
             }
             orderCpInfo.setOrderid(signOrderid);
+            orderCpInfo.setNewSignOrderid(newSignOrderid);
             orderCpInfo.setReturnContent(response);
             logger.info(signResponseMap);
             // 获取返回参数
             if ( signResponseMap.get("retCode").equals("0000") ){
                 // 签约通知成功
                 orderCpInfo.setTranno(signResponseMap.get("tranNo"));
-                orderCpInfo.setSignstatus("2");
+                orderCpInfo.setSignstatus("1");
                 if ( signResponseMap.containsKey("sysAgreeNo") ){
                     orderCpInfo.setSysagreeno(signResponseMap.get("sysAgreeNo"));
                 }
@@ -767,16 +764,21 @@ public class YinjiaStageController {
     public String signNotify(YinjiaSignNotifyRequest request, HttpServletRequest httpRequest){
         logger.info("签约异步回调："+httpRequest);
 
+        // 根据签约订单号获取业务订单号
+        OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderBySignOrderid(request.getOutOrderNo(),true);
+
         // 签约流水表增加异步回调记录
         String notifyContent = ToolUtils.mapToUrl(request.toMap());
         OrderCpMessageInfo orderCpMessageInfo = new OrderCpMessageInfo();
-        orderCpMessageInfo.setNotifyTranno(request.getTranNO());
+        orderCpMessageInfo.setOrderid(orderInfo.getOrderid());
+        orderCpMessageInfo.setSignOrderid(request.getOutOrderNo());
+        orderCpMessageInfo.setNotifyTranno(request.getTranNo());
         orderCpMessageInfo.setNotifyContent(notifyContent);
         orderCpMessageServiceFacade.insRecord(orderCpMessageInfo);
 
         // 更新订单表用户操作状态
         OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
-        orderYinjiaApiInfo.setOrderid(request.getOutOrderNo());
+        orderYinjiaApiInfo.setSignOrderid(Long.parseLong(request.getOutOrderNo()));
 
         OrderCpInterfaceInfo orderCpInterfaceInfo = new OrderCpInterfaceInfo();
         orderCpInterfaceInfo.setOrderid(request.getOutOrderNo());
@@ -788,7 +790,7 @@ public class YinjiaStageController {
 
             // 更新用户操作状态为4：签约返回成功,待获取支付短信
             orderYinjiaApiInfo.setUserOperateStatus((byte)4);
-            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+            orderYinjiaApiServiceFacade.updateColumnBySignOrderid(orderYinjiaApiInfo);
         }else if (request.getSignStatus().equals("FAIL")){
             // 更新签约状态为签约失败
             orderCpInterfaceInfo.setSignstatus("3");
@@ -796,7 +798,7 @@ public class YinjiaStageController {
 
             // 更新用户操作状态为4：签约返回成功,待获取支付短信
             orderYinjiaApiInfo.setUserOperateStatus((byte)5);
-            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+            orderYinjiaApiServiceFacade.updateColumnBySignOrderid(orderYinjiaApiInfo);
         }
 
         return "SUCCESS";

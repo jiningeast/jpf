@@ -334,6 +334,7 @@ public class YinjiaStageTestController {
         dataMap.put("platformOrderid", orderid);
         yjResponseDto.setData(dataMap);
 
+        logger.info(dataMap);
         return yjResponseDto;
     }
 
@@ -521,11 +522,6 @@ public class YinjiaStageTestController {
         String newSignOrderid = createOrderid();
         String oldSignOrderid = "";
 
-        // 获取订单信息
-        /*OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"), true);
-        String foreignRequest = orderInfo.getForeignRequest();
-        Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);*/
-
         // 获取商户支付配置中的CP_MerchNO等参数
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), 7, true);
         String paramJson = merchantPayTypeInfo.getParam();
@@ -624,16 +620,9 @@ public class YinjiaStageTestController {
             requestMap.put("sign",signMySign);
             requestMap.put("signType","MD5");
             // 请求签约url
-//            String response = OkHttpUtils.postForm(ConfigUtil.getValue("CHINAPAY_URL_REQUEST")+"sign",requestMap);
-            // 测试服务器固定返回签约成功
-            Map<String, String> testResponseMap = new HashMap<>();
-            testResponseMap.put("retCode","0000");
-            testResponseMap.put("tranNo","0000");
-            String response = JsonUtils.toJson(testResponseMap);
-
+            String response = OkHttpUtils.postForm(ConfigUtil.getValue("CHINAPAY_URL_REQUEST")+"sign",requestMap);
             logger.info("签约返回："+response);
 
-//            Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
             Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
             String html = null;
 
@@ -656,13 +645,14 @@ public class YinjiaStageTestController {
                 signOrderid = oldSignOrderid;
             }
             orderCpInfo.setOrderid(signOrderid);
+            orderCpInfo.setNewSignOrderid(newSignOrderid);
             orderCpInfo.setReturnContent(response);
             logger.info(signResponseMap);
             // 获取返回参数
             if ( signResponseMap.get("retCode").equals("0000") ){
                 // 签约通知成功
                 orderCpInfo.setTranno(signResponseMap.get("tranNo"));
-                orderCpInfo.setSignstatus("2");
+                orderCpInfo.setSignstatus("1");
                 if ( signResponseMap.containsKey("sysAgreeNo") ){
                     orderCpInfo.setSysagreeno(signResponseMap.get("sysAgreeNo"));
                 }
@@ -704,28 +694,15 @@ public class YinjiaStageTestController {
                     return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
                 }
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), JpfInterfaceErrorInfo.SIGN_FAILED.getDesc(), null);
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), signResponseMap.get("retMsg"), null);
             }
 
             // 构建返回
-            /*Map<String, Object> responseDataMap = new HashMap<>();
+            Map<String, Object> responseDataMap = new HashMap<>();
             responseDataMap.put("html", html);
             String responseDataJson = JsonUtils.toJson(responseDataMap);
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_SIGNED.getDesc(),responseDataJson);*/
-
-            Map<String, Object> responseDataMap = new HashMap<>();
-            responseDataMap.put("orderid", dataMap.get("orderid"));
-            String responseDataJson = JsonUtils.toJson(responseDataMap);
-            String AESStr = AESUtils.encrypt(responseDataJson, ConfigUtil.getValue("AES_KEY"));
-
-            Map<String, String> responseMap = new HashMap<>();
-            responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
-            responseMap.put("info", JpfInterfaceErrorInfo.SUCCESS.getDesc());
-            responseMap.put("data", AESStr);
-            String responseJson = JsonUtils.toJson(responseMap);
-
-            return Base64CustomUtils.base64Encoder(responseJson).replaceAll("\r","").replaceAll("\n","");
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_NOT_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_NOT_SIGNED.getDesc(),responseDataJson);
 
         }
 
@@ -787,16 +764,21 @@ public class YinjiaStageTestController {
     public String signNotify(YinjiaSignNotifyRequest request, HttpServletRequest httpRequest){
         logger.info("签约异步回调："+httpRequest);
 
+        // 根据签约订单号获取业务订单号
+        OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderBySignOrderid(request.getOutOrderNo(),true);
+
         // 签约流水表增加异步回调记录
         String notifyContent = ToolUtils.mapToUrl(request.toMap());
         OrderCpMessageInfo orderCpMessageInfo = new OrderCpMessageInfo();
-        orderCpMessageInfo.setNotifyTranno(request.getTranNO());
+        orderCpMessageInfo.setOrderid(orderInfo.getOrderid());
+        orderCpMessageInfo.setSignOrderid(request.getOutOrderNo());
+        orderCpMessageInfo.setNotifyTranno(request.getTranNo());
         orderCpMessageInfo.setNotifyContent(notifyContent);
         orderCpMessageServiceFacade.insRecord(orderCpMessageInfo);
 
         // 更新订单表用户操作状态
         OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
-        orderYinjiaApiInfo.setOrderid(request.getOutOrderNo());
+        orderYinjiaApiInfo.setSignOrderid(Long.parseLong(request.getOutOrderNo()));
 
         OrderCpInterfaceInfo orderCpInterfaceInfo = new OrderCpInterfaceInfo();
         orderCpInterfaceInfo.setOrderid(request.getOutOrderNo());
@@ -808,7 +790,7 @@ public class YinjiaStageTestController {
 
             // 更新用户操作状态为4：签约返回成功,待获取支付短信
             orderYinjiaApiInfo.setUserOperateStatus((byte)4);
-            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+            orderYinjiaApiServiceFacade.updateColumnBySignOrderid(orderYinjiaApiInfo);
         }else if (request.getSignStatus().equals("FAIL")){
             // 更新签约状态为签约失败
             orderCpInterfaceInfo.setSignstatus("3");
@@ -816,7 +798,7 @@ public class YinjiaStageTestController {
 
             // 更新用户操作状态为4：签约返回成功,待获取支付短信
             orderYinjiaApiInfo.setUserOperateStatus((byte)5);
-            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+            orderYinjiaApiServiceFacade.updateColumnBySignOrderid(orderYinjiaApiInfo);
         }
 
         return "SUCCESS";

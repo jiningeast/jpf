@@ -12,9 +12,13 @@ public interface OrderYinjiaApiServiceFacade {
 
     public OrderYinjiaApiInfo getOrderByOrderid(String orderid, boolean forInterface);
 
+    public OrderYinjiaApiInfo getOrderBySignOrderid(String signOrerid, boolean forInterface);
+
     public int updataSignOrderid(OrderYinjiaApiInfo orderYinjiaApiInfo);
 
     public int updateColumnByOrderid(OrderYinjiaApiInfo orderYinjiaApiInfo);
+
+    public int updateColumnBySignOrderid(OrderYinjiaApiInfo orderYinjiaApiInfo);
 
     public int updateOrdername(OrderYinjiaApiInfo orderYinjiaApiInfo, boolean forInterface);
 

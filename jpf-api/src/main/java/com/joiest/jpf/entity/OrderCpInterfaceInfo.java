@@ -134,6 +134,11 @@ public class OrderCpInterfaceInfo {
      */
     private String bankname;
 
+    /**
+     * 新签约订单号
+     */
+    private String newSignOrderid;
+
     public String getBankname() {
         return bankname;
     }
@@ -340,5 +345,13 @@ public class OrderCpInterfaceInfo {
 
     public void setNotifyContent(String notifyContent) {
         this.notifyContent = notifyContent;
+    }
+
+    public String getNewSignOrderid() {
+        return newSignOrderid;
+    }
+
+    public void setNewSignOrderid(String newSignOrderid) {
+        this.newSignOrderid = newSignOrderid;
     }
 }
