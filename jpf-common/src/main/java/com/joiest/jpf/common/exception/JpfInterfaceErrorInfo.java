@@ -53,6 +53,7 @@ public enum JpfInterfaceErrorInfo {
     ILLEGAL_PUBLICKEY("10015", "私钥错误"),
     INCORRECT_SIGN("10016","验签失败"),
     NO_SIGN("10017", "缺少签名参数"),
+    ORDER_CLOSED("10018", "订单已关闭"),
 
     // 获取分期错误参数 10020开头
     NO_TERMS_CONFIGURATION("10020", "商户尚未配置银联信用卡分期支付信息"),
