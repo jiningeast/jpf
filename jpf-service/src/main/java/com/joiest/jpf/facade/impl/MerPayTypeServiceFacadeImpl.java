@@ -535,7 +535,7 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         }
         if ( StringUtils.isBlank(pkey) )
         {
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "商户密钥不能为空");
         }
 
         PayMerchantsExample example = new PayMerchantsExample();
@@ -546,5 +546,39 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         payMerchantsMapper.updateByExampleSelective(payMerchants,example);
         return new JpfResponseDto();
     }
+
+    /**
+     * 添加、修改商户密钥和费率
+     * @param id
+     * @param pkey
+     * @return
+     */
+    public JpfResponseDto modifyMerPKeyAndRate(String id,String pkey,String rate)
+    {
+        if ( StringUtils.isBlank(id) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+//        if ( StringUtils.isBlank(pkey) )
+//        {
+//            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+//        }
+
+        Double mrate = Double.parseDouble(rate);
+        if ( mrate > 1 )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请输入正确的商户费率");
+        }
+
+        PayMerchantsExample example = new PayMerchantsExample();
+        PayMerchantsExample.Criteria c = example.createCriteria();
+        c.andIdEqualTo(Long.valueOf(id));
+        PayMerchants payMerchants = new PayMerchants();
+        payMerchants.setPrivateKey(pkey);
+        payMerchants.setRate(rate);
+        payMerchantsMapper.updateByExampleSelective(payMerchants,example);
+        return new JpfResponseDto();
+    }
+
 
 }

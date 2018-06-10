@@ -13,6 +13,8 @@
         #searchForm td { width: 5%;  }
         .statistics td:nth-child(odd) { background-color: rgb(241,241,241); text-align: right;}
         .statistics td:nth-child(even) { text-align: left; }
+        .datagrid-header td, .datagrid-body td, .datagrid-footer td{
+            text-align: center;}
     </style>
     <script>
         $(function () {
@@ -45,7 +47,7 @@
                     {field:'money',title:'金额',width:'8%', formatter:formatPrice},
                     {field:'cat',title:'支付方式',width:'10%'},
                     {field:'productId',title:'商品ID',width:'5%'},
-                    {field:'productName',title:'商品名称',width:'10%'},
+                    {field:'productName',title:'商品名称',width:'13%'},
                     {field:'productAmount',title:'商品数量',width:'5%'},
                     {field:'productUnitPrice',title:'商品单价',width:'5%', formatter:formatPrice},
                     {field:'created',title:'添加时间',width:'9%',formatter: formatDateStr}
@@ -77,8 +79,8 @@
             });
 
             $('#infoDiv').window({
-                width:'1024px',
-                height:'550px',
+                width:'1600px',
+                height:'800px',
                 closed:true,
                 modal:true
             });

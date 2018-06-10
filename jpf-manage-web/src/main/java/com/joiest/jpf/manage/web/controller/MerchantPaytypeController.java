@@ -192,4 +192,14 @@ public class MerchantPaytypeController {
     {
         return merPayTypeServiceFacade.modifyMerPKey(id,pkey);
     }
+
+    /**
+     * 添加、修改商户密钥和费率
+     */
+    @RequestMapping("/pkRate")
+    @ResponseBody
+    public JpfResponseDto modifyMerPrivateKeyAndRate(String id,String pkey,String mrate)
+    {
+        return merPayTypeServiceFacade.modifyMerPKeyAndRate(id,pkey,mrate);
+    }
 }

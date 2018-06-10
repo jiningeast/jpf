@@ -18,13 +18,38 @@ public class OrderPayMessageServiceFacadeImpl implements OrderPayMessageServiceF
     private PayOrderPayMessageMapper payOrderPayMessageMapper;
 
     /**
-     * 根据 orderid 获取订单支付流水
+     * 根据 orderid 获取订单支付同步流水
      */
-    public List<OrderPayMessageInfo> getOrderPayMessageListByOrderId(String orderid)
+    public List<OrderPayMessageInfo> getOrderPayMessageReturnListByOrderId(String orderid)
     {
         PayOrderPayMessageExample example = new PayOrderPayMessageExample();
+        example.setOrderByClause("id DESC");
         PayOrderPayMessageExample.Criteria c = example.createCriteria();
         c.andOrderidEqualTo(orderid);
+        c.andTypeEqualTo((byte)1);
+        List<PayOrderPayMessage> list = payOrderPayMessageMapper.selectByExample(example);
+
+        List<OrderPayMessageInfo> orderPayMessageList = new ArrayList<>();
+        for (PayOrderPayMessage one : list )
+        {
+            OrderPayMessageInfo info = new OrderPayMessageInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayOrderPayMessage.class, OrderPayMessageInfo.class, false);
+            beanCopier.copy(one, info, null);
+            orderPayMessageList.add(info);
+        }
+        return orderPayMessageList;
+    }
+
+    /**
+     * 根据 orderid 获取订单支付异步回调流水
+     */
+    public List<OrderPayMessageInfo> getOrderPayMessageNotifyListByOrderId(String orderid)
+    {
+        PayOrderPayMessageExample example = new PayOrderPayMessageExample();
+        example.setOrderByClause("id DESC");
+        PayOrderPayMessageExample.Criteria c = example.createCriteria();
+        c.andOrderidEqualTo(orderid);
+        c.andTypeEqualTo((byte)2);
         List<PayOrderPayMessage> list = payOrderPayMessageMapper.selectByExample(example);
 
         List<OrderPayMessageInfo> orderPayMessageList = new ArrayList<>();

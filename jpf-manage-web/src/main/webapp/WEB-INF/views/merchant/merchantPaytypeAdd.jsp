@@ -23,9 +23,21 @@
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;">商户名称：</td>
                     <td width="30%">${merchantInfo.merchName}</td>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;">商户密钥：</td>
-                    <td width="30%"><input type="text" name="private_key" id="private_key" value="${merchantInfo.privateKey}" style="width:70%" validtype="length[0,32]" class="easyui-textbox" data-options="requeired:true">
-                        &nbsp;&nbsp;<a id="pKeyBtn_m" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">保存</a>
+                    <td width="30%"><input type="text" name="private_key" id="private_key" value="${merchantInfo.privateKey}" style="width:90%" validtype="length[0,32]" class="easyui-textbox" data-options="requeired:true">
+                        <%--&nbsp;&nbsp;<a id="pKeyBtn_m" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">保存</a>--%>
                     </td>
+                </tr>
+                <tr>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">商户费率：</td>
+                    <td width="30%"><input type="text" name="mRate" id="mRate" value="${merchantInfo.rate}" style="width:90%" class="easyui-textbox" data-options="requeired:true,validType:'isFloat',prompt:'例:0.26  实际支付时的费率为:商户费率+分期费率'">
+                        &nbsp;&nbsp;
+                    </td>
+                    <td width="15%" style="text-align: right;background-color: #f1f1f1;">操作：</td>
+                    <td width="30%">
+                        <a id="SaveBtn_m" style="width:30%" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">保存</a>
+                    </td>
+                </tr>
+                <tr>
                 </tr>
                 <tr>
                     <th colspan="4">已有支付类型</th>
@@ -72,6 +84,20 @@
 </style>
 <script>
 
+    $.extend($.fn.validatebox.defaults.rules, {
+        isFloat : {
+            validator: function(value, param){
+                return isFloat(value);
+            },
+            message: '请输入正确的费率'
+        }
+    });
+    function isFloat(z_check_value){
+        var z_reg = /^0{1}\.{1}\d{2}$/;
+        return z_reg.test($.trim(z_check_value));
+    }
+
+
     //保存密钥
     $("#pKeyBtn_m").on("click", function () {
         if ( $("#private_key").val() != '' )
@@ -96,6 +122,31 @@
             });
             return false;
         }
+    });
+
+    //保存
+    $("#SaveBtn_m").on("click", function () {
+
+        var id = ${merchantInfo.id};
+        var pkey = $("#private_key").val();
+        var mRate = $("#mRate").val();
+        $.ajax({
+            type: 'post',
+            url: '../merchant/paytype/pkRate',
+            data: {id:id,pkey:pkey,mrate:mRate},
+            dataType: 'json',
+            success: function (msg) {
+                if (msg.retCode != '0000') {
+                    $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
+                } else {
+                    $.messager.alert('消息提示', '操作成功！', 'info');
+                }
+            },
+            error: function () {
+                $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+            }
+        });
+        return false;
     });
 
     //编辑页面加载
