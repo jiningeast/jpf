@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;">商户费率：</td>
-                    <td width="30%"><input type="text" name="mRate" id="mRate" value="${merchantInfo.rate}" style="width:90%" class="easyui-textbox" data-options="requeired:true,validType:'isFloat',prompt:'例:0.26  实际支付时的费率为:商户费率+分期费率'">
+                    <td width="30%"><input type="text" name="mRate" id="mRate" value="${merchantInfo.rate}" style="width:95%" class="easyui-textbox" data-options="requeired:true,validType:'isFloat',prompt:'例:0.026  实际支付时的费率为:商户费率+分期费率'">
                         &nbsp;&nbsp;
                     </td>
                     <td width="15%" style="text-align: right;background-color: #f1f1f1;">操作：</td>
@@ -93,40 +93,43 @@
         }
     });
     function isFloat(z_check_value){
-        var z_reg = /^0{1}\.{1}\d{2}$/;
+        var z_reg = /^0{1}(\.0){1}\d{2}$/;
         return z_reg.test($.trim(z_check_value));
     }
 
 
     //保存密钥
-    $("#pKeyBtn_m").on("click", function () {
-        if ( $("#private_key").val() != '' )
-        {
-            var id = ${merchantInfo.id};
-            var pkey = $("#private_key").val();
-            $.ajax({
-                type: 'post',
-                url: '../merchant/paytype/pk',
-                data: {id:id,pkey:pkey},
-                dataType: 'json',
-                success: function (msg) {
-                    if (msg.retCode != '0000') {
-                        $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-                    } else {
-                        $.messager.alert('消息提示', '操作成功！', 'info');
-                    }
-                },
-                error: function () {
-                    $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                }
-            });
-            return false;
-        }
-    });
+    <%--$("#pKeyBtn_m").on("click", function () {--%>
+        <%--if ( $("#private_key").val() != '' )--%>
+        <%--{--%>
+            <%--var id = ${merchantInfo.id};--%>
+            <%--var pkey = $("#private_key").val();--%>
+            <%--$.ajax({--%>
+                <%--type: 'post',--%>
+                <%--url: '../merchant/paytype/pk',--%>
+                <%--data: {id:id,pkey:pkey},--%>
+                <%--dataType: 'json',--%>
+                <%--success: function (msg) {--%>
+                    <%--if (msg.retCode != '0000') {--%>
+                        <%--$.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');--%>
+                    <%--} else {--%>
+                        <%--$.messager.alert('消息提示', '操作成功！', 'info');--%>
+                    <%--}--%>
+                <%--},--%>
+                <%--error: function () {--%>
+                    <%--$.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');--%>
+                <%--}--%>
+            <%--});--%>
+            <%--return false;--%>
+        <%--}--%>
+    <%--});--%>
 
     //保存
     $("#SaveBtn_m").on("click", function () {
-
+        var isValid = $("#paytypeForm").form('enableValidation').form('validate');
+        if (!isValid) {
+            return;
+        }
         var id = ${merchantInfo.id};
         var pkey = $("#private_key").val();
         var mRate = $("#mRate").val();
