@@ -1662,30 +1662,31 @@ public class YinjiaStageController {
 
         String postSign = SignUtils.getSign(postParamTree,merchInfo.getPrivateKey(),"UTF-8");
         merPostParamMap.put("sign",postSign);
+        String merPostJson = JsonUtils.toJson(merPostParamMap);
 
         String notify_url = null;
         StringBuilder sbf_mer = new StringBuilder();
         String fileName_merNofity = "merPayNotify";
 
-        //添加通知商户流水
-        ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
-        merPayRequest.setAddtime(new Date());
-        merPayRequest.setOrderid(orderInfo.getOrderid());
-        merPayRequest.setForeignOrderid(orderInfo.getForeignOrderid());
-        String merRequestStr = ToolUtils.mapToUrl(merPostParamMap);
-        merPayRequest.setNotifyContent(notify_url + "?" + merRequestStr);
-        int insertMerMessageRes = pcaServiceFacade.addPayMerMessage(merPayRequest);
-
-        //更新聚合回调流水
-        ModifyPayMessageRequest modifyPayMessageRequestUp = new ModifyPayMessageRequest();
-        modifyPayMessageRequestUp.setId(new Long(insertPayMsgRes).longValue());
-        modifyPayMessageRequestUp.setUpdatetime(new Date());
-        modifyPayMessageRequestUp.setMermessageId(new Long(insertMerMessageRes).longValue());
-        pcaServiceFacade.modifyPayMessage(modifyPayMessageRequestUp);
         try{
-
             notify_url = URLDecoder.decode(orderInfo.getNotifyUrl(), "UTF-8");
-            String response = OkHttpUtils.postForm(notify_url,merPostParamMap);
+            //添加通知商户流水
+            ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
+            merPayRequest.setAddtime(new Date());
+            merPayRequest.setOrderid(orderInfo.getOrderid());
+            merPayRequest.setForeignOrderid(orderInfo.getForeignOrderid());
+            String merRequestStr = ToolUtils.mapToUrl(merPostParamMap);
+            merPayRequest.setNotifyContent(notify_url + "?" + merRequestStr);
+            int insertMerMessageRes = pcaServiceFacade.addPayMerMessage(merPayRequest);
+
+            //更新聚合回调流水
+            ModifyPayMessageRequest modifyPayMessageRequestUp = new ModifyPayMessageRequest();
+            modifyPayMessageRequestUp.setId(new Long(insertPayMsgRes).longValue());
+            modifyPayMessageRequestUp.setUpdatetime(new Date());
+            modifyPayMessageRequestUp.setMermessageId(new Long(insertMerMessageRes).longValue());
+            pcaServiceFacade.modifyPayMessage(modifyPayMessageRequestUp);
+
+            String response = OkHttpUtils.postJson(notify_url,merPostJson);
 //            String response = "SUCCESS";
             //更新通知商户流水
             ModifyPayOrderPayMerRequest merPayRequestUp = new ModifyPayOrderPayMerRequest();
