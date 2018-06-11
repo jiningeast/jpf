@@ -184,7 +184,10 @@ public class YinjiaStageController {
         }else{
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
         }
-
+        if ( StringUtils.isBlank(merchInfo.getRate()))
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MERCH_RATE_ERROR.getCode(), JpfInterfaceErrorInfo.MERCH_RATE_ERROR.getDesc());
+        }
         // 签名串
         if ( StringUtils.isBlank(request.getSign()) ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc());
@@ -521,6 +524,10 @@ public class YinjiaStageController {
 
         //获取分期费率
         VirtualInfo stageRateInfo = virtualInterfaceServiceFacade.getInfoByRelateId(catid);
+        if ( StringUtils.isBlank(stageRateInfo.getIntro() ) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.STAGE_RATE_ERROR.getCode(), JpfInterfaceErrorInfo.STAGE_RATE_ERROR.getDesc());
+        }
         //更新订单费率信息表
         OrdersMoneyInterfaceInfo moneyInterfaceInfo = new OrdersMoneyInterfaceInfo();
         moneyInterfaceInfo.setOrderid(Long.parseLong(orderYinjiaApiInfo.getOrderid()));

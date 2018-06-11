@@ -66,6 +66,7 @@ public enum JpfInterfaceErrorInfo {
     SIGNURL_ENCODING_ERROR("10035", "返回signUrl编码错误"),
     INCORRECT_PAYTYPE("10036", "payType值有误，请检查"),
     UNSUPPORT_PAYTYPE("10037", "商户无此支付方式"),
+    MERCH_RATE_ERROR("10038", "商户尚未配置费率信息"),
 
     // H5 第一步 获取商户支付方式等信息
     INCORRECT_DATA("10040","加密信息有误"),
@@ -74,6 +75,7 @@ public enum JpfInterfaceErrorInfo {
     ILLEGAL_TERM("10050", "非法的分期期数"),
     UNSUPPORT_TERM("10051", "此商户不支持该分期数"),
     UPDATE_ORDERNAME_FAILED("10052", "保存分期期数失败"),
+    STAGE_RATE_ERROR("10053","尚未配置分期费率"),
 
     // H5 第三步 点击签约页的提交
     USER_NOT_SIGNED("10060", "用户未签约"),
