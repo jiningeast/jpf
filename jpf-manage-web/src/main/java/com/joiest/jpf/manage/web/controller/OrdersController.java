@@ -49,6 +49,10 @@ public class OrdersController {
     @Autowired
     private OrderYinjiaApiServiceFacade orderYinjiaApiServiceFacade;
 
+    //费率详情
+    @Autowired
+    private OrdersMoneyServiceFacade ordersMoneyServiceFacade;
+
     @RequestMapping("/index")
     public String index()
     {
@@ -108,6 +112,9 @@ public class OrdersController {
             orderCpInterfaceInfo = orderCpServiceFacade.getOrderCpByorderid(orderYinjiaApiInfo.getSignOrderid().toString());
         }
 
+        //订单费率详情
+        OrdersMoneyInfo ordersMoneyInfo = ordersMoneyServiceFacade.getOrdersMoneyInfo(Long.parseLong(orderYinjiaApiInfo.getOrderid()));
+
         //支付回调信息
         //同步信息
         List<OrderPayMessageInfo> payMessagetReturnList = orderPayMessageServiceFacade.getOrderPayMessageReturnListByOrderId(orderid);
@@ -127,6 +134,7 @@ public class OrdersController {
         modelMap.addAttribute("payMerMsgList", payMerMessageList);
         modelMap.addAttribute("orderCpInfo", orderCpInterfaceInfo);
         modelMap.addAttribute("merchantInfo", merchantInfo);
+        modelMap.addAttribute("ordersMoneyInfo", ordersMoneyInfo);
         modelMap.put("payDetaiStr", sbf.toString());
         return new ModelAndView("orders/paydetail", modelMap);
 

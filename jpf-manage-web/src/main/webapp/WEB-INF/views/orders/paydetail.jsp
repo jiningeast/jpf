@@ -96,7 +96,7 @@
             <tr>
                 <td style="text-align: right;background-color: #f1f1f1;">签约时间：</td>
                 <td>
-                    <fmt:formatDate value="${orderCpInfo.created}" pattern="yyyy-MM-dd HH:mm"/>
+                    <fmt:formatDate value="${orderCpInfo.created}" pattern="yyyy-MM-dd HH:mm:ss"/>
                 </td>
                 <td style="text-align: right;background-color: #f1f1f1;"></td><td></td>
             </tr>
@@ -149,7 +149,7 @@
             <tr>
                 <td style="text-align: right;background-color: #f1f1f1;">支付时间：</td>
                 <td>
-                    <fmt:formatDate value="${apiInfo.paytime}" pattern="yyyy-MM-dd HH:mm"/>
+                    <fmt:formatDate value="${apiInfo.paytime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                 </td>
                 <td style="text-align: right;background-color: #f1f1f1;">支付详情：</td>
                 <td>
@@ -175,8 +175,62 @@
                 </td>
                 <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>
                 <td>
-                    <fmt:formatDate value="${apiInfo.addtime}" pattern="yyyy-MM-dd HH:mm"/>
+                    <fmt:formatDate value="${apiInfo.addtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                 </td>
+            </tr>
+        </table>
+        <table cellpadding=3 class="table table-bordered">
+            <tr>
+                <th>费率信息</th>
+            </tr>
+            <tr>
+                <td style="text-align: right;background-color: #f1f1f1;" class="column1">ID：</td>
+                <td class="column2" >
+                    ${ordersMoneyInfo.id}
+                </td>
+                <td style="text-align: right;background-color: #f1f1f1;" class="column1">订单号：</td>
+                <td class="column2">
+                    ${ordersMoneyInfo.orderid}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right;background-color: #f1f1f1;">订单金额：</td>
+                <td>
+                    ${ordersMoneyInfo.money}
+                </td>
+                <td style="text-align: right;background-color: #f1f1f1;">分期期数：</td>
+                <td>
+                    ${ordersMoneyInfo.stageName}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right;background-color: #f1f1f1;">分期费率：</td>
+                <td>
+                    ${ordersMoneyInfo.stageRate}
+                </td>
+                <td style="text-align: right;background-color: #f1f1f1;">分期费率金额：</td>
+                <td>
+                    ${ordersMoneyInfo.stageMoney}
+                </td>
+
+            </tr>
+            <tr>
+                <td style="text-align: right;background-color: #f1f1f1;">商户费率：</td>
+                <td>
+                    ${ordersMoneyInfo.merchRate}
+                </td>
+                <td style="text-align: right;background-color: #f1f1f1;">商户费率金额：</td>
+                <td>
+                    ${ordersMoneyInfo.merchMoney}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>
+                <td>
+                    <fmt:formatDate value="${ordersMoneyInfo.addtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                </td>
+                <td style="text-align: right;background-color: #f1f1f1;"></td>
+                <td></td>
             </tr>
         </table>
         <table cellpadding=3 class="table table-bordered">
@@ -212,11 +266,11 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>
                         <td>
-                            <fmt:formatDate value="${one.addtime}" pattern="yyyy-MM-dd HH:mm"/>
+                            <fmt:formatDate value="${one.addtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">更新时间：</td>
                         <td>
-                            <fmt:formatDate value="${one.updatetime}" pattern="yyyy-MM-dd HH:mm"/>
+                            <fmt:formatDate value="${one.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </td>
                     </tr>
                 </c:forEach>
@@ -268,11 +322,11 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>
                         <td>
-                            <fmt:formatDate value="${one.addtime}" pattern="yyyy-MM-dd HH:mm"/>
+                            <fmt:formatDate value="${one.addtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">更新时间：</td>
                         <td>
-                            <fmt:formatDate value="${one.updatetime}" pattern="yyyy-MM-dd HH:mm"/>
+                            <fmt:formatDate value="${one.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </td>
                     </tr>
                 </c:forEach>
@@ -314,11 +368,11 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>
                         <td>
-                            <fmt:formatDate value="${one.addtime}" pattern="yyyy-MM-dd HH:mm"/>
+                            <fmt:formatDate value="${one.addtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">更新时间：</td>
                         <td>
-                            <fmt:formatDate value="${one.updatetime}" pattern="yyyy-MM-dd HH:mm"/>
+                            <fmt:formatDate value="${one.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </td>
                     </tr>
                 </c:forEach>
