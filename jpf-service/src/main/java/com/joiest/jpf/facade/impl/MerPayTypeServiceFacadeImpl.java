@@ -228,8 +228,10 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         String bankcatid = builder.substring(0, builder.length()-1).toString();
 
         Map<String, Object> jsonMap = new HashMap<>();
+        Map<String, Object> jsonMap_Sec = new HashMap<>();
         List<Object> list = new ArrayList<>();
         String newJson = "";
+        String paramSecJson = "";
         //微信
         if ( request.getTpid() == 9 )
         {
@@ -273,6 +275,17 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
                 jsonMap.put("CP_Salt", request.getCp_Salt());
             }
             newJson = jsonUtils.toJson(jsonMap);
+
+            String reg_merRate = "^0{1}(\\.0){1}\\d{2}$";
+            Boolean merRateIsTrue = Pattern.compile(reg_merRate).matcher(request.getYl_rate()).matches();
+            if ( StringUtils.isNotBlank(request.getYl_rate()) && merRateIsTrue)
+            {
+                jsonMap_Sec.put("merRate", request.getYl_rate());
+            }else
+            {
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请输入正确的商户费率信息");
+            }
+            paramSecJson = JsonUtils.toJson(jsonMap_Sec);
         }
 
         PayMerchantsPaytype record = new PayMerchantsPaytype();
@@ -284,6 +297,11 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         {
             record.setParam(newJson);
         }
+        if ( StringUtils.isNotBlank(paramSecJson) )
+        {
+            record.setParamSec(paramSecJson);
+        }
+
         record.setBankcatid(bankcatid);
 
         payMerchantsPaytypeMapper.insertSelective(record);
@@ -328,8 +346,10 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         String bankcatid = builder.substring(0, builder.length()-1).toString();
 
         Map<String, Object> jsonMap = new HashMap<>();
+        Map<String, Object> jsonMap_Sec = new HashMap<>();
         List<Object> list = new ArrayList<>();
         String newJson = "";
+        String paramSecJson = "";
         //微信
         if ( request.getTpid() == 9 )
         {
@@ -372,6 +392,17 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
                 jsonMap.put("CP_Salt", request.getCp_Salt());
             }
             newJson = jsonUtils.toJson(jsonMap);
+
+            String reg_merRate = "^0{1}(\\.0){1}\\d{2}$";
+            Boolean merRateIsTrue = Pattern.compile(reg_merRate).matcher(request.getYl_rate()).matches();
+            if ( StringUtils.isNotBlank(request.getYl_rate()) && merRateIsTrue)
+            {
+                jsonMap_Sec.put("merRate", request.getYl_rate());
+            }else
+            {
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请输入正确的商户费率信息");
+            }
+            paramSecJson = JsonUtils.toJson(jsonMap_Sec);
         }
 
         PayMerchantsPaytype record = new PayMerchantsPaytype();
@@ -382,6 +413,11 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
         if ( StringUtils.isNotBlank(newJson) )
         {
             record.setParam(newJson);
+        }
+
+        if ( StringUtils.isNotBlank(paramSecJson) )
+        {
+            record.setParamSec(paramSecJson);
         }
         record.setBankcatid(bankcatid);
 
