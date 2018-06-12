@@ -184,10 +184,7 @@ public class YinjiaStageTestController {
         }else{
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
         }
-        if ( StringUtils.isBlank(merchInfo.getRate()))
-        {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MERCH_RATE_ERROR.getCode(), JpfInterfaceErrorInfo.MERCH_RATE_ERROR.getDesc());
-        }
+
         // 签名串
         if ( StringUtils.isBlank(request.getSign()) ){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc());
@@ -256,6 +253,28 @@ public class YinjiaStageTestController {
             return yjResponseDto;
         }
 
+        //商户费率
+        String merRate = "";
+        Map<String,String> paramSec = new HashMap<>();
+        //银联支付
+        if ( payType == 7 )
+        {
+            // 获取该商户银联信用卡分期支付的配置信息
+            MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpid(merchInfo.getId(),7, true);
+            if ( StringUtils.isNotBlank(merchantPayTypeInfo.getParamSec()) )
+            {
+                paramSec = JsonUtils.toCollection(merchantPayTypeInfo.getParamSec(), new TypeReference<Map<String, String>>(){});
+                merRate = paramSec.get("merRate");
+            }
+            String reg_merRate = "^0{1}(\\.0){1}\\d{2}$";
+
+            Boolean merRateIsTrue = Pattern.compile(reg_merRate).matcher(merRate).matches();
+            if ( StringUtils.isBlank(merRate) || !merRateIsTrue )
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.MERCH_RATE_ERROR.getCode(), JpfInterfaceErrorInfo.MERCH_RATE_ERROR.getDesc());
+            }
+        }
+
         // 计算价钱是否合理
         Double totalPrice = new Double(request.getProductTotalPrice());
         Double myTotalPrice = BigDecimalCalculateUtils.mul( Double.parseDouble(request.getProductUnitPrice()), Double.parseDouble(request.getProductAmount()) );
@@ -313,8 +332,8 @@ public class YinjiaStageTestController {
         moneyInterfaceInfo.setOrderid(Long.parseLong(orderid));
         moneyInterfaceInfo.setMoney(new BigDecimal(request.getProductTotalPrice()));
         moneyInterfaceInfo.setMtsid(merchInfo.getId());
-        moneyInterfaceInfo.setMerchRate(merchInfo.getRate());
-        Double merRateMoney = BigDecimalCalculateUtils.mul(totalPrice, new Double(merchInfo.getRate()));
+        moneyInterfaceInfo.setMerchRate(merRate);
+        Double merRateMoney = BigDecimalCalculateUtils.mul(totalPrice, new Double(merRate));
         moneyInterfaceInfo.setMerchMoney(new BigDecimal(new DecimalFormat("#.00").format(merRateMoney)));
         moneyInterfaceInfo.setAddtime(new Date());
         ordersMoneyInterfaceServiceFacade.addRecord(moneyInterfaceInfo);

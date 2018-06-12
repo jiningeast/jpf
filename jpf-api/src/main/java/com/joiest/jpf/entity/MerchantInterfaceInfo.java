@@ -164,11 +164,6 @@ public class MerchantInterfaceInfo {
      */
     private String privateKey;
 
-    /**
-     * 费率
-     */
-    private String rate;
-
     public Long getId() {
         return id;
     }
@@ -425,11 +420,4 @@ public class MerchantInterfaceInfo {
         this.privateKey = privateKey;
     }
 
-    public String getRate() {
-        return rate;
-    }
-
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
 }

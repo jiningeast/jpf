@@ -69,11 +69,4 @@ public interface MerPayTypeServiceFacade {
      */
     public JpfResponseDto modifyMerPKey(String id,String pkey);
 
-    /**
-     * 修改商户密钥和费率
-     * @param id
-     * @param pkey
-     * @param rate
-     */
-    public JpfResponseDto modifyMerPKeyAndRate(String id,String pkey,String rate);
 }

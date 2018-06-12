@@ -66,7 +66,7 @@ public enum JpfInterfaceErrorInfo {
     SIGNURL_ENCODING_ERROR("10035", "返回signUrl编码错误"),
     INCORRECT_PAYTYPE("10036", "payType值有误，请检查"),
     UNSUPPORT_PAYTYPE("10037", "商户无此支付方式"),
-    MERCH_RATE_ERROR("10038", "商户尚未配置费率信息"),
+    MERCH_RATE_ERROR("10038", "商户费率信息错误"),
 
     // H5 第一步 获取商户支付方式等信息
     INCORRECT_DATA("10040","加密信息有误"),

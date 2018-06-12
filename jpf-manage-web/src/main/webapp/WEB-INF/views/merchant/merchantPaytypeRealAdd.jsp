@@ -160,18 +160,18 @@
                     <td style="text-align: right;background-color: #f1f1f1;">商户签发密钥：</td>
                     <td><input type="text" name="cp_Salt" class="easyui-textbox" data-options="requeired:true"></td>
                 </tr>
-                <tr>
-                    <td colspan="4"><font style="color: red;">*以上信息支持数字、字母、‘,’、‘_’和‘-’，输入其他字符无效</font></td>
-                </tr>
                 <tr class="">
                     <td style="text-align: right;background-color: #f1f1f1;">
                         商户费率:
                     </td>
                     <td>
-                        <input name="yl_rate" id="yl_rate" type="text" style="width:220px" class="easyui-textbox" value="" data-options="requeired:true,validType:'isFloat',prompt:'例:0.026'"/>
+                        <input name="yl_rate" id="yl_rate" type="text" style="width:220px" class="easyui-textbox" value="" data-options="required:true,validType:'isFloat',prompt:'例:0.026'"/>
                     </td>
                     <td></td>
                     <td></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><font style="color: red;">*以上信息支持数字、字母、‘,’、‘_’和‘-’，输入其他字符无效</font></td>
                 </tr>
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">

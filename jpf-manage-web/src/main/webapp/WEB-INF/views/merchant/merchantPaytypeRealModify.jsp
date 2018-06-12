@@ -164,7 +164,7 @@
                         商户费率:
                     </td>
                     <td>
-                        <input name="yl_rate" id="yl_rate" type="text" style="width:220px" class="easyui-textbox" value="${merRate}" data-options="requeired:true,validType:'isFloat',prompt:'例:0.026'"/>
+                        <input name="yl_rate" id="yl_rate" type="text" style="width:220px" class="easyui-textbox" value="${merRate}" data-options="required:true,validType:'isFloat',prompt:'例:0.026'"/>
                     </td>
                     <td></td>
                     <td></td>

@@ -2335,76 +2335,6 @@ public class PayMerchantsExample {
             return (Criteria) this;
         }
 
-        public Criteria andRateIsNull() {
-            addCriterion("rate is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateIsNotNull() {
-            addCriterion("rate is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateEqualTo(String value) {
-            addCriterion("rate =", value, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateNotEqualTo(String value) {
-            addCriterion("rate <>", value, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateGreaterThan(String value) {
-            addCriterion("rate >", value, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateGreaterThanOrEqualTo(String value) {
-            addCriterion("rate >=", value, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateLessThan(String value) {
-            addCriterion("rate <", value, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateLessThanOrEqualTo(String value) {
-            addCriterion("rate <=", value, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateLike(String value) {
-            addCriterion("rate like", value, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateNotLike(String value) {
-            addCriterion("rate not like", value, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateIn(List<String> values) {
-            addCriterion("rate in", values, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateNotIn(List<String> values) {
-            addCriterion("rate not in", values, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateBetween(String value1, String value2) {
-            addCriterion("rate between", value1, value2, "rate");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateNotBetween(String value1, String value2) {
-            addCriterion("rate not between", value1, value2, "rate");
-            return (Criteria) this;
-        }
-
         public Criteria andMerchNoLikeInsensitive(String value) {
             addCriterion("upper(merch_no) like", value.toUpperCase(), "merchNo");
             return (Criteria) this;
@@ -2522,11 +2452,6 @@ public class PayMerchantsExample {
 
         public Criteria andPrivateKeyLikeInsensitive(String value) {
             addCriterion("upper(private_key) like", value.toUpperCase(), "privateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andRateLikeInsensitive(String value) {
-            addCriterion("upper(rate) like", value.toUpperCase(), "rate");
             return (Criteria) this;
         }
     }

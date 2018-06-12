@@ -164,11 +164,6 @@ public class PayMerchants implements Serializable {
      */
     private String privateKey;
 
-    /**
-     * 费率
-     */
-    private String rate;
-
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -427,14 +422,6 @@ public class PayMerchants implements Serializable {
         this.privateKey = privateKey == null ? null : privateKey.trim();
     }
 
-    public String getRate() {
-        return rate;
-    }
-
-    public void setRate(String rate) {
-        this.rate = rate == null ? null : rate.trim();
-    }
-
     /**
      *
      */
@@ -476,7 +463,6 @@ public class PayMerchants implements Serializable {
         sb.append(", lefalhand=").append(lefalhand);
         sb.append(", certificate=").append(certificate);
         sb.append(", privateKey=").append(privateKey);
-        sb.append(", rate=").append(rate);
         sb.append("]");
         return sb.toString();
     }
@@ -528,8 +514,7 @@ public class PayMerchants implements Serializable {
             && (this.getIdenddate() == null ? other.getIdenddate() == null : this.getIdenddate().equals(other.getIdenddate()))
             && (this.getLefalhand() == null ? other.getLefalhand() == null : this.getLefalhand().equals(other.getLefalhand()))
             && (this.getCertificate() == null ? other.getCertificate() == null : this.getCertificate().equals(other.getCertificate()))
-            && (this.getPrivateKey() == null ? other.getPrivateKey() == null : this.getPrivateKey().equals(other.getPrivateKey()))
-            && (this.getRate() == null ? other.getRate() == null : this.getRate().equals(other.getRate()));
+            && (this.getPrivateKey() == null ? other.getPrivateKey() == null : this.getPrivateKey().equals(other.getPrivateKey()));
     }
 
     /**
@@ -571,7 +556,6 @@ public class PayMerchants implements Serializable {
         result = prime * result + ((getLefalhand() == null) ? 0 : getLefalhand().hashCode());
         result = prime * result + ((getCertificate() == null) ? 0 : getCertificate().hashCode());
         result = prime * result + ((getPrivateKey() == null) ? 0 : getPrivateKey().hashCode());
-        result = prime * result + ((getRate() == null) ? 0 : getRate().hashCode());
         return result;
     }
 }
