@@ -1,7 +1,5 @@
 package com.joiest.jpf.dto;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * 银嘉分期支付接口请求类
  */

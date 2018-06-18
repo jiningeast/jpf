@@ -114,6 +114,9 @@ public class OrderCpServiceFacadeImpl implements OrderCpServiceFacade {
         if ( orderCpInterfaceInfo.getReturnContent() != null ){
             payOrderCp.setReturnContent(orderCpInterfaceInfo.getReturnContent());
         }
+        if ( orderCpInterfaceInfo.getNewSignOrderid() != null ){
+            payOrderCp.setOrderid(orderCpInterfaceInfo.getNewSignOrderid());
+        }
 
         return payOrderCpMapper.updateByExampleSelective(payOrderCp, e);
     }

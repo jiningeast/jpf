@@ -30,5 +30,7 @@
 	<bean id="SmsMessageServiceFacade" class="com.joiest.jpf.facade.impl.SmsMessageServiceFacadeImpl"></bean>
 	<bean id="OrderRefundMessageServiceFacade" class="com.joiest.jpf.facade.impl.OrderRefundMessageServiceFacadeImpl"></bean>
 	<bean id="OrdersServiceFacade" class="com.joiest.jpf.facade.impl.OrdersServiceFacadeImpl"></bean>
+	<bean id="VirtualInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.VirtualInterfaceServiceFacadeImpl"></bean>
+	<bean id="OrdersMoneyInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.OrdersMoneyInterfaceServiceFacadeImpl"></bean>
 
 </beans>

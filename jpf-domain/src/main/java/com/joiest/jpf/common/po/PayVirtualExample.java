@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PayVirtualExample {
@@ -102,6 +103,7 @@ public class PayVirtualExample {
         orderByClause = null;
         distinct = false;
     }
+
     /**
      *
      * @param pageNo
@@ -290,6 +292,66 @@ public class PayVirtualExample {
 
         public Criteria andPidNotBetween(Byte value1, Byte value2) {
             addCriterion("pid not between", value1, value2, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdIsNull() {
+            addCriterion("relate_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdIsNotNull() {
+            addCriterion("relate_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdEqualTo(Integer value) {
+            addCriterion("relate_id =", value, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdNotEqualTo(Integer value) {
+            addCriterion("relate_id <>", value, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdGreaterThan(Integer value) {
+            addCriterion("relate_id >", value, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("relate_id >=", value, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdLessThan(Integer value) {
+            addCriterion("relate_id <", value, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdLessThanOrEqualTo(Integer value) {
+            addCriterion("relate_id <=", value, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdIn(List<Integer> values) {
+            addCriterion("relate_id in", values, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdNotIn(List<Integer> values) {
+            addCriterion("relate_id not in", values, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdBetween(Integer value1, Integer value2) {
+            addCriterion("relate_id between", value1, value2, "relateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("relate_id not between", value1, value2, "relateId");
             return (Criteria) this;
         }
 
@@ -560,6 +622,141 @@ public class PayVirtualExample {
 
         public Criteria andIntroNotBetween(String value1, String value2) {
             addCriterion("intro not between", value1, value2, "intro");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeIsNull() {
+            addCriterion("addtime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeIsNotNull() {
+            addCriterion("addtime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeEqualTo(Date value) {
+            addCriterion("addtime =", value, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeNotEqualTo(Date value) {
+            addCriterion("addtime <>", value, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeGreaterThan(Date value) {
+            addCriterion("addtime >", value, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("addtime >=", value, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeLessThan(Date value) {
+            addCriterion("addtime <", value, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeLessThanOrEqualTo(Date value) {
+            addCriterion("addtime <=", value, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeIn(List<Date> values) {
+            addCriterion("addtime in", values, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeNotIn(List<Date> values) {
+            addCriterion("addtime not in", values, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeBetween(Date value1, Date value2) {
+            addCriterion("addtime between", value1, value2, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddtimeNotBetween(Date value1, Date value2) {
+            addCriterion("addtime not between", value1, value2, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeIsNull() {
+            addCriterion("updatetime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeIsNotNull() {
+            addCriterion("updatetime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeEqualTo(Date value) {
+            addCriterion("updatetime =", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotEqualTo(Date value) {
+            addCriterion("updatetime <>", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeGreaterThan(Date value) {
+            addCriterion("updatetime >", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("updatetime >=", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeLessThan(Date value) {
+            addCriterion("updatetime <", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeLessThanOrEqualTo(Date value) {
+            addCriterion("updatetime <=", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeIn(List<Date> values) {
+            addCriterion("updatetime in", values, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotIn(List<Date> values) {
+            addCriterion("updatetime not in", values, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeBetween(Date value1, Date value2) {
+            addCriterion("updatetime between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
+            addCriterion("updatetime not between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCatLikeInsensitive(String value) {
+            addCriterion("upper(cat) like", value.toUpperCase(), "cat");
+            return (Criteria) this;
+        }
+
+        public Criteria andCatpathLikeInsensitive(String value) {
+            addCriterion("upper(catpath) like", value.toUpperCase(), "catpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntroLikeInsensitive(String value) {
+            addCriterion("upper(intro) like", value.toUpperCase(), "intro");
             return (Criteria) this;
         }
     }

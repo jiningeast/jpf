@@ -106,11 +106,6 @@
                     "icon" : "icon-nav",
                     "url" : "orderCpsingle/index"
                 },{
-                    "menuid" : "502",
-                    "menuname" : "平台流水管理",
-                    "icon" : "icon-nav",
-                    "url" : "orderCpsingle/index"
-                },{
                     "menuid" : "503",
                     "menuname" : "通道订单数据",
                     "icon" : "icon-nav",

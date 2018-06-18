@@ -39,6 +39,16 @@ public class OrderPayMessageInfo {
     private String notifyContent;
 
     /**
+     * 类型: 1:同步; 2:异步;
+     */
+    private Byte type;
+
+    /**
+     * 发送给商户的异步回调信息ID
+     */
+    private Long mermessageId;
+
+    /**
      *
      */
     private Date addtime;
@@ -48,6 +58,28 @@ public class OrderPayMessageInfo {
      */
     private Date updatetime;
 
+    //=============== 页面展示需要 Begin ==================
+    private String numberOfInstallments;
+
+    private String outOrderNo;
+
+    public String getOutOrderNo() {
+        return outOrderNo;
+    }
+
+    public void setOutOrderNo(String outOrderNo) {
+        this.outOrderNo = outOrderNo;
+    }
+
+    public String getNumberOfInstallments() {
+        return numberOfInstallments;
+    }
+
+    public void setNumberOfInstallments(String numberOfInstallments) {
+        this.numberOfInstallments = numberOfInstallments;
+    }
+
+    //=============== 页面展示需要 End ==================
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -104,6 +136,22 @@ public class OrderPayMessageInfo {
 
     public void setNotifyContent(String notifyContent) {
         this.notifyContent = notifyContent == null ? null : notifyContent.trim();
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public Long getMermessageId() {
+        return mermessageId;
+    }
+
+    public void setMermessageId(Long mermessageId) {
+        this.mermessageId = mermessageId;
     }
 
     public Date getAddtime() {

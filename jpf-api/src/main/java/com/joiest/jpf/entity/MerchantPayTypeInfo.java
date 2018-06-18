@@ -44,6 +44,11 @@ public class MerchantPayTypeInfo {
     private String param;
 
     /**
+     * 属性配置2
+     */
+    private String paramSec;
+
+    /**
      * 银行ID
      */
     private Long bankid;
@@ -144,5 +149,13 @@ public class MerchantPayTypeInfo {
 
     public void setMerch_name(String merch_name) {
         this.merch_name = merch_name;
+    }
+
+    public String getParamSec() {
+        return paramSec;
+    }
+
+    public void setParamSec(String paramSec) {
+        this.paramSec = paramSec;
     }
 }

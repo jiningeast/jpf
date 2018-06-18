@@ -419,4 +419,5 @@ public class MerchantInterfaceInfo {
     public void setPrivateKey(String privateKey) {
         this.privateKey = privateKey;
     }
+
 }

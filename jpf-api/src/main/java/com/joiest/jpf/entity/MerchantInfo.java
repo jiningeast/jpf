@@ -421,4 +421,5 @@ public class MerchantInfo {
     public void setPrivateKey(String privateKey) {
         this.privateKey = privateKey;
     }
+
 }

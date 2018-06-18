@@ -53,6 +53,11 @@ public class ModifyMerPayTypeRequest {
      * 商户签名秘钥
      */
     private String cp_Salt;
+
+    /**
+     * 属性配置2
+     */
+    private String yl_rate;
     //=============银联分期支付参数 End ==================
 
     public Long getMtsid() {
@@ -133,5 +138,13 @@ public class ModifyMerPayTypeRequest {
 
     public void setWx_payLimit(String wx_payLimit) {
         this.wx_payLimit = wx_payLimit;
+    }
+
+    public String getYl_rate() {
+        return yl_rate;
+    }
+
+    public void setYl_rate(String yl_rate) {
+        this.yl_rate = yl_rate;
     }
 }

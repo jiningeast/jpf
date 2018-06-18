@@ -40,6 +40,11 @@ public class PayMerchantsPaytype implements Serializable {
     private String param;
 
     /**
+     * 属性配置2
+     */
+    private String paramSec;
+
+    /**
      * 创建时间
      */
     private Date created;
@@ -107,6 +112,14 @@ public class PayMerchantsPaytype implements Serializable {
         this.param = param == null ? null : param.trim();
     }
 
+    public String getParamSec() {
+        return paramSec;
+    }
+
+    public void setParamSec(String paramSec) {
+        this.paramSec = paramSec == null ? null : paramSec.trim();
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -139,6 +152,7 @@ public class PayMerchantsPaytype implements Serializable {
         sb.append(", catpath=").append(catpath);
         sb.append(", bankcatid=").append(bankcatid);
         sb.append(", param=").append(param);
+        sb.append(", paramSec=").append(paramSec);
         sb.append(", created=").append(created);
         sb.append(", updated=").append(updated);
         sb.append("]");
@@ -168,6 +182,7 @@ public class PayMerchantsPaytype implements Serializable {
             && (this.getCatpath() == null ? other.getCatpath() == null : this.getCatpath().equals(other.getCatpath()))
             && (this.getBankcatid() == null ? other.getBankcatid() == null : this.getBankcatid().equals(other.getBankcatid()))
             && (this.getParam() == null ? other.getParam() == null : this.getParam().equals(other.getParam()))
+            && (this.getParamSec() == null ? other.getParamSec() == null : this.getParamSec().equals(other.getParamSec()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
     }
@@ -186,6 +201,7 @@ public class PayMerchantsPaytype implements Serializable {
         result = prime * result + ((getCatpath() == null) ? 0 : getCatpath().hashCode());
         result = prime * result + ((getBankcatid() == null) ? 0 : getBankcatid().hashCode());
         result = prime * result + ((getParam() == null) ? 0 : getParam().hashCode());
+        result = prime * result + ((getParamSec() == null) ? 0 : getParamSec().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
         return result;

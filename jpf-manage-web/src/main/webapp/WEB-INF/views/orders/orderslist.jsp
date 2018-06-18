@@ -13,6 +13,8 @@
         #searchForm td { width: 5%;  }
         .statistics td:nth-child(odd) { background-color: rgb(241,241,241); text-align: right;}
         .statistics td:nth-child(even) { text-align: left; }
+        .datagrid-header td, .datagrid-body td, .datagrid-footer td{
+            text-align: center;}
     </style>
     <script>
         $(function () {
@@ -45,7 +47,7 @@
                     {field:'money',title:'金额',width:'8%', formatter:formatPrice},
                     {field:'cat',title:'支付方式',width:'10%'},
                     {field:'productId',title:'商品ID',width:'5%'},
-                    {field:'productName',title:'商品名称',width:'10%'},
+                    {field:'productName',title:'商品名称',width:'13%'},
                     {field:'productAmount',title:'商品数量',width:'5%'},
                     {field:'productUnitPrice',title:'商品单价',width:'5%', formatter:formatPrice},
                     {field:'created',title:'添加时间',width:'9%',formatter: formatDateStr}
@@ -77,8 +79,8 @@
             });
 
             $('#infoDiv').window({
-                width:'1024px',
-                height:'550px',
+                width:'1600px',
+                height:'800px',
                 closed:true,
                 modal:true
             });
@@ -92,53 +94,14 @@
         <form id="searchForm" method="post">
             <table cellpadding="5" width="100%">
                 <tr>
-                    <td>订单ID：</td>
+                    <td>平台订单ID：</td>
                     <td><input id="orderid" name="orderid" class="easyui-textbox" type="text" ></td>
-                    <td>商户ID：</td>
-                    <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" /></td>
-                    <td>产品ID：</td>
-                    <td><input id="pid" name="pid" class="easyui-textbox" type="text" /></td>
-                </tr>
-                <tr>
                     <td>支付方式：</td>
                     <td>
                         <input id="paytype" name="paytype" class="easyui-combobox" style="width: 150px;" type="text">
                     </td>
-                    <td>支付状态：</td>
-                    <td>
-                        <select id="orderstatus" name="orderstatus" class="easyui-combobox">
-                            <option value="">全部</option>
-                            <option value="0">未支付</option>
-                            <option value="1">已支付</option>
-                            <option value="2">支付失败</option>
-                        </select>
-                    </td>
-                    <td>退单状态：</td>
-                    <td>
-                        <select id="singlestatus" name="singlestatus" class="easyui-combobox">
-                            <option value="">全部</option>
-                            <option value="1">正常订单</option>
-                            <option value="2">用户申请退单</option>
-                            <option value="3">用户撤销退单</option>
-                            <option value="4">运营已审核，待财务审核</option>
-                            <option value="5">财务已审核，退款中</option>
-                            <option value="6">审核驳回</option>
-                            <option value="7">退款成功</option>
-                            <option value="8">退款失败</option>
-                        </select>
-                    </td>
                 </tr>
                 <tr>
-                    <td>支付时间：</td>
-                    <td>
-                        <input type="text" class="Wdate" style="width:100px;" id="paytimeStart"
-                               name="paytimeStart"
-                               onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'paytimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                        -
-                        <input type="text" class="Wdate" style="width:100px;" id="paytimeEnd"
-                               name="paytimeEnd"
-                               onfocus="WdatePicker({minDate:'#F{$dp.$D(\'paytimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                    </td>
                     <td>生成时间：</td>
                     <td>
                         <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
@@ -149,6 +112,9 @@
                                name="addtimeEnd"
                                onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
                     </td>
+                </tr>
+                <tr>
+
                 </tr>
             </table>
         </form>

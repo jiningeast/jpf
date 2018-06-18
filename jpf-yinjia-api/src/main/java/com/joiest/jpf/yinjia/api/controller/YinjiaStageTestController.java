@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -88,6 +89,14 @@ public class YinjiaStageTestController {
 
     @Autowired
     private OrdersServiceFacade ordersServiceFacade;
+
+    //获取分期费率信息
+    @Autowired
+    private VirtualInterfaceServiceFacade virtualInterfaceServiceFacade;
+
+    //订单费率金额详情
+    @Autowired
+    private OrdersMoneyInterfaceServiceFacade ordersMoneyInterfaceServiceFacade;
 
     /**
      * 商户获取银联信用卡分期支付的期数
@@ -244,6 +253,28 @@ public class YinjiaStageTestController {
             return yjResponseDto;
         }
 
+        //商户费率
+        String merRate = "";
+        Map<String,String> paramSec = new HashMap<>();
+        //银联支付
+        if ( payType == 7 )
+        {
+            // 获取该商户银联信用卡分期支付的配置信息
+            MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpid(merchInfo.getId(),7, true);
+            if ( StringUtils.isNotBlank(merchantPayTypeInfo.getParamSec()) )
+            {
+                paramSec = JsonUtils.toCollection(merchantPayTypeInfo.getParamSec(), new TypeReference<Map<String, String>>(){});
+                merRate = paramSec.get("merRate");
+            }
+            String reg_merRate = "^0{1}(\\.0){1}\\d{2}$";
+
+            Boolean merRateIsTrue = Pattern.compile(reg_merRate).matcher(merRate).matches();
+            if ( StringUtils.isBlank(merRate) || !merRateIsTrue )
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.MERCH_RATE_ERROR.getCode(), JpfInterfaceErrorInfo.MERCH_RATE_ERROR.getDesc());
+            }
+        }
+
         // 计算价钱是否合理
         Double totalPrice = new Double(request.getProductTotalPrice());
         Double myTotalPrice = BigDecimalCalculateUtils.mul( Double.parseDouble(request.getProductUnitPrice()), Double.parseDouble(request.getProductAmount()) );
@@ -296,6 +327,17 @@ public class YinjiaStageTestController {
         ordersInfo.setCreated(new Date());
         ordersServiceFacade.insRecord(ordersInfo);
 
+        //创建费率信息
+        OrdersMoneyInterfaceInfo moneyInterfaceInfo = new OrdersMoneyInterfaceInfo();
+        moneyInterfaceInfo.setOrderid(Long.parseLong(orderid));
+        moneyInterfaceInfo.setMoney(new BigDecimal(request.getProductTotalPrice()));
+        moneyInterfaceInfo.setMtsid(merchInfo.getId());
+        moneyInterfaceInfo.setMerchRate(merRate);
+        Double merRateMoney = BigDecimalCalculateUtils.mul(totalPrice, new Double(merRate));
+        moneyInterfaceInfo.setMerchMoney(new BigDecimal(new DecimalFormat("#.00").format(merRateMoney)));
+        moneyInterfaceInfo.setAddtime(new Date());
+        ordersMoneyInterfaceServiceFacade.addRecord(moneyInterfaceInfo);
+
         // 成功返回
         yjResponseDto.clear();
         yjResponseDto.setCode("10000");
@@ -310,8 +352,10 @@ public class YinjiaStageTestController {
         // 构建返回的data
         Map<String, String> dataMap = new HashMap<>();
         // 给输出的signUrl urlEncode一下
+        String signUrlUndecode = null;
         String signUrl = null;
         try{
+            signUrlUndecode = ConfigUtil.getValue("TERMS_URL")+urlTail;
             signUrl = URLEncoder.encode(ConfigUtil.getValue("TERMS_URL")+urlTail, "UTF-8");
         }catch (UnsupportedEncodingException e){
             yjResponseDto.clear();
@@ -320,11 +364,19 @@ public class YinjiaStageTestController {
 
             return yjResponseDto;
         }
+        // 获取signUrl的二进制流
+        Map<String,Object> imageStreamRequest = new HashMap<>();
+        imageStreamRequest.put("content",signUrlUndecode);
+        String imageStream = OkHttpUtils.postForm(ConfigUtil.getValue("GET_IMAGE_STREAM_URL"), imageStreamRequest);
+
+        // 返回参数
         dataMap.put("signUrl", signUrl);
+        dataMap.put("imageStream", imageStream);
         dataMap.put("orderid", request.getOrderid());
         dataMap.put("platformOrderid", orderid);
         yjResponseDto.setData(dataMap);
 
+        logger.info(dataMap);
         return yjResponseDto;
     }
 
@@ -342,6 +394,9 @@ public class YinjiaStageTestController {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INCORRECT_DATA.getCode(), JpfInterfaceErrorInfo.INCORRECT_DATA.getDesc());
         }
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderidAndForeignOrderid(dataMap.get("orderid"), dataMap.get("platformOrderid"), true);
+        if ( orderYinjiaApiInfo.getPayStatus() == 1 ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.ORDER_CLOSED.getCode(), JpfInterfaceErrorInfo.ORDER_CLOSED.getDesc());
+        }
         MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchantByMerchNo(dataMap.get("merchNo"));
         MerchantPayTypeInfo merPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(merInfo.getId(), orderYinjiaApiInfo.getPaytype(), true);
 
@@ -427,6 +482,9 @@ public class YinjiaStageTestController {
 
         // 获取此订单所有相关信息
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(request.getOrderid(),true);
+        if ( orderYinjiaApiInfo.getPayStatus() == 1 ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.ORDER_CLOSED.getCode(), JpfInterfaceErrorInfo.ORDER_CLOSED.getDesc());
+        }
         Long mtsid = orderYinjiaApiInfo.getMtsid();
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(mtsid,7);
         String bankcatids[] = merchantPayTypeInfo.getBankcatid().split(",");
@@ -483,6 +541,25 @@ public class YinjiaStageTestController {
             return Base64CustomUtils.base64Encoder(responseJson);
         }
 
+        //获取分期费率
+        VirtualInfo stageRateInfo = virtualInterfaceServiceFacade.getInfoByRelateId(catid);
+        if ( StringUtils.isBlank(stageRateInfo.getIntro() ) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.STAGE_RATE_ERROR.getCode(), JpfInterfaceErrorInfo.STAGE_RATE_ERROR.getDesc());
+        }
+        //更新订单费率信息表
+        OrdersMoneyInterfaceInfo moneyInterfaceInfo = new OrdersMoneyInterfaceInfo();
+        moneyInterfaceInfo.setOrderid(Long.parseLong(orderYinjiaApiInfo.getOrderid()));
+        moneyInterfaceInfo.setStageId(Integer.toString(catid));
+        moneyInterfaceInfo.setStageName(request.getTerm()+"期");
+        moneyInterfaceInfo.setStageRate(stageRateInfo.getIntro());
+        Double orderMoney = new Double(orderYinjiaApiInfo.getOrderPayPrice().toString());
+        Double stageRate = new Double(stageRateInfo.getIntro());
+        Double stageRateMoney = BigDecimalCalculateUtils.mul(orderMoney, stageRate);
+        moneyInterfaceInfo.setStageMoney(new BigDecimal(new DecimalFormat("#.00").format(stageRateMoney)));
+        moneyInterfaceInfo.setUpdatetime(new Date());
+        ordersMoneyInterfaceServiceFacade.modifyRecord(moneyInterfaceInfo);
+
         // 正确返回
         Map<String, String> responseDataMap = new HashMap<>();
         responseDataMap.put("orderid", request.getOrderid());
@@ -510,12 +587,8 @@ public class YinjiaStageTestController {
 
         String dataJson = AESUtils.decrypt(request.getData(), ConfigUtil.getValue("AES_KEY"));
         Map<String, String> dataMap = JsonUtils.toCollection(dataJson, new TypeReference<Map<String, String>>(){});
-        String signOrderid = createOrderid();
-
-        // 获取订单信息
-        /*OrderInfo orderInfo = orderServiceFacade.getOrderByOrderid(dataMap.get("orderid"), true);
-        String foreignRequest = orderInfo.getForeignRequest();
-        Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);*/
+        String newSignOrderid = createOrderid();
+        String oldSignOrderid = "";
 
         // 获取商户支付配置中的CP_MerchNO等参数
         MerchantPayTypeInfo merchantPayTypeInfo = merPayTypeServiceFacade.getOneMerPayTypeByTpid(Long.parseLong(dataMap.get("mid")), 7, true);
@@ -539,7 +612,7 @@ public class YinjiaStageTestController {
                 // 从未签约过，准备插入一条签约记录
                 OrderCpInterfaceInfo orderCpInsert = new OrderCpInterfaceInfo();
                 orderCpInsert.setMerchNo(paramMap.get("CP_MerchaNo"));
-                orderCpInsert.setOrderid(signOrderid);
+                orderCpInsert.setOrderid(newSignOrderid);
                 orderCpInsert.setMtsid(Long.parseLong(dataMap.get("mid")));
                 orderCpInsert.setInterestmode((long)1);
                 orderCpInsert.setSignedname(request.getSignedName());
@@ -555,7 +628,7 @@ public class YinjiaStageTestController {
                 Date validityyear = org.apache.commons.lang3.time.DateUtils.addYears(new Date(),1);
                 orderCpInsert.setValidityyear(validityyear);
                 // 设置IP
-                orderCpInsert.setClientip(IP);
+                orderCpInsert.setClientip("127.0.0.1");
                 orderCpInsert.setSignstatus("1");
                 orderCpInsert.setSysagreeno("");
                 orderCpInsert.setCreated(DateUtils.getCurrentDate());
@@ -567,7 +640,7 @@ public class YinjiaStageTestController {
                 }
             }else{
                 // 如果不是第一次签约则将老的orderid获取到
-                signOrderid = orderCpInterfaceInfo.getOrderid();
+                oldSignOrderid = orderCpInterfaceInfo.getOrderid();
             }
 
             // 构建返回加密串
@@ -582,9 +655,9 @@ public class YinjiaStageTestController {
             chinapayMap.put("sysMerchNo", paramMap.get("CP_MerchaNo"));
             chinapayMap.put("inputCharset", "UTF-8");
             chinapayMap.put("interestMode", "01");
-            /*chinapayMap.put("chnCode", paramMap.get("CP_Code"));
-            chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));*/
-            chinapayMap.put("outOrderNo", signOrderid);
+            chinapayMap.put("chnCode", paramMap.get("CP_Code"));
+            chinapayMap.put("chnAcctId", paramMap.get("CP_Acctid"));
+            chinapayMap.put("outOrderNo", newSignOrderid);
             chinapayMap.put("frontUrl", ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES);
             logger.info("frontUrl="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL")+frontAES+" length="+ConfigUtil.getValue("CHINAPAY_SIGN_RETURN_URL").length()+frontAES.length());
             chinapayMap.put("backUrl", ConfigUtil.getValue("CHINAPAY_SIGN_BACK_URL"));
@@ -596,11 +669,11 @@ public class YinjiaStageTestController {
             String accountType = "CREDIT";
             chinapayMap.put("accountType", accountType);
             chinapayMap.put("accountNumber", request.getAccountNumber());
-            chinapayMap.put("clientIp", IP);
+            chinapayMap.put("clientIp", "127.0.0.1");
             if ( accountType.equals("CREDIT") ){
                 chinapayMap.put("cvn2", request.getCvn2());
                 String yearMonth[] = request.getValidityCard().split("-");
-                chinapayMap.put("validityYear", yearMonth[0]);
+                chinapayMap.put("validityYear", StringUtils.substring(yearMonth[0],2));
                 chinapayMap.put("validityMonth", yearMonth[1]);
             }
             Map<String, String> treeMap = new TreeMap<>();
@@ -621,23 +694,16 @@ public class YinjiaStageTestController {
             requestMap.put("sign",signMySign);
             requestMap.put("signType","MD5");
             // 请求签约url
-//            String response = OkHttpUtils.postForm(ConfigUtil.getValue("CHINAPAY_URL_REQUEST")+"sign",requestMap);
-            // 测试服务器固定返回签约成功
-            Map<String, String> testResponseMap = new HashMap<>();
-            testResponseMap.put("retCode","0000");
-            testResponseMap.put("tranNo","0000");
-            String response = JsonUtils.toJson(testResponseMap);
-
+            String response = OkHttpUtils.postForm(ConfigUtil.getValue("CHINAPAY_URL_REQUEST")+"sign",requestMap);
             logger.info("签约返回："+response);
 
-//            Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
             Map<String, String> signResponseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
             String html = null;
 
             // 增加签约流水记录
             OrderCpMessageInfo orderCpMessageInfo = new OrderCpMessageInfo();
             orderCpMessageInfo.setOrderid(dataMap.get("orderid"));
-            orderCpMessageInfo.setSignOrderid(signOrderid);
+            orderCpMessageInfo.setSignOrderid(newSignOrderid);
             orderCpMessageInfo.setReturnTranno(signResponseMap.get("tranNo"));
             orderCpMessageInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
             orderCpMessageInfo.setReturnContent(response);
@@ -645,14 +711,22 @@ public class YinjiaStageTestController {
 
             // 更新签约表
             OrderCpInterfaceInfo orderCpInfo = new OrderCpInterfaceInfo();
+            String signOrderid = "";
+            // 判断更新数据时取的是老orderid还是新orderid
+            if ( StringUtils.isBlank(oldSignOrderid) ){
+                signOrderid = newSignOrderid;
+            }else{
+                signOrderid = oldSignOrderid;
+            }
             orderCpInfo.setOrderid(signOrderid);
+            orderCpInfo.setNewSignOrderid(newSignOrderid);
             orderCpInfo.setReturnContent(response);
             logger.info(signResponseMap);
             // 获取返回参数
             if ( signResponseMap.get("retCode").equals("0000") ){
                 // 签约通知成功
                 orderCpInfo.setTranno(signResponseMap.get("tranNo"));
-                orderCpInfo.setSignstatus("2");
+                orderCpInfo.setSignstatus("1");
                 if ( signResponseMap.containsKey("sysAgreeNo") ){
                     orderCpInfo.setSysagreeno(signResponseMap.get("sysAgreeNo"));
                 }
@@ -694,28 +768,15 @@ public class YinjiaStageTestController {
                     return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getCode(), JpfInterfaceErrorInfo.UPDATE_SIGN_ORDER_ERROR.getDesc(), null);
                 }
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), JpfInterfaceErrorInfo.SIGN_FAILED.getDesc(), null);
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SIGN_FAILED.getCode(), signResponseMap.get("retMsg"), null);
             }
 
             // 构建返回
-            /*Map<String, Object> responseDataMap = new HashMap<>();
+            Map<String, Object> responseDataMap = new HashMap<>();
             responseDataMap.put("html", html);
             String responseDataJson = JsonUtils.toJson(responseDataMap);
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_SIGNED.getDesc(),responseDataJson);*/
-
-            Map<String, Object> responseDataMap = new HashMap<>();
-            responseDataMap.put("orderid", dataMap.get("orderid"));
-            String responseDataJson = JsonUtils.toJson(responseDataMap);
-            String AESStr = AESUtils.encrypt(responseDataJson, ConfigUtil.getValue("AES_KEY"));
-
-            Map<String, String> responseMap = new HashMap<>();
-            responseMap.put("code", JpfInterfaceErrorInfo.SUCCESS.getCode());
-            responseMap.put("info", JpfInterfaceErrorInfo.SUCCESS.getDesc());
-            responseMap.put("data", AESStr);
-            String responseJson = JsonUtils.toJson(responseMap);
-
-            return Base64CustomUtils.base64Encoder(responseJson).replaceAll("\r","").replaceAll("\n","");
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_NOT_SIGNED.getCode(), JpfInterfaceErrorInfo.USER_NOT_SIGNED.getDesc(),responseDataJson);
 
         }
 
@@ -754,6 +815,9 @@ public class YinjiaStageTestController {
 
         // 获取订单信息
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(dataMap.get("orderid"),true);
+        if ( orderYinjiaApiInfo.getPayStatus() == 1 ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.ORDER_CLOSED.getCode(), JpfInterfaceErrorInfo.ORDER_CLOSED.getDesc());
+        }
         String foreignRequest = orderYinjiaApiInfo.getForeignRequest();
         Map<String, String> foreignRequestMap = ToolUtils.urlToMap(foreignRequest);
 
@@ -777,16 +841,21 @@ public class YinjiaStageTestController {
     public String signNotify(YinjiaSignNotifyRequest request, HttpServletRequest httpRequest){
         logger.info("签约异步回调："+httpRequest);
 
+        // 根据签约订单号获取业务订单号
+        OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderBySignOrderid(request.getOutOrderNo(),true);
+
         // 签约流水表增加异步回调记录
         String notifyContent = ToolUtils.mapToUrl(request.toMap());
         OrderCpMessageInfo orderCpMessageInfo = new OrderCpMessageInfo();
-        orderCpMessageInfo.setNotifyTranno(request.getTranNO());
+        orderCpMessageInfo.setOrderid(orderInfo.getOrderid());
+        orderCpMessageInfo.setSignOrderid(request.getOutOrderNo());
+        orderCpMessageInfo.setNotifyTranno(request.getTranNo());
         orderCpMessageInfo.setNotifyContent(notifyContent);
         orderCpMessageServiceFacade.insRecord(orderCpMessageInfo);
 
         // 更新订单表用户操作状态
         OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
-        orderYinjiaApiInfo.setOrderid(request.getOutOrderNo());
+        orderYinjiaApiInfo.setSignOrderid(Long.parseLong(request.getOutOrderNo()));
 
         OrderCpInterfaceInfo orderCpInterfaceInfo = new OrderCpInterfaceInfo();
         orderCpInterfaceInfo.setOrderid(request.getOutOrderNo());
@@ -798,7 +867,7 @@ public class YinjiaStageTestController {
 
             // 更新用户操作状态为4：签约返回成功,待获取支付短信
             orderYinjiaApiInfo.setUserOperateStatus((byte)4);
-            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+            orderYinjiaApiServiceFacade.updateColumnBySignOrderid(orderYinjiaApiInfo);
         }else if (request.getSignStatus().equals("FAIL")){
             // 更新签约状态为签约失败
             orderCpInterfaceInfo.setSignstatus("3");
@@ -806,7 +875,7 @@ public class YinjiaStageTestController {
 
             // 更新用户操作状态为4：签约返回成功,待获取支付短信
             orderYinjiaApiInfo.setUserOperateStatus((byte)5);
-            orderYinjiaApiServiceFacade.updateColumnByOrderid(orderYinjiaApiInfo);
+            orderYinjiaApiServiceFacade.updateColumnBySignOrderid(orderYinjiaApiInfo);
         }
 
         return "SUCCESS";
@@ -838,6 +907,9 @@ public class YinjiaStageTestController {
         }
         //获取订单信息
         OrderYinjiaApiInfo orderInfo = orderYinjiaApiServiceFacade.getOrderByOrderid(orderid.trim(),true);
+        if ( orderInfo.getPayStatus() == 1 ){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.ORDER_CLOSED.getCode(), JpfInterfaceErrorInfo.ORDER_CLOSED.getDesc());
+        }
         if ( orderInfo.getSignOrderid()==null )
         {
             //throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_SIGE_NOT.getCode(), "用户信息未签约");
@@ -898,8 +970,8 @@ public class YinjiaStageTestController {
             maptree.put("reqType","02");//用于区分发送短信的类型
             maptree.put("clientIp",ServletUtils.getIpAddr(request));//ServletUtils.getIpAddr(request)
             //maptree.put("clientIp","10.10.18.17");
-            /*maptree.put("chnCode",maparr.get("CP_Code"));
-            maptree.put("chnAcctId",maparr.get("CP_Acctid"));*/
+            maptree.put("chnCode",maparr.get("CP_Code"));
+            maptree.put("chnAcctId",maparr.get("CP_Acctid"));
             maptree.put("selectFinaCode",orderCpInfo.getSelectfinacode());
             maptree.put("accountType","CREDIT");
             maptree.put("accountNumber",orderCpInfo.getBankaccountnumber());
@@ -940,7 +1012,7 @@ public class YinjiaStageTestController {
             SmsMessageInfo smsMessageInfo = new SmsMessageInfo();
             smsMessageInfo.setOrderid(orderid);
             smsMessageInfo.setMtsid(orderInfo.getMtsid().toString());
-            smsMessageInfo.setPtype((byte)99);
+            smsMessageInfo.setPtype((byte)3);
             smsMessageInfo.setPtypeCn(" ");
             smsMessageInfo.setSendtype((byte)1);
             smsMessageInfo.setSendtypeCn("支付");
@@ -1484,7 +1556,7 @@ public class YinjiaStageTestController {
 
             requestUrl = ConfigUtil.getValue("CHINAPAY_URL_REQUEST") + "installPay";
 
-//            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
+            YjResponseDto resultPay = chinaPayServiceFacade.IntallPay(signMap, requestUrl);
 
             //请求结果
 //            Map<String,String> resultMap = JsonUtils.toCollection(resultPay.getInfo(), new TypeReference<Map<String, String>>(){});
@@ -1555,6 +1627,17 @@ public class YinjiaStageTestController {
     @ResponseBody
     public String ChinaPayReturn(YinjiaPayNotifyRequest request)
     {
+        //添加回调流水
+        ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
+        modifyPayMessageRequest.setNotifyTranno(request.getTranNo());
+        modifyPayMessageRequest.setOrderid(request.getOutOrderNo());
+        Map<String,Object> requestMap = ClassUtil.requestToMap(request);
+        String requestStr = ToolUtils.mapToUrl(requestMap);
+        modifyPayMessageRequest.setNotifyContent(requestStr);
+        modifyPayMessageRequest.setAddtime(new Date());
+        modifyPayMessageRequest.setType((byte)2);
+        int insertPayMsgRes = pcaServiceFacade.addPayMessage(modifyPayMessageRequest);
+
         Map<String,Object> returnMap = new HashMap<>();
         returnMap.put("finishTime", request.getFinishTime());
         returnMap.put("sysMerchNo", request.getSysMerchNo());
@@ -1601,20 +1684,14 @@ public class YinjiaStageTestController {
             sbf.append("\n支付成功修改数据库状态完成");
             user_operate_status = 11;
         }
-        //更新
+
+        //更新订单用户操作状态
         orderInfoUpdate.setPayStatus(orderstatus);
         orderInfoUpdate.setPaytime(date);
         orderInfoUpdate.setUpdatetime(date);
         orderInfoUpdate.setOrderid(returnMap.get("outOrderNo").toString());
         orderInfoUpdate.setUserOperateStatus(user_operate_status);
         orderInterfaceServiceFacade.updateOrderStatus(orderInfoUpdate);
-        //流水
-        ModifyPayMessageRequest modifyPayMessageRequest = new ModifyPayMessageRequest();
-        modifyPayMessageRequest.setNotifyTranno(request.getTranNo());
-        modifyPayMessageRequest.setOrderid(request.getOutOrderNo());
-        modifyPayMessageRequest.setNotifyContent(request.toString());
-        modifyPayMessageRequest.setUpdatetime(new Date());
-        pcaServiceFacade.modifyPayMessage(modifyPayMessageRequest);
 
         //日志
         String fileName = "ChinaPayReturn";
@@ -1634,30 +1711,45 @@ public class YinjiaStageTestController {
 
         String postSign = SignUtils.getSign(postParamTree,merchInfo.getPrivateKey(),"UTF-8");
         merPostParamMap.put("sign",postSign);
+        String merPostJson = JsonUtils.toJson(merPostParamMap);
 
         String notify_url = null;
         StringBuilder sbf_mer = new StringBuilder();
         String fileName_merNofity = "merPayNotify";
+
         try{
             notify_url = URLDecoder.decode(orderInfo.getNotifyUrl(), "UTF-8");
-            String response = OkHttpUtils.postForm(notify_url,merPostParamMap);
-            //通知商户流水
-//            String response = "SUCCESS";
+            //添加通知商户流水
             ModifyPayOrderPayMerRequest merPayRequest = new ModifyPayOrderPayMerRequest();
             merPayRequest.setAddtime(new Date());
             merPayRequest.setOrderid(orderInfo.getOrderid());
             merPayRequest.setForeignOrderid(orderInfo.getForeignOrderid());
             String merRequestStr = ToolUtils.mapToUrl(merPostParamMap);
             merPayRequest.setNotifyContent(notify_url + "?" + merRequestStr);
-            merPayRequest.setNotifyResult(StringUtils.deleteWhitespace(ToolUtils.delHTMLTag(response)));
-            pcaServiceFacade.addPayMerMessage(merPayRequest);
+            int insertMerMessageRes = pcaServiceFacade.addPayMerMessage(merPayRequest);
+
+            //更新聚合回调流水
+            ModifyPayMessageRequest modifyPayMessageRequestUp = new ModifyPayMessageRequest();
+            modifyPayMessageRequestUp.setId(new Long(insertPayMsgRes).longValue());
+            modifyPayMessageRequestUp.setUpdatetime(new Date());
+            modifyPayMessageRequestUp.setMermessageId(new Long(insertMerMessageRes).longValue());
+            pcaServiceFacade.modifyPayMessage(modifyPayMessageRequestUp);
+
+            String response = OkHttpUtils.postJson(notify_url,merPostJson);
+//            String response = "SUCCESS";
+            //更新通知商户流水
+            ModifyPayOrderPayMerRequest merPayRequestUp = new ModifyPayOrderPayMerRequest();
+            merPayRequestUp.setId(new Long(insertMerMessageRes).longValue());
+            merPayRequestUp.setUpdatetime(new Date());
+            merPayRequestUp.setNotifyResult(StringUtils.deleteWhitespace(ToolUtils.delHTMLTag(response)));
+            int upMerMessageRes = pcaServiceFacade.modifyPayMerMessage(merPayRequestUp);
 
             //日志
             logger.info("支付回调--发送给商户: 请求地址：" + notify_url + "; 请求参数" + merPostParamMap);
             sbf_mer.append("\n\nTime:" + myfmt.format(date) + "支付回调--发送给商户");
             sbf_mer.append("\n请求地址：" + notify_url);
             sbf_mer.append("\n接口参数：" + merPostParamMap);
-            if(response == "SUCCESS")
+            if( response.equals("SUCCESS") )
             {
                 sbf_mer.append("\n回调信息：" + "SUCCESS");
                 LogsCustomUtils.writeIntoFile(sbf_mer.toString(),"", fileName_merNofity,true);

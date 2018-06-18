@@ -123,10 +123,14 @@ public class OrderYinjiaApiInfo {
 
     //=========支付方式 End==============
 
-    //=========页面展示需要 BEGIN =========
+    //=========后台页面展示需要 BEGIN =========
+    //用户操作状态
     private String userOperateStatus_cn;
 
+    //退款状态
     private String refundStatus_cn;
+
+    private String productName;
 
     public String getUserOperateStatus_cn() {
         return userOperateStatus_cn;
@@ -144,7 +148,15 @@ public class OrderYinjiaApiInfo {
         this.refundStatus_cn = refundStatus_cn;
     }
 
-    //=========页面展示需要 End =========
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    //=========后台页面展示需要 End =========
 
 
 

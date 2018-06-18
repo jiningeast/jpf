@@ -76,6 +76,25 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
     }
 
     @Override
+    public OrderYinjiaApiInfo getOrderBySignOrderid(String signOrerid, boolean forInterface){
+        PayOrderYinjiaApiExample e = new PayOrderYinjiaApiExample();
+        PayOrderYinjiaApiExample.Criteria c = e.createCriteria();
+        c.andSignOrderidEqualTo(Long.parseLong(signOrerid));
+
+        List<PayOrderYinjiaApi> list = payOrderYinjiaApiMapper.selectByExample(e);
+
+        if ( forInterface && list == null){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+        }
+
+        OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayOrderYinjiaApi.class, OrderYinjiaApiInfo.class, false);
+        beanCopier.copy(list.get(0), orderYinjiaApiInfo, null);
+
+        return orderYinjiaApiInfo;
+    }
+
+    @Override
     public int updataSignOrderid(OrderYinjiaApiInfo orderYinjiaApiInfo){
         PayOrderYinjiaApiExample e = new PayOrderYinjiaApiExample();
         PayOrderYinjiaApiExample.Criteria c = e.createCriteria();
@@ -96,6 +115,23 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
         PayOrderYinjiaApiExample e = new PayOrderYinjiaApiExample();
         PayOrderYinjiaApiExample.Criteria c = e.createCriteria();
         c.andOrderidEqualTo(orderYinjiaApiInfo.getOrderid());
+
+        PayOrderYinjiaApi payOrderYinjiaApi = new PayOrderYinjiaApi();
+        BeanCopier beanCopier = BeanCopier.create(OrderYinjiaApiInfo.class, PayOrderYinjiaApi.class, false);
+        beanCopier.copy(orderYinjiaApiInfo, payOrderYinjiaApi, null);
+        payOrderYinjiaApi.setUpdatetime(new Date());
+
+        return payOrderYinjiaApiMapper.updateByExampleSelective(payOrderYinjiaApi, e);
+    }
+
+    @Override
+    public int updateColumnBySignOrderid(OrderYinjiaApiInfo orderYinjiaApiInfo){
+        // 判断这条记录是否存在
+        getOrderBySignOrderid(orderYinjiaApiInfo.getSignOrderid().toString(), true);
+
+        PayOrderYinjiaApiExample e = new PayOrderYinjiaApiExample();
+        PayOrderYinjiaApiExample.Criteria c = e.createCriteria();
+        c.andSignOrderidEqualTo(orderYinjiaApiInfo.getSignOrderid());
 
         PayOrderYinjiaApi payOrderYinjiaApi = new PayOrderYinjiaApi();
         BeanCopier beanCopier = BeanCopier.create(OrderYinjiaApiInfo.class, PayOrderYinjiaApi.class, false);

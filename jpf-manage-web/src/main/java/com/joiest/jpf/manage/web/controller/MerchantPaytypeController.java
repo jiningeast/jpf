@@ -137,6 +137,15 @@ public class MerchantPaytypeController {
             modelMap.addAttribute("merSubMchid", paramMap.get("merSubMchid"));
             modelMap.addAttribute("payLimit", paramMap.get("payLimit"));
         }
+
+        //参数2
+        if ( StringUtils.isNotBlank(merpayTypeInfoOne.getParamSec()) )
+        {
+            Map<String,String> paramSecMap = JsonUtils.toCollection(merpayTypeInfoOne.getParamSec(), new TypeReference<Map<String, String>>(){});
+
+            //银联支付---商户费率
+            modelMap.addAttribute("merRate", paramSecMap.get("merRate"));
+        }
         modelMap.addAttribute("TypeInfoOne", TypeInfoOne);
         modelMap.addAttribute("merchantInfo", merchantInfo);
         return new ModelAndView("merchant/merchantPaytypeRealModify", modelMap);
@@ -192,4 +201,5 @@ public class MerchantPaytypeController {
     {
         return merPayTypeServiceFacade.modifyMerPKey(id,pkey);
     }
+
 }

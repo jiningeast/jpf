@@ -1,14 +1,17 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayOrdersCustom;
+import com.joiest.jpf.common.po.PayOrderExample;
 import com.joiest.jpf.common.po.PayOrders;
 import com.joiest.jpf.common.po.PayOrdersExample;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayOrdersCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrdersMapper;
 import com.joiest.jpf.dto.GetOrdersRequest;
 import com.joiest.jpf.dto.GetOrdersResponse;
 import com.joiest.jpf.entity.OrdersInfo;
 import com.joiest.jpf.facade.OrdersServiceFacade;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -53,8 +56,21 @@ public class OrdersServiceFacadeImpl implements OrdersServiceFacade {
         example.setPageNo(request.getPage());
         example.setPageSize(request.getRows());
         example.setOrderByClause("created DESC");
-        PayOrdersExample.Criteria c = example.createCriteria();
 
+        PayOrdersExample.Criteria c = example.createCriteria();
+        if ( request.getPaytype() != null )
+        {
+            c.andPaytypeEqualTo(request.getPaytype() );
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andCreatedGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andCreatedLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
+//        c.addCriterionCustom("m.companyname", "北京天道保险经纪有限责任公司", "productName");
         List<PayOrdersCustom> list = payOrdersCustomMapper.getOrdersListAndPaytype(example);
         List<OrdersInfo> infoList = new ArrayList<>();
         for (PayOrdersCustom one : list)

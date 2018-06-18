@@ -63,6 +63,28 @@ public class GetOrdersRequest {
 
     private long page;
 
+    //============== 搜索 Begin ==================
+    private String addtimeStart;
+
+    private String addtimeEnd;
+
+    public String getAddtimeStart() {
+        return addtimeStart;
+    }
+
+    public void setAddtimeStart(String addtimeStart) {
+        this.addtimeStart = addtimeStart;
+    }
+
+    public String getAddtimeEnd() {
+        return addtimeEnd;
+    }
+
+    public void setAddtimeEnd(String addtimeEnd) {
+        this.addtimeEnd = addtimeEnd;
+    }
+
+    //============== 搜索 End ==================
     private static final long serialVersionUID = 1L;
 
     public String getId() {

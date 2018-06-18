@@ -1,6 +1,8 @@
 package com.joiest.jpf.entity;
 
 
+import java.util.Date;
+
 public class VirtualInfo {
     /**
      *
@@ -11,6 +13,11 @@ public class VirtualInfo {
      *
      */
     private Byte pid;
+
+    /**
+     * 关联ID
+     */
+    private Integer relateId;
 
     /**
      *
@@ -32,6 +39,18 @@ public class VirtualInfo {
      */
     private String intro;
 
+    /**
+     * 添加时间
+     */
+    private Date addtime;
+
+    /**
+     * 修改时间
+     */
+    private Date updatetime;
+
+    private static final long serialVersionUID = 1L;
+
     public Byte getCatid() {
         return catid;
     }
@@ -46,6 +65,14 @@ public class VirtualInfo {
 
     public void setPid(Byte pid) {
         this.pid = pid;
+    }
+
+    public Integer getRelateId() {
+        return relateId;
+    }
+
+    public void setRelateId(Integer relateId) {
+        this.relateId = relateId;
     }
 
     public String getCat() {
@@ -78,5 +105,21 @@ public class VirtualInfo {
 
     public void setIntro(String intro) {
         this.intro = intro == null ? null : intro.trim();
+    }
+
+    public Date getAddtime() {
+        return addtime;
+    }
+
+    public void setAddtime(Date addtime) {
+        this.addtime = addtime;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 }

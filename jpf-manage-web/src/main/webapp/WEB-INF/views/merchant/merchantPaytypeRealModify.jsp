@@ -158,22 +158,19 @@
                     <td style="text-align: right;background-color: #f1f1f1;">商户签发密钥：</td>
                     <td><input type="text" name="cp_Salt" class="easyui-textbox" value="${CP_Salt}" data-options="required:true"></td>
                 </tr>
+
+                <tr class="">
+                    <td style="text-align: right;background-color: #f1f1f1;">
+                        商户费率:
+                    </td>
+                    <td>
+                        <input name="yl_rate" id="yl_rate" type="text" style="width:220px" class="easyui-textbox" value="${merRate}" data-options="required:true,validType:'isFloat',prompt:'例:0.026'"/>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 <tr>
                     <td colspan="4"><font style="color: red;">*以上信息支持数字、字母、‘,’、‘_’和‘-’，输入其他字符无效</font></td>
-                </tr>
-                <tr class="paramTr">
-                    <td style="text-align: right;background-color: #f1f1f1;">
-                        参数1:
-                    </td>
-                    <td>
-                        <input id="yl_param1" name="yl_param1" type="text" style="width:220px" class="easyui-textbox" value="" />
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">
-                        参数2:
-                    </td>
-                    <td>
-                        <input id="yl_param2" name="yl_param2" type="text" style="width:220px" class="easyui-textbox" value="" />
-                    </td>
                 </tr>
                 <tr class="paramTr">
                     <td style="text-align: right;background-color: #f1f1f1;">
@@ -289,8 +286,19 @@
                 return checkMoney(value);
             },
             message: '请输入正确的金额'
+        },
+        isFloat : {
+            validator: function(value, param){
+                return isFloat(value);
+            },
+            message: '请输入正确的费率'
         }
     });
+
+    function isFloat(z_check_value){
+        var z_reg = /^0{1}(\.0){1}\d{2}$/;
+        return z_reg.test($.trim(z_check_value));
+    }
 
     var reg_money = /^((([0-9])|([1-9][0-9]+))(\.([0-9]{0,2}))?)$/;//.是特殊字符，需要转义
     function checkMoney(z_check_value){

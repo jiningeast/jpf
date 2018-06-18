@@ -68,4 +68,5 @@ public interface MerPayTypeServiceFacade {
      * @return
      */
     public JpfResponseDto modifyMerPKey(String id,String pkey);
+
 }
