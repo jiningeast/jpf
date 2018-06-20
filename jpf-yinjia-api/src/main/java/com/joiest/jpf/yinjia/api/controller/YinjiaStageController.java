@@ -521,7 +521,7 @@ public class YinjiaStageController {
         }
         ordernameMap.put("payType_cn",payType_cn);
         if ( StringUtils.isNotBlank(request.getTerm()) ){
-            ordernameMap.put("stageType", request.getTerm());
+            ordernameMap.put("stageType", catid);
             ordernameMap.put("stageType_cn",request.getTerm()+"期");
         }
         String ordernameJson = JsonUtils.toJson(ordernameMap);
