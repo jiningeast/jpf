@@ -54,7 +54,10 @@ public enum JpfInterfaceErrorInfo {
     INCORRECT_SIGN("10016","验签失败"),
     NO_SIGN("10017", "缺少签名参数"),
     ORDER_CLOSED("10018", "订单已关闭"),
-    MERCH_UNAVAILABLE("10019", "商户未审核"),
+
+    //商户信息验证失败
+    MERCH_UNAVAILABLE("10071", "商户未审核"),
+    MERCH_FREEZEUP("10072", "商户被冻结"),
 
     // 获取分期错误参数 10020开头
     NO_TERMS_CONFIGURATION("10020", "商户尚未配置银联信用卡分期支付信息"),

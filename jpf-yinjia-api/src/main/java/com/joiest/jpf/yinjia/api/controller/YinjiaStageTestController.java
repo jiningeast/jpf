@@ -1500,6 +1500,20 @@ public class YinjiaStageTestController {
 
             //获取商户信息 and 商户银嘉支付参数
             MerchantInterfaceInfo merInfo = merchantInterfaceServiceFacade.getMerchantByMid(orderInfo.getMtsid());
+            if ( merInfo == null )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc(), null);
+            } else
+            {
+                if ( !merInfo.getAttestation() )
+                {
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MERCH_UNAVAILABLE.getCode(), JpfInterfaceErrorInfo.MERCH_UNAVAILABLE.getDesc(), null);
+                }
+                if ( !merInfo.getStatus().equals((byte)0 ) )
+                {
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MERCH_FREEZEUP.getCode(), JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc(), null);
+                }
+            }
             // 获取该商户银联信用卡分期支付的配置信息
             MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpid(orderInfo.getMtsid(),7, true);
             Map<String,String> paramMap = JsonUtils.toObject(merchantPayTypeInfo.getParam(),Map.class);
