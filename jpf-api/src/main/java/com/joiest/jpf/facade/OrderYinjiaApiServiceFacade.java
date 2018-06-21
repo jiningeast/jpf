@@ -33,4 +33,9 @@ public interface OrderYinjiaApiServiceFacade {
      * @return
      */
     public OrderYinjiaApiInfo getOrderYinjiaApiByOrderid(String orderid);
+
+    /**
+     * 获取 YinjinApi order list  根据pay_orders_money_detail去重
+     */
+    public OrderYinjiaApiResponse getOrderYinjiaApiDuplicateRemove(OrderYinjiaApiRequest request);
 }

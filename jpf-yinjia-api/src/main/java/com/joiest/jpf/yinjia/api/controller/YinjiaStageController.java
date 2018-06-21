@@ -1761,5 +1761,142 @@ public class YinjiaStageController {
         }
         return "NOTICE";
     }
+    /*
+     * 获取未操作汇率的数据
+     * */
+    @RequestMapping(value = "/DuplicateRemoveByMoneyDetail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public YjResponseDto DuplicateRemoveByMoneyDetail(OrderYinjiaApiRequest orderRequest){
 
+        YjResponseDto yjResponseDto = new YjResponseDto();
+
+        int allNum = 2000;//2000;
+        int perNum = 500;//1500;
+        double allPage = allNum>perNum?Math.ceil(allNum/perNum):1;
+        int start = 0;
+        int allPageToInt = (new Double(allPage)).intValue();
+        OrderYinjiaApiResponse orderYinjiaApiResponse;
+
+        int sucNum = 0;
+        int failNum = 0;
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n订单汇率设置start");
+
+        for(int i=1;i<=allPageToInt;i++){
+
+            //int i =1;
+            start = (i-1)*perNum;
+            orderRequest.setPage(i);
+            orderRequest.setRows(perNum);
+
+            orderYinjiaApiResponse = orderYinjiaApiServiceFacade.getOrderYinjiaApiDuplicateRemove(orderRequest);
+
+            List<ProductInfo> infoList = new ArrayList<>();
+            OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+            String stage="";
+            String payType_cn = "";
+            for(OrderYinjiaApiInfo lm:orderYinjiaApiResponse.getList()){
+
+                //获取分期信息
+                Map<String,String> ordernameJson = new HashMap<>();
+                ordernameJson = JsonUtils.toObject(lm.getPayDetail(), Map.class);
+                payType_cn = ordernameJson.get("stageType_cn");
+                if ( !StringUtils.isBlank(ordernameJson.get("stageType_cn")) )
+                {
+                    Pattern pattern = Pattern.compile("^\\d");
+                    Matcher matcher = pattern.matcher(ordernameJson.get("stageType_cn"));
+                    if ( matcher.find() ){
+
+                        stage = matcher.group(0);
+                        if (Integer.parseInt(stage)<=9) {
+                            stage = "0"+stage;
+                        }
+                    }else{
+                        //支付分期信息不存在
+                        failNum++;
+                        System.out.println("订单:"+lm.getOrderid()+",支付分期信息不存在");
+                        sbf.append("\n订单:"+lm.getOrderid()+",支付分期信息不存在");
+                        continue;
+                    }
+                }else{
+                    //支付分期信息不存在
+                    failNum++;
+                    System.out.println("订单:"+lm.getOrderid()+",支付分期信息不存在");
+                    sbf.append("\n订单:"+lm.getOrderid()+",支付分期信息不存在");
+                    continue;
+                }
+                //获取商户汇率信息
+                String merRate = "";
+                Map<String,String> paramSec = new HashMap<>();
+                // 获取该商户银联信用卡分期支付的配置信息
+                MerchantPayTypeInfo merchantPayTypeInfo  = merPayTypeServiceFacade.getOneMerPayTypeByTpidNull(lm.getMtsid(),7);
+                if (merchantPayTypeInfo==null)
+                {
+
+                    //商户信用卡分期配置信息有误
+                    failNum++;
+                    System.out.println("订单:"+lm.getOrderid()+",商户信用卡分期配置信息有误pay_merchants_paytype");
+                    sbf.append("\n订单:"+lm.getOrderid()+",商户信用卡分期配置信息有误pay_merchants_paytype");
+                    continue;
+                }else{
+
+                    if(StringUtils.isNotBlank(merchantPayTypeInfo.getParamSec())){
+
+                        paramSec = JsonUtils.toCollection(merchantPayTypeInfo.getParamSec(), new TypeReference<Map<String, String>>(){});
+                        merRate = paramSec.get("merRate");
+                    }else{
+                        failNum++;
+                        System.out.println("订单:"+lm.getOrderid()+",商户信用卡分期配置信息有误pay_merchants_paytype");
+                        sbf.append("\n订单:"+lm.getOrderid()+",商户信用卡分期配置信息有误pay_merchants_paytype");
+                        continue;
+                    }
+                }
+
+                //获取分期费率
+                VirtualInfo stageRateInfo = virtualInterfaceServiceFacade.getInfoByRelateId(new Long(ordernameJson.get("stageType")).intValue());
+                if ( StringUtils.isBlank(stageRateInfo.getIntro() ) )
+                {
+                    //订单所属汇率未获取 pay_virtual
+                    failNum++;
+                    System.out.println("订单:"+lm.getOrderid()+",所属汇率未获取 pay_virtual");
+                    sbf.append("\n订单:"+lm.getOrderid()+",所属汇率未获取 pay_virtual");
+                    continue;
+                }
+
+                //创建费率信息
+                OrdersMoneyInterfaceInfo moneyInterfaceInfo = new OrdersMoneyInterfaceInfo();
+                moneyInterfaceInfo.setOrderid(Long.parseLong(lm.getOrderid()));
+                moneyInterfaceInfo.setMoney(lm.getOrderPayPrice());//订单总金额
+                moneyInterfaceInfo.setStageId(ordernameJson.get("stageType"));//分期id
+                moneyInterfaceInfo.setStageName(payType_cn);//分期名称
+                moneyInterfaceInfo.setStageRate(stageRateInfo.getIntro());//分期汇率pay_virtual表
+
+                //分期费率的金额
+                Double orderMoney = new Double(lm.getOrderPayPrice().toString());
+                Double stageRate = new Double(stageRateInfo.getIntro());
+                Double stageRateMoney = BigDecimalCalculateUtils.mul(orderMoney, stageRate);
+                moneyInterfaceInfo.setStageMoney(new BigDecimal(new DecimalFormat("#.00").format(stageRateMoney)));
+
+                moneyInterfaceInfo.setMtsid(lm.getMtsid());
+                moneyInterfaceInfo.setMerchRate(merRate);
+
+                //商户费率的金额
+                Double merRateMoney = BigDecimalCalculateUtils.mul(new Double(lm.getOrderPayPrice().toString()), new Double(merRate));
+                moneyInterfaceInfo.setMerchMoney(new BigDecimal(new DecimalFormat("#.00").format(merRateMoney)));
+                moneyInterfaceInfo.setAddtime(new Date());
+                ordersMoneyInterfaceServiceFacade.addRecord(moneyInterfaceInfo);
+                sucNum++;
+            }
+        }
+        sbf.append("\n订单汇率设置成功数："+sucNum);
+        sbf.append("\n订单汇率设置失败数："+failNum);
+        sbf.append("\n订单汇率设置end");
+        String fileName = "ExchangeRateLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
+
+        return yjResponseDto;
+    }
 }
