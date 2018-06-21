@@ -1,7 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayBankCard;
-import com.joiest.jpf.dao.repository.mapper.generate.PayBankCardMapper;
+import com.joiest.jpf.dao.repository.mapper.custom.PayBankCardCustomMapper;
 import com.joiest.jpf.entity.BankCardInfo;
 import com.joiest.jpf.facade.BankCardServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,14 @@ import java.util.List;
 public class BankCardServiceFacadeImpl implements BankCardServiceFacade {
 
     @Autowired
-    private PayBankCardMapper payBankCardMapper;
+    private PayBankCardCustomMapper payBankCardCustomMapper;
 
     /**
      * 根据卡号获取
      */
     public BankCardInfo getBankCardByCardNO(String cardNo){
 
-        List<PayBankCard> list = payBankCardMapper.customSelectByCardNo(cardNo);
+        List<PayBankCard> list = payBankCardCustomMapper.selectByCardNo(cardNo);
         PayBankCard payBankCard = list.get(0);
 
         BankCardInfo bankCardInfo = new BankCardInfo();
