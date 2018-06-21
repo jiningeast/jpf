@@ -515,6 +515,29 @@ public class MerPayTypeServiceFacadeImpl implements MerPayTypeServiceFacade {
 
         return merchantPayTypeInfo;
     }
+    @Override
+    public MerchantPayTypeInfo getOneMerPayTypeByTpidNull(Long mtsid, Integer tpid){
+        PayMerchantsPaytypeExample e = new PayMerchantsPaytypeExample();
+        PayMerchantsPaytypeExample.Criteria c = e.createCriteria();
+        c.andMtsidEqualTo(mtsid);
+        c.andTpidEqualTo(tpid);
+        List<PayMerchantsPaytype> list = payMerchantsPaytypeMapper.selectByExample(e);
+
+       /* if ( list == null ){
+
+            return null;
+            //throw new JpfInterfaceException(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(),"商户支付参数获取失败");
+        }*/
+        if ( list == null || list.isEmpty() )
+        {
+            return null;
+        }
+        MerchantPayTypeInfo merchantPayTypeInfo = new MerchantPayTypeInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayMerchantsPaytype.class, MerchantPayTypeInfo.class, false);
+        beanCopier.copy(list.get(0), merchantPayTypeInfo, null);
+
+        return merchantPayTypeInfo;
+    }
 
     /**
      * 获取某个商户的某个支付类型 by id

@@ -9,7 +9,11 @@ import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsProductMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsTypeMapper;
 import com.joiest.jpf.dto.*;
+import com.joiest.jpf.entity.MerchantInfo;
+import com.joiest.jpf.entity.MerchantInterfaceInfo;
 import com.joiest.jpf.entity.ProductInfo;
+import com.joiest.jpf.facade.MerchantInterfaceServiceFacade;
+import com.joiest.jpf.facade.MerchantServiceFacade;
 import com.joiest.jpf.facade.ProductServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static org.apache.ibatis.ognl.DynamicSubscript.mid;
+
 public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
     private static final Logger logger = LogManager.getLogger(ProductServiceFacadeImpl.class);
@@ -31,6 +37,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     @Autowired
     private PayMerchantsTypeMapper payMerchantsTypeMapper;
 
+    @Autowired
+    private MerchantServiceFacade merchantServiceFacade;
     /*@Override
     public GetProductResponse getProductList(GetProductRequest request) {
         if(request.getPageNo()<=0){
@@ -131,6 +139,10 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             BeanCopier beanCopier = BeanCopier.create(PayMerchantsProduct.class, ProductInfo.class, false);
             beanCopier.copy(product,productInfo,null);
             infoList.add(productInfo);
+        }
+        for(ProductInfo lm:infoList){
+            MerchantInfo merchantInfo = merchantServiceFacade.getMerchant(lm.getMtsid());
+            lm.setCompanyname(merchantInfo.getCompanyname());
         }
         return infoList;
     }

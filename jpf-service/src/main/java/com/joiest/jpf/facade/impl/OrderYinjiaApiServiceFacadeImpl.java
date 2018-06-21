@@ -213,4 +213,42 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
         beanCopier.copy(one, info, null);
         return info;
     }
+
+    /**
+     * 获取 YinjinApi order list  根据pay_orders_money_detail去重
+     */
+    public OrderYinjiaApiResponse getOrderYinjiaApiDuplicateRemove(OrderYinjiaApiRequest request)
+    {
+        if(request.getPage()<=0){
+            request.setPage(1);
+        }
+        if (request.getRows() <= 0) {
+            request.setRows(1000);
+        }
+        PayOrderYinjiaApiExample example = new PayOrderYinjiaApiExample();
+        example.setPageNo(request.getPage());
+        example.setPageSize(request.getRows());
+        example.setOrderByClause("id asc");
+        PayOrderYinjiaApiExample.Criteria c = example.createCriteria();
+        List<PayOrderYinjiaApiCustom> orderList = payOrderYinjiaApiCustomMapper.getOrderDuplicateRemoveByMoneyDetail(example);
+        if ( orderList == null || orderList.isEmpty() )
+        {
+            return null;
+            //throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "信息不存在");
+        }
+
+        List<OrderYinjiaApiInfo> ordersList = new ArrayList<>();
+        for (PayOrderYinjiaApiCustom one : orderList )
+        {
+            OrderYinjiaApiInfo info = new OrderYinjiaApiInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayOrderYinjiaApiCustom.class, OrderYinjiaApiInfo.class, false);
+            beanCopier.copy(one, info, null);
+            ordersList.add(info);
+        }
+        OrderYinjiaApiResponse response = new OrderYinjiaApiResponse();
+        response.setList(ordersList);
+        //int count = payOrderYinjiaApiMapper.countByExample(example);
+        //response.setCount(count);
+        return response;
+    }
 }

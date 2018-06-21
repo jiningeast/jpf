@@ -111,7 +111,8 @@
                 columns:[[
                     {field:'id',checkbox:true },
                     {field:'pid',title:'产品ID',width:80},
-                    {field:'mtsid',title:'商户ID',width:80},
+                    {field:'mtsid',title:'商户编号',width:80},
+                    {field:'companyname',title:'商户名称',width:80},
                     {field:'pname',title:'产品名称',width:200},
                     {field:'pintro',title:'产品简介',width:200},
                     {field:'pmoney',title:'产品价格',width:150,formatter:formatPrice},

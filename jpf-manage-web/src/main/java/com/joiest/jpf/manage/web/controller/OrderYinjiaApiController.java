@@ -1,5 +1,6 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.dto.OrderYinjiaApiRequest;
 import com.joiest.jpf.dto.OrderYinjiaApiResponse;
 import com.joiest.jpf.entity.*;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -75,4 +77,5 @@ public class OrderYinjiaApiController {
         return new ModelAndView("orderyinjia/ordercpinfo", modelMap);
 
     }
+
 }

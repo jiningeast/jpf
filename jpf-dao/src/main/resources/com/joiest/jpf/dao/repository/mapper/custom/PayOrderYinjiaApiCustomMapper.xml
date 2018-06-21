@@ -519,5 +519,28 @@
     </if>
   </select>
 
+  <select id="getOrderDuplicateRemoveByMoneyDetail" parameterType="com.joiest.jpf.common.po.PayOrderYinjiaApiExample" resultMap="BaseResultMap" >
+    SELECT
+    a.orderid,a.foreign_orderid,a.sign_orderid,a.mtsid,
+    a.paytype,a.order_pay_price,a.pay_detail,
+    a.pay_status,a.refund_status,a.user_operate_status
+    FROM
+    pay_order_yinjia_api a
+    WHERE
+    a.orderid NOT IN (
+    SELECT
+    orderid
+    FROM
+    pay_orders_money_detail
+    )
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+
+    <if test="pageNo &gt; 0 and pageSize &gt; 0">
+      limit ${(pageNo-1) * pageSize}, ${pageSize}
+    </if>
+  </select>
+
 
 </mapper>

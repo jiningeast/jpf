@@ -54,7 +54,20 @@ public class ProductInfo {
      * 更新时间
      */
     private Date updated;
+    //============== 产品列表 后台 Begin =====================
+    /**
+     * 企业名称
+     */
+    private String companyname;
 
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
+    //============== 产品列表 后台 End =====================
     private static final long serialVersionUID = 1L;
 
     public Long getPid() {
