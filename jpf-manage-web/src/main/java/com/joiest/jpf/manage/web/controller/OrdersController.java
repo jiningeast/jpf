@@ -79,19 +79,21 @@ public class OrdersController {
     {
         //支付订单信息
         OrderYinjiaApiInfo orderYinjiaApiInfo = orderYinjiaApiServiceFacade.getOrderYinjiaApiByOrderid(orderid);
+
+
+        //商品名称
+        Map<String,String> paramMap = ToolUtils.urlToMap(orderYinjiaApiInfo.getForeignRequest());
+        if ( paramMap.containsKey("productName") )
+        {
+            orderYinjiaApiInfo.setProductName(paramMap.get("productName"));
+        }
+        orderYinjiaApiInfo.setUserOperateStatus_cn(USER_OPERATE_STATUS.get(orderYinjiaApiInfo.getUserOperateStatus().toString()));
+        orderYinjiaApiInfo.setRefundStatus_cn(REFUND_STATUS.get(orderYinjiaApiInfo.getRefundStatus().toString()));
+
         OrderCpInterfaceInfo orderCpInterfaceInfo = new OrderCpInterfaceInfo();
         StringBuilder sbf = new StringBuilder();
         if ( orderYinjiaApiInfo.getSignOrderid() != null )
         {
-            //商品名称
-            Map<String,String> paramMap = ToolUtils.urlToMap(orderYinjiaApiInfo.getForeignRequest());
-            if ( paramMap.containsKey("productName") )
-            {
-                orderYinjiaApiInfo.setProductName(paramMap.get("productName"));
-            }
-            orderYinjiaApiInfo.setUserOperateStatus_cn(USER_OPERATE_STATUS.get(orderYinjiaApiInfo.getUserOperateStatus().toString()));
-            orderYinjiaApiInfo.setRefundStatus_cn(REFUND_STATUS.get(orderYinjiaApiInfo.getRefundStatus().toString()));
-
             if ( StringUtils.isNotBlank(orderYinjiaApiInfo.getPayDetail()) )
             {
                 Map<String,String> payDetail_Map = JsonUtils.toCollection(orderYinjiaApiInfo.getPayDetail(), new TypeReference<Map<String, String>>() {});

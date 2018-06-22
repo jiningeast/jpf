@@ -9,7 +9,7 @@ public interface OrderYinjiaApiServiceFacade {
     public int insOrder(OrderYinjiaApiInfo orderYinjiaApiInfo);
 
     public OrderYinjiaApiInfo getOrderByOrderidAndForeignOrderid(String orderid, String platformOrderid, boolean forInterface);
-
+    public OrderYinjiaApiInfo getOrderByForeignOrderid(String orderid);
     public OrderYinjiaApiInfo getOrderByOrderid(String orderid, boolean forInterface);
 
     public OrderYinjiaApiInfo getOrderBySignOrderid(String signOrerid, boolean forInterface);

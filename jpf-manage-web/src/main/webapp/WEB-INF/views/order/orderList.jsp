@@ -16,6 +16,20 @@
     </style>
     <script>
         $(function () {
+            var toolbar = [{
+                text:'订单详情',
+                iconCls:'icon-view-detail',
+                handler:function(){
+                    var rows = $('#dg').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','list');
+                        return
+                    }
+                    //console.dir(rows);return false;
+                    $('#infoDiv').window("open").window('refresh', 'paydetail?orderid=' + rows[0].orderid ).window('setTitle','详情');
+                }
+            }];
+
             // 支付方式中文字段
             var payTypeArr = new Array();
             $.post("../param/getType",{'pid':'5'},function (res) {
@@ -37,6 +51,7 @@
 
             $("#dg").datagrid({
                 title:'订单列表',
+                toolbar:toolbar,
                 url:'list',
                 pagination:true,
                 singleSelect:true,
@@ -142,6 +157,12 @@
                     //$('#dg').datagrid('reload', postData);
                 }
             });
+            $('#infoDiv').window({
+                width:'1600px',
+                height:'800px',
+                closed:true,
+                modal:true
+            });
         })
     </script>
 </head>
@@ -214,7 +235,7 @@
     <div id="ft" style="padding:5px;">
         <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
         <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>&nbsp;&nbsp;
-        <a id="importExcel" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-download'">导出</a>
+       <%-- <a id="importExcel" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-download'">导出</a>--%>
     </div>
     <br/>
     <div class="easyui-panel statistics" title="汇总统计">
@@ -233,5 +254,6 @@
     </div>
     <br/>
     <table id="dg"></table>
+    <div id="infoDiv"></div>
 </body>
 </html>
