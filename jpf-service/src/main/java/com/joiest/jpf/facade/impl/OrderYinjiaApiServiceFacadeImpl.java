@@ -65,7 +65,8 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
 
         if (list == null || list.isEmpty()){
 
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "未支付旧数据不支持同步到通道订单信息表，请查看最近数据");
+            return null;
+            //throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "未支付旧数据不支持同步到通道订单信息表，请查看最近数据");
         }
 
         OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
