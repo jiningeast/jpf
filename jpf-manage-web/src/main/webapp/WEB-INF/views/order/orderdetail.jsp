@@ -109,11 +109,11 @@
             <tr>
                 <td style="text-align: right;background-color: #f1f1f1;" class="column1">订单号：</td>
                 <td class="column2" >
-                    ${apiInfo.orderid}
-                </td>
-                <td style="text-align: right;background-color: #f1f1f1;" class="column1">商户订单号：</td>
-                <td class="column2">
                     ${apiInfo.foreignOrderid}
+                </td>
+                <td style="text-align: right;background-color: #f1f1f1;" class="column1">接口订单号：</td>
+                <td class="column2">
+                    ${apiInfo.orderid}
                 </td>
             </tr>
             <tr>
@@ -305,14 +305,14 @@
                         </td>
                     </tr>
                     <%--<tr>--%>
-                        <%--<td style="text-align: right;background-color: #f1f1f1;"  class="column1" >同步流水号：</td>--%>
-                        <%--<td class="column2" style="word-break: break-all;">--%>
-                                <%--${one.returnTranno}--%>
-                        <%--</td>--%>
-                        <%--<td style="text-align: right;background-color: #f1f1f1;"  class="column1">同步返回信息：</td>--%>
-                        <%--<td style="word-break: break-all;" class="column2" >--%>
-                                <%--${one.returnContent}--%>
-                        <%--</td>--%>
+                    <%--<td style="text-align: right;background-color: #f1f1f1;"  class="column1" >同步流水号：</td>--%>
+                    <%--<td class="column2" style="word-break: break-all;">--%>
+                    <%--${one.returnTranno}--%>
+                    <%--</td>--%>
+                    <%--<td style="text-align: right;background-color: #f1f1f1;"  class="column1">同步返回信息：</td>--%>
+                    <%--<td style="word-break: break-all;" class="column2" >--%>
+                    <%--${one.returnContent}--%>
+                    <%--</td>--%>
                     <%--</tr>--%>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">异步返回信息：</td>

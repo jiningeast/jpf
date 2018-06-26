@@ -9,9 +9,9 @@
 	<script type="text/javascript" src="${basePath}/resources/easyui144/outlook.js"> </script>
     <style type="text/css">
     	body{
-			background:#D2E0F2; 
-			overflow-x : hidden;   
-		    overflow-y : hidden; 
+			background:#D2E0F2;
+			overflow-x : hidden;
+		    overflow-y : hidden;
 		}
     </style>
     <script type="text/javascript">
@@ -130,7 +130,7 @@
         $('#w').window('close');
     }
 
-    
+
 
     //修改密码
     function serverLogin() {
@@ -152,10 +152,10 @@
             return false;
         }
 
-        var param = {}; 
+        var param = {};
 		param["oldPwd"]=oldpass;
 		param["newPwd"]=rePass;
-        
+
         $.ajax({
 			type:'post',
 			url:'user/modifyPwd',
@@ -179,7 +179,7 @@
 
     $(function() {
 		//alert($('iframe').parent().css());
-	
+
         openPwd();
 
         $('#editpass').click(function() {
@@ -228,7 +228,7 @@
     <div data-options="region:'west',title:'导航菜单',split:true" style="width:180px;" id="west">
 		<div id='wnav' class="easyui-accordion" fit="true" border="false">
 		<!--  导航内容 -->
-				
+
 		</div>
     </div>
     <div id="mainPanle" data-options="region:'center'"  style="background: #eee; overflow-y:hidden">
@@ -239,8 +239,8 @@
 			</div>
 		</div>
     </div>
-    
-    
+
+
     <!--修改密码窗口-->
     <div id="w" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
         maximizable="false" icon="icon-save"  style="width: 300px; height: 180px; padding: 5px;
@@ -263,7 +263,7 @@
                 </table>
             </div>
             <div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
-                <a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" >确定</a> 
+                <a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" >确定</a>
                 <a id="btnCancel" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)">取消</a>
             </div>
         </div>

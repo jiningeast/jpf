@@ -532,7 +532,7 @@
     orderid
     FROM
     pay_orders_money_detail
-    )
+    ) and a.paytype = 7
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>

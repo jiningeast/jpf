@@ -55,7 +55,26 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
 
         return orderYinjiaApiInfo;
     }
+    @Override
+    public OrderYinjiaApiInfo getOrderByForeignOrderid(String orderid){
 
+        PayOrderYinjiaApiExample e = new PayOrderYinjiaApiExample();
+        PayOrderYinjiaApiExample.Criteria c = e.createCriteria();
+        c.andForeignOrderidEqualTo(orderid);
+        List<PayOrderYinjiaApi> list = payOrderYinjiaApiMapper.selectByExample(e);
+
+        if (list == null || list.isEmpty()){
+
+            return null;
+            //throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "未支付旧数据不支持同步到通道订单信息表，请查看最近数据");
+        }
+
+        OrderYinjiaApiInfo orderYinjiaApiInfo = new OrderYinjiaApiInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayOrderYinjiaApi.class, OrderYinjiaApiInfo.class, false);
+        beanCopier.copy(list.get(0), orderYinjiaApiInfo, null);
+
+        return orderYinjiaApiInfo;
+    }
     @Override
     public OrderYinjiaApiInfo getOrderByOrderid(String orderid, boolean forInterface){
         PayOrderYinjiaApiExample e = new PayOrderYinjiaApiExample();

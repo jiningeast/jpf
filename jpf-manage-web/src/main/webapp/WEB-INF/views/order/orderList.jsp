@@ -16,6 +16,20 @@
     </style>
     <script>
         $(function () {
+            var toolbar = [{
+                text:'订单详情',
+                iconCls:'icon-view-detail',
+                handler:function(){
+                    var rows = $('#dg').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','list');
+                        return
+                    }
+                    //console.dir(rows);return false;
+                    $('#infoDiv').window("open").window('refresh', 'paydetail?orderid=' + rows[0].orderid ).window('setTitle','详情');
+                }
+            }];
+
             // 支付方式中文字段
             var payTypeArr = new Array();
             $.post("../param/getType",{'pid':'5'},function (res) {
@@ -37,6 +51,7 @@
 
             $("#dg").datagrid({
                 title:'订单列表',
+                toolbar:toolbar,
                 url:'list',
                 pagination:true,
                 singleSelect:true,
@@ -126,21 +141,17 @@
             //导出excel
             $('#importExcel').linkbutton({
                 onClick: function(){
-                    var queryArray = $('#searchForm').serializeArray();
-                    var postData = parsePostData(queryArray);
-                    var importExcel = "";
-                    $.ajax({
-                        url:"imprtExcel",
-                        type:'post',
-                        data:postData,
-                        dataType:'json',
-                        success:function(re){
-                            console.dir(re);
-                        },
 
-                    });
-                    //$('#dg').datagrid('reload', postData);
+                    var queryArray = $('#searchForm').serialize();
+                    var importExcel = "imprtExcel?"+queryArray;
+                    window.location.href = importExcel;
                 }
+            });
+            $('#infoDiv').window({
+                width:'1600px',
+                height:'800px',
+                closed:true,
+                modal:true
             });
         })
     </script>
@@ -233,5 +244,6 @@
     </div>
     <br/>
     <table id="dg"></table>
+    <div id="infoDiv"></div>
 </body>
 </html>
