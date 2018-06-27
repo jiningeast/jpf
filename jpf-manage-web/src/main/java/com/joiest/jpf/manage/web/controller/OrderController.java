@@ -239,7 +239,10 @@ public class OrderController {
 
             response.reset();
             output = response.getOutputStream();
-            response.setHeader("Content-disposition", "attachment; filename=order.xlsx");
+
+            String filename = "旅游分期订单";
+            response.setHeader("Content-disposition", "attachment;filename="+new String(filename.getBytes("gbk"), "iso8859-1")+".xls");
+            //response.setHeader("Content-disposition", "attachment; filename=旅游分期订单.xls");
             response.setContentType("application/vnd.ms-excel");
             workbook.write(output);
             output.close();

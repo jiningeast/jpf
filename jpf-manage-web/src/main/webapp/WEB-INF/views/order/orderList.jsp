@@ -14,6 +14,7 @@
         .statistics td:nth-child(odd) { background-color: rgb(241,241,241); text-align: right;}
         .statistics td:nth-child(even) { text-align: left; }
     </style>
+    <script type="text/javascript" src="${basePath}/resources/js/dialog.js"> </script>
     <script>
         $(function () {
             var toolbar = [{
@@ -139,12 +140,56 @@
                 }
             });
             //导出excel
-            $('#importExcel').linkbutton({
-                onClick: function(){
+            $('#importExcel').linkbutton({onClick: function(){
+
+                    /*ar remarkHasDialog = dialog({
+                        content: '正在导出，请稍等。。。',
+                        width:140,
+                        //drag:true,
+                    });//.show();*/
 
                     var queryArray = $('#searchForm').serialize();
                     var importExcel = "imprtExcel?"+queryArray;
                     window.location.href = importExcel;
+                    //remarkHasDialog.content('导出成功').width(50);
+                  /*  var aa = document.getElementById("iframe_id")
+                        aa.src = "imprtExcel?"+queryArray;*/
+                    //remarkHasDialog.show();//显示遮罩层
+                /*
+                    console.dir(document.parentWindow);
+                    //document.parent.window.remarkHasDialog.content('导出成功').width(50);
+                    document.parentWindow.remarkHasDialog.content('导出成功').width(50);
+                */
+
+
+                    //var aa = document.createElement("iframe");
+
+                    aa.setAttribute('id','test');
+                   /* aa.onload = function(){
+                        // alert("Local iframe is now loaded.");
+                        aa.src = "imprtExcel?"+queryArray;
+                        console.dir(55555555555);
+
+                    };*/
+                   /* aa.src = "imprtExcel?"+queryArray;
+
+                    if (aa.attachEvent){
+                        aa.attachEvent("onload", function(){
+                            console.dir(22222222222222);
+                        });
+                    } else {
+
+                        aa.onload = function(){
+
+                            console.dir(55555555555);
+                        };
+                        console.dir(4444444444);
+                    }
+                    document.body.appendChild(aa);
+*/
+
+
+
                 }
             });
             $('#infoDiv').window({
@@ -157,6 +202,9 @@
     </script>
 </head>
 <body>
+<%--
+    <iframe id="iframe_id" style="display:none;"><!doctype html><html><head><meta charset="utf-8"><title></title></head><body></body></html></iframe>
+--%>
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'" style="padding: 20px;">
         <form id="searchForm" method="post">
             <table cellpadding="5" width="100%">
