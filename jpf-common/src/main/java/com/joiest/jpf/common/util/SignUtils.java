@@ -1,7 +1,13 @@
 package com.joiest.jpf.common.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.util.codec.binary.Base64;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.net.MalformedURLException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -87,5 +93,190 @@ public class SignUtils {
 			result.put(entry.getKey(), entry.getValue());
 		}
 		return result;
+	}
+
+	/**
+	 * OCR 计算签名
+	 *
+	 * @param secret APP密钥
+	 * @param method HttpMethod
+	 * @param path
+	 * @param headers
+	 * @param querys
+	 * @param bodys
+	 * @param signHeaderPrefixList 自定义参与签名Header前缀
+	 * @return 签名后的字符串
+	 */
+	public static String OcrSign(String secret, String method, String path,
+							  Map<String, String> headers,
+							  Map<String, String> querys,
+							  Map<String, String> bodys,
+							  List<String> signHeaderPrefixList) {
+		try {
+			Mac hmacSha256 = Mac.getInstance("HmacSHA256");
+			byte[] keyBytes = secret.getBytes("UTF-8");
+			hmacSha256.init(new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacSHA256"));
+
+			return new String(Base64.encodeBase64(
+					hmacSha256.doFinal(buildStringToSign(method, path, headers, querys, bodys, signHeaderPrefixList)
+							.getBytes("UTF-8"))),
+					"UTF-8");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	/**
+	 * Ocr 构建待签名字符串
+	 * @param method
+	 * @param path
+	 * @param headers
+	 * @param querys
+	 * @param bodys
+	 * @param signHeaderPrefixList
+	 * @return
+	 */
+	private static String buildStringToSign(String method, String path,
+											Map<String, String> headers,
+											Map<String, String> querys,
+											Map<String, String> bodys,
+											List<String> signHeaderPrefixList) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(method.toUpperCase()).append("\n");
+		if (null != headers) {
+			if (null != headers.get("Accept")) {
+				sb.append(headers.get("Accept"));
+			}
+			sb.append("\n");
+			if (null != headers.get("Content-MD5")) {
+				sb.append(headers.get("Content-MD5"));
+			}
+			sb.append("\n");
+			if (null != headers.get("Content-Type")) {
+				sb.append(headers.get("Content-Type"));
+			}
+			sb.append("\n");
+			if (null != headers.get("Date")) {
+				sb.append(headers.get("Date"));
+			}
+		}
+		sb.append("\n");
+		sb.append(buildHeaders(headers, signHeaderPrefixList));
+		sb.append(buildResource(path, querys, bodys));
+
+		return sb.toString();
+	}
+
+	/**
+	 * OCR 构建待签名Http头
+	 *
+	 * @param headers 请求中所有的Http头
+	 * @param signHeaderPrefixList 自定义参与签名Header前缀
+	 * @return 待签名Http头
+	 */
+	private static String buildHeaders(Map<String, String> headers, List<String> signHeaderPrefixList) {
+		StringBuilder sb = new StringBuilder();
+
+		if (null != signHeaderPrefixList) {
+
+			signHeaderPrefixList.remove("X-Ca-Signature");
+			signHeaderPrefixList.remove("Accept");
+			signHeaderPrefixList.remove("Content-MD5");
+			signHeaderPrefixList.remove("Content-Type");
+			signHeaderPrefixList.remove("Date");
+			Collections.sort(signHeaderPrefixList);
+			if (null != headers) {
+				Map<String, String> sortMap = new TreeMap<String, String>();
+				sortMap.putAll(headers);
+				StringBuilder signHeadersStringBuilder = new StringBuilder();
+				for (Map.Entry<String, String> header : sortMap.entrySet()) {
+					if (isHeaderToSign(header.getKey(), signHeaderPrefixList)) {
+						sb.append(header.getKey());
+						sb.append(":");
+						if (!StringUtils.isBlank(header.getValue())) {
+							sb.append(header.getValue());
+						}
+						sb.append("\n");
+						if (0 < signHeadersStringBuilder.length()) {
+							signHeadersStringBuilder.append(",");
+						}
+						signHeadersStringBuilder.append(header.getKey());
+					}
+				}
+				headers.put("X-Ca-Signature-Headers", signHeadersStringBuilder.toString());
+			}
+		}
+
+		return sb.toString();
+	}
+	/**
+	 * OCR 构建待签名Path+Query+BODY
+	 *
+	 * @param path
+	 * @param querys
+	 * @param bodys
+	 * @return 待签名
+	 */
+	private static String buildResource(String path, Map<String, String> querys, Map<String, String> bodys) {
+		StringBuilder sb = new StringBuilder();
+
+		if (!StringUtils.isBlank(path)) {
+			sb.append(path);
+		}
+		Map<String, String> sortMap = new TreeMap<String, String>();
+		if (null != querys) {
+			for (Map.Entry<String, String> query : querys.entrySet()) {
+				if (!StringUtils.isBlank(query.getKey())) {
+					sortMap.put(query.getKey(), query.getValue());
+				}
+			}
+		}
+		if (null != bodys) {
+			for (Map.Entry<String, String> body : bodys.entrySet()) {
+				if (!StringUtils.isBlank(body.getKey())) {
+					sortMap.put(body.getKey(), body.getValue());
+				}
+			}
+		}
+		StringBuilder sbParam = new StringBuilder();
+		for (Map.Entry<String, String> item : sortMap.entrySet()) {
+			if (!StringUtils.isBlank(item.getKey())) {
+				if (0 < sbParam.length()) {
+					sbParam.append("&");
+				}
+				sbParam.append(item.getKey());
+				if (!StringUtils.isBlank(item.getValue())) {
+					sbParam.append("=").append(item.getValue());
+				}
+			}
+		}
+		if (0 < sbParam.length()) {
+			sb.append("?");
+			sb.append(sbParam);
+		}
+
+		return sb.toString();
+	}
+	/**
+	 *OCR Http头是否参与签名 return
+	 */
+	private static boolean isHeaderToSign(String headerName, List<String> signHeaderPrefixList) {
+		if (StringUtils.isBlank(headerName)) {
+			return false;
+		}
+
+		if (headerName.startsWith("X-Ca-")) {
+			return true;
+		}
+
+		if (null != signHeaderPrefixList) {
+			for (String signHeaderPrefix : signHeaderPrefixList) {
+				if (headerName.equalsIgnoreCase(signHeaderPrefix)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

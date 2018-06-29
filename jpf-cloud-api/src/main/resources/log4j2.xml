@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="info">
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<ThresholdFilter level="trace" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%thread] %-5level %class{36} %L %M - %msg%xEx%n" />
+		</Console>
+		<RollingFile name="RollingFile" fileName="/logs/jpf-cloud-api/jpf-cloud-api.log"
+			filePattern="/logs/jpf-cloud-api/$${date:yyyy-MM}/jpf-web-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout
+				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} [%thread] %-5level %class{36} %L %M - %msg%xEx%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="500 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="9999"/>
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<root level="debug">
+			<appender-ref ref="RollingFile" />
+			<appender-ref ref="Console" />
+		</root>
+	</loggers>
+</configuration> 

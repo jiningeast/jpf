@@ -14,6 +14,7 @@ public class Base64CustomUtils {
         {
             BASE64Encoder encode = new BASE64Encoder();
             result = encode.encode(str.getBytes("UTF-8"));
+
         }catch (Exception e)
         {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "转码失败");
