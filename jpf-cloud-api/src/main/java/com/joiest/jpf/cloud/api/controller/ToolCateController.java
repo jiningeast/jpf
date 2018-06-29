@@ -7,12 +7,14 @@ import com.joiest.jpf.common.util.MessageDigestUtil;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.dto.ToolCateRequest;
 import com.joiest.jpf.dto.ToolCateResponse;
+import com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +34,8 @@ import java.util.regex.Pattern;
 @RequestMapping("toolcate")
 public class ToolCateController {
 
+    @Autowired
+    private ToolCateServiceFacadeImpl toolCateServiceFacade;
 
     //自定义参与签名Header前缀（可选,默认只有"X-Ca-"开头的参与到Header签名）
     private final static List<String> CUSTOM_HEADERS_TO_SIGN_PREFIX = new ArrayList<String>();
@@ -57,11 +61,6 @@ public class ToolCateController {
     @ResponseBody
     public String idCardOcr(HttpServletRequest request) throws IOException {
 
-       //String paths = this.getServletContext().getRealPath();
-        /*System.out.println(this.getClass()); //this.getClass().getResourceAsStream("/kafka-http.properties")
-        System.out.println(this.getClass().getResource("/")); //this.getClass().getResourceAsStream("/kafka-http.properties")
-        System.out.println(this.getClass().getResource("images")); //this.getClass().getResourceAsStream("/kafka-http.properties")
-*/
         String side = request.getParameter("side");
         String imgInfo = request.getParameter("img");
 
@@ -82,7 +81,14 @@ public class ToolCateController {
         configObj.put("side", side);
 
         String config_str = configObj.toString();
-        String imgFile = baseToImage(dealImgInfo,"OCR");
+
+        //base64转换为图片
+        Map<String, String> imgUrl = toolCateServiceFacade.baseToImage(request,dealImgInfo,"OCR");
+
+        String requestUrl = request.getRequestURL().toString();
+        String resourceUrl = requestUrl.replace("/toolcate/idCardOcr",imgUrl.get("resourceUrl"));
+
+        String imgFile = imgUrl.get("actualUrl");
 
         // 对图像进行base64编码
         String imgBase64 = null;
@@ -148,11 +154,12 @@ public class ToolCateController {
         JSONObject userInfo = null;
         Map<String,Object> idCard= new HashMap<String,Object>();
         String responseJson = null;
+
         //调用服务端
         try {
 
             //调用阿里云OCR请求，获取数据
-            toolCateResponse = convert(OkHttpUtils.httpPostOcr(
+            toolCateResponse = toolCateServiceFacade.convert(OkHttpUtils.httpPostOcr(
                    toolCateRequest.getHost(),
                    toolCateRequest.getPath(),
                    toolCateRequest.getTimeout(),
@@ -178,6 +185,7 @@ public class ToolCateController {
                 yjResponseDto.setData(map);
 
             }else{
+
                 res = toolCateResponse.getBody();
                 ocrResult = JSONObject.fromObject(res);
 
@@ -198,6 +206,7 @@ public class ToolCateController {
                         idCard.put("sex",userInfo.get("sex"));
                         idCard.put("numnum",userInfo.get("num"));
                         idCard.put("side",side);
+                        idCard.put("resourceUrl",resourceUrl);
 
                     }else{
 
@@ -207,6 +216,8 @@ public class ToolCateController {
                         idCard.put("brequest_id",userInfo.get("request_id"));
                         idCard.put("end_date",userInfo.get("end_date"));
                         idCard.put("side",side);
+                        idCard.put("resourceUrl",resourceUrl);
+
                     }
                     Map<String,Object> map = new HashMap<>();
                     map.put("userifno",idCard);
@@ -221,79 +232,14 @@ public class ToolCateController {
                 }
             }
             responseJson = JsonUtils.toJson(yjResponseDto);
-            return Base64CustomUtils.base64Encoder(responseJson);
-
+            String baseRe = Base64CustomUtils.base64Encoder(responseJson);
+            baseRe = baseRe.replaceAll("\r\n","");
+            return baseRe;
         } catch (Exception e) {
 
             e.printStackTrace();
         }
         return null;
-    }
-    /**
-     * 对数据流进行处理
-     * */
-    private static ToolCateResponse convert(HttpResponse response) throws IOException {
-
-        ToolCateResponse res = new ToolCateResponse();
-        if (null != response) {
-
-            res.setStatusCode(response.getStatusLine().getStatusCode());
-            for (Header header : response.getAllHeaders()) {
-                res.setHeader(header.getName(), MessageDigestUtil.iso88591ToUtf8(header.getValue()));
-            }
-            res.setContentType(res.getHeader("Content-Type"));
-            res.setRequestId(res.getHeader("X-Ca-Request-Id"));
-            res.setErrorMessage(res.getHeader("X-Ca-Error-Message"));
-            res.setBody(OkHttpUtils.readStreamAsStr(response.getEntity().getContent()));
-
-        } else {
-            //服务器无回应
-            res.setStatusCode(500);
-            res.setErrorMessage("No Response");
-        }
-        return res;
-    }
-
-    //base64字符串转化成图片
-    @RequestMapping(value = "/baseToImage", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public static String baseToImage(String imgStr,String perfix)
-    {
-
-        if(perfix == null || perfix.isEmpty()){
-            perfix = "Ocr";
-        }
-        //对字节数组字符串进行Base64解码并生成图片
-        if (imgStr == null) //图像数据为空
-            return null;
-
-        BASE64Decoder decoder = new BASE64Decoder();
-        try
-        {
-            //Base64解码
-            byte[] b = decoder.decodeBuffer(imgStr);
-            for(int i=0;i<b.length;++i)
-            {
-                if(b[i]<0)
-                {
-                    //调整异常数据
-                    b[i]+=256;
-                }
-            }
-            long timeStamp = new Date().getTime();
-
-            //生成jpeg图片
-            String imgFilePath = "D:\\"+perfix+timeStamp+".jpg";//新生成的图片
-            OutputStream out = new FileOutputStream(imgFilePath);
-            out.write(b);
-            out.flush();
-            out.close();
-            return imgFilePath;
-
-        }catch (Exception e) {
-
-            return null;
-        }
     }
 
 }
