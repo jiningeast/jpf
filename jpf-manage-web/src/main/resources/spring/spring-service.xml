@@ -28,5 +28,5 @@
 	<bean id="OrderPayMerMessageServiceFacade" class="com.joiest.jpf.facade.impl.OrderPayMerMessageServiceFacadeImpl"></bean>
 	<bean id="OrdersServiceFacade" class="com.joiest.jpf.facade.impl.OrdersServiceFacadeImpl"></bean>
 	<bean id="OrdersMoneyServiceFacade" class="com.joiest.jpf.facade.impl.OrdersMoneyServiceFacadeImpl"></bean>
-
+	<bean id="CloudRechargeServiceFacade" class="com.joiest.jpf.facade.impl.CloudRechargeServiceFacadeImpl"></bean>
 </beans>

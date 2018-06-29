@@ -111,6 +111,16 @@
                     "icon" : "icon-nav",
                     "url" : "orders/index"
                 }]
+            },{
+                "menuid" : "6",
+                "icon" : "icon-sys",
+                "menuname" : "云账户充值管理",
+                "menus" : [{
+                    "menuid" : "601",
+                    "menuname" : "充值管理",
+                    "icon" : "icon-nav",
+                    "url" : "cloudRecharge/index"
+                }]
             }]
     	};
 

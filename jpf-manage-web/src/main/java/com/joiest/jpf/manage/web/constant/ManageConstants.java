@@ -64,4 +64,21 @@ public class ManageConstants {
             put("payType_cn", "支付方式：");
         }
     };
+
+    /**
+     * 充值状态集合
+     */
+    public static Map<String,String> STATUSLIST= new HashMap<String, String>() {
+        {
+            put("0", "已取消");
+            put("1", "申请中");
+            put("2", "已审核");
+            put("3", "已支付");
+            put("4", "已充值开票中");
+            put("5", "已充值已开票");
+            put("6", "已发货");
+            put("7", "已完成");
+
+        }
+    };
 }
