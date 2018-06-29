@@ -114,20 +114,14 @@
             },{
                 "menuid" : "6",
                 "icon" : "icon-sys",
-                "menuname" : "云账户企业管理",
+                "menuname" : "云账户充值管理",
                 "menus" : [{
                     "menuid" : "601",
-                    "menuname" : "代理公司管理",
+                    "menuname" : "充值管理",
                     "icon" : "icon-nav",
-                    "url" : "cloudCompany/index"
-                },{
-                    "menuid" : "602",
-                    "menuname" : "业务公司管理",
-                    "icon" : "icon-nav",
-                    "url" : "roles/index"
+                    "url" : "cloudRecharge/index"
                 }]
-             }
-            ]
+            }]
     	};
 
   	//设置登录窗口

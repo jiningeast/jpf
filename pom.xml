@@ -66,6 +66,8 @@
         <maven-resources-plugin_version>2.5</maven-resources-plugin_version>
         <versions_maven_plugin_version>2.3</versions_maven_plugin_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <HttpClient_version>4.0-beta1</HttpClient_version>
     </properties>
 
     <dependencyManagement>
@@ -330,6 +332,13 @@
                 <artifactId>bcprov-jdk15on</artifactId>
                 <version>${bouncycastle_version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${HttpClient_version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -337,6 +346,12 @@
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
