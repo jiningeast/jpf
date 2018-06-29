@@ -5,5 +5,6 @@
 
 	<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>
 	<bean id="toolCateServiceFacade" class="com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl"></bean>
+	<bean id="cloudIdcardServiceFacade" class="com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl"></bean>
 
 </beans>

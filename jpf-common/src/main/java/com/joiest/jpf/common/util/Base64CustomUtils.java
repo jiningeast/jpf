@@ -36,4 +36,10 @@ public class Base64CustomUtils {
         return result;
     }
 
+    public static void main(String[] args) {
+        String str = "eyJzaWRlIjoiZmFjZSIsImFkZHJlc3MiOiLljJfkuqzluILlu7bluobljr/lu7bluobplYfopb/ovpvluoTmnZExMzflj7cy6ZeoIiwibmF0aW9uYWxpdHkiOiLmsYkiLCJmcmVxdWVzdF9pZCI6IjIwMTgwNjI5MTAxNTA0XzJlMGU4ZDkwMzk2OGQ3OTk4YWJiY2U2NDI0Nzg5ZmYzIiwicmVzb3VyY2VVcmwiOiJodHRwOi8vMTAuMTAuMTguMTc6ODA4MC9jbG91ZC1hcGlcXHJlc291cmNlc1xcT0NSXFxPQ1IxNTMwMjM4NTAwMjk2LmpwZyIsIm51bSI6IjExMDIyOTE5ODcwOTIzMDAzNyIsInNleCI6IueUtyIsIm5hbWUiOiLlt6bmmajlhpsiLCJiaXJ0aCI6IjE5ODcwOTIzIn0=";
+        String abc = Base64CustomUtils.base64Decoder(str);
+        System.out.printf(abc);
+        System.out.printf(abc);
+    }
 }
