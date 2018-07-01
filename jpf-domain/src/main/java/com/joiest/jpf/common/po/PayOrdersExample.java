@@ -169,6 +169,13 @@ public class PayOrdersExample {
             criteria.add(new Criterion(condition, value));
         }
 
+        public void addCriterionCustom(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            criteria.add(new Criterion(condition, value));
+        }
+
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
@@ -186,6 +193,12 @@ public class PayOrdersExample {
             return (Criteria) this;
         }
 
+        //==========================================
+        public Criteria andMerIdEqualTo(String value) {
+            addCriterion("id =", value, "id");
+            return (Criteria) this;
+        }
+        //==========================================
         public Criteria andIdEqualTo(String value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
