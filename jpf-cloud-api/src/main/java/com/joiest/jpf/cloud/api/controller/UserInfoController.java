@@ -4,8 +4,15 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.dto.GetUserBlanceRequest;
+import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
+import com.joiest.jpf.entity.CloudIdcardInfo;
+import com.joiest.jpf.entity.CloudStaffBanksInfo;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
+import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
+import com.joiest.jpf.facade.impl.CloudCompanyStaffServiceFacadeImpl;
+import com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl;
+import com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -21,6 +29,15 @@ public class UserInfoController {
 
     @Autowired
     private CloudDfMoneyServiceFacade cloudDfMoneyServiceFacade;
+
+    @Autowired
+    private CloudCompanyStaffServiceFacadeImpl cloudCompanyStaffServiceFacade;
+
+    @Autowired
+    private CloudIdcardServiceFacadeImpl cloudIdcardServiceFacade;
+
+    @Autowired
+    private CloudStaffBanksServiceFacadeImpl cloudStaffBanksServiceFacade;
 
     //登录
     @RequestMapping("/login")
@@ -129,4 +146,61 @@ public class UserInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), list);
     }
 
+
+    /**
+     * 验证用户信息  身份证、银行卡、手机号信息
+     * */
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getUserInfo(HttpServletRequest request){
+
+        String cardId = request.getParameter("id");//身份证接口返回id
+        String mobile = request.getParameter("mobile");//手机号
+        String bankNum = request.getParameter("bankNum");//银行卡号
+        String verificate = request.getParameter("verificate");//验证码
+
+        CloudCompanyStaffInfo cloudCompanyStaffInfo;
+        CloudIdcardInfo cloudIdcardInfo;
+        CloudStaffBanksInfo cloudStaffBanksInfo;
+        if(cardId==null || mobile==null ||  bankNum==null || verificate==null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
+        }else{
+
+            //身份证信息
+            cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cardId);
+
+            //员工信息
+            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(cloudIdcardInfo.getNum());
+
+            //员工银行卡信息
+            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, cloudCompanyStaffInfo.getId());
+
+            if(cloudIdcardInfo == null){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户身份证信息不存在", null);
+            }
+            if(cloudCompanyStaffInfo==null){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户员工信息不存在", null);
+            }
+            if(cloudStaffBanksInfo==null){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户银行卡信息不存在", null);
+            }
+            if(!cloudStaffBanksInfo.getBankphone().equals(mobile)){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡所属绑定手机有误", null);
+            }
+            //操作员工状态
+            Map<String,String> map = new HashMap<String,String>();
+
+            map.put("is_active","1");
+            map.put("code",verificate);
+
+
+
+            return null;
+        }
+    }
 }

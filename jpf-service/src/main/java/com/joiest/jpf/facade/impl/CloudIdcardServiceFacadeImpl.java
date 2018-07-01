@@ -9,6 +9,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +20,9 @@ public class CloudIdcardServiceFacadeImpl {
 
     @Autowired
     private PayCloudIdcardCustomMapper payCloudIdcardCustomMapper;
+
     /*
-     * 新增退单记录
+     * 新增身份证信息
      * */
     public int addCloudIdcard(JSONObject faceResult, JSONObject backResult){
 
@@ -76,4 +78,24 @@ public class CloudIdcardServiceFacadeImpl {
 
         return cloudIdcardInfo;
     }
+
+    /*
+     * 查询身份证信息通过主键
+     * */
+    public CloudIdcardInfo getCloudIdcardById(String id){
+
+        PayCloudIdcard payCloudIdcard = payCloudIdcardCustomMapper.selectByPrimaryKey(id);;
+
+        if(payCloudIdcard == null){
+
+            return  null;
+        }
+
+        CloudIdcardInfo cloudIdcardInfo = new CloudIdcardInfo();
+        BeanCopier beanCopier = BeanCopier.create( PayCloudIdcard.class, CloudIdcardInfo.class, false);
+        beanCopier.copy(payCloudIdcard, cloudIdcardInfo, null);
+
+        return cloudIdcardInfo;
+    }
+
 }

@@ -283,4 +283,29 @@ public class ToolCateController {
 
         return baseRe;
     }
+    @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String sendSms(HttpServletRequest request) throws IOException {
+
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
+        /*try{
+            String phone="138XXXXXXXX,159XXXXXXXX";//手机号码，用英文逗号,分隔，最大1000个号码。
+            String strMessage="测试短信";//短信内容
+            String strSubPort="*";//扩展子号 （不带请填星号*，长度不大于6位）;
+            String strUserMsgId="0";//用户自定义流水号，不带请输入0（流水号范围-（2^63）……2^63-1）
+            CHttpPost sms=new CHttpPost();//短信请求业务类
+            StringBuffer strPtMsgId=new StringBuffer("");//如果成功，存流水号。失败，存错误码。
+            int result=sms.SendSms(strPtMsgId, ip,port,strUserId, strPwd, phone, strMessage, strSubPort, strUserMsgId);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            if(result==0){//返回值为0，代表成功
+                System.out.println("发送成功："+strPtMsgId.toString());//将流水号打印出来
+            }else{//返回值为非0，代表失败
+                System.out.println("发送失败："+strPtMsgId.toString());//将错误码打印出来
+            }
+        }catch (Exception e) {
+            e.printStackTrace();//异常处理
+        }
+        int result = toolCateServiceFacade.sendSms();
+        return null;*/
+    }
 }

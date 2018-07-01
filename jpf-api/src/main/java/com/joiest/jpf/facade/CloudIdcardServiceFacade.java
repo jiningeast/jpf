@@ -14,4 +14,13 @@ public interface CloudIdcardServiceFacade {
      * 查询身份证信息通过身份证号
      * */
     public CloudIdcardInfo getCloudIdcardByCardNo(String cardNo);
+    /*
+     * 查询身份证信息通过身份证号
+     * */
+    public CloudIdcardInfo sendSms(String cardNo);
+
+    /*
+     * 查询身份证信息通过主键
+     * */
+    public CloudIdcardInfo getCloudIdcardById(String id);
 }

@@ -7,5 +7,7 @@
 	<bean id="toolCateServiceFacade" class="com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl"></bean>
 	<bean id="cloudIdcardServiceFacade" class="com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl"></bean>
 	<bean id="CloudDfMoneyServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfMoneyServiceFacadeImpl"></bean>
+	<bean id="cloudCompanyStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyStaffServiceFacadeImpl"></bean>
+	<bean id="cloudStaffBanksServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl"></bean>
 
 </beans>
