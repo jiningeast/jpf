@@ -48,12 +48,12 @@ public class PayCloudCompanyStaff implements Serializable {
     /**
      * 删除状态：1:正常，-1:离职, -2:彻底删除
      */
-    private Boolean status;
+    private String status;
 
     /**
      * 是否签约 0=未签约 1=已签约
      */
-    private Boolean isActive;
+    private String isActive;
 
     /**
      * 创建时间
@@ -171,20 +171,20 @@ public class PayCloudCompanyStaff implements Serializable {
         this.jobno = jobno == null ? null : jobno.trim();
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
-    public Boolean getIsActive() {
+    public String getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setIsActive(String isActive) {
+        this.isActive = isActive == null ? null : isActive.trim();
     }
 
     public Date getCreated() {

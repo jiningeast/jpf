@@ -785,52 +785,52 @@ public class PayCloudStaffBanksExample {
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveEqualTo(Boolean value) {
+        public Criteria andBankActiveEqualTo(String value) {
             addCriterion("bank_active =", value, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveNotEqualTo(Boolean value) {
+        public Criteria andBankActiveNotEqualTo(String value) {
             addCriterion("bank_active <>", value, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveGreaterThan(Boolean value) {
+        public Criteria andBankActiveGreaterThan(String value) {
             addCriterion("bank_active >", value, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andBankActiveGreaterThanOrEqualTo(String value) {
             addCriterion("bank_active >=", value, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveLessThan(Boolean value) {
+        public Criteria andBankActiveLessThan(String value) {
             addCriterion("bank_active <", value, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveLessThanOrEqualTo(Boolean value) {
+        public Criteria andBankActiveLessThanOrEqualTo(String value) {
             addCriterion("bank_active <=", value, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveIn(List<Boolean> values) {
+        public Criteria andBankActiveIn(List<String> values) {
             addCriterion("bank_active in", values, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveNotIn(List<Boolean> values) {
+        public Criteria andBankActiveNotIn(List<String> values) {
             addCriterion("bank_active not in", values, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveBetween(Boolean value1, Boolean value2) {
+        public Criteria andBankActiveBetween(String value1, String value2) {
             addCriterion("bank_active between", value1, value2, "bankActive");
             return (Criteria) this;
         }
 
-        public Criteria andBankActiveNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andBankActiveNotBetween(String value1, String value2) {
             addCriterion("bank_active not between", value1, value2, "bankActive");
             return (Criteria) this;
         }
@@ -845,52 +845,52 @@ public class PayCloudStaffBanksExample {
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrEqualTo(Byte value) {
+        public Criteria andBankacctattrEqualTo(String value) {
             addCriterion("bankAcctAttr =", value, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrNotEqualTo(Byte value) {
+        public Criteria andBankacctattrNotEqualTo(String value) {
             addCriterion("bankAcctAttr <>", value, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrGreaterThan(Byte value) {
+        public Criteria andBankacctattrGreaterThan(String value) {
             addCriterion("bankAcctAttr >", value, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrGreaterThanOrEqualTo(Byte value) {
+        public Criteria andBankacctattrGreaterThanOrEqualTo(String value) {
             addCriterion("bankAcctAttr >=", value, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrLessThan(Byte value) {
+        public Criteria andBankacctattrLessThan(String value) {
             addCriterion("bankAcctAttr <", value, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrLessThanOrEqualTo(Byte value) {
+        public Criteria andBankacctattrLessThanOrEqualTo(String value) {
             addCriterion("bankAcctAttr <=", value, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrIn(List<Byte> values) {
+        public Criteria andBankacctattrIn(List<String> values) {
             addCriterion("bankAcctAttr in", values, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrNotIn(List<Byte> values) {
+        public Criteria andBankacctattrNotIn(List<String> values) {
             addCriterion("bankAcctAttr not in", values, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrBetween(Byte value1, Byte value2) {
+        public Criteria andBankacctattrBetween(String value1, String value2) {
             addCriterion("bankAcctAttr between", value1, value2, "bankacctattr");
             return (Criteria) this;
         }
 
-        public Criteria andBankacctattrNotBetween(Byte value1, Byte value2) {
+        public Criteria andBankacctattrNotBetween(String value1, String value2) {
             addCriterion("bankAcctAttr not between", value1, value2, "bankacctattr");
             return (Criteria) this;
         }

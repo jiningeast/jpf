@@ -743,52 +743,52 @@ public class PayCloudCompanyStaffExample {
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Boolean value) {
+        public Criteria andStatusEqualTo(String value) {
             addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Boolean value) {
+        public Criteria andStatusNotEqualTo(String value) {
             addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Boolean value) {
+        public Criteria andStatusGreaterThan(String value) {
             addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andStatusGreaterThanOrEqualTo(String value) {
             addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Boolean value) {
+        public Criteria andStatusLessThan(String value) {
             addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Boolean value) {
+        public Criteria andStatusLessThanOrEqualTo(String value) {
             addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Boolean> values) {
+        public Criteria andStatusIn(List<String> values) {
             addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Boolean> values) {
+        public Criteria andStatusNotIn(List<String> values) {
             addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(Boolean value1, Boolean value2) {
+        public Criteria andStatusBetween(String value1, String value2) {
             addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andStatusNotBetween(String value1, String value2) {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
@@ -803,52 +803,52 @@ public class PayCloudCompanyStaffExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveEqualTo(Boolean value) {
+        public Criteria andIsActiveEqualTo(String value) {
             addCriterion("is_active =", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveNotEqualTo(Boolean value) {
+        public Criteria andIsActiveNotEqualTo(String value) {
             addCriterion("is_active <>", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveGreaterThan(Boolean value) {
+        public Criteria andIsActiveGreaterThan(String value) {
             addCriterion("is_active >", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andIsActiveGreaterThanOrEqualTo(String value) {
             addCriterion("is_active >=", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveLessThan(Boolean value) {
+        public Criteria andIsActiveLessThan(String value) {
             addCriterion("is_active <", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveLessThanOrEqualTo(Boolean value) {
+        public Criteria andIsActiveLessThanOrEqualTo(String value) {
             addCriterion("is_active <=", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveIn(List<Boolean> values) {
+        public Criteria andIsActiveIn(List<String> values) {
             addCriterion("is_active in", values, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveNotIn(List<Boolean> values) {
+        public Criteria andIsActiveNotIn(List<String> values) {
             addCriterion("is_active not in", values, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveBetween(Boolean value1, Boolean value2) {
+        public Criteria andIsActiveBetween(String value1, String value2) {
             addCriterion("is_active between", value1, value2, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andIsActiveNotBetween(String value1, String value2) {
             addCriterion("is_active not between", value1, value2, "isActive");
             return (Criteria) this;
         }
