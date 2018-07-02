@@ -46,21 +46,16 @@ public class CloudCompanyStaffServiceFacadeImpl {
      * */
     public int upCloudCompanyStaffByIdcard(String idcard, Map<String,String> map){
 
-        return 2;
-        /*PayCloudCompanyStaffExample example = new PayCloudCompanyStaffExample();
+        PayCloudCompanyStaffExample example = new PayCloudCompanyStaffExample();
         PayCloudCompanyStaffExample.Criteria c = example.createCriteria();
-        c.andIdcardEqualTo(idcard);
 
-        CloudCompanyStaffInfo staff = new CloudCompanyStaffInfo();
+
+        PayCloudCompanyStaff staff = new PayCloudCompanyStaff();
 
         staff.setIsActive(map.get("is_active"));
-        staff.setTrantype(orderRefundInfo.getTrantype());
-        staff.setNotifyTime(orderRefundInfo.getNotifyTime());
-        staff.setResponsParam(orderRefundInfo.getResponsParam());
-        //orderRefundInfo.setRefundOrderid(orderRefundInfo.getRefundOrderid());
-        staff.setStatus(orderRefundInfo.getStatus());
+        staff.setCode(map.get("code"));
 
-        return payOrderRefundMapper.updateByExampleSelective(orderRe, example);*/
+        return payCloudCompanyStaffMapper.updateByExampleSelective(staff, example);
     }
 
 }

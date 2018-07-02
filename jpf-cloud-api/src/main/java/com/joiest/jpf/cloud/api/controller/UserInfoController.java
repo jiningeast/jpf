@@ -150,9 +150,9 @@ public class UserInfoController {
     /**
      * 验证用户信息  身份证、银行卡、手机号信息
      * */
-    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/authUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String getUserInfo(HttpServletRequest request){
+    public String authUserInfo(HttpServletRequest request){
 
         String cardId = request.getParameter("id");//身份证接口返回id
         String mobile = request.getParameter("mobile");//手机号
@@ -162,6 +162,9 @@ public class UserInfoController {
         CloudCompanyStaffInfo cloudCompanyStaffInfo;
         CloudIdcardInfo cloudIdcardInfo;
         CloudStaffBanksInfo cloudStaffBanksInfo;
+
+        //短信验证
+
         if(cardId==null || mobile==null ||  bankNum==null || verificate==null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
@@ -188,19 +191,26 @@ public class UserInfoController {
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户银行卡信息不存在", null);
             }
-            if(!cloudStaffBanksInfo.getBankphone().equals(mobile)){
+            String test = cloudStaffBanksInfo.getBankphone();
+            if(cloudStaffBanksInfo.getBankphone().equals(mobile)){
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡所属绑定手机有误", null);
+                //操作员工状态
+                Map<String,String> map = new HashMap<String,String>();
+
+                map.put("is_active","1");
+                map.put("code",verificate);
+
+                int res = cloudCompanyStaffServiceFacade.upCloudCompanyStaffByIdcard(cardId,map);
+                if(res>0){
+
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "用户认证成功", null);
+                }else{
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "用户认证失败，请重试", null);
+                }
+            }else{
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡绑定手机号有误", null);
             }
-            //操作员工状态
-            Map<String,String> map = new HashMap<String,String>();
-
-            map.put("is_active","1");
-            map.put("code",verificate);
-
-
-
-            return null;
         }
     }
 }
