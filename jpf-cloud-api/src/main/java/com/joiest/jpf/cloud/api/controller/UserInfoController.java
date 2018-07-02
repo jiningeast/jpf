@@ -1,6 +1,7 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.dto.GetUserBlanceRequest;
@@ -13,6 +14,7 @@ import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
 import com.joiest.jpf.facade.impl.CloudCompanyStaffServiceFacadeImpl;
 import com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl;
 import com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl;
+import com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,9 @@ public class UserInfoController {
 
     @Autowired
     private CloudStaffBanksServiceFacadeImpl cloudStaffBanksServiceFacade;
+
+    @Autowired
+    private RedisCustomServiceFacadeImpl redisCustomServiceFacade;
 
     //登录
     @RequestMapping("/login")
@@ -159,12 +164,21 @@ public class UserInfoController {
         String bankNum = request.getParameter("bankNum");//银行卡号
         String verificate = request.getParameter("verificate");//验证码
 
+        cardId = Base64CustomUtils.base64Decoder(cardId);
+        mobile = Base64CustomUtils.base64Decoder(mobile);
+        bankNum = Base64CustomUtils.base64Decoder(bankNum);
+        verificate = Base64CustomUtils.base64Decoder(verificate);
+
         CloudCompanyStaffInfo cloudCompanyStaffInfo;
         CloudIdcardInfo cloudIdcardInfo;
         CloudStaffBanksInfo cloudStaffBanksInfo;
 
         //短信验证
+        String verificateRedis = redisCustomServiceFacade.get(mobile+"check");
+        if(verificateRedis != verificate){
 
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误", null);
+        }
         if(cardId==null || mobile==null ||  bankNum==null || verificate==null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);

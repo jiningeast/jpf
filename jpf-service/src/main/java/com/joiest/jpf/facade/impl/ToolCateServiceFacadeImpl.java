@@ -81,7 +81,9 @@ public class ToolCateServiceFacadeImpl {
             return null;
         }
     }
-
+    /**
+    * 流信息获取
+     * **/
     public ToolCateResponse convert(HttpResponse response)  throws IOException {
 
         ToolCateResponse res = new ToolCateResponse();
@@ -184,7 +186,6 @@ public class ToolCateServiceFacadeImpl {
             strPtMsgId.append(returnInt);
             e.printStackTrace();//异常处理
         }
-
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -193,13 +194,17 @@ public class ToolCateServiceFacadeImpl {
         sbf.append("\n接口参数：" + param.toString());
         sbf.append("\n回调信息：" + Message);
         String fileName = "MwSmslog";
+
         LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
 
         return returnInt;//返回值返回
     }
 
-    // 生成一个pay_order表的orderid
+    /**
+     * 生成一个唯一数
+     * */
     public String createOrderid(){
+
         int pre = getRandomInt(100,999);
         int last = getRandomInt(100,999);
         String middle = String.valueOf(System.currentTimeMillis());
@@ -209,6 +214,7 @@ public class ToolCateServiceFacadeImpl {
     }
     // 生成指定范围内的随机整数
     public int getRandomInt(int min, int max){
+
         Random random = new Random();
         int randomInt = random.nextInt(max)%(max-min+1) + min;
 
