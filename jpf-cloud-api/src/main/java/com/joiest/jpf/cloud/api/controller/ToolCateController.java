@@ -23,6 +23,8 @@ import net.sf.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("toolcate")
@@ -249,7 +251,25 @@ public class ToolCateController {
 
         String face = request.getParameter("face");
         String back = request.getParameter("back");
+        //参数是否为空
+        if(face == null || face.isEmpty() || back == null || back.isEmpty()){
 
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
+        }
+
+        String  str = "^[\\x{4e00}-\\x{9fa5}]+$/u";
+        //String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
+
+        String name =  request.getParameter("name");;
+        Pattern pattern = Pattern.compile("^[\\x{4e00}-\\x{9fa5}]+$/u");
+        Matcher matcher = pattern.matcher(name);
+        boolean find= matcher.find();
+        String namep=null;
+            if ( matcher.find() ){
+
+                namep = matcher.group(0);
+
+            }
         String faceBase = Base64CustomUtils.base64Decoder(face);
         String backBase = Base64CustomUtils.base64Decoder(back);
 
