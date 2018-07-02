@@ -60,6 +60,11 @@
             <artifactId>json-lib</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -8,6 +8,7 @@ import com.joiest.jpf.dto.ToolCateResponse;
 import com.joiest.jpf.entity.CloudIdcardInfo;
 import com.joiest.jpf.entity.MwSmsInfo;
 import com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl;
+import com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl;
 import com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
@@ -31,6 +32,10 @@ public class ToolCateController {
     private ToolCateServiceFacadeImpl toolCateServiceFacade;
     @Autowired
     private CloudIdcardServiceFacadeImpl cloudIdcardServiceFacade;
+
+    @Autowired
+    private RedisCustomServiceFacadeImpl redisCustomServiceFacade;
+
     //自定义参与签名Header前缀（可选,默认只有"X-Ca-"开头的参与到Header签名）
     private final static List<String> CUSTOM_HEADERS_TO_SIGN_PREFIX = new ArrayList<String>();
     /*
@@ -288,34 +293,33 @@ public class ToolCateController {
     @ResponseBody
     public String sendSms(HttpServletRequest request) throws IOException {
 
+        //String aa= redisCustomServiceFacade.get("liangliang");
+        //return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
 
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
-/*
+        String phone = request.getParameter("mobile");
+        phone = Base64CustomUtils.base64Decoder(phone);
         try{
 
-            String phone = "18311171705";
-            String strMessage="测试短信";//短信内容
-            String strSubPort="*";//扩展子号 （不带请填星号*，长度不大于6位）;
-            String strUserMsgId="0";//用户自定义流水号，不带请输入0（流水号范围-（2^63）……2^63-1）
-            String ip="61.145.229.26";
-            String port="8086";
-            String strUserId="J26100";
-            String strPwd = "658844";
+            int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
 
-            StringBuffer strPtMsgId = new StringBuffer("");//如果成功，存流水号。失败，存错误码。
+            redisCustomServiceFacade.set(phone+"check",new Integer(verificateCode).toString(),60*10);
+            String content = null;
+            content = "尊敬的用户，您此次的手机验证码是："+verificateCode+",10十分钟内有效";
 
-            int result=toolCateServiceFacade.SendSms(strPtMsgId, phone, strMessage, strSubPort, strUserMsgId);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            int result=toolCateServiceFacade.SendSms(ConfigUtil.getValue("MWMONGATESENDSUBMIT_URL")
+                    ,ConfigUtil.getValue("MWUSERNAME"), ConfigUtil.getValue("MWPASSWORD"), phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
 
             if(result==0){//返回值为0，代表成功
 
-                System.out.println("发送成功："+strPtMsgId.toString());//将流水号打印出来
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
             }else{//返回值为非0，代表失败
 
-                System.out.println("发送失败："+strPtMsgId.toString());//将错误码打印出来
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "短信发送失败",null);
             }
         }catch (Exception e) {
 
             e.printStackTrace();//异常处理
-        }*/
+        }
+        return null;
     }
 }
