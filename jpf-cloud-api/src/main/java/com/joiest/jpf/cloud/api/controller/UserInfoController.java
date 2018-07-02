@@ -151,7 +151,6 @@ public class UserInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), list);
     }
 
-
     /**
      * 验证用户信息  身份证、银行卡、手机号信息
      * */
@@ -175,7 +174,7 @@ public class UserInfoController {
 
         //短信验证
         String verificateRedis = redisCustomServiceFacade.get(mobile+"check");
-        if(verificateRedis != verificate){
+        if(!verificateRedis.equals(verificate)){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误", null);
         }
