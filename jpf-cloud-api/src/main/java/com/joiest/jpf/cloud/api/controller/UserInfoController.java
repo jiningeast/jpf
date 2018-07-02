@@ -236,10 +236,11 @@ public class UserInfoController {
     @ResponseBody
     public String userLogin(HttpServletRequest request) {
 
-        String tokn = request.getParameter("token");
+
+        /*String tokn = request.getParameter("token");
         String jiami = redisCustomServiceFacade.get("yun" + tokn);
-
-
+        String mid_decrypt = AESUtils.decrypt(jiami, ConfigUtil.getValue("AES_KEY"));
+        */
         String idCard = request.getParameter("idCard");
         String verificate = request.getParameter("verificate");
         if(idCard == null || idCard.isEmpty() || verificate==null || verificate.isEmpty()){
