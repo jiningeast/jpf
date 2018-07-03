@@ -18,7 +18,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#infoDiv').window("open").window('refresh', 'audit/page?id='+rows[0].id).window('setTitle','审核');
+                        $('#infoDiv').window("open").window('refresh', '../caiwu/audit/page?id='+rows[0].id).window('setTitle','审核');
                     }
                 },
             ];

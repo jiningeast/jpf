@@ -116,6 +116,12 @@ public class CloudRechargeInfo {
 
     private String status_cn;
 
+    private String pactno;
+
+    private String needid;
+
+    private Date pacttime;
+
     public String getId() {
         return id;
     }
@@ -299,4 +305,29 @@ public class CloudRechargeInfo {
     public void setStatus_cn(String status_cn) {
         this.status_cn = status_cn;
     }
+
+    public Date getPacttime() {
+        return pacttime;
+    }
+
+    public void setPacttime(Date pacttime) {
+        this.pacttime = pacttime;
+    }
+
+    public String getPactno() {
+        return pactno;
+    }
+
+    public void setPactno(String pactno) {
+        this.pactno = pactno == null ? null : pactno.trim();
+    }
+
+    public String getNeedid() {
+        return needid;
+    }
+
+    public void setNeedid(String needid) {
+        this.needid = needid == null ? null : needid.trim();
+    }
+
 }

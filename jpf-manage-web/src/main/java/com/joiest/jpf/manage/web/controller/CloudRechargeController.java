@@ -32,7 +32,7 @@ public class CloudRechargeController {
     }
 
     /*
-    * 充值了列表页
+    * 充值列表页
     * */
     @RequestMapping("/list")
     @ResponseBody
@@ -44,6 +44,59 @@ public class CloudRechargeController {
         map.put("rows", cloudRechargeResponse.getList());
 
         return map;
+    }
+
+
+    /*
+     * 财务充值列表页
+     * */
+    @RequestMapping("/caiwu/Index")
+    public String caiwuIndex(){
+        return "cloudRecharge/cloudCaiwuList";
+    }
+
+    /*
+     * 财务充值列表页
+     * */
+    @RequestMapping("/caiwu/list")
+    @ResponseBody
+    public Map<String, Object> caiwuList(CloudRechargeRequest cloudRechargeRequest){
+        CloudRechargeResponse cloudRechargeResponse = cloudRechargeServiceFacade.getCaiwuRecords(cloudRechargeRequest);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", cloudRechargeResponse.getCount());
+        map.put("rows", cloudRechargeResponse.getList());
+
+        return map;
+    }
+
+    /*
+     * 审核操作页面
+     * */
+    @RequestMapping("/caiwu/audit/page")
+    @ResponseBody
+    public ModelAndView caiwuAudit(String id,ModelMap modelMap){
+        CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecharge(id);
+        cloudRechargeInfo.setStatus_cn(ManageConstants.STATUSLIST.get(cloudRechargeInfo.getStatus().toString()));
+        modelMap.addAttribute("cloudRechargeInfo", cloudRechargeInfo);
+
+        return new ModelAndView("cloudRecharge/cloudRechargeAudit",modelMap);
+
+    }
+
+    /*
+     * 审核操作页面
+     * */
+    @RequestMapping("/caiwu/audit/action")
+    @ResponseBody
+    public JpfResponseDto caiwuAuditAction(CloudRechargeRequest request){
+        CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecharge(request.getId());
+        request.setStatus_cn(ManageConstants.STATUSLIST.get(cloudRechargeInfo.getStatus().toString()));
+        JpfResponseDto jpfResponseDto = cloudRechargeServiceFacade.getCaiwuAuditRecharge(request);
+
+
+        return jpfResponseDto;
+
     }
 
     /*
@@ -66,7 +119,8 @@ public class CloudRechargeController {
     @RequestMapping("/audit/action")
     @ResponseBody
     public JpfResponseDto auditAction(CloudRechargeRequest request){
-        request.setStatus_cn(ManageConstants.STATUSLIST.get(request.getStatus().toString()));
+        CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecharge(request.getId());
+        request.setStatus_cn(ManageConstants.STATUSLIST.get(cloudRechargeInfo.getStatus().toString()));
         JpfResponseDto jpfResponseDto = cloudRechargeServiceFacade.getAuditRecharge(request);
 
 

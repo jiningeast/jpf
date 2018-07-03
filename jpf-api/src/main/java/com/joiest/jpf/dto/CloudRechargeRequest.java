@@ -5,25 +5,6 @@ import java.util.Date;
 
 public class CloudRechargeRequest {
     /**
-     * 开始时间
-     */
-    private String addtimeStart;
-    /**
-     * 结束时间
-     */
-    private String addtimeEnd;
-
-    /**
-     * 当前页码
-     */
-    private long page;
-
-    /**
-     * 主键
-     */
-    private long rows;
-
-    /**
      * 主键
      */
     private String id;
@@ -134,6 +115,23 @@ public class CloudRechargeRequest {
     private Date chargetime;
 
     private String status_cn;
+
+    private String pactno;
+
+    private String needid;
+
+    private Date pacttime;
+
+    /**
+     * 注册时间
+     */
+    private String addtimeStart;
+
+    private String addtimeEnd;
+
+    private long rows;
+
+    private long page;
 
     public String getId() {
         return id;
@@ -311,12 +309,36 @@ public class CloudRechargeRequest {
         this.chargetime = chargetime;
     }
 
-    public long getPage() {
-        return page;
+    public String getStatus_cn() {
+        return status_cn;
     }
 
-    public void setPage(long page) {
-        this.page = page;
+    public void setStatus_cn(String status_cn) {
+        this.status_cn = status_cn;
+    }
+
+    public Date getPacttime() {
+        return pacttime;
+    }
+
+    public void setPacttime(Date pacttime) {
+        this.pacttime = pacttime;
+    }
+
+    public String getPactno() {
+        return pactno;
+    }
+
+    public void setPactno(String pactno) {
+        this.pactno = pactno == null ? null : pactno.trim();
+    }
+
+    public String getNeedid() {
+        return needid;
+    }
+
+    public void setNeedid(String needid) {
+        this.needid = needid == null ? null : needid.trim();
     }
 
     public long getRows() {
@@ -325,6 +347,14 @@ public class CloudRechargeRequest {
 
     public void setRows(long rows) {
         this.rows = rows;
+    }
+
+    public long getPage() {
+        return page;
+    }
+
+    public void setPage(long page) {
+        this.page = page;
     }
 
     public String getAddtimeStart() {
@@ -341,14 +371,5 @@ public class CloudRechargeRequest {
 
     public void setAddtimeEnd(String addtimeEnd) {
         this.addtimeEnd = addtimeEnd;
-    }
-
-
-    public String getStatus_cn() {
-        return status_cn;
-    }
-
-    public void setStatus_cn(String status_cn) {
-        this.status_cn = status_cn;
     }
 }
