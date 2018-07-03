@@ -8,20 +8,16 @@
     <script>
         $(function(){
 
-            var toolbar = [
+            /*var toolbar = [
                 {
-                    text : '审核',
-                    iconCls : 'icon-key-add',
+                    text : '批量打款',
+                    iconCls : 'icon-add',
                     handler : function(){
-                        var rows = $('#dg').datagrid('getSelections');
-                        if (rows.length != 1) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return
-                        }
-                        $('#infoDiv').window("open").window('refresh', 'audit/page?id='+rows[0].id).window('setTitle','审核');
+
+                        $('#infoDiv').window("open").window('refresh', 'batchMoney/page').window('setTitle','审核');
                     }
-                },
-            ];
+                }
+            ];*/
 
             $('#infoDiv').window({
                 width:'1024px',
@@ -31,7 +27,7 @@
             });
 
             $("#dg").datagrid({
-                title : '充值管理',
+                title : '批次打款管理',
                 toolbar:toolbar,
                 pagination:true,
                 singleSelect:true,
@@ -40,39 +36,37 @@
                 url : 'list',
                 columns : [[
                     {field:'id', title:'ID',width:'4%'},
-                    {field:'fid', title:'充值单号',width:'10%'},
-                    {field:'agent_no', title:'代理聚合商户编号',width:'10%'},
-                    {field:'merch_no', title:'到账聚合商户编号',width:'10%'},
-                    {field:'payway', title:'支付方式',width:'5%'},
-                    {field:'pactno', title:'合同编号',width:'5%'},
-                    {field:'money', title:'充值金额',width:'5%'},
-                    {field:'realmoney', title:'实际到帐金额',width:'5%'},
-                    {field:'feemoney', title:'手续费总额',width:'5%'},
-                    {field:'agent_feemoney', title:'代理手续费',width:'5%'},
-                    {field:'sales_feemoney', title:'服务平台手续费',width:'5%'},
-                    {field:'status', title:'状态',width:'8%',
+                    {field:'fid', title:'批次定单号',width:'10%'},
+                    {field:'agent_no', title:'代理聚合商户编号',width:'8%'},
+                    {field:'merch_no', title:'到账聚合商户编号',width:'8%'},
+                    {field:'commoney', title:'发放总金额',width:'5%'},
+                    {field:'uid', title:'企业添加人',width:'5%'},
+                    {field:'batchno', title:'用户批次号',width:'5%'},
+                    {field:'batchitems', title:'总笔数',width:'5%'},
+                    {field:'batchallmoney', title:'总金额',width:'5%'},
+                    {field:'feemoney', title:'服务费金额',width:'5%'},
+                    {field:'taxmoney', title:'增值税金额',width:'5%'},
+                    {field:'taxmoremoney', title:'增值税附加金额',width:'5%'},
+                    {field:'profitmoney', title:'毛利金额',width:'5%'},
+                    {field:'montype', title:'状态',width:'6%',
                         formatter:function (value, row, index) {
                             if ( value == 0 ){
-                                return '已取消';
+                                return '待锁定';
                             }else if ( value == 1 ){
-                                return '申请中';
+                                return '待付款';
                             }else if ( value == 2 ){
-                                return '<span style="color:blue">已审核(待上传付款凭证)</span>';
+                                return '<span style="color:blue">处理完成</span>';
                             }else if ( value == 3 ){
-                                return '<span style="color:red">已支付(已上传凭证)</span>';
+                                return '<span style="color:red">处理完成(部分失败)</span>';
                             }else if ( value == 4 ){
-                                return '<span style="color:green">已充值开票中</span>';
-                            }else if ( value == 5 ){
-                                return '<span style="color:red">已充值已开票</span>';
-                            }else if ( value == 6 ){
-                                return '<span style="color:red">已发货</span>';
-                            }else if ( value == 7 ){
-                                return '<span style="color:red">已完成</span>';
+                                return '<span style="color:green">处理失败</span>';
+                            }else if ( value == -1 ){
+                                return '<span style="color:red">已删除</span>';
                             }
                         }
                     },
-                    {field:'addtime', title:'创建时间',width:'10%',formatter: formatDateStr},
-                    {field:'updatetime', title:'修改时间',width:'10%',formatter: formatDateStr}
+                    {field:'addtime', title:'创建时间',width:'8%',formatter: formatDateStr},
+                    {field:'updatetime', title:'修改时间',width:'8%',formatter: formatDateStr}
                 ]]
             });
             $('#dg').datagrid().datagrid('getPager');
@@ -122,26 +116,23 @@
             <form id="searchForm" method="post">
                 <table cellpadding="5">
                     <tr>
-                        <td>充值单号:</td>
+                        <td>批次定单号:</td>
                         <td><input id="fid" name="fid" class="easyui-textbox" type="text" /></td>
                         <td>代理聚合商户编号:</td>
                         <td><input id="agent_no" name="agent_no" class="easyui-textbox" type="text" /></td>
-                        <td>手机号:</td>
-                        <td><input id="linkphone" name="linkphone" class="easyui-textbox" type="text" /></td>
+
                     </tr>
                     <tr>
                         <td>充值状态:</td>
                         <td>
-                            <select id="status_s" name="status" class="easyui-combobox">
+                            <select id="status_s" name="montype" class="easyui-combobox">
                                 <option value="">全部</option>
-                                <option value="0">已取消</option>
-                                <option value="1">申请中</option>
-                                <option value="2">已审核</option>
-                                <option value="3">已支付</option>
-                                <option value="4">已充值开票中</option>
-                                <option value="5">已充值已开票</option>
-                                <option value=6">已发货</option>
-                                <option value=7">已完成</option>
+                                <option value="0">待锁定</option>
+                                <option value="1">待打款</option>
+                                <option value="2">处理完成</option>
+                                <option value="3">处理完成（部分失败）</option>
+                                <option value="4">处理失败</option>
+                                <option value="-1">已删除</option>
                             </select>
                         </td>
                         <td>添加起止时间:</td>

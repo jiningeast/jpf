@@ -19,6 +19,11 @@ public interface CloudCompanyServiceFacade {
     public GetCloudCompanyResponse getAgentList(GetCloudCompanyRequest request);
 
     /**
+     * 云账户金额校验
+     */
+    public Boolean checkCompanyMoneyVerify(String id);
+
+    /**
      * 添加公司基本信息
      */
     //public JpfResponseDto addCloudCompany(String name, String intro);
