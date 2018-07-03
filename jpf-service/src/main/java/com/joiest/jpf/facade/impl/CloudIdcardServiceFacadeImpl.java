@@ -4,6 +4,7 @@ import com.joiest.jpf.common.po.PayCloudIdcard;
 import com.joiest.jpf.common.po.PayCloudIdcardExample;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudIdcardCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudIdcardMapper;
+import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.entity.CloudIdcardInfo;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,5 +98,4 @@ public class CloudIdcardServiceFacadeImpl {
 
         return cloudIdcardInfo;
     }
-
 }

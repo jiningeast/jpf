@@ -38,4 +38,28 @@ public class CloudStaffBanksServiceFacadeImpl {
 
         return cloudStaffBanksInfo;
     }
+    /**
+     * 通过员工号、手机号获取员工银行卡信息
+     * */
+    public CloudStaffBanksInfo getStaffBankBySidPhone(String id,String mobile){
+
+        PayCloudStaffBanksExample example = new PayCloudStaffBanksExample();
+
+        PayCloudStaffBanksExample.Criteria c = example.createCriteria();
+        c.andBankphoneEqualTo(mobile);
+        c.andStaffidEqualTo(new Long(String.valueOf(id)));
+
+        List<PayCloudStaffBanks> getStaffBankInfo = payCloudStaffBanksMapper.selectByExample(example);
+        if(getStaffBankInfo == null || getStaffBankInfo.isEmpty()){
+
+            return null;
+        }
+        PayCloudStaffBanks payCloudStaffBanks = getStaffBankInfo.get(0);
+
+        CloudStaffBanksInfo cloudStaffBanksInfo = new CloudStaffBanksInfo();
+        BeanCopier beanCopier = BeanCopier.create( PayCloudStaffBanks.class, CloudStaffBanksInfo.class, false);
+        beanCopier.copy(payCloudStaffBanks, cloudStaffBanksInfo, null);
+
+        return cloudStaffBanksInfo;
+    }
 }

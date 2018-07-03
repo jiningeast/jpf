@@ -11,6 +11,9 @@ public interface CloudStaffBanksServiceFacade {
      * */
     public CloudStaffBanksInfo getStaffBankByNumSid(String num, BigInteger id);
 
-
+    /**
+     * 通过员工号、手机号获取员工银行卡信息
+     * */
+    public CloudStaffBanksInfo getStaffBankBySidPhone(String id,String mobile);
 
 }

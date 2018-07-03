@@ -8,6 +8,7 @@ import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -58,4 +59,23 @@ public class CloudCompanyStaffServiceFacadeImpl {
         return payCloudCompanyStaffMapper.updateByExampleSelective(staff, example);
     }
 
+    /*
+     *获取员工信息通过id
+     * */
+    public CloudCompanyStaffInfo getCloudCompanyStaffById(String id){
+
+
+        PayCloudCompanyStaff payCloudCompanyStaff =  payCloudCompanyStaffMapper.selectByPrimaryKey(new BigInteger(id));;
+
+        if(payCloudCompanyStaff == null){
+
+            return  null;
+        }
+
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = new CloudCompanyStaffInfo();
+        BeanCopier beanCopier = BeanCopier.create( PayCloudCompanyStaff.class, CloudCompanyStaffInfo.class, false);
+        beanCopier.copy(payCloudCompanyStaff, cloudCompanyStaffInfo, null);
+
+        return cloudCompanyStaffInfo;
+    }
 }

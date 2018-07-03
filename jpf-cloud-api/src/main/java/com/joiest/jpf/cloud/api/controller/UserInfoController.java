@@ -101,7 +101,7 @@ public class UserInfoController {
         GetCloudMoneyDfResponse response = cloudDfMoneyServiceFacade.getDfMoneyList(map.get("start"),map.get("end"), userIsLogin.get(1),pageNo, pageSize, flag);
         if ( response == null )
         {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "暂无数据", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "暂无数据", null);
         }
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), response.getMonthTotal().toString(), response);
@@ -315,4 +315,51 @@ public class UserInfoController {
         }
         return null;
     }
+
+
+    @RequestMapping(value = "/userAuthInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String userAuthInfo(HttpServletRequest request) throws IOException {
+
+        String token = request.getParameter("token");
+        String getId = redisCustomServiceFacade.get("yun" + token);
+        String id = AESUtils.decrypt(getId, ConfigUtil.getValue("AES_KEY"));
+
+        if(getId.equals(null) || id.equals(null)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
+        }
+
+        //获取员工信息
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(id);
+        if(cloudCompanyStaffInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工信息不存在",null);
+        }
+        //获取员工银行卡信息
+        CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankBySidPhone(id, cloudCompanyStaffInfo.getMobile());
+        if(cloudStaffBanksInfo==null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工对应银行卡信息不存在",null);
+        }
+        //身份证信息
+        CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cloudCompanyStaffInfo.getIdcard());
+
+        Map<String,String> uinfo = new HashMap<String, String>();
+        uinfo.put("name",cloudCompanyStaffInfo.getNickname());
+        uinfo.put("idCard",cloudCompanyStaffInfo.getIdcard());
+        uinfo.put("userAuth",cloudCompanyStaffInfo.getIsActive());
+        uinfo.put("banknum",cloudStaffBanksInfo.getBankno());
+        uinfo.put("bankphone",cloudStaffBanksInfo.getBankphone());
+        //uinfo.put("bankpAuth",cloudStaffBanksInfo.getBankActive());
+
+        uinfo.put("cardFaceLocal",cloudIdcardInfo.getFaceimglocal());
+        uinfo.put("cardFaceServer",cloudIdcardInfo.getFaceimgserver());
+        uinfo.put("backFaceLocal",cloudIdcardInfo.getBackimglocal());
+        uinfo.put("cardFaceServer",cloudIdcardInfo.getBackimgserver());
+
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "获取成功", uinfo);
+    }
 }
+
