@@ -256,7 +256,7 @@ public class ToolCateController {
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
         }
-
+/*
         String  str = "^[\\x{4e00}-\\x{9fa5}]+$/u";
         //String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
 
@@ -269,7 +269,7 @@ public class ToolCateController {
 
                 namep = matcher.group(0);
 
-            }
+            }*/
         String faceBase = Base64CustomUtils.base64Decoder(face);
         String backBase = Base64CustomUtils.base64Decoder(back);
 
