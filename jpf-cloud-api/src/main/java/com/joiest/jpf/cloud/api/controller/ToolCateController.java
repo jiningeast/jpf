@@ -1,18 +1,17 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.common.dto.YjResponseDto;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.MessageDigestUtil;
-import com.joiest.jpf.common.util.OkHttpUtils;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.ToolCateRequest;
 import com.joiest.jpf.dto.ToolCateResponse;
+import com.joiest.jpf.entity.CloudIdcardInfo;
+import com.joiest.jpf.entity.MwSmsInfo;
+import com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl;
+import com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl;
 import com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl;
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.sf.json.JSONObject;
-import sun.misc.BASE64Decoder;
-
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
@@ -36,6 +32,11 @@ public class ToolCateController {
 
     @Autowired
     private ToolCateServiceFacadeImpl toolCateServiceFacade;
+    @Autowired
+    private CloudIdcardServiceFacadeImpl cloudIdcardServiceFacade;
+
+    @Autowired
+    private RedisCustomServiceFacadeImpl redisCustomServiceFacade;
 
     //自定义参与签名Header前缀（可选,默认只有"X-Ca-"开头的参与到Header签名）
     private final static List<String> CUSTOM_HEADERS_TO_SIGN_PREFIX = new ArrayList<String>();
@@ -204,7 +205,7 @@ public class ToolCateController {
                         idCard.put("num",userInfo.get("num"));
                         idCard.put("frequest_id",userInfo.get("request_id"));
                         idCard.put("sex",userInfo.get("sex"));
-                        idCard.put("numnum",userInfo.get("num"));
+                        //idCard.put("numnum",userInfo.get("num"));
                         idCard.put("side",side);
                         idCard.put("resourceUrl",resourceUrl);
 
@@ -241,5 +242,104 @@ public class ToolCateController {
         }
         return null;
     }
+    /**
+     * 身份证分析入库
+     * */
+    @RequestMapping(value = "/idCardAnaly", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String idCardAnaly(HttpServletRequest request) throws IOException {
 
+        String face = request.getParameter("face");
+        String back = request.getParameter("back");
+        //参数是否为空
+        if(face == null || face.isEmpty() || back == null || back.isEmpty()){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
+        }
+/*
+        String  str = "^[\\x{4e00}-\\x{9fa5}]+$/u";
+        //String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
+
+        String name =  request.getParameter("name");;
+        Pattern pattern = Pattern.compile("^[\\x{4e00}-\\x{9fa5}]+$/u");
+        Matcher matcher = pattern.matcher(name);
+        boolean find= matcher.find();
+        String namep=null;
+            if ( matcher.find() ){
+
+                namep = matcher.group(0);
+
+            }*/
+        String faceBase = Base64CustomUtils.base64Decoder(face);
+        String backBase = Base64CustomUtils.base64Decoder(back);
+
+        JSONObject faceResult = JSONObject.fromObject(faceBase);
+        JSONObject backResult = JSONObject.fromObject(backBase);
+
+        CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardByCardNo(faceResult.get("num").toString());
+
+        YjResponseDto yjResponseDto= new YjResponseDto();
+        if(cloudIdcardInfo == null){
+
+            int idCard= cloudIdcardServiceFacade.addCloudIdcard(faceResult,backResult);
+            if(idCard > 0){
+
+                Map<String,Object> map = new HashMap<>();
+                map.put("id",idCard);
+
+                yjResponseDto.setCode("10000");
+                yjResponseDto.setInfo("身份证信息上传成功");
+                yjResponseDto.setData(map);
+            }else{
+                yjResponseDto.setCode("10008");
+                yjResponseDto.setInfo("身份证信息上传失败");
+            }
+        }else{
+
+            Map<String,Object> map = new HashMap<>();
+            map.put("id",cloudIdcardInfo.getId());
+
+            yjResponseDto.setCode("10000");
+            yjResponseDto.setInfo("身份证信息上传成功");
+            yjResponseDto.setData(map);
+        }
+        String responseJson = JsonUtils.toJson(yjResponseDto);
+        String baseRe = Base64CustomUtils.base64Encoder(responseJson);
+        baseRe = baseRe.replaceAll("\r\n","");
+
+        return baseRe;
+    }
+    @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String sendSms(HttpServletRequest request) throws IOException {
+
+        //String aa= redisCustomServiceFacade.get("liangliang");
+        //return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
+
+        String phone = request.getParameter("mobile");
+        phone = Base64CustomUtils.base64Decoder(phone);
+        try{
+
+            int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
+
+            redisCustomServiceFacade.set(phone+"check",new Integer(verificateCode).toString(),60*10);
+            String content = null;
+            content = "尊敬的用户，您此次的手机验证码是："+verificateCode+",10十分钟内有效";
+
+            int result=toolCateServiceFacade.SendSms(ConfigUtil.getValue("MWMONGATESENDSUBMIT_URL")
+                    ,ConfigUtil.getValue("MWUSERNAME"), ConfigUtil.getValue("MWPASSWORD"), phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+
+            if(result==0){//返回值为0，代表成功
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
+            }else{//返回值为非0，代表失败
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "短信发送失败",null);
+            }
+        }catch (Exception e) {
+
+            e.printStackTrace();//异常处理
+        }
+        return null;
+    }
 }
