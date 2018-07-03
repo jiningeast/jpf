@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.MessageDigestUtil;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.dto.ToolCateResponse;
@@ -17,9 +18,11 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class ToolCateServiceFacadeImpl {
 
@@ -78,7 +81,9 @@ public class ToolCateServiceFacadeImpl {
             return null;
         }
     }
-
+    /**
+    * 流信息获取
+     * **/
     public ToolCateResponse convert(HttpResponse response)  throws IOException {
 
         ToolCateResponse res = new ToolCateResponse();
@@ -123,34 +128,39 @@ public class ToolCateServiceFacadeImpl {
         dest.close();
         return new String(bos.toByteArray(), "UTF-8");
     }
+
     /**
      * 短信息发送接口（相同内容群发，可自定义流水号）
-     * @param strPtMsgId 平台返回的流水号
+     * @param strUserId  帐号
+     * @param strPwd 密码
      * @param strMobiles 手机号
      * @param strMessage 短信内容
-     * @param strSubPort 扩展子号
-     * @param strUserMsgId 用户自编流水号
      * @return 0:成功 非0:返回webservice接口返回的错误代码
      */
-    public int SendSms(StringBuffer strPtMsgId, String strMobiles, String strMessage, String strSubPort, String strUserMsgId)
+    public int SendSms(String url,String strUserId, String strPwd, String strMobiles, String strMessage)
     {
-        /*int returnInt=-200;//定义返回值变量
-        int sameErrorCount = 0;
+
+        StringBuffer strPtMsgId = new StringBuffer("");//存储日志。
+
+        int returnInt=-200;//定义返回值变量
+        String strUserMsgId = createOrderid();
+        String strSubPort = "*";//扩展子号 （不带请填星号*，长度不大于6位）;
+
+        String Message = null;
+        MwSmsInfo param = new MwSmsInfo();
         try {
+
             String result = null;//存放解析后的返回值
 
-            MwSmsInfo p = new MwSmsInfo();
-            //Params p = new Params();
-            p.setUserId(MWUSERNAME);//设置账号
-            p.setPassword(strPwd);//设置密码
-            p.setPszMobis(strMobiles);//设置手机号码
-            p.setPszMsg(strMessage);//设置短信内容
-            p.setIMobiCount(String.valueOf(strMobiles.split(",").length));//设置手机号码个数
-            p.setPszSubPort(strSubPort);//设置扩展子号
-            p.setMsgId(strUserMsgId);//设置流水号
+            param.setUserId(strUserId);//设置账号
+            param.setPassword(strPwd);//设置密码
+            param.setPszMobis(strMobiles);//设置手机号码
+            param.setPszMsg(strMessage);//设置短信内容
+            param.setIMobiCount(String.valueOf(strMobiles.split(",").length));//设置手机号码个数
+            param.setPszSubPort(strSubPort);//设置扩展子号
+            param.setMsgId(strUserMsgId);//设置流水号
 
-            String Message = OkHttpUtils.executePost(p, "http://"+ip+":"+port+"/MWGate/wmgw.asmx/"+
-                    "MongateSendSubmit");//调用底层POST方法提交
+            Message = OkHttpUtils.executePost(param, url);//调用底层POST方法提交
             //请求返回值不为空，则解析返回值
             if(Message != null&& Message != "")
             {
@@ -159,7 +169,8 @@ public class ToolCateServiceFacadeImpl {
                 result = el.getText();//解析返回值
             }
             //处理返回结果
-            if(result != null&& !"".equals(result)&&result.length()>10){
+            if(result != null && !"".equals(result) && result.length()>10){
+
                 //解析后的返回值不为空且长度大于10，则是提交成功
                 returnInt=0;
                 strPtMsgId.append(result);
@@ -171,13 +182,42 @@ public class ToolCateServiceFacadeImpl {
             }
         } catch (Exception e) {
 
-            sameErrorCount=sameErrorCount+1; //发送失败,发送失败次数加1
             returnInt=-200;
             strPtMsgId.append(returnInt);
             e.printStackTrace();//异常处理
         }
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + url);
+        sbf.append("\n接口参数：" + param.toString());
+        sbf.append("\n回调信息：" + Message);
+        String fileName = "MwSmslog";
 
-        return returnInt;//返回值返回*/
-        return 2;
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
+
+        return returnInt;//返回值返回
+    }
+
+    /**
+     * 生成一个唯一数
+     * */
+    public String createOrderid(){
+
+        int pre = getRandomInt(100,999);
+        int last = getRandomInt(100,999);
+        String middle = String.valueOf(System.currentTimeMillis());
+        middle = middle.substring(3,middle.length());
+
+        return ""+pre+middle+last;
+    }
+    // 生成指定范围内的随机整数
+    public int getRandomInt(int min, int max){
+
+        Random random = new Random();
+        int randomInt = random.nextInt(max)%(max-min+1) + min;
+
+        return randomInt;
     }
 }

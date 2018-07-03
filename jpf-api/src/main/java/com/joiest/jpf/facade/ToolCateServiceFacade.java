@@ -17,5 +17,10 @@ public interface ToolCateServiceFacade {
     /**
      * 短信发送
      * */
-    public int SendSms(StringBuffer strPtMsgId, String strMobiles, String strMessage, String strSubPort, String strUserMsgId);
+    public int SendSms(String url,String strUserId, String strPwd, String strMobiles, String strMessage);
+
+    /**
+     *生成指定范围内的随机数
+     * */
+    public int getRandomInt(int min, int max);
 }

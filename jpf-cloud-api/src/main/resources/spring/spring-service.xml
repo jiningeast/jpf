@@ -9,5 +9,6 @@
 	<bean id="CloudDfMoneyServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfMoneyServiceFacadeImpl"></bean>
 	<bean id="cloudCompanyStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyStaffServiceFacadeImpl"></bean>
 	<bean id="cloudStaffBanksServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl"></bean>
+	<bean id="redisCustomServiceFacade" class="com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl"></bean>
 
 </beans>

@@ -1,6 +1,9 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.AESUtils;
+import com.joiest.jpf.common.util.Base64CustomUtils;
+import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.dto.GetUserBlanceRequest;
@@ -10,9 +13,7 @@ import com.joiest.jpf.entity.CloudIdcardInfo;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
-import com.joiest.jpf.facade.impl.CloudCompanyStaffServiceFacadeImpl;
-import com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl;
-import com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl;
+import com.joiest.jpf.facade.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -39,6 +41,11 @@ public class UserInfoController {
     @Autowired
     private CloudStaffBanksServiceFacadeImpl cloudStaffBanksServiceFacade;
 
+    @Autowired
+    private RedisCustomServiceFacadeImpl redisCustomServiceFacade;
+
+    @Autowired
+    private ToolCateServiceFacadeImpl toolCateServiceFacade;
     //登录
     @RequestMapping("/login")
     @ResponseBody
@@ -146,7 +153,6 @@ public class UserInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), list);
     }
 
-
     /**
      * 验证用户信息  身份证、银行卡、手机号信息
      * */
@@ -159,12 +165,21 @@ public class UserInfoController {
         String bankNum = request.getParameter("bankNum");//银行卡号
         String verificate = request.getParameter("verificate");//验证码
 
+        cardId = Base64CustomUtils.base64Decoder(cardId);
+        mobile = Base64CustomUtils.base64Decoder(mobile);
+        bankNum = Base64CustomUtils.base64Decoder(bankNum);
+        verificate = Base64CustomUtils.base64Decoder(verificate);
+
         CloudCompanyStaffInfo cloudCompanyStaffInfo;
         CloudIdcardInfo cloudIdcardInfo;
         CloudStaffBanksInfo cloudStaffBanksInfo;
 
         //短信验证
+        String verificateRedis = redisCustomServiceFacade.get(mobile+"check");
+        if(!verificateRedis.equals(verificate)){
 
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误", null);
+        }
         if(cardId==null || mobile==null ||  bankNum==null || verificate==null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
@@ -212,5 +227,92 @@ public class UserInfoController {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡绑定手机号有误", null);
             }
         }
+    }
+
+    /**
+     * 验证用户信息  身份证、银行卡、手机号信息
+     * */
+    @RequestMapping(value = "/userLogin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String userLogin(HttpServletRequest request) {
+
+
+        /*String tokn = request.getParameter("token");
+        String jiami = redisCustomServiceFacade.get("yun" + tokn);
+        String mid_decrypt = AESUtils.decrypt(jiami, ConfigUtil.getValue("AES_KEY"));
+        */
+        String idCard = request.getParameter("idCard");
+        String verificate = request.getParameter("verificate");
+        if(idCard == null || idCard.isEmpty() || verificate==null || verificate.isEmpty()){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
+        }
+        idCard = Base64CustomUtils.base64Decoder(idCard);
+        verificate = Base64CustomUtils.base64Decoder(verificate);
+
+        //获取员工信息
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(idCard);
+        if(cloudCompanyStaffInfo==null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应员工账号信息",null);
+        }
+        String check= redisCustomServiceFacade.get(cloudCompanyStaffInfo.getMobile()+"login");
+        if(verificate.equals(check)){
+
+            int random = toolCateServiceFacade.getRandomInt(10000,99999);
+            String token = AESUtils.encrypt(cloudCompanyStaffInfo.getId().toString() + random,ConfigUtil.getValue("AES_KEY"));
+            String mid_encrypt = AESUtils.encrypt(cloudCompanyStaffInfo.getId().toString(), ConfigUtil.getValue("AES_KEY"));
+
+            redisCustomServiceFacade.set("yun" + token, mid_encrypt, 3600*24*7);
+
+
+            Map<String,String> tok = new HashMap<String, String>();
+            tok.put("token",token);
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "登录成功", tok);
+        }else{
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误",null);
+        }
+    }
+    @RequestMapping(value = "/sendLoginSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String sendLoginSms(HttpServletRequest request) throws IOException {
+
+        //String aa= redisCustomServiceFacade.get("liangliang");
+
+        String idCard = request.getParameter("idCard");
+        idCard = Base64CustomUtils.base64Decoder(idCard);
+
+        //获取员工信息
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(idCard);
+        if(cloudCompanyStaffInfo == null || idCard ==null || idCard.isEmpty()){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应员工账号信息",null);
+        }
+        try{
+
+            String  phone = cloudCompanyStaffInfo.getMobile();
+            int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
+
+            redisCustomServiceFacade.set(phone+"login",new Integer(verificateCode).toString(),60*10);
+            String content = null;
+            content = "尊敬的用户，您此次登录的手机验证码是："+verificateCode+",10十分钟内有效";
+
+            int result=toolCateServiceFacade.SendSms(ConfigUtil.getValue("MWMONGATESENDSUBMIT_URL")
+                    ,ConfigUtil.getValue("MWUSERNAME"), ConfigUtil.getValue("MWPASSWORD"), phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+
+            if(result==0){//返回值为0，代表成功
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
+            }else{//返回值为非0，代表失败
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "短信发送失败",null);
+            }
+        }catch (Exception e) {
+
+            e.printStackTrace();//异常处理
+        }
+        return null;
     }
 }
