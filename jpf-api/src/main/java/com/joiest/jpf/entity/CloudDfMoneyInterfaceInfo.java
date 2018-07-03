@@ -111,26 +111,6 @@ public class CloudDfMoneyInterfaceInfo {
     private Integer vid;
 
     /**
-     * 公司发放事件ID
-     */
-    private Long cmid;
-
-    /**
-     * 1:福利发放，2:优惠券
-     */
-    private Integer stftype;
-
-    /**
-     * 优惠券类别
-     */
-    private Long couponid;
-
-    /**
-     * 优惠券名称
-     */
-    private String couponname;
-
-    /**
      * 用户代付状态  0 不可代付 1  已激活
      */
     private Integer isActive;
@@ -356,38 +336,6 @@ public class CloudDfMoneyInterfaceInfo {
 
     public void setVid(Integer vid) {
         this.vid = vid;
-    }
-
-    public Long getCmid() {
-        return cmid;
-    }
-
-    public void setCmid(Long cmid) {
-        this.cmid = cmid;
-    }
-
-    public Integer getStftype() {
-        return stftype;
-    }
-
-    public void setStftype(Integer stftype) {
-        this.stftype = stftype;
-    }
-
-    public Long getCouponid() {
-        return couponid;
-    }
-
-    public void setCouponid(Long couponid) {
-        this.couponid = couponid;
-    }
-
-    public String getCouponname() {
-        return couponname;
-    }
-
-    public void setCouponname(String couponname) {
-        this.couponname = couponname;
     }
 
     public Integer getIsActive() {

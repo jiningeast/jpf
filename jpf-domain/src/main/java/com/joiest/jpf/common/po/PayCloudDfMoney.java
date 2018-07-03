@@ -111,26 +111,6 @@ public class PayCloudDfMoney implements Serializable {
     private Integer vid;
 
     /**
-     * 公司发放事件ID
-     */
-    private Long cmid;
-
-    /**
-     * 1:福利发放，2:优惠券
-     */
-    private Integer stftype;
-
-    /**
-     * 优惠券类别
-     */
-    private Long couponid;
-
-    /**
-     * 优惠券名称
-     */
-    private String couponname;
-
-    /**
      * 用户代付状态  0 不可代付 1  已激活
      */
     private Integer isActive;
@@ -350,38 +330,6 @@ public class PayCloudDfMoney implements Serializable {
         this.vid = vid;
     }
 
-    public Long getCmid() {
-        return cmid;
-    }
-
-    public void setCmid(Long cmid) {
-        this.cmid = cmid;
-    }
-
-    public Integer getStftype() {
-        return stftype;
-    }
-
-    public void setStftype(Integer stftype) {
-        this.stftype = stftype;
-    }
-
-    public Long getCouponid() {
-        return couponid;
-    }
-
-    public void setCouponid(Long couponid) {
-        this.couponid = couponid;
-    }
-
-    public String getCouponname() {
-        return couponname;
-    }
-
-    public void setCouponname(String couponname) {
-        this.couponname = couponname == null ? null : couponname.trim();
-    }
-
     public Integer getIsActive() {
         return isActive;
     }
@@ -492,10 +440,6 @@ public class PayCloudDfMoney implements Serializable {
         sb.append(", montype=").append(montype);
         sb.append(", remark=").append(remark);
         sb.append(", vid=").append(vid);
-        sb.append(", cmid=").append(cmid);
-        sb.append(", stftype=").append(stftype);
-        sb.append(", couponid=").append(couponid);
-        sb.append(", couponname=").append(couponname);
         sb.append(", isActive=").append(isActive);
         sb.append(", content=").append(content);
         sb.append(", updatetime=").append(updatetime);
@@ -547,10 +491,6 @@ public class PayCloudDfMoney implements Serializable {
             && (this.getMontype() == null ? other.getMontype() == null : this.getMontype().equals(other.getMontype()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getVid() == null ? other.getVid() == null : this.getVid().equals(other.getVid()))
-            && (this.getCmid() == null ? other.getCmid() == null : this.getCmid().equals(other.getCmid()))
-            && (this.getStftype() == null ? other.getStftype() == null : this.getStftype().equals(other.getStftype()))
-            && (this.getCouponid() == null ? other.getCouponid() == null : this.getCouponid().equals(other.getCouponid()))
-            && (this.getCouponname() == null ? other.getCouponname() == null : this.getCouponname().equals(other.getCouponname()))
             && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
@@ -591,10 +531,6 @@ public class PayCloudDfMoney implements Serializable {
         result = prime * result + ((getMontype() == null) ? 0 : getMontype().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getVid() == null) ? 0 : getVid().hashCode());
-        result = prime * result + ((getCmid() == null) ? 0 : getCmid().hashCode());
-        result = prime * result + ((getStftype() == null) ? 0 : getStftype().hashCode());
-        result = prime * result + ((getCouponid() == null) ? 0 : getCouponid().hashCode());
-        result = prime * result + ((getCouponname() == null) ? 0 : getCouponname().hashCode());
         result = prime * result + ((getIsActive() == null) ? 0 : getIsActive().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
