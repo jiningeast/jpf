@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.dto.ToolCateResponse;
+import net.sf.json.JSONObject;
 import org.apache.http.HttpResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,4 +24,9 @@ public interface ToolCateServiceFacade {
      *生成指定范围内的随机数
      * */
     public int getRandomInt(int min, int max);
+
+    /**
+    *阿里云身份证、姓名实名认证
+    * */
+    public JSONObject idenAuth(String name, String idCard);
 }

@@ -12,6 +12,7 @@ import com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl;
 import com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
+import org.apache.http.HttpResponse;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -178,8 +179,8 @@ public class ToolCateController {
                 System.out.println("Http body error msg: " + toolCateResponse.getBody());
 
                 Map<String,Object> map = new HashMap<>();
-                map.put("Http code",toolCateResponse.getHeader("X-Ca-Error-Message"));
-                map.put("Http body error msg",toolCateResponse.getBody());
+                map.put("HttpCode",toolCateResponse.getHeader("X-Ca-Error-Message"));
+                map.put("HttpBodyError",toolCateResponse.getBody());
 
                 yjResponseDto.setCode("10008");
                 yjResponseDto.setInfo("500 Internal Server Error");
@@ -309,12 +310,29 @@ public class ToolCateController {
 
         return baseRe;
     }
+    /*
+    * 身份证号、姓名实名认证
+    * */
+    @RequestMapping(value = "/idenAuth", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String idenAuth(HttpServletRequest request) {
+
+        String name = request.getParameter("name");
+        String idCard = request.getParameter("idCard");
+
+        JSONObject cardAuth = toolCateServiceFacade.idenAuth(name,idCard);
+
+        String baseRe = Base64CustomUtils.base64Encoder(cardAuth.toString());
+        baseRe = baseRe.replaceAll("\r\n","");
+
+        return baseRe;
+    }
+    /**
+     * 短信发送
+     * */
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String sendSms(HttpServletRequest request) throws IOException {
-
-        //String aa= redisCustomServiceFacade.get("liangliang");
-        //return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
 
         String phone = request.getParameter("mobile");
         phone = Base64CustomUtils.base64Decoder(phone);

@@ -5,8 +5,11 @@ import com.joiest.jpf.common.util.MessageDigestUtil;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.dto.ToolCateResponse;
 import com.joiest.jpf.entity.MwSmsInfo;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -200,6 +203,75 @@ public class ToolCateServiceFacadeImpl {
         return returnInt;//返回值返回
     }
 
+
+    /**
+     *阿里云身份证、姓名实名认证
+     * */
+    public JSONObject idenAuth(String name,String idCard){
+
+        String host = "https://idenauthen.market.alicloudapi.com";
+        String path = "/idenAuthentication";
+
+        String method = "POST";
+        String appcode = "92f6237c503845559542c5d26f9adab2";
+
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        //根据API的要求，定义相对应的Content-Type
+        headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+
+        Map<String, String> querys = new HashMap<String, String>();
+
+        Map<String, String> bodys = new HashMap<String, String>();
+        bodys.put("idNo", idCard);
+        bodys.put("name", name);
+
+        ToolCateResponse toolCateResponse = new ToolCateResponse();//接收响应值
+        Map<String,String> respos = new HashMap<String,String>();//参数返回
+        String res=null;
+        JSONObject dealFirst = null;
+        JSONObject ocrResult = new JSONObject();
+        JSONObject data = null;
+
+        try {
+
+            HttpResponse response = OkHttpUtils.httpPostIdenAuth(host, path, method, headers, querys, bodys);
+            toolCateResponse = convert(response);
+
+            if(toolCateResponse.getStatusCode() != 200){
+
+                System.out.println("Http code: " + toolCateResponse.getStatusCode());
+                System.out.println("Http header error: " + toolCateResponse.getHeader("X-Ca-Error-Message"));
+                System.out.println("Http body error msg: " + toolCateResponse.getBody());
+
+                data.put("httpCode",toolCateResponse.getHeader("X-Ca-Error-Message"));
+                data.put("HttpBodyError",toolCateResponse.getBody());
+
+                ocrResult.put("code","10008");
+                ocrResult.put("info","实名认证有误");
+                ocrResult.put("data",data);
+            }else {
+
+                res = toolCateResponse.getBody();
+                dealFirst = JSONObject.fromObject(res);
+                if(dealFirst.get("respCode").equals("0000")){
+
+                    ocrResult.put("code","10000");
+                    ocrResult.put("info","实名认证一致");
+                    ocrResult.put("data",dealFirst);
+                }else{
+
+                    ocrResult.put("code","10008");
+                    ocrResult.put("info","实名认证不一致");
+                    ocrResult.put("data",dealFirst);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ocrResult;
+    }
     /**
      * 生成一个唯一数
      * */

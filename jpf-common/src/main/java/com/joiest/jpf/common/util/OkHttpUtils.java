@@ -7,6 +7,7 @@ import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
@@ -219,6 +220,75 @@ public class OkHttpUtils {
                 .build();
         System.out.println(OkHttpUtils.postJson("http://192.168.102.7:8082/shutdown", ""));
     }
+
+    /**
+     * 身份证、姓名实名认证 Post String
+     *
+     * @param host
+     * @param path
+     * @param method
+     * @param headers
+     * @param querys
+     * @param body
+     * @return
+     * @throws Exception
+     */
+
+    /**
+     * post form
+     *
+     * @param host
+     * @param path
+     * @param method
+     * @param headers
+     * @param querys
+     * @param bodys
+     * @return
+     * @throws Exception
+     */
+    public static HttpResponse httpPostIdenAuth(String host, String path, String method,
+                                      Map<String, String> headers,
+                                      Map<String, String> querys,
+                                      Map<String, String> bodys)
+            throws Exception {
+        HttpClient httpClient = wrapClient(host);
+
+        HttpPost request = new HttpPost(initUrl(host, path, querys));
+        for (Map.Entry<String, String> e : headers.entrySet()) {
+            request.addHeader(e.getKey(), e.getValue());
+        }
+
+        if (bodys != null) {
+            List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
+
+            for (String key : bodys.keySet()) {
+                nameValuePairList.add(new BasicNameValuePair(key, bodys.get(key)));
+            }
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(nameValuePairList, "utf-8");
+            formEntity.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
+            request.setEntity(formEntity);
+        }
+
+        return httpClient.execute(request);
+    }
+    /*public static HttpResponse httpPostIdenAuth(String host, String path, String method,
+                                      Map<String, String> headers,
+                                      Map<String, String> querys,
+                                      String body)
+            throws Exception {
+        HttpClient httpClient = wrapClient(host);
+
+        HttpPost request = new HttpPost(initUrl(host, path, querys));
+        for (Map.Entry<String, String> e : headers.entrySet()) {
+            request.addHeader(e.getKey(), e.getValue());
+        }
+
+        if (StringUtils.isNotBlank(body)) {
+            request.setEntity(new StringEntity(body, "utf-8"));
+        }
+
+        return httpClient.execute(request);
+    }*/
 
     /**
      * OCR Http POST 字符串
