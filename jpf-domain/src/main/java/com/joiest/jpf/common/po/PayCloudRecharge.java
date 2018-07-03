@@ -10,6 +10,16 @@ public class PayCloudRecharge {
     private String id;
 
     /**
+     * 需求ID
+     */
+    private String needid;
+
+    /**
+     * 合同编号
+     */
+    private String pactno;
+
+    /**
      * 交易充值记录ID，唯一值，CZ+10位时间戳+6位随机码
      */
     private String fid;
@@ -90,11 +100,6 @@ public class PayCloudRecharge {
     private String imgurl;
 
     /**
-     * 客服备注
-     */
-    private String kfremarks;
-
-    /**
      * 申请时间
      */
     private Date addtime;
@@ -114,12 +119,38 @@ public class PayCloudRecharge {
      */
     private Date chargetime;
 
+    /**
+     * 需求确认时间
+     */
+    private Date pacttime;
+
+    /**
+     * 客服备注
+     */
+    private String kfremarks;
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getNeedid() {
+        return needid;
+    }
+
+    public void setNeedid(String needid) {
+        this.needid = needid == null ? null : needid.trim();
+    }
+
+    public String getPactno() {
+        return pactno;
+    }
+
+    public void setPactno(String pactno) {
+        this.pactno = pactno == null ? null : pactno.trim();
     }
 
     public String getFid() {
@@ -250,14 +281,6 @@ public class PayCloudRecharge {
         this.imgurl = imgurl == null ? null : imgurl.trim();
     }
 
-    public String getKfremarks() {
-        return kfremarks;
-    }
-
-    public void setKfremarks(String kfremarks) {
-        this.kfremarks = kfremarks == null ? null : kfremarks.trim();
-    }
-
     public Date getAddtime() {
         return addtime;
     }
@@ -288,5 +311,21 @@ public class PayCloudRecharge {
 
     public void setChargetime(Date chargetime) {
         this.chargetime = chargetime;
+    }
+
+    public Date getPacttime() {
+        return pacttime;
+    }
+
+    public void setPacttime(Date pacttime) {
+        this.pacttime = pacttime;
+    }
+
+    public String getKfremarks() {
+        return kfremarks;
+    }
+
+    public void setKfremarks(String kfremarks) {
+        this.kfremarks = kfremarks == null ? null : kfremarks.trim();
     }
 }

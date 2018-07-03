@@ -31,6 +31,22 @@
                     </td>
                 </tr>
                 <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">需求ID：</td>
+                    <td>
+                        ${cloudRechargeInfo.needid}
+                    </td>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同编号：</td>
+                    <td>
+                        <c:if test="${cloudRechargeInfo.status=='1'}">
+                            <input name="pactno" value="" type="text">
+                        </c:if>
+                        <c:if test="${cloudRechargeInfo.status!='1'}">
+                            ${cloudRechargeInfo.pactno}
+                        </c:if>
+
+                    </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付方式：</td>
                     <td>
                         ${cloudRechargeInfo.payway}
@@ -91,7 +107,12 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付凭证：</td>
                     <td colspan="3">
-                        <img width="200" height="200" src="${cloudRechargeInfo.imgurl}">
+                        <c:if test="${cloudRechargeInfo.imgurl=='' || cloudRechargeInfo.imgurl==null }">
+
+                        </c:if>
+                        <c:if test="${cloudRechargeInfo.imgurl}">
+                            <img width="200" height="200" src="${cloudRechargeInfo.imgurl}">
+                        </c:if>
                     </td>
                 </tr>
                 <tr>
@@ -116,8 +137,12 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">充值状态：</td>
-                    <td colspan="4">
+                    <td >
                         ${cloudRechargeInfo.status_cn}
+                    </td>
+                    <td style="text-align: right;background-color: #f1f1f1;">需求确认时间：</td>
+                    <td >
+                        ${cloudRechargeInfo.pacttime}
                     </td>
                 </tr>
             </table>
