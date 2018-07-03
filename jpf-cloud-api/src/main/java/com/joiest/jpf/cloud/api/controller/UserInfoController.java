@@ -187,21 +187,19 @@ public class UserInfoController {
 
             //身份证信息
             cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cardId);
-
-            //员工信息
-            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(cloudIdcardInfo.getNum());
-
-            //员工银行卡信息
-            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, cloudCompanyStaffInfo.getId());
-
             if(cloudIdcardInfo == null){
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户身份证信息不存在", null);
             }
+            //员工信息
+            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(cloudIdcardInfo.getNum());
             if(cloudCompanyStaffInfo==null){
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户员工信息不存在", null);
             }
+
+            //员工银行卡信息
+            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, cloudCompanyStaffInfo.getId());
             if(cloudStaffBanksInfo==null){
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户银行卡信息不存在", null);
