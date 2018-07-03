@@ -3,7 +3,6 @@ package com.joiest.jpf.entity;
 import java.math.BigInteger;
 
 public class CloudStaffBanksInfo {
-
     /**
      * 自增ID
      */
@@ -52,12 +51,12 @@ public class CloudStaffBanksInfo {
     /**
      * 用户状态  0 银行卡未激活  1  银行卡已激活
      */
-    private Boolean bankActive;
+    private String bankActive;
 
     /**
      * 收款人账号属性 0=PRIVATE对私,1=PUBLIC对公
      */
-    private Byte bankacctattr;
+    private String bankacctattr;
 
     private static final long serialVersionUID = 1L;
 
@@ -133,20 +132,19 @@ public class CloudStaffBanksInfo {
         this.bankcity = bankcity == null ? null : bankcity.trim();
     }
 
-    public Boolean getBankActive() {
+    public String getBankActive() {
         return bankActive;
     }
 
-    public void setBankActive(Boolean bankActive) {
-        this.bankActive = bankActive;
+    public void setBankActive(String bankActive) {
+        this.bankActive = bankActive == null ? null : bankActive.trim();
     }
 
-    public Byte getBankacctattr() {
+    public String getBankacctattr() {
         return bankacctattr;
     }
 
-    public void setBankacctattr(Byte bankacctattr) {
-        this.bankacctattr = bankacctattr;
+    public void setBankacctattr(String bankacctattr) {
+        this.bankacctattr = bankacctattr == null ? null : bankacctattr.trim();
     }
-
 }

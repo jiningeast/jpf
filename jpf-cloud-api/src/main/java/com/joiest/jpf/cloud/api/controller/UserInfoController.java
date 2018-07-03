@@ -343,20 +343,24 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工对应银行卡信息不存在",null);
         }
         //身份证信息
-        CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cloudCompanyStaffInfo.getIdcard());
+        CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(String.valueOf(cloudCompanyStaffInfo.getUcardid()));
+        if(cloudIdcardInfo == null){
 
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息不存在",null);
+        }
         Map<String,String> uinfo = new HashMap<String, String>();
         uinfo.put("name",cloudCompanyStaffInfo.getNickname());
         uinfo.put("idCard",cloudCompanyStaffInfo.getIdcard());
         uinfo.put("userAuth",cloudCompanyStaffInfo.getIsActive());
         uinfo.put("banknum",cloudStaffBanksInfo.getBankno());
         uinfo.put("bankphone",cloudStaffBanksInfo.getBankphone());
-        //uinfo.put("bankpAuth",cloudStaffBanksInfo.getBankActive());
+        uinfo.put("bankpAuth",cloudStaffBanksInfo.getBankActive());
 
-        uinfo.put("cardFaceLocal",cloudIdcardInfo.getFaceimglocal());
-        uinfo.put("cardFaceServer",cloudIdcardInfo.getFaceimgserver());
-        uinfo.put("backFaceLocal",cloudIdcardInfo.getBackimglocal());
-        uinfo.put("cardFaceServer",cloudIdcardInfo.getBackimgserver());
+        uinfo.put("faceCardLocal",cloudIdcardInfo.getFaceimglocal());
+        uinfo.put("faceCardServer",cloudIdcardInfo.getFaceimgserver());
+
+        uinfo.put("backCardLocal",cloudIdcardInfo.getBackimglocal());
+        uinfo.put("backCardServer",cloudIdcardInfo.getBackimgserver());
 
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "获取成功", uinfo);

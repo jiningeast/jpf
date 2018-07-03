@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class CloudCompanyStaffInfo {
-
     /**
      * 自增ID
      */
@@ -31,21 +30,6 @@ public class CloudCompanyStaffInfo {
     private String merchNo;
 
     /**
-     * 部门ID
-     */
-    private String dsid;
-
-    /**
-     * 职位ID
-     */
-    private Long jid;
-
-    /**
-     * 工号
-     */
-    private String jobno;
-
-    /**
      * 删除状态：1:正常，-1:离职, -2:彻底删除
      */
     private String status;
@@ -54,31 +38,6 @@ public class CloudCompanyStaffInfo {
      * 是否签约 0=未签约 1=已签约
      */
     private String isActive;
-
-    /**
-     * 创建时间
-     */
-    private Date created;
-
-    /**
-     * 1:男；2:女
-     */
-    private Boolean gender;
-
-    /**
-     * 入职日期
-     */
-    private Date entrydate;
-
-    /**
-     * 修改时间
-     */
-    private Date updated;
-
-    /**
-     * 生日
-     */
-    private Date birthday;
 
     /**
      * 邮箱
@@ -101,9 +60,14 @@ public class CloudCompanyStaffInfo {
     private Integer ucardid;
 
     /**
-     * 员工登录密码
+     * 创建时间
      */
-    private String password;
+    private Date created;
+
+    /**
+     * 修改时间
+     */
+    private Date updated;
 
     private static final long serialVersionUID = 1L;
 
@@ -147,30 +111,6 @@ public class CloudCompanyStaffInfo {
         this.merchNo = merchNo == null ? null : merchNo.trim();
     }
 
-    public String getDsid() {
-        return dsid;
-    }
-
-    public void setDsid(String dsid) {
-        this.dsid = dsid == null ? null : dsid.trim();
-    }
-
-    public Long getJid() {
-        return jid;
-    }
-
-    public void setJid(Long jid) {
-        this.jid = jid;
-    }
-
-    public String getJobno() {
-        return jobno;
-    }
-
-    public void setJobno(String jobno) {
-        this.jobno = jobno == null ? null : jobno.trim();
-    }
-
     public String getStatus() {
         return status;
     }
@@ -185,46 +125,6 @@ public class CloudCompanyStaffInfo {
 
     public void setIsActive(String isActive) {
         this.isActive = isActive == null ? null : isActive.trim();
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Boolean getGender() {
-        return gender;
-    }
-
-    public void setGender(Boolean gender) {
-        this.gender = gender;
-    }
-
-    public Date getEntrydate() {
-        return entrydate;
-    }
-
-    public void setEntrydate(Date entrydate) {
-        this.entrydate = entrydate;
-    }
-
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
     }
 
     public String getEmail() {
@@ -259,12 +159,20 @@ public class CloudCompanyStaffInfo {
         this.ucardid = ucardid;
     }
 
-    public String getPassword() {
-        return password;
+    public Date getCreated() {
+        return created;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
 }

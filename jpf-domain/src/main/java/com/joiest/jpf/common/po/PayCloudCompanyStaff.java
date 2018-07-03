@@ -31,21 +31,6 @@ public class PayCloudCompanyStaff implements Serializable {
     private String merchNo;
 
     /**
-     * 部门ID
-     */
-    private String dsid;
-
-    /**
-     * 职位ID
-     */
-    private Long jid;
-
-    /**
-     * 工号
-     */
-    private String jobno;
-
-    /**
      * 删除状态：1:正常，-1:离职, -2:彻底删除
      */
     private String status;
@@ -54,31 +39,6 @@ public class PayCloudCompanyStaff implements Serializable {
      * 是否签约 0=未签约 1=已签约
      */
     private String isActive;
-
-    /**
-     * 创建时间
-     */
-    private Date created;
-
-    /**
-     * 1:男；2:女
-     */
-    private Boolean gender;
-
-    /**
-     * 入职日期
-     */
-    private Date entrydate;
-
-    /**
-     * 修改时间
-     */
-    private Date updated;
-
-    /**
-     * 生日
-     */
-    private Date birthday;
 
     /**
      * 邮箱
@@ -101,9 +61,14 @@ public class PayCloudCompanyStaff implements Serializable {
     private Integer ucardid;
 
     /**
-     * 员工登录密码
+     * 创建时间
      */
-    private String password;
+    private Date created;
+
+    /**
+     * 修改时间
+     */
+    private Date updated;
 
     private static final long serialVersionUID = 1L;
 
@@ -147,30 +112,6 @@ public class PayCloudCompanyStaff implements Serializable {
         this.merchNo = merchNo == null ? null : merchNo.trim();
     }
 
-    public String getDsid() {
-        return dsid;
-    }
-
-    public void setDsid(String dsid) {
-        this.dsid = dsid == null ? null : dsid.trim();
-    }
-
-    public Long getJid() {
-        return jid;
-    }
-
-    public void setJid(Long jid) {
-        this.jid = jid;
-    }
-
-    public String getJobno() {
-        return jobno;
-    }
-
-    public void setJobno(String jobno) {
-        this.jobno = jobno == null ? null : jobno.trim();
-    }
-
     public String getStatus() {
         return status;
     }
@@ -185,46 +126,6 @@ public class PayCloudCompanyStaff implements Serializable {
 
     public void setIsActive(String isActive) {
         this.isActive = isActive == null ? null : isActive.trim();
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Boolean getGender() {
-        return gender;
-    }
-
-    public void setGender(Boolean gender) {
-        this.gender = gender;
-    }
-
-    public Date getEntrydate() {
-        return entrydate;
-    }
-
-    public void setEntrydate(Date entrydate) {
-        this.entrydate = entrydate;
-    }
-
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
     }
 
     public String getEmail() {
@@ -259,12 +160,20 @@ public class PayCloudCompanyStaff implements Serializable {
         this.ucardid = ucardid;
     }
 
-    public String getPassword() {
-        return password;
+    public Date getCreated() {
+        return created;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     /**
@@ -281,21 +190,14 @@ public class PayCloudCompanyStaff implements Serializable {
         sb.append(", nickname=").append(nickname);
         sb.append(", mobile=").append(mobile);
         sb.append(", merchNo=").append(merchNo);
-        sb.append(", dsid=").append(dsid);
-        sb.append(", jid=").append(jid);
-        sb.append(", jobno=").append(jobno);
         sb.append(", status=").append(status);
         sb.append(", isActive=").append(isActive);
-        sb.append(", created=").append(created);
-        sb.append(", gender=").append(gender);
-        sb.append(", entrydate=").append(entrydate);
-        sb.append(", updated=").append(updated);
-        sb.append(", birthday=").append(birthday);
         sb.append(", email=").append(email);
         sb.append(", code=").append(code);
         sb.append(", idcard=").append(idcard);
         sb.append(", ucardid=").append(ucardid);
-        sb.append(", password=").append(password);
+        sb.append(", created=").append(created);
+        sb.append(", updated=").append(updated);
         sb.append("]");
         return sb.toString();
     }
@@ -321,21 +223,14 @@ public class PayCloudCompanyStaff implements Serializable {
             && (this.getNickname() == null ? other.getNickname() == null : this.getNickname().equals(other.getNickname()))
             && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
-            && (this.getDsid() == null ? other.getDsid() == null : this.getDsid().equals(other.getDsid()))
-            && (this.getJid() == null ? other.getJid() == null : this.getJid().equals(other.getJid()))
-            && (this.getJobno() == null ? other.getJobno() == null : this.getJobno().equals(other.getJobno()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
-            && (this.getGender() == null ? other.getGender() == null : this.getGender().equals(other.getGender()))
-            && (this.getEntrydate() == null ? other.getEntrydate() == null : this.getEntrydate().equals(other.getEntrydate()))
-            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()))
-            && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()))
             && (this.getEmail() == null ? other.getEmail() == null : this.getEmail().equals(other.getEmail()))
             && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
             && (this.getIdcard() == null ? other.getIdcard() == null : this.getIdcard().equals(other.getIdcard()))
             && (this.getUcardid() == null ? other.getUcardid() == null : this.getUcardid().equals(other.getUcardid()))
-            && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()));
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
     }
 
     /**
@@ -350,21 +245,14 @@ public class PayCloudCompanyStaff implements Serializable {
         result = prime * result + ((getNickname() == null) ? 0 : getNickname().hashCode());
         result = prime * result + ((getMobile() == null) ? 0 : getMobile().hashCode());
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
-        result = prime * result + ((getDsid() == null) ? 0 : getDsid().hashCode());
-        result = prime * result + ((getJid() == null) ? 0 : getJid().hashCode());
-        result = prime * result + ((getJobno() == null) ? 0 : getJobno().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getIsActive() == null) ? 0 : getIsActive().hashCode());
-        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
-        result = prime * result + ((getGender() == null) ? 0 : getGender().hashCode());
-        result = prime * result + ((getEntrydate() == null) ? 0 : getEntrydate().hashCode());
-        result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
-        result = prime * result + ((getBirthday() == null) ? 0 : getBirthday().hashCode());
         result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
         result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
         result = prime * result + ((getIdcard() == null) ? 0 : getIdcard().hashCode());
         result = prime * result + ((getUcardid() == null) ? 0 : getUcardid().hashCode());
-        result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
+        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
+        result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
         return result;
     }
 }
