@@ -70,7 +70,7 @@ public class PayCloudIdcard implements Serializable {
     private String issue;
 
     /**
-     * ocr正面请求id
+     * ocr背面请求id
      */
     private String brequestId;
 
@@ -83,6 +83,11 @@ public class PayCloudIdcard implements Serializable {
      * 身份证背面照片(阿里云图片服务器)
      */
     private String backimgserver;
+
+    /**
+     * 1 OCR识别，2手动录入
+     */
+    private Byte type;
 
     /**
      * 
@@ -224,6 +229,14 @@ public class PayCloudIdcard implements Serializable {
         this.backimgserver = backimgserver == null ? null : backimgserver.trim();
     }
 
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -265,6 +278,7 @@ public class PayCloudIdcard implements Serializable {
         sb.append(", brequestId=").append(brequestId);
         sb.append(", backimglocal=").append(backimglocal);
         sb.append(", backimgserver=").append(backimgserver);
+        sb.append(", type=").append(type);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -303,6 +317,7 @@ public class PayCloudIdcard implements Serializable {
             && (this.getBrequestId() == null ? other.getBrequestId() == null : this.getBrequestId().equals(other.getBrequestId()))
             && (this.getBackimglocal() == null ? other.getBackimglocal() == null : this.getBackimglocal().equals(other.getBackimglocal()))
             && (this.getBackimgserver() == null ? other.getBackimgserver() == null : this.getBackimgserver().equals(other.getBackimgserver()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -330,6 +345,7 @@ public class PayCloudIdcard implements Serializable {
         result = prime * result + ((getBrequestId() == null) ? 0 : getBrequestId().hashCode());
         result = prime * result + ((getBackimglocal() == null) ? 0 : getBackimglocal().hashCode());
         result = prime * result + ((getBackimgserver() == null) ? 0 : getBackimgserver().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;

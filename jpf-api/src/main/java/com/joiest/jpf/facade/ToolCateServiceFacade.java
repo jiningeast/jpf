@@ -29,4 +29,9 @@ public interface ToolCateServiceFacade {
     *阿里云身份证、姓名实名认证
     * */
     public JSONObject idenAuth(String name, String idCard);
+
+    /**
+     *阿里云OCR 身份证识别
+     * */
+    public String idCardOcr(String side,String img);
 }

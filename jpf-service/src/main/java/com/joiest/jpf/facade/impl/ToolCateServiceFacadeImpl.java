@@ -29,6 +29,23 @@ import java.util.Random;
 
 public class ToolCateServiceFacadeImpl {
 
+    private String MethodPost = "POST";
+
+    //实名认证 接口公共参数======start
+        private String IdenHost = "https://idenauthen.market.alicloudapi.com";
+        private String IdPath = "/idenAuthentication";
+        private String AppCode = "92f6237c503845559542c5d26f9adab2";;
+    //实名认证 接口公共参数======end
+
+
+    //OCR 接口公共参数======start
+        private String OcrHost = "http://dm-51.data.aliyun.com";
+        private String OcrPath = "/rest/160601/ocr/ocr_idcard.json";
+        private String OcrAppKey = "24789083";
+        private String OcrAppSecret = "bb49c2a1f0d00d09ee83c56f23a0f5cd";
+    //OCR 接口公共参数======end
+
+
     /**
      * base64 encode 转换为图片
      * */
@@ -203,21 +220,24 @@ public class ToolCateServiceFacadeImpl {
         return returnInt;//返回值返回
     }
 
+    /**
+     *阿里云OCR 身份证识别
+     * */
+    public String idCardOcr(String side,String img){
+
+
+        return null;
+    }
 
     /**
      *阿里云身份证、姓名实名认证
      * */
     public JSONObject idenAuth(String name,String idCard){
 
-        String host = "https://idenauthen.market.alicloudapi.com";
-        String path = "/idenAuthentication";
-
-        String method = "POST";
-        String appcode = "92f6237c503845559542c5d26f9adab2";
-
         Map<String, String> headers = new HashMap<String, String>();
+
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
-        headers.put("Authorization", "APPCODE " + appcode);
+        headers.put("Authorization", "APPCODE " + AppCode);
         //根据API的要求，定义相对应的Content-Type
         headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 
@@ -236,7 +256,7 @@ public class ToolCateServiceFacadeImpl {
 
         try {
 
-            HttpResponse response = OkHttpUtils.httpPostIdenAuth(host, path, method, headers, querys, bodys);
+            HttpResponse response = OkHttpUtils.httpPostIdenAuth(IdenHost, IdPath, MethodPost, headers, querys, bodys);
             toolCateResponse = convert(response);
 
             if(toolCateResponse.getStatusCode() != 200){
@@ -263,7 +283,7 @@ public class ToolCateServiceFacadeImpl {
                 }else{
 
                     ocrResult.put("code","10008");
-                    ocrResult.put("info","实名认证不一致");
+                    ocrResult.put("info",dealFirst.get("respMessage"));
                     ocrResult.put("data",dealFirst);
                 }
             }

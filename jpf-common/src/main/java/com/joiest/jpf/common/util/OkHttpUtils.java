@@ -229,19 +229,6 @@ public class OkHttpUtils {
      * @param method
      * @param headers
      * @param querys
-     * @param body
-     * @return
-     * @throws Exception
-     */
-
-    /**
-     * post form
-     *
-     * @param host
-     * @param path
-     * @param method
-     * @param headers
-     * @param querys
      * @param bodys
      * @return
      * @throws Exception
@@ -251,8 +238,8 @@ public class OkHttpUtils {
                                       Map<String, String> querys,
                                       Map<String, String> bodys)
             throws Exception {
-        HttpClient httpClient = wrapClient(host);
 
+        HttpClient httpClient = wrapClient(host);
         HttpPost request = new HttpPost(initUrl(host, path, querys));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
@@ -271,25 +258,6 @@ public class OkHttpUtils {
 
         return httpClient.execute(request);
     }
-    /*public static HttpResponse httpPostIdenAuth(String host, String path, String method,
-                                      Map<String, String> headers,
-                                      Map<String, String> querys,
-                                      String body)
-            throws Exception {
-        HttpClient httpClient = wrapClient(host);
-
-        HttpPost request = new HttpPost(initUrl(host, path, querys));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-            request.addHeader(e.getKey(), e.getValue());
-        }
-
-        if (StringUtils.isNotBlank(body)) {
-            request.setEntity(new StringEntity(body, "utf-8"));
-        }
-
-        return httpClient.execute(request);
-    }*/
-
     /**
      * OCR Http POST 字符串
      * @param host

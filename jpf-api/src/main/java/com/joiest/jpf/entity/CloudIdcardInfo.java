@@ -3,7 +3,6 @@ package com.joiest.jpf.entity;
 import java.util.Date;
 
 public class CloudIdcardInfo {
-
     /**
      *
      */
@@ -70,7 +69,7 @@ public class CloudIdcardInfo {
     private String issue;
 
     /**
-     * ocr正面请求id
+     * ocr背面请求id
      */
     private String brequestId;
 
@@ -83,6 +82,11 @@ public class CloudIdcardInfo {
      * 身份证背面照片(阿里云图片服务器)
      */
     private String backimgserver;
+
+    /**
+     * 1 OCR识别，2手动录入
+     */
+    private Byte type;
 
     /**
      *
@@ -222,6 +226,14 @@ public class CloudIdcardInfo {
 
     public void setBackimgserver(String backimgserver) {
         this.backimgserver = backimgserver == null ? null : backimgserver.trim();
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 
     public Date getAddtime() {

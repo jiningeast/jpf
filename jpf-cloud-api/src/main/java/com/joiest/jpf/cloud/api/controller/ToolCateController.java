@@ -33,6 +33,7 @@ public class ToolCateController {
 
     @Autowired
     private ToolCateServiceFacadeImpl toolCateServiceFacade;
+
     @Autowired
     private CloudIdcardServiceFacadeImpl cloudIdcardServiceFacade;
 
@@ -65,6 +66,9 @@ public class ToolCateController {
 
         String side = request.getParameter("side");
         String imgInfo = request.getParameter("img");
+
+        String ocrRes = toolCateServiceFacade.idCardOcr(side,imgInfo);
+
 
         String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
 
@@ -252,63 +256,49 @@ public class ToolCateController {
 
         String face = request.getParameter("face");
         String back = request.getParameter("back");
+        String type = request.getParameter("type");
         //参数是否为空
         if(face == null || face.isEmpty() || back == null || back.isEmpty()){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
         }
-/*
-        String  str = "^[\\x{4e00}-\\x{9fa5}]+$/u";
-        //String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
-
-        String name =  request.getParameter("name");;
-        Pattern pattern = Pattern.compile("^[\\x{4e00}-\\x{9fa5}]+$/u");
-        Matcher matcher = pattern.matcher(name);
-        boolean find= matcher.find();
-        String namep=null;
-            if ( matcher.find() ){
-
-                namep = matcher.group(0);
-
-            }*/
         String faceBase = Base64CustomUtils.base64Decoder(face);
         String backBase = Base64CustomUtils.base64Decoder(back);
+        type = Base64CustomUtils.base64Decoder(type);
 
         JSONObject faceResult = JSONObject.fromObject(faceBase);
         JSONObject backResult = JSONObject.fromObject(backBase);
 
+        //实名验证
+       JSONObject cardAuth = toolCateServiceFacade.idenAuth(faceResult.get("name").toString(),faceResult.get("num").toString());
+       if(cardAuth.get("code").equals("10008")){
+
+           return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), cardAuth.get("info").toString(),null);
+       }
         CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardByCardNo(faceResult.get("num").toString());
 
         YjResponseDto yjResponseDto= new YjResponseDto();
         if(cloudIdcardInfo == null){
 
-            int idCard= cloudIdcardServiceFacade.addCloudIdcard(faceResult,backResult);
+            int idCard= cloudIdcardServiceFacade.addCloudIdcard(faceResult,backResult,new Byte(type));
             if(idCard > 0){
 
                 Map<String,Object> map = new HashMap<>();
                 map.put("id",idCard);
 
-                yjResponseDto.setCode("10000");
-                yjResponseDto.setInfo("身份证信息上传成功");
-                yjResponseDto.setData(map);
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "身份证信息上传成功",map);
+
             }else{
-                yjResponseDto.setCode("10008");
-                yjResponseDto.setInfo("身份证信息上传失败");
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息上传失败",null);
             }
         }else{
 
             Map<String,Object> map = new HashMap<>();
             map.put("id",cloudIdcardInfo.getId());
 
-            yjResponseDto.setCode("10000");
-            yjResponseDto.setInfo("身份证信息上传成功");
-            yjResponseDto.setData(map);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "身份证信息上传成功",map);
         }
-        String responseJson = JsonUtils.toJson(yjResponseDto);
-        String baseRe = Base64CustomUtils.base64Encoder(responseJson);
-        baseRe = baseRe.replaceAll("\r\n","");
-
-        return baseRe;
     }
     /*
     * 身份证号、姓名实名认证

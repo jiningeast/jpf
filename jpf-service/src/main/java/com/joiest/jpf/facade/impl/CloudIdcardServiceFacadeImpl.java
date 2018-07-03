@@ -25,8 +25,7 @@ public class CloudIdcardServiceFacadeImpl {
     /*
      * 新增身份证信息
      * */
-    public int addCloudIdcard(JSONObject faceResult, JSONObject backResult){
-
+    public int addCloudIdcard(JSONObject faceResult, JSONObject backResult,Byte type){
 
         PayCloudIdcard cloudId = new PayCloudIdcard();
 
@@ -48,6 +47,8 @@ public class CloudIdcardServiceFacadeImpl {
         cloudId.setIssue(backResult.get("issue").toString());
         cloudId.setBrequestId(backResult.get("brequest_id").toString());
         cloudId.setBackimglocal(backResult.get("resourceUrl").toString());
+
+        cloudId.setType(type);
         //cloudId.setBackimgserver(backResult.get("resourceUrl").toString());
 
         cloudId.setAddtime(new Date());
