@@ -11,7 +11,6 @@ import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.entity.CloudIdcardInfo;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
 import com.joiest.jpf.facade.*;
-import com.joiest.jpf.facade.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,7 +39,7 @@ public class UserInfoController {
     private CloudStaffBanksServiceFacade cloudStaffBanksServiceFacade;
 
     @Autowired
-    private RedisCustomServiceFacadeImpl redisCustomServiceFacade;
+    private RedisCustomServiceFacade redisCustomServiceFacade;
 
     @Autowired
     private ToolCateServiceFacade toolCateServiceFacade;
