@@ -111,6 +111,46 @@
                     "icon" : "icon-nav",
                     "url" : "orders/index"
                 }]
+            },{
+                    "menuid" : "6",
+                    "icon" : "icon-sys",
+                    "menuname" : "云账户充值管理",
+                    "menus" : [{
+                        "menuid" : "601",
+                        "menuname" : "充值管理",
+                        "icon" : "icon-nav",
+                        "url" : "cloudRecharge/index"
+                    },{
+                        "menuid" : "602",
+                        "menuname" : "财务充值管理",
+                        "icon" : "icon-nav",
+                        "url" : "cloudRecharge/caiwu/Index"
+                    }]
+            },{
+                "menuid" : "7",
+                "icon" : "icon-sys",
+                "menuname" : "云账户公司管理",
+                "menus" : [{
+                    "menuid" : "701",
+                    "menuname" : "代理公司列表",
+                    "icon" : "icon-nav",
+                    "url" : "cloudCompany/index"
+                },{
+                    "menuid" : "702",
+                    "menuname" : "通道订单数据",
+                    "icon" : "icon-nav",
+                    "url" : "orders/index"
+                }]
+            },{
+                "menuid" : "8",
+                "icon" : "icon-sys",
+                "menuname" : "云账户批次管理",
+                "menus" : [{
+                    "menuid" : "801",
+                    "menuname" : "批次管理",
+                    "icon" : "icon-nav",
+                    "url" : "cloudCompanyMoney/index"
+                }]
             }]
     	};
 

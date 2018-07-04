@@ -91,6 +91,18 @@ public enum JpfInterfaceErrorInfo {
 
     private final String code;
 
+    private Object data;
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+    public void clearData() {
+        this.data = null;
+    }
 
     JpfInterfaceErrorInfo(String code, String desc) {
         this.code = code;

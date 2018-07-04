@@ -20,6 +20,8 @@ public class YjResponseDto {
      */
     private String Info = "SUCCESS";
 
+    private String desc= "Success";
+
     private Object Data;
 
     public String getCode() {

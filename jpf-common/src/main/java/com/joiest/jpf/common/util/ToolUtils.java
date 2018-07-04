@@ -1,6 +1,8 @@
 package com.joiest.jpf.common.util;
 
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -19,20 +21,21 @@ public class ToolUtils {
      * @param data 返回数据
      * @return base64加密串
      */
-    public static String toJsonBase64(String code, String info, String data )
+    public static String toJsonBase64(String code, String info, Object data )
     {
-        Map<String,String> responseMap = new HashMap<>();
+        Map<String,Object> responseMap = new HashMap<>();
         responseMap.put("code",code );
         responseMap.put("info",info);
         if ( data != null )
         {
             responseMap.put("data",data);
         }
-        String jsonStr = JsonUtils.toJson(responseMap);
+        String jsonStr = JsonUtils.toJson(responseMap).replaceAll("\\\\","");
         String base64Str = Base64CustomUtils.base64Encoder(jsonStr);
         base64Str = base64Str.replaceAll("\r","");
         base64Str = base64Str.replaceAll("\n","");
         return base64Str;
+
     }
 
     /**
@@ -113,6 +116,35 @@ public class ToolUtils {
         urlEncoded = urlEncoded.replaceAll("%5D","%5d");*/
 
         return urlEncoded;
+    }
+
+    public static Map<String,String> getMonthStartAndEnd(int year, int month)
+    {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String,String> map = new HashMap<>();
+
+        //获取指定年月第一天
+        Calendar calstar= Calendar.getInstance();
+
+        calstar.set(Calendar.YEAR, year);
+
+        calstar.set(Calendar.MONTH, month-1);
+
+        calstar.set(Calendar.DAY_OF_MONTH, 1);
+
+        String start = fmt.format(calstar.getTime());
+
+        map.put("start", start);
+
+        calstar.set(Calendar.MONTH, month);
+
+        calstar.set(Calendar.DAY_OF_MONTH, 0);//最后一天
+
+        String end = fmt.format(calstar.getTime());
+
+        map.put("end", end);
+
+        return map;
     }
 
 
