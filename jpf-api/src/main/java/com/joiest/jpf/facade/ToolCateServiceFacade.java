@@ -22,7 +22,7 @@ public interface ToolCateServiceFacade {
     /**
      * 短信发送
      * */
-    public int SendSms(String url,String strUserId, String strPwd, String strMobiles, String strMessage);
+    public int sendSms(String strMobiles, String strMessage);
 
     /**
      *生成指定范围内的随机数

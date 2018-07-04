@@ -60,6 +60,7 @@ public class UserInfoController {
     {
         return "";
     }
+/*
 
     //月份
     @RequestMapping(value = "/userblance", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
@@ -109,7 +110,8 @@ public class UserInfoController {
     //判断用户是否登录
     private String userIsLogin()
     {
-        /*String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
+        */
+/*String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(uid_encrypt)) {
             uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY"));
             String reg_mid = "^\\d{1,10}$";
@@ -125,17 +127,20 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), token);
         } else {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未登录", null);
-        }*/
+        }*//*
+
 //        Map<Integer,String> map = new HashMap<>();
 //        map.put(0,JpfInterfaceErrorInfo.SUCCESS.getCode());
 //        map.put(1,"67136");
 //        return map;
     }
 
-    /**
+    */
+/**
      * 获取用户总金额
      * @return
-     */
+     *//*
+
     @RequestMapping(value = "/userdf", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getUserTotalMoney()
@@ -151,10 +156,12 @@ public class UserInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), totalMoney);
     }
 
-    /**
+    */
+/**
      * 月份汇总
      * @return
-     */
+     *//*
+
     @RequestMapping(value = "/usermonth", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getUserMonthMoney()
@@ -169,6 +176,7 @@ public class UserInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), list);
     }
 
+*/
 
     /**
      * 验证用户信息  身份证、银行卡、手机号信息
@@ -319,8 +327,7 @@ public class UserInfoController {
             String content = null;
             content = "尊敬的用户，您此次登录的手机验证码是："+verificateCode+",10十分钟内有效";
 
-            int result=toolCateServiceFacade.SendSms(ConfigUtil.getValue("MWMONGATESENDSUBMIT_URL")
-                    ,ConfigUtil.getValue("MWUSERNAME"), ConfigUtil.getValue("MWPASSWORD"), phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            int result=toolCateServiceFacade.sendSms(phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
 
             if(result==0){//返回值为0，代表成功
 

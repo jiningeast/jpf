@@ -37,13 +37,18 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
         private String AppCode = "92f6237c503845559542c5d26f9adab2";;
     //实名认证 接口公共参数======end
 
-
     //OCR 接口公共参数======start
         private String OcrHost = "http://dm-51.data.aliyun.com";
         private String OcrPath = "/rest/160601/ocr/ocr_idcard.json";
         private String OcrAppKey = "24789083";
         private String OcrAppSecret = "bb49c2a1f0d00d09ee83c56f23a0f5cd";
     //OCR 接口公共参数======end
+
+    //梦网短信发送公共参数====start
+        private String  MwMongateSendSubmitUrl  = "http://61.145.229.26:8086/MWGate/wmgw.asmx/MongateSendSubmit";
+        private String  MwUserId = "J26100";
+        private String  MwPassword = "658844";
+    //梦网短信发送公共参数====end
 
     /*
      * 获取参数的json对象
@@ -59,6 +64,7 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
         }
         return obj;
     }
+
     /**
      * base64 encode 转换为图片
      * */
@@ -91,12 +97,15 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
 
             //生成jpeg图
             String showUrl = request.getSession().getServletContext().getRealPath("/resources");
+
             String resourcesUrl = "\\resources\\"+perfix+"\\";
             String urlRepj = showUrl.replace("\\target\\jpf-cloud\\resources","\\src\\main\\webapp"+resourcesUrl);
 
             File fileDir = new File(urlRepj);
-            fileDir.mkdirs();
+            if (!fileDir.exists()){
 
+                fileDir.mkdirs();
+            }
             String filename = perfix+timeStamp+".jpg";
             String imgFilePath = urlRepj+"/"+filename;//新生成的图片
 
@@ -104,6 +113,8 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
             out.write(b);
             out.flush();
             out.close();
+
+            //dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
 
             imgInfo.put("actualUrl",imgFilePath);//服务器实际路径
             imgInfo.put("filename",filename);//文件名
@@ -190,14 +201,12 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
     }
     /**
      * 短信息发送接口（相同内容群发，可自定义流水号）
-     * @param strUserId  帐号
-     * @param strPwd 密码
      * @param strMobiles 手机号
      * @param strMessage 短信内容
      * @return 0:成功 非0:返回webservice接口返回的错误代码
      */
     @Override
-    public int SendSms(String url,String strUserId, String strPwd, String strMobiles, String strMessage)
+    public int sendSms(String strMobiles, String strMessage)
     {
 
         StringBuffer strPtMsgId = new StringBuffer("");//存储日志。
@@ -212,15 +221,15 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
 
             String result = null;//存放解析后的返回值
 
-            param.setUserId(strUserId);//设置账号
-            param.setPassword(strPwd);//设置密码
+            param.setUserId(MwUserId);//设置账号
+            param.setPassword(MwPassword);//设置密码
             param.setPszMobis(strMobiles);//设置手机号码
             param.setPszMsg(strMessage);//设置短信内容
             param.setIMobiCount(String.valueOf(strMobiles.split(",").length));//设置手机号码个数
             param.setPszSubPort(strSubPort);//设置扩展子号
             param.setMsgId(strUserMsgId);//设置流水号
 
-            Message = OkHttpUtils.executePost(param, url);//调用底层POST方法提交
+            Message = OkHttpUtils.executePost(param, MwMongateSendSubmitUrl);//调用底层POST方法提交
             //请求返回值不为空，则解析返回值
             if(Message != null&& Message != "")
             {
@@ -250,7 +259,7 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sbf.append("\n\nTime:" + myfmt.format(date));
-        sbf.append("\n请求地址：" + url);
+        sbf.append("\n请求地址：" + MwMongateSendSubmitUrl);
         sbf.append("\n接口参数：" + param.toString());
         sbf.append("\n回调信息：" + Message);
         String fileName = "MwSmslog";
@@ -259,9 +268,6 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
 
         return returnInt;//返回值返回
     }
-    //自定义参与签名Header前缀（可选,默认只有"X-Ca-"开头的参与到Header签名）
-    private final static List<String> CUSTOM_HEADERS_TO_SIGN_PREFIX = new ArrayList<String>();
-
     /**
      *阿里云OCR 身份证识别
      * */
@@ -270,13 +276,6 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
         String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
 
         JSONObject lastRes = new JSONObject();
-        //YjResponseDto yjResponseDto= new YjResponseDto();
-        //请求path
-        String host = "http://dm-51.data.aliyun.com";
-        String path = "/rest/160601/ocr/ocr_idcard.json";
-        String APP_KEY = "24789083";
-        String APP_SECRET = "bb49c2a1f0d00d09ee83c56f23a0f5cd";
-
         Boolean is_old_format = true; //如果文档的输入中含有inputs字段，设置为True， 否则设置为False
 
         //请根据线上文档修改configure字段
@@ -328,7 +327,10 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
         headers.put("Content-MD5", MessageDigestUtil.base64AndMD5(body));
         headers.put("Content-Type", "application/text; charset=UTF-8");
 
-        ToolCateRequest toolCateRequest = new ToolCateRequest("POST", host, path, APP_KEY, APP_SECRET,10000);
+        //自定义参与签名Header前缀（可选,默认只有"X-Ca-"开头的参与到Header签名）
+        List<String> CUSTOM_HEADERS_TO_SIGN_PREFIX = new ArrayList<String>();
+
+        ToolCateRequest toolCateRequest = new ToolCateRequest(MethodPost, OcrHost, OcrPath, OcrAppKey, OcrAppSecret,10000);
         toolCateRequest.setHeaders(headers);
         toolCateRequest.setSignHeaderPrefixList(CUSTOM_HEADERS_TO_SIGN_PREFIX);
         toolCateRequest.setStringBody(body);
@@ -367,12 +369,7 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
 
                 lastRes.put("code","10008");
                 lastRes.put("info","Internal Server Error");
-                lastRes.put("data","Internal Server Error");
-
-                /*yjResponseDto.setCode("10008");
-                yjResponseDto.setInfo("500 Internal Server Error");
-                yjResponseDto.setData(map);*/
-
+                lastRes.put("data",map);
             }else{
 
                 res = toolCateResponse.getBody();
@@ -411,25 +408,20 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
                     Map<String,Object> map = new HashMap<>();
                     map.put("userifno",idCard);
 
-                    /*yjResponseDto.setCode("10000");
-                    yjResponseDto.setInfo("SUCCESS");
-                    yjResponseDto.setData(map);*/
+                    lastRes.put("code","10000");
+                    lastRes.put("info","SUCCESS");
+                    lastRes.put("data",map);
                 }else{
 
-                    /*yjResponseDto.setCode("10008");
-                    yjResponseDto.setInfo("身份证识别错误");*/
+                    lastRes.put("code","10008");
+                    lastRes.put("info","身份证识别错误");
                 }
             }
-            String yjResponseDto = null;
-            responseJson = JsonUtils.toJson(yjResponseDto);
-            String baseRe = Base64CustomUtils.base64Encoder(responseJson);
-            baseRe = baseRe.replaceAll("\r\n","");
-            return baseRe;
         } catch (Exception e) {
 
             e.printStackTrace();
         }
-        return null;
+        return lastRes.toString();
     }
 
     /**
