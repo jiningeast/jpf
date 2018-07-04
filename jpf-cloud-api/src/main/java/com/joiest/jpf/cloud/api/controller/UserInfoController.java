@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/user")
@@ -46,6 +47,8 @@ public class UserInfoController {
 
     @Autowired
     private ToolCateServiceFacadeImpl toolCateServiceFacade;
+
+    private String uid;
     //登录
     @RequestMapping("/login")
     @ResponseBody
@@ -67,7 +70,7 @@ public class UserInfoController {
     @ResponseBody
     public String getUserCurMonthMoney(GetUserBlanceRequest request)
     {
-        Map<Integer,String> userIsLogin = userIsLogin();
+        Map<Integer,String> userIsLogin = userIsLogin(request.getToken());
         if ( !userIsLogin.get(0).equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(), JpfInterfaceErrorInfo.NOTlOGIN.getDesc(), null);
@@ -108,12 +111,29 @@ public class UserInfoController {
     }
 
     //判断用户是否登录
-    private Map<Integer,String> userIsLogin()
+    private String userIsLogin()
     {
-        Map<Integer,String> map = new HashMap<>();
-        map.put(0,JpfInterfaceErrorInfo.SUCCESS.getCode());
-        map.put(1,"67136");
-        return map;
+        /*String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
+        if (StringUtils.isNotBlank(uid_encrypt)) {
+            uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY"));
+            String reg_mid = "^\\d{1,10}$";
+            Boolean uidIsTrue = Pattern.compile(reg_mid).matcher(uid).matches();
+            if ( !uidIsTrue )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getCode(), JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getDesc(), null);
+            }
+            merInfo = merchantInterfaceServiceFacade.getMerchantByMid(Long.parseLong(mid));
+            if (merInfo == null) {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MERINFO_NOT_FOUND.getCode(), JpfInterfaceErrorInfo.MERINFO_NOT_FOUND.getDesc(), null);
+            }
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), token);
+        } else {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未登录", null);
+        }*/
+//        Map<Integer,String> map = new HashMap<>();
+//        map.put(0,JpfInterfaceErrorInfo.SUCCESS.getCode());
+//        map.put(1,"67136");
+//        return map;
     }
 
     /**
@@ -153,6 +173,7 @@ public class UserInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), list);
     }
 
+
     /**
      * 验证用户信息  身份证、银行卡、手机号信息
      * */
@@ -175,7 +196,7 @@ public class UserInfoController {
         CloudStaffBanksInfo cloudStaffBanksInfo;
 
         //短信验证
-        String verificateRedis = redisCustomServiceFacade.get(mobile+"check");
+        String verificateRedis = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_AUTH")+mobile);
         if(!verificateRedis.equals(verificate)){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误", null);
@@ -187,6 +208,13 @@ public class UserInfoController {
 
             //身份证信息
             cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cardId);
+
+            //员工信息
+            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(cloudIdcardInfo.getNum());
+
+            //员工银行卡信息
+            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, cloudCompanyStaffInfo.getId());
+
             if(cloudIdcardInfo == null){
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户身份证信息不存在", null);
@@ -254,14 +282,14 @@ public class UserInfoController {
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应员工账号信息",null);
         }
-        String check= redisCustomServiceFacade.get(cloudCompanyStaffInfo.getMobile()+"login");
+        String check= redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_SENDSMS") + cloudCompanyStaffInfo.getMobile() );
         if(verificate.equals(check)){
 
             int random = toolCateServiceFacade.getRandomInt(10000,99999);
             String token = AESUtils.encrypt(cloudCompanyStaffInfo.getId().toString() + random,ConfigUtil.getValue("AES_KEY"));
             String mid_encrypt = AESUtils.encrypt(cloudCompanyStaffInfo.getId().toString(), ConfigUtil.getValue("AES_KEY"));
 
-            redisCustomServiceFacade.set("yun" + token, mid_encrypt, 3600*24*7);
+            redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token, mid_encrypt, Long.parseLong(ConfigUtil.getValue("CLOUD_USER_LOGIN_EXPIRE")) );
 
 
             Map<String,String> tok = new HashMap<String, String>();
@@ -293,7 +321,7 @@ public class UserInfoController {
             String  phone = cloudCompanyStaffInfo.getMobile();
             int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
 
-            redisCustomServiceFacade.set(phone+"login",new Integer(verificateCode).toString(),60*10);
+            redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_SENDSMS") + phone, new Integer(verificateCode).toString(),Long.parseLong(ConfigUtil.getValue("CLOUD_USER_SENDSMS_EXPIRE")) );
             String content = null;
             content = "尊敬的用户，您此次登录的手机验证码是："+verificateCode+",10十分钟内有效";
 
@@ -314,13 +342,15 @@ public class UserInfoController {
         return null;
     }
 
-
+    /**
+     * 获取用户认证信息
+     */
     @RequestMapping(value = "/userAuthInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String userAuthInfo(HttpServletRequest request) throws IOException {
 
         String token = request.getParameter("token");
-        String getId = redisCustomServiceFacade.get("yun" + token);
+        String getId = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
         String id = AESUtils.decrypt(getId, ConfigUtil.getValue("AES_KEY"));
 
         if(getId.equals(null) || id.equals(null)){
