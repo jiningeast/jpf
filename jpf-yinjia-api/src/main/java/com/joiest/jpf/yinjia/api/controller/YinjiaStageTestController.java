@@ -220,7 +220,7 @@ public class YinjiaStageTestController {
                     payType = 9;
                     break;
             }
-            GetMerchPayTypeResponse response = merPayTypeServiceFacade.getOneMerPayTypes(Long.parseLong(request.getMid()));
+            GetMerchPayTypeResponse response = merPayTypeServiceFacade.getOneMerPayTypes(merchInfo.getId());
             List<MerchantPayTypeInfo> list = response.getPayTypeInfos();
             List<Integer> payTypesList = new ArrayList();
             for ( MerchantPayTypeInfo info:list){
@@ -1715,6 +1715,9 @@ public class YinjiaStageTestController {
         Map<String,Object> merPostParamMap = new HashMap<>();
         merPostParamMap.put("finishTime",request.getFinishTime());
         merPostParamMap.put("mid",orderInfo.getMtsid().toString());
+        // 把返回金额格式固定为小数点保留2位
+        BigDecimal tranAmt = new BigDecimal(request.getTranAmt());
+        request.setTranAmt(tranAmt.setScale(2,BigDecimal.ROUND_DOWN).toString());
         merPostParamMap.put("tranAmt",request.getTranAmt());
         merPostParamMap.put("tranResult",request.getTranResult());
         merPostParamMap.put("orderid",orderInfo.getForeignOrderid());    //商户订单号
