@@ -85,7 +85,13 @@ public enum JpfInterfaceErrorInfo {
     USER_NOT_SIGNED("10060", "用户未签约"),
     USER_SIGNED("10061", "用户已签约"),
     UPDATE_SIGN_ORDER_ERROR("10062", "更新签约信息失败"),
-    SIGN_FAILED("10063", "签约接口返回失败");
+    SIGN_FAILED("10063", "签约接口返回失败"),
+
+    //云帐户
+    //个人相关
+    USERINFO_VALID_FAIL("20001", "个人信息校验失败"),
+    USERINFO_NOT_EXIST("20002", "个人信息不存在");
+
 
     private final String desc;
 

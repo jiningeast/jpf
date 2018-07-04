@@ -4,6 +4,7 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.dto.GetUserBlanceRequest;
 import com.joiest.jpf.entity.CloudCompanyStaffInfo;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/user")
@@ -45,6 +47,8 @@ public class UserInfoController {
     private ToolCateServiceFacade toolCateServiceFacade;
 
     private String uid;
+
+    private CloudCompanyStaffInfo userInfo;
     //登录
     @RequestMapping("/login")
     @ResponseBody
@@ -60,17 +64,19 @@ public class UserInfoController {
     {
         return "";
     }
-/*
 
     //月份
     @RequestMapping(value = "/userblance", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getUserCurMonthMoney(GetUserBlanceRequest request)
     {
-        Map<Integer,String> userIsLogin = userIsLogin(request.getToken());
-        if ( !userIsLogin.get(0).equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        ValidatorUtils.validateInterface(request);
+
+        Map<String,String> loginResultMap = userIsLogin(request.getToken());
+
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
         {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(), JpfInterfaceErrorInfo.NOTlOGIN.getDesc(), null);
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
         }
 
         String[] date;
@@ -98,7 +104,7 @@ public class UserInfoController {
             //指定月份
             flag = 2;
         }
-        GetCloudMoneyDfResponse response = cloudDfMoneyServiceFacade.getDfMoneyList(map.get("start"),map.get("end"), userIsLogin.get(1),pageNo, pageSize, flag);
+        GetCloudMoneyDfResponse response = cloudDfMoneyServiceFacade.getDfMoneyList(map.get("start"),map.get("end"), userInfo.getId().toString(),pageNo, pageSize, flag);
         if ( response == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "暂无数据", null);
@@ -108,75 +114,81 @@ public class UserInfoController {
     }
 
     //判断用户是否登录
-    private String userIsLogin()
+    private Map<String,String> userIsLogin(String token)
     {
-        */
-/*String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
+
+        Map<String,String> resultMap = new HashMap<>();
+        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(uid_encrypt)) {
             uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY"));
             String reg_mid = "^\\d{1,10}$";
             Boolean uidIsTrue = Pattern.compile(reg_mid).matcher(uid).matches();
             if ( !uidIsTrue )
             {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getCode(), JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getDesc(), null);
+                resultMap.put("0",JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getCode());
+                resultMap.put("1",JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getDesc());
+                return resultMap;
             }
-            merInfo = merchantInterfaceServiceFacade.getMerchantByMid(Long.parseLong(mid));
-            if (merInfo == null) {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MERINFO_NOT_FOUND.getCode(), JpfInterfaceErrorInfo.MERINFO_NOT_FOUND.getDesc(), null);
+            userInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(uid);
+            if (userInfo == null) {
+                resultMap.put("0",JpfInterfaceErrorInfo.USERINFO_NOT_EXIST.getCode());
+                resultMap.put("1",JpfInterfaceErrorInfo.USERINFO_NOT_EXIST.getDesc());
+                return resultMap;
             }
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), token);
+            resultMap.put("0",JpfInterfaceErrorInfo.SUCCESS.getCode());
+            resultMap.put("1",JpfInterfaceErrorInfo.SUCCESS.getDesc());
+            return resultMap;
         } else {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未登录", null);
-        }*//*
-
-//        Map<Integer,String> map = new HashMap<>();
-//        map.put(0,JpfInterfaceErrorInfo.SUCCESS.getCode());
-//        map.put(1,"67136");
-//        return map;
-    }
-
-    */
-/**
-     * 获取用户总金额
-     * @return
-     *//*
-
-    @RequestMapping(value = "/userdf", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String getUserTotalMoney()
-    {
-        Map<Integer,String> userIsLogin = userIsLogin();
-        if ( !userIsLogin.get(0).equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
-        {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(), JpfInterfaceErrorInfo.NOTlOGIN.getDesc(), null);
+            resultMap.put("0",JpfInterfaceErrorInfo.NOTlOGIN.getCode());
+            resultMap.put("1",JpfInterfaceErrorInfo.NOTlOGIN.getDesc());
+            return resultMap;
         }
 
-        Double totalMoney = cloudDfMoneyServiceFacade.getUserDfTotalMoney(userIsLogin.get(1));
+    }
+
+    /**
+     * 获取用户总金额
+     */
+    @RequestMapping(value = "/userdf", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getUserTotalMoney(String token)
+    {
+        if ( StringUtils.isBlank(token) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "token不能为空", null);
+        }
+
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+
+        Double totalMoney = cloudDfMoneyServiceFacade.getUserDfTotalMoney(uid);
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), totalMoney);
     }
 
-    */
-/**
-     * 月份汇总
-     * @return
-     *//*
-
     @RequestMapping(value = "/usermonth", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String getUserMonthMoney()
+    public String getUserMonthMoney(String token)
     {
-        Map<Integer,String> userIsLogin = userIsLogin();
-        if ( !userIsLogin.get(0).equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        if ( StringUtils.isBlank(token) )
         {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(), JpfInterfaceErrorInfo.NOTlOGIN.getDesc(), null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "token不能为空", null);
         }
-        List<CloudDfMoneyInterfaceInfo> list = cloudDfMoneyServiceFacade.getUserMonthList(Long.parseLong(userIsLogin.get(1)));
+
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+
+        List<CloudDfMoneyInterfaceInfo> list = cloudDfMoneyServiceFacade.getUserMonthList(Long.parseLong(uid));
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), list);
     }
 
-*/
 
     /**
      * 验证用户信息  身份证、银行卡、手机号信息
@@ -201,6 +213,10 @@ public class UserInfoController {
 
         //短信验证
         String verificateRedis = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_AUTH")+mobile);
+        if(verificateRedis == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码失效，请重新发送", null);
+        }
         if(!verificateRedis.equals(verificate)){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误", null);
@@ -322,7 +338,6 @@ public class UserInfoController {
 
             String  phone = cloudCompanyStaffInfo.getMobile();
             int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
-
             redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_SENDSMS") + phone, new Integer(verificateCode).toString(),Long.parseLong(ConfigUtil.getValue("CLOUD_USER_SENDSMS_EXPIRE")) );
             String content = null;
             content = "尊敬的用户，您此次登录的手机验证码是："+verificateCode+",10十分钟内有效";

@@ -140,7 +140,7 @@ public class ToolCateController {
 
             int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
 
-            redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_AUTH")+phone,new Integer(verificateCode).toString(),60*10);
+            redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_AUTH")+phone,new Integer(verificateCode).toString(),Long.parseLong(ConfigUtil.getValue("CLOUD_USER_AUTH_EXPIRE")));
             String content = null;
             content = "尊敬的用户，您此次的手机验证码是："+verificateCode+",10十分钟内有效";
 
