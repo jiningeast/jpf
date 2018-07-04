@@ -9,11 +9,12 @@ public class PayCloudCompanyExample {
     protected String orderByClause;
 
     protected boolean distinct;
+
+    protected List<Criteria> oredCriteria;
+
     protected long pageNo;
 
     protected long pageSize;
-    protected List<Criteria> oredCriteria;
-
     /**
      *
      */
