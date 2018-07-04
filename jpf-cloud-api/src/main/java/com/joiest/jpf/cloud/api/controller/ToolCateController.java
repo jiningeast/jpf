@@ -67,7 +67,7 @@ public class ToolCateController {
         String side = request.getParameter("side");
         String imgInfo = request.getParameter("img");
 
-        String ocrRes = toolCateServiceFacade.idCardOcr(side,imgInfo);
+        //String ocrRes = toolCateServiceFacade.idCardOcr(request,side,imgInfo);
 
 
         String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");

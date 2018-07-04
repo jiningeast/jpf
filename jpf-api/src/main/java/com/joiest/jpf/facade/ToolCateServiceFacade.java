@@ -33,5 +33,5 @@ public interface ToolCateServiceFacade {
     /**
      *阿里云OCR 身份证识别
      * */
-    public String idCardOcr(String side,String img);
+    public String idCardOcr(HttpServletRequest request,String side,String img);
 }

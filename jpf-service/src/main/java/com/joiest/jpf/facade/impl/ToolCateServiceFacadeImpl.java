@@ -1,15 +1,17 @@
 package com.joiest.jpf.facade.impl;
 
-import com.joiest.jpf.common.util.LogsCustomUtils;
-import com.joiest.jpf.common.util.MessageDigestUtil;
-import com.joiest.jpf.common.util.OkHttpUtils;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.ToolCateRequest;
 import com.joiest.jpf.dto.ToolCateResponse;
 import com.joiest.jpf.entity.MwSmsInfo;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -22,10 +24,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class ToolCateServiceFacadeImpl {
 
@@ -45,7 +44,20 @@ public class ToolCateServiceFacadeImpl {
         private String OcrAppSecret = "bb49c2a1f0d00d09ee83c56f23a0f5cd";
     //OCR 接口公共参数======end
 
+    /*
+     * 获取参数的json对象
+     */
+    public static JSONObject getParam(int type, String dataValue) {
 
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("dataType", type);
+            obj.put("dataValue", dataValue);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
     /**
      * base64 encode 转换为图片
      * */
@@ -91,9 +103,9 @@ public class ToolCateServiceFacadeImpl {
             out.flush();
             out.close();
 
-            imgInfo.put("actualUrl",imgFilePath);
-            imgInfo.put("filename",filename);
-            imgInfo.put("resourceUrl",resourcesUrl+filename);
+            imgInfo.put("actualUrl",imgFilePath);//服务器实际路径
+            imgInfo.put("filename",filename);//文件名
+            imgInfo.put("resourceUrl",resourcesUrl+filename);//域名对应图片地址 如：http://xxx.com/图片存储地址
 
             return imgInfo;
         }catch (Exception e) {
@@ -102,8 +114,31 @@ public class ToolCateServiceFacadeImpl {
         }
     }
     /**
-    * 流信息获取
-     * **/
+     * 图片转换为base64
+     * */
+    public String imageToBase(String imgFile) {
+
+        // 对图像进行base64编码
+        String imgBase64 = null;
+        try {
+
+            File file = new File(imgFile);
+            byte[] content = new byte[(int) file.length()];
+            FileInputStream finputstream = new FileInputStream(file);
+            finputstream.read(content);
+            finputstream.close();
+            imgBase64 = new String(Base64.encodeBase64(content));
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            return null;
+        }
+        return imgBase64;
+    }
+        /**
+        * 流信息获取
+         * **/
     public ToolCateResponse convert(HttpResponse response)  throws IOException {
 
         ToolCateResponse res = new ToolCateResponse();
@@ -219,13 +254,176 @@ public class ToolCateServiceFacadeImpl {
 
         return returnInt;//返回值返回
     }
+    //自定义参与签名Header前缀（可选,默认只有"X-Ca-"开头的参与到Header签名）
+    private final static List<String> CUSTOM_HEADERS_TO_SIGN_PREFIX = new ArrayList<String>();
 
     /**
      *阿里云OCR 身份证识别
      * */
-    public String idCardOcr(String side,String img){
+    public String idCardOcr(HttpServletRequest request,String side,String imgInfo){
 
+        String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
 
+        JSONObject lastRes = new JSONObject();
+        //YjResponseDto yjResponseDto= new YjResponseDto();
+        //请求path
+        String host = "http://dm-51.data.aliyun.com";
+        String path = "/rest/160601/ocr/ocr_idcard.json";
+        String APP_KEY = "24789083";
+        String APP_SECRET = "bb49c2a1f0d00d09ee83c56f23a0f5cd";
+
+        Boolean is_old_format = true; //如果文档的输入中含有inputs字段，设置为True， 否则设置为False
+
+        //请根据线上文档修改configure字段
+        JSONObject configObj = new JSONObject();
+        configObj.put("side", side);
+        String config_str = configObj.toString();
+
+        //base64转换为图片
+        Map<String, String> imgUrl = baseToImage(request,dealImgInfo,"OCR");
+        //域名访问路径
+        String requestUrl = request.getRequestURL().toString();
+        String resourceUrl = requestUrl.replace("/toolcate/idCardOcr",imgUrl.get("resourceUrl"));
+
+        //获取图片实际路径
+        String imgFile = imgUrl.get("actualUrl");
+        //根据图片地址获取base64
+        String imgBase64  = imageToBase(imgFile);
+
+        // 拼装请求body的json字符串
+        JSONObject requestObj = new JSONObject();
+        try {
+            if(is_old_format==true) {
+
+                JSONObject obj = new JSONObject();
+                obj.put("image", getParam(50, imgBase64));
+                if(config_str.length() > 0) {
+                    obj.put("configure", getParam(50, config_str));
+                }
+                JSONArray inputArray = new JSONArray();
+                inputArray.add(obj);
+                requestObj.put("inputs", inputArray);
+            }else{
+
+                requestObj.put("image", imgBase64);
+                if(config_str.length() > 0) {
+
+                    requestObj.put("configure", config_str);
+                }
+            }
+        } catch (JSONException e) {
+
+            e.printStackTrace();
+        }
+        //Body内容
+        String body = requestObj.toString();
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Accept", "application/json");
+        headers.put("Content-MD5", MessageDigestUtil.base64AndMD5(body));
+        headers.put("Content-Type", "application/text; charset=UTF-8");
+
+        ToolCateRequest toolCateRequest = new ToolCateRequest("POST", host, path, APP_KEY, APP_SECRET,10000);
+        toolCateRequest.setHeaders(headers);
+        toolCateRequest.setSignHeaderPrefixList(CUSTOM_HEADERS_TO_SIGN_PREFIX);
+        toolCateRequest.setStringBody(body);
+
+        ToolCateResponse toolCateResponse = new ToolCateResponse();//接口响应参数设置
+        String res=null;//定义body接收数据
+        JSONObject ocrResult = null;//定义body接收数据转换为json
+        JSONObject userInfo = null;//获取body中最后的用户信息
+        Map<String,Object> idCard= new HashMap<String,Object>();//返回最终的用户信息参数
+        String responseJson = null;
+
+        //调用服务端
+        try {
+
+            //调用阿里云OCR请求，获取数据
+            toolCateResponse = convert(OkHttpUtils.httpPostOcr(
+                    toolCateRequest.getHost(),
+                    toolCateRequest.getPath(),
+                    toolCateRequest.getTimeout(),
+                    toolCateRequest.getHeaders(),
+                    toolCateRequest.getQuerys(),
+                    toolCateRequest.getStringBody(),
+                    toolCateRequest.getSignHeaderPrefixList(),
+                    toolCateRequest.getAppKey(),
+                    toolCateRequest.getAppSecret()
+            ));
+            if(toolCateResponse.getStatusCode() != 200){
+
+                System.out.println("Http code: " + toolCateResponse.getStatusCode());
+                System.out.println("Http header error: " + toolCateResponse.getHeader("X-Ca-Error-Message"));
+                System.out.println("Http body error msg: " + toolCateResponse.getBody());
+
+                Map<String,Object> map = new HashMap<>();
+                map.put("HttpCode",toolCateResponse.getHeader("X-Ca-Error-Message"));
+                map.put("HttpBodyError",toolCateResponse.getBody());
+
+                lastRes.put("code","10008");
+                lastRes.put("info","Internal Server Error");
+                lastRes.put("data","Internal Server Error");
+
+                /*yjResponseDto.setCode("10008");
+                yjResponseDto.setInfo("500 Internal Server Error");
+                yjResponseDto.setData(map);*/
+
+            }else{
+
+                res = toolCateResponse.getBody();
+                ocrResult = JSONObject.fromObject(res);
+
+                JSONArray outputArray = ocrResult.getJSONArray("outputs");
+                String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+                userInfo = JSONObject.fromObject(output);
+
+                if(userInfo.get("success").equals(true)){
+
+                    if(side.equals("face")){
+
+                        idCard.put("address",userInfo.get("address"));
+                        idCard.put("birth",userInfo.get("birth"));
+                        idCard.put("name",userInfo.get("name"));
+                        idCard.put("nationality",userInfo.get("nationality"));
+                        idCard.put("num",userInfo.get("num"));
+                        idCard.put("frequest_id",userInfo.get("request_id"));
+                        idCard.put("sex",userInfo.get("sex"));
+                        //idCard.put("numnum",userInfo.get("num"));
+                        idCard.put("side",side);
+                        idCard.put("resourceUrl",resourceUrl);
+
+                    }else{
+
+                        idCard.put("start_date",userInfo.get("start_date"));
+                        idCard.put("end_date",userInfo.get("end_date"));
+                        idCard.put("issue",userInfo.get("issue"));
+                        idCard.put("brequest_id",userInfo.get("request_id"));
+                        idCard.put("end_date",userInfo.get("end_date"));
+                        idCard.put("side",side);
+                        idCard.put("resourceUrl",resourceUrl);
+
+                    }
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("userifno",idCard);
+
+                    /*yjResponseDto.setCode("10000");
+                    yjResponseDto.setInfo("SUCCESS");
+                    yjResponseDto.setData(map);*/
+                }else{
+
+                    /*yjResponseDto.setCode("10008");
+                    yjResponseDto.setInfo("身份证识别错误");*/
+                }
+            }
+            String yjResponseDto = null;
+            responseJson = JsonUtils.toJson(yjResponseDto);
+            String baseRe = Base64CustomUtils.base64Encoder(responseJson);
+            baseRe = baseRe.replaceAll("\r\n","");
+            return baseRe;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
         return null;
     }
 
