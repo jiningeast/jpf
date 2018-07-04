@@ -22,12 +22,13 @@ public class PhotoUtil {
 	 *　　返回图片位置
 	 */
 	public static String saveFile( MultipartFile filedata, HttpServletRequest request) {
+
         String fileName = filedata.getOriginalFilename();
         String path=request.getSession().getServletContext().getRealPath("images/");
         File tempFile = new File(path, new Date().getTime() + String.valueOf(fileName));
 
         // TODO Auto-generated method stub
-		String pathval = request.getSession().getServletContext().getRealPath("/")+"/../../src/main/webapp/resources/";
+		String pathval = request.getSession().getServletContext().getRealPath("")+"/../../src/main/webapp/resources/";
 		// 根据配置文件获取服务器图片存放路径
 		String newFileName = String.valueOf( System.currentTimeMillis());
 		String saveFilePath = "images/uploadFile/";

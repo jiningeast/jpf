@@ -9,28 +9,10 @@ public class PayCloudCompanyExample {
     protected String orderByClause;
 
     protected boolean distinct;
-
-    protected List<Criteria> oredCriteria;
-
     protected long pageNo;
 
     protected long pageSize;
-
-    public long getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(long pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public long getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(long pageSize) {
-        this.pageSize = pageSize;
-    }
+    protected List<Criteria> oredCriteria;
 
     /**
      *
@@ -1764,5 +1746,21 @@ public class PayCloudCompanyExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
+    }
+
+    public long getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(long pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public long getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(long pageSize) {
+        this.pageSize = pageSize;
     }
 }
