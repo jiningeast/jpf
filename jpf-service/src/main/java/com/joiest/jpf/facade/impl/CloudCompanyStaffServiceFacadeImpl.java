@@ -5,6 +5,7 @@ import com.joiest.jpf.common.po.PayCloudCompanyStaffExample;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyStaffMapper;
 import com.joiest.jpf.entity.CloudCompanyStaffInfo;
+import com.joiest.jpf.facade.CloudCompanyStaffServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -12,7 +13,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
-public class CloudCompanyStaffServiceFacadeImpl {
+public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServiceFacade {
 
     @Autowired
     private PayCloudCompanyStaffMapper payCloudCompanyStaffMapper;
@@ -20,7 +21,7 @@ public class CloudCompanyStaffServiceFacadeImpl {
     /*
      * 查询身份证信息通过身份证号
      * */
-    public CloudCompanyStaffInfo getCloudIdcardByCardNo(String cardNo){
+    public CloudCompanyStaffInfo getCloudCompanyStaffByIdcard(String cardNo){
 
         PayCloudCompanyStaffExample example = new PayCloudCompanyStaffExample();
 

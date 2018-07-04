@@ -3,7 +3,6 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.dto.GetUserBlanceRequest;
@@ -11,8 +10,7 @@ import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.entity.CloudIdcardInfo;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
-import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
-import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.facade.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/user")
@@ -34,19 +31,19 @@ public class UserInfoController {
     private CloudDfMoneyServiceFacade cloudDfMoneyServiceFacade;
 
     @Autowired
-    private CloudCompanyStaffServiceFacadeImpl cloudCompanyStaffServiceFacade;
+    private CloudCompanyStaffServiceFacade cloudCompanyStaffServiceFacade;
 
     @Autowired
-    private CloudIdcardServiceFacadeImpl cloudIdcardServiceFacade;
+    private CloudIdcardServiceFacade cloudIdcardServiceFacade;
 
     @Autowired
-    private CloudStaffBanksServiceFacadeImpl cloudStaffBanksServiceFacade;
+    private CloudStaffBanksServiceFacade cloudStaffBanksServiceFacade;
 
     @Autowired
     private RedisCustomServiceFacadeImpl redisCustomServiceFacade;
 
     @Autowired
-    private ToolCateServiceFacadeImpl toolCateServiceFacade;
+    private ToolCateServiceFacade toolCateServiceFacade;
 
     private String uid;
     //登录
@@ -210,8 +207,11 @@ public class UserInfoController {
             cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cardId);
 
             //员工信息
-            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(cloudIdcardInfo.getNum());
+            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffByIdcard(cloudIdcardInfo.getNum());
+            if(cloudCompanyStaffInfo==null){
 
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户员工信息不存在", null);
+            }
             //员工银行卡信息
             cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, cloudCompanyStaffInfo.getId());
 
@@ -219,12 +219,7 @@ public class UserInfoController {
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户身份证信息不存在", null);
             }
-            //员工信息
-            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(cloudIdcardInfo.getNum());
-            if(cloudCompanyStaffInfo==null){
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户员工信息不存在", null);
-            }
 
             //员工银行卡信息
             cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, cloudCompanyStaffInfo.getId());
@@ -277,7 +272,7 @@ public class UserInfoController {
         verificate = Base64CustomUtils.base64Decoder(verificate);
 
         //获取员工信息
-        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(idCard);
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffByIdcard(idCard);
         if(cloudCompanyStaffInfo==null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应员工账号信息",null);
@@ -311,7 +306,7 @@ public class UserInfoController {
         idCard = Base64CustomUtils.base64Decoder(idCard);
 
         //获取员工信息
-        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudIdcardByCardNo(idCard);
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffByIdcard(idCard);
         if(cloudCompanyStaffInfo == null || idCard ==null || idCard.isEmpty()){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应员工账号信息",null);

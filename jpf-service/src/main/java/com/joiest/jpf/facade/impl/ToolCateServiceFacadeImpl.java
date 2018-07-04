@@ -5,6 +5,7 @@ import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.ToolCateRequest;
 import com.joiest.jpf.dto.ToolCateResponse;
 import com.joiest.jpf.entity.MwSmsInfo;
+import com.joiest.jpf.facade.ToolCateServiceFacade;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -26,7 +27,7 @@ import java.nio.channels.WritableByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class ToolCateServiceFacadeImpl {
+public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
 
     private String MethodPost = "POST";
 
@@ -61,6 +62,7 @@ public class ToolCateServiceFacadeImpl {
     /**
      * base64 encode 转换为图片
      * */
+    @Override
     public Map<String,String> baseToImage(HttpServletRequest request, String imgStr, String perfix){
 
         Map<String,String> imgInfo = new HashMap<>();
@@ -116,6 +118,7 @@ public class ToolCateServiceFacadeImpl {
     /**
      * 图片转换为base64
      * */
+    @Override
     public String imageToBase(String imgFile) {
 
         // 对图像进行base64编码
@@ -136,9 +139,10 @@ public class ToolCateServiceFacadeImpl {
         }
         return imgBase64;
     }
-        /**
-        * 流信息获取
-         * **/
+    /**
+    * 流信息获取
+     * **/
+    @Override
     public ToolCateResponse convert(HttpResponse response)  throws IOException {
 
         ToolCateResponse res = new ToolCateResponse();
@@ -160,6 +164,7 @@ public class ToolCateServiceFacadeImpl {
         }
         return res;
     }
+
     /**
      * 将流转换为字符串
      *
@@ -183,7 +188,6 @@ public class ToolCateServiceFacadeImpl {
         dest.close();
         return new String(bos.toByteArray(), "UTF-8");
     }
-
     /**
      * 短信息发送接口（相同内容群发，可自定义流水号）
      * @param strUserId  帐号
@@ -192,6 +196,7 @@ public class ToolCateServiceFacadeImpl {
      * @param strMessage 短信内容
      * @return 0:成功 非0:返回webservice接口返回的错误代码
      */
+    @Override
     public int SendSms(String url,String strUserId, String strPwd, String strMobiles, String strMessage)
     {
 
@@ -430,6 +435,7 @@ public class ToolCateServiceFacadeImpl {
     /**
      *阿里云身份证、姓名实名认证
      * */
+    @Override
     public JSONObject idenAuth(String name,String idCard){
 
         Map<String, String> headers = new HashMap<String, String>();
@@ -493,6 +499,7 @@ public class ToolCateServiceFacadeImpl {
     /**
      * 生成一个唯一数
      * */
+
     public String createOrderid(){
 
         int pre = getRandomInt(100,999);
@@ -502,7 +509,10 @@ public class ToolCateServiceFacadeImpl {
 
         return ""+pre+middle+last;
     }
-    // 生成指定范围内的随机整数
+    /*
+    *   生成指定范围内的随机整数
+    **/
+    @Override
     public int getRandomInt(int min, int max){
 
         Random random = new Random();

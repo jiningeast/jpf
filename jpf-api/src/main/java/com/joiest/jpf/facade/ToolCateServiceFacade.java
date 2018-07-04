@@ -5,6 +5,7 @@ import net.sf.json.JSONObject;
 import org.apache.http.HttpResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Map;
 
 public interface ToolCateServiceFacade {
@@ -12,8 +13,11 @@ public interface ToolCateServiceFacade {
     //base64转图片
     public Map<String,String> baseToImage(HttpServletRequest request, String imgStr, String perfix);
 
+    //图片转base64
+    public String imageToBase(String imgFile);
+
     //流信息获取
-    public ToolCateResponse convert(HttpResponse response);
+    public ToolCateResponse convert(HttpResponse response) throws IOException;
 
     /**
      * 短信发送

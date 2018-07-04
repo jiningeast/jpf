@@ -6,13 +6,12 @@ import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.ToolCateRequest;
 import com.joiest.jpf.dto.ToolCateResponse;
 import com.joiest.jpf.entity.CloudIdcardInfo;
-import com.joiest.jpf.entity.MwSmsInfo;
-import com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl;
+import com.joiest.jpf.facade.CloudIdcardServiceFacade;
+import com.joiest.jpf.facade.ToolCateServiceFacade;
 import com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl;
 import com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
-import org.apache.http.HttpResponse;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,18 +23,16 @@ import net.sf.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("toolcate")
 public class ToolCateController {
 
     @Autowired
-    private ToolCateServiceFacadeImpl toolCateServiceFacade;
+    private ToolCateServiceFacade toolCateServiceFacade;
 
     @Autowired
-    private CloudIdcardServiceFacadeImpl cloudIdcardServiceFacade;
+    private CloudIdcardServiceFacade cloudIdcardServiceFacade;
 
     @Autowired
     private RedisCustomServiceFacadeImpl redisCustomServiceFacade;

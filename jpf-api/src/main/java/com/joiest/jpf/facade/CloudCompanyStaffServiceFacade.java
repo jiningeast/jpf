@@ -9,7 +9,7 @@ public interface CloudCompanyStaffServiceFacade {
     /*
     * 获取员工信息通过身份证号
     * */
-    public CloudCompanyStaffInfo getCloudCompanyStaffByIdcard();
+    public CloudCompanyStaffInfo getCloudCompanyStaffByIdcard(String cardNo);
 
     /*
     * 通过身份证号更新员工信息

@@ -4,19 +4,21 @@ import com.joiest.jpf.common.po.PayCloudStaffBanks;
 import com.joiest.jpf.common.po.PayCloudStaffBanksExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudStaffBanksMapper;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
+import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.math.BigInteger;
 import java.util.List;
 
-public class CloudStaffBanksServiceFacadeImpl {
+public class CloudStaffBanksServiceFacadeImpl implements CloudStaffBanksServiceFacade {
 
     @Autowired
     private PayCloudStaffBanksMapper payCloudStaffBanksMapper;
     /**
      * 通过银行卡号、员工号获取员工银行卡信息
      * */
+    @Override
     public CloudStaffBanksInfo getStaffBankByNumSid(String bankNum, BigInteger id){
 
         PayCloudStaffBanksExample example = new PayCloudStaffBanksExample();
@@ -41,6 +43,7 @@ public class CloudStaffBanksServiceFacadeImpl {
     /**
      * 通过员工号、手机号获取员工银行卡信息
      * */
+    @Override
     public CloudStaffBanksInfo getStaffBankBySidPhone(String id,String mobile){
 
         PayCloudStaffBanksExample example = new PayCloudStaffBanksExample();

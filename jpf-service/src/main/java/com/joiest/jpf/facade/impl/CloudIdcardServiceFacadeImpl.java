@@ -6,6 +6,7 @@ import com.joiest.jpf.dao.repository.mapper.custom.PayCloudIdcardCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudIdcardMapper;
 import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.entity.CloudIdcardInfo;
+import com.joiest.jpf.facade.CloudIdcardServiceFacade;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -14,7 +15,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
-public class CloudIdcardServiceFacadeImpl {
+public class CloudIdcardServiceFacadeImpl implements CloudIdcardServiceFacade {
 
     @Autowired
     private PayCloudIdcardMapper payCloudIdcardMapper;
@@ -25,6 +26,7 @@ public class CloudIdcardServiceFacadeImpl {
     /*
      * 新增身份证信息
      * */
+    @Override
     public int addCloudIdcard(JSONObject faceResult, JSONObject backResult,Byte type){
 
         PayCloudIdcard cloudId = new PayCloudIdcard();
@@ -59,6 +61,7 @@ public class CloudIdcardServiceFacadeImpl {
     /*
      * 查询身份证信息通过身份证号
      * */
+    @Override
     public CloudIdcardInfo getCloudIdcardByCardNo(String cardNo){
 
         PayCloudIdcardExample example = new PayCloudIdcardExample();
@@ -84,6 +87,7 @@ public class CloudIdcardServiceFacadeImpl {
     /*
      * 查询身份证信息通过主键
      * */
+    @Override
     public CloudIdcardInfo getCloudIdcardById(String id){
 
         PayCloudIdcard payCloudIdcard = payCloudIdcardCustomMapper.selectByPrimaryKey(id);;
