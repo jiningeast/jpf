@@ -19,6 +19,12 @@ public class GetCloudCompanyRequest {
      */
     private String name;
 
+
+
+    /**
+     * 公司类别
+     */
+    private String type;
     /**
      * 联系人姓名
      */
@@ -48,6 +54,8 @@ public class GetCloudCompanyRequest {
      * 是否需要发送短信 1发送 0不发送
      */
     private Byte issms;
+
+
 
     /**
      * 企业支付密码通知方式 1=邮件2=短信
@@ -125,6 +133,11 @@ public class GetCloudCompanyRequest {
     private BigDecimal agentRate;
 
 
+
+    /**
+     * 状态：-1:禁闭。1:正常
+     */
+    private Byte status;
 
     private long rows;
 
@@ -207,13 +220,7 @@ public class GetCloudCompanyRequest {
         this.issms = issms;
     }
 
-    public Byte getTipstype() {
-        return tipstype;
-    }
 
-    public void setTipstype(Byte tipstype) {
-        this.tipstype = tipstype;
-    }
 
     public String getServiclinkuser() {
         return serviclinkuser;
@@ -348,5 +355,28 @@ public class GetCloudCompanyRequest {
 
     public void setPage(long page) {
         this.page = page;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Byte getTipstype() {
+        return tipstype;
+    }
+
+    public void setTipstype(Byte tipstype) {
+        this.tipstype = tipstype;
     }
 }

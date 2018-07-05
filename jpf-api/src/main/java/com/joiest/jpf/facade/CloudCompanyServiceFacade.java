@@ -5,6 +5,8 @@ import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 
+import javax.servlet.http.HttpSession;
+
 
 public interface CloudCompanyServiceFacade {
 
@@ -26,6 +28,6 @@ public interface CloudCompanyServiceFacade {
     /**
      * 添加公司基本信息
      */
-    //public JpfResponseDto addCloudCompany(String name, String intro);
+    public JpfResponseDto addCloudCompany(GetCloudCompanyRequest request,int account) throws Exception;
 
 }

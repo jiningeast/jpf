@@ -62,7 +62,7 @@ public class CloudRechargeController {
     @ResponseBody
     public Map<String, Object> caiwuList(CloudRechargeRequest cloudRechargeRequest){
         CloudRechargeResponse cloudRechargeResponse = cloudRechargeServiceFacade.getCaiwuRecords(cloudRechargeRequest);
-
+        ModelMap modelMap = new ModelMap();
         Map<String, Object> map = new HashMap<>();
         map.put("total", cloudRechargeResponse.getCount());
         map.put("rows", cloudRechargeResponse.getList());

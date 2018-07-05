@@ -256,7 +256,7 @@
 	</noscript>
     <div data-options="region:'north'" border="false" style="overflow: hidden; height: 60px;
         background: url(${basePath}/resources/images/top.png) no-repeat right center; color: #fff; font-family: Verdana, 微软雅黑,黑体">
-        <span style="float:right; padding-right:20px;padding-top:10px" class="head">欢迎 ${sessionScope.SESSION_OPERATORUSER.userName} <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
+        <span style="float:right; padding-right:20px;padding-top:10px" class="head">欢迎 ${sessionScope["manage-userInfo"].userName} <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
 
         <span style="padding-left:10px; padding-top:5px; font-size: 16px; float:left; width: 385px; height: 50px">
         	<%-- <img src="${basePath}/resources/images/seller1.png" align="absmiddle" /> --%>&nbsp;&nbsp;&nbsp;&nbsp;消费金融运营管理系统
