@@ -260,7 +260,7 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sbf.append("\n\nTime:" + myfmt.format(date));
         sbf.append("\n请求地址：" + MwMongateSendSubmitUrl);
-        sbf.append("\n接口参数：" + param.toString());
+        sbf.append("\n接口参数：" + JSONObject.fromObject(param));
         sbf.append("\n回调信息：" + Message);
         String fileName = "MwSmslog";
 
@@ -421,6 +421,22 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
 
             e.printStackTrace();
         }
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + OcrHost+OcrPath);
+        sbf.append("\n接口参数headers：" + JSONObject.fromObject(headers));
+        sbf.append("\n接口参数bodys：" + body);
+        sbf.append("\n回调ContentType：" + toolCateResponse.getContentType());
+        sbf.append("\n回调RequestId：" + toolCateResponse.getRequestId());
+        sbf.append("\n回调ErrorMessage：" + toolCateResponse.getErrorMessage());
+        sbf.append("\n回调Body：" + toolCateResponse.getBody());
+        String fileName = "Ocrlog";
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
         return lastRes.toString();
     }
 
@@ -486,6 +502,22 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + IdenHost+IdPath);
+        sbf.append("\n接口参数headers：" + JSONObject.fromObject(headers));
+        sbf.append("\n接口参数bodys：" + JSONObject.fromObject(bodys));
+        sbf.append("\n回调ContentType：" + toolCateResponse.getContentType());
+        sbf.append("\n回调RequestId：" + toolCateResponse.getRequestId());
+        sbf.append("\n回调ErrorMessage：" + toolCateResponse.getErrorMessage());
+        sbf.append("\n回调Body：" + toolCateResponse.getBody());
+        String fileName = "IdenAuthlog";
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
         return ocrResult;
     }
     /**

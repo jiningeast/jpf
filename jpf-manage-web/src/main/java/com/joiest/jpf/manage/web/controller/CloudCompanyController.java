@@ -70,8 +70,9 @@ public class CloudCompanyController {
             , HttpServletRequest request){
         //第一种返回页面的方法
         //model.addAttribute("img",PhotoUtil.saveFile(file,request));
+        String savePre = "images/uploadFile/";
         //第二种返回页面的方法
-        String cc=PhotoUtil.saveFile(file,request);
+        String cc=PhotoUtil.saveFile(file,request,savePre);
         PhotoUtil.deleteFile("images/uploadFile/1530233577554.jpg",request);
         return "test";
     }

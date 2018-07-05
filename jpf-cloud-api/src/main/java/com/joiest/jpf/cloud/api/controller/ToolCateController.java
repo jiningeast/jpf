@@ -1,5 +1,6 @@
 package com.joiest.jpf.cloud.api.controller;
 
+import com.joiest.jpf.cloud.api.util.ExcelDealUtils;
 import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
@@ -17,11 +18,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.sf.json.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.Member;
 import java.util.*;
 
 @Controller
@@ -159,4 +166,42 @@ public class ToolCateController {
         }
         return null;
     }
+
+    /**
+     * excel上传 获取excel表中数据
+     * 普通form提交 阿加西
+     * */
+    @RequestMapping(value = "/uploadEcelByForm", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String uploadEcelByForm(HttpServletRequest request,@RequestParam("file") MultipartFile file) throws Exception {
+
+        JSONObject jsonRes = new JSONObject();
+        InputStream in = null;
+        Map<Object,Object> rowoOb = new HashMap<>();
+
+        if (file.isEmpty()) {
+
+            jsonRes.put("code","10008");
+            jsonRes.put("info","请选择文件");
+        }
+        in = file.getInputStream();
+        rowoOb = new ExcelDealUtils().getBankListByExcel(in, file.getOriginalFilename());
+        //循环行
+        for (Map.Entry<Object, Object> hang : rowoOb.entrySet()) {
+
+            //循环行中具体的列
+            Map<Object,Object> cellOb = (Map<Object,Object>)hang.getValue();
+            for (Map.Entry<Object, Object> lie : cellOb.entrySet()) {
+
+                //此处执行具体的逻辑操作（如：入库）
+                System.out.println(lie.getKey());
+                System.out.println(lie.getValue());
+            }
+        }
+        in.close();
+        // 该处可调用service相应方法进行数据保存到数据库中，现只对数据输出
+        return "result";
+    }
+
+
 }
