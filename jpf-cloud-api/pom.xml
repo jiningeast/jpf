@@ -20,6 +20,12 @@
             <artifactId>jpf-service</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- aliyun -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>${aliyun-sdk-oss_version}</version>
+        </dependency>
 
         <!-- spring -->
         <dependency>
