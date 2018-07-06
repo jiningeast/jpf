@@ -1,19 +1,14 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.ExcelDealUtils;
+import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.dto.ToolCateRequest;
-import com.joiest.jpf.dto.ToolCateResponse;
 import com.joiest.jpf.entity.CloudIdcardInfo;
 import com.joiest.jpf.facade.CloudIdcardServiceFacade;
 import com.joiest.jpf.facade.ToolCateServiceFacade;
 import com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl;
-import com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.sf.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.lang.reflect.Member;
 import java.util.*;
 
 @Controller
@@ -166,7 +158,52 @@ public class ToolCateController {
         }
         return null;
     }
+    /**
+     * 短信发送接口
+     * */
+    @RequestMapping(value = "/sendSmsApi", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String sendSmsApi(HttpServletRequest request) throws IOException {
 
+        String mobile = request.getParameter("mobile");
+        String content = request.getParameter("content");
+        String dateTime = request.getParameter("dateTime");
+        String sign = request.getParameter("sign");
+
+        if(mobile == null || content==null || dateTime==null || sign ==null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
+        }
+        Map<String,String> map = new HashMap<>();
+        map.put("mobile",mobile);
+        map.put("content",content);
+        map.put("dateTime",dateTime);
+
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(map);
+
+        String respos = ToolUtils.mapToUrl(treeMap);
+        String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+        if(!selfSign.equals(sign)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "签名有误",null);
+        }
+        try{
+
+            int result = new MwSmsUtils().sendSms(mobile, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            if(result==0){//返回值为0，代表成功
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
+            }else{//返回值为非0，代表失败
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "短信发送失败",null);
+            }
+        }catch (Exception e) {
+
+            e.printStackTrace();//异常处理
+        }
+        return null;
+    }
     /**
      * excel上传 获取excel表中数据
      * 普通form提交 阿加西
@@ -201,7 +238,25 @@ public class ToolCateController {
         in.close();
         // 该处可调用service相应方法进行数据保存到数据库中，现只对数据输出
         return "result";
-    }
 
+    }
+    /**
+     * excel上传 获取excel表中数据
+     * 普通form提交 阿加西
+     * */
+    @RequestMapping(value = "/uploadEcelByFile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String uploadEcelByFile(HttpServletRequest request) throws Exception {
+
+        File files=new File("C:\\Users\\admin\\Desktop\\test.xls");
+        String aa = files.getName();
+        FileInputStream file = new FileInputStream("C:\\Users\\admin\\Desktop\\test.xls");
+
+        Map<Object,Object> rowoOb = new HashMap<>();
+
+        rowoOb = new ExcelDealUtils().getBankListByExcel(file, files.getName());
+
+        return null;
+    }
 
 }
