@@ -164,16 +164,18 @@ public class ToolCateController {
      * */
     @RequestMapping(value = "/sendSmsApi", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String sendSmsApi(HttpServletRequest request) throws IOException {
+    public JSONObject sendSmsApi(HttpServletRequest request) throws IOException {
 
         String mobile = request.getParameter("mobile");
         String content = request.getParameter("content");
         String dateTime = request.getParameter("dateTime");
         String sign = request.getParameter("sign");
 
+        JSONObject json = new JSONObject();
         if(mobile == null || content==null || dateTime==null || sign ==null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
+            json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+            json.put("info","Error");
         }
         Map<String,String> map = new HashMap<>();
         map.put("mobile",mobile);
@@ -186,14 +188,13 @@ public class ToolCateController {
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
 
-        JSONObject json = new JSONObject();
         if(!selfSign.equals(sign)){
 
             json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
             json.put("info","签名有误");
         }
         try{
-
+            
             int result = new MwSmsUtils().sendSms(mobile, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
             if(result==0){//返回值为0，代表成功
 
@@ -208,10 +209,8 @@ public class ToolCateController {
 
             e.printStackTrace();//异常处理
         }
-        return null;
+        return json;
     }
-
-
     /**
      * excel上传 获取excel表中数据
      * 普通form提交
