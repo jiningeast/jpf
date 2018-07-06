@@ -1,5 +1,6 @@
 package com.joiest.jpf.cloud.api.controller;
 
+import com.joiest.jpf.cloud.api.util.IdentAuth;
 import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.AESUtils;
@@ -13,6 +14,7 @@ import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.entity.CloudIdcardInfo;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
 import com.joiest.jpf.facade.*;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -407,6 +409,60 @@ public class UserInfoController {
 
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "获取成功", uinfo);
+    }
+
+    /**
+     * 身份证OCR识别
+     * */
+    @RequestMapping(value = "/idCardOcr", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String idCardOcr(HttpServletRequest request) throws IOException {
+
+        String side = request.getParameter("side");
+        String imgInfo = request.getParameter("img");
+
+        if(side == null || imgInfo==null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
+        }
+        //String ocrRes = toolCateServiceFacade.idCardOcr(request,side,imgInfo);
+        JSONObject ocrRes = new IdentAuth().idCardOcr(request,side,imgInfo);
+        String baseRe = Base64CustomUtils.base64Encoder(ocrRes.toString());
+        baseRe = baseRe.replaceAll("\r\n","");
+
+        return baseRe;
+    }
+    /**
+     * 短信发送
+     * */
+    @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String sendSms(HttpServletRequest request) throws IOException {
+
+        String phone = request.getParameter("mobile");
+        phone = Base64CustomUtils.base64Decoder(phone);
+        try{
+
+            int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
+
+            redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_AUTH")+phone,new Integer(verificateCode).toString(),Long.parseLong(ConfigUtil.getValue("CLOUD_USER_AUTH_EXPIRE")));
+            String content = null;
+            content = "尊敬的用户，您此次的手机验证码是："+verificateCode+",10十分钟内有效";
+
+            //int result = toolCateServiceFacade.sendSms(phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            int result = new MwSmsUtils().sendSms(phone, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            if(result==0){//返回值为0，代表成功
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
+            }else{//返回值为非0，代表失败
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "短信发送失败",null);
+            }
+        }catch (Exception e) {
+
+            e.printStackTrace();//异常处理
+        }
+        return null;
     }
 }
 

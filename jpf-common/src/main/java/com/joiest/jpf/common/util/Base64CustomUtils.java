@@ -2,9 +2,15 @@ package com.joiest.jpf.common.util;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
+import org.apache.tomcat.util.codec.binary.Base64;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
-import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Base64CustomUtils {
 
@@ -41,5 +47,90 @@ public class Base64CustomUtils {
         String abc = Base64CustomUtils.base64Decoder(str);
         System.out.printf(abc);
         System.out.printf(abc);
+    }
+
+    /**
+     * base64 encode 转换为图片
+     * */
+    public static Map<String,String> baseToImage(HttpServletRequest request, String imgStr, String perfix){
+
+        Map<String,String> imgInfo = new HashMap<>();
+
+        if(perfix == null || perfix.isEmpty()){
+            perfix = "Ocr";
+        }
+        //对字节数组字符串进行Base64解码并生成图片
+        if (imgStr == null) //图像数据为空
+            return null;
+
+        BASE64Decoder decoder = new BASE64Decoder();
+        try
+        {
+            //Base64解码
+            byte[] b = decoder.decodeBuffer(imgStr);
+            for(int i=0;i<b.length;++i)
+            {
+                if(b[i]<0)
+                {
+                    //调整异常数据
+                    b[i]+=256;
+                }
+            }
+            long timeStamp = new Date().getTime();
+
+            //生成jpeg图
+            String showUrl = request.getSession().getServletContext().getRealPath("/resources");
+
+            String resourcesUrl = "\\resources\\"+perfix+"\\";
+            String urlRepj = showUrl.replace("\\target\\jpf-cloud\\resources","\\src\\main\\webapp"+resourcesUrl);
+
+            File fileDir = new File(urlRepj);
+            if (!fileDir.exists()){
+
+                fileDir.mkdirs();
+            }
+            String filename = perfix+timeStamp+".jpg";
+            String imgFilePath = urlRepj+"/"+filename;//新生成的图片
+
+            OutputStream out = new FileOutputStream(imgFilePath);
+            out.write(b);
+            out.flush();
+            out.close();
+
+            //dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
+
+            imgInfo.put("actualUrl",imgFilePath);//服务器实际路径
+            imgInfo.put("filename",filename);//文件名
+            imgInfo.put("resourceUrl",resourcesUrl+filename);//域名对应图片地址 如：http://xxx.com/图片存储地址
+
+            return imgInfo;
+        }catch (Exception e) {
+
+            return null;
+        }
+    }
+
+    /**
+     * 图片转换为base64
+     * */
+    public static String imageToBase(String imgFile) {
+
+        // 对图像进行base64编码
+        String imgBase64 = null;
+        try {
+
+            File file = new File(imgFile);
+            byte[] content = new byte[(int) file.length()];
+            FileInputStream finputstream = new FileInputStream(file);
+            finputstream.read(content);
+            finputstream.close();
+            imgBase64 = new String(Base64.encodeBase64(content));
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            return null;
+        }
+        return imgBase64;
     }
 }

@@ -29,7 +29,7 @@ public class ExcelDealUtils {
      * @return
      * @throws IOException
      */
-    public Map<Object,Object> getBankListByExcel(InputStream in, String fileName) throws Exception{
+    public Map<Object,Object> getImportExcel(InputStream in, String fileName) throws Exception{
 
         Map<Object,Object> map = null;
         Sheet sheet = null;
