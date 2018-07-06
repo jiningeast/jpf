@@ -5,6 +5,9 @@ import com.joiest.jpf.common.util.PhotoUtil;
 import com.joiest.jpf.common.util.SendMailUtil;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
+import com.joiest.jpf.dto.GetCloudCompanysRequest;
+import com.joiest.jpf.dto.GetCloudCompanysResponse;
+import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
@@ -88,4 +91,17 @@ public class CloudCompanyController {
         return strBackUrl;
     }
 
+    /**
+     * 获取公司信息，不区分类型
+     */
+    @RequestMapping("/getCompanys")
+    @ResponseBody
+    public Map<String, Object> getCompanys(GetCloudCompanysRequest request){
+        GetCloudCompanysResponse response = cloudCompanyServiceFacade.getAllCompanys(request);
+        Map<String,Object> map = new HashMap<>();
+        map.put("total", response.getCount());
+        map.put("rows", response.getList());
+
+        return map;
+    }
 }

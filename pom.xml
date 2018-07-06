@@ -54,6 +54,7 @@
         <slf4j_version>1.7.12</slf4j_version>
         <log4j_version>2.3</log4j_version>
         <poi_version>3.7</poi_version>
+        <poi_ooxml_version>3.17</poi_ooxml_version>
         <bouncycastle_version>1.58</bouncycastle_version>
         <tomcat7_version>2.2</tomcat7_version>
         <!-- Test libs -->
@@ -286,9 +287,19 @@
                 <version>${log4j_version}</version>
             </dependency>
             <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.16</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
                 <version>${poi_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi_ooxml_version}</version>
             </dependency>
             <!-- Test libs -->
             <dependency>
