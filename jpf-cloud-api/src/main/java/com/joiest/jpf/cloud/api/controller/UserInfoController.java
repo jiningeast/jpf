@@ -1,5 +1,6 @@
 package com.joiest.jpf.cloud.api.controller;
 
+import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
@@ -323,8 +324,6 @@ public class UserInfoController {
     @ResponseBody
     public String sendLoginSms(HttpServletRequest request) throws IOException {
 
-        //String aa= redisCustomServiceFacade.get("liangliang");
-
         String idCard = request.getParameter("idCard");
         idCard = Base64CustomUtils.base64Decoder(idCard);
 
@@ -342,8 +341,8 @@ public class UserInfoController {
             String content = null;
             content = "尊敬的用户，您此次登录的手机验证码是："+verificateCode+",10十分钟内有效";
 
-            int result=toolCateServiceFacade.sendSms(phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
-
+            //int result=toolCateServiceFacade.sendSms(phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            int result = new MwSmsUtils().sendSms(phone, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
             if(result==0){//返回值为0，代表成功
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);

@@ -143,8 +143,8 @@ public class ToolCateController {
             String content = null;
             content = "尊敬的用户，您此次的手机验证码是："+verificateCode+",10十分钟内有效";
 
-            int result = toolCateServiceFacade.sendSms(phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
-
+            //int result = toolCateServiceFacade.sendSms(phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            int result = new MwSmsUtils().sendSms(phone, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
             if(result==0){//返回值为0，代表成功
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
@@ -184,19 +184,24 @@ public class ToolCateController {
 
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+        JSONObject json = new JSONObject();
         if(!selfSign.equals(sign)){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "签名有误",null);
+            json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+            json.put("info","签名有误");
         }
         try{
 
             int result = new MwSmsUtils().sendSms(mobile, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
             if(result==0){//返回值为0，代表成功
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功",null);
+                json.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+                json.put("info","短信发送成功");
             }else{//返回值为非0，代表失败
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "短信发送失败",null);
+                json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+                json.put("info","短信发送失败");
             }
         }catch (Exception e) {
 
@@ -206,7 +211,7 @@ public class ToolCateController {
     }
     /**
      * excel上传 获取excel表中数据
-     * 普通form提交 阿加西
+     * 普通form提交
      * */
     @RequestMapping(value = "/uploadEcelByForm", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
