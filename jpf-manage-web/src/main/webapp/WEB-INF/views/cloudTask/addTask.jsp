@@ -34,6 +34,7 @@
         <a id="confirmBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确定</a>
     </div>
     <div id="companys"></div>
+    <div id="personsDataGrid"></div>
 </div>
 <script>
     $(function(){
@@ -84,9 +85,13 @@
                     $.messager.alert('提示', '所选的文件格式不正确!', 'info');
                     return false;
                 }
+
+                ajaxLoading();
             },
             success:function (msg) {
-                console.log("data="+msg);
+                ajaxLoadEnd();
+
+                // 显示数据
             }
         });
 
@@ -95,8 +100,40 @@
             onClick:function(){
                 // 表单提交
                 $("#taskForm").submit();
+
+                // excel数据列表
+                /*$('#personsDataGrid').datagrid({
+                    title:'打款人员列表',
+                    pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
+                    singleSelect:true,
+                    multiselect:false,
+                    selectOnCheck:true,
+                    remoteSort: false, // 服务端排序
+                    data:[
+                        {   company_id:$("#mid").val(),
+                            company_name:$("#name").textbox("getValue"),
+                            uploadfile:$("#uploadfile").filebox('getValue')
+                        }
+                        ],
+                    method:"post",
+                    url:'submitTask',
+                    columns:[[
+                        {field:'id',title:'任务Id',width:"10%"},
+                    ]]
+                });*/
             }
         })
+
+        //采用jquery easyui loading css效果
+        function ajaxLoading(){
+            $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:"100%",height:$(window).height()}).appendTo("body");
+            $("<div class=\"datagrid-mask-msg\"></div>").html("正在处理，请稍候。。。").appendTo("body").css({display:"block",left:($(document.body).outerWidth(true) - 190) / 2,top:($(window).height() - 45) / 2});
+        }
+        function ajaxLoadEnd(){
+            $(".datagrid-mask").remove();
+            $(".datagrid-mask-msg").remove();
+        }
+
     })
 </script>
 </body>
