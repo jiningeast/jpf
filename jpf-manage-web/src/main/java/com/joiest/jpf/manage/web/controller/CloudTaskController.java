@@ -123,14 +123,14 @@ public class CloudTaskController {
             responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
             responseMap.put("data",staffInfosFailed);
 
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),"E:\\"+uuid+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
         }else{
             Map<String,Object> responseMap = new HashMap<>();
             responseMap.put("code","10000");
             responseMap.put("info","数据检测无误");
             responseMap.put("data",staffInfosSuccess);
 
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),"E:\\"+uuid+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
         }
 
         return uuid.toString();
@@ -148,6 +148,8 @@ public class CloudTaskController {
     @RequestMapping(value = "/personsData", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String personsData(String data){
+        // 读取暂存文件
+
 
         return "";
     }

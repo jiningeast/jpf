@@ -9,39 +9,33 @@
 </div>
 <script>
     $(function () {
+        urlParams = GetRequest();
         $("#dg").datagrid({
-            title:'任务信息列表',
-            toolbar:toolbar,
+            title:'人员信息',
             pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
             singleSelect:true,
             multiselect:false,
             selectOnCheck:true,
             remoteSort: false, // 服务端排序
-            url:'list',
+            url:'personsData?data='+urlParams[data],
             columns:[[
                 {field:'id',title:'任务Id',width:"10%"},
-                {field:'oprator_name',title:'操作人',width:"10%"},
-                {field:'company_name',title:'企业名称',width:"10%"},
-                {field:'agent_no',title:'代理号',width:"10%"},
-                {field:'merch_no',title:'商户号',width:"10%"},
-                {field:'batchno',title:'批次号',width:"10%"},
-                {field:'status',title:'状态',width:"10%",
-                    formatter:function (value,row,index) {
-                        if ( value == 0 ){
-                            return "未处理";
-                        }else if ( value == 1 ){
-                            return "处理中";
-                        }else if ( value == 2 ){
-                            return "完成";
-                        }else if ( value == 3 ){
-                            return "失败";
-                        }
-                    }},
-                {field:'created',title:'创建时间',width:"10%",formatter: formatDateStr},
-                {field:'finishtime',title:'完成时间',width:"10%",formatter: formatDateStr}
             ]]
         })
     })
+
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
 </script>
 </body>
 </html>
