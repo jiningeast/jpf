@@ -31,6 +31,11 @@ public class OrderCpsingleInfo {
     private Long mtsid;
 
     /**
+     * 聚合商户号
+     */
+    private String merchName;
+
+    /**
      * 1:支付后退单，2:未支付撤单
      */
     private Byte singletype;
@@ -133,5 +138,13 @@ public class OrderCpsingleInfo {
 
     public void setRefundContent(String refundContent) {
         this.refundContent = refundContent;
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
     }
 }
