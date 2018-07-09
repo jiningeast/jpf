@@ -38,4 +38,9 @@ public interface CloudCompanyServiceFacade {
      * 获取公司信息，不区分类型
      */
     public GetCloudCompanysResponse getAllCompanys(GetCloudCompanysRequest request);
+
+    /**
+     * 根据主键id获取单个公司的信息
+     */
+    public CloudCompanyInfo getRecById(String id);
 }

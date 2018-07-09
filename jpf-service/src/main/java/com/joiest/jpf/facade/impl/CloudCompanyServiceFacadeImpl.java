@@ -313,4 +313,15 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
         return response;
     }
+
+    @Override
+    public CloudCompanyInfo getRecById(String id){
+        PayCloudCompany payCloudCompany = payCloudCompanyMapper.selectByPrimaryKey(id);
+        CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class,CloudCompanyInfo.class,false);
+        beanCopier.copy(payCloudCompany,cloudCompanyInfo,null);
+
+        return cloudCompanyInfo;
+    }
 }

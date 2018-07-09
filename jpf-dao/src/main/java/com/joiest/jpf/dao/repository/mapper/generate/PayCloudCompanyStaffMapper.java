@@ -2,7 +2,6 @@ package com.joiest.jpf.dao.repository.mapper.generate;
 
 import com.joiest.jpf.common.po.PayCloudCompanyStaff;
 import com.joiest.jpf.common.po.PayCloudCompanyStaffExample;
-import java.math.BigInteger;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,7 +24,7 @@ public interface PayCloudCompanyStaffMapper {
      *
      * @param id
      */
-    int deleteByPrimaryKey(BigInteger id);
+    int deleteByPrimaryKey(String id);
 
     /**
      * 插入数据库记录
@@ -53,7 +52,7 @@ public interface PayCloudCompanyStaffMapper {
      *
      * @param id
      */
-    PayCloudCompanyStaff selectByPrimaryKey(BigInteger id);
+    PayCloudCompanyStaff selectByPrimaryKey(String id);
 
     /**
      * 选择性更新数据库记录

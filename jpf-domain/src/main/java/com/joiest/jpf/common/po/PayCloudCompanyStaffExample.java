@@ -1,6 +1,5 @@
 package com.joiest.jpf.common.po;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -186,52 +185,52 @@ public class PayCloudCompanyStaffExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(BigInteger value) {
+        public Criteria andIdEqualTo(String value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(BigInteger value) {
+        public Criteria andIdNotEqualTo(String value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(BigInteger value) {
+        public Criteria andIdGreaterThan(String value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(BigInteger value) {
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(BigInteger value) {
+        public Criteria andIdLessThan(String value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(BigInteger value) {
+        public Criteria andIdLessThanOrEqualTo(String value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<BigInteger> values) {
+        public Criteria andIdIn(List<String> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<BigInteger> values) {
+        public Criteria andIdNotIn(List<String> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(BigInteger value1, BigInteger value2) {
+        public Criteria andIdBetween(String value1, String value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(BigInteger value1, BigInteger value2) {
+        public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -246,52 +245,52 @@ public class PayCloudCompanyStaffExample {
             return (Criteria) this;
         }
 
-        public Criteria andUidEqualTo(Long value) {
+        public Criteria andUidEqualTo(String value) {
             addCriterion("uid =", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidNotEqualTo(Long value) {
+        public Criteria andUidNotEqualTo(String value) {
             addCriterion("uid <>", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidGreaterThan(Long value) {
+        public Criteria andUidGreaterThan(String value) {
             addCriterion("uid >", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidGreaterThanOrEqualTo(Long value) {
+        public Criteria andUidGreaterThanOrEqualTo(String value) {
             addCriterion("uid >=", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidLessThan(Long value) {
+        public Criteria andUidLessThan(String value) {
             addCriterion("uid <", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidLessThanOrEqualTo(Long value) {
+        public Criteria andUidLessThanOrEqualTo(String value) {
             addCriterion("uid <=", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidIn(List<Long> values) {
+        public Criteria andUidIn(List<String> values) {
             addCriterion("uid in", values, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidNotIn(List<Long> values) {
+        public Criteria andUidNotIn(List<String> values) {
             addCriterion("uid not in", values, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidBetween(Long value1, Long value2) {
+        public Criteria andUidBetween(String value1, String value2) {
             addCriterion("uid between", value1, value2, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidNotBetween(Long value1, Long value2) {
+        public Criteria andUidNotBetween(String value1, String value2) {
             addCriterion("uid not between", value1, value2, "uid");
             return (Criteria) this;
         }
@@ -516,52 +515,52 @@ public class PayCloudCompanyStaffExample {
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(String value) {
+        public Criteria andStatusEqualTo(Byte value) {
             addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(String value) {
+        public Criteria andStatusNotEqualTo(Byte value) {
             addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(String value) {
+        public Criteria andStatusGreaterThan(Byte value) {
             addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(String value) {
+        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
             addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(String value) {
+        public Criteria andStatusLessThan(Byte value) {
             addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(String value) {
+        public Criteria andStatusLessThanOrEqualTo(Byte value) {
             addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<String> values) {
+        public Criteria andStatusIn(List<Byte> values) {
             addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<String> values) {
+        public Criteria andStatusNotIn(List<Byte> values) {
             addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(String value1, String value2) {
+        public Criteria andStatusBetween(Byte value1, Byte value2) {
             addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(String value1, String value2) {
+        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
@@ -576,52 +575,52 @@ public class PayCloudCompanyStaffExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveEqualTo(String value) {
+        public Criteria andIsActiveEqualTo(Byte value) {
             addCriterion("is_active =", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveNotEqualTo(String value) {
+        public Criteria andIsActiveNotEqualTo(Byte value) {
             addCriterion("is_active <>", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveGreaterThan(String value) {
+        public Criteria andIsActiveGreaterThan(Byte value) {
             addCriterion("is_active >", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveGreaterThanOrEqualTo(String value) {
+        public Criteria andIsActiveGreaterThanOrEqualTo(Byte value) {
             addCriterion("is_active >=", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveLessThan(String value) {
+        public Criteria andIsActiveLessThan(Byte value) {
             addCriterion("is_active <", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveLessThanOrEqualTo(String value) {
+        public Criteria andIsActiveLessThanOrEqualTo(Byte value) {
             addCriterion("is_active <=", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveIn(List<String> values) {
+        public Criteria andIsActiveIn(List<Byte> values) {
             addCriterion("is_active in", values, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveNotIn(List<String> values) {
+        public Criteria andIsActiveNotIn(List<Byte> values) {
             addCriterion("is_active not in", values, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveBetween(String value1, String value2) {
+        public Criteria andIsActiveBetween(Byte value1, Byte value2) {
             addCriterion("is_active between", value1, value2, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsActiveNotBetween(String value1, String value2) {
+        public Criteria andIsActiveNotBetween(Byte value1, Byte value2) {
             addCriterion("is_active not between", value1, value2, "isActive");
             return (Criteria) this;
         }
@@ -846,52 +845,52 @@ public class PayCloudCompanyStaffExample {
             return (Criteria) this;
         }
 
-        public Criteria andUcardidEqualTo(Integer value) {
+        public Criteria andUcardidEqualTo(String value) {
             addCriterion("ucardid =", value, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidNotEqualTo(Integer value) {
+        public Criteria andUcardidNotEqualTo(String value) {
             addCriterion("ucardid <>", value, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidGreaterThan(Integer value) {
+        public Criteria andUcardidGreaterThan(String value) {
             addCriterion("ucardid >", value, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andUcardidGreaterThanOrEqualTo(String value) {
             addCriterion("ucardid >=", value, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidLessThan(Integer value) {
+        public Criteria andUcardidLessThan(String value) {
             addCriterion("ucardid <", value, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidLessThanOrEqualTo(Integer value) {
+        public Criteria andUcardidLessThanOrEqualTo(String value) {
             addCriterion("ucardid <=", value, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidIn(List<Integer> values) {
+        public Criteria andUcardidIn(List<String> values) {
             addCriterion("ucardid in", values, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidNotIn(List<Integer> values) {
+        public Criteria andUcardidNotIn(List<String> values) {
             addCriterion("ucardid not in", values, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidBetween(Integer value1, Integer value2) {
+        public Criteria andUcardidBetween(String value1, String value2) {
             addCriterion("ucardid between", value1, value2, "ucardid");
             return (Criteria) this;
         }
 
-        public Criteria andUcardidNotBetween(Integer value1, Integer value2) {
+        public Criteria andUcardidNotBetween(String value1, String value2) {
             addCriterion("ucardid not between", value1, value2, "ucardid");
             return (Criteria) this;
         }

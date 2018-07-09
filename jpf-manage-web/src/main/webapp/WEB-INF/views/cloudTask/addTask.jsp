@@ -34,7 +34,7 @@
         <a id="confirmBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确定</a>
     </div>
     <div id="companys"></div>
-    <div id="personsDataGrid"></div>
+    <div id="persons"></div>
 </div>
 <script>
     $(function(){
@@ -47,6 +47,14 @@
 
         // 选取公司弹窗大小
         $('#companys').window({
+            width:'1024px',
+            height:'550px',
+            closed:true,
+            modal:true
+        });
+
+        // 选取公司弹窗大小
+        $('#persons').window({
             width:'1024px',
             height:'550px',
             closed:true,
@@ -90,8 +98,13 @@
             },
             success:function (msg) {
                 ajaxLoadEnd();
+                /*var data_str = JSON.parse(msg);
+                var data_obj = eval('(' +  data_str +')');
+                var base64 = new Base64();
+                var data = base64.encode(msg);*/
 
-                // 显示数据
+                // 打开新窗口显示数据
+                $('#persons').window("open").window('refresh', '../cloudTask/persons?data='+msg).window('setTitle','人员信息');
             }
         });
 
@@ -100,27 +113,6 @@
             onClick:function(){
                 // 表单提交
                 $("#taskForm").submit();
-
-                // excel数据列表
-                /*$('#personsDataGrid').datagrid({
-                    title:'打款人员列表',
-                    pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
-                    singleSelect:true,
-                    multiselect:false,
-                    selectOnCheck:true,
-                    remoteSort: false, // 服务端排序
-                    data:[
-                        {   company_id:$("#mid").val(),
-                            company_name:$("#name").textbox("getValue"),
-                            uploadfile:$("#uploadfile").filebox('getValue')
-                        }
-                        ],
-                    method:"post",
-                    url:'submitTask',
-                    columns:[[
-                        {field:'id',title:'任务Id',width:"10%"},
-                    ]]
-                });*/
             }
         })
 

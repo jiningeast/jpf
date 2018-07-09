@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>批量打款</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
+    <script type="text/javascript" src="${basePath}/resources/js/Base64.js"></script>
     <style>
         .notice{ padding: 10px; background: rgb(255,251,230); border: solid 1px rgb(255,229,143); margin-bottom: 20px; }
         .notice h6 { margin: 0; }
