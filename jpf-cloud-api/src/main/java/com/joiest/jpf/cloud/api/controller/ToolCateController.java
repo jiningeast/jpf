@@ -41,7 +41,6 @@ public class ToolCateController {
     @ResponseBody
     public JSONObject idCardOcr(HttpServletRequest request) throws IOException {
 
-
         String side = request.getParameter("side");
         String dateTime = request.getParameter("dateTime");
         String imgInfo = request.getParameter("img");
