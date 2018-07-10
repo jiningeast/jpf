@@ -10,24 +10,41 @@ import javax.servlet.http.HttpSession;
 
 public interface CloudCompanyServiceFacade {
 
-    /**
-     * 插入一条记录
-     */
-    //public int insRecord(CloudCompanyInfo ordersInfo);
 
     /**
-     * 列表---后台
+     * 代理列表---后台
      */
     public GetCloudCompanyResponse getAgentList(GetCloudCompanyRequest request);
-
+    /**
+     * 业务公司列表---后台
+     */
+    public GetCloudCompanyResponse getSaleList(GetCloudCompanyRequest request);
     /**
      * 云账户金额校验
      */
     public Boolean checkCompanyMoneyVerify(String id);
 
     /**
-     * 添加公司基本信息
+     * 添加公司
      */
     public JpfResponseDto addCloudCompany(GetCloudCompanyRequest request,int account) throws Exception;
 
+
+    /**
+     * 修改公司
+     */
+
+    public JpfResponseDto  editCloudCompany(GetCloudCompanyRequest request,int account) throws Exception;
+
+
+    /**
+     * 获取公司单条信息
+     */
+
+    public CloudCompanyInfo getCompanyOne(String id,int type);
+
+    /**
+     * 锁定公司
+     */
+    public JpfResponseDto delCompany(String merchNo,int type);
 }

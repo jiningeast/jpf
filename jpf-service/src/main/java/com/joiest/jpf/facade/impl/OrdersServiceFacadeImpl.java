@@ -66,7 +66,7 @@ public class OrdersServiceFacadeImpl implements OrdersServiceFacade {
         {
             c.andCreatedGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
         }
-        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
         {
             c.andCreatedLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
         }

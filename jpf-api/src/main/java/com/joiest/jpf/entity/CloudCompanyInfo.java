@@ -129,6 +129,20 @@ public class CloudCompanyInfo {
      */
     private BigDecimal salesRate;
 
+    /**
+     * 登录名称
+     */
+    private String userName;
+    /**
+     * 状态：-1:禁闭。1:正常
+     */
+    private Byte status;
+
+    /**
+     * 公司类型
+     */
+    private int type;
+
     public BigDecimal getAgentRate() {
         return agentRate;
     }
@@ -329,5 +343,29 @@ public class CloudCompanyInfo {
 
     public void setCertificate(String certificate) {
         this.certificate = certificate == null ? null : certificate.trim();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

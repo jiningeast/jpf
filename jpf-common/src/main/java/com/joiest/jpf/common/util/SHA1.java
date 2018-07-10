@@ -60,27 +60,6 @@ public class SHA1
         System.out.println(s.getMySHA1Code("abc123,./"));
     }
 
-    /**
-     * @author Aaron·Li
-     * @date
-     */
-    public static class IDUtils {
-        private static byte[] lock = new byte[0];
-
-        // 位数，默认是6位
-        private final static long w = 1000000;
-
-        public static String createID() {
-            long r = 0;
-            synchronized (lock) {
-                r = (long) ((Math.random() + 1) * w);
-            }
-            long timeStampSec = System.currentTimeMillis()/1000;
-            String timestamp = String.format("%010d", timeStampSec);
-
-            return  timestamp + String.valueOf(r).substring(1);
-        }
 
 
-    }
 }
