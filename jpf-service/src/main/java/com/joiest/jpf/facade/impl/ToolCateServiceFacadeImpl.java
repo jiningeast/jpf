@@ -294,6 +294,7 @@ public class ToolCateServiceFacadeImpl implements ToolCateServiceFacade {
         //根据图片地址获取base64
         String imgBase64  = imageToBase(imgFile);
 
+
         // 拼装请求body的json字符串
         JSONObject requestObj = new JSONObject();
         try {

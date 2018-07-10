@@ -3,7 +3,11 @@ package com.joiest.jpf.facade;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
+import com.joiest.jpf.dto.GetCloudCompanysRequest;
+import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
+
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -47,4 +51,13 @@ public interface CloudCompanyServiceFacade {
      * 锁定公司
      */
     public JpfResponseDto delCompany(String merchNo,int type);
+    /**
+     * 获取公司信息，不区分类型
+     */
+    public GetCloudCompanysResponse getAllCompanys(GetCloudCompanysRequest request);
+
+    /**
+     * 根据主键id获取单个公司的信息
+     */
+    public CloudCompanyInfo getRecById(String id);
 }

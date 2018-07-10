@@ -144,9 +144,14 @@
             },{
                 "menuid" : "8",
                 "icon" : "icon-sys",
-                "menuname" : "云账户批次管理",
+                "menuname" : "云账户打款管理",
                 "menus" : [{
                     "menuid" : "801",
+                    "menuname" : "打款任务管理",
+                    "icon" : "icon-nav",
+                    "url" : "cloudTask/index"
+                },{
+                    "menuid" : "802",
                     "menuname" : "批次管理",
                     "icon" : "icon-nav",
                     "url" : "cloudCompanyMoney/index"

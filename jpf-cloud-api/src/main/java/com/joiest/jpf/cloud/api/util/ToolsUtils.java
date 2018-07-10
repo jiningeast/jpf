@@ -7,7 +7,6 @@ public class ToolsUtils {
     /**
      * 生成一个唯一数
      * */
-
     public static String createOrderid(){
 
         int pre = getRandomInt(100,999);

@@ -1,11 +1,15 @@
 package com.joiest.jpf.facade.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.joiest.jpf.common.custom.PayCloudCompanyCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.common.util.Md5Encrypt;
+import com.joiest.jpf.common.util.SHA1;
+import com.joiest.jpf.common.util.SendMailUtil;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyAgentMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
@@ -26,15 +30,18 @@ import java.util.regex.Pattern;
 
 public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade {
 
-
     @Autowired
     private PayCloudCompanyCustomMapper payCloudCompanyCustomMapper;
+
     @Autowired
     private PayCloudCompanyMapper payCloudCompanyMapper;
+
     @Autowired
     private PayCloudCompanySalesMapper payCloudCompanySalesMapper;
+
     @Autowired
     private PayCloudCompanyAgentMapper payCloudCompanyAgentMapper;
+
     @Autowired
     private PayCloudEmployeeMapper payCloudEmployeeMapper;
 
@@ -544,4 +551,49 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
     }
 
 
+    @Override
+    public GetCloudCompanysResponse getAllCompanys(GetCloudCompanysRequest request){
+        GetCloudCompanysResponse response = new GetCloudCompanysResponse();
+
+        PayCloudCompanyExample e = new PayCloudCompanyExample();
+        PayCloudCompanyExample.Criteria c = e.createCriteria();
+
+        // 聚合商户号
+        if ( StringUtils.isNotBlank(request.getMerchNo()) ){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        // 商户id
+        if ( StringUtils.isNotBlank(request.getmId()) ){
+            c.andIdEqualTo(request.getmId());
+        }
+        // 商户名称
+        if ( StringUtils.isNotBlank(request.getName()) ){
+            c.andNameLike("%"+request.getName()+"%");
+        }
+
+        response.setCount(payCloudCompanyMapper.countByExample(e));
+        List<PayCloudCompany> list = payCloudCompanyMapper.selectByExample(e);
+
+        List<CloudCompanyInfo> infos = new ArrayList<>();
+        for(PayCloudCompany payCloudCompany:list){
+            CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class,CloudCompanyInfo.class,false);
+            beanCopier.copy(payCloudCompany,cloudCompanyInfo,null);
+            infos.add(cloudCompanyInfo);
+        }
+        response.setList(infos);
+
+        return response;
+    }
+
+    @Override
+    public CloudCompanyInfo getRecById(String id){
+        PayCloudCompany payCloudCompany = payCloudCompanyMapper.selectByPrimaryKey(id);
+        CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class,CloudCompanyInfo.class,false);
+        beanCopier.copy(payCloudCompany,cloudCompanyInfo,null);
+
+        return cloudCompanyInfo;
+    }
 }

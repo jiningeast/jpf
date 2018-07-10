@@ -80,7 +80,7 @@ public class MwSmsUtils {
         sbf.append("\n回调信息：" + Message);
         String fileName = "MwSmslog";
 
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName,true);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
 
         return returnInt;//返回值返回
     }
