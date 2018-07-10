@@ -276,14 +276,12 @@ public class UserInfoController {
             }
         }
     }
-
     /**
-     * 验证用户信息  身份证、银行卡、手机号信息
+     * 用户登录
      * */
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String userLogin(HttpServletRequest request) {
-
 
         /*String tokn = request.getParameter("token");
         String jiami = redisCustomServiceFacade.get("yun" + tokn);
