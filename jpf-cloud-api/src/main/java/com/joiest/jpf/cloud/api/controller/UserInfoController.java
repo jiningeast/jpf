@@ -193,102 +193,13 @@ public class UserInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), list);
     }
 
-
     /**
-     * 验证用户信息  身份证、银行卡、手机号信息
-     * */
-    @RequestMapping(value = "/authUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String authUserInfo(HttpServletRequest request){
-
-        String cardId = request.getParameter("id");//身份证接口返回id
-        String mobile = request.getParameter("mobile");//手机号
-        String bankNum = request.getParameter("bankNum");//银行卡号
-        String verificate = request.getParameter("verificate");//验证码
-
-        cardId = Base64CustomUtils.base64Decoder(cardId);
-        mobile = Base64CustomUtils.base64Decoder(mobile);
-        bankNum = Base64CustomUtils.base64Decoder(bankNum);
-        verificate = Base64CustomUtils.base64Decoder(verificate);
-
-        CloudCompanyStaffInfo cloudCompanyStaffInfo;
-        CloudIdcardInfo cloudIdcardInfo;
-        CloudStaffBanksInfo cloudStaffBanksInfo;
-
-        //短信验证
-        String verificateRedis = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_AUTH")+mobile);
-        if(verificateRedis == null){
-
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码失效，请重新发送", null);
-        }
-        if(!verificateRedis.equals(verificate)){
-
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误", null);
-        }
-        if(cardId==null || mobile==null ||  bankNum==null || verificate==null){
-
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
-        }else{
-
-            //身份证信息
-            cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cardId);
-
-            //员工信息
-            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffByIdcard(cloudIdcardInfo.getNum());
-            if(cloudCompanyStaffInfo==null){
-
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户员工信息不存在", null);
-            }
-            //员工银行卡信息
-            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, new BigInteger(cloudCompanyStaffInfo.getId()));
-
-            if(cloudIdcardInfo == null){
-
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户身份证信息不存在", null);
-            }
-
-
-            //员工银行卡信息
-            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, new BigInteger(cloudCompanyStaffInfo.getId()));
-            if(cloudStaffBanksInfo==null){
-
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户银行卡信息不存在", null);
-            }
-            String test = cloudStaffBanksInfo.getBankphone();
-            if(cloudStaffBanksInfo.getBankphone().equals(mobile)){
-
-                //操作员工状态
-                Map<String,String> map = new HashMap<String,String>();
-
-                map.put("is_active","1");
-                map.put("code",verificate);
-
-                int res = cloudCompanyStaffServiceFacade.upCloudCompanyStaffByIdcard(cardId,map);
-                if(res>0){
-
-                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "用户认证成功", null);
-                }else{
-                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "用户认证失败，请重试", null);
-                }
-            }else{
-
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡绑定手机号有误", null);
-            }
-        }
-    }
-
-    /**
-     * 验证用户信息  身份证、银行卡、手机号信息
+     * 用户登录
      * */
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String userLogin(HttpServletRequest request) {
 
-
-        /*String tokn = request.getParameter("token");
-        String jiami = redisCustomServiceFacade.get("yun" + tokn);
-        String mid_decrypt = AESUtils.decrypt(jiami, ConfigUtil.getValue("AES_KEY"));
-        */
         String idCard = request.getParameter("idCard");
         String verificate = request.getParameter("verificate");
         if(idCard == null || idCard.isEmpty() || verificate==null || verificate.isEmpty()){
@@ -323,6 +234,9 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误",null);
         }
     }
+    /*
+     * 发送登录短信
+     * */
     @RequestMapping(value = "/sendLoginSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String sendLoginSms(HttpServletRequest request) throws IOException {
@@ -359,7 +273,6 @@ public class UserInfoController {
         }
         return null;
     }
-
     /**
      * 获取用户认证信息
      */
@@ -428,34 +341,59 @@ public class UserInfoController {
 
         String side = request.getParameter("side");
         String imgInfo = request.getParameter("img");
+        String token = request.getParameter("token");
 
-        if(side == null || imgInfo==null){
+        if(side == null || imgInfo==null || token==null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
         }
-        //String ocrRes = toolCateServiceFacade.idCardOcr(request,side,imgInfo);
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
         JSONObject ocrRes = new IdentAuth().idCardOcr(request,side,imgInfo);
         String baseRe = Base64CustomUtils.base64Encoder(ocrRes.toString());
         baseRe = baseRe.replaceAll("\r\n","");
 
         return baseRe;
     }
+
     /**
-     * 短信发送
+     * 认证短信发送
      * */
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String sendSms(HttpServletRequest request) throws IOException {
 
         String phone = request.getParameter("mobile");
-        phone = Base64CustomUtils.base64Decoder(phone);
-        try{
+        String bankno = request.getParameter("bankno");
+        String token = request.getParameter("token");
 
+        phone = Base64CustomUtils.base64Decoder(phone);
+        bankno = Base64CustomUtils.base64Decoder(bankno);
+
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()))
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        //检验银行卡信息银行卡信息
+        CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankno, new BigInteger(uid));
+        if(cloudStaffBanksInfo==null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请输入正确的银行卡信息", null);
+        }
+        if(!cloudStaffBanksInfo.getBankphone().equals(phone)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请确认手机号和银行卡绑定手机号一致", null);
+        }
+        try{
             int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
 
             redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_AUTH")+phone,new Integer(verificateCode).toString(),Long.parseLong(ConfigUtil.getValue("CLOUD_USER_AUTH_EXPIRE")));
             String content = null;
-            content = "尊敬的用户，您此次的手机验证码是："+verificateCode+",10十分钟内有效";
+            content = "尊敬的用户，您此次的手机验证码是："+verificateCode+",十分钟内有效";
 
             //int result = toolCateServiceFacade.sendSms(phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
             int result = new MwSmsUtils().sendSms(phone, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
@@ -471,6 +409,84 @@ public class UserInfoController {
             e.printStackTrace();//异常处理
         }
         return null;
+    }
+    /**
+     * 验证用户信息  身份证、银行卡、手机号信息
+     * */
+    @RequestMapping(value = "/authUserInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String authUserInfo(HttpServletRequest request){
+
+        String cardId = request.getParameter("id");//身份证接口返回id
+        String mobile = request.getParameter("mobile");//手机号
+        String bankNum = request.getParameter("bankNum");//银行卡号
+        String verificate = request.getParameter("verificate");//验证码
+        String token = request.getParameter("token");//token
+
+        cardId = Base64CustomUtils.base64Decoder(cardId);
+        mobile = Base64CustomUtils.base64Decoder(mobile);
+        bankNum = Base64CustomUtils.base64Decoder(bankNum);
+        verificate = Base64CustomUtils.base64Decoder(verificate);
+
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()))
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        CloudCompanyStaffInfo cloudCompanyStaffInfo;
+        CloudIdcardInfo cloudIdcardInfo;
+        CloudStaffBanksInfo cloudStaffBanksInfo;
+        //短信验证
+        String verificateRedis = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_AUTH")+mobile);
+        if(verificateRedis == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码失效，请重新发送", null);
+        }
+        if(!verificateRedis.equals(verificate)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "验证码错误", null);
+        }
+        if(cardId==null || mobile==null ||  bankNum==null || verificate==null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
+        }else{
+
+            //身份证信息
+            cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cardId);
+
+            //员工信息
+            cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffByIdcard(cloudIdcardInfo.getNum());
+            if(cloudCompanyStaffInfo==null){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户员工信息不存在", null);
+            }
+            //员工银行卡信息
+            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, new BigInteger(cloudCompanyStaffInfo.getId()));
+            if(cloudIdcardInfo == null){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户银行卡信息不存在", null);
+            }
+            String test = cloudStaffBanksInfo.getBankphone();
+            if(cloudStaffBanksInfo.getBankphone().equals(mobile)){
+
+                //操作员工状态
+                Map<String,String> map = new HashMap<String,String>();
+
+                map.put("is_active","1");
+                map.put("code",verificate);
+
+                int res = cloudCompanyStaffServiceFacade.upCloudCompanyStaffByIdcard(cloudCompanyStaffInfo.getIdcard(),map);
+                if(res>0){
+
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "用户认证成功", null);
+                }else{
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "用户认证失败，请重试", null);
+                }
+            }else{
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡绑定手机号有误", null);
+            }
+        }
     }
 }
 

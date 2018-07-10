@@ -217,7 +217,7 @@ public class IdentAuth {
                 System.out.println("Http body error msg: " + toolCateResponse.getBody());
 
                 Map<String,Object> map = new HashMap<>();
-                map.put("HttpCode",toolCateResponse.getHeader("X-Ca-Error-Message"));
+                map.put("HttpCode",toolCateResponse.getHeader("X-Ca-Error-Message")==null?"0000":toolCateResponse.getHeader("X-Ca-Error-Message"));
                 map.put("HttpBodyError",toolCateResponse.getBody());
 
                 lastRes.put("code","10008");
