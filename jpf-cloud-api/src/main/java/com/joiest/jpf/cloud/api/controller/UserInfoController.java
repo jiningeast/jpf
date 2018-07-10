@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -239,7 +240,7 @@ public class UserInfoController {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户员工信息不存在", null);
             }
             //员工银行卡信息
-            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, cloudCompanyStaffInfo.getId());
+            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, new BigInteger(cloudCompanyStaffInfo.getId()));
 
             if(cloudIdcardInfo == null){
 
@@ -248,7 +249,7 @@ public class UserInfoController {
 
 
             //员工银行卡信息
-            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, cloudCompanyStaffInfo.getId());
+            cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, new BigInteger(cloudCompanyStaffInfo.getId()));
             if(cloudStaffBanksInfo==null){
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户银行卡信息不存在", null);
@@ -408,7 +409,7 @@ public class UserInfoController {
         }
         uinfo.put("name",cloudCompanyStaffInfo.getNickname());
         uinfo.put("idCard",cloudCompanyStaffInfo.getIdcard());
-        uinfo.put("userAuth",cloudCompanyStaffInfo.getIsActive());
+        uinfo.put("userAuth",cloudCompanyStaffInfo.getIsActive().toString());
         uinfo.put("banknum",cloudStaffBanksInfo.getBankno());
         uinfo.put("bankphone",cloudStaffBanksInfo.getBankphone());
         uinfo.put("bankpAuth",cloudStaffBanksInfo.getBankActive());
