@@ -17,6 +17,8 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanySalesMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudEmployeeMapper;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
+import com.joiest.jpf.dto.GetCloudCompanysRequest;
+import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
