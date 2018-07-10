@@ -9,27 +9,40 @@
 </div>
 <script>
     $(function () {
-        var data = getQueryString("data");
-        console.log(data);
+        var toolbar = [{
+            text:'确认',
+            iconCls:'icon-ok',
+            handler:function(){
+                $("#addWindow").window("open").window('refresh','../cloudTask/addTask').window('setTitle','新增打款任务');
+            }
+        }];
+
         $("#dg").datagrid({
             title:'人员信息',
-            pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
+            toolbar:toolbar,
             singleSelect:true,
             multiselect:false,
             selectOnCheck:true,
             remoteSort: false, // 服务端排序
             url:'personsData?data='+${data},
             columns:[[
-                {field:'type',title:'类型',width:"10%"},
+                {field:'type',title:'类型',width:"10%",
+                    formatter:function (value,row,index) {
+                        if ( value == '0' ){
+                            return "个人";
+                        }else if ( value == '1' ){
+                            return "企业";
+                        }
+                    }},
                 {field:'bankName',title:'总行名称',width:"10%"},
                 {field:'province',title:'开户行省',width:"10%"},
                 {field:'city',title:'开户行市',width:"10%"},
                 {field:'bankNo',title:'收款账号',width:"10%"},
                 {field:'name',title:'收款户名',width:"10%"},
-                {field:'IdNo',title:'身份证号',width:"10%"},
+                {field:'idno',title:'身份证号',width:"10%"},
                 {field:'phone',title:'手机号',width:"10%"},
                 {field:'money',title:'打款金额',width:"10%"},
-                {field:'memo',title:'备注',width:"10%"},
+                {field:'memo',title:'备注',width:"10%"}
             ]]
         })
     })

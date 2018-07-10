@@ -155,12 +155,12 @@ public class CloudTaskController {
     @ResponseBody
     public Map<String, Object> personsData(String data){
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+data+".txt");
-        Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
-        List< LinkedHashMap<Object,Object> > list = new ArrayList< LinkedHashMap<Object, Object>>();
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+data+".txt","GB2312");
+        Map<String,List< LinkedHashMap<String,String> >> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
+        List< LinkedHashMap<String,String> > list = jsonMap.get("data");
 
         Map<String,Object> responseMap = new HashMap<>();
-        responseMap.put("total",1);
+        responseMap.put("total",list.size());
         responseMap.put("rows",jsonMap.get("data"));
 
         return responseMap;

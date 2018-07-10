@@ -151,8 +151,7 @@ public class ToolUtils {
     /**
      * 从文件中读取所有内容
      */
-    public static String readFromFile(String fileName) {
-        String encoding = "UTF-8";
+    public static String readFromFile(String fileName, String encoding) {
         File file = new File(fileName);
         Long filelength = file.length();
         byte[] filecontent = new byte[filelength.intValue()];
