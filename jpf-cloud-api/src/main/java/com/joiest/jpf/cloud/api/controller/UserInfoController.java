@@ -341,7 +341,7 @@ public class UserInfoController {
             int verificateCode = toolCateServiceFacade.getRandomInt(100000,999999);//短信内容
             redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_SENDSMS") + phone, new Integer(verificateCode).toString(),Long.parseLong(ConfigUtil.getValue("CLOUD_USER_SENDSMS_EXPIRE")) );
             String content = null;
-            content = "尊敬的用户，您此次登录的手机验证码是："+verificateCode+",10十分钟内有效";
+            content = "尊敬的用户，您此次登录的手机验证码是："+verificateCode+",十分钟内有效";
 
             //int result=toolCateServiceFacade.sendSms(phone, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
             int result = new MwSmsUtils().sendSms(phone, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。

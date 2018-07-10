@@ -50,7 +50,7 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
 
         PayCloudCompanyStaffExample example = new PayCloudCompanyStaffExample();
         PayCloudCompanyStaffExample.Criteria c = example.createCriteria();
-
+        c.andCodeEqualTo(idcard);
 
         PayCloudCompanyStaff staff = new PayCloudCompanyStaff();
 
