@@ -14,6 +14,18 @@ public interface PayCloudCompanyCustomMapper {
      * @param example
      */
     int countByExample(PayCloudCompanyExample example);
+    /**
+     * 根据条件计数代理
+     *
+     * @param example
+     */
+    int countByExampleAgent(PayCloudCompanyExample example);
+    /**
+     * 根据条件计数业务公司
+     *
+     * @param example
+     */
+    int countByExampleSales(PayCloudCompanyExample example);
 
     /**
      *
@@ -87,7 +99,7 @@ public interface PayCloudCompanyCustomMapper {
     int updateByPrimaryKey(PayCloudCompany record);
 
     /**
-     *
+     *获取代理公司列表
      *
      * @param example
      */
@@ -95,9 +107,20 @@ public interface PayCloudCompanyCustomMapper {
 
     /**
      *
-     *
+     *获取业务公司列表
 
      */
     List<PayCloudCompanyCustom> selectCompanySales(PayCloudCompanyExample example);
+    /**
+     *
+     *获取代理连表信息
 
+     */
+    PayCloudCompanyCustom selectCompanyOneAgent(String id);
+    /**
+     *
+     *获取业务公司连表信息
+
+     */
+    PayCloudCompanyCustom selectCompanyOneSales(String id);
 }

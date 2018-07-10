@@ -128,6 +128,15 @@ public class PayCloudCompanyCustom {
      * 服务费费率
      */
     private BigDecimal salesRate;
+    /**
+     * 登录名称
+     */
+    private String userName;
+
+    /**
+     * 状态：-1:禁闭。1:正常
+     */
+    private Byte status;
 
     public String getId() {
         return id;
@@ -327,5 +336,21 @@ public class PayCloudCompanyCustom {
 
     public void setSalesRate(BigDecimal salesRate) {
         this.salesRate = salesRate;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

@@ -148,6 +148,14 @@ public class GetCloudCompanyRequest {
      */
     private BigDecimal salesRate;
 
+    /**
+     * 注册时间
+     */
+    private String addtimeStart;
+
+    private String addtimeEnd;
+
+
     public String getId() {
         return id;
     }
@@ -378,5 +386,21 @@ public class GetCloudCompanyRequest {
 
     public void setTipstype(Byte tipstype) {
         this.tipstype = tipstype;
+    }
+
+    public String getAddtimeStart() {
+        return addtimeStart;
+    }
+
+    public void setAddtimeStart(String addtimeStart) {
+        this.addtimeStart = addtimeStart;
+    }
+
+    public String getAddtimeEnd() {
+        return addtimeEnd;
+    }
+
+    public void setAddtimeEnd(String addtimeEnd) {
+        this.addtimeEnd = addtimeEnd;
     }
 }

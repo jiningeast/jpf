@@ -1,11 +1,13 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.custom.PayOrderCpsingleCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayOrderCpsingleCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderCpsingleMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayOrderMapper;
 import com.joiest.jpf.dto.OrderCpsingleRequest;
@@ -36,6 +38,9 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
 
     @Autowired
     private SystemlogServiceFacade systemlogServiceFacade;
+
+    @Autowired
+    private PayOrderCpsingleCustomMapper payOrderCpsingleCustomMapper;
 
     private static final Logger logger = LogManager.getLogger(OrderCpsingleServiceFacadeImpl.class);
 
@@ -93,8 +98,11 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             c.andAddtimeBetween(addtimeStart,addtimeEnd);
         }
 
-        List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
-
+        //List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
+        List<PayOrderCpsingleCustom> list = payOrderCpsingleCustomMapper.selectJoinMerchants(e);
+        if( list.isEmpty() || list==null ){
+            throw new JpfException(JpfErrorInfo.SYSTEM_ERROR,"未查询到数据信息");
+        }
         // =============================start========================================
         // tableName
         String className = e.getClass().getName();
@@ -125,12 +133,19 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
         // ==============================end=========================================
 
         List<OrderCpsingleInfo> infos = new ArrayList<>();
-        for (PayOrderCpsingle payOrderCpsingle:list){
+        for (PayOrderCpsingleCustom payOrderCpsingleCustom:list){
+            OrderCpsingleInfo orderCpsingleInfo = new OrderCpsingleInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayOrderCpsingleCustom.class, OrderCpsingleInfo.class, false);
+            beanCopier.copy(payOrderCpsingleCustom, orderCpsingleInfo, null);
+            infos.add(orderCpsingleInfo);
+        }
+
+        /*for (PayOrderCpsingle payOrderCpsingle:list){
             OrderCpsingleInfo orderCpsingleInfo = new OrderCpsingleInfo();
             BeanCopier beanCopier = BeanCopier.create(PayOrderCpsingle.class, OrderCpsingleInfo.class, false);
             beanCopier.copy(payOrderCpsingle, orderCpsingleInfo, null);
             infos.add(orderCpsingleInfo);
-        }
+        }*/
 
         response.setList(infos);
         response.setCount(payOrderCpsingleMapper.countByExample(e));
