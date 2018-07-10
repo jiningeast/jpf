@@ -57,19 +57,24 @@
     			"menuname" : "商户管理",
     			"menus" : [{
     				"menuid" : "201",
-    				"menuname" : "商户信息管理",
+    				"menuname" : "旅游商户管理",
     				"icon" : "icon-nav",
     				"url" : "merchant/index"
     			},{
                     "menuid" : "202",
-                    "menuname" : "商户支付配置管理",
-                    "icon" : "icon-nav",
-                    "url" : "merchant/paytype/index"
-                },{
-                    "menuid" : "203",
-                    "menuname" : "门店管理",
+                    "menuname" : "旅游门店管理",
                     "icon" : "icon-nav",
                     "url" : "merShop/index"
+                },{
+                    "menuid" : "203",
+                    "menuname" : "云账户代理商户管理",
+                    "icon" : "icon-nav",
+                    "url" : "cloudCompany/index"
+                },{
+                    "menuid" : "204",
+                    "menuname" : "云账户业务商户管理",
+                    "icon" : "icon-nav",
+                    "url" : "cloudCompany/indexSale"
                 }]
     		},{
                 "menuid" : "3",
@@ -77,85 +82,65 @@
                 "menuname" : "产品管理",
                 "menus" : [{
                     "menuid" : "301",
-                    "menuname" : "产品信息管理",
+                    "menuname" : "旅游产品管理",
                     "icon" : "icon-nav",
                     "url" : "product/index"
                 }]
             },{
                 "menuid" : "4",
                 "icon" : "icon-sys",
-                "menuname" : "旅游分期订单管理",
+                "menuname" : "订单管理",
                 "menus" : [{
                     "menuid" : "401",
-                    "menuname" : "旅游分期订单信息管理",
+                    "menuname" : "旅游订单管理",
                     "icon" : "icon-nav",
                     "url" : "order/index"
                 },{
                     "menuid" : "402",
-                    "menuname" : "旅游分期退单信息管理",
+                    "menuname" : "云账户订单管理",
                     "icon" : "icon-nav",
-                    "url" : "tdorder/index"
+                    "url" : "cloudCompanyMoney/index"
                 }]
             },{
                 "menuid" : "5",
                 "icon" : "icon-sys",
-                "menuname" : "财务管理",
+                "menuname" : "运营管理",
                 "menus" : [{
                     "menuid" : "501",
-                    "menuname" : "旅游分期退单管理",
+                    "menuname" : "旅游退单管理",
                     "icon" : "icon-nav",
-                    "url" : "orderCpsingle/index"
+                    "url" : "tdorder/index"
+                },{
+                    "menuid" : "502",
+                    "menuname" : "云账户充值管理",
+                    "icon" : "icon-nav",
+                    "url" : "cloudRecharge/index"
                 },{
                     "menuid" : "503",
-                    "menuname" : "通道订单数据",
+                    "menuname" : "代付任务管理",
                     "icon" : "icon-nav",
-                    "url" : "orders/index"
+                    "url" : "cloudTask/index"
                 }]
             },{
                     "menuid" : "6",
                     "icon" : "icon-sys",
-                    "menuname" : "云账户充值管理",
+                    "menuname" : "财务管理",
                     "menus" : [{
                         "menuid" : "601",
-                        "menuname" : "充值管理",
+                        "menuname" : "旅游退单管理",
                         "icon" : "icon-nav",
-                        "url" : "cloudRecharge/index"
+                        "url" : "orderCpsingle/index"
                     },{
                         "menuid" : "602",
-                        "menuname" : "财务充值管理",
+                        "menuname" : "云账户充值管理",
                         "icon" : "icon-nav",
                         "url" : "cloudRecharge/caiwu/Index"
+                    },{
+                        "menuid" : "603",
+                        "menuname" : "聚合通道订单管理",
+                        "icon" : "icon-nav",
+                        "url" : "orders/index"
                     }]
-            },{
-                "menuid" : "7",
-                "icon" : "icon-sys",
-                "menuname" : "云账户公司管理",
-                "menus" : [{
-                    "menuid" : "701",
-                    "menuname" : "代理公司列表",
-                    "icon" : "icon-nav",
-                    "url" : "cloudCompany/index"
-                },{
-                    "menuid" : "702",
-                    "menuname" : "业务公司列表",
-                    "icon" : "icon-nav",
-                    "url" : "cloudCompany/indexSale"
-                }]
-            },{
-                "menuid" : "8",
-                "icon" : "icon-sys",
-                "menuname" : "云账户打款管理",
-                "menus" : [{
-                    "menuid" : "801",
-                    "menuname" : "打款任务管理",
-                    "icon" : "icon-nav",
-                    "url" : "cloudTask/index"
-                },{
-                    "menuid" : "802",
-                    "menuname" : "批次管理",
-                    "icon" : "icon-nav",
-                    "url" : "cloudCompanyMoney/index"
-                }]
             }]
     	};
 

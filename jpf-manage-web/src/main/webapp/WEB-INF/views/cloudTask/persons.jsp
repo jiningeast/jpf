@@ -4,12 +4,13 @@
     <title>人员列表</title>
 </head>
 <body>
-<div name="contentDiv">
+<div name="contentDiv" style="padding: 15px;">
     <div id="dg"></div>
 </div>
 <script>
     $(function () {
-        urlParams = GetRequest();
+        var data = getQueryString("data");
+        console.log(data);
         $("#dg").datagrid({
             title:'人员信息',
             pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
@@ -17,24 +18,34 @@
             multiselect:false,
             selectOnCheck:true,
             remoteSort: false, // 服务端排序
-            url:'personsData?data='+urlParams[data],
+            url:'personsData?data='+${data},
             columns:[[
-                {field:'id',title:'任务Id',width:"10%"},
+                {field:'type',title:'类型',width:"10%"},
+                {field:'bankName',title:'总行名称',width:"10%"},
+                {field:'province',title:'开户行省',width:"10%"},
+                {field:'city',title:'开户行市',width:"10%"},
+                {field:'bankNo',title:'收款账号',width:"10%"},
+                {field:'name',title:'收款户名',width:"10%"},
+                {field:'IdNo',title:'身份证号',width:"10%"},
+                {field:'phone',title:'手机号',width:"10%"},
+                {field:'money',title:'打款金额',width:"10%"},
+                {field:'memo',title:'备注',width:"10%"},
             ]]
         })
     })
 
-    function GetRequest() {
-        var url = location.search; //获取url中"?"符后的字串
-        var theRequest = new Object();
-        if (url.indexOf("?") != -1) {
-            var str = url.substr(1);
-            strs = str.split("&");
-            for(var i = 0; i < strs.length; i ++) {
-                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
-            }
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        var q = window.location.pathname.substr(1).match(reg_rewrite);
+        if(r != null){
+            return unescape(r[2]);
+        }else if(q != null){
+            return unescape(q[2]);
+        }else{
+            return null;
         }
-        return theRequest;
     }
 </script>
 </body>

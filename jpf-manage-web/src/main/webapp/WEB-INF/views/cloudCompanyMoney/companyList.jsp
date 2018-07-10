@@ -27,7 +27,7 @@
             });
 
             $("#dg").datagrid({
-                title : '批次打款管理',
+                title : '云账户订单列表',
                 toolbar:toolbar,
                 pagination:true,
                 singleSelect:true,
@@ -108,13 +108,17 @@
         });
 
     </script>
+    <style>
+        #searchForm td:nth-child(odd) { text-align: right; }
+        #searchForm td:nth-child(even) { text-align: left; }
+    </style>
 </head>
 <body>
-<div name="contentDiv" style="width:1418px">
+<div name="contentDiv">
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm" method="post">
-                <table cellpadding="5">
+                <table cellpadding="5" width="75%">
                     <tr>
                         <td>批次定单号:</td>
                         <td><input id="fid" name="fid" class="easyui-textbox" type="text" /></td>

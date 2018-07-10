@@ -60,7 +60,7 @@
             ];
 
             $("#dg").datagrid({
-                title : '银行管理',
+                title : '银行列表',
                 toolbar:toolbar,
                 pagination:true,
                 singleSelect:true,

@@ -36,7 +36,7 @@
             });
 
             $("#dg").datagrid({
-                title : '系统日志',
+                title : '系统日志列表',
                 pagination : true,//如果为true，则在DataGrid控件底部显示分页工具栏。
                 singleSelect : true,
                 multiselect : false,
@@ -85,16 +85,24 @@
     </script>
 </head>
 <body>
-<div name="contentDiv" style="width:1418px">
-    <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'">
+<div name="contentDiv">
+    <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'" style="width: 100%;">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm" method="post">
                 <table cellpadding="5">
                     <tr>
+                        <td style="text-align: right">状态:</td>
+                        <td style="text-align: left; width: 100px">
+                            <select id="logtype" name="logtype" class="easyui-combobox">
+                                <option value="">全部</option>
+                                <option value="0">前台</option>
+                                <option value="1">后台</option>
+                            </select>
+                        </td>
                         <td>操作者帐号:</td>
-                        <td><input id="operatorName" name="operatorName" class="easyui-textbox" type="text" /></td>
+                        <td style="width: 180px; text-align: left"><input id="operatorName" name="operatorName" class="easyui-textbox" type="text" /></td>
                         <td>创建时间：</td>
-                        <td colspan="3">
+                        <td>
                             <input type="text" class="Wdate" style="width:158px;" id="startAddTime_s"
                                    name="startAddTime"
                                    onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endAddTime_s\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
@@ -102,16 +110,6 @@
                             <input type="text" class="Wdate" style="width:158px;" id="endAddTime_s"
                                    name="endAddTime"
                                    onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startAddTime_s\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>状态:</td>
-                        <td>
-                            <select id="logtype" name="logtype" class="easyui-combobox">
-                                <option value="">全部</option>
-                                <option value="0">前台</option>
-                                <option value="1">后台</option>
-                            </select>
                         </td>
                     </tr>
                 </table>
