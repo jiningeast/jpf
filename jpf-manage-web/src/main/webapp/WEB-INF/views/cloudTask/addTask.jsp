@@ -34,6 +34,7 @@
         <a id="confirmBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确定</a>
     </div>
     <div id="companys"></div>
+    <div id="persons"></div>
 </div>
 <script>
     $(function(){
@@ -46,6 +47,14 @@
 
         // 选取公司弹窗大小
         $('#companys').window({
+            width:'1024px',
+            height:'550px',
+            closed:true,
+            modal:true
+        });
+
+        // 选取公司弹窗大小
+        $('#persons').window({
             width:'1024px',
             height:'550px',
             closed:true,
@@ -84,9 +93,18 @@
                     $.messager.alert('提示', '所选的文件格式不正确!', 'info');
                     return false;
                 }
+
+                ajaxLoading();
             },
             success:function (msg) {
-                console.log("data="+msg);
+                ajaxLoadEnd();
+                /*var data_str = JSON.parse(msg);
+                var data_obj = eval('(' +  data_str +')');
+                var base64 = new Base64();
+                var data = base64.encode(msg);*/
+
+                // 打开新窗口显示数据
+                $('#persons').window("open").window('refresh', '../cloudTask/persons?data='+msg).window('setTitle','人员信息');
             }
         });
 
@@ -97,6 +115,17 @@
                 $("#taskForm").submit();
             }
         })
+
+        //采用jquery easyui loading css效果
+        function ajaxLoading(){
+            $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:"100%",height:$(window).height()}).appendTo("body");
+            $("<div class=\"datagrid-mask-msg\"></div>").html("正在处理，请稍候。。。").appendTo("body").css({display:"block",left:($(document.body).outerWidth(true) - 190) / 2,top:($(window).height() - 45) / 2});
+        }
+        function ajaxLoadEnd(){
+            $(".datagrid-mask").remove();
+            $(".datagrid-mask-msg").remove();
+        }
+
     })
 </script>
 </body>

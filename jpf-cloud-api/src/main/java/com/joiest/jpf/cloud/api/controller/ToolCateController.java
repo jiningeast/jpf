@@ -7,7 +7,10 @@ import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.entity.CloudIdcardInfo;
+import com.joiest.jpf.entity.CloudIdenauthInfo;
 import com.joiest.jpf.facade.CloudIdcardServiceFacade;
+import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
+import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +31,9 @@ public class ToolCateController {
 
     @Autowired
     private CloudIdcardServiceFacade cloudIdcardServiceFacade;
+
+    @Autowired
+    private CloudIdenauthServiceFacade cloudIdenauthServiceFacade;
     /**
      * 身份证OCR识别
      * */
@@ -105,13 +111,68 @@ public class ToolCateController {
             json.put("info","签名有误");
             return json;
         }
-        JSONObject cardAuth = new IdentAuth().idenAuth(name,idCard);
-        return cardAuth;
-        /*
-            JSONObject cardAuth = toolCateServiceFacade.idenAuth(name,idCard);
-            String baseRe = Base64CustomUtils.base64Encoder(cardAuth.toString());
-            baseRe = baseRe.replaceAll("\r\n","");
-        */
+        JSONObject idenAuth =idenAuthDataDeal(name,idCard);
+        return idenAuth;
+    }
+    /**
+     * 实名认证数据处理
+     * */
+    @RequestMapping(value = "/idenAuthDataDeal", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public JSONObject idenAuthDataDeal(String name,String idCard){
+
+
+        //获取当前姓名、身份证号对应
+        CloudIdenauthInfo cloudIdenauthInfo = cloudIdenauthServiceFacade.getCloudIdenauthByNumName(name,idCard);
+
+        JSONObject cardAuth = new JSONObject();
+        if(cloudIdenauthInfo == null || !cloudIdenauthInfo.getStatus().equals((byte)1)){
+
+            //调用实名认证接口
+            cardAuth = new IdentAuth().idenAuth(name,idCard);
+
+            int authCount = 1;
+            String status = "1";
+            String responseParam = null;
+
+            Map<String,String> idenMap = new HashMap<>();
+
+            if(cardAuth.get("code").equals("10008")){
+                idenMap.put("status","2");
+            }else {
+                idenMap.put("status","1");
+            }
+            //计算认证次数
+            if(cloudIdenauthInfo != null){
+
+                authCount = authCount+cloudIdenauthInfo.getCount();
+
+                JSONArray myJsonArray = JSONArray.fromObject(cloudIdenauthInfo.getResponseparam());
+                myJsonArray.add(myJsonArray.size(),cardAuth.get("rawdata").toString());
+                responseParam = myJsonArray.toString();
+
+                idenMap.put("count",String.valueOf(authCount));
+                idenMap.put("responseParam",responseParam);
+                idenMap.put("apiParam",cardAuth.discard("rawdata").toString());
+
+                cloudIdenauthServiceFacade.updateCloudIdenauthById(idenMap,cloudIdenauthInfo.getId());
+            }else{
+
+                idenMap.put("name",name);
+                idenMap.put("num",idCard);
+                idenMap.put("count",String.valueOf(authCount));
+
+                responseParam = "["+cardAuth.get("rawdata").toString()+"]";
+                idenMap.put("responseParam",responseParam);
+                idenMap.put("apiParam",cardAuth.discard("rawdata").toString());
+
+                cloudIdenauthServiceFacade.addCloudIdenauth(idenMap);
+            }
+        }else{
+
+            return JSONObject.fromObject(cloudIdenauthInfo.getApiparam());
+        }
+        return cardAuth.discard("rawdata");
     }
     /**
      * 短信发送接口
@@ -225,7 +286,6 @@ public class ToolCateController {
         return null;
     }
 
-
     /**
      * 身份证分析入库
      * */
@@ -249,8 +309,8 @@ public class ToolCateController {
         JSONObject backResult = JSONObject.fromObject(backBase);
 
         //实名验证
-        JSONObject cardAuth = new IdentAuth().idenAuth(faceResult.get("name").toString(),faceResult.get("num").toString());
-        //JSONObject cardAuth = toolCateServiceFacade.idenAuth(faceResult.get("name").toString(),faceResult.get("num").toString());
+        //JSONObject cardAuth = new IdentAuth().idenAuth(faceResult.get("name").toString(),faceResult.get("num").toString());
+        JSONObject cardAuth = idenAuthDataDeal(faceResult.get("name").toString(),faceResult.get("num").toString());
         if(cardAuth.get("code").equals("10008")){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), cardAuth.get("info").toString(),null);

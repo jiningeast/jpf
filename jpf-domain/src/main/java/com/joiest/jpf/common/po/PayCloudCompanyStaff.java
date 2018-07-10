@@ -1,19 +1,18 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 
 public class PayCloudCompanyStaff implements Serializable {
     /**
      * 自增ID
      */
-    private BigInteger id;
+    private String id;
 
     /**
      * 企业添加人ID
      */
-    private Long uid;
+    private String uid;
 
     /**
      * 员工名称
@@ -33,12 +32,12 @@ public class PayCloudCompanyStaff implements Serializable {
     /**
      * 删除状态：1:正常，-1:离职, -2:彻底删除
      */
-    private String status;
+    private Byte status;
 
     /**
      * 是否签约 0=未签约 1=已签约
      */
-    private String isActive;
+    private Byte isActive;
 
     /**
      * 邮箱
@@ -58,7 +57,7 @@ public class PayCloudCompanyStaff implements Serializable {
     /**
      * 对应pay_cloud_idcard用户身份证信息id
      */
-    private Integer ucardid;
+    private String ucardid;
 
     /**
      * 创建时间
@@ -72,20 +71,20 @@ public class PayCloudCompanyStaff implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public BigInteger getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
-    public Long getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(Long uid) {
-        this.uid = uid;
+    public void setUid(String uid) {
+        this.uid = uid == null ? null : uid.trim();
     }
 
     public String getNickname() {
@@ -112,20 +111,20 @@ public class PayCloudCompanyStaff implements Serializable {
         this.merchNo = merchNo == null ? null : merchNo.trim();
     }
 
-    public String getStatus() {
+    public Byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
-    public String getIsActive() {
+    public Byte getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive == null ? null : isActive.trim();
+    public void setIsActive(Byte isActive) {
+        this.isActive = isActive;
     }
 
     public String getEmail() {
@@ -152,12 +151,12 @@ public class PayCloudCompanyStaff implements Serializable {
         this.idcard = idcard == null ? null : idcard.trim();
     }
 
-    public Integer getUcardid() {
+    public String getUcardid() {
         return ucardid;
     }
 
-    public void setUcardid(Integer ucardid) {
-        this.ucardid = ucardid;
+    public void setUcardid(String ucardid) {
+        this.ucardid = ucardid == null ? null : ucardid.trim();
     }
 
     public Date getCreated() {

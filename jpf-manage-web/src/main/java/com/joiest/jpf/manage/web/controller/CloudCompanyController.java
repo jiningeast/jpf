@@ -5,6 +5,7 @@ import com.joiest.jpf.common.util.PhotoUtil;
 import com.joiest.jpf.common.util.SendMailUtil;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
+import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
@@ -14,6 +15,7 @@ import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.sun.tools.internal.ws.processor.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,57 +40,92 @@ public class CloudCompanyController {
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
     @RequestMapping("/index")
-    public String index()
-    {
+    public String index() {
 
         return "cloudCompany/agentlist";
 
     }
 
-    //列表
+    //代理公司列表
     @RequestMapping("list")
     @ResponseBody
-    public Map<String,Object> list(GetCloudCompanyRequest request)
-    {
+    public Map<String, Object> list(GetCloudCompanyRequest request) {
         GetCloudCompanyResponse response = cloudCompanyServiceFacade.getAgentList(request);
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("total", response.getCount());
         map.put("rows", response.getList());
         return map;
     }
+
+    @RequestMapping("/indexSale")
+    public String indexSale() {
+
+        return "cloudCompany/salelist";
+
+    }
+
+    //列表
+    @RequestMapping("listSale")
+    @ResponseBody
+    public Map<String, Object> listSale(GetCloudCompanyRequest request) {
+        GetCloudCompanyResponse response = cloudCompanyServiceFacade.getSaleList(request);
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", response.getCount());
+        map.put("rows", response.getList());
+        return map;
+    }
+
     //添加公司
     @RequestMapping("/add")
     @ResponseBody
-    public JpfResponseDto add(GetCloudCompanyRequest request,HttpSession httpSession)throws Exception{
+    public JpfResponseDto add(GetCloudCompanyRequest request, HttpSession httpSession) throws Exception {
 
         //获取登录帐号
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
-        int account=userInfo.getId();
-        return cloudCompanyServiceFacade.addCloudCompany(request,account);
+        int account = userInfo.getId();
+        return cloudCompanyServiceFacade.addCloudCompany(request, account);
     }
+
     /**
      * 添加公司-页面
      */
     @RequestMapping("add/page")
-    public ModelAndView addView(){
-        return  new ModelAndView("cloudCompany/companyAdd");
+    public ModelAndView addView() {
+        return new ModelAndView("cloudCompany/companyAdd");
     }
-   /**
+
+    /**
      * 上传文件
      */
-    @RequestMapping(value = "/upload",method = RequestMethod.POST)
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public String upload(@RequestParam("file") MultipartFile file
             , HttpServletRequest request) throws UnknownHostException {
         String address = InetAddress.getLocalHost().getHostAddress().toString();
 
         String savePre = "images/uploadFile/";
-        String cc=PhotoUtil.saveFile(file,request,savePre);
-        HttpServletRequest httpRequest=(HttpServletRequest)request;
-        String  YOU="1530514343788.jpg";
-       // String strBackUrl = "http://" + request.getServerName()+":"+request.getServerPort()+httpRequest.getContextPath()+"/resources/"+cc; //服务器地址
-          String strBackUrl ="http://"+address+":"+request.getServerPort()+httpRequest.getContextPath()+"/resources/"+cc;
-        return strBackUrl;
+        String cc = PhotoUtil.saveFile(file, request, savePre);
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String YOU = "1530514343788.jpg";
+        // String strBackUrl = "http://" + request.getServerName()+":"+request.getServerPort()+httpRequest.getContextPath()+"/resources/"+cc; //服务器地址
+        String strBackUrl = "http://" + address + ":" + request.getServerPort() + httpRequest.getContextPath() + "/resources/" + cc;
+        return cc;
+    }
+
+    /**
+     * 修改公司-页面
+     */
+    @RequestMapping("edit/page")
+    public ModelAndView editView(String id, int type, ModelMap modelMap) {
+        //取出当前公司的信息
+        CloudCompanyInfo cloudCompanyInfo = cloudCompanyServiceFacade.getCompanyOne(id, type);
+        if (type == 1) {
+            cloudCompanyInfo.setType(1);
+        } else {
+            cloudCompanyInfo.setType(0);
+        }
+        modelMap.addAttribute("cloudCompanyInfo", cloudCompanyInfo);
+        return new ModelAndView("cloudCompany/companyEdit", modelMap);
     }
 
     /**
@@ -103,5 +140,26 @@ public class CloudCompanyController {
         map.put("rows", response.getList());
 
         return map;
+    }
+    /**
+     * 修改公司-提交
+     */
+    @RequestMapping("edit/action")
+    @ResponseBody
+    public JpfResponseDto edit(GetCloudCompanyRequest request, HttpSession httpSession) throws Exception {
+        //获取登录帐号
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
+        int account = userInfo.getId();
+        return cloudCompanyServiceFacade.editCloudCompany(request, account);
+    }
+
+    /**
+     * 锁定公司
+     */
+    @RequestMapping("delCompany")
+    @ResponseBody
+    public JpfResponseDto delCompany(String merchNo, int type) {
+
+        return cloudCompanyServiceFacade.delCompany(merchNo, type);
     }
 }

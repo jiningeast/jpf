@@ -4,14 +4,12 @@ import com.joiest.jpf.common.po.PayCloudIdcard;
 import com.joiest.jpf.common.po.PayCloudIdcardExample;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudIdcardCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudIdcardMapper;
-import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.entity.CloudIdcardInfo;
 import com.joiest.jpf.facade.CloudIdcardServiceFacade;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 

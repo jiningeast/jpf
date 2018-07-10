@@ -137,9 +137,9 @@
                     "url" : "cloudCompany/index"
                 },{
                     "menuid" : "702",
-                    "menuname" : "通道订单数据",
+                    "menuname" : "业务公司列表",
                     "icon" : "icon-nav",
-                    "url" : "orders/index"
+                    "url" : "cloudCompany/indexSale"
                 }]
             },{
                 "menuid" : "8",

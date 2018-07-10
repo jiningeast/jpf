@@ -50,11 +50,11 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
 
         PayCloudCompanyStaffExample example = new PayCloudCompanyStaffExample();
         PayCloudCompanyStaffExample.Criteria c = example.createCriteria();
-
+        c.andCodeEqualTo(idcard);
 
         PayCloudCompanyStaff staff = new PayCloudCompanyStaff();
 
-        staff.setIsActive(map.get("is_active"));
+        staff.setIsActive(Byte.parseByte(map.get("is_active")));
         staff.setCode(map.get("code"));
 
         return payCloudCompanyStaffMapper.updateByExampleSelective(staff, example);
@@ -66,7 +66,7 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
     public CloudCompanyStaffInfo getCloudCompanyStaffById(String id){
 
 
-        PayCloudCompanyStaff payCloudCompanyStaff =  payCloudCompanyStaffMapper.selectByPrimaryKey(new BigInteger(id));;
+        PayCloudCompanyStaff payCloudCompanyStaff =  payCloudCompanyStaffMapper.selectByPrimaryKey(id);
 
         if(payCloudCompanyStaff == null){
 

@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>代理公司管理</title>
+    <title>业务公司管理</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script>
         $(function() {
@@ -32,7 +32,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#infoDiv').window("open").window('refresh', 'edit/page?id='+rows[0].id+"&merchNo="+rows[0].merchNo+"&type=1").window('setTitle','编辑');
+                        $('#infoDiv').window("open").window('refresh', 'edit/page?id='+rows[0].id+"&merchNo="+rows[0].merchNo+"&type=0").window('setTitle','编辑');
                     }
                 },
                 {
@@ -112,7 +112,7 @@
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
                 // width:500,
-                url:'list',
+                url:'listSale',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'merchNo',title:'商户编号',width:'10%'},
@@ -121,9 +121,9 @@
                     {field:'phonename',title:'联系人姓名',width:'10%'},
                     {field:'phone',title:'联系电话',width:'15%'},
                     {field:'linkemail',title:'邮箱',width:'13%'},
-                    {field:'agentRate',title:'代理平台费率',width:'10%'},
+                    {field:'salesRate',title:'代理平台费率',width:'10%'},
                     {field:'userName',title:'录入管理员',width:'10%'},
-                    {field:'attestation',title:'认证状态',width:'8%',
+                    {field:'attestation',title:'状态',width:'8%',
                         formatter : function(value,row,index){
                             if(value=='0'){return '未认证'}
                             else if(value=='1'){return '已认证'}

@@ -1,9 +1,7 @@
 package com.joiest.jpf.cloud.api.util;
 
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.LogsCustomUtils;
-import com.joiest.jpf.common.util.MessageDigestUtil;
-import com.joiest.jpf.common.util.OkHttpUtils;
+import com.joiest.jpf.common.po.PayCloudIdenauth;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.ToolCateRequest;
 import com.joiest.jpf.dto.ToolCateResponse;
 import net.sf.json.JSONArray;
@@ -49,45 +47,59 @@ public class IdentAuth {
         bodys.put("idNo", idCard);
         bodys.put("name", name);
 
+        String isSuc = "1";//默认成功
         ToolCateResponse toolCateResponse = new ToolCateResponse();//接收响应值
-        Map<String,String> respos = new HashMap<String,String>();//参数返回
-        String res=null;
-        JSONObject dealFirst = null;
-        JSONObject ocrResult = new JSONObject();
-        JSONObject data = null;
+        String res=null;//初始化body信息
+        JSONObject dealFirst = null;//定义body信息
+        JSONObject ocrResult = new JSONObject();//定义返回的json数据
+        JSONObject data = new JSONObject();//定义失败时错误信息
+        JSONObject allParam = new JSONObject(); //定义整体返回
 
         try {
 
             HttpResponse response = OkHttpUtils.httpPostIdenAuth(IdenHost, IdPath, MethodPost, headers, querys, bodys);
             toolCateResponse = AliYunUtils.convert(response);
+
+            allParam = JSONObject.fromObject(toolCateResponse);
+
+            res = toolCateResponse.getBody();
             if(toolCateResponse.getStatusCode() != 200){
 
+                isSuc = "2";
+                if(res.equals("") || res.equals(null)){
+                    res = "Error";
+                }
                 System.out.println("Http code: " + toolCateResponse.getStatusCode());
                 System.out.println("Http header error: " + toolCateResponse.getHeader("X-Ca-Error-Message"));
-                System.out.println("Http body error msg: " + toolCateResponse.getBody());
+                System.out.println("Http body error msg: " + res);
 
                 data.put("httpCode",toolCateResponse.getHeader("X-Ca-Error-Message"));
-                data.put("HttpBodyError",toolCateResponse.getBody());
+                data.put("HttpBodyError",res);
 
                 ocrResult.put("code","10008");
                 ocrResult.put("info","实名认证有误");
                 ocrResult.put("data",data);
             }else {
 
-                res = toolCateResponse.getBody();
                 dealFirst = JSONObject.fromObject(res);
+                dealFirst.discard("respMessage");
+
                 if(dealFirst.get("respCode").equals("0000")){
 
+                    dealFirst.discard("respCode");
                     ocrResult.put("code","10000");
                     ocrResult.put("info","实名认证一致");
                     ocrResult.put("data",dealFirst);
                 }else{
 
+                    isSuc = "2";
+                    dealFirst.discard("respCode");
                     ocrResult.put("code","10008");
                     ocrResult.put("info",dealFirst.get("respMessage"));
                     ocrResult.put("data",dealFirst);
                 }
             }
+            ocrResult.put("rawdata",allParam);
         } catch (Exception e) {
             e.printStackTrace();
         }
