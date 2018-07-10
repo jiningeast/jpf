@@ -389,11 +389,23 @@ public class UserInfoController {
         }
         //身份证信息
         CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(String.valueOf(cloudCompanyStaffInfo.getUcardid()));
+        Map<String,String> uinfo = new HashMap<String, String>();
         if(cloudIdcardInfo == null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息不存在",null);
+            uinfo.put("faceCardLocal",null);
+            uinfo.put("faceCardServer",null);
+
+            uinfo.put("backCardLocal",null);
+            uinfo.put("backCardServer",null);
+            //return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息不存在",null);
+        }else{
+
+            uinfo.put("faceCardLocal",cloudIdcardInfo.getFaceimglocal());
+            uinfo.put("faceCardServer",cloudIdcardInfo.getFaceimgserver());
+
+            uinfo.put("backCardLocal",cloudIdcardInfo.getBackimglocal());
+            uinfo.put("backCardServer",cloudIdcardInfo.getBackimgserver());
         }
-        Map<String,String> uinfo = new HashMap<String, String>();
         uinfo.put("name",cloudCompanyStaffInfo.getNickname());
         uinfo.put("idCard",cloudCompanyStaffInfo.getIdcard());
         uinfo.put("userAuth",cloudCompanyStaffInfo.getIsActive());
@@ -401,11 +413,6 @@ public class UserInfoController {
         uinfo.put("bankphone",cloudStaffBanksInfo.getBankphone());
         uinfo.put("bankpAuth",cloudStaffBanksInfo.getBankActive());
 
-        uinfo.put("faceCardLocal",cloudIdcardInfo.getFaceimglocal());
-        uinfo.put("faceCardServer",cloudIdcardInfo.getFaceimgserver());
-
-        uinfo.put("backCardLocal",cloudIdcardInfo.getBackimglocal());
-        uinfo.put("backCardServer",cloudIdcardInfo.getBackimgserver());
 
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "获取成功", uinfo);
