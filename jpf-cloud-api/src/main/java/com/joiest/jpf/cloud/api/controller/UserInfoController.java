@@ -228,7 +228,7 @@ public class UserInfoController {
             String token = AESUtils.encrypt(cloudCompanyStaffInfo.getId().toString() + random,ConfigUtil.getValue("AES_KEY"));
             String mid_encrypt = AESUtils.encrypt(cloudCompanyStaffInfo.getId().toString(), ConfigUtil.getValue("AES_KEY"));
 
-            redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token, mid_encrypt, Long.parseLong(ConfigUtil.getValue("CLOUD_USER_LOGIN_EXPIRE")) );
+            redisCustomServiceFacade.set(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token, mid_encrypt, Long.parseLong(ConfigUtil.getValue("CLOUD_USER_LOGIN_EXPIRE_30")) );
 
 
             Map<String,String> tok = new HashMap<String, String>();
@@ -287,13 +287,12 @@ public class UserInfoController {
     public String userAuthInfo(HttpServletRequest request) throws IOException {
 
         String token = request.getParameter("token");
-        String getId = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
-        String id = AESUtils.decrypt(getId, ConfigUtil.getValue("AES_KEY"));
-
-        if(getId.equals(null) || id.equals(null)){
-
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
         }
+        String id = uid;
 
         //获取员工信息
         CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(id);
