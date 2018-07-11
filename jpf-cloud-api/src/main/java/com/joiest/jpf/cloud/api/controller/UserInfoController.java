@@ -64,9 +64,15 @@ public class UserInfoController {
     //登出
     @RequestMapping("/logout")
     @ResponseBody
-    public String userlogout()
+    public String userlogout(String token)
     {
-        return "";
+        if ( StringUtils.isBlank(token) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "token不能为空", null);
+        }
+
+        redisCustomServiceFacade.remove(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
     }
 
     //月份
