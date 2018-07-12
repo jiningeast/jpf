@@ -28,6 +28,8 @@ public interface CloudCompanyMoneyServiceFacade {
      * */
     public GetCloudMoneyDfResponse getAllByfid(String fid);
 
-
-
+    /**
+     * 新增代付订单
+     */
+    public int addRec(CloudCompanyMoneyRequest cloudCompanyMoneyRequest);
 }

@@ -185,4 +185,13 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
 
     }
 
+    @Override
+    public int addRec(CloudCompanyMoneyRequest cloudCompanyMoneyRequest){
+        PayCloudCompanyMoney payCloudCompanyMoney = new PayCloudCompanyMoney();
+
+        BeanCopier beanCopier = BeanCopier.create(CloudCompanyMoneyRequest.class, PayCloudCompanyMoney.class, false);
+        beanCopier.copy(cloudCompanyMoneyRequest, payCloudCompanyMoney, null);
+
+        return payCloudCompanyMoneyMapper.insert(payCloudCompanyMoney);
+    }
 }

@@ -49,4 +49,15 @@ public class CloudTaskServiceFacadeImpl implements CloudTaskServiceFacade {
 
         return payCloudTaskMapper.insert(payCloudTask);
     }
+
+    @Override
+    public CloudTaskInfo getOneTask(String id){
+        PayCloudTask payCloudTask = payCloudTaskMapper.selectByPrimaryKey(id);
+        CloudTaskInfo cloudTaskInfo = new CloudTaskInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayCloudTask.class, CloudTaskInfo.class, false);
+        beanCopier.copy(payCloudTask, cloudTaskInfo, null);
+
+        return cloudTaskInfo;
+    }
 }

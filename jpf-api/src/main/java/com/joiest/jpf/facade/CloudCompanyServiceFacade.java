@@ -7,10 +7,6 @@ import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
 
 public interface CloudCompanyServiceFacade {
 

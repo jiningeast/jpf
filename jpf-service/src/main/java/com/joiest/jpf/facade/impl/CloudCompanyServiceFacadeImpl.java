@@ -1,4 +1,5 @@
 package com.joiest.jpf.facade.impl;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import com.joiest.jpf.common.custom.PayCloudCompanyCustom;
@@ -47,8 +48,6 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
     @Autowired
     private PayCloudEmployeeMapper payCloudEmployeeMapper;
 
-  /*  @Autowired
-    private ToolCateServiceFacade toolCateServiceFacade;*/
     /**
      * 代理公司列表---后台
      */
@@ -360,6 +359,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
             return  new JpfResponseDto();
     }
+
     /**
      * 云账户金额校验
      */
@@ -512,10 +512,8 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
         BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyCustom.class, CloudCompanyInfo.class, false);
         beanCopier.copy(payCloudCompanyCustom,cloudCompanyInfo,null);
+
         return cloudCompanyInfo;
-
-
-
     }
 
     /**
@@ -531,12 +529,10 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         //查询当前添加的是否存在
         PayCloudEmployeeExample example= new PayCloudEmployeeExample();
         PayCloudEmployeeExample.Criteria c = example.createCriteria();
-
         c.andMerchNoEqualTo(merchNo);
 
         List<PayCloudEmployee> payCloudEmployeeList = payCloudEmployeeMapper.selectByExample(example);
         if(payCloudEmployeeList.isEmpty()){
-
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "公司不存在");
         }
         PayCloudEmployee payCloudEmployee = new PayCloudEmployee();

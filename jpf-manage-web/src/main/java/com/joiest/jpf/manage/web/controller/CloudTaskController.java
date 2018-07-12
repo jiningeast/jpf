@@ -7,6 +7,7 @@ import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudRemitExcelInfo;
 import com.joiest.jpf.entity.CloudTaskInfo;
 import com.joiest.jpf.entity.UserInfo;
+import com.joiest.jpf.facade.CloudCompanyMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudTaskServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -37,6 +39,9 @@ public class CloudTaskController {
 
     @Autowired
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
+
+    @Autowired
+    private CloudCompanyMoneyServiceFacade CloudCompanyMoneyServiceFacade;
 
     /**
      * 批量打款页
@@ -243,11 +248,24 @@ public class CloudTaskController {
         return responseMap;
     }
 
+    /**
+     * 运营确认excel文件内容无误后点击确认的操作
+     */
     @RequestMapping(value = "/confirmPersons")
     @ResponseBody
-    public Map<String,Object> confirmPersons(String companyId, String batchNo, HttpServletRequest httpRequest){
+    public Map<String,Object> confirmPersons(String companyId, String batchNo, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         // OSS上传excel文件
+        // 先上传到本地
+        UploadUtils uploadUtils = new UploadUtils();
+        try {
+            uploadUtils.doPost(httpRequest,httpResponse);
+        }catch (Exception e){
+            Map<String,Object> responseMap = new HashMap<>();
+            responseMap.put("code",10002);
+            responseMap.put("info","上传文件失败");
 
+            return responseMap;
+        }
 
         // 查询商户信息
         CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(companyId);
@@ -280,5 +298,40 @@ public class CloudTaskController {
 
             return responseMap;
         }
+
+        // 新建一个待锁定的代付款批次订单
+
+        /*CloudCompanyMoneyRequest request = new CloudCompanyMoneyRequest();
+        request.setAgentNo("CY1530862557288877");   // 待修改
+        request.setMerchNo(companyInfo.getMerchNo());
+        request.setCommoney();
+        request.setAddtime();
+        request.setUid();
+        request.setFid();
+        request.setVid();
+        request.setIntro();
+        request.setMontype();
+        request.setBatchstatus();
+        request.setBatchno();
+        request.setBatchitems();
+        request.setBatchallmoney();
+        request.setBatchdealitems();
+        request.setBatchdealmoney();
+        request.setBatchfailitems();
+        request.setBatchfailmoney();
+        request.setUpdatetime();
+        request.setFeemoney();
+        request.setTaxmoney();
+        request.setTaxmoremoney();
+        request.setProfitmoney();
+        CloudCompanyMoneyServiceFacade.addRec(request);*/
+    }
+
+    /**
+     * 任务处理完成后点击锁定
+     */
+    @RequestMapping("/lockOrder")
+    public void lockOrder(String taskId){
+        // 新建批次订单
     }
 }
