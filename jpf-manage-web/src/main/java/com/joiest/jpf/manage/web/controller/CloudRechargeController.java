@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,6 +39,15 @@ public class CloudRechargeController {
     @RequestMapping("/list")
     @ResponseBody
     public Map<String, Object> list(CloudRechargeRequest cloudRechargeRequest){
+
+
+        //定义财务角色对应的状态值
+        List<Byte> statusArr=new ArrayList<Byte>();
+        statusArr.add((byte)0);  //已支付(已上传凭证)
+        statusArr.add((byte)1); //已支付(已上传凭证)
+        statusArr.add((byte)2); //已支付(已上传凭证)
+        cloudRechargeRequest.setStatusArr(statusArr);
+
         CloudRechargeResponse cloudRechargeResponse = cloudRechargeServiceFacade.getRecords(cloudRechargeRequest);
 
         Map<String, Object> map = new HashMap<>();
@@ -61,6 +72,13 @@ public class CloudRechargeController {
     @RequestMapping("/caiwu/list")
     @ResponseBody
     public Map<String, Object> caiwuList(CloudRechargeRequest cloudRechargeRequest){
+
+        //定义财务角色对应的状态值
+        List<Byte> statusArr=new ArrayList<Byte>();
+        statusArr.add((byte)3);  //已支付(已上传凭证)
+        statusArr.add((byte)4); //已支付(已上传凭证)
+        cloudRechargeRequest.setStatusArr(statusArr);
+
         CloudRechargeResponse cloudRechargeResponse = cloudRechargeServiceFacade.getCaiwuRecords(cloudRechargeRequest);
         ModelMap modelMap = new ModelMap();
         Map<String, Object> map = new HashMap<>();

@@ -140,6 +140,11 @@
                         "menuname" : "聚合通道订单管理",
                         "icon" : "icon-nav",
                         "url" : "orders/index"
+                    },{
+                        "menuid" : "604",
+                        "menuname" : "云账户代付管理",
+                        "icon" : "icon-nav",
+                        "url" : "cloudCompanyMoney/caiwu/index"
                     }]
             }]
     	};

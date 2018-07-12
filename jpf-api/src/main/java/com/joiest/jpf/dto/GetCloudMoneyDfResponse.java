@@ -6,6 +6,8 @@ import java.util.List;
 
 public class GetCloudMoneyDfResponse {
 
+    private int count;
+
     private List<CloudDfMoneyInterfaceInfo> list;
 
     private Double monthTotal;
@@ -24,5 +26,13 @@ public class GetCloudMoneyDfResponse {
 
     public void setMonthTotal(Double monthTotal) {
         this.monthTotal = monthTotal;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }
