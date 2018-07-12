@@ -1,6 +1,5 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.util.ExcelDealUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.LogsCustomUtils;
@@ -8,10 +7,12 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.CloudTaskRequest;
 import com.joiest.jpf.dto.CloudTaskResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
-import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.entity.CloudRemitExcelInfo;
+import com.joiest.jpf.entity.CloudTaskInfo;
+import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudTaskServiceFacade;
+import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -164,5 +167,44 @@ public class CloudTaskController {
         responseMap.put("rows",jsonMap.get("data"));
 
         return responseMap;
+    }
+
+    @RequestMapping(value = "/confirmPersons")
+    @ResponseBody
+    public Map<String,Object> confirmPersons(String companyId, String batchNo, HttpServletRequest httpRequest){
+        // OSS上传excel文件
+
+
+        // 查询商户信息
+        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(companyId);
+
+        // 查询操作人id和姓名
+        HttpSession session = httpRequest.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+
+        // 新建任务记录
+        CloudTaskInfo cloudTaskInfo = new CloudTaskInfo();
+        cloudTaskInfo.setOpratorId(""+userInfo.getId());
+        cloudTaskInfo.setOpratorName(userInfo.getUserName());
+        cloudTaskInfo.setCompanyId(companyInfo.getId());
+        cloudTaskInfo.setCompanyName(companyInfo.getName());
+        cloudTaskInfo.setMerchNo(companyInfo.getMerchNo());
+        cloudTaskInfo.setBatchno(batchNo);
+        cloudTaskInfo.setStatus((byte)0);
+        cloudTaskInfo.setCreated(new Date());
+        int taskRes = cloudTaskServiceFacade.insTask(cloudTaskInfo);
+        if ( taskRes > 0 ){
+            Map<String,Object> responseMap = new HashMap<>();
+            responseMap.put("code",10000);
+            responseMap.put("info","新建任务成功");
+
+            return responseMap;
+        }else{
+            Map<String,Object> responseMap = new HashMap<>();
+            responseMap.put("code",10001);
+            responseMap.put("info","新建任务失败");
+
+            return responseMap;
+        }
     }
 }

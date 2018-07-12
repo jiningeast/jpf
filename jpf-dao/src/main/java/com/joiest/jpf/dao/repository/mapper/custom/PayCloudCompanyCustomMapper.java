@@ -123,4 +123,9 @@ public interface PayCloudCompanyCustomMapper {
 
      */
     PayCloudCompanyCustom selectCompanyOneSales(String id);
+
+    /**
+     * 获取单条公司信息，带类型
+     */
+    PayCloudCompanyCustom selectCompanyOne(String id);
 }

@@ -3,7 +3,6 @@ package com.joiest.jpf.entity;
 import java.util.Date;
 
 public class CloudTaskInfo {
-
     /**
      * 主键id
      */
@@ -15,37 +14,37 @@ public class CloudTaskInfo {
     private String opratorId;
 
     /**
-     *
+     * 操作人姓名
      */
     private String opratorName;
 
     /**
-     * 公司id
+     * 商户id
      */
     private String companyId;
 
     /**
-     *
+     * 商户名称
      */
     private String companyName;
 
     /**
-     * 代理号
-     */
-    private String agentNo;
-
-    /**
-     * 公司号
+     * 商户号
      */
     private String merchNo;
 
     /**
-     * 用户批次号
+     * 商户类型 0=业务商户 1=代理商户
+     */
+    private Byte companyType;
+
+    /**
+     * 用户批次号，订单号
      */
     private String batchno;
 
     /**
-     * 处理状态 0=未完成 1=完成 2=报错
+     * 处理状态 0=未处理 1=处理中 2=完成 3=失败
      */
     private Byte status;
 
@@ -99,20 +98,20 @@ public class CloudTaskInfo {
         this.companyName = companyName;
     }
 
-    public String getAgentNo() {
-        return agentNo;
-    }
-
-    public void setAgentNo(String agentNo) {
-        this.agentNo = agentNo;
-    }
-
     public String getMerchNo() {
         return merchNo;
     }
 
     public void setMerchNo(String merchNo) {
         this.merchNo = merchNo;
+    }
+
+    public Byte getCompanyType() {
+        return companyType;
+    }
+
+    public void setCompanyType(Byte companyType) {
+        this.companyType = companyType;
     }
 
     public String getBatchno() {
