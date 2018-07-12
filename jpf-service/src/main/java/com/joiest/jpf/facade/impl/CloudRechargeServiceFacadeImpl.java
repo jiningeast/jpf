@@ -193,7 +193,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         }
 
 
-        PayCloudRecharge PayCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(id);
+        PayCloudRecharge PayCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(id));
 
 
         CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
@@ -233,7 +233,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if( StringUtils.isBlank(infoId) ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
-        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(infoId);
+        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(infoId));
         CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
         if( payCloudRecharge ==null){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到相关信息");
@@ -248,7 +248,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
         PayCloudRecharge recordData = new PayCloudRecharge();
         recordData.setUpdatetime(curretDate);
-        recordData.setId(infoId);
+        recordData.setId(Long.valueOf(infoId));
 
         //添加实物
         int res = 0;
@@ -362,7 +362,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if( StringUtils.isBlank(infoId) ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
-        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(infoId);
+        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(infoId));
         CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
         if( payCloudRecharge ==null){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到相关信息");
@@ -377,7 +377,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
         PayCloudRecharge recordData = new PayCloudRecharge();
         recordData.setUpdatetime(curretDate);
-        recordData.setId(infoId);
+        recordData.setId(Long.valueOf(infoId));
 
         //添加实物
         int res = 0;
@@ -478,7 +478,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     public Integer rechargeCompanyMoney(String id){
 
         //查询充值信息
-        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(id);
+        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(id));
         CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
         if( payCloudRecharge ==null){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到相关信息");

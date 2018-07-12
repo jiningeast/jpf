@@ -10,11 +10,11 @@ public class PayCloudRechargeExample {
 
     protected boolean distinct;
 
+    protected List<Criteria> oredCriteria;
+
     protected long pageNo;
 
     protected long pageSize;
-
-    protected List<Criteria> oredCriteria;
 
     /**
      *
@@ -105,6 +105,36 @@ public class PayCloudRechargeExample {
         distinct = false;
     }
 
+    /**
+     *
+     * @param pageNo
+     */
+    public void setPageNo(long pageNo) {
+        this.pageNo=pageNo;
+    }
+
+    /**
+     *
+     */
+    public long getPageNo() {
+        return pageNo;
+    }
+
+    /**
+     *
+     * @param pageSize
+     */
+    public void setPageSize(long pageSize) {
+        this.pageSize=pageSize;
+    }
+
+    /**
+     *
+     */
+    public long getPageSize() {
+        return pageSize;
+    }
+
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
 
@@ -156,183 +186,53 @@ public class PayCloudRechargeExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(String value) {
+        public Criteria andIdEqualTo(Long value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(String value) {
+        public Criteria andIdNotEqualTo(Long value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(String value) {
+        public Criteria andIdGreaterThan(Long value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
+        public Criteria andIdGreaterThanOrEqualTo(Long value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(String value) {
+        public Criteria andIdLessThan(Long value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(String value) {
+        public Criteria andIdLessThanOrEqualTo(Long value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<String> values) {
+        public Criteria andIdIn(List<Long> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<String> values) {
+        public Criteria andIdNotIn(List<Long> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(String value1, String value2) {
+        public Criteria andIdBetween(Long value1, Long value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(String value1, String value2) {
+        public Criteria andIdNotBetween(Long value1, Long value2) {
             addCriterion("id not between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidIsNull() {
-            addCriterion("needid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidIsNotNull() {
-            addCriterion("needid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidEqualTo(String value) {
-            addCriterion("needid =", value, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidNotEqualTo(String value) {
-            addCriterion("needid <>", value, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidGreaterThan(String value) {
-            addCriterion("needid >", value, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidGreaterThanOrEqualTo(String value) {
-            addCriterion("needid >=", value, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidLessThan(String value) {
-            addCriterion("needid <", value, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidLessThanOrEqualTo(String value) {
-            addCriterion("needid <=", value, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidIn(List<String> values) {
-            addCriterion("needid in", values, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidNotIn(List<String> values) {
-            addCriterion("needid not in", values, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidBetween(String value1, String value2) {
-            addCriterion("needid between", value1, value2, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andNeedidNotBetween(String value1, String value2) {
-            addCriterion("needid not between", value1, value2, "needid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoIsNull() {
-            addCriterion("pactno is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoIsNotNull() {
-            addCriterion("pactno is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoEqualTo(String value) {
-            addCriterion("pactno =", value, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoNotEqualTo(String value) {
-            addCriterion("pactno <>", value, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoGreaterThan(String value) {
-            addCriterion("pactno >", value, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoGreaterThanOrEqualTo(String value) {
-            addCriterion("pactno >=", value, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoLessThan(String value) {
-            addCriterion("pactno <", value, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoLessThanOrEqualTo(String value) {
-            addCriterion("pactno <=", value, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoLike(String value) {
-            addCriterion("pactno like", value, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoNotLike(String value) {
-            addCriterion("pactno not like", value, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoIn(List<String> values) {
-            addCriterion("pactno in", values, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoNotIn(List<String> values) {
-            addCriterion("pactno not in", values, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoBetween(String value1, String value2) {
-            addCriterion("pactno between", value1, value2, "pactno");
-            return (Criteria) this;
-        }
-
-        public Criteria andPactnoNotBetween(String value1, String value2) {
-            addCriterion("pactno not between", value1, value2, "pactno");
             return (Criteria) this;
         }
 
@@ -403,6 +303,216 @@ public class PayCloudRechargeExample {
 
         public Criteria andFidNotBetween(String value1, String value2) {
             addCriterion("fid not between", value1, value2, "fid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidIsNull() {
+            addCriterion("needid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidIsNotNull() {
+            addCriterion("needid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidEqualTo(String value) {
+            addCriterion("needid =", value, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidNotEqualTo(String value) {
+            addCriterion("needid <>", value, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidGreaterThan(String value) {
+            addCriterion("needid >", value, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidGreaterThanOrEqualTo(String value) {
+            addCriterion("needid >=", value, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidLessThan(String value) {
+            addCriterion("needid <", value, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidLessThanOrEqualTo(String value) {
+            addCriterion("needid <=", value, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidLike(String value) {
+            addCriterion("needid like", value, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidNotLike(String value) {
+            addCriterion("needid not like", value, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidIn(List<String> values) {
+            addCriterion("needid in", values, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidNotIn(List<String> values) {
+            addCriterion("needid not in", values, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidBetween(String value1, String value2) {
+            addCriterion("needid between", value1, value2, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidNotBetween(String value1, String value2) {
+            addCriterion("needid not between", value1, value2, "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathIsNull() {
+            addCriterion("needcatpath is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathIsNotNull() {
+            addCriterion("needcatpath is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathEqualTo(String value) {
+            addCriterion("needcatpath =", value, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathNotEqualTo(String value) {
+            addCriterion("needcatpath <>", value, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathGreaterThan(String value) {
+            addCriterion("needcatpath >", value, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathGreaterThanOrEqualTo(String value) {
+            addCriterion("needcatpath >=", value, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathLessThan(String value) {
+            addCriterion("needcatpath <", value, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathLessThanOrEqualTo(String value) {
+            addCriterion("needcatpath <=", value, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathLike(String value) {
+            addCriterion("needcatpath like", value, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathNotLike(String value) {
+            addCriterion("needcatpath not like", value, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathIn(List<String> values) {
+            addCriterion("needcatpath in", values, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathNotIn(List<String> values) {
+            addCriterion("needcatpath not in", values, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathBetween(String value1, String value2) {
+            addCriterion("needcatpath between", value1, value2, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathNotBetween(String value1, String value2) {
+            addCriterion("needcatpath not between", value1, value2, "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoIsNull() {
+            addCriterion("pactno is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoIsNotNull() {
+            addCriterion("pactno is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoEqualTo(String value) {
+            addCriterion("pactno =", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoNotEqualTo(String value) {
+            addCriterion("pactno <>", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoGreaterThan(String value) {
+            addCriterion("pactno >", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoGreaterThanOrEqualTo(String value) {
+            addCriterion("pactno >=", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoLessThan(String value) {
+            addCriterion("pactno <", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoLessThanOrEqualTo(String value) {
+            addCriterion("pactno <=", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoLike(String value) {
+            addCriterion("pactno like", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoNotLike(String value) {
+            addCriterion("pactno not like", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoIn(List<String> values) {
+            addCriterion("pactno in", values, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoNotIn(List<String> values) {
+            addCriterion("pactno not in", values, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoBetween(String value1, String value2) {
+            addCriterion("pactno between", value1, value2, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoNotBetween(String value1, String value2) {
+            addCriterion("pactno not between", value1, value2, "pactno");
             return (Criteria) this;
         }
 
@@ -616,52 +726,52 @@ public class PayCloudRechargeExample {
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidEqualTo(String value) {
+        public Criteria andEmployeeUidEqualTo(Long value) {
             addCriterion("employee_uid =", value, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidNotEqualTo(String value) {
+        public Criteria andEmployeeUidNotEqualTo(Long value) {
             addCriterion("employee_uid <>", value, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidGreaterThan(String value) {
+        public Criteria andEmployeeUidGreaterThan(Long value) {
             addCriterion("employee_uid >", value, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidGreaterThanOrEqualTo(String value) {
+        public Criteria andEmployeeUidGreaterThanOrEqualTo(Long value) {
             addCriterion("employee_uid >=", value, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidLessThan(String value) {
+        public Criteria andEmployeeUidLessThan(Long value) {
             addCriterion("employee_uid <", value, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidLessThanOrEqualTo(String value) {
+        public Criteria andEmployeeUidLessThanOrEqualTo(Long value) {
             addCriterion("employee_uid <=", value, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidIn(List<String> values) {
+        public Criteria andEmployeeUidIn(List<Long> values) {
             addCriterion("employee_uid in", values, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidNotIn(List<String> values) {
+        public Criteria andEmployeeUidNotIn(List<Long> values) {
             addCriterion("employee_uid not in", values, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidBetween(String value1, String value2) {
+        public Criteria andEmployeeUidBetween(Long value1, Long value2) {
             addCriterion("employee_uid between", value1, value2, "employeeUid");
             return (Criteria) this;
         }
 
-        public Criteria andEmployeeUidNotBetween(String value1, String value2) {
+        public Criteria andEmployeeUidNotBetween(Long value1, Long value2) {
             addCriterion("employee_uid not between", value1, value2, "employeeUid");
             return (Criteria) this;
         }
@@ -1655,6 +1765,111 @@ public class PayCloudRechargeExample {
             addCriterion("pacttime not between", value1, value2, "pacttime");
             return (Criteria) this;
         }
+
+        public Criteria andPactstatusIsNull() {
+            addCriterion("pactstatus is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusIsNotNull() {
+            addCriterion("pactstatus is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusEqualTo(Byte value) {
+            addCriterion("pactstatus =", value, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusNotEqualTo(Byte value) {
+            addCriterion("pactstatus <>", value, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusGreaterThan(Byte value) {
+            addCriterion("pactstatus >", value, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("pactstatus >=", value, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusLessThan(Byte value) {
+            addCriterion("pactstatus <", value, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusLessThanOrEqualTo(Byte value) {
+            addCriterion("pactstatus <=", value, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusIn(List<Byte> values) {
+            addCriterion("pactstatus in", values, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusNotIn(List<Byte> values) {
+            addCriterion("pactstatus not in", values, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusBetween(Byte value1, Byte value2) {
+            addCriterion("pactstatus between", value1, value2, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactstatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("pactstatus not between", value1, value2, "pactstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFidLikeInsensitive(String value) {
+            addCriterion("upper(fid) like", value.toUpperCase(), "fid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedidLikeInsensitive(String value) {
+            addCriterion("upper(needid) like", value.toUpperCase(), "needid");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedcatpathLikeInsensitive(String value) {
+            addCriterion("upper(needcatpath) like", value.toUpperCase(), "needcatpath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoLikeInsensitive(String value) {
+            addCriterion("upper(pactno) like", value.toUpperCase(), "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoLikeInsensitive(String value) {
+            addCriterion("upper(agent_no) like", value.toUpperCase(), "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNoLikeInsensitive(String value) {
+            addCriterion("upper(merch_no) like", value.toUpperCase(), "merchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkphoneLikeInsensitive(String value) {
+            addCriterion("upper(linkphone) like", value.toUpperCase(), "linkphone");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkemailLikeInsensitive(String value) {
+            addCriterion("upper(linkemail) like", value.toUpperCase(), "linkemail");
+            return (Criteria) this;
+        }
+
+        public Criteria andImgurlLikeInsensitive(String value) {
+            addCriterion("upper(imgurl) like", value.toUpperCase(), "imgurl");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
@@ -1748,21 +1963,5 @@ public class PayCloudRechargeExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
-    }
-
-    public long getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(long pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public long getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(long pageSize) {
-        this.pageSize = pageSize;
     }
 }
