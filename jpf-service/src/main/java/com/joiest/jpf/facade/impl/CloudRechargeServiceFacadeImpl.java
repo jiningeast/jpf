@@ -1,16 +1,18 @@
 package com.joiest.jpf.facade.impl;
 
 
-import com.google.common.primitives.Bytes;
+import com.joiest.jpf.common.constant.EnumConstants;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
-import com.joiest.jpf.common.util.BigDecimalCalculateUtils;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
+import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanySalesMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudRechargeMapper;
+import com.joiest.jpf.dto.CloudRechargeNeedReleaseRequest;
 import com.joiest.jpf.dto.CloudRechargeRequest;
 import com.joiest.jpf.dto.CloudRechargeResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
@@ -20,7 +22,6 @@ import com.joiest.jpf.facade.CloudRechargeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
     @Autowired
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
+
+    @Autowired
+    private PayCloudCompanySalesMapper payCloudCompanySalesMapper;
     /*
     * 统计充值总笔数
     * */
@@ -537,5 +541,145 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     /*
     * 云账户金额校验
     * */
+
+    @Override
+    public JpfResponseDto rechargeNeedRelease(CloudRechargeNeedReleaseRequest request) {
+        ValidatorUtils.validate(request);
+        //代理公司校验
+        PayCloudCompanyExample payCloudCompanyExample = new PayCloudCompanyExample();
+        PayCloudCompanyExample.Criteria companyExampleCriteria = payCloudCompanyExample.createCriteria();
+        companyExampleCriteria.andMerchNoEqualTo(request.getAgentNo());
+        List<PayCloudCompany> payCloudCompanyList = payCloudCompanyMapper.selectByExample(payCloudCompanyExample);
+        if (payCloudCompanyList == null || payCloudCompanyList.isEmpty()) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "代理企业不存在");
+        }
+        //业务公司校验
+        PayCloudCompanySalesExample payCloudCompanySalesExample = new PayCloudCompanySalesExample();
+        PayCloudCompanySalesExample.Criteria c = payCloudCompanySalesExample.createCriteria();
+        c.andSalesNoEqualTo(request.getMerchNo());
+        List<PayCloudCompanySales> payCloudCompanySalesList = payCloudCompanySalesMapper.selectByExample(payCloudCompanySalesExample);
+        if (payCloudCompanySalesList == null || payCloudCompanySalesList.isEmpty()) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "该" + request.getMerchNo() + "企业不存在");
+        }
+        PayCloudCompanySales payCloudCompanySales = payCloudCompanySalesList.get(0);
+        BigDecimal feemoney = request.getMoney().multiply(payCloudCompanySales.getSalesRate());//计算手续费
+        BigDecimal realmoney = feemoney.add(request.getMoney());//计算实际汇款金额
+        //校验与前端的手续费或者实际汇款金额是否一致
+        if (feemoney.compareTo(request.getFeemoney())!=0||realmoney.compareTo(request.getRealmoney())!=0) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "企业手续费或实际汇款金额不一致");
+        }
+        PayCloudRecharge record = new PayCloudRecharge();
+        record.setFid("");
+        record.setNeedid(request.getNeedid());
+        record.setNeedcatpath(request.getNeedcatpath());
+        record.setAgentNo(request.getAgentNo());
+        record.setMerchNo(record.getMerchNo());
+        record.setPayway(record.getPayway());
+        if(request.getEmployeeUid()!=null){
+            record.setEmployeeUid(request.getEmployeeUid());
+        }
+        if (StringUtils.isNotBlank(request.getLinkphone())) {
+            record.setLinkphone(request.getLinkphone());
+        }
+        if (StringUtils.isNotBlank(request.getLinkemail())) {
+            record.setLinkemail(request.getLinkemail());
+        }
+        record.setStatus(EnumConstants.RechargeStatus.APPLYING.value());
+        record.setMoney(request.getMoney());
+        record.setRealmoney(request.getRealmoney());
+        record.setFeemoney(request.getFeemoney());
+        record.setSalesRate(payCloudCompanySales.getSalesRate());
+        record.setAddtime(Calendar.getInstance().getTime());
+        record.setPacttime(DateUtils.getFdate(request.getPacttime(),DateUtils.DATEFORMATLONG));
+        record.setPactstatus(EnumConstants.RechargePactStatus.UNCONFIRMED.value());
+        payCloudRechargeMapper.insertSelective(record);
+        return new JpfResponseDto();
+    }
+
+    @Override
+    public JpfResponseDto rechargeNeedDelete(Long id,String fid) {
+        if (id == null) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
+        }
+        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(id);
+        if (payCloudRecharge == null) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]不能不存在");
+        }
+        if (!payCloudRecharge.getFid().equals(fid)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]订单号不一致");
+        }
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.APPLYING.value())) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "非初始状态，不可以操作");
+        }
+        payCloudRechargeMapper.deleteByPrimaryKey(id);
+        return new JpfResponseDto();
+    }
+
+    @Override
+    public JpfResponseDto rechargeNeedAffirm(Long id,String fid,Byte pactstatus) {
+        if (id == null) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
+        }
+        if (pactstatus == null) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[pactstatus]不能为空");
+        }
+        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(id);
+        if (payCloudRecharge == null) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]不能不存在");
+        }
+        if (!payCloudRecharge.getFid().equals(fid)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]订单号不一致");
+        }
+        if (payCloudRecharge.getPactstatus().equals(EnumConstants.RechargePactStatus.CONFIRMED.value())) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "已验收，不需要重复验收");
+        }
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.APPLYING.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.PAY.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.CANCEL.value())) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "状态不匹配，不可以操作");
+        }
+        if (payCloudRecharge.getPacttime().getTime() > Calendar.getInstance().getTime().getTime()) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "未到验收时间，不可以操作");
+        }
+        PayCloudRechargeExample payCloudRechargeExample = new PayCloudRechargeExample();
+        PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
+        payCloudRechargeExampleCriteria.andIdEqualTo(id);
+        payCloudRechargeExampleCriteria.andPactstatusEqualTo(EnumConstants.RechargePactStatus.UNCONFIRMED.value());
+        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.APPLYING.value(),EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.PAY.value(),EnumConstants.RechargeStatus.CANCEL.value()));
+        PayCloudRecharge record = new PayCloudRecharge();
+        record.setPactstatus(EnumConstants.RechargePactStatus.CONFIRMED.value());
+        payCloudRechargeMapper.updateByExample(record, payCloudRechargeExample);
+        return new JpfResponseDto();
+    }
+
+    @Override
+    public JpfResponseDto rechargeNeedVoucher(Long id,String fid,String imgurl) {
+        if (id == null) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
+        }
+        if (imgurl == null) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[imgurl]不能为空");
+        }
+        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(id);
+        if (payCloudRecharge == null) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]不能不存在");
+        }
+        if (!payCloudRecharge.getFid().equals(fid)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]订单号不一致");
+        }
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "状态不匹配，不可以操作");
+        }
+        PayCloudRechargeExample payCloudRechargeExample = new PayCloudRechargeExample();
+        PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
+        payCloudRechargeExampleCriteria.andIdEqualTo(id);
+        payCloudRechargeExampleCriteria.andStatusEqualTo(EnumConstants.RechargeStatus.AUDIT.value());
+        PayCloudRecharge record = new PayCloudRecharge();
+        record.setImgurl(imgurl);
+        record.setStatus(EnumConstants.RechargeStatus.PAY.value());
+        payCloudRechargeMapper.updateByExample(record, payCloudRechargeExample);
+        return new JpfResponseDto();
+    }
 
 }

@@ -1,8 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.dto.CloudRechargeRequest;
-import com.joiest.jpf.dto.CloudRechargeResponse;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.CloudRechargeInfo;
 
 public interface CloudRechargeServiceFacade {
@@ -43,5 +42,25 @@ public interface CloudRechargeServiceFacade {
      * 充值公司账户金额
      */
     public Integer rechargeCompanyMoney(String id);
+
+    /**
+     * 发布需求接口
+     */
+    public JpfResponseDto rechargeNeedRelease(CloudRechargeNeedReleaseRequest request);
+
+    /**
+     * 删除发布需求接口 status=1时可以有此操作
+     */
+    public JpfResponseDto rechargeNeedDelete(Long id,String fid);
+
+    /**
+     * 确认验收接口 pacttime时间到了、pactstatus=1、status=0或1或2或3时可以有此操作
+     */
+    public JpfResponseDto rechargeNeedAffirm(Long id,String fid,Byte pactstatus);
+
+    /**
+     * 上传凭证接口 status=2时可以有此操作
+     */
+    public JpfResponseDto rechargeNeedVoucher(Long id,String fid,String imgurl);
 
 }
