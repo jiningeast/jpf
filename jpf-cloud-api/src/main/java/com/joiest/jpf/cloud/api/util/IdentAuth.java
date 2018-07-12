@@ -1,6 +1,5 @@
 package com.joiest.jpf.cloud.api.util;
 
-import com.joiest.jpf.common.po.PayCloudIdenauth;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.ToolCateRequest;
 import com.joiest.jpf.dto.ToolCateResponse;
@@ -73,7 +72,7 @@ public class IdentAuth {
                 System.out.println("Http header error: " + toolCateResponse.getHeader("X-Ca-Error-Message"));
                 System.out.println("Http body error msg: " + res);
 
-                data.put("httpCode",toolCateResponse.getHeader("X-Ca-Error-Message"));
+                data.put("HttpCode",toolCateResponse.getHeader("X-Ca-Error-Message")==null?"0000":toolCateResponse.getHeader("X-Ca-Error-Message"));
                 data.put("HttpBodyError",res);
 
                 ocrResult.put("code","10008");

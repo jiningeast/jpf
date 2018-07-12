@@ -30,6 +30,8 @@ public class CloudIdenauthServiceFacadeImpl implements CloudIdenauthServiceFacad
         idenAuth.setNum(idAuth.get("num"));
         idenAuth.setStatus(new Byte(idAuth.get("status")));
         idenAuth.setCount(new Integer(idAuth.get("count")));
+        idenAuth.setRequestparam(idAuth.get("requestParam"));
+
         idenAuth.setResponseparam(idAuth.get("responseParam"));
         idenAuth.setApiparam(idAuth.get("apiParam"));
         idenAuth.setAddtime(new Date());
@@ -38,7 +40,7 @@ public class CloudIdenauthServiceFacadeImpl implements CloudIdenauthServiceFacad
         return payCloudIdenauthMapper.insertSelective(idenAuth);
     }
     /*
-     * 更新增认证信息
+     * 更新认证信息
      * */
     public int updateCloudIdenauthById(Map<String,String> idenAuth,BigInteger id){
 
@@ -47,6 +49,7 @@ public class CloudIdenauthServiceFacadeImpl implements CloudIdenauthServiceFacad
         idenAuthUp.setId(id);
         idenAuthUp.setStatus(new Byte(idenAuth.get("status")));
         idenAuthUp.setCount(new Integer(idenAuth.get("count")));
+        idenAuthUp.setRequestparam(idenAuth.get("requestParam"));
         idenAuthUp.setResponseparam(idenAuth.get("responseParam"));
         idenAuthUp.setApiparam(idenAuth.get("apiParam"));
         idenAuthUp.setUpdatetime(new Date());
