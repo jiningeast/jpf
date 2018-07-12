@@ -612,6 +612,35 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     }
 
     @Override
+    public JpfResponseDto rechargeNeedVoucher(Long id,String fid,String imgurl) {
+        if (id == null) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
+        }
+        if (imgurl == null) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[imgurl]不能为空");
+        }
+        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(id);
+        if (payCloudRecharge == null) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]不能不存在");
+        }
+        if (!payCloudRecharge.getFid().equals(fid)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]订单号不一致");
+        }
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "状态不匹配，不可以操作");
+        }
+        PayCloudRechargeExample payCloudRechargeExample = new PayCloudRechargeExample();
+        PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
+        payCloudRechargeExampleCriteria.andIdEqualTo(id);
+        payCloudRechargeExampleCriteria.andStatusEqualTo(EnumConstants.RechargeStatus.AUDIT.value());
+        PayCloudRecharge record = new PayCloudRecharge();
+        record.setImgurl(imgurl);
+        record.setStatus(EnumConstants.RechargeStatus.PAY.value());
+        payCloudRechargeMapper.updateByExample(record, payCloudRechargeExample);
+        return new JpfResponseDto();
+    }
+
+    @Override
     public JpfResponseDto rechargeNeedAffirm(Long id,String fid,Byte pactstatus) {
         if (id == null) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
@@ -645,35 +674,6 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.APPLYING.value(),EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.PAY.value(),EnumConstants.RechargeStatus.CANCEL.value()));
         PayCloudRecharge record = new PayCloudRecharge();
         record.setPactstatus(EnumConstants.RechargePactStatus.CONFIRMED.value());
-        payCloudRechargeMapper.updateByExample(record, payCloudRechargeExample);
-        return new JpfResponseDto();
-    }
-
-    @Override
-    public JpfResponseDto rechargeNeedVoucher(Long id,String fid,String imgurl) {
-        if (id == null) {
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
-        }
-        if (imgurl == null) {
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[imgurl]不能为空");
-        }
-        PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(id);
-        if (payCloudRecharge == null) {
-            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]不能不存在");
-        }
-        if (!payCloudRecharge.getFid().equals(fid)) {
-            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]订单号不一致");
-        }
-        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())) {
-            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "状态不匹配，不可以操作");
-        }
-        PayCloudRechargeExample payCloudRechargeExample = new PayCloudRechargeExample();
-        PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
-        payCloudRechargeExampleCriteria.andIdEqualTo(id);
-        payCloudRechargeExampleCriteria.andStatusEqualTo(EnumConstants.RechargeStatus.AUDIT.value());
-        PayCloudRecharge record = new PayCloudRecharge();
-        record.setImgurl(imgurl);
-        record.setStatus(EnumConstants.RechargeStatus.PAY.value());
         payCloudRechargeMapper.updateByExample(record, payCloudRechargeExample);
         return new JpfResponseDto();
     }
