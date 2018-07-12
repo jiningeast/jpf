@@ -104,7 +104,7 @@
                 var data = base64.encode(msg);*/
 
                 // 打开新窗口显示数据
-                $('#persons').window("open").window('refresh', '../cloudTask/persons?data='+msg).window('setTitle','人员信息');
+                $('#persons').window("open").window('refresh', '../cloudTask/persons?data='+msg).window('setTitle','确认人员信息');
             }
         });
 

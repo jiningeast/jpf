@@ -10,8 +10,8 @@
         $(function() {
             $('#infoDiv').window({
                 title:'详情',
-                width:'1024',
-                height:'600px',
+                width:'80%',
+                height:'500px',
                 closed:true,
                 modal:true
             });
@@ -102,7 +102,7 @@
             ];
 
             $('#dg').datagrid({
-                title:'代理公司管理',
+                title:'代理商户信息',
                 toolbar:toolbar,
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
@@ -120,7 +120,7 @@
                     {field:'name',title:'公司名称',width:'8%'},
                     {field:'phonename',title:'联系人姓名',width:'10%'},
                     {field:'phone',title:'联系电话',width:'15%'},
-                    {field:'linkemail',title:'邮箱',width:'13%'},
+                    {field:'linkemail',title:'邮箱',width:'8%'},
                     {field:'agentRate',title:'代理平台费率',width:'10%'},
                     {field:'userName',title:'录入管理员',width:'10%'},
                     {field:'attestation',title:'认证状态',width:'8%',
@@ -181,13 +181,17 @@
             return new Date().getTime();
         }
     </script>
+    <style>
+        #searchForm table tr td:nth-child(odd) { text-align: right; }
+        #searchForm table tr td:nth-child(even) { text-align: left; }
+    </style>
 </head>
 <body>
 <div name="contentDiv" style="width:1418px">
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm" method="post">
-                <table cellpadding="5">
+                <table cellpadding="5" width="75%">
                     <tr>
                         <td>商户编号:</td>
                         <td><input id="merchNo" name="merchNo" class="easyui-textbox" type="text" /></td>
@@ -202,7 +206,6 @@
                             <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
                                    name="addtimeEnd"
                                    onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                        </td>
                         </td>
                     </tr>
                 </table>

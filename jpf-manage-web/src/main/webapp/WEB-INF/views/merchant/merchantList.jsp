@@ -42,8 +42,19 @@
                     $('#infoDiv').window("open").window('refresh', '../merchant/agent/modify/page?id='+rows[0].id).window('setTitle','编辑');
                 }
             },{
-                text:'审核',
+                text:'支付类型配置',
                 iconCls:'icon-key-add',
+                handler:function(){
+                    var rows = $('#dg').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
+                        return
+                    }
+                    $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id='+rows[0].id).window('setTitle','配置支付类型');
+                }
+            },{
+                text:'审核',
+                iconCls:'icon-ok',
                 handler:function(){
                     var rows = $('#dg').datagrid('getSelections');
                     if (rows.length != 1) {
@@ -56,21 +67,10 @@
                     }
                     $('#infoDiv').window("open").window('refresh', 'audit/page?id='+rows[0].id).window('setTitle','审核');
                 }
-            },{
-                text:'配置支付类型',
-                iconCls:'icon-add',
-                handler:function(){
-                    var rows = $('#dg').datagrid('getSelections');
-                    if (rows.length != 1) {
-                        $.messager.alert('消息提示','请选择一条数据！','info');
-                        return
-                    }
-                    $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id='+rows[0].id).window('setTitle','配置支付类型');
-                }
             }];
 
             $('#dg').datagrid({
-                title:'商户信息列表',
+                title:'旅游商户列表',
                 toolbar:toolbar,
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
@@ -170,13 +170,17 @@
             return new Date().getTime();
         }
     </script>
+    <style>
+        #searchForm table tr td:nth-child(odd) { text-align: right; }
+        #searchForm table tr td:nth-child(even) { text-align: left; }
+    </style>
 </head>
 <body>
 <div name="contentDiv" style="width:1418px">
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'">
-        <div style="padding:10px 60px 20px 60px">
+        <div style="padding:10px">
             <form id="searchForm" method="post">
-                <table cellpadding="5">
+                <table cellpadding="5" width="100%">
                     <tr>
                         <td>聚合商户号:</td>
                         <td><input id="merchNo_s" name="merchNo" class="easyui-textbox" type="text" /></td>

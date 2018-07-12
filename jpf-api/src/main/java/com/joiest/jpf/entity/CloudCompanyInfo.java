@@ -30,7 +30,7 @@ public class CloudCompanyInfo {
     private String phone;
 
     /**
-     * 营业执照
+     * 营业执照地址
      */
     private String bslicense;
 
@@ -60,12 +60,12 @@ public class CloudCompanyInfo {
     private String serviclinkuser;
 
     /**
-     * 手机号
+     * 客户经理手机号
      */
     private String linkphone;
 
     /**
-     * 邮箱
+     * 客户经理邮箱
      */
     private String linkemail;
 
@@ -120,53 +120,36 @@ public class CloudCompanyInfo {
     private String certificate;
 
     /**
-     * 代理平台费率，0.00:不收取费率
+     * 联系人邮箱
      */
-    private BigDecimal agentRate;
+    private String phoneemail;
 
     /**
-     * 服务费费率
+     * 纳税人类型：01:一般纳税人 02:小规模纳税人
      */
-    private BigDecimal salesRate;
+    private String taxpayertype;
 
     /**
-     * 登录名称
+     * 纳税人识别号
      */
-    private String userName;
-    /**
-     * 状态：-1:禁闭。1:正常
-     */
-    private Byte status;
+    private String tin;
 
     /**
-     * 公司类型
+     * 单位注册地址
      */
-    private int type;
+    private String address;
 
-    public BigDecimal getAgentRate() {
-        return agentRate;
-    }
-
-    public void setAgentRate(BigDecimal agentRate) {
-        this.agentRate = agentRate;
-    }
-
-    public BigDecimal getSalesRate() {
-        return salesRate;
-    }
-
-    public void setSalesRate(BigDecimal salesRate) {
-        this.salesRate = salesRate;
-    }
-
-
+    /**
+     * 商户类型：0=业务商户 1=代理商户
+     */
+    private byte type;
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getMerchNo() {
@@ -174,7 +157,7 @@ public class CloudCompanyInfo {
     }
 
     public void setMerchNo(String merchNo) {
-        this.merchNo = merchNo == null ? null : merchNo.trim();
+        this.merchNo = merchNo;
     }
 
     public String getName() {
@@ -182,7 +165,7 @@ public class CloudCompanyInfo {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getPhonename() {
@@ -190,7 +173,7 @@ public class CloudCompanyInfo {
     }
 
     public void setPhonename(String phonename) {
-        this.phonename = phonename == null ? null : phonename.trim();
+        this.phonename = phonename;
     }
 
     public String getPhone() {
@@ -198,7 +181,7 @@ public class CloudCompanyInfo {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
     }
 
     public String getBslicense() {
@@ -206,7 +189,7 @@ public class CloudCompanyInfo {
     }
 
     public void setBslicense(String bslicense) {
-        this.bslicense = bslicense == null ? null : bslicense.trim();
+        this.bslicense = bslicense;
     }
 
     public String getAptitude() {
@@ -214,7 +197,7 @@ public class CloudCompanyInfo {
     }
 
     public void setAptitude(String aptitude) {
-        this.aptitude = aptitude == null ? null : aptitude.trim();
+        this.aptitude = aptitude;
     }
 
     public Byte getAttestation() {
@@ -246,7 +229,7 @@ public class CloudCompanyInfo {
     }
 
     public void setServiclinkuser(String serviclinkuser) {
-        this.serviclinkuser = serviclinkuser == null ? null : serviclinkuser.trim();
+        this.serviclinkuser = serviclinkuser;
     }
 
     public String getLinkphone() {
@@ -254,7 +237,7 @@ public class CloudCompanyInfo {
     }
 
     public void setLinkphone(String linkphone) {
-        this.linkphone = linkphone == null ? null : linkphone.trim();
+        this.linkphone = linkphone;
     }
 
     public String getLinkemail() {
@@ -262,7 +245,7 @@ public class CloudCompanyInfo {
     }
 
     public void setLinkemail(String linkemail) {
-        this.linkemail = linkemail == null ? null : linkemail.trim();
+        this.linkemail = linkemail;
     }
 
     public String getPrivateKey() {
@@ -270,7 +253,7 @@ public class CloudCompanyInfo {
     }
 
     public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey == null ? null : privateKey.trim();
+        this.privateKey = privateKey;
     }
 
     public String getAddadminid() {
@@ -278,7 +261,7 @@ public class CloudCompanyInfo {
     }
 
     public void setAddadminid(String addadminid) {
-        this.addadminid = addadminid == null ? null : addadminid.trim();
+        this.addadminid = addadminid;
     }
 
     public String getEditadminid() {
@@ -286,7 +269,7 @@ public class CloudCompanyInfo {
     }
 
     public void setEditadminid(String editadminid) {
-        this.editadminid = editadminid == null ? null : editadminid.trim();
+        this.editadminid = editadminid;
     }
 
     public Byte getIsshow() {
@@ -318,7 +301,7 @@ public class CloudCompanyInfo {
     }
 
     public void setCloudcode(String cloudcode) {
-        this.cloudcode = cloudcode == null ? null : cloudcode.trim();
+        this.cloudcode = cloudcode;
     }
 
     public String getCloudpaypwd() {
@@ -326,7 +309,7 @@ public class CloudCompanyInfo {
     }
 
     public void setCloudpaypwd(String cloudpaypwd) {
-        this.cloudpaypwd = cloudpaypwd == null ? null : cloudpaypwd.trim();
+        this.cloudpaypwd = cloudpaypwd;
     }
 
     public Date getUpdated() {
@@ -342,30 +325,46 @@ public class CloudCompanyInfo {
     }
 
     public void setCertificate(String certificate) {
-        this.certificate = certificate == null ? null : certificate.trim();
+        this.certificate = certificate;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getPhoneemail() {
+        return phoneemail;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setPhoneemail(String phoneemail) {
+        this.phoneemail = phoneemail;
     }
 
-    public Byte getStatus() {
-        return status;
+    public String getTaxpayertype() {
+        return taxpayertype;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
+    public void setTaxpayertype(String taxpayertype) {
+        this.taxpayertype = taxpayertype;
     }
 
-    public int getType() {
+    public String getTin() {
+        return tin;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public byte getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(byte type) {
         this.type = type;
     }
 }

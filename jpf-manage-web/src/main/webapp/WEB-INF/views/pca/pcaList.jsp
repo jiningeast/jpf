@@ -9,7 +9,7 @@
     <script>
         $(function(){
             $('#dg').datagrid({
-                title:'地区管理',
+                title:'地区列表',
                 // toolbar:toolbar,
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。

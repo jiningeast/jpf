@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <context id="mysql">
+        <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"></plugin>
+        <!-- Pagination -->
+        <plugin type="com.pisgah.mybatis.plugin.MysqlPaginationPlugin"></plugin>
+
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+
+
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin">
+            <property name="suppressJavaInterface" value="false"/>
+        </plugin>
+
+        <commentGenerator type="com.pisgah.mybatis.CustomCommentGenerator">
+            <property name="javaFileEncoding" value="UTF-8"/>
+            <property name="suppressDate" value="false"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://121.40.40.219:3306/payjoiest"
+                        userId="yfk" password="123456*"/>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.joiest.jpf.common.po"
+                            targetProject="E:/IdeaProjects/jpf/jpf-domain/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.joiest.jpf.dao.repository.mapper.generate"
+                         targetProject="E:/IdeaProjects/jpf/jpf-dao/src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.joiest.jpf.dao.repository.mapper.generate" targetProject="E:/IdeaProjects/jpf/jpf-dao/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--<table tableName="pay_systemlog">
+            <columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="logtype" javaType="java.lang.Integer" jdbcType="INTEGER" />
+        </table>-->
+
+        <!--<table tableName="pay_order">
+            <columnOverride column="id" javaType="java.math.BigInteger" jdbcType="BIGINT" />
+            <columnOverride column="orderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="orderprice" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="orderselprice" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="ordername" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="paytype" javaType="java.lang.Integer" jdbcType="TINYINT" />
+            <columnOverride column="foreign_request" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </table>-->
+
+        <!--<table tableName="pay_tdorder">
+            <columnOverride column="id" javaType="java.math.BigInteger" jdbcType="BIGINT" />
+            <columnOverride column="tdorderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="orderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="tdorderprice" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="operate_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="urla" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </table>-->
+
+        <!--<table tableName="pay_order_cpsingle">
+            <columnOverride column="id" javaType="java.math.BigInteger" jdbcType="BIGINT" />
+            <columnOverride column="tdorderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="orderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="tdorderprice" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="operate_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="refund_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </table>-->
+
+        <!--<table tableName="pay_merchants"></table>-->
+
+        <!--<table tableName="pay_order_cp">
+            <columnOverride column="orderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="validitycard" javaType="java.lang.String" jdbcType="TIMESTAMP" />
+            <columnOverride column="return_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="notify_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </table>-->
+
+        <!--<table tableName="pay_bank_card">
+            <columnOverride column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <columnOverride column="cardLen" javaType="java.lang.Integer" jdbcType="INTEGER" />
+        </table>-->
+
+        <!--<table tableName="pay_order_cp_message">
+            <columnOverride column="orderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="sign_orderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="request_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="return_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="notify_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </table>-->
+
+        <!--<table tableName="pay_orders">
+            <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="orderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="mtsid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="money" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="paytype" javaType="java.lang.Integer" jdbcType="TINYINT" />
+            <columnOverride column="product_id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="product_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="product_amount" javaType="java.lang.String" jdbcType="INTEGER" />
+            <columnOverride column="product_unit_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="self_business" javaType="java.lang.Integer" jdbcType="TINYINT" />
+        </table>-->
+
+        <!--<table tableName="pay_merchants_product"></table>-->
+
+        <!--<table tableName="pay_merchants_bank"></table>-->
+
+        <table tableName="pay_cloud_company">
+            <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="attestation" javaType="java.lang.Byte" jdbcType="TINYINT" />
+            <columnOverride column="tipsType" javaType="java.lang.Byte" jdbcType="TINYINT" />
+            <columnOverride column="addadminid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="editadminid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="cloudmoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+        </table>
+
+        <!--<table tableName="pay_cloud_agent">
+            <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="agent_rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+        </table>-->
+
+        <!--<table tableName="pay_cloud_company_sales">
+            <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="sales_rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+        </table>-->
+
+        <!--<table tableName="pay_order_stream">
+            <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="orderid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="request" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="response" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </table>-->
+
+        <!--<table tableName="pay_cloud_task">
+            <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="oprator_id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="company_id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="company_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+            <columnOverride column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+        </table>-->
+
+        <!--<table tableName="pay_cloud_company_staff">
+            <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="uid" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+            <columnOverride column="is_active" javaType="java.lang.Byte" jdbcType="TINYINT" />
+            <columnOverride column="ucardid" javaType="java.lang.String" jdbcType="INTEGER" />
+        </table>-->
+
+        <!--
+        常规字段处理方法：
+        1.ID转字符串
+        2.tinyint长度为1转Byte
+        3.金额字段转BigDecimal
+        4.text字段转String
+        -->
+
+
+    </context>
+</generatorConfiguration>

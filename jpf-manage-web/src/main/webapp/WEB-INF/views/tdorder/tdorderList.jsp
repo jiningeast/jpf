@@ -73,7 +73,7 @@
             ]
 
             $("#dg").datagrid({
-                title : '退单列表',
+                title : '旅游退单列表',
                 toolbar : toolbar,
                 pagination : true,
                 singleSelect : true,
@@ -182,7 +182,7 @@
 <body>
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'" style="padding: 20px;">
         <form id="searchForm" method="post">
-            <table cellpadding="5" width="100%">
+            <table cellpadding="5" width="75%">
                 <tr>
                     <td>退单ID：</td>
                     <td><input id="tdorderid" name="tdorderid" class="easyui-textbox" type="text" /></td>
@@ -210,12 +210,6 @@
                             <option value="3">已撤单</option>
                         </select>
                     </td>
-                    <td></td>
-                    <td>
-
-                    </td>
-                </tr>
-                <tr>
                     <td>用户退单时间：</td>
                     <td>
                         <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
@@ -225,10 +219,6 @@
                         <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
                                name="addtimeEnd"
                                onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                    </td>
-                    <td></td>
-                    <td>
-
                     </td>
                 </tr>
             </table>

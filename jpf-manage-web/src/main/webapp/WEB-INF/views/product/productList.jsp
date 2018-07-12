@@ -97,7 +97,7 @@
                 }];
 
             $('#dg').datagrid({
-                title:'产品信息列表',
+                title:'旅游产品列表',
                 toolbar:toolbar,
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
@@ -184,13 +184,17 @@
             return new Date().getTime();
         }
     </script>
+    <style>
+        #searchForm table tr td:nth-child(odd) { text-align: right; }
+        #searchForm table tr td:nth-child(even) { text-align: left; }
+    </style>
 </head>
 <body>
 <div name="contentDiv" style="width:1418px">
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm" method="post">
-                <table cellpadding="5">
+                <table cellpadding="5" width="75%">
                     <tr>
                         <td>商户ID:</td>
                         <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" /></td>

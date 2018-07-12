@@ -86,9 +86,9 @@
     </script>
 </head>
 <body>
-    <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'" style="padding: 20px;">
+    <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'" style="padding: 10px;">
         <form id="searchForm" method="post">
-            <table cellpadding="5" width="100%">
+            <table cellpadding="5" width="70%">
                 <tr>
                     <td>商户ID：</td>
                     <td><input id="mtsid" name="mtsid" class="easyui-textbox" type="text" ></td>
@@ -101,13 +101,15 @@
                             <option value="1">分店</option>
                         </select>
                     </td>
+                </tr>
+                <tr>
                     <td>生成时间：</td>
-                    <td>
-                        <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
+                    <td colspan="2">
+                        <input type="text" class="Wdate" style="width:48%;" id="addtimeStart"
                                name="addtimeStart"
                                onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'addtimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
                         -
-                        <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
+                        <input type="text" class="Wdate" style="width:48%;" id="addtimeEnd"
                                name="addtimeEnd"
                                onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
                     </td>

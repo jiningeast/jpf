@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>批量打款</title>
+    <title>代付任务</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script type="text/javascript" src="${basePath}/resources/js/Base64.js"></script>
     <style>
@@ -27,10 +27,10 @@
             });
 
             var toolbar = [{
-                text:'新增打款任务',
+                text:'新增',
                 iconCls:'icon-add',
                 handler:function(){
-                    $("#addWindow").window("open").window('refresh','../cloudTask/addTask').window('setTitle','新增打款任务');
+                    $("#addWindow").window("open").window('refresh','../cloudTask/addTask').window('setTitle','新增代付任务');
                 }
             }];
 

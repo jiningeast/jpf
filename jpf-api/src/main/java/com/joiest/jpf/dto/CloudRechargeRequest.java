@@ -1,7 +1,9 @@
 package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class CloudRechargeRequest {
     /**
@@ -38,6 +40,12 @@ public class CloudRechargeRequest {
      * 操作人手机号
      */
     private String linkphone;
+
+    /**
+     * 状态数组
+     */
+    private List<Byte> statusArr;
+
 
     /**
      * 操作人邮箱
@@ -371,5 +379,13 @@ public class CloudRechargeRequest {
 
     public void setAddtimeEnd(String addtimeEnd) {
         this.addtimeEnd = addtimeEnd;
+    }
+
+    public List<Byte> getStatusArr() {
+        return statusArr;
+    }
+
+    public void setStatusArr(List<Byte> statusArr) {
+        this.statusArr = statusArr;
     }
 }

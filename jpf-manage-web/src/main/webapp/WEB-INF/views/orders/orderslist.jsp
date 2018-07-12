@@ -32,7 +32,7 @@
             }];
 
             $("#dg").datagrid({
-                title:'订单列表',
+                title:'聚合通道订单列表',
                 toolbar:toolbar,
                 url:'list',
                 pagination:true,
@@ -92,7 +92,7 @@
 <body>
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'" style="padding: 20px;">
         <form id="searchForm" method="post">
-            <table cellpadding="5" width="100%">
+            <table cellpadding="5" width="75%">
                 <tr>
                     <td>平台订单ID：</td>
                     <td><input id="orderid" name="orderid" class="easyui-textbox" type="text" ></td>
@@ -112,9 +112,6 @@
                                name="addtimeEnd"
                                onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
                     </td>
-                </tr>
-                <tr>
-
                 </tr>
             </table>
         </form>

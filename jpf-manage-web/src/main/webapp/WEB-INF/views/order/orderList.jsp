@@ -18,7 +18,7 @@
     <script>
         $(function () {
             var toolbar = [{
-                text:'订单详情',
+                text:'旅游订单列表',
                 iconCls:'icon-view-detail',
                 handler:function(){
                     var rows = $('#dg').datagrid('getSelections');

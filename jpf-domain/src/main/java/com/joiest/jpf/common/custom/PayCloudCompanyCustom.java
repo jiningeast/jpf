@@ -138,6 +138,16 @@ public class PayCloudCompanyCustom {
      */
     private Byte status;
 
+    /**
+     * 代理商户号
+     */
+    private String agentNo;
+
+    /**
+     * 业务商户号
+     */
+    private String salesNo;
+
     public String getId() {
         return id;
     }
@@ -352,5 +362,21 @@ public class PayCloudCompanyCustom {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getAgentNo() {
+        return agentNo;
+    }
+
+    public void setAgentNo(String agentNo) {
+        this.agentNo = agentNo;
+    }
+
+    public String getSalesNo() {
+        return salesNo;
+    }
+
+    public void setSalesNo(String salesNo) {
+        this.salesNo = salesNo;
     }
 }

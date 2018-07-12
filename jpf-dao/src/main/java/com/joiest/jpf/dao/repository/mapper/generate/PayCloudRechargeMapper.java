@@ -24,7 +24,7 @@ public interface PayCloudRechargeMapper {
      *
      * @param id
      */
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Long id);
 
     /**
      * 插入数据库记录
@@ -58,7 +58,7 @@ public interface PayCloudRechargeMapper {
      *
      * @param id
      */
-    PayCloudRecharge selectByPrimaryKey(String id);
+    PayCloudRecharge selectByPrimaryKey(Long id);
 
     /**
      * 选择性更新数据库记录

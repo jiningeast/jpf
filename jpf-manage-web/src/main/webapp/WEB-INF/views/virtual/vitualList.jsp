@@ -70,7 +70,7 @@
             ];
 
             $('#dg').datagrid({
-                title:'虚拟分类配置管理',
+                title:'虚拟分类列表',
                 toolbar:toolbar,
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
