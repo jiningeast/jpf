@@ -56,11 +56,11 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     public CloudRechargeResponse getRecords(CloudRechargeRequest cloudRechargeRequest){
         CloudRechargeResponse cloudRechargeResponse = new CloudRechargeResponse();
 
-        //定义财务角色对应的状态值
+       /* //定义财务角色对应的状态值
         List<Byte> statusArr=new ArrayList<Byte>();
         statusArr.add((byte)0);  //已支付(已上传凭证)
         statusArr.add((byte)1); //已支付(已上传凭证)
-        statusArr.add((byte)2); //已支付(已上传凭证)
+        statusArr.add((byte)2); //已支付(已上传凭证)*/
 
         PayCloudRechargeExample e = new PayCloudRechargeExample();
         PayCloudRechargeExample.Criteria c = e.createCriteria();
@@ -88,7 +88,10 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             addtimeEnd = DateUtils.getFdate( cloudRechargeRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
-        c.andStatusIn(statusArr);
+        if( cloudRechargeRequest.getStatusArr() != null ){
+            c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+        }
+
 
         //System.out.println(cloudRechargeRequest.getStatus());
         //System.out.println(222222);
@@ -120,10 +123,10 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     public CloudRechargeResponse getCaiwuRecords(CloudRechargeRequest cloudRechargeRequest){
         CloudRechargeResponse cloudRechargeResponse = new CloudRechargeResponse();
 
-        //定义财务角色对应的状态值
+        /*//定义财务角色对应的状态值
         List<Byte> statusArr=new ArrayList<Byte>();
         statusArr.add((byte)3);  //已支付(已上传凭证)
-        statusArr.add((byte)4); //已支付(已上传凭证)
+        statusArr.add((byte)4); //已支付(已上传凭证)*/
 
         PayCloudRechargeExample e = new PayCloudRechargeExample();
         PayCloudRechargeExample.Criteria c = e.createCriteria();
@@ -151,7 +154,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             addtimeEnd = DateUtils.getFdate( cloudRechargeRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
-        c.andStatusIn(statusArr);
+        if( cloudRechargeRequest.getStatusArr() != null ){
+            c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+        }
 
         //System.out.println(cloudRechargeRequest.getStatus());
         //System.out.println(222222);
@@ -217,7 +222,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
      * 审核充值记录状态
      * */
     @Override
-    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+    //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getAuditRecharge(CloudRechargeRequest request){
 
         String infoId = request.getId();
@@ -347,7 +352,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
      * 审核充值记录状态
      * */
     @Override
-    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+    //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getCaiwuAuditRecharge(CloudRechargeRequest request){
 
         String infoId = request.getId();
@@ -407,6 +412,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
                     //做充值操作
                     if(res ==1 ){
+                        //企业账户充值
                         Integer rechargeRes =  this.rechargeCompanyMoney(infoId);
                         if( rechargeRes !=1 ){
                             throw new JpfException(JpfErrorInfo.DAL_ERROR, "账户充值失败");
