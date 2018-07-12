@@ -25,4 +25,9 @@ public interface BankServiceFacade {
      */
     public List<BankInfo> getBankAll();
 
+    /**
+     * 根据银行名称获取银行信息
+     */
+    public BankInfo getBankByName(String bankName);
+
 }

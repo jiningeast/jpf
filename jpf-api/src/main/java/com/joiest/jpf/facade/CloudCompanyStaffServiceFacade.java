@@ -21,4 +21,14 @@ public interface CloudCompanyStaffServiceFacade {
     * */
     public CloudCompanyStaffInfo getCloudCompanyStaffById(String id);
 
+    /**
+     * 插入员工信息
+     */
+    public int addStaff(CloudCompanyStaffInfo cloudCompanyStaffInfo);
+
+    /**
+     * 根据多个字段获取员工
+     */
+    public CloudCompanyStaffInfo getStaffByInfo(CloudCompanyStaffInfo cloudCompanyStaffInfo);
+
 }

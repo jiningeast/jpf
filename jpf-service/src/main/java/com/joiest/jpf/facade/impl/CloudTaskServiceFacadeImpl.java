@@ -25,7 +25,7 @@ public class CloudTaskServiceFacadeImpl implements CloudTaskServiceFacade {
         PayCloudTaskExample e = new PayCloudTaskExample();
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
-        PayCloudTaskExample.Criteria c = e.createCriteria();
+        e.setOrderByClause("id DESC");
         List<CloudTaskInfo> infos = new ArrayList<>();
 
         List<PayCloudTask> list = payCloudTaskMapper.selectByExample(e);

@@ -3,6 +3,7 @@ package com.joiest.jpf.facade;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
+import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 
 import java.util.Map;
 
@@ -31,5 +32,5 @@ public interface CloudCompanyMoneyServiceFacade {
     /**
      * 新增代付订单
      */
-    public int addRec(CloudCompanyMoneyRequest cloudCompanyMoneyRequest);
+    public int addRec(CloudCompanyMoneyInfo cloudCompanyMoneyInfo);
 }

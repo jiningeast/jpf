@@ -32,6 +32,12 @@
                 handler:function(){
                     $("#addWindow").window("open").window('refresh','../cloudTask/addTask').window('setTitle','新增代付任务');
                 }
+            },{
+                text:'详情',
+                iconCls:'icon-view-detail',
+                handler:function () {
+                    $("#detailWindow").window("open").window('refresh','../cloudTask/detail').window('setTitle','任务详情');
+                }
             }];
 
             // 任务数据
@@ -46,10 +52,10 @@
                 url:'list',
                 columns:[[
                     {field:'id',title:'任务Id',width:"10%"},
-                    {field:'oprator_name',title:'操作人',width:"10%"},
-                    {field:'company_name',title:'企业名称',width:"10%"},
-                    {field:'agent_no',title:'代理号',width:"10%"},
-                    {field:'merch_no',title:'商户号',width:"10%"},
+                    {field:'opratorName',title:'操作人',width:"10%"},
+                    {field:'companyName',title:'企业名称',width:"10%"},
+                    {field:'agentNo',title:'代理号',width:"10%"},
+                    {field:'merchNo',title:'商户号',width:"10%"},
                     {field:'batchno',title:'批次号',width:"10%"},
                     {field:'status',title:'状态',width:"10%",
                         formatter:function (value,row,index) {
@@ -74,5 +80,6 @@
 <div name="contentDiv">
     <div id="taskDataGrid"></div>
     <div id="addWindow" style="padding: 10px;"></div>
+    <div id="detailWindow" style="padding: 10px;"></div>
 </div>
 </body>

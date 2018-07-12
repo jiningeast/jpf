@@ -16,4 +16,9 @@ public interface CloudStaffBanksServiceFacade {
      * */
     public CloudStaffBanksInfo getStaffBankBySidPhone(String id,String mobile);
 
+    /**
+     * 插入员工银行卡信息
+     */
+    public int addStaffBank(CloudStaffBanksInfo cloudStaffBanksInfo);
+
 }

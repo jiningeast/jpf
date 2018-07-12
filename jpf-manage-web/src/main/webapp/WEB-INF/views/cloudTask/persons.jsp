@@ -6,11 +6,16 @@
 </head>
 <body>
 <div name="contentDiv" style="padding: 15px;">
-    <%--成功失败列白哦提示信息--%>
+    <%--成功失败列表提示信息--%>
         <c:if  test="${requestScope.code == '10000'}">
             <div class="notice" >
-                <p>成功：Excel表格信息确认无误，共${requestScope.total }条，请点击确认</p>
+                <p style="margin-top: 0;">成功：Excel表格信息确认无误，共${requestScope.total }条，请点击确认</p>
             </div>
+            <form id="confirmPersonsForm" method="post" enctype="multipart/form-data">
+                <input id="companyId" name="companyId" type="hidden" value="">
+                <input id="data" name="data" type="hidden" value=${data}>
+                <%--<input id="file" type="file" value="" style="display: none;">--%>
+            </form>
         </c:if>
         <c:if  test="${requestScope.code == '10001'}">
             <div class="notice" style="background-color: #ffe9e9;border-color: #ffa8a8">
@@ -23,7 +28,6 @@
             </div>
         </c:if>
         <div id="dg"></div>
-
 </div>
 <script>
 <c:if  test="${requestScope.code != '10004'}">
@@ -32,10 +36,14 @@
             text:'确认',
             iconCls:'icon-ok',
             handler:function(){
-                $("#addWindow").window("open").window('refresh','../cloudTask/addTask').window('setTitle','新增打款任务');
+                // 把上个页面的值拿过来
+                $("#companyId").val( $("#mid").val() );
+                // $("#file").val( $("#uploadfile").filebox("getValue") );
+
+
+                $("#confirmPersonsForm").submit();
             }
         }];
-
 
         $("#dg").datagrid({
             title:'人员信息',
@@ -65,21 +73,28 @@
                 {field:'memo',title:'备注',width:"10%"}
             ]]
         })
+
+        $("#confirmPersonsForm").form({
+            type:'post',
+            url:"../cloudTask/confirmPersons",
+            dataType:"json",
+            contentType:"application/json",
+            enctype:"multipart/form-data",
+            onSubmit:function () {
+
+            },
+            success:function (msg) {
+                var response = JSON.parse(msg);
+                if (response.retCode != '0000') {
+                    $.messager.alert('消息提示', response.retMsg, 'error');
+                } else {
+                    alert(response.retMsg);
+                    window.location.reload();
+                }
+            }
+        });
     })
 </c:if>
-    function getQueryString(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
-        var r = window.location.search.substr(1).match(reg);
-        var q = window.location.pathname.substr(1).match(reg_rewrite);
-        if(r != null){
-            return unescape(r[2]);
-        }else if(q != null){
-            return unescape(q[2]);
-        }else{
-            return null;
-        }
-    }
 </script>
 </body>
 </html>

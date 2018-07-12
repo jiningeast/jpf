@@ -29,6 +29,11 @@ public class CloudTaskInfo {
     private String companyName;
 
     /**
+     * 代理商户号
+     */
+    private String agentNo;
+
+    /**
      * 商户号
      */
     private String merchNo;
@@ -42,6 +47,11 @@ public class CloudTaskInfo {
      * 用户批次号，订单号
      */
     private String batchno;
+
+    /**
+     * 上传的excel文件路径
+     */
+    private String filePath;
 
     /**
      * 处理状态 0=未处理 1=处理中 2=完成 3=失败
@@ -98,6 +108,14 @@ public class CloudTaskInfo {
         this.companyName = companyName;
     }
 
+    public String getAgentNo() {
+        return agentNo;
+    }
+
+    public void setAgentNo(String agentNo) {
+        this.agentNo = agentNo;
+    }
+
     public String getMerchNo() {
         return merchNo;
     }
@@ -120,6 +138,14 @@ public class CloudTaskInfo {
 
     public void setBatchno(String batchno) {
         this.batchno = batchno;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public Byte getStatus() {
