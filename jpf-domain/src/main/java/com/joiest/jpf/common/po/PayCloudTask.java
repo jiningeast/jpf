@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class PayCloudTask implements Serializable {
     /**
-     * 
+     * 主键id
      */
     private String id;
 
@@ -15,32 +15,32 @@ public class PayCloudTask implements Serializable {
     private String opratorId;
 
     /**
-     * 
+     * 操作人姓名
      */
     private String opratorName;
 
     /**
-     * 公司id
+     * 商户id
      */
     private String companyId;
 
     /**
-     * 
+     * 商户名称
      */
     private String companyName;
 
     /**
-     * 代理号
-     */
-    private String agentNo;
-
-    /**
-     * 公司号
+     * 商户号
      */
     private String merchNo;
 
     /**
-     * 用户批次号
+     * 商户类型 0=业务商户 1=代理商户
+     */
+    private Byte companyType;
+
+    /**
+     * 用户批次号，订单号
      */
     private String batchno;
 
@@ -101,20 +101,20 @@ public class PayCloudTask implements Serializable {
         this.companyName = companyName == null ? null : companyName.trim();
     }
 
-    public String getAgentNo() {
-        return agentNo;
-    }
-
-    public void setAgentNo(String agentNo) {
-        this.agentNo = agentNo == null ? null : agentNo.trim();
-    }
-
     public String getMerchNo() {
         return merchNo;
     }
 
     public void setMerchNo(String merchNo) {
         this.merchNo = merchNo == null ? null : merchNo.trim();
+    }
+
+    public Byte getCompanyType() {
+        return companyType;
+    }
+
+    public void setCompanyType(Byte companyType) {
+        this.companyType = companyType;
     }
 
     public String getBatchno() {
@@ -163,8 +163,8 @@ public class PayCloudTask implements Serializable {
         sb.append(", opratorName=").append(opratorName);
         sb.append(", companyId=").append(companyId);
         sb.append(", companyName=").append(companyName);
-        sb.append(", agentNo=").append(agentNo);
         sb.append(", merchNo=").append(merchNo);
+        sb.append(", companyType=").append(companyType);
         sb.append(", batchno=").append(batchno);
         sb.append(", status=").append(status);
         sb.append(", created=").append(created);
@@ -194,8 +194,8 @@ public class PayCloudTask implements Serializable {
             && (this.getOpratorName() == null ? other.getOpratorName() == null : this.getOpratorName().equals(other.getOpratorName()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
-            && (this.getAgentNo() == null ? other.getAgentNo() == null : this.getAgentNo().equals(other.getAgentNo()))
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
+            && (this.getCompanyType() == null ? other.getCompanyType() == null : this.getCompanyType().equals(other.getCompanyType()))
             && (this.getBatchno() == null ? other.getBatchno() == null : this.getBatchno().equals(other.getBatchno()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
@@ -214,8 +214,8 @@ public class PayCloudTask implements Serializable {
         result = prime * result + ((getOpratorName() == null) ? 0 : getOpratorName().hashCode());
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
-        result = prime * result + ((getAgentNo() == null) ? 0 : getAgentNo().hashCode());
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
+        result = prime * result + ((getCompanyType() == null) ? 0 : getCompanyType().hashCode());
         result = prime * result + ((getBatchno() == null) ? 0 : getBatchno().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());

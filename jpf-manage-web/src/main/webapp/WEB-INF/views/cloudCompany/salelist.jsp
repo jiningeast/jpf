@@ -10,7 +10,7 @@
         $(function() {
             $('#infoDiv').window({
                 title:'详情',
-                width:'1400px',
+                width:'80%',
                 height:'500px',
                 closed:true,
                 modal:true

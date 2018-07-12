@@ -40,4 +40,13 @@ public class CloudTaskServiceFacadeImpl implements CloudTaskServiceFacade {
 
         return cloudTaskResponse;
     }
+
+    @Override
+    public int insTask(CloudTaskInfo cloudTaskInfo){
+        PayCloudTask payCloudTask = new PayCloudTask();
+        BeanCopier beanCopier = BeanCopier.create(CloudTaskInfo.class, PayCloudTask.class, false);
+        beanCopier.copy(cloudTaskInfo, payCloudTask, null);
+
+        return payCloudTaskMapper.insert(payCloudTask);
+    }
 }

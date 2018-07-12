@@ -495,76 +495,6 @@ public class PayCloudTaskExample {
             return (Criteria) this;
         }
 
-        public Criteria andAgentNoIsNull() {
-            addCriterion("agent_no is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoIsNotNull() {
-            addCriterion("agent_no is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoEqualTo(String value) {
-            addCriterion("agent_no =", value, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoNotEqualTo(String value) {
-            addCriterion("agent_no <>", value, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoGreaterThan(String value) {
-            addCriterion("agent_no >", value, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoGreaterThanOrEqualTo(String value) {
-            addCriterion("agent_no >=", value, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoLessThan(String value) {
-            addCriterion("agent_no <", value, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoLessThanOrEqualTo(String value) {
-            addCriterion("agent_no <=", value, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoLike(String value) {
-            addCriterion("agent_no like", value, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoNotLike(String value) {
-            addCriterion("agent_no not like", value, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoIn(List<String> values) {
-            addCriterion("agent_no in", values, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoNotIn(List<String> values) {
-            addCriterion("agent_no not in", values, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoBetween(String value1, String value2) {
-            addCriterion("agent_no between", value1, value2, "agentNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoNotBetween(String value1, String value2) {
-            addCriterion("agent_no not between", value1, value2, "agentNo");
-            return (Criteria) this;
-        }
-
         public Criteria andMerchNoIsNull() {
             addCriterion("merch_no is null");
             return (Criteria) this;
@@ -632,6 +562,66 @@ public class PayCloudTaskExample {
 
         public Criteria andMerchNoNotBetween(String value1, String value2) {
             addCriterion("merch_no not between", value1, value2, "merchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeIsNull() {
+            addCriterion("company_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeIsNotNull() {
+            addCriterion("company_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeEqualTo(Byte value) {
+            addCriterion("company_type =", value, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeNotEqualTo(Byte value) {
+            addCriterion("company_type <>", value, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeGreaterThan(Byte value) {
+            addCriterion("company_type >", value, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("company_type >=", value, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeLessThan(Byte value) {
+            addCriterion("company_type <", value, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("company_type <=", value, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeIn(List<Byte> values) {
+            addCriterion("company_type in", values, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeNotIn(List<Byte> values) {
+            addCriterion("company_type not in", values, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeBetween(Byte value1, Byte value2) {
+            addCriterion("company_type between", value1, value2, "companyType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("company_type not between", value1, value2, "companyType");
             return (Criteria) this;
         }
 
@@ -892,11 +882,6 @@ public class PayCloudTaskExample {
 
         public Criteria andCompanyNameLikeInsensitive(String value) {
             addCriterion("upper(company_name) like", value.toUpperCase(), "companyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAgentNoLikeInsensitive(String value) {
-            addCriterion("upper(agent_no) like", value.toUpperCase(), "agentNo");
             return (Criteria) this;
         }
 

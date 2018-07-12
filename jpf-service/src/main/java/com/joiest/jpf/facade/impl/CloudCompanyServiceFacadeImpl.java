@@ -588,13 +588,21 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         return response;
     }
 
+    /**
+     * cloudCompanyInfo中type变量代表商户类型：0=业务商户 1=代理商户
+     */
     @Override
     public CloudCompanyInfo getRecById(String id){
-        PayCloudCompany payCloudCompany = payCloudCompanyMapper.selectByPrimaryKey(id);
+        PayCloudCompanyCustom payCloudCompanyCustom = payCloudCompanyCustomMapper.selectCompanyOne(id);
         CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
+        if ( StringUtils.isNotBlank(payCloudCompanyCustom.getAgentNo()) ){
+            cloudCompanyInfo.setType(1);
+        }else{
+            cloudCompanyInfo.setType(0);
+        }
 
-        BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class,CloudCompanyInfo.class,false);
-        beanCopier.copy(payCloudCompany,cloudCompanyInfo,null);
+        BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyCustom.class,CloudCompanyInfo.class,false);
+        beanCopier.copy(payCloudCompanyCustom,cloudCompanyInfo,null);
 
         return cloudCompanyInfo;
     }

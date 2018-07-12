@@ -21,22 +21,22 @@
                     <th>基本信息</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">公司名称：</td>
+                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">公司名称：</td>
                     <td>
                         <input id="name" name="name" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value=""/>
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">联系人姓名：</td>
+                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">联系人姓名：</td>
                     <td>
                         <input id="phonename" name="phonename" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value=""/>
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">联系人电话：</td>
+                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">联系人电话：</td>
                     <td>
                         <input id="phone" name="phone" type="text" style="width:150px" class="easyui-textbox"
                                value="" data-options="required:true,validType:'phoneRex'"/>
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">邮　箱：</td>
+                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">邮　箱：</td>
                     <td>
                         <input id="linkemail" name="linkemail" type="text"style="width:150px" class="easyui-textbox" value="" data-options="prompt:'Enter a valid email.',required:true,validType:'email'"/>
                     </td>
