@@ -170,6 +170,11 @@ public class CloudDfMoneyInterfaceInfo {
     //月份
     private String datemonth;
 
+    /**
+     * 企业充值合同编号
+     */
+    private String pactno;
+
     public Long getId() {
         return id;
     }
@@ -441,4 +446,13 @@ public class CloudDfMoneyInterfaceInfo {
     public void setDatemonth(String datemonth) {
         this.datemonth = datemonth;
     }
+
+    public String getPactno() {
+        return pactno;
+    }
+
+    public void setPactno(String pactno) {
+        this.pactno = pactno;
+    }
+
 }

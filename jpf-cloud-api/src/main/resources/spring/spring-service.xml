@@ -11,5 +11,6 @@
 	<bean id="CloudStaffBanksServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl"></bean>
 	<bean id="RedisCustomServiceFacade" class="com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl"></bean>
 	<bean id="CloudIdenauthServiceFacade" class="com.joiest.jpf.facade.impl.CloudIdenauthServiceFacadeImpl"></bean>
+	<bean id="CloudCompactStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompactStaffInterfaceServiceFacadeImpl"></bean>
 
 </beans>

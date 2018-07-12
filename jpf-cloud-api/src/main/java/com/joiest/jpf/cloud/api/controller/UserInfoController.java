@@ -9,10 +9,7 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.dto.GetUserBlanceRequest;
-import com.joiest.jpf.entity.CloudCompanyStaffInfo;
-import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
-import com.joiest.jpf.entity.CloudIdcardInfo;
-import com.joiest.jpf.entity.CloudStaffBanksInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -49,6 +47,10 @@ public class UserInfoController {
 
     @Autowired
     private ToolCateServiceFacade toolCateServiceFacade;
+
+    //个人签约合同
+    @Autowired
+    private CloudCompactStaffInterfaceServiceFacade cloudCompactStaffServiceFacade;
 
     private String uid;
 
@@ -332,8 +334,16 @@ public class UserInfoController {
         uinfo.put("bankphone",cloudStaffBanksInfo.getBankphone());
         uinfo.put("bankpAuth",cloudStaffBanksInfo.getBankActive());
 
-
-
+        //用户待签合同
+        byte compact_status = 0;
+        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactList(Long.parseLong(uid),compact_status);
+        if ( getUserCompactList == null || getUserCompactList.isEmpty() )
+        {
+            uinfo.put("compact", "1");
+        } else
+        {
+            uinfo.put("compact", "2");
+        }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "获取成功", uinfo);
     }
 
@@ -493,5 +503,100 @@ public class UserInfoController {
             }
         }
     }
+
+    //待签约合同列表
+    @RequestMapping(value = "/userbesign", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getUserBeSignUpList(String token)
+    {
+        if ( StringUtils.isBlank(token) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "token不能为空", null);
+        }
+
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        //待签约
+        byte compact_status = 0;
+        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactListCustom(Long.parseLong(uid),compact_status);
+        List<Map<String,String>> resultMapList = new ArrayList<Map<String,String>>();
+        if ( getUserCompactList != null && !getUserCompactList.isEmpty() )
+        {
+            for (CloudCompactStaffInterfaceCustomInfo one : getUserCompactList)
+            {
+                Map<String,String> resultMap = new HashMap<>();
+                resultMap.put("id", one.getId().toString());
+                //企业名称
+                resultMap.put("companyName", one.getName());
+                //合同编号
+                resultMap.put("pactno", one.getPactno());
+                //金额
+                resultMap.put("commoney", one.getCommoney().toString());
+                //签约状态
+                resultMap.put("compact", one.getCompactActive().toString());
+                resultMapList.add(resultMap);
+            }
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), resultMapList);
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
+    }
+
+    //已签约合同列表
+    @RequestMapping(value = "/usersign", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getUserSignUpList(String token)
+    {
+        if ( StringUtils.isBlank(token) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "token不能为空", null);
+        }
+
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        //待签约
+        byte compact_status = 1;
+        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactListCustom(Long.parseLong(uid),compact_status);
+        List<Map<String,String>> resultMapList = new ArrayList<Map<String,String>>();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if ( getUserCompactList != null && !getUserCompactList.isEmpty() )
+        {
+            for (CloudCompactStaffInterfaceCustomInfo one : getUserCompactList)
+            {
+                Map<String,String> resultMap = new HashMap<>();
+                resultMap.put("id", one.getId().toString());
+                //企业名称
+                resultMap.put("companyName", one.getName());
+                //合同编号
+                resultMap.put("pactno", one.getPactno());
+                //金额
+                resultMap.put("commoney", one.getCommoney().toString());
+                //签约状态
+                resultMap.put("compact", one.getCompactActive().toString());
+                //签约时间
+                String  updated;
+                if ( one.getUpdated() != null )
+                {
+                    updated =  myfmt.format(one.getUpdated());
+                    resultMap.put("updated", updated);
+                } else
+                {
+                    resultMap.put("updated", "");
+                }
+
+                resultMapList.add(resultMap);
+            }
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), resultMapList);
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
+    }
+
+    //签约动作 & 携带是否有待签约合同的参数
+
 }
 
