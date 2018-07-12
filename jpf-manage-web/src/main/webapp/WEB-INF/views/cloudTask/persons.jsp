@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -5,9 +6,27 @@
 </head>
 <body>
 <div name="contentDiv" style="padding: 15px;">
-    <div id="dg"></div>
+    <%--成功失败列白哦提示信息--%>
+        <c:if  test="${requestScope.code == '10000'}">
+            <div class="notice" >
+                <p>成功：Excel表格信息确认无误，共${requestScope.total }条，请点击确认</p>
+            </div>
+        </c:if>
+        <c:if  test="${requestScope.code == '10001'}">
+            <div class="notice" style="background-color: #ffe9e9;border-color: #ffa8a8">
+                <p style="margin-top: 0px;">失败：Excel表格信息有误，共${requestScope.total}条，详情如下，请修改重新上传</p>
+            </div>
+        </c:if>
+        <c:if  test="${requestScope.code == '10004'}">
+            <div class="notice" style="background-color: #ffe9e9;border-color: #ffa8a8">
+                <p style="margin-top: 0px;">失败：Excel表格信息有误，${requestScope.info}</p>
+            </div>
+        </c:if>
+        <div id="dg"></div>
+
 </div>
 <script>
+<c:if  test="${requestScope.code != '10004'}">
     $(function () {
         var toolbar = [{
             text:'确认',
@@ -16,6 +35,7 @@
                 $("#addWindow").window("open").window('refresh','../cloudTask/addTask').window('setTitle','新增打款任务');
             }
         }];
+
 
         $("#dg").datagrid({
             title:'人员信息',
@@ -46,7 +66,7 @@
             ]]
         })
     })
-
+</c:if>
     function getQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");

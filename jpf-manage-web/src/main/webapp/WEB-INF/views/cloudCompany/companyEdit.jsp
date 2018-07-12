@@ -56,9 +56,9 @@
 
                     <td style="text-align: right;background-color: #f1f1f1;">企业类型：</td>
                     <td>
-                        <c:if  test="${cloudCompanyInfo.type eq 1 }">代理公司</c:if>
-                        <c:if  test="${cloudCompanyInfo.type eq 0 }">业务公司</c:if>
-                    <input type="hidden" name="type" value="<c:if  test="${cloudCompanyInfo.type eq 1 }">1</c:if> <c:if  test="${cloudCompanyInfo.type eq 0 }">0</c:if>">
+                        <c:if  test="${cloudCompanyInfo.type == 1 }">代理公司</c:if>
+                        <c:if  test="${cloudCompanyInfo.type == 0 }">业务公司</c:if>
+                    <input type="hidden" name="type" value="<c:if  test="${cloudCompanyInfo.type == 1 }">1</c:if> <c:if  test="${cloudCompanyInfo.type == 0 }">0</c:if>">
                     </select>
 
 
@@ -75,7 +75,7 @@
                       <td style="text-align: right;background-color: #f1f1f1;">服务费：</td>
                       <td>
                           <input  id="salesRate" name="salesRate" type="text" style="width:150px" class="easyui-numberbox"
-                                 value="<c:if  test="${cloudCompanyInfo.type eq 1 }">${cloudCompanyInfo.agentRate}</c:if><c:if  test="${cloudCompanyInfo.type eq 0 }">${cloudCompanyInfo.salesRate}</c:if>" data-options="required:true" precision="2"/><span style="color: #FF2F2F"> 注：当为0.00时不收取服务费</span>
+                                 value="<c:if  test="${cloudCompanyInfo.type == 1 }">${cloudCompanyInfo.agentRate}</c:if><c:if  test="${cloudCompanyInfo.type == 0 }">${cloudCompanyInfo.salesRate}</c:if>" data-options="required:true" precision="2"/><span style="color: #FF2F2F"> 注：当为0.00时不收取服务费</span>
                       </td>
                       <td style="text-align: right;background-color: #f1f1f1;">登录状态：</td>
                       <td>

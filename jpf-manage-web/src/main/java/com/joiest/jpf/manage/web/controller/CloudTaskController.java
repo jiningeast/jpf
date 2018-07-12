@@ -1,9 +1,6 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.joiest.jpf.common.util.ExcelDealUtils;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.LogsCustomUtils;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CloudTaskRequest;
 import com.joiest.jpf.dto.CloudTaskResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
@@ -28,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Controller
@@ -85,63 +83,125 @@ public class CloudTaskController {
         // 保存excel文件
 
         // 判断excel数据正确完整性
-
-
+        //获取当前的文件名
+        String fileNameAll = uploadfile.getOriginalFilename();
+        String fileName=fileNameAll.substring(0,fileNameAll.lastIndexOf("."));
         // 解析xml
         ExcelDealUtils excelDealUtils = new ExcelDealUtils();
+        //循环判断每一条数据
+
         Map<Object,Object> map = excelDealUtils.getImportExcel(uploadfile.getInputStream(), uploadfile.getOriginalFilename());
         List<Object> list = new ArrayList<>(map.values());
+
+
         // 组装自由职业者信息数组
         List<CloudRemitExcelInfo> staffInfosSuccess = new ArrayList<>();
         List<CloudRemitExcelInfo> staffInfosFailed = new ArrayList<>();
         // 检查每条自由职业者信息的完整性
         CloudRemitExcelInfo staffInfo = new CloudRemitExcelInfo();
-        for ( int i=4; i<list.size(); i++){
+        UUID uuid = UUID.randomUUID();
+        String Batchno = "";
+        String companyMoney_Str;
+        String companyMoney_StrSame;
+        double companyMoney = 0;
+        double companyMoneySame = 0;
+        int count=0;
+        int samecount=0;
+        Map<String,Object> responseMap = new HashMap<>();
+        for ( int i=0; i<list.size(); i++){
             // 外循环为一行excel记录
-            Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
-            staffInfo.setType(Byte.parseByte(singlePerson.get(0)));
-            staffInfo.setBankName(singlePerson.get(1));
-            staffInfo.setProvince(singlePerson.get(2));
-            staffInfo.setCity(singlePerson.get(3));
-            staffInfo.setBankNo(singlePerson.get(4));
-            staffInfo.setName(singlePerson.get(5));
-            staffInfo.setIDNo(singlePerson.get(6));
-            staffInfo.setPhone(singlePerson.get(7));
-            staffInfo.setMoney(new BigDecimal(singlePerson.get(8)));
-            staffInfo.setMemo(singlePerson.get(9));
-            for ( int j=0; j<singlePerson.size()-1; j++){
-                // 内循环为该记录的列值
-                // 检查列数据的正确性
-                // 第一列类型必须是0或者1
-                if ( !singlePerson.get(0).equals("0") && !singlePerson.get(0).equals("1") ){
-                    staffInfosFailed.add(staffInfo);
-                }else{
-                    // 前9列数据必填
-                    if ( StringUtils.isBlank(singlePerson.get(j)) ){
-                        staffInfosFailed.add(staffInfo);
+            if(i >= 4){
+                Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
+                staffInfo.setType(Byte.parseByte(singlePerson.get(0)));
+                staffInfo.setBankName(singlePerson.get(1));
+                staffInfo.setProvince(singlePerson.get(2));
+                staffInfo.setCity(singlePerson.get(3));
+                staffInfo.setBankNo(singlePerson.get(4));
+                staffInfo.setName(singlePerson.get(5));
+                staffInfo.setIDNo(singlePerson.get(6));
+                staffInfo.setPhone(singlePerson.get(7));
+                staffInfo.setMoney(new BigDecimal(singlePerson.get(8)));
+                staffInfo.setMemo(singlePerson.get(9));
+                byte flag = 1;
+                for ( int j=0; j<singlePerson.size()-1; j++){
+                    // 内循环为该记录的列值
+                    // 检查列数据的正确性
+                    // 第一列类型必须是0或者1
+                    if ( !singlePerson.get(0).equals("0") && !singlePerson.get(0).equals("1") ){
+                        flag = 0;
+                    }else{
+                        // 前9列数据必填
+                        if ( StringUtils.isBlank(singlePerson.get(j)) ){
+                            flag = 0;
+                        }
                     }
                 }
+                if ( flag == 0 ){
+                    staffInfosFailed.add(staffInfo);
+                }else{
+                    staffInfosSuccess.add(staffInfo);
+                }
+                //总数
+                count++;
+                //总钱数==获取decimal方式
+                companyMoney_Str = new DecimalFormat("#.00").format(Double.parseDouble(singlePerson.get(8))) ;
+                companyMoney = BigDecimalCalculateUtils.add(companyMoney,Double.parseDouble(companyMoney_Str));
+            }else{
+
+                Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
+                for (int j=0; j<singlePerson.size()-1; j++){
+
+                    if(i==2){
+                       Batchno=singlePerson.get(0);
+                       samecount=Integer.parseInt(singlePerson.get(1));
+                        companyMoney_Str = new DecimalFormat("#.00").format(Double.parseDouble(singlePerson.get(2))) ;
+                        companyMoneySame=Double.parseDouble(companyMoney_Str);
+                   }
+
+                }
             }
-            staffInfosSuccess.add(staffInfo);
+
         }
-        UUID uuid = UUID.randomUUID();
-        if ( staffInfosFailed.size() > 0 ){
-            Map<String,Object> responseMap = new HashMap<>();
+        if(fileName.equals(Batchno)==false){
+            responseMap.put("code","10004");
+            responseMap.put("info","批次号与文件名不一致请修改后上传！");
+            responseMap.put("data",staffInfosFailed);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            return uuid.toString();
+        }else if(count !=samecount){
+            responseMap.put("code","10004");
+            responseMap.put("info","总笔数与实际笔数不符请修改后上传！");
+            responseMap.put("data",staffInfosFailed);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            return uuid.toString();
+        }else if(count>1000){
+            responseMap.put("code","10004");
+            responseMap.put("info","最大支持1000条数据请修改后上传！");
+            responseMap.put("data",staffInfosFailed);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            return uuid.toString();
+        }else if(companyMoney!=companyMoneySame){
+            responseMap.put("code","10004");
+            responseMap.put("info","总金额与实际金额不符请修改后上传！");
+            responseMap.put("data",staffInfosFailed);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            return uuid.toString();
+        }else if ( staffInfosFailed.size() > 0 ){
             responseMap.put("code","10001");
             responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
             responseMap.put("data",staffInfosFailed);
 
             LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            return uuid.toString();
         }else{
-            Map<String,Object> responseMap = new HashMap<>();
             responseMap.put("code","10000");
             responseMap.put("info","数据检测无误");
             responseMap.put("data",staffInfosSuccess);
-
             LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            return uuid.toString();
+
         }
 
-        return uuid.toString();
     }
 
     /**
@@ -150,8 +210,22 @@ public class CloudTaskController {
     @RequestMapping("/persons")
     @ResponseBody
     public ModelAndView persons(String data,ModelMap modelMap){
+        String up=data;
+        up = StringUtils.strip(up,"\"");
+        up = StringUtils.stripEnd(up,"\"");
+        // 读取暂存文件
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+up+".txt","GB2312");
+        Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
+        String code=jsonMap.get("code");
+        String info=jsonMap.get("info");
+        Map<String,List< LinkedHashMap<String,String> >> jsonMaps = JsonUtils.toObject(fileContent,HashMap.class);
+        List< LinkedHashMap<String,String> > list = jsonMaps.get("data");
         modelMap.addAttribute("data",data);
+        modelMap.addAttribute("code",code);
+        modelMap.addAttribute("info",info);
+        modelMap.addAttribute("total",list.size());
         return new ModelAndView("cloudTask/persons",modelMap);
+
     }
 
     @RequestMapping(value = "/personsData", produces = "application/json;charset=utf-8")
