@@ -1,9 +1,10 @@
 package com.joiest.jpf.common.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PayCloudCompany {
+public class PayCloudCompany implements Serializable {
     /**
      * 自增ID
      */
@@ -30,7 +31,7 @@ public class PayCloudCompany {
     private String phone;
 
     /**
-     * 营业执照
+     * 营业执照地址
      */
     private String bslicense;
 
@@ -60,12 +61,12 @@ public class PayCloudCompany {
     private String serviclinkuser;
 
     /**
-     * 手机号
+     * 客户经理手机号
      */
     private String linkphone;
 
     /**
-     * 邮箱
+     * 客户经理邮箱
      */
     private String linkemail;
 
@@ -118,6 +119,28 @@ public class PayCloudCompany {
      * 营业执照编号
      */
     private String certificate;
+
+    /**
+     * 联系人邮箱
+     */
+    private String phoneemail;
+
+    /**
+     * 纳税人类型：01:一般纳税人 02:小规模纳税人
+     */
+    private String taxpayertype;
+
+    /**
+     * 纳税人识别号
+     */
+    private String tin;
+
+    /**
+     * 单位注册地址
+     */
+    private String address;
+
+    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
@@ -301,5 +324,159 @@ public class PayCloudCompany {
 
     public void setCertificate(String certificate) {
         this.certificate = certificate == null ? null : certificate.trim();
+    }
+
+    public String getPhoneemail() {
+        return phoneemail;
+    }
+
+    public void setPhoneemail(String phoneemail) {
+        this.phoneemail = phoneemail == null ? null : phoneemail.trim();
+    }
+
+    public String getTaxpayertype() {
+        return taxpayertype;
+    }
+
+    public void setTaxpayertype(String taxpayertype) {
+        this.taxpayertype = taxpayertype == null ? null : taxpayertype.trim();
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin == null ? null : tin.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
+    /**
+     *
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", merchNo=").append(merchNo);
+        sb.append(", name=").append(name);
+        sb.append(", phonename=").append(phonename);
+        sb.append(", phone=").append(phone);
+        sb.append(", bslicense=").append(bslicense);
+        sb.append(", aptitude=").append(aptitude);
+        sb.append(", attestation=").append(attestation);
+        sb.append(", issms=").append(issms);
+        sb.append(", tipstype=").append(tipstype);
+        sb.append(", serviclinkuser=").append(serviclinkuser);
+        sb.append(", linkphone=").append(linkphone);
+        sb.append(", linkemail=").append(linkemail);
+        sb.append(", privateKey=").append(privateKey);
+        sb.append(", addadminid=").append(addadminid);
+        sb.append(", editadminid=").append(editadminid);
+        sb.append(", isshow=").append(isshow);
+        sb.append(", created=").append(created);
+        sb.append(", cloudmoney=").append(cloudmoney);
+        sb.append(", cloudcode=").append(cloudcode);
+        sb.append(", cloudpaypwd=").append(cloudpaypwd);
+        sb.append(", updated=").append(updated);
+        sb.append(", certificate=").append(certificate);
+        sb.append(", phoneemail=").append(phoneemail);
+        sb.append(", taxpayertype=").append(taxpayertype);
+        sb.append(", tin=").append(tin);
+        sb.append(", address=").append(address);
+        sb.append("]");
+        return sb.toString();
+    }
+
+    /**
+     *
+     * @param that
+     */
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        }
+        if (that == null) {
+            return false;
+        }
+        if (getClass() != that.getClass()) {
+            return false;
+        }
+        PayCloudCompany other = (PayCloudCompany) that;
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
+            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getPhonename() == null ? other.getPhonename() == null : this.getPhonename().equals(other.getPhonename()))
+            && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
+            && (this.getBslicense() == null ? other.getBslicense() == null : this.getBslicense().equals(other.getBslicense()))
+            && (this.getAptitude() == null ? other.getAptitude() == null : this.getAptitude().equals(other.getAptitude()))
+            && (this.getAttestation() == null ? other.getAttestation() == null : this.getAttestation().equals(other.getAttestation()))
+            && (this.getIssms() == null ? other.getIssms() == null : this.getIssms().equals(other.getIssms()))
+            && (this.getTipstype() == null ? other.getTipstype() == null : this.getTipstype().equals(other.getTipstype()))
+            && (this.getServiclinkuser() == null ? other.getServiclinkuser() == null : this.getServiclinkuser().equals(other.getServiclinkuser()))
+            && (this.getLinkphone() == null ? other.getLinkphone() == null : this.getLinkphone().equals(other.getLinkphone()))
+            && (this.getLinkemail() == null ? other.getLinkemail() == null : this.getLinkemail().equals(other.getLinkemail()))
+            && (this.getPrivateKey() == null ? other.getPrivateKey() == null : this.getPrivateKey().equals(other.getPrivateKey()))
+            && (this.getAddadminid() == null ? other.getAddadminid() == null : this.getAddadminid().equals(other.getAddadminid()))
+            && (this.getEditadminid() == null ? other.getEditadminid() == null : this.getEditadminid().equals(other.getEditadminid()))
+            && (this.getIsshow() == null ? other.getIsshow() == null : this.getIsshow().equals(other.getIsshow()))
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getCloudmoney() == null ? other.getCloudmoney() == null : this.getCloudmoney().equals(other.getCloudmoney()))
+            && (this.getCloudcode() == null ? other.getCloudcode() == null : this.getCloudcode().equals(other.getCloudcode()))
+            && (this.getCloudpaypwd() == null ? other.getCloudpaypwd() == null : this.getCloudpaypwd().equals(other.getCloudpaypwd()))
+            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()))
+            && (this.getCertificate() == null ? other.getCertificate() == null : this.getCertificate().equals(other.getCertificate()))
+            && (this.getPhoneemail() == null ? other.getPhoneemail() == null : this.getPhoneemail().equals(other.getPhoneemail()))
+            && (this.getTaxpayertype() == null ? other.getTaxpayertype() == null : this.getTaxpayertype().equals(other.getTaxpayertype()))
+            && (this.getTin() == null ? other.getTin() == null : this.getTin().equals(other.getTin()))
+            && (this.getAddress() == null ? other.getAddress() == null : this.getAddress().equals(other.getAddress()));
+    }
+
+    /**
+     *
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getPhonename() == null) ? 0 : getPhonename().hashCode());
+        result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
+        result = prime * result + ((getBslicense() == null) ? 0 : getBslicense().hashCode());
+        result = prime * result + ((getAptitude() == null) ? 0 : getAptitude().hashCode());
+        result = prime * result + ((getAttestation() == null) ? 0 : getAttestation().hashCode());
+        result = prime * result + ((getIssms() == null) ? 0 : getIssms().hashCode());
+        result = prime * result + ((getTipstype() == null) ? 0 : getTipstype().hashCode());
+        result = prime * result + ((getServiclinkuser() == null) ? 0 : getServiclinkuser().hashCode());
+        result = prime * result + ((getLinkphone() == null) ? 0 : getLinkphone().hashCode());
+        result = prime * result + ((getLinkemail() == null) ? 0 : getLinkemail().hashCode());
+        result = prime * result + ((getPrivateKey() == null) ? 0 : getPrivateKey().hashCode());
+        result = prime * result + ((getAddadminid() == null) ? 0 : getAddadminid().hashCode());
+        result = prime * result + ((getEditadminid() == null) ? 0 : getEditadminid().hashCode());
+        result = prime * result + ((getIsshow() == null) ? 0 : getIsshow().hashCode());
+        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
+        result = prime * result + ((getCloudmoney() == null) ? 0 : getCloudmoney().hashCode());
+        result = prime * result + ((getCloudcode() == null) ? 0 : getCloudcode().hashCode());
+        result = prime * result + ((getCloudpaypwd() == null) ? 0 : getCloudpaypwd().hashCode());
+        result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
+        result = prime * result + ((getCertificate() == null) ? 0 : getCertificate().hashCode());
+        result = prime * result + ((getPhoneemail() == null) ? 0 : getPhoneemail().hashCode());
+        result = prime * result + ((getTaxpayertype() == null) ? 0 : getTaxpayertype().hashCode());
+        result = prime * result + ((getTin() == null) ? 0 : getTin().hashCode());
+        result = prime * result + ((getAddress() == null) ? 0 : getAddress().hashCode());
+        return result;
     }
 }

@@ -596,9 +596,9 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         PayCloudCompanyCustom payCloudCompanyCustom = payCloudCompanyCustomMapper.selectCompanyOne(id);
         CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
         if ( StringUtils.isNotBlank(payCloudCompanyCustom.getAgentNo()) ){
-            cloudCompanyInfo.setType(1);
+            cloudCompanyInfo.setType((byte)1);
         }else{
-            cloudCompanyInfo.setType(0);
+            cloudCompanyInfo.setType((byte)0);
         }
 
         BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyCustom.class,CloudCompanyInfo.class,false);

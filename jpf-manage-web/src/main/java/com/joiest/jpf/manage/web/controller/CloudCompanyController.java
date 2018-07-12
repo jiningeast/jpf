@@ -120,9 +120,9 @@ public class CloudCompanyController {
         //取出当前公司的信息
         CloudCompanyInfo cloudCompanyInfo = cloudCompanyServiceFacade.getCompanyOne(id, type);
         if (type == 1) {
-            cloudCompanyInfo.setType(1);
+            cloudCompanyInfo.setType((byte)1);
         } else {
-            cloudCompanyInfo.setType(0);
+            cloudCompanyInfo.setType((byte)0);
         }
         modelMap.addAttribute("cloudCompanyInfo", cloudCompanyInfo);
         return new ModelAndView("cloudCompany/companyEdit", modelMap);
