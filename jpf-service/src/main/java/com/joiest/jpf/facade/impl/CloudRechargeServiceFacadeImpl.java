@@ -538,10 +538,6 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         return rechargeRet;
     }
 
-    /*
-    * 云账户金额校验
-    * */
-
     @Override
     public JpfResponseDto rechargeNeedRelease(CloudRechargeNeedReleaseRequest request) {
         ValidatorUtils.validate(request);
