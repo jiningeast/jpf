@@ -493,5 +493,52 @@ public class UserInfoController {
             }
         }
     }
+    /**
+     * 获区单个合同信息
+     * */
+    @RequestMapping(value = "/compactSigle", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String compactSigle(HttpServletRequest request) {
+
+        String token = request.getParameter("token");//token
+        String compactId = request.getParameter("compactId");//token
+
+        compactId = Base64CustomUtils.base64Decoder(compactId);
+        if(compactId == null || token == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
+        }
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()))
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+
+        return null;
+    }
+    /**
+     * 合同签约
+     * */
+    @RequestMapping(value = "/authCompactSigle", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String authCompactSigle(HttpServletRequest request) {
+
+        String token = request.getParameter("token");//token
+        String compactId = request.getParameter("compactId");//token
+
+        compactId = Base64CustomUtils.base64Decoder(compactId);
+        if(compactId == null || token == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
+        }
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()))
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+
+
+        return null;
+    }
 }
 
