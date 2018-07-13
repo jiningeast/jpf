@@ -90,7 +90,7 @@ public class Base64CustomUtils {
                 fileDir.mkdirs();
             }
             String filename = perfix+timeStamp+".jpg";
-            String imgFilePath = urlRepj+"/"+filename;//新生成的图片
+            String imgFilePath = urlRepj+filename;//新生成的图片
 
             OutputStream out = new FileOutputStream(imgFilePath);
             out.write(b);
@@ -98,10 +98,10 @@ public class Base64CustomUtils {
             out.close();
 
             //dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
-
-            imgInfo.put("actualUrl",imgFilePath);//服务器实际路径
+            String hostUrl = resourcesUrl+filename;
+            imgInfo.put("actualUrl",imgFilePath.replaceAll("\\\\", "/"));//服务器实际路径
             imgInfo.put("filename",filename);//文件名
-            imgInfo.put("resourceUrl",resourcesUrl+filename);//域名对应图片地址 如：http://xxx.com/图片存储地址
+            imgInfo.put("resourceUrl",hostUrl.replaceAll("\\\\", "/"));//域名对应图片地址 如：http://xxx.com/图片存储地址
 
             return imgInfo;
         }catch (Exception e) {
