@@ -7,13 +7,11 @@ import java.io.InputStream;
 
 import java.net.URL;
 import java.util.Date;
+
+import com.aliyun.oss.model.*;
 import org.apache.log4j.Logger;
 
 import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.model.Bucket;
-import com.aliyun.oss.model.OSSObject;
-import com.aliyun.oss.model.ObjectMetadata;
-import com.aliyun.oss.model.PutObjectResult;
 import org.springframework.util.StringUtils;
 
 /**
@@ -151,13 +149,19 @@ public class AliyunOSSClientUtil {
             metadata.setContentDisposition("filename/filesize=" + fileName + "/" + fileSize + "Byte.");
             //上传文件   (上传文件流的形式)
             PutObjectResult putResult = ossClient.putObject(bucketName, folder + fileName, is, metadata);
+//
+//            byte[] buffer = new byte[1024];
+//            CallbackResult putObjectResult = new PutObjectResult();
+//            putObjectResult.getCallbackResponseBody().read(buffer);
+//
+//            System.out.println(putObjectResult);
 
             //return this.getPreUrl(OSSClient ossClient, String bucketName, String folder,String fileName);
             //解析结果
             resultStr = putResult.getETag();
             if(resultStr != null)
             {
-
+                //地址回调功能
                 Date expiration = new Date(new Date().getTime() + 3600 * 1000);
                 URL url = ossClient.generatePresignedUrl(OSSClientConstants.BACKET_NAME, folder + fileName, expiration);
                 if (url != null) {
@@ -166,6 +170,7 @@ public class AliyunOSSClientUtil {
 
             }
 
+            ossClient.shutdown();
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("sorry,this is upload files error,so ,please inspect test mode oss ." + e.getMessage(), e);
