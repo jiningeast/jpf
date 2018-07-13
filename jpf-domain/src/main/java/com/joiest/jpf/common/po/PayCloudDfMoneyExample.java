@@ -2206,6 +2206,66 @@ public class PayCloudDfMoneyExample {
             return (Criteria) this;
         }
 
+        public Criteria andCompanyMoneyIdIsNull() {
+            addCriterion("company_money_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdIsNotNull() {
+            addCriterion("company_money_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdEqualTo(String value) {
+            addCriterion("company_money_id =", value, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdNotEqualTo(String value) {
+            addCriterion("company_money_id <>", value, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdGreaterThan(String value) {
+            addCriterion("company_money_id >", value, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdGreaterThanOrEqualTo(String value) {
+            addCriterion("company_money_id >=", value, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdLessThan(String value) {
+            addCriterion("company_money_id <", value, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdLessThanOrEqualTo(String value) {
+            addCriterion("company_money_id <=", value, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdIn(List<String> values) {
+            addCriterion("company_money_id in", values, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdNotIn(List<String> values) {
+            addCriterion("company_money_id not in", values, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdBetween(String value1, String value2) {
+            addCriterion("company_money_id between", value1, value2, "companyMoneyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyMoneyIdNotBetween(String value1, String value2) {
+            addCriterion("company_money_id not between", value1, value2, "companyMoneyId");
+            return (Criteria) this;
+        }
+
         public Criteria andPactnoIsNull() {
             addCriterion("pactno is null");
             return (Criteria) this;
