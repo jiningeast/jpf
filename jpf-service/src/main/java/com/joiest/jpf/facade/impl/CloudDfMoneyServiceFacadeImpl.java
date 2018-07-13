@@ -1,6 +1,9 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayCloudDfMoneyInterfaceCustom;
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
 import com.joiest.jpf.common.util.BigDecimalCalculateUtils;
@@ -11,6 +14,7 @@ import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudCompactStaffInterfaceCustomInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -116,6 +120,31 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         }
 
         return response;
+    }
+
+    /*
+    **根据订单号更新 代付明细状态
+    * fid  订单号
+     */
+    @Override
+    public JpfResponseDto updateDfRecordsByFid(PayCloudDfMoney record,String fid){
+
+        PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
+        PayCloudDfMoneyExample.Criteria c = example.createCriteria();
+
+        if( StringUtils.isBlank(fid) || fid==null  ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单号不能为空");
+        }
+        c.andFidEqualTo(fid);
+
+        int count = payCloudDfMoneyMapper.updateByExample(record,example);
+        if(count !=1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "数据更新失败");
+        }
+
+        return new JpfResponseDto();
+
+
     }
 
 

@@ -32,6 +32,7 @@
 	<bean id="CloudRechargeServiceFacade" class="com.joiest.jpf.facade.impl.CloudRechargeServiceFacadeImpl"></bean>
 	<bean id="CloudCompanyMoneyServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyMoneyServiceFacadeImpl"></bean>
 	<bean id="CloudTaskServiceFacade" class="com.joiest.jpf.facade.impl.CloudTaskServiceFacadeImpl"></bean>
+	<bean id="CloudDfMoneyServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfMoneyServiceFacadeImpl"></bean>
 	<bean id="CloudCompanyStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyStaffServiceFacadeImpl"></bean>
 	<bean id="CloudStaffBanksServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl"></bean>
 </beans>

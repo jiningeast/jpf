@@ -1,5 +1,7 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 
@@ -17,6 +19,10 @@ public interface CloudDfMoneyServiceFacade {
     //获取用户记录 按月份
 
     public List<CloudDfMoneyInterfaceInfo> getUserMonthList(Long uid);
+
+    //根据订单号更新代付明细
+    public JpfResponseDto updateDfRecordsByFid(PayCloudDfMoney record, String fid);
+
 
     //获取充值记录数据通过主键
     public CloudDfMoneyInterfaceInfo getDfMoneyById(Long id);

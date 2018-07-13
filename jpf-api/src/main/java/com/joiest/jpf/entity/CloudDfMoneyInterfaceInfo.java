@@ -21,6 +21,16 @@ public class CloudDfMoneyInterfaceInfo {
     private String merchNo;
 
     /**
+     * 员工表用户签约状态
+     */
+    private String companyStaffIsActice;
+
+    /**
+     * 合同表合同签约状态
+     */
+    private String compactStaffCompactActive;
+
+    /**
      * 企业添加人ID
      */
     private Long uid;
@@ -445,6 +455,22 @@ public class CloudDfMoneyInterfaceInfo {
 
     public void setDatemonth(String datemonth) {
         this.datemonth = datemonth;
+    }
+
+    public String getCompanyStaffIsActice() {
+        return companyStaffIsActice;
+    }
+
+    public void setCompanyStaffIsActice(String companyStaffIsActice) {
+        this.companyStaffIsActice = companyStaffIsActice;
+    }
+
+    public String getCompactStaffCompactActive() {
+        return compactStaffCompactActive;
+    }
+
+    public void setCompactStaffCompactActive(String compactStaffCompactActive) {
+        this.compactStaffCompactActive = compactStaffCompactActive;
     }
 
     public String getPactno() {

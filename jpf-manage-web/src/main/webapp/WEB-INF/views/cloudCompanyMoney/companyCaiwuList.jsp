@@ -18,6 +18,13 @@
             <script>
                 $(function(){
 
+                    $('#infoDiv').window({
+                        width:'1024px',
+                        height:'550px',
+                        closed:true,
+                        modal:true
+                    });
+
                     var toolbar = [
                         {
                             text : '代付明细',
@@ -32,13 +39,6 @@
                             }
                         }
                     ];
-
-                    $('#infoDiv').window({
-                        width:'1024px',
-                        height:'550px',
-                        closed:true,
-                        modal:true
-                    });
 
                     $("#dg").datagrid({
                         title : '云账户代付列表',
@@ -83,14 +83,6 @@
                             {field:'updatetime', title:'修改时间',width:'8%',formatter: formatDateStr}
                         ]]
                     });
-                    $('#dg').datagrid().datagrid('getPager');
-
-                    $('#edit').window({
-                        width:'400px',
-                        height:'200px',
-                        closed:true,
-                        modal:true
-                    });
 
                     $('#searchBtn').linkbutton({
                         onClick: function(){
@@ -111,15 +103,6 @@
                         }
                     });
                 })
-
-                $(window).resize(function() {
-                    var width = $(window).width() - 20;
-                    $("div[name='contentDiv']").css("width", width);
-
-                    // 加上这个，form面板和grid面板右侧不会出现残缺
-                    $("#formDiv").panel().width=1;
-                    $('#dg').datagrid().width=1;
-                });
 
             </script>
             <style>
@@ -175,8 +158,8 @@
     </div>
     <br/>
     <table id="dg"></table>
+    <div id="infoDiv"></div>
 </div>
-<table id="infoDiv"></table>
 
 <script>
 

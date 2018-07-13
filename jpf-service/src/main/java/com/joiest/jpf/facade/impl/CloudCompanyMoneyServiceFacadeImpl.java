@@ -1,13 +1,13 @@
 package com.joiest.jpf.facade.impl;
 
 
+import com.joiest.jpf.common.custom.PayCloudDfMoneyCustom;
+import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayCloudCompanyMoney;
-import com.joiest.jpf.common.po.PayCloudCompanyMoneyExample;
-import com.joiest.jpf.common.po.PayCloudDfMoney;
-import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMoneyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyMapper;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
@@ -32,6 +32,9 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
 
     @Autowired
     private PayCloudDfMoneyMapper payCloudDfMoneyMapper;
+
+    @Autowired
+    private PayCloudDfMoneyCustomMapper payCloudDfMoneyCustomMapper;
 
     /*
     * 统计充值总笔数
@@ -168,15 +171,26 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         PayCloudDfMoneyExample.Criteria c = example.createCriteria();
         c.andFidEqualTo(fid);
 
-        List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(example);
+        //List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(example);
+        //关联查询用户签约状态
+        List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);
         List<CloudDfMoneyInterfaceInfo> infos = new ArrayList<>();
+        for (PayCloudDfMoneyCustom payCloudDfMoneyCustom : list) {
+            CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = new CloudDfMoneyInterfaceInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoneyCustom.class, CloudDfMoneyInterfaceInfo.class, false);
+            beanCopier.copy(payCloudDfMoneyCustom, cloudDfMoneyInterfaceInfo, null);
+
+            infos.add(cloudDfMoneyInterfaceInfo);
+        }
+
+        /*List<CloudDfMoneyInterfaceInfo> infos = new ArrayList<>();
         for (PayCloudDfMoney payCloudDfMoney : list) {
             CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = new CloudDfMoneyInterfaceInfo();
             BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoney.class, CloudDfMoneyInterfaceInfo.class, false);
             beanCopier.copy(payCloudDfMoney, cloudDfMoneyInterfaceInfo, null);
 
             infos.add(cloudDfMoneyInterfaceInfo);
-        }
+        }*/
 
         getCloudMoneyDfResponse.setCount(payCloudDfMoneyMapper.countByExample(example));
         getCloudMoneyDfResponse.setList(infos);
@@ -185,6 +199,50 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
 
     }
 
+    @Override
+    public CloudCompanyMoneyInfo getRecByFid(String fid){
+
+        if( StringUtils.isBlank(fid) || fid==null  ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单号不能为空");
+        }
+
+        PayCloudCompanyMoneyExample example = new PayCloudCompanyMoneyExample();
+        PayCloudCompanyMoneyExample.Criteria c = example.createCriteria();
+        c.andFidEqualTo(fid);
+
+        List<PayCloudCompanyMoney> payCloudCompanyMoney = payCloudCompanyMoneyMapper.selectByExample(example);
+        CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyMoney.class,CloudCompanyMoneyInfo.class,false);
+        beanCopier.copy(payCloudCompanyMoney,cloudCompanyMoneyInfo,null);
+
+        return cloudCompanyMoneyInfo;
+    }
+
+    /**
+     * 根据订单号更新 代付明细状态
+     * fid  订单号
+     */
+    @Override
+    public JpfResponseDto updateRecByFid(PayCloudCompanyMoney record, String fid){
+
+        PayCloudCompanyMoneyExample example = new PayCloudCompanyMoneyExample();
+        PayCloudCompanyMoneyExample.Criteria c = example.createCriteria();
+
+        if( StringUtils.isBlank(fid) || fid==null  ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单号不能为空");
+        }
+        c.andFidEqualTo(fid);
+
+        int count = payCloudCompanyMoneyMapper.updateByExample(record,example);
+        if(count !=1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "数据更新失败");
+        }
+
+        return new JpfResponseDto();
+
+
+    }
     @Override
     public int addRec(CloudCompanyMoneyInfo cloudCompanyMoneyInfo){
         PayCloudCompanyMoney payCloudCompanyMoney = new PayCloudCompanyMoney();
