@@ -3,6 +3,7 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.cloud.api.util.IdentAuth;
 import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.po.PayCloudCompactStaff;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
@@ -503,7 +504,6 @@ public class UserInfoController {
             }
         }
     }
-
     //待签约合同列表
     @RequestMapping(value = "/userbesign", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -596,7 +596,139 @@ public class UserInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
     }
 
-    //签约动作 & 携带是否有待签约合同的参数
+    /**
+     * 获区单个合同信息
+     * */
+    @RequestMapping(value = "/compactSigle", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String compactSigle(HttpServletRequest request) {
+
+        String token = request.getParameter("token");//token
+        String compactId = request.getParameter("compactId");//token
+
+        compactId = Base64CustomUtils.base64Decoder(compactId);
+        if(compactId == null || token == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
+        }
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()))
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        CloudCompactStaffInterfaceCustomInfo cloudCompactStaffInterfaceCustomInfo = cloudCompactStaffServiceFacade.getUserCompactById(new Long(compactId));
+
+        if(cloudCompactStaffInterfaceCustomInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此合同", null);
+        }
+        //获取员工信息
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(cloudCompactStaffInterfaceCustomInfo.getStaffid().toString());
+        if(cloudCompanyStaffInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工信息不存在",null);
+        }
+        //获取员工代付信息pay_cloud_df_money
+        CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = cloudDfMoneyServiceFacade.getDfMoneyById(cloudCompactStaffInterfaceCustomInfo.getDfid());
+        if(cloudDfMoneyInterfaceInfo == null){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
+        }
+
+        Map<String,String> userInfo = new HashMap<>();
+
+        userInfo.put("name",cloudDfMoneyInterfaceInfo.getBanknickname());//名称
+        userInfo.put("idCard",cloudCompanyStaffInfo.getIdcard());//身份证号
+        userInfo.put("mobile",cloudDfMoneyInterfaceInfo.getBankphone());//手机号
+        userInfo.put("email",cloudCompanyStaffInfo.getEmail());//邮箱
+        userInfo.put("bankname",cloudDfMoneyInterfaceInfo.getBankname());//银行名称
+        userInfo.put("bankno",cloudDfMoneyInterfaceInfo.getBankno());//银行卡号
+        userInfo.put("compact_no",cloudCompactStaffInterfaceCustomInfo.getCompactNo());//自由职业者合同编号
+        userInfo.put("pactno",cloudCompactStaffInterfaceCustomInfo.getPactno());//合同编号
+        userInfo.put("content",cloudCompactStaffInterfaceCustomInfo.getContent());//合同内容
+        userInfo.put("compact_active",cloudCompactStaffInterfaceCustomInfo.getCompactActive().toString());//用户状态
+        userInfo.put("ticketContent",cloudCompactStaffInterfaceCustomInfo.getTicketcontent());//服务内容
+        userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
+        userInfo.put("commoney",cloudCompactStaffInterfaceCustomInfo.getCommoney().toString());//发放金额
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
+    }
+    /**
+     * 合同签约
+     * */
+    @RequestMapping(value = "/authCompactSigle", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String authCompactSigle(HttpServletRequest request) {
+
+        String token = request.getParameter("token");//token
+        String compactId = request.getParameter("compactId");//token
+
+        compactId = Base64CustomUtils.base64Decoder(compactId);
+        if(compactId == null || token == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
+        }
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()))
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        //合同信息
+        CloudCompactStaffInterfaceCustomInfo cloudCompactStaffInterfaceCustomInfo = cloudCompactStaffServiceFacade.getUserCompactById(new Long(compactId));
+        if(cloudCompactStaffInterfaceCustomInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此合同", null);
+        }
+        if(cloudCompactStaffInterfaceCustomInfo.getCompactActive().equals((byte)1)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "此份合同已签",null);
+        }
+
+        //获取员工信息
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(cloudCompactStaffInterfaceCustomInfo.getStaffid().toString());
+        if(cloudCompanyStaffInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工信息有误",null);
+        }
+        if(!cloudCompanyStaffInfo.getIsActive().equals((byte)1)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工尚未签约",null);
+        }
+
+        //获取员工代付信息pay_cloud_df_money
+        CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = cloudDfMoneyServiceFacade.getDfMoneyById(cloudCompactStaffInterfaceCustomInfo.getDfid());
+        if(cloudDfMoneyInterfaceInfo == null){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
+        }
+
+        //员工银行卡信息
+        CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(cloudDfMoneyInterfaceInfo.getBankno(), new BigInteger(cloudCompanyStaffInfo.getId()));
+        if(cloudStaffBanksInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户银行卡信息不存在", null);
+        }
+        if(!cloudStaffBanksInfo.getBankActive().equals("1")){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡未激活", null);
+        }
+        //合同表签订
+        Map<String,String> compant = new HashMap<>();
+        compant.put("compact_active","1");
+
+        //充值记录状态
+        Map<String,String> dfMoney = new HashMap<>();
+        dfMoney.put("is_active","1");
+
+        int companctActive = cloudCompactStaffServiceFacade.upUserCompactActiveById(compant,new Long(compactId));
+        int dfMoneyActive = cloudDfMoneyServiceFacade.updateDfMoneyActive(dfMoney,cloudDfMoneyInterfaceInfo.getId());
+
+        if(companctActive>0 && dfMoneyActive>0){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"合同签订成功",null);
+        }else{
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "合同签订失败", null);
+        }
+    }
 
 }
 

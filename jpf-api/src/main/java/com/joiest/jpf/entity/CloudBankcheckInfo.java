@@ -3,11 +3,27 @@ package com.joiest.jpf.entity;
 import java.math.BigInteger;
 import java.util.Date;
 
-public class CloudIdenauthInfo {
+public class CloudBankcheckInfo {
+
     /**
      *
      */
     private BigInteger id;
+
+    /**
+     * 银行卡号
+     */
+    private String accountno;
+
+    /**
+     * 身份证
+     */
+    private String num;
+
+    /**
+     * 手机号
+     */
+    private String mobile;
 
     /**
      * 姓名
@@ -15,23 +31,19 @@ public class CloudIdenauthInfo {
     private String name;
 
     /**
-     * 身份证号码
+     * 1 四要素鉴权   2 三要素鉴权
      */
-    private String num;
+    private Byte type;
 
     /**
-     * 认证状态1 成功，2失败
+     * 1 验证成功   2验证失败
      */
     private Byte status;
 
     /**
-     * 认证次数
+     * 鉴权次数
      */
     private Integer count;
-    /**
-     * 1 业务调用   2接口调用
-     */
-    private Byte type;
 
     /**
      * 请求参数
@@ -49,12 +61,12 @@ public class CloudIdenauthInfo {
     private String apiparam;
 
     /**
-     *
+     * 添加时间
      */
     private Date addtime;
 
     /**
-     *
+     * 更新时间
      */
     private Date updatetime;
 
@@ -68,12 +80,12 @@ public class CloudIdenauthInfo {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getAccountno() {
+        return accountno;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setAccountno(String accountno) {
+        this.accountno = accountno == null ? null : accountno.trim();
     }
 
     public String getNum() {
@@ -82,6 +94,30 @@ public class CloudIdenauthInfo {
 
     public void setNum(String num) {
         this.num = num == null ? null : num.trim();
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 
     public Byte getStatus() {

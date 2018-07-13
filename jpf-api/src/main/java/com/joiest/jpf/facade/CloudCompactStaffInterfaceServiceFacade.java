@@ -3,6 +3,7 @@ package com.joiest.jpf.facade;
 import com.joiest.jpf.entity.CloudCompactStaffInterfaceCustomInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CloudCompactStaffInterfaceServiceFacade {
 
@@ -22,5 +23,15 @@ public interface CloudCompactStaffInterfaceServiceFacade {
      * @return
      */
     public List<CloudCompactStaffInterfaceCustomInfo> getUserCompactListCustom(Long uid, byte compactActive);
+
+    /**
+     * 获取单个合同通过合同单号、员工id
+     */
+    public CloudCompactStaffInterfaceCustomInfo getUserCompactById(Long id);
+
+    /**
+     * 更新合同状态
+     */
+    public int upUserCompactActiveById(Map<String,String> compant, Long id);
 
 }

@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class CloudCompactStaffInterfaceServiceFacadeImpl implements CloudCompactStaffInterfaceServiceFacade {
 
@@ -91,4 +93,35 @@ public class CloudCompactStaffInterfaceServiceFacadeImpl implements CloudCompact
         return resultList;
     }
 
+    /**
+     * 获取单个合同通过合同单号、员工id
+     */
+    public CloudCompactStaffInterfaceCustomInfo getUserCompactById(Long id){
+
+        PayCloudCompactStaff payCloudCompactStaff = payCloudCompactStaffMapper.selectByPrimaryKey(id);
+
+        if(payCloudCompactStaff == null) return null;
+
+        CloudCompactStaffInterfaceCustomInfo info = new CloudCompactStaffInterfaceCustomInfo();
+
+        BeanCopier beanCopier = BeanCopier.create( PayCloudCompactStaff.class, CloudCompactStaffInterfaceCustomInfo.class, false);
+        beanCopier.copy(payCloudCompactStaff, info, null);
+
+        return info;
+    }
+    /**
+     * 更新合同状态
+     */
+    public int upUserCompactActiveById(Map<String,String> compant, Long id){
+
+        PayCloudCompactStaff payCloudCompactStaff = new PayCloudCompactStaff();
+
+        payCloudCompactStaff.setCompactActive(new Byte(compant.get("compact_active")));
+        payCloudCompactStaff.setUpdated(new Date());
+        payCloudCompactStaff.setId(id);
+
+        return payCloudCompactStaffMapper.updateByPrimaryKeySelective(payCloudCompactStaff);
+    }
+
 }
+
