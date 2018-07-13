@@ -142,6 +142,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
         payCloudDfMoney.setIsActive(new Integer(dfMoney.get("is_active")));
         payCloudDfMoney.setUpdatetime(new Date());
+        payCloudDfMoney.setId(id);
 
 
         return payCloudDfMoneyMapper.updateByPrimaryKeySelective(payCloudDfMoney);
