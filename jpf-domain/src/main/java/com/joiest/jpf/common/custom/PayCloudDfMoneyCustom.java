@@ -23,16 +23,6 @@ public class PayCloudDfMoneyCustom {
     private String merchNo;
 
     /**
-     * 员工表用户签约状态
-     */
-    private String companyStaffIsActice;
-
-    /**
-     * 合同表合同签约状态
-     */
-    private String compactStaffCompactActive;
-
-    /**
      * 企业添加人ID
      */
     private Long uid;
@@ -51,6 +41,16 @@ public class PayCloudDfMoneyCustom {
      * 手机号
      */
     private String username;
+
+    /**
+     * 员工表用户签约状态
+     */
+    private String companyStaffIsActice;
+
+    /**
+     * 合同表合同签约状态
+     */
+    private String compactStaffCompactActive;
 
     /**
      * 发放金额
@@ -171,6 +171,16 @@ public class PayCloudDfMoneyCustom {
      * 是否提交报税 1=未申报 2=已申报
      */
     private Integer invostatus;
+
+    /**
+     * 关联批次订单表的id
+     */
+    private String companyMoneyId;
+
+    /**
+     * 企业充值合同编号
+     */
+    private String pactno;
 
     private static final long serialVersionUID = 1L;
 
@@ -422,6 +432,22 @@ public class PayCloudDfMoneyCustom {
         this.invostatus = invostatus;
     }
 
+    public String getCompanyMoneyId() {
+        return companyMoneyId;
+    }
+
+    public void setCompanyMoneyId(String companyMoneyId) {
+        this.companyMoneyId = companyMoneyId == null ? null : companyMoneyId.trim();
+    }
+
+    public String getPactno() {
+        return pactno;
+    }
+
+    public void setPactno(String pactno) {
+        this.pactno = pactno == null ? null : pactno.trim();
+    }
+
     /**
      *
      */
@@ -462,6 +488,8 @@ public class PayCloudDfMoneyCustom {
         sb.append(", payablemoney=").append(payablemoney);
         sb.append(", withholdmoney=").append(withholdmoney);
         sb.append(", invostatus=").append(invostatus);
+        sb.append(", companyMoneyId=").append(companyMoneyId);
+        sb.append(", pactno=").append(pactno);
         sb.append("]");
         return sb.toString();
     }
@@ -512,7 +540,9 @@ public class PayCloudDfMoneyCustom {
                 && (this.getOrdernewid() == null ? other.getOrdernewid() == null : this.getOrdernewid().equals(other.getOrdernewid()))
                 && (this.getPayablemoney() == null ? other.getPayablemoney() == null : this.getPayablemoney().equals(other.getPayablemoney()))
                 && (this.getWithholdmoney() == null ? other.getWithholdmoney() == null : this.getWithholdmoney().equals(other.getWithholdmoney()))
-                && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()));
+                && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()))
+                && (this.getCompanyMoneyId() == null ? other.getCompanyMoneyId() == null : this.getCompanyMoneyId().equals(other.getCompanyMoneyId()))
+                && (this.getPactno() == null ? other.getPactno() == null : this.getPactno().equals(other.getPactno()));
     }
 
     /**
@@ -553,6 +583,8 @@ public class PayCloudDfMoneyCustom {
         result = prime * result + ((getPayablemoney() == null) ? 0 : getPayablemoney().hashCode());
         result = prime * result + ((getWithholdmoney() == null) ? 0 : getWithholdmoney().hashCode());
         result = prime * result + ((getInvostatus() == null) ? 0 : getInvostatus().hashCode());
+        result = prime * result + ((getCompanyMoneyId() == null) ? 0 : getCompanyMoneyId().hashCode());
+        result = prime * result + ((getPactno() == null) ? 0 : getPactno().hashCode());
         return result;
     }
 
@@ -571,5 +603,4 @@ public class PayCloudDfMoneyCustom {
     public void setCompactStaffCompactActive(String compactStaffCompactActive) {
         this.compactStaffCompactActive = compactStaffCompactActive;
     }
-
 }

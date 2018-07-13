@@ -40,6 +40,16 @@ public class CloudDfMoneyInfo {
     private String username;
 
     /**
+     * 员工表用户签约状态
+     */
+    private String companyStaffIsActice;
+
+    /**
+     * 合同表合同签约状态
+     */
+    private String compactStaffCompactActive;
+
+    /**
      * 发放金额
      */
     private BigDecimal commoney;
@@ -431,5 +441,21 @@ public class CloudDfMoneyInfo {
 
     public void setPactno(String pactno) {
         this.pactno = pactno;
+    }
+
+    public String getCompanyStaffIsActice() {
+        return companyStaffIsActice;
+    }
+
+    public void setCompanyStaffIsActice(String companyStaffIsActice) {
+        this.companyStaffIsActice = companyStaffIsActice;
+    }
+
+    public String getCompactStaffCompactActive() {
+        return compactStaffCompactActive;
+    }
+
+    public void setCompactStaffCompactActive(String compactStaffCompactActive) {
+        this.compactStaffCompactActive = compactStaffCompactActive;
     }
 }

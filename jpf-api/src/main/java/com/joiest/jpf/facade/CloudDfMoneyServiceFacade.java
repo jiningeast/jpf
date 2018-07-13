@@ -23,6 +23,9 @@ public interface CloudDfMoneyServiceFacade {
     //根据订单号更新代付明细
     public JpfResponseDto updateDfRecordsByFid(PayCloudDfMoney record, String fid);
 
+    //根据主键字符串更新代付明细
+    public JpfResponseDto updateDfRecordsByids(PayCloudDfMoney record, List<Long> ids);
+
 
     //获取充值记录数据通过主键
     public CloudDfMoneyInterfaceInfo getDfMoneyById(Long id);

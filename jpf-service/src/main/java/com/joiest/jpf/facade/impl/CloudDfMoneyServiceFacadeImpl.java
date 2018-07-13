@@ -177,4 +177,16 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         return payCloudDfMoneyMapper.updateByPrimaryKeySelective(payCloudDfMoney);
     }
 
+    //根据主键字符串更新代付明细
+    public JpfResponseDto updateDfRecordsByids(PayCloudDfMoney record, List<Long> ids){
+
+        PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
+        PayCloudDfMoneyExample.Criteria c = example.createCriteria();
+        c.andIdIn(ids);
+
+        int count = payCloudDfMoneyMapper.updateByExampleSelective(record,example);
+
+        return new JpfResponseDto();
+    }
+
 }

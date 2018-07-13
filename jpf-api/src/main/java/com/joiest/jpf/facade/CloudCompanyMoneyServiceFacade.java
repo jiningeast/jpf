@@ -29,17 +29,17 @@ public interface CloudCompanyMoneyServiceFacade {
     /*
      * 代付列表
      * */
-    public GetCloudMoneyDfResponse getAllByfid(String fid);
+    public GetCloudMoneyDfResponse getAllBycompanyMoneyId(String companyMoneyId);
 
     /**
-     * 根据订单号fid获取单个订单信息
+     * 根据主键id获取单个订单信息
      */
-    public CloudCompanyMoneyInfo getRecByFid(String fid);
+    public CloudCompanyMoneyInfo getRecById(String id);
 
     /**
-     * 根据订单号fid更新订单状态
+     * 根据主键ID更新订单状态
      */
-    public JpfResponseDto updateRecByFid(PayCloudCompanyMoney record, String fid);
+    public JpfResponseDto updateRecById(PayCloudCompanyMoney record, String id);
 
     /**
      * 新增代付订单

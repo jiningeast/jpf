@@ -37,6 +37,8 @@
         <result column="payablemoney" jdbcType="DECIMAL" property="payablemoney" />
         <result column="withholdmoney" jdbcType="DECIMAL" property="withholdmoney" />
         <result column="invostatus" jdbcType="TINYINT" property="invostatus" />
+        <result column="company_money_id" jdbcType="BIGINT" property="companyMoneyId" />
+        <result column="pactno" jdbcType="VARCHAR" property="pactno" />
 
         <result column="companyStaffIsActice" jdbcType="TINYINT" property="companyStaffIsActice" />
         <result column="compactStaffCompactActive" jdbcType="TINYINT" property="compactStaffCompactActive" />

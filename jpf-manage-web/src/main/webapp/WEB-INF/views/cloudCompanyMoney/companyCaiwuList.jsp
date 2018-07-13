@@ -35,7 +35,7 @@
                                     $.messager.alert('消息提示','请选择一条数据！','info');
                                     return false;
                                 }
-                                $('#infoDiv').window("open").window('refresh', '../dfdetail/page?fid='+rows[0].fid).window('setTitle','代付明细');
+                                $('#infoDiv').window("open").window('refresh', '../dfdetail/page?companyMoneyId='+rows[0].id).window('setTitle','代付明细');
                             }
                         }
                     ];
