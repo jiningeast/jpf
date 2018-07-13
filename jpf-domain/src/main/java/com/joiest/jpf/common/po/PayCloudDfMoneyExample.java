@@ -2206,6 +2206,76 @@ public class PayCloudDfMoneyExample {
             return (Criteria) this;
         }
 
+        public Criteria andPactnoIsNull() {
+            addCriterion("pactno is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoIsNotNull() {
+            addCriterion("pactno is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoEqualTo(String value) {
+            addCriterion("pactno =", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoNotEqualTo(String value) {
+            addCriterion("pactno <>", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoGreaterThan(String value) {
+            addCriterion("pactno >", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoGreaterThanOrEqualTo(String value) {
+            addCriterion("pactno >=", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoLessThan(String value) {
+            addCriterion("pactno <", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoLessThanOrEqualTo(String value) {
+            addCriterion("pactno <=", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoLike(String value) {
+            addCriterion("pactno like", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoNotLike(String value) {
+            addCriterion("pactno not like", value, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoIn(List<String> values) {
+            addCriterion("pactno in", values, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoNotIn(List<String> values) {
+            addCriterion("pactno not in", values, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoBetween(String value1, String value2) {
+            addCriterion("pactno between", value1, value2, "pactno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoNotBetween(String value1, String value2) {
+            addCriterion("pactno not between", value1, value2, "pactno");
+            return (Criteria) this;
+        }
+
         public Criteria andAgentNoLikeInsensitive(String value) {
             addCriterion("upper(agent_no) like", value.toUpperCase(), "agentNo");
             return (Criteria) this;
@@ -2288,6 +2358,11 @@ public class PayCloudDfMoneyExample {
 
         public Criteria andOrdernewidLikeInsensitive(String value) {
             addCriterion("upper(ordernewid) like", value.toUpperCase(), "ordernewid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPactnoLikeInsensitive(String value) {
+            addCriterion("upper(pactno) like", value.toUpperCase(), "pactno");
             return (Criteria) this;
         }
     }

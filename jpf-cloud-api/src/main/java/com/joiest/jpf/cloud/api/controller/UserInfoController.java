@@ -3,16 +3,14 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.cloud.api.util.IdentAuth;
 import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.po.PayCloudCompactStaff;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.dto.GetUserBlanceRequest;
-import com.joiest.jpf.entity.CloudCompanyStaffInfo;
-import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
-import com.joiest.jpf.entity.CloudIdcardInfo;
-import com.joiest.jpf.entity.CloudStaffBanksInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -49,6 +48,10 @@ public class UserInfoController {
 
     @Autowired
     private ToolCateServiceFacade toolCateServiceFacade;
+
+    //个人签约合同
+    @Autowired
+    private CloudCompactStaffInterfaceServiceFacade cloudCompactStaffServiceFacade;
 
     private String uid;
 
@@ -332,8 +335,16 @@ public class UserInfoController {
         uinfo.put("bankphone",cloudStaffBanksInfo.getBankphone());
         uinfo.put("bankpAuth",cloudStaffBanksInfo.getBankActive());
 
-
-
+        //用户待签合同
+        byte compact_status = 0;
+        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactList(Long.parseLong(uid),compact_status);
+        if ( getUserCompactList == null || getUserCompactList.isEmpty() )
+        {
+            uinfo.put("compact", "1");
+        } else
+        {
+            uinfo.put("compact", "2");
+        }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "获取成功", uinfo);
     }
 
@@ -493,6 +504,98 @@ public class UserInfoController {
             }
         }
     }
+    //待签约合同列表
+    @RequestMapping(value = "/userbesign", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getUserBeSignUpList(String token)
+    {
+        if ( StringUtils.isBlank(token) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "token不能为空", null);
+        }
+
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        //待签约
+        byte compact_status = 0;
+        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactListCustom(Long.parseLong(uid),compact_status);
+        List<Map<String,String>> resultMapList = new ArrayList<Map<String,String>>();
+        if ( getUserCompactList != null && !getUserCompactList.isEmpty() )
+        {
+            for (CloudCompactStaffInterfaceCustomInfo one : getUserCompactList)
+            {
+                Map<String,String> resultMap = new HashMap<>();
+                resultMap.put("id", one.getId().toString());
+                //企业名称
+                resultMap.put("companyName", one.getName());
+                //合同编号
+                resultMap.put("pactno", one.getPactno());
+                //金额
+                resultMap.put("commoney", one.getCommoney().toString());
+                //签约状态
+                resultMap.put("compact", one.getCompactActive().toString());
+                resultMapList.add(resultMap);
+            }
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), resultMapList);
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
+    }
+
+    //已签约合同列表
+    @RequestMapping(value = "/usersign", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getUserSignUpList(String token)
+    {
+        if ( StringUtils.isBlank(token) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "token不能为空", null);
+        }
+
+        Map<String,String> loginResultMap = userIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        //待签约
+        byte compact_status = 1;
+        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactListCustom(Long.parseLong(uid),compact_status);
+        List<Map<String,String>> resultMapList = new ArrayList<Map<String,String>>();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if ( getUserCompactList != null && !getUserCompactList.isEmpty() )
+        {
+            for (CloudCompactStaffInterfaceCustomInfo one : getUserCompactList)
+            {
+                Map<String,String> resultMap = new HashMap<>();
+                resultMap.put("id", one.getId().toString());
+                //企业名称
+                resultMap.put("companyName", one.getName());
+                //合同编号
+                resultMap.put("pactno", one.getPactno());
+                //金额
+                resultMap.put("commoney", one.getCommoney().toString());
+                //签约状态
+                resultMap.put("compact", one.getCompactActive().toString());
+                //签约时间
+                String  updated;
+                if ( one.getUpdated() != null )
+                {
+                    updated =  myfmt.format(one.getUpdated());
+                    resultMap.put("updated", updated);
+                } else
+                {
+                    resultMap.put("updated", "");
+                }
+
+                resultMapList.add(resultMap);
+            }
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), resultMapList);
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
+    }
+
     /**
      * 获区单个合同信息
      * */
@@ -513,8 +616,38 @@ public class UserInfoController {
         {
             return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
         }
+        CloudCompactStaffInterfaceCustomInfo cloudCompactStaffInterfaceCustomInfo = cloudCompactStaffServiceFacade.getUserCompactById(new Long(compactId));
 
-        return null;
+        if(cloudCompactStaffInterfaceCustomInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此合同", null);
+        }
+        //获取员工信息
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(cloudCompactStaffInterfaceCustomInfo.getStaffid().toString());
+        if(cloudCompanyStaffInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工信息不存在",null);
+        }
+        //获取员工代付信息pay_cloud_df_money
+        CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = cloudDfMoneyServiceFacade.getDfMoneyById(cloudCompactStaffInterfaceCustomInfo.getDfid());
+        if(cloudDfMoneyInterfaceInfo == null){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
+        }
+
+        Map<String,String> userInfo = new HashMap<>();
+
+        userInfo.put("name",cloudDfMoneyInterfaceInfo.getBanknickname());//名称
+        userInfo.put("idCard",cloudCompanyStaffInfo.getIdcard());//身份证号
+        userInfo.put("mobile",cloudDfMoneyInterfaceInfo.getBankphone());//手机号
+        userInfo.put("email",cloudCompanyStaffInfo.getEmail());//邮箱
+        userInfo.put("bankname",cloudDfMoneyInterfaceInfo.getBankname());//银行名称
+        userInfo.put("bankno",cloudDfMoneyInterfaceInfo.getBankno());//银行卡号
+        userInfo.put("compact_no",cloudCompactStaffInterfaceCustomInfo.getCompactNo());//自由职业者合同编号
+        userInfo.put("pactno",cloudCompactStaffInterfaceCustomInfo.getPactno());//合同编号
+        userInfo.put("content",cloudCompactStaffInterfaceCustomInfo.getContent());//合同内容
+        userInfo.put("compact_active",cloudCompactStaffInterfaceCustomInfo.getCompactActive().toString());//用户状态
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }
     /**
      * 合同签约
@@ -537,8 +670,63 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
         }
 
+        //合同信息
+        CloudCompactStaffInterfaceCustomInfo cloudCompactStaffInterfaceCustomInfo = cloudCompactStaffServiceFacade.getUserCompactById(new Long(compactId));
+        if(cloudCompactStaffInterfaceCustomInfo == null){
 
-        return null;
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此合同", null);
+        }
+        if(cloudCompactStaffInterfaceCustomInfo.getCompactActive().equals((byte)1)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "此份合同已签",null);
+        }
+
+        //获取员工信息
+        CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(cloudCompactStaffInterfaceCustomInfo.getStaffid().toString());
+        if(cloudCompanyStaffInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工信息有误",null);
+        }
+        if(!cloudCompanyStaffInfo.getIsActive().equals((byte)1)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工尚未签约",null);
+        }
+
+        //获取员工代付信息pay_cloud_df_money
+        CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = cloudDfMoneyServiceFacade.getDfMoneyById(cloudCompactStaffInterfaceCustomInfo.getDfid());
+        if(cloudDfMoneyInterfaceInfo == null){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
+        }
+
+        //员工银行卡信息
+        CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(cloudDfMoneyInterfaceInfo.getBankno(), new BigInteger(cloudCompanyStaffInfo.getId()));
+        if(cloudStaffBanksInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户银行卡信息不存在", null);
+        }
+        if(!cloudStaffBanksInfo.getBankActive().equals("1")){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡未激活", null);
+        }
+        //合同表签订
+        Map<String,String> compant = new HashMap<>();
+        compant.put("compact_active","1");
+
+        //充值记录状态
+        Map<String,String> dfMoney = new HashMap<>();
+        dfMoney.put("is_active","1");
+
+        int companctActive = cloudCompactStaffServiceFacade.upUserCompactActiveById(compant,new Long(compactId));
+        int dfMoneyActive = cloudDfMoneyServiceFacade.updateDfMoneyActive(dfMoney,cloudDfMoneyInterfaceInfo.getId());
+
+        if(companctActive>0 && dfMoneyActive>0){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"合同签订成功",null);
+        }else{
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "合同签订失败", null);
+        }
     }
+
 }
 

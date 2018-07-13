@@ -160,6 +160,11 @@ public class PayCloudDfMoney implements Serializable {
      */
     private Integer invostatus;
 
+    /**
+     * 企业充值合同编号
+     */
+    private String pactno;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -410,6 +415,14 @@ public class PayCloudDfMoney implements Serializable {
         this.invostatus = invostatus;
     }
 
+    public String getPactno() {
+        return pactno;
+    }
+
+    public void setPactno(String pactno) {
+        this.pactno = pactno == null ? null : pactno.trim();
+    }
+
     /**
      *
      */
@@ -450,6 +463,7 @@ public class PayCloudDfMoney implements Serializable {
         sb.append(", payablemoney=").append(payablemoney);
         sb.append(", withholdmoney=").append(withholdmoney);
         sb.append(", invostatus=").append(invostatus);
+        sb.append(", pactno=").append(pactno);
         sb.append("]");
         return sb.toString();
     }
@@ -500,7 +514,8 @@ public class PayCloudDfMoney implements Serializable {
             && (this.getOrdernewid() == null ? other.getOrdernewid() == null : this.getOrdernewid().equals(other.getOrdernewid()))
             && (this.getPayablemoney() == null ? other.getPayablemoney() == null : this.getPayablemoney().equals(other.getPayablemoney()))
             && (this.getWithholdmoney() == null ? other.getWithholdmoney() == null : this.getWithholdmoney().equals(other.getWithholdmoney()))
-            && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()));
+            && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()))
+            && (this.getPactno() == null ? other.getPactno() == null : this.getPactno().equals(other.getPactno()));
     }
 
     /**
@@ -541,6 +556,7 @@ public class PayCloudDfMoney implements Serializable {
         result = prime * result + ((getPayablemoney() == null) ? 0 : getPayablemoney().hashCode());
         result = prime * result + ((getWithholdmoney() == null) ? 0 : getWithholdmoney().hashCode());
         result = prime * result + ((getInvostatus() == null) ? 0 : getInvostatus().hashCode());
+        result = prime * result + ((getPactno() == null) ? 0 : getPactno().hashCode());
         return result;
     }
 }
