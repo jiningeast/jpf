@@ -41,6 +41,31 @@ public class CloudCompactStaffInterfaceCustomInfo {
     private Byte compactActive;
 
     /**
+     * 合同模板ID
+     */
+    private Long compactid;
+
+    /**
+     * 服务内容id
+     */
+    private Integer ticketid;
+
+    /**
+     * 服务内容
+     */
+    private String ticketcontent;
+
+    /**
+     * 项目名称id
+     */
+    private String entryid;
+
+    /**
+     * 项目名称
+     */
+    private String entryname;
+
+    /**
      * 创建时间
      */
     private Date created;
@@ -161,5 +186,45 @@ public class CloudCompactStaffInterfaceCustomInfo {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public Long getCompactid() {
+        return compactid;
+    }
+
+    public void setCompactid(Long compactid) {
+        this.compactid = compactid;
+    }
+
+    public Integer getTicketid() {
+        return ticketid;
+    }
+
+    public void setTicketid(Integer ticketid) {
+        this.ticketid = ticketid;
+    }
+
+    public String getTicketcontent() {
+        return ticketcontent;
+    }
+
+    public void setTicketcontent(String ticketcontent) {
+        this.ticketcontent = ticketcontent;
+    }
+
+    public String getEntryid() {
+        return entryid;
+    }
+
+    public void setEntryid(String entryid) {
+        this.entryid = entryid;
+    }
+
+    public String getEntryname() {
+        return entryname;
+    }
+
+    public void setEntryname(String entryname) {
+        this.entryname = entryname;
     }
 }

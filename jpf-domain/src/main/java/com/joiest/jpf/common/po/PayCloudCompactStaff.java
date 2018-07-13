@@ -40,6 +40,31 @@ public class PayCloudCompactStaff implements Serializable {
     private Byte compactActive;
 
     /**
+     * 合同模板ID
+     */
+    private Long compactid;
+
+    /**
+     * 服务内容id
+     */
+    private Integer ticketid;
+
+    /**
+     * 服务内容
+     */
+    private String ticketcontent;
+
+    /**
+     * 项目名称id
+     */
+    private String entryid;
+
+    /**
+     * 项目名称
+     */
+    private String entryname;
+
+    /**
      * 创建时间
      */
     private Date created;
@@ -107,6 +132,46 @@ public class PayCloudCompactStaff implements Serializable {
         this.compactActive = compactActive;
     }
 
+    public Long getCompactid() {
+        return compactid;
+    }
+
+    public void setCompactid(Long compactid) {
+        this.compactid = compactid;
+    }
+
+    public Integer getTicketid() {
+        return ticketid;
+    }
+
+    public void setTicketid(Integer ticketid) {
+        this.ticketid = ticketid;
+    }
+
+    public String getTicketcontent() {
+        return ticketcontent;
+    }
+
+    public void setTicketcontent(String ticketcontent) {
+        this.ticketcontent = ticketcontent == null ? null : ticketcontent.trim();
+    }
+
+    public String getEntryid() {
+        return entryid;
+    }
+
+    public void setEntryid(String entryid) {
+        this.entryid = entryid == null ? null : entryid.trim();
+    }
+
+    public String getEntryname() {
+        return entryname;
+    }
+
+    public void setEntryname(String entryname) {
+        this.entryname = entryname == null ? null : entryname.trim();
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -139,6 +204,11 @@ public class PayCloudCompactStaff implements Serializable {
         sb.append(", pactno=").append(pactno);
         sb.append(", content=").append(content);
         sb.append(", compactActive=").append(compactActive);
+        sb.append(", compactid=").append(compactid);
+        sb.append(", ticketid=").append(ticketid);
+        sb.append(", ticketcontent=").append(ticketcontent);
+        sb.append(", entryid=").append(entryid);
+        sb.append(", entryname=").append(entryname);
         sb.append(", created=").append(created);
         sb.append(", updated=").append(updated);
         sb.append("]");
@@ -168,6 +238,11 @@ public class PayCloudCompactStaff implements Serializable {
             && (this.getPactno() == null ? other.getPactno() == null : this.getPactno().equals(other.getPactno()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
             && (this.getCompactActive() == null ? other.getCompactActive() == null : this.getCompactActive().equals(other.getCompactActive()))
+            && (this.getCompactid() == null ? other.getCompactid() == null : this.getCompactid().equals(other.getCompactid()))
+            && (this.getTicketid() == null ? other.getTicketid() == null : this.getTicketid().equals(other.getTicketid()))
+            && (this.getTicketcontent() == null ? other.getTicketcontent() == null : this.getTicketcontent().equals(other.getTicketcontent()))
+            && (this.getEntryid() == null ? other.getEntryid() == null : this.getEntryid().equals(other.getEntryid()))
+            && (this.getEntryname() == null ? other.getEntryname() == null : this.getEntryname().equals(other.getEntryname()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
     }
@@ -186,6 +261,11 @@ public class PayCloudCompactStaff implements Serializable {
         result = prime * result + ((getPactno() == null) ? 0 : getPactno().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getCompactActive() == null) ? 0 : getCompactActive().hashCode());
+        result = prime * result + ((getCompactid() == null) ? 0 : getCompactid().hashCode());
+        result = prime * result + ((getTicketid() == null) ? 0 : getTicketid().hashCode());
+        result = prime * result + ((getTicketcontent() == null) ? 0 : getTicketcontent().hashCode());
+        result = prime * result + ((getEntryid() == null) ? 0 : getEntryid().hashCode());
+        result = prime * result + ((getEntryname() == null) ? 0 : getEntryname().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
         return result;
