@@ -14,6 +14,7 @@ import com.aliyun.oss.model.Bucket;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
+import org.springframework.util.StringUtils;
 
 /**
  * @class:AliyunOSSClientUtil
@@ -41,6 +42,8 @@ public class AliyunOSSClientUtil {
         BACKET_NAME = OSSClientConstants.BACKET_NAME;
         FOLDER = OSSClientConstants.FOLDER;
     }
+
+    private String filedir;
 
     /**
      * 获取阿里云OSS客户端对象
@@ -123,6 +126,7 @@ public class AliyunOSSClientUtil {
      * */
     public static  String uploadObject2OSS(OSSClient ossClient, File file, String bucketName, String folder) {
         String resultStr = null;
+        String resultStrs = null;
         try {
             //以输入流的形式上传文件
             InputStream is = new FileInputStream(file);
@@ -147,13 +151,26 @@ public class AliyunOSSClientUtil {
             metadata.setContentDisposition("filename/filesize=" + fileName + "/" + fileSize + "Byte.");
             //上传文件   (上传文件流的形式)
             PutObjectResult putResult = ossClient.putObject(bucketName, folder + fileName, is, metadata);
+
+            //return this.getPreUrl(OSSClient ossClient, String bucketName, String folder,String fileName);
             //解析结果
             resultStr = putResult.getETag();
+            if(resultStr != null)
+            {
+
+                Date expiration = new Date(new Date().getTime() + 3600 * 1000);
+                URL url = ossClient.generatePresignedUrl(OSSClientConstants.BACKET_NAME, folder + fileName, expiration);
+                if (url != null) {
+                    resultStrs =  url.toString();
+                }
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("sorry,this is upload files error,so ,please inspect test mode oss ." + e.getMessage(), e);
         }
-        return resultStr;
+        return  resultStrs;
     }
 
     /**
@@ -195,6 +212,20 @@ public class AliyunOSSClientUtil {
         return "image/jpeg";
     }
 
+
+    /**
+     * 通过对文件的上传调用返回的URL
+     *
+     * */
+    public static  String getPreUrl(OSSClient ossClient, String bucketName, String folder, String fileName){
+        // 设置URL过期时间为1小时。
+        Date expiration = new Date(new Date().getTime() + 3600 * 1000);
+        URL url = ossClient.generatePresignedUrl(OSSClientConstants.BACKET_NAME, folder + fileName, expiration);
+        if (url != null) {
+            return url.toString();
+        }
+        return null;
+    }
 
 
 
