@@ -8,13 +8,16 @@ import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyInterfaceCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyMapper;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
+import com.joiest.jpf.entity.CloudCompactStaffInterfaceCustomInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade {
 
@@ -113,6 +116,35 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         }
 
         return response;
+    }
+
+
+    //获取充值记录数据通过主键
+    public CloudDfMoneyInterfaceInfo getDfMoneyById(Long id){
+
+
+        PayCloudDfMoney payCloudDfMoney = payCloudDfMoneyMapper.selectByPrimaryKey(id);
+
+        if(payCloudDfMoney == null) return null;
+
+        CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = new CloudDfMoneyInterfaceInfo();
+
+        BeanCopier beanCopier = BeanCopier.create( PayCloudDfMoney.class, CloudDfMoneyInterfaceInfo.class, false);
+
+        beanCopier.copy(payCloudDfMoney, cloudDfMoneyInterfaceInfo, null);
+
+        return cloudDfMoneyInterfaceInfo;
+    }
+    //更新代付状态
+    public int updateDfMoneyActive(Map<String,String> dfMoney, Long id){
+
+        PayCloudDfMoney payCloudDfMoney = new PayCloudDfMoney();
+
+        payCloudDfMoney.setIsActive(new Integer(dfMoney.get("is_active")));
+        payCloudDfMoney.setUpdatetime(new Date());
+
+
+        return payCloudDfMoneyMapper.updateByPrimaryKeySelective(payCloudDfMoney);
     }
 
 }
