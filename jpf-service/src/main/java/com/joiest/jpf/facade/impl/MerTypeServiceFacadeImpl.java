@@ -1,12 +1,15 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.custom.PayMerchantsTypeCustom;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayMerchantsPaytype;
 import com.joiest.jpf.common.po.PayMerchantsType;
 import com.joiest.jpf.common.po.PayMerchantsTypeExample;
+import com.joiest.jpf.dao.repository.mapper.custom.PayMerchantsTypeCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayMerchantsTypeMapper;
 import com.joiest.jpf.entity.MerchantTypeInfo;
+import com.joiest.jpf.entity.MerchantTypeTree;
 import com.joiest.jpf.facade.MerTypeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ public class MerTypeServiceFacadeImpl implements MerTypeServiceFacade {
 
     @Autowired
     private PayMerchantsTypeMapper payMerchantsTypeMapper;
+
+    @Autowired
+    private PayMerchantsTypeCustomMapper payMerchantsTypeCustomMapper;
 
 
     @Override
@@ -82,6 +88,19 @@ public class MerTypeServiceFacadeImpl implements MerTypeServiceFacade {
             merchantTypeInfos.add(merchantTypeInfo);
         }
         return merchantTypeInfos;
+    }
+
+    @Override
+    public List<MerchantTypeTree> getMerchantTypeTree(int catId) {
+        List<PayMerchantsTypeCustom> payMerchantsTypeCustoms = payMerchantsTypeCustomMapper.findPayMerchantsTypeTree(catId);
+        List<MerchantTypeTree> merchantTypeTrees = new ArrayList<>();
+        for (PayMerchantsTypeCustom payMerchantsTypeCustom : payMerchantsTypeCustoms) {
+            MerchantTypeTree merchantTypeTree = new MerchantTypeTree();
+            BeanCopier beanCopier = BeanCopier.create(PayMerchantsTypeCustom.class, MerchantTypeTree.class, false);
+            beanCopier.copy(payMerchantsTypeCustom, merchantTypeTree, null);
+            merchantTypeTrees.add(merchantTypeTree);
+        }
+        return merchantTypeTrees;
     }
 
 }
