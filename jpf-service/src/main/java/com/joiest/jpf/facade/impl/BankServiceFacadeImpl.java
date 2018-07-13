@@ -217,4 +217,22 @@ public class BankServiceFacadeImpl implements BankServiceFacade {
         }
         return infos;
     }
+
+    /**
+     * 根据银行名称获取银行信息
+     */
+    public BankInfo getBankByName(String bankName){
+        PayBankExample e = new PayBankExample();
+        PayBankExample.Criteria c = e.createCriteria();
+        c.andPaybanknameEqualTo(bankName);
+        List<PayBank> list = payBankMapper.selectByExample(e);
+
+        BankInfo bankInfo = new BankInfo();
+        if ( !list.isEmpty() ){
+            BeanCopier beanCopier = BeanCopier.create(PayBank.class, BankInfo.class, false);
+            beanCopier.copy(list.get(0), bankInfo, null);
+        }
+
+        return bankInfo;
+    }
 }

@@ -25,7 +25,7 @@ public class CloudTaskServiceFacadeImpl implements CloudTaskServiceFacade {
         PayCloudTaskExample e = new PayCloudTaskExample();
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
-        PayCloudTaskExample.Criteria c = e.createCriteria();
+        e.setOrderByClause("id DESC");
         List<CloudTaskInfo> infos = new ArrayList<>();
 
         List<PayCloudTask> list = payCloudTaskMapper.selectByExample(e);
@@ -48,5 +48,16 @@ public class CloudTaskServiceFacadeImpl implements CloudTaskServiceFacade {
         beanCopier.copy(cloudTaskInfo, payCloudTask, null);
 
         return payCloudTaskMapper.insert(payCloudTask);
+    }
+
+    @Override
+    public CloudTaskInfo getOneTask(String id){
+        PayCloudTask payCloudTask = payCloudTaskMapper.selectByPrimaryKey(id);
+        CloudTaskInfo cloudTaskInfo = new CloudTaskInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayCloudTask.class, CloudTaskInfo.class, false);
+        beanCopier.copy(payCloudTask, cloudTaskInfo, null);
+
+        return cloudTaskInfo;
     }
 }

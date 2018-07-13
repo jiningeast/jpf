@@ -5,6 +5,14 @@ import java.math.BigDecimal;
 public class CloudRemitExcelInfo {
 
     /**
+     * 发放总金额
+     */
+    private BigDecimal commoney;
+    /**
+     * 批次号
+     */
+    private String batchno ;
+    /**
      * 类型
      * 0=个人 1=企业
      */
@@ -133,5 +141,21 @@ public class CloudRemitExcelInfo {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public BigDecimal getCommoney() {
+        return commoney;
+    }
+
+    public void setCommoney(BigDecimal commoney) {
+        this.commoney = commoney;
+    }
+
+    public String getBatchno() {
+        return batchno;
+    }
+
+    public void setBatchno(String batchno) {
+        this.batchno = batchno;
     }
 }

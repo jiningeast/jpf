@@ -34,7 +34,7 @@
     <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="agent_no" property="agentNo" jdbcType="VARCHAR" />
-    <result column="sales_no" property="sales_no" jdbcType="VARCHAR" />
+    <result column="sales_no" property="salesNo" jdbcType="VARCHAR" />
   </resultMap>
 
     <sql id="Example_Where_Clause_Custom">
@@ -214,8 +214,9 @@
     SELECT
     company.*,sales.sales_no,agent.agent_no
     FROM pay_cloud_company company
-    INNER JOIN pay_cloud_company_agent agent ON company.merch_no=agent.agent_no INNER JOIN pay_cloud_company_sales sales ON company.merch_no=sales.sales_no
-    WHERE company.id=#{id,jdbcType=TINYINT}
+    LEFT JOIN pay_cloud_company_agent agent ON company.merch_no=agent.agent_no
+    LEFT JOIN pay_cloud_company_sales sales ON company.merch_no=sales.sales_no
+    WHERE company.id=#{id,jdbcType=BIGINT}
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">

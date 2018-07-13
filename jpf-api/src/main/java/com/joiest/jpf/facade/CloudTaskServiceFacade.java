@@ -4,7 +4,6 @@ import com.joiest.jpf.dto.CloudTaskRequest;
 import com.joiest.jpf.dto.CloudTaskResponse;
 import com.joiest.jpf.entity.CloudTaskInfo;
 
-import java.util.List;
 
 public interface CloudTaskServiceFacade {
 
@@ -17,4 +16,9 @@ public interface CloudTaskServiceFacade {
      * 新建任务记录
      */
     public int insTask(CloudTaskInfo cloudTaskInfo);
+
+    /**
+     * 获取单条任务记录
+     */
+    public CloudTaskInfo getOneTask(String id);
 }

@@ -495,6 +495,76 @@ public class PayCloudTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andAgentNoIsNull() {
+            addCriterion("agent_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoIsNotNull() {
+            addCriterion("agent_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoEqualTo(String value) {
+            addCriterion("agent_no =", value, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoNotEqualTo(String value) {
+            addCriterion("agent_no <>", value, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoGreaterThan(String value) {
+            addCriterion("agent_no >", value, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoGreaterThanOrEqualTo(String value) {
+            addCriterion("agent_no >=", value, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoLessThan(String value) {
+            addCriterion("agent_no <", value, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoLessThanOrEqualTo(String value) {
+            addCriterion("agent_no <=", value, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoLike(String value) {
+            addCriterion("agent_no like", value, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoNotLike(String value) {
+            addCriterion("agent_no not like", value, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoIn(List<String> values) {
+            addCriterion("agent_no in", values, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoNotIn(List<String> values) {
+            addCriterion("agent_no not in", values, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoBetween(String value1, String value2) {
+            addCriterion("agent_no between", value1, value2, "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoNotBetween(String value1, String value2) {
+            addCriterion("agent_no not between", value1, value2, "agentNo");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchNoIsNull() {
             addCriterion("merch_no is null");
             return (Criteria) this;
@@ -695,6 +765,76 @@ public class PayCloudTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andFilePathIsNull() {
+            addCriterion("file_path is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathIsNotNull() {
+            addCriterion("file_path is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathEqualTo(String value) {
+            addCriterion("file_path =", value, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathNotEqualTo(String value) {
+            addCriterion("file_path <>", value, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathGreaterThan(String value) {
+            addCriterion("file_path >", value, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathGreaterThanOrEqualTo(String value) {
+            addCriterion("file_path >=", value, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathLessThan(String value) {
+            addCriterion("file_path <", value, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathLessThanOrEqualTo(String value) {
+            addCriterion("file_path <=", value, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathLike(String value) {
+            addCriterion("file_path like", value, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathNotLike(String value) {
+            addCriterion("file_path not like", value, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathIn(List<String> values) {
+            addCriterion("file_path in", values, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathNotIn(List<String> values) {
+            addCriterion("file_path not in", values, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathBetween(String value1, String value2) {
+            addCriterion("file_path between", value1, value2, "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathNotBetween(String value1, String value2) {
+            addCriterion("file_path not between", value1, value2, "filePath");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -885,6 +1025,11 @@ public class PayCloudTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andAgentNoLikeInsensitive(String value) {
+            addCriterion("upper(agent_no) like", value.toUpperCase(), "agentNo");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchNoLikeInsensitive(String value) {
             addCriterion("upper(merch_no) like", value.toUpperCase(), "merchNo");
             return (Criteria) this;
@@ -892,6 +1037,11 @@ public class PayCloudTaskExample {
 
         public Criteria andBatchnoLikeInsensitive(String value) {
             addCriterion("upper(batchno) like", value.toUpperCase(), "batchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andFilePathLikeInsensitive(String value) {
+            addCriterion("upper(file_path) like", value.toUpperCase(), "filePath");
             return (Criteria) this;
         }
     }
