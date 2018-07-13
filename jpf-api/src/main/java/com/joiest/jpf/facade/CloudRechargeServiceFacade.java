@@ -44,6 +44,11 @@ public interface CloudRechargeServiceFacade {
     public Integer rechargeCompanyMoney(String id);
 
     /**
+     * 获取企业需求列表
+     */
+    public GetRechargeNeedResponse getRechargeNeedInfo(GetRechargeNeedRequest request,Long pageNo,Long pageSize);
+
+    /**
      * 发布需求接口
      */
     public JpfResponseDto rechargeNeedRelease(CloudRechargeNeedReleaseRequest request);
