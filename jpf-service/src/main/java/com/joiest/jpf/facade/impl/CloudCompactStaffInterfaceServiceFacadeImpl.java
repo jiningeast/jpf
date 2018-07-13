@@ -118,6 +118,7 @@ public class CloudCompactStaffInterfaceServiceFacadeImpl implements CloudCompact
 
         payCloudCompactStaff.setCompactActive(new Byte(compant.get("compact_active")));
         payCloudCompactStaff.setUpdated(new Date());
+        payCloudCompactStaff.setId(id);
 
         return payCloudCompactStaffMapper.updateByPrimaryKeySelective(payCloudCompactStaff);
     }

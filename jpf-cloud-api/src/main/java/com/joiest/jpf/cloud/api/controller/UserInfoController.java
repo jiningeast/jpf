@@ -646,6 +646,9 @@ public class UserInfoController {
         userInfo.put("pactno",cloudCompactStaffInterfaceCustomInfo.getPactno());//合同编号
         userInfo.put("content",cloudCompactStaffInterfaceCustomInfo.getContent());//合同内容
         userInfo.put("compact_active",cloudCompactStaffInterfaceCustomInfo.getCompactActive().toString());//用户状态
+        userInfo.put("ticketContent",cloudCompactStaffInterfaceCustomInfo.getTicketcontent());//服务内容
+        userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
+        userInfo.put("commoney",cloudCompactStaffInterfaceCustomInfo.getCommoney().toString());//发放金额
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }
@@ -669,7 +672,6 @@ public class UserInfoController {
         {
             return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
         }
-
         //合同信息
         CloudCompactStaffInterfaceCustomInfo cloudCompactStaffInterfaceCustomInfo = cloudCompactStaffServiceFacade.getUserCompactById(new Long(compactId));
         if(cloudCompactStaffInterfaceCustomInfo == null){
