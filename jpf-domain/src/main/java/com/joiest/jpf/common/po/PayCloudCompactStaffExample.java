@@ -625,6 +625,336 @@ public class PayCloudCompactStaffExample {
             return (Criteria) this;
         }
 
+        public Criteria andCompactidIsNull() {
+            addCriterion("compactId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidIsNotNull() {
+            addCriterion("compactId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidEqualTo(Long value) {
+            addCriterion("compactId =", value, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidNotEqualTo(Long value) {
+            addCriterion("compactId <>", value, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidGreaterThan(Long value) {
+            addCriterion("compactId >", value, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidGreaterThanOrEqualTo(Long value) {
+            addCriterion("compactId >=", value, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidLessThan(Long value) {
+            addCriterion("compactId <", value, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidLessThanOrEqualTo(Long value) {
+            addCriterion("compactId <=", value, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidIn(List<Long> values) {
+            addCriterion("compactId in", values, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidNotIn(List<Long> values) {
+            addCriterion("compactId not in", values, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidBetween(Long value1, Long value2) {
+            addCriterion("compactId between", value1, value2, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompactidNotBetween(Long value1, Long value2) {
+            addCriterion("compactId not between", value1, value2, "compactid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidIsNull() {
+            addCriterion("ticketId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidIsNotNull() {
+            addCriterion("ticketId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidEqualTo(Integer value) {
+            addCriterion("ticketId =", value, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidNotEqualTo(Integer value) {
+            addCriterion("ticketId <>", value, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidGreaterThan(Integer value) {
+            addCriterion("ticketId >", value, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("ticketId >=", value, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidLessThan(Integer value) {
+            addCriterion("ticketId <", value, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidLessThanOrEqualTo(Integer value) {
+            addCriterion("ticketId <=", value, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidIn(List<Integer> values) {
+            addCriterion("ticketId in", values, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidNotIn(List<Integer> values) {
+            addCriterion("ticketId not in", values, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidBetween(Integer value1, Integer value2) {
+            addCriterion("ticketId between", value1, value2, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketidNotBetween(Integer value1, Integer value2) {
+            addCriterion("ticketId not between", value1, value2, "ticketid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentIsNull() {
+            addCriterion("ticketContent is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentIsNotNull() {
+            addCriterion("ticketContent is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentEqualTo(String value) {
+            addCriterion("ticketContent =", value, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentNotEqualTo(String value) {
+            addCriterion("ticketContent <>", value, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentGreaterThan(String value) {
+            addCriterion("ticketContent >", value, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentGreaterThanOrEqualTo(String value) {
+            addCriterion("ticketContent >=", value, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentLessThan(String value) {
+            addCriterion("ticketContent <", value, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentLessThanOrEqualTo(String value) {
+            addCriterion("ticketContent <=", value, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentLike(String value) {
+            addCriterion("ticketContent like", value, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentNotLike(String value) {
+            addCriterion("ticketContent not like", value, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentIn(List<String> values) {
+            addCriterion("ticketContent in", values, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentNotIn(List<String> values) {
+            addCriterion("ticketContent not in", values, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentBetween(String value1, String value2) {
+            addCriterion("ticketContent between", value1, value2, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentNotBetween(String value1, String value2) {
+            addCriterion("ticketContent not between", value1, value2, "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidIsNull() {
+            addCriterion("entryId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidIsNotNull() {
+            addCriterion("entryId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidEqualTo(String value) {
+            addCriterion("entryId =", value, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidNotEqualTo(String value) {
+            addCriterion("entryId <>", value, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidGreaterThan(String value) {
+            addCriterion("entryId >", value, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidGreaterThanOrEqualTo(String value) {
+            addCriterion("entryId >=", value, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidLessThan(String value) {
+            addCriterion("entryId <", value, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidLessThanOrEqualTo(String value) {
+            addCriterion("entryId <=", value, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidLike(String value) {
+            addCriterion("entryId like", value, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidNotLike(String value) {
+            addCriterion("entryId not like", value, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidIn(List<String> values) {
+            addCriterion("entryId in", values, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidNotIn(List<String> values) {
+            addCriterion("entryId not in", values, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidBetween(String value1, String value2) {
+            addCriterion("entryId between", value1, value2, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidNotBetween(String value1, String value2) {
+            addCriterion("entryId not between", value1, value2, "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameIsNull() {
+            addCriterion("entryName is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameIsNotNull() {
+            addCriterion("entryName is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameEqualTo(String value) {
+            addCriterion("entryName =", value, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameNotEqualTo(String value) {
+            addCriterion("entryName <>", value, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameGreaterThan(String value) {
+            addCriterion("entryName >", value, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameGreaterThanOrEqualTo(String value) {
+            addCriterion("entryName >=", value, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameLessThan(String value) {
+            addCriterion("entryName <", value, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameLessThanOrEqualTo(String value) {
+            addCriterion("entryName <=", value, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameLike(String value) {
+            addCriterion("entryName like", value, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameNotLike(String value) {
+            addCriterion("entryName not like", value, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameIn(List<String> values) {
+            addCriterion("entryName in", values, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameNotIn(List<String> values) {
+            addCriterion("entryName not in", values, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameBetween(String value1, String value2) {
+            addCriterion("entryName between", value1, value2, "entryname");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameNotBetween(String value1, String value2) {
+            addCriterion("entryName not between", value1, value2, "entryname");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedIsNull() {
             addCriterion("created is null");
             return (Criteria) this;
@@ -757,6 +1087,21 @@ public class PayCloudCompactStaffExample {
 
         public Criteria andContentLikeInsensitive(String value) {
             addCriterion("upper(content) like", value.toUpperCase(), "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andTicketcontentLikeInsensitive(String value) {
+            addCriterion("upper(ticketContent) like", value.toUpperCase(), "ticketcontent");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntryidLikeInsensitive(String value) {
+            addCriterion("upper(entryId) like", value.toUpperCase(), "entryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntrynameLikeInsensitive(String value) {
+            addCriterion("upper(entryName) like", value.toUpperCase(), "entryname");
             return (Criteria) this;
         }
     }
