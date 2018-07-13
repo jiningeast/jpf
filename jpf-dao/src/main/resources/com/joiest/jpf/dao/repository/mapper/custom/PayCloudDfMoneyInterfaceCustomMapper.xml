@@ -93,7 +93,7 @@
     id, agent_no, merch_no, uid, fid, busstaffid, username, commoney, bankno, banknickname,
     bankphone, bankname, bankprovince, bankcity, banktype, bankAcctAttr, addtime, realname,
     montype, remark, vid, is_active, content, updatetime,
-    operastate, tranNo, orderid, ordernewid, payablemoney, withholdmoney, invostatus,count(*) AS count, sum(payablemoney) AS totalMoney,DATE_FORMAT(addtime, "%Y-%m") AS datemonth
+    operastate, tranNo, orderid, ordernewid, payablemoney, withholdmoney, invostatus,count(*) AS count, sum(commoney) AS totalMoney,DATE_FORMAT(addtime, "%Y-%m") AS datemonth
   </sql>
 
   <select id="getUserMonthList" parameterType="java.math.BigInteger" resultMap="BaseResultMap">

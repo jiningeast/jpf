@@ -1,10 +1,12 @@
-package com.joiest.jpf.common.po;
+package com.joiest.jpf.common.custom;
 
-import java.io.Serializable;
+import com.joiest.jpf.common.po.PayCloudDfMoney;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PayCloudDfMoney implements Serializable {
+public class PayCloudDfMoneyCustom {
+
     /**
      * 自增ID
      */
@@ -39,6 +41,16 @@ public class PayCloudDfMoney implements Serializable {
      * 手机号
      */
     private String username;
+
+    /**
+     * 员工表用户签约状态
+     */
+    private String companyStaffIsActice;
+
+    /**
+     * 合同表合同签约状态
+     */
+    private String compactStaffCompactActive;
 
     /**
      * 发放金额
@@ -499,38 +511,38 @@ public class PayCloudDfMoney implements Serializable {
         }
         PayCloudDfMoney other = (PayCloudDfMoney) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getAgentNo() == null ? other.getAgentNo() == null : this.getAgentNo().equals(other.getAgentNo()))
-            && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
-            && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
-            && (this.getFid() == null ? other.getFid() == null : this.getFid().equals(other.getFid()))
-            && (this.getBusstaffid() == null ? other.getBusstaffid() == null : this.getBusstaffid().equals(other.getBusstaffid()))
-            && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
-            && (this.getCommoney() == null ? other.getCommoney() == null : this.getCommoney().equals(other.getCommoney()))
-            && (this.getBankno() == null ? other.getBankno() == null : this.getBankno().equals(other.getBankno()))
-            && (this.getBanknickname() == null ? other.getBanknickname() == null : this.getBanknickname().equals(other.getBanknickname()))
-            && (this.getBankphone() == null ? other.getBankphone() == null : this.getBankphone().equals(other.getBankphone()))
-            && (this.getBankname() == null ? other.getBankname() == null : this.getBankname().equals(other.getBankname()))
-            && (this.getBankprovince() == null ? other.getBankprovince() == null : this.getBankprovince().equals(other.getBankprovince()))
-            && (this.getBankcity() == null ? other.getBankcity() == null : this.getBankcity().equals(other.getBankcity()))
-            && (this.getBanktype() == null ? other.getBanktype() == null : this.getBanktype().equals(other.getBanktype()))
-            && (this.getBankacctattr() == null ? other.getBankacctattr() == null : this.getBankacctattr().equals(other.getBankacctattr()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getRealname() == null ? other.getRealname() == null : this.getRealname().equals(other.getRealname()))
-            && (this.getMontype() == null ? other.getMontype() == null : this.getMontype().equals(other.getMontype()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getVid() == null ? other.getVid() == null : this.getVid().equals(other.getVid()))
-            && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getOperastate() == null ? other.getOperastate() == null : this.getOperastate().equals(other.getOperastate()))
-            && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
-            && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
-            && (this.getOrdernewid() == null ? other.getOrdernewid() == null : this.getOrdernewid().equals(other.getOrdernewid()))
-            && (this.getPayablemoney() == null ? other.getPayablemoney() == null : this.getPayablemoney().equals(other.getPayablemoney()))
-            && (this.getWithholdmoney() == null ? other.getWithholdmoney() == null : this.getWithholdmoney().equals(other.getWithholdmoney()))
-            && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()))
-            && (this.getCompanyMoneyId() == null ? other.getCompanyMoneyId() == null : this.getCompanyMoneyId().equals(other.getCompanyMoneyId()))
-            && (this.getPactno() == null ? other.getPactno() == null : this.getPactno().equals(other.getPactno()));
+                && (this.getAgentNo() == null ? other.getAgentNo() == null : this.getAgentNo().equals(other.getAgentNo()))
+                && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
+                && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
+                && (this.getFid() == null ? other.getFid() == null : this.getFid().equals(other.getFid()))
+                && (this.getBusstaffid() == null ? other.getBusstaffid() == null : this.getBusstaffid().equals(other.getBusstaffid()))
+                && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
+                && (this.getCommoney() == null ? other.getCommoney() == null : this.getCommoney().equals(other.getCommoney()))
+                && (this.getBankno() == null ? other.getBankno() == null : this.getBankno().equals(other.getBankno()))
+                && (this.getBanknickname() == null ? other.getBanknickname() == null : this.getBanknickname().equals(other.getBanknickname()))
+                && (this.getBankphone() == null ? other.getBankphone() == null : this.getBankphone().equals(other.getBankphone()))
+                && (this.getBankname() == null ? other.getBankname() == null : this.getBankname().equals(other.getBankname()))
+                && (this.getBankprovince() == null ? other.getBankprovince() == null : this.getBankprovince().equals(other.getBankprovince()))
+                && (this.getBankcity() == null ? other.getBankcity() == null : this.getBankcity().equals(other.getBankcity()))
+                && (this.getBanktype() == null ? other.getBanktype() == null : this.getBanktype().equals(other.getBanktype()))
+                && (this.getBankacctattr() == null ? other.getBankacctattr() == null : this.getBankacctattr().equals(other.getBankacctattr()))
+                && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+                && (this.getRealname() == null ? other.getRealname() == null : this.getRealname().equals(other.getRealname()))
+                && (this.getMontype() == null ? other.getMontype() == null : this.getMontype().equals(other.getMontype()))
+                && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+                && (this.getVid() == null ? other.getVid() == null : this.getVid().equals(other.getVid()))
+                && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
+                && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
+                && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+                && (this.getOperastate() == null ? other.getOperastate() == null : this.getOperastate().equals(other.getOperastate()))
+                && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
+                && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
+                && (this.getOrdernewid() == null ? other.getOrdernewid() == null : this.getOrdernewid().equals(other.getOrdernewid()))
+                && (this.getPayablemoney() == null ? other.getPayablemoney() == null : this.getPayablemoney().equals(other.getPayablemoney()))
+                && (this.getWithholdmoney() == null ? other.getWithholdmoney() == null : this.getWithholdmoney().equals(other.getWithholdmoney()))
+                && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()))
+                && (this.getCompanyMoneyId() == null ? other.getCompanyMoneyId() == null : this.getCompanyMoneyId().equals(other.getCompanyMoneyId()))
+                && (this.getPactno() == null ? other.getPactno() == null : this.getPactno().equals(other.getPactno()));
     }
 
     /**
@@ -574,5 +586,21 @@ public class PayCloudDfMoney implements Serializable {
         result = prime * result + ((getCompanyMoneyId() == null) ? 0 : getCompanyMoneyId().hashCode());
         result = prime * result + ((getPactno() == null) ? 0 : getPactno().hashCode());
         return result;
+    }
+
+    public String getCompanyStaffIsActice() {
+        return companyStaffIsActice;
+    }
+
+    public void setCompanyStaffIsActice(String companyStaffIsActice) {
+        this.companyStaffIsActice = companyStaffIsActice;
+    }
+
+    public String getCompactStaffCompactActive() {
+        return compactStaffCompactActive;
+    }
+
+    public void setCompactStaffCompactActive(String compactStaffCompactActive) {
+        this.compactStaffCompactActive = compactStaffCompactActive;
     }
 }

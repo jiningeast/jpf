@@ -3,8 +3,7 @@ package com.joiest.jpf.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CloudDfMoneyInterfaceInfo {
-
+public class CloudDfMoneyInfo {
     /**
      * 自增ID
      */
@@ -19,16 +18,6 @@ public class CloudDfMoneyInterfaceInfo {
      * 聚合商户企业编号
      */
     private String merchNo;
-
-    /**
-     * 员工表用户签约状态
-     */
-    private String companyStaffIsActice;
-
-    /**
-     * 合同表合同签约状态
-     */
-    private String compactStaffCompactActive;
 
     /**
      * 企业添加人ID
@@ -49,6 +38,16 @@ public class CloudDfMoneyInterfaceInfo {
      * 手机号
      */
     private String username;
+
+    /**
+     * 员工表用户签约状态
+     */
+    private String companyStaffIsActice;
+
+    /**
+     * 合同表合同签约状态
+     */
+    private String compactStaffCompactActive;
 
     /**
      * 发放金额
@@ -170,15 +169,10 @@ public class CloudDfMoneyInterfaceInfo {
      */
     private Integer invostatus;
 
-
-    //月份的记录总数
-    private Integer count;
-
-    //月份的总金额
-    private BigDecimal totalMoney;
-
-    //月份
-    private String datemonth;
+    /**
+     * 关联批次订单表的id
+     */
+    private String companyMoneyId;
 
     /**
      * 企业充值合同编号
@@ -433,28 +427,20 @@ public class CloudDfMoneyInterfaceInfo {
         this.invostatus = invostatus;
     }
 
-    public Integer getCount() {
-        return count;
+    public String getCompanyMoneyId() {
+        return companyMoneyId;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setCompanyMoneyId(String companyMoneyId) {
+        this.companyMoneyId = companyMoneyId;
     }
 
-    public BigDecimal getTotalMoney() {
-        return totalMoney;
+    public String getPactno() {
+        return pactno;
     }
 
-    public void setTotalMoney(BigDecimal totalMoney) {
-        this.totalMoney = totalMoney;
-    }
-
-    public String getDatemonth() {
-        return datemonth;
-    }
-
-    public void setDatemonth(String datemonth) {
-        this.datemonth = datemonth;
+    public void setPactno(String pactno) {
+        this.pactno = pactno;
     }
 
     public String getCompanyStaffIsActice() {
@@ -472,13 +458,4 @@ public class CloudDfMoneyInterfaceInfo {
     public void setCompactStaffCompactActive(String compactStaffCompactActive) {
         this.compactStaffCompactActive = compactStaffCompactActive;
     }
-
-    public String getPactno() {
-        return pactno;
-    }
-
-    public void setPactno(String pactno) {
-        this.pactno = pactno;
-    }
-
 }

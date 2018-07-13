@@ -12,11 +12,11 @@ import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanySalesMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudRechargeMapper;
-import com.joiest.jpf.dto.CloudRechargeNeedReleaseRequest;
-import com.joiest.jpf.dto.CloudRechargeRequest;
-import com.joiest.jpf.dto.CloudRechargeResponse;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudRechargeInfo;
+import com.joiest.jpf.entity.RechargeNeedInfo;
+import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudRechargeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -536,6 +536,76 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         }
 
         return rechargeRet;
+    }
+
+    @Override
+    public GetRechargeNeedResponse getRechargeNeedInfo(GetRechargeNeedRequest request,Long pageNo,Long pageSize) {
+        PayCloudRechargeExample example = new PayCloudRechargeExample();
+        PayCloudRechargeExample.Criteria exampleCriteria = example.createCriteria();
+        if (null != request.getId()) {
+            exampleCriteria.andIdEqualTo(request.getId());
+        }
+        if (StringUtils.isNotBlank(request.getFid())) {
+            exampleCriteria.andFidEqualTo(request.getFid());
+        }
+        if (StringUtils.isNotBlank(request.getPactno())) {
+            exampleCriteria.andPactnoEqualTo(request.getPactno());
+        }
+        if (StringUtils.isNotBlank(request.getAgentNo())) {
+            exampleCriteria.andAgentNoEqualTo(request.getAgentNo());
+        }
+        if (StringUtils.isNotBlank(request.getMerchNo())) {
+            exampleCriteria.andMerchNoEqualTo(request.getMerchNo());
+        }
+        if (null != request.getPayway()) {
+            exampleCriteria.andPaywayEqualTo(request.getPayway());
+        }
+        if (null != request.getEmployeeUid()) {
+            exampleCriteria.andEmployeeUidEqualTo(request.getEmployeeUid());
+        }
+        if (null != request.getStatus()) {
+            exampleCriteria.andStatusEqualTo(request.getStatus());
+        }
+        if (null != request.getStatusList() && !request.getStatusList().isEmpty()) {
+            exampleCriteria.andStatusIn(request.getStatusList());
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeStart()) && StringUtils.isNotBlank(request.getAddtimeEnd())) {
+            exampleCriteria.andAddtimeBetween(DateUtils.getFdate(request.getAddtimeStart(), DateUtils.DATEFORMATSHORT ),DateUtils.getFdate(request.getAddtimeEnd(), DateUtils.DATEFORMATSHORT ));
+        }
+        if (StringUtils.isNotBlank(request.getShenhetimeStart()) && StringUtils.isNotBlank(request.getShenhetimeEnd())) {
+            exampleCriteria.andShenhetimeBetween(DateUtils.getFdate(request.getShenhetimeStart(), DateUtils.DATEFORMATSHORT ),DateUtils.getFdate(request.getShenhetimeEnd(), DateUtils.DATEFORMATSHORT ));
+        }
+        if (StringUtils.isNotBlank(request.getChargetimeStart()) && StringUtils.isNotBlank(request.getChargetimeEnd())) {
+            exampleCriteria.andChargetimeBetween(DateUtils.getFdate(request.getChargetimeStart(), DateUtils.DATEFORMATSHORT), DateUtils.getFdate(request.getChargetimeEnd(), DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getPacttimeStart()) && StringUtils.isNotBlank(request.getPacttimeEnd())) {
+            exampleCriteria.andPacttimeBetween(DateUtils.getFdate(request.getPacttimeStart(), DateUtils.DATEFORMATSHORT), DateUtils.getFdate(request.getPacttimeEnd(), DateUtils.DATEFORMATSHORT));
+        }
+        if (null != request.getPactstatus()) {
+            exampleCriteria.andPactstatusEqualTo(request.getPactstatus());
+        }
+        int count = payCloudRechargeMapper.countByExample(example);
+        if (pageNo < 0) {
+            pageNo = Long.valueOf(1);
+        }
+        if (pageSize <= 0) {
+            pageSize = Long.valueOf(20);
+        }
+        example.setPageNo(pageNo);
+        example.setPageSize(pageSize);
+        example.setOrderByClause("DESC addtime");
+        List<PayCloudRecharge> payCloudRecharges = payCloudRechargeMapper.selectByExample(example);
+        List<RechargeNeedInfo> info = new ArrayList<>();
+        for (PayCloudRecharge payCloudRecharge : payCloudRecharges) {
+            RechargeNeedInfo rechargeNeedInfo = new RechargeNeedInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayCloudRecharge.class, RechargeNeedInfo.class, false);
+            beanCopier.copy(payCloudRecharge, rechargeNeedInfo, null);
+            info.add(rechargeNeedInfo);
+        }
+        GetRechargeNeedResponse response = new GetRechargeNeedResponse();
+        response.setCount(count);
+        response.setInfo(info);
+        return response;
     }
 
     @Override

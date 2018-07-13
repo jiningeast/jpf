@@ -116,14 +116,21 @@
 
         <!--<table tableName="pay_merchants_bank"></table>-->
 
-        <table tableName="pay_cloud_company">
+        <!--<table tableName="pay_cloud_company">
             <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
             <columnOverride column="attestation" javaType="java.lang.Byte" jdbcType="TINYINT" />
             <columnOverride column="tipsType" javaType="java.lang.Byte" jdbcType="TINYINT" />
             <columnOverride column="addadminid" javaType="java.lang.String" jdbcType="BIGINT" />
             <columnOverride column="editadminid" javaType="java.lang.String" jdbcType="BIGINT" />
             <columnOverride column="cloudmoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-        </table>
+        </table>-->
+
+        <!--<table tableName="pay_cloud_employee">
+            <columnOverride column="uid" javaType="java.lang.String" jdbcType="INTEGER" />
+            <columnOverride column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+            <columnOverride column="province" javaType="java.lang.String" jdbcType="BIGINT" />
+            <columnOverride column="city" javaType="java.lang.String" jdbcType="BIGINT" />
+        </table>-->
 
         <!--<table tableName="pay_cloud_agent">
             <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
@@ -142,13 +149,15 @@
             <columnOverride column="response" javaType="java.lang.String" jdbcType="VARCHAR" />
         </table>-->
 
-        <!--<table tableName="pay_cloud_task">
+        <table tableName="pay_cloud_task">
             <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
             <columnOverride column="oprator_id" javaType="java.lang.String" jdbcType="BIGINT" />
             <columnOverride column="company_id" javaType="java.lang.String" jdbcType="BIGINT" />
             <columnOverride column="company_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
             <columnOverride column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
-        </table>-->
+            <columnOverride column="money" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="is_lock" javaType="java.lang.Byte" jdbcType="TINYINT" />
+        </table>
 
         <!--<table tableName="pay_cloud_company_staff">
             <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
@@ -156,6 +165,20 @@
             <columnOverride column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
             <columnOverride column="is_active" javaType="java.lang.Byte" jdbcType="TINYINT" />
             <columnOverride column="ucardid" javaType="java.lang.String" jdbcType="INTEGER" />
+        </table>-->
+
+        <!--<table tableName="pay_cloud_df_money">
+            <columnOverride column="commoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="payablemoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="withholdmoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+            <columnOverride column="bankAcctAttr" javaType="java.lang.Integer" jdbcType="TINYINT" />
+            <columnOverride column="montype" javaType="java.lang.Integer" jdbcType="TINYINT" />
+            <columnOverride column="vid" javaType="java.lang.Integer" jdbcType="TINYINT" />
+            <columnOverride column="is_active" javaType="java.lang.Integer" jdbcType="TINYINT" />
+            <columnOverride column="operastate" javaType="java.lang.Integer" jdbcType="TINYINT" />
+            <columnOverride column="invostatus" javaType="java.lang.Integer" jdbcType="TINYINT" />
+            <columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="company_money_id" javaType="java.lang.String" jdbcType="BIGINT" />
         </table>-->
 
         <!--

@@ -90,8 +90,10 @@ public enum JpfInterfaceErrorInfo {
     //云帐户
     //个人相关
     USERINFO_VALID_FAIL("20001", "个人信息校验失败"),
-    USERINFO_NOT_EXIST("20002", "个人信息不存在");
+    USERINFO_NOT_EXIST("20002", "个人信息不存在"),
 
+    //代付接口
+    DF_SIGN_ERROR("30001","签名错误");
 
     private final String desc;
 

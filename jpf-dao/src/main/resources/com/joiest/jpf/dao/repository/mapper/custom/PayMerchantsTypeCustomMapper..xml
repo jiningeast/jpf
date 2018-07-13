@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.joiest.jpf.dao.repository.mapper.custom.PayMerchantsTypeCustomMapper">
+
+    <resultMap id="BaseResultMap" type="com.joiest.jpf.common.custom.PayMerchantsTypeCustom">
+        <id column="catid" jdbcType="INTEGER" property="catid" />
+        <result column="pid" jdbcType="VARCHAR" property="pid" />
+        <result column="catpath" jdbcType="VARCHAR" property="catpath" />
+        <result column="cat" jdbcType="VARCHAR" property="cat" />
+        <collection property="childList"  column="catid" ofType="com.joiest.jpf.common.custom.PayMerchantsTypeCustom"
+                    select="findPayMerchantsTypeByPid"></collection>
+    </resultMap>
+
+    <select id="findPayMerchantsTypeTree" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select * from pay_merchants_type where catid=#{catid,jdbcType=INTEGER}
+    </select>
+
+    <select id="findPayMerchantsTypeByPid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from pay_merchants_type where pid=#{catid,jdbcType=INTEGER}
+    </select>
+
+</mapper>

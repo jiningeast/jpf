@@ -21,4 +21,9 @@ public interface CloudTaskServiceFacade {
      * 获取单条任务记录
      */
     public CloudTaskInfo getOneTask(String id);
+
+    /**
+     * 更新任务记录
+     */
+    public int updateColumn(CloudTaskInfo cloudTaskInfo);
 }

@@ -1,11 +1,12 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayCloudCompanyMoney;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 
-import java.util.Map;
 
 public interface CloudCompanyMoneyServiceFacade {
 
@@ -27,10 +28,30 @@ public interface CloudCompanyMoneyServiceFacade {
     /*
      * 代付列表
      * */
-    public GetCloudMoneyDfResponse getAllByfid(String fid);
+    public GetCloudMoneyDfResponse getAllBycompanyMoneyId(String companyMoneyId);
+
+    /**
+     * 根据主键id获取单个订单信息
+     */
+    public CloudCompanyMoneyInfo getRecById(String id);
+
+    /**
+     * 根据主键ID更新订单状态
+     */
+    public JpfResponseDto updateRecById(PayCloudCompanyMoney record, String id);
 
     /**
      * 新增代付订单
      */
     public int addRec(CloudCompanyMoneyInfo cloudCompanyMoneyInfo);
+
+    /**
+     * 根据批次号获取订单
+     */
+    public CloudCompanyMoneyInfo getRecByBatchNo(String batchNo);
+
+    /**
+     * 更新记录
+     */
+    public int updateColumn(CloudCompanyMoneyInfo cloudCompanyMoneyInfo);
 }

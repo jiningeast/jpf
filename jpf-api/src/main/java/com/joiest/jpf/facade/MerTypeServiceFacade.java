@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.entity.MerchantTypeInfo;
+import com.joiest.jpf.entity.MerchantTypeTree;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface MerTypeServiceFacade {
     public MerchantTypeInfo getOneTypeByCatid(String catid);
 
     public List<MerchantTypeInfo> getOneTypeByCatId(String catid);
+
+    public List<MerchantTypeTree> getMerchantTypeTree(int catId);
+
 }

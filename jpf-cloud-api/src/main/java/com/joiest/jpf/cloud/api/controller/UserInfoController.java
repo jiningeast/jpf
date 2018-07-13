@@ -398,7 +398,7 @@ public class UserInfoController {
         CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankno, new BigInteger(uid));
         if(cloudStaffBanksInfo==null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请输入正确的银行卡信息", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此银行卡信息", null);
         }
         if(!cloudStaffBanksInfo.getBankphone().equals(phone)){
 
@@ -715,6 +715,16 @@ public class UserInfoController {
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "银行卡未激活", null);
         }
+        byte compact_status = 0;
+        String hasNoSign = "1";
+        //获取未签约合同
+        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactListCustom(Long.parseLong(uid),compact_status);
+        if(getUserCompactList == null){
+            hasNoSign = "0";
+        }
+
+        Map<String,String> resData = new HashMap<>();
+        resData.put("hasNoSign",hasNoSign);
         //合同表签订
         Map<String,String> compant = new HashMap<>();
         compant.put("compact_active","1");
@@ -728,10 +738,10 @@ public class UserInfoController {
 
         if(companctActive>0 && dfMoneyActive>0){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"合同签订成功",null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"合同签订成功",resData);
         }else{
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "合同签订失败", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "合同签订失败", resData);
         }
     }
          ////生成默认密码
