@@ -3,6 +3,7 @@ package com.joiest.jpf.facade;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
+import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 
 import java.util.List;
@@ -17,7 +18,6 @@ public interface CloudDfMoneyServiceFacade {
     public Double getUserDfTotalMoney(String uid);
 
     //获取用户记录 按月份
-
     public List<CloudDfMoneyInterfaceInfo> getUserMonthList(Long uid);
 
     //根据订单号更新代付明细
@@ -32,6 +32,11 @@ public interface CloudDfMoneyServiceFacade {
 
     //更新代付状态
     public int updateDfMoneyActive(Map<String,String> dfMoney,Long id);
+
+    /**
+     * 插入记录
+     */
+    public int addDfMoney(CloudDfMoneyInfo cloudDfMoneyInfo);
 }
 
 

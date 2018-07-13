@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayCloudTask implements Serializable {
@@ -50,6 +51,21 @@ public class PayCloudTask implements Serializable {
     private String batchno;
 
     /**
+     * 任务总笔数
+     */
+    private Integer persons;
+
+    /**
+     * 任务总金额
+     */
+    private BigDecimal money;
+
+    /**
+     * 合同编号
+     */
+    private String contractNo;
+
+    /**
      * 上传的excel文件路径
      */
     private String filePath;
@@ -58,6 +74,11 @@ public class PayCloudTask implements Serializable {
      * 处理状态 0=未处理 1=处理中 2=完成 3=失败
      */
     private Byte status;
+
+    /**
+     * 任务锁定 0=未锁 1=锁定
+     */
+    private Byte isLock;
 
     /**
      * 添加时间
@@ -143,6 +164,30 @@ public class PayCloudTask implements Serializable {
         this.batchno = batchno == null ? null : batchno.trim();
     }
 
+    public Integer getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Integer persons) {
+        this.persons = persons;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo == null ? null : contractNo.trim();
+    }
+
     public String getFilePath() {
         return filePath;
     }
@@ -157,6 +202,14 @@ public class PayCloudTask implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Byte getIsLock() {
+        return isLock;
+    }
+
+    public void setIsLock(Byte isLock) {
+        this.isLock = isLock;
     }
 
     public Date getCreated() {
@@ -193,8 +246,12 @@ public class PayCloudTask implements Serializable {
         sb.append(", merchNo=").append(merchNo);
         sb.append(", companyType=").append(companyType);
         sb.append(", batchno=").append(batchno);
+        sb.append(", persons=").append(persons);
+        sb.append(", money=").append(money);
+        sb.append(", contractNo=").append(contractNo);
         sb.append(", filePath=").append(filePath);
         sb.append(", status=").append(status);
+        sb.append(", isLock=").append(isLock);
         sb.append(", created=").append(created);
         sb.append(", finishtime=").append(finishtime);
         sb.append("]");
@@ -226,8 +283,12 @@ public class PayCloudTask implements Serializable {
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
             && (this.getCompanyType() == null ? other.getCompanyType() == null : this.getCompanyType().equals(other.getCompanyType()))
             && (this.getBatchno() == null ? other.getBatchno() == null : this.getBatchno().equals(other.getBatchno()))
+            && (this.getPersons() == null ? other.getPersons() == null : this.getPersons().equals(other.getPersons()))
+            && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
+            && (this.getContractNo() == null ? other.getContractNo() == null : this.getContractNo().equals(other.getContractNo()))
             && (this.getFilePath() == null ? other.getFilePath() == null : this.getFilePath().equals(other.getFilePath()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getIsLock() == null ? other.getIsLock() == null : this.getIsLock().equals(other.getIsLock()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getFinishtime() == null ? other.getFinishtime() == null : this.getFinishtime().equals(other.getFinishtime()));
     }
@@ -248,8 +309,12 @@ public class PayCloudTask implements Serializable {
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
         result = prime * result + ((getCompanyType() == null) ? 0 : getCompanyType().hashCode());
         result = prime * result + ((getBatchno() == null) ? 0 : getBatchno().hashCode());
+        result = prime * result + ((getPersons() == null) ? 0 : getPersons().hashCode());
+        result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
+        result = prime * result + ((getContractNo() == null) ? 0 : getContractNo().hashCode());
         result = prime * result + ((getFilePath() == null) ? 0 : getFilePath().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getIsLock() == null) ? 0 : getIsLock().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getFinishtime() == null) ? 0 : getFinishtime().hashCode());
         return result;

@@ -1,5 +1,6 @@
 package com.joiest.jpf.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class CloudTaskInfo {
@@ -49,6 +50,21 @@ public class CloudTaskInfo {
     private String batchno;
 
     /**
+     * 任务总笔数
+     */
+    private Integer persons;
+
+    /**
+     * 任务总金额
+     */
+    private BigDecimal money;
+
+    /**
+     * 合同编号
+     */
+    private String contractNo;
+
+    /**
      * 上传的excel文件路径
      */
     private String filePath;
@@ -57,6 +73,11 @@ public class CloudTaskInfo {
      * 处理状态 0=未处理 1=处理中 2=完成 3=失败
      */
     private Byte status;
+
+    /**
+     * 任务锁定 0=未锁 1=锁定
+     */
+    private Byte isLock;
 
     /**
      * 添加时间
@@ -140,6 +161,30 @@ public class CloudTaskInfo {
         this.batchno = batchno;
     }
 
+    public Integer getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Integer persons) {
+        this.persons = persons;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
     public String getFilePath() {
         return filePath;
     }
@@ -154,6 +199,14 @@ public class CloudTaskInfo {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Byte getIsLock() {
+        return isLock;
+    }
+
+    public void setIsLock(Byte isLock) {
+        this.isLock = isLock;
     }
 
     public Date getCreated() {

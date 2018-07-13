@@ -7,7 +7,6 @@ import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 
-import java.util.Map;
 
 public interface CloudCompanyMoneyServiceFacade {
 
@@ -45,4 +44,14 @@ public interface CloudCompanyMoneyServiceFacade {
      * 新增代付订单
      */
     public int addRec(CloudCompanyMoneyInfo cloudCompanyMoneyInfo);
+
+    /**
+     * 根据批次号获取订单
+     */
+    public CloudCompanyMoneyInfo getRecByBatchNo(String batchNo);
+
+    /**
+     * 更新记录
+     */
+    public int updateColumn(CloudCompanyMoneyInfo cloudCompanyMoneyInfo);
 }

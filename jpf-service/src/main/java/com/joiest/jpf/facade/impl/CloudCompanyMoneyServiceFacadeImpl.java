@@ -13,6 +13,7 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyMapper;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
+import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.facade.CloudCompanyMoneyServiceFacade;
@@ -199,6 +200,9 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
 
     }
 
+    /**
+     * 新增代付订单
+     */
     @Override
     public CloudCompanyMoneyInfo getRecById(String id){
 
@@ -257,5 +261,36 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         beanCopier.copy(cloudCompanyMoneyInfo, payCloudCompanyMoney, null);
 
         return payCloudCompanyMoneyMapper.insert(payCloudCompanyMoney);
+    }
+
+    /**
+     * 根据批次号获取订单
+     */
+    @Override
+    public CloudCompanyMoneyInfo getRecByBatchNo(String batchNo){
+        PayCloudCompanyMoneyExample e = new PayCloudCompanyMoneyExample();
+        PayCloudCompanyMoneyExample.Criteria c = e.createCriteria();
+        c.andBatchnoEqualTo(batchNo);
+        List<PayCloudCompanyMoney> list = payCloudCompanyMoneyMapper.selectByExample(e);
+
+        CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyMoney.class, CloudCompanyMoneyInfo.class, false);
+        beanCopier.copy(list.get(0), cloudCompanyMoneyInfo, null);
+
+        return cloudCompanyMoneyInfo;
+    }
+
+    /**
+     * 更新记录
+     */
+    @Override
+    public int updateColumn(CloudCompanyMoneyInfo cloudCompanyMoneyInfo){
+        PayCloudCompanyMoney payCloudCompanyMoney = new PayCloudCompanyMoney();
+
+        BeanCopier beanCopier = BeanCopier.create(CloudCompanyMoneyInfo.class, PayCloudCompanyMoney.class, false);
+        beanCopier.copy(cloudCompanyMoneyInfo, payCloudCompanyMoney, null);
+
+         return payCloudCompanyMoneyMapper.updateByPrimaryKeySelective(payCloudCompanyMoney);
+
     }
 }

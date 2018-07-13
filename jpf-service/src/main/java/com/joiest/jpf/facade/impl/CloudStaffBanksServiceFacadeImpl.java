@@ -72,6 +72,30 @@ public class CloudStaffBanksServiceFacadeImpl implements CloudStaffBanksServiceF
     }
 
     /**
+     * 根据指定条件获取信息
+     */
+    public CloudStaffBanksInfo getStaffBankByInfo(CloudStaffBanksInfo cloudStaffBanksInfo){
+        PayCloudStaffBanksExample e = new PayCloudStaffBanksExample();
+        PayCloudStaffBanksExample.Criteria c = e.createCriteria();
+        if ( cloudStaffBanksInfo.getBankno() != null ){
+            c.andBanknoEqualTo(cloudStaffBanksInfo.getBankno());
+        }
+        if ( cloudStaffBanksInfo.getBankActive() != null ){
+            c.andBankActiveEqualTo(cloudStaffBanksInfo.getBankActive());
+        }
+        if ( cloudStaffBanksInfo.getBankphone() != null ){
+            c.andBankphoneEqualTo(cloudStaffBanksInfo.getBankphone());
+        }
+        List<PayCloudStaffBanks> list = payCloudStaffBanksMapper.selectByExample(e);
+        CloudStaffBanksInfo cloudStaffBanksInfo1 = new CloudStaffBanksInfo();
+
+        BeanCopier beanCopier = BeanCopier.create( PayCloudStaffBanks.class, CloudStaffBanksInfo.class, false);
+        beanCopier.copy(list.get(0), cloudStaffBanksInfo1, null);
+
+        return cloudStaffBanksInfo1;
+    }
+
+    /**
      * 插入员工银行卡信息
      */
     @Override
