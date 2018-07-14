@@ -184,6 +184,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         PayCloudDfMoneyExample.Criteria c = example.createCriteria();
         c.andIdIn(ids);
 
+
         int count = payCloudDfMoneyMapper.updateByExampleSelective(record,example);
 
         return new JpfResponseDto();

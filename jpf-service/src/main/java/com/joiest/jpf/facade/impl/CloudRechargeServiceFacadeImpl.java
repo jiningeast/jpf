@@ -165,7 +165,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         //System.out.println(cloudRechargeRequest.getStatus());
         //System.out.println(222222);
         e.setPageNo(cloudRechargeRequest.getPage());
-        e.setPageSize(cloudRechargeRequest.getRows());e.setPageSize(cloudRechargeRequest.getRows());
+        e.setPageSize(cloudRechargeRequest.getRows());
         e.setOrderByClause("id DESC");
 
         List<PayCloudRecharge> list = payCloudRechargeMapper.selectByExample(e);

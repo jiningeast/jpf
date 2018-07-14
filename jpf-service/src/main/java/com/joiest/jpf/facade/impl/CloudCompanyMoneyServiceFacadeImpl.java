@@ -37,7 +37,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
     private PayCloudDfMoneyCustomMapper payCloudDfMoneyCustomMapper;
 
     /*
-    * 统计充值总笔数
+    * 统计总数
     * */
     @Override
     public Integer getCount(){
@@ -52,7 +52,8 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
      * */
     @Override
     public CloudCompanyMoneyResponse getRecords(CloudCompanyMoneyRequest cloudCompanyMoneyRequest){
-        CloudCompanyMoneyResponse CloudCompanyMoneyResponse = new CloudCompanyMoneyResponse();
+
+        CloudCompanyMoneyResponse cloudCompanyMoneyResponse = new CloudCompanyMoneyResponse();
 
         PayCloudCompanyMoneyExample e = new PayCloudCompanyMoneyExample();
         PayCloudCompanyMoneyExample.Criteria c = e.createCriteria();
@@ -80,6 +81,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
             c.andAddtimeLessThan( addtimeEnd );
         }
 
+
         e.setPageNo(cloudCompanyMoneyRequest.getPage());
         e.setPageSize(cloudCompanyMoneyRequest.getRows());
         e.setOrderByClause("id DESC");
@@ -87,18 +89,18 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         List<PayCloudCompanyMoney> list = payCloudCompanyMoneyMapper.selectByExample(e);
         List<CloudCompanyMoneyInfo> infos = new ArrayList<>();
         for (PayCloudCompanyMoney payCloudCompanyMoney : list) {
-            CloudCompanyMoneyInfo CloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
+            CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
             BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyMoney.class, CloudCompanyMoneyInfo.class, false);
-            beanCopier.copy(payCloudCompanyMoney, CloudCompanyMoneyInfo, null);
+            beanCopier.copy(payCloudCompanyMoney, cloudCompanyMoneyInfo, null);
 
-            infos.add(CloudCompanyMoneyInfo);
+            infos.add(cloudCompanyMoneyInfo);
         }
 
-        CloudCompanyMoneyResponse.setList(infos);
-        CloudCompanyMoneyResponse.setCount(payCloudCompanyMoneyMapper.countByExample(e));
+        cloudCompanyMoneyResponse.setList(infos);
+        cloudCompanyMoneyResponse.setCount(payCloudCompanyMoneyMapper.countByExample(e));
 
 
-        return CloudCompanyMoneyResponse;
+        return cloudCompanyMoneyResponse;
     }
 
     /*
@@ -106,10 +108,11 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
      * */
     @Override
     public CloudCompanyMoneyResponse getCaiwuRecords(CloudCompanyMoneyRequest cloudCompanyMoneyRequest){
-        CloudCompanyMoneyResponse CloudCompanyMoneyResponse = new CloudCompanyMoneyResponse();
+        CloudCompanyMoneyResponse cloudCompanyMoneyResponse = new CloudCompanyMoneyResponse();
 
-        PayCloudCompanyMoneyExample e = new PayCloudCompanyMoneyExample();
-        PayCloudCompanyMoneyExample.Criteria c = e.createCriteria();
+        PayCloudCompanyMoneyExample example = new PayCloudCompanyMoneyExample();
+
+        PayCloudCompanyMoneyExample.Criteria c = example.createCriteria();
         // 构建查询example
         if ( StringUtils.isNotBlank(cloudCompanyMoneyRequest.getAgentNo()) ){
             c.andAgentNoEqualTo(cloudCompanyMoneyRequest.getAgentNo());
@@ -133,26 +136,25 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
             addtimeEnd = DateUtils.getFdate( cloudCompanyMoneyRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
+        example.setPageNo(cloudCompanyMoneyRequest.getPage());
+        example.setPageSize(cloudCompanyMoneyRequest.getRows());
+        example.setOrderByClause("id DESC");
 
-        e.setPageNo(cloudCompanyMoneyRequest.getPage());
-        e.setPageSize(cloudCompanyMoneyRequest.getRows());
-        e.setOrderByClause("id DESC");
-
-        List<PayCloudCompanyMoney> list = payCloudCompanyMoneyMapper.selectByExample(e);
+        List<PayCloudCompanyMoney> list = payCloudCompanyMoneyMapper.selectByExample(example);
         List<CloudCompanyMoneyInfo> infos = new ArrayList<>();
         for (PayCloudCompanyMoney payCloudCompanyMoney : list) {
-            CloudCompanyMoneyInfo CloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
+            CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
             BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyMoney.class, CloudCompanyMoneyInfo.class, false);
-            beanCopier.copy(payCloudCompanyMoney, CloudCompanyMoneyInfo, null);
+            beanCopier.copy(payCloudCompanyMoney, cloudCompanyMoneyInfo, null);
 
-            infos.add(CloudCompanyMoneyInfo);
+            infos.add(cloudCompanyMoneyInfo);
         }
 
-        CloudCompanyMoneyResponse.setList(infos);
-        CloudCompanyMoneyResponse.setCount(payCloudCompanyMoneyMapper.countByExample(e));
+        cloudCompanyMoneyResponse.setList(infos);
+        cloudCompanyMoneyResponse.setCount(payCloudCompanyMoneyMapper.countByExample(example));
 
 
-        return CloudCompanyMoneyResponse;
+        return cloudCompanyMoneyResponse;
     }
 
     /*
