@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -765,6 +766,196 @@ public class PayCloudTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andPersonsIsNull() {
+            addCriterion("persons is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsIsNotNull() {
+            addCriterion("persons is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsEqualTo(Integer value) {
+            addCriterion("persons =", value, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsNotEqualTo(Integer value) {
+            addCriterion("persons <>", value, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsGreaterThan(Integer value) {
+            addCriterion("persons >", value, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("persons >=", value, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsLessThan(Integer value) {
+            addCriterion("persons <", value, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsLessThanOrEqualTo(Integer value) {
+            addCriterion("persons <=", value, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsIn(List<Integer> values) {
+            addCriterion("persons in", values, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsNotIn(List<Integer> values) {
+            addCriterion("persons not in", values, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsBetween(Integer value1, Integer value2) {
+            addCriterion("persons between", value1, value2, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonsNotBetween(Integer value1, Integer value2) {
+            addCriterion("persons not between", value1, value2, "persons");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyIsNull() {
+            addCriterion("money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyIsNotNull() {
+            addCriterion("money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyEqualTo(BigDecimal value) {
+            addCriterion("money =", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("money <>", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyGreaterThan(BigDecimal value) {
+            addCriterion("money >", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("money >=", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyLessThan(BigDecimal value) {
+            addCriterion("money <", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("money <=", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyIn(List<BigDecimal> values) {
+            addCriterion("money in", values, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("money not in", values, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("money between", value1, value2, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("money not between", value1, value2, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoIsNull() {
+            addCriterion("contract_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoIsNotNull() {
+            addCriterion("contract_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoEqualTo(String value) {
+            addCriterion("contract_no =", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotEqualTo(String value) {
+            addCriterion("contract_no <>", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoGreaterThan(String value) {
+            addCriterion("contract_no >", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoGreaterThanOrEqualTo(String value) {
+            addCriterion("contract_no >=", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLessThan(String value) {
+            addCriterion("contract_no <", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLessThanOrEqualTo(String value) {
+            addCriterion("contract_no <=", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLike(String value) {
+            addCriterion("contract_no like", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotLike(String value) {
+            addCriterion("contract_no not like", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoIn(List<String> values) {
+            addCriterion("contract_no in", values, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotIn(List<String> values) {
+            addCriterion("contract_no not in", values, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoBetween(String value1, String value2) {
+            addCriterion("contract_no between", value1, value2, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotBetween(String value1, String value2) {
+            addCriterion("contract_no not between", value1, value2, "contractNo");
+            return (Criteria) this;
+        }
+
         public Criteria andFilePathIsNull() {
             addCriterion("file_path is null");
             return (Criteria) this;
@@ -892,6 +1083,66 @@ public class PayCloudTaskExample {
 
         public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockIsNull() {
+            addCriterion("is_lock is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockIsNotNull() {
+            addCriterion("is_lock is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockEqualTo(Byte value) {
+            addCriterion("is_lock =", value, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockNotEqualTo(Byte value) {
+            addCriterion("is_lock <>", value, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockGreaterThan(Byte value) {
+            addCriterion("is_lock >", value, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_lock >=", value, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockLessThan(Byte value) {
+            addCriterion("is_lock <", value, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockLessThanOrEqualTo(Byte value) {
+            addCriterion("is_lock <=", value, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockIn(List<Byte> values) {
+            addCriterion("is_lock in", values, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockNotIn(List<Byte> values) {
+            addCriterion("is_lock not in", values, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockBetween(Byte value1, Byte value2) {
+            addCriterion("is_lock between", value1, value2, "isLock");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsLockNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_lock not between", value1, value2, "isLock");
             return (Criteria) this;
         }
 
@@ -1037,6 +1288,11 @@ public class PayCloudTaskExample {
 
         public Criteria andBatchnoLikeInsensitive(String value) {
             addCriterion("upper(batchno) like", value.toUpperCase(), "batchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLikeInsensitive(String value) {
+            addCriterion("upper(contract_no) like", value.toUpperCase(), "contractNo");
             return (Criteria) this;
         }
 

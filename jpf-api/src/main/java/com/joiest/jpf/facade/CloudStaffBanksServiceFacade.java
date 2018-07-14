@@ -17,6 +17,11 @@ public interface CloudStaffBanksServiceFacade {
     public CloudStaffBanksInfo getStaffBankBySidPhone(String id,String mobile);
 
     /**
+     * 根据指定条件获取信息
+     */
+    public CloudStaffBanksInfo getStaffBankByInfo(CloudStaffBanksInfo cloudStaffBanksInfo);
+
+    /**
      * 插入员工银行卡信息
      */
     public int addStaffBank(CloudStaffBanksInfo cloudStaffBanksInfo);

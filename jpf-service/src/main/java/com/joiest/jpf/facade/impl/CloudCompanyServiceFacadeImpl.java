@@ -246,6 +246,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         Company.setName(request.getName());
         Company.setPhonename(request.getPhonename());
         Company.setPhone(request.getPhone());
+
         Company.setLinkemail(request.getLinkemail());
         Company.setAttestation(request.getAttestation());
         Company.setAptitude(request.getAptitude());

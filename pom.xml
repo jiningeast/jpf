@@ -68,7 +68,7 @@
         <versions_maven_plugin_version>2.3</versions_maven_plugin_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <aliyun-sdk-oss_version>2.8.3</aliyun-sdk-oss_version>
-        <HttpClient_version>4.0-beta1</HttpClient_version>
+        <HttpClient_version>4.5.4</HttpClient_version>
     </properties>
 
     <dependencyManagement>
