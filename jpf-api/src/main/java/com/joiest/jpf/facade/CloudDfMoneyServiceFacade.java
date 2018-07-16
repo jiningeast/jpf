@@ -37,6 +37,17 @@ public interface CloudDfMoneyServiceFacade {
      * 插入记录
      */
     public int addDfMoney(CloudDfMoneyInfo cloudDfMoneyInfo);
+
+    /**
+     * 获取指定批次充值列表
+     * @param batchId
+     * @param dfif
+     * @param pageNo
+     * @param pageSize
+     * @param flag
+     * @return
+     */
+    public GetCloudMoneyDfResponse getDfDetailList(String batchId, String dfif, long pageNo, long pageSize, int flag);
 }
 
 

@@ -11,14 +11,24 @@ public class PayCloudDfOrder implements Serializable {
     private Long id;
 
     /**
-     * 
+     * 打款orderid
      */
     private Long orderid;
 
     /**
-     * df订单ID
+     * 打款批次id
      */
-    private String foreignOrderid;
+    private String batchid;
+
+    /**
+     * 外来批次编号
+     */
+    private String requestBatchno;
+
+    /**
+     * 单独打款id df_money.id
+     */
+    private String requestDfId;
 
     /**
      * 交易金额
@@ -34,11 +44,6 @@ public class PayCloudDfOrder implements Serializable {
      * 请求信息
      */
     private String requeststr;
-
-    /**
-     * 外来请求字符串
-     */
-    private String foreignRequest;
 
     /**
      * 银行编码
@@ -88,7 +93,7 @@ public class PayCloudDfOrder implements Serializable {
     /**
      * 订单状态 1处理中
      */
-    private Byte status;
+    private Integer status;
 
     /**
      * 代付状态 00提交申请 01审核通过 02申请被拒绝 03已打批次 04提交到渠道 05代付成功 06代付失败
@@ -118,12 +123,28 @@ public class PayCloudDfOrder implements Serializable {
         this.orderid = orderid;
     }
 
-    public String getForeignOrderid() {
-        return foreignOrderid;
+    public String getBatchid() {
+        return batchid;
     }
 
-    public void setForeignOrderid(String foreignOrderid) {
-        this.foreignOrderid = foreignOrderid == null ? null : foreignOrderid.trim();
+    public void setBatchid(String batchid) {
+        this.batchid = batchid == null ? null : batchid.trim();
+    }
+
+    public String getRequestBatchno() {
+        return requestBatchno;
+    }
+
+    public void setRequestBatchno(String requestBatchno) {
+        this.requestBatchno = requestBatchno == null ? null : requestBatchno.trim();
+    }
+
+    public String getRequestDfId() {
+        return requestDfId;
+    }
+
+    public void setRequestDfId(String requestDfId) {
+        this.requestDfId = requestDfId == null ? null : requestDfId.trim();
     }
 
     public BigDecimal getApplyamt() {
@@ -148,14 +169,6 @@ public class PayCloudDfOrder implements Serializable {
 
     public void setRequeststr(String requeststr) {
         this.requeststr = requeststr == null ? null : requeststr.trim();
-    }
-
-    public String getForeignRequest() {
-        return foreignRequest;
-    }
-
-    public void setForeignRequest(String foreignRequest) {
-        this.foreignRequest = foreignRequest == null ? null : foreignRequest.trim();
     }
 
     public String getFinacode() {
@@ -230,11 +243,11 @@ public class PayCloudDfOrder implements Serializable {
         this.tranno = tranno == null ? null : tranno.trim();
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -265,11 +278,12 @@ public class PayCloudDfOrder implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", orderid=").append(orderid);
-        sb.append(", foreignOrderid=").append(foreignOrderid);
+        sb.append(", batchid=").append(batchid);
+        sb.append(", requestBatchno=").append(requestBatchno);
+        sb.append(", requestDfId=").append(requestDfId);
         sb.append(", applyamt=").append(applyamt);
         sb.append(", orderStdPrice=").append(orderStdPrice);
         sb.append(", requeststr=").append(requeststr);
-        sb.append(", foreignRequest=").append(foreignRequest);
         sb.append(", finacode=").append(finacode);
         sb.append(", payeeacct=").append(payeeacct);
         sb.append(", payeename=").append(payeename);
@@ -304,11 +318,12 @@ public class PayCloudDfOrder implements Serializable {
         PayCloudDfOrder other = (PayCloudDfOrder) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
-            && (this.getForeignOrderid() == null ? other.getForeignOrderid() == null : this.getForeignOrderid().equals(other.getForeignOrderid()))
+            && (this.getBatchid() == null ? other.getBatchid() == null : this.getBatchid().equals(other.getBatchid()))
+            && (this.getRequestBatchno() == null ? other.getRequestBatchno() == null : this.getRequestBatchno().equals(other.getRequestBatchno()))
+            && (this.getRequestDfId() == null ? other.getRequestDfId() == null : this.getRequestDfId().equals(other.getRequestDfId()))
             && (this.getApplyamt() == null ? other.getApplyamt() == null : this.getApplyamt().equals(other.getApplyamt()))
             && (this.getOrderStdPrice() == null ? other.getOrderStdPrice() == null : this.getOrderStdPrice().equals(other.getOrderStdPrice()))
             && (this.getRequeststr() == null ? other.getRequeststr() == null : this.getRequeststr().equals(other.getRequeststr()))
-            && (this.getForeignRequest() == null ? other.getForeignRequest() == null : this.getForeignRequest().equals(other.getForeignRequest()))
             && (this.getFinacode() == null ? other.getFinacode() == null : this.getFinacode().equals(other.getFinacode()))
             && (this.getPayeeacct() == null ? other.getPayeeacct() == null : this.getPayeeacct().equals(other.getPayeeacct()))
             && (this.getPayeename() == null ? other.getPayeename() == null : this.getPayeename().equals(other.getPayeename()))
@@ -332,11 +347,12 @@ public class PayCloudDfOrder implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrderid() == null) ? 0 : getOrderid().hashCode());
-        result = prime * result + ((getForeignOrderid() == null) ? 0 : getForeignOrderid().hashCode());
+        result = prime * result + ((getBatchid() == null) ? 0 : getBatchid().hashCode());
+        result = prime * result + ((getRequestBatchno() == null) ? 0 : getRequestBatchno().hashCode());
+        result = prime * result + ((getRequestDfId() == null) ? 0 : getRequestDfId().hashCode());
         result = prime * result + ((getApplyamt() == null) ? 0 : getApplyamt().hashCode());
         result = prime * result + ((getOrderStdPrice() == null) ? 0 : getOrderStdPrice().hashCode());
         result = prime * result + ((getRequeststr() == null) ? 0 : getRequeststr().hashCode());
-        result = prime * result + ((getForeignRequest() == null) ? 0 : getForeignRequest().hashCode());
         result = prime * result + ((getFinacode() == null) ? 0 : getFinacode().hashCode());
         result = prime * result + ((getPayeeacct() == null) ? 0 : getPayeeacct().hashCode());
         result = prime * result + ((getPayeename() == null) ? 0 : getPayeename().hashCode());
