@@ -7,7 +7,7 @@ public class PayCloudEmployee implements Serializable {
     /**
      * 
      */
-    private String uid;
+    private Integer uid;
 
     /**
      * 聚合商户编号
@@ -40,14 +40,9 @@ public class PayCloudEmployee implements Serializable {
     private String regip;
 
     /**
-     * 
+     * 注册时间
      */
-    private Integer regdate;
-
-    /**
-     * 创建时间
-     */
-    private Date created;
+    private Date regdate;
 
     /**
      * 企业登录密码
@@ -62,26 +57,31 @@ public class PayCloudEmployee implements Serializable {
     /**
      * 省份
      */
-    private String province;
+    private Long province;
 
     /**
      * 城市
      */
-    private String city;
+    private Long city;
 
     /**
      * 地址详情
      */
     private String address;
 
+    /**
+     * 创建时间
+     */
+    private Date created;
+
     private static final long serialVersionUID = 1L;
 
-    public String getUid() {
+    public Integer getUid() {
         return uid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid == null ? null : uid.trim();
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 
     public String getMerchNo() {
@@ -132,20 +132,12 @@ public class PayCloudEmployee implements Serializable {
         this.regip = regip == null ? null : regip.trim();
     }
 
-    public Integer getRegdate() {
+    public Date getRegdate() {
         return regdate;
     }
 
-    public void setRegdate(Integer regdate) {
+    public void setRegdate(Date regdate) {
         this.regdate = regdate;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
     }
 
     public String getCloudloginpwd() {
@@ -164,20 +156,20 @@ public class PayCloudEmployee implements Serializable {
         this.linkname = linkname == null ? null : linkname.trim();
     }
 
-    public String getProvince() {
+    public Long getProvince() {
         return province;
     }
 
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
+    public void setProvince(Long province) {
+        this.province = province;
     }
 
-    public String getCity() {
+    public Long getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city == null ? null : city.trim();
+    public void setCity(Long city) {
+        this.city = city;
     }
 
     public String getAddress() {
@@ -186,6 +178,14 @@ public class PayCloudEmployee implements Serializable {
 
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     /**
@@ -205,12 +205,12 @@ public class PayCloudEmployee implements Serializable {
         sb.append(", status=").append(status);
         sb.append(", regip=").append(regip);
         sb.append(", regdate=").append(regdate);
-        sb.append(", created=").append(created);
         sb.append(", cloudloginpwd=").append(cloudloginpwd);
         sb.append(", linkname=").append(linkname);
         sb.append(", province=").append(province);
         sb.append(", city=").append(city);
         sb.append(", address=").append(address);
+        sb.append(", created=").append(created);
         sb.append("]");
         return sb.toString();
     }
@@ -239,12 +239,12 @@ public class PayCloudEmployee implements Serializable {
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getRegip() == null ? other.getRegip() == null : this.getRegip().equals(other.getRegip()))
             && (this.getRegdate() == null ? other.getRegdate() == null : this.getRegdate().equals(other.getRegdate()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getCloudloginpwd() == null ? other.getCloudloginpwd() == null : this.getCloudloginpwd().equals(other.getCloudloginpwd()))
             && (this.getLinkname() == null ? other.getLinkname() == null : this.getLinkname().equals(other.getLinkname()))
             && (this.getProvince() == null ? other.getProvince() == null : this.getProvince().equals(other.getProvince()))
             && (this.getCity() == null ? other.getCity() == null : this.getCity().equals(other.getCity()))
-            && (this.getAddress() == null ? other.getAddress() == null : this.getAddress().equals(other.getAddress()));
+            && (this.getAddress() == null ? other.getAddress() == null : this.getAddress().equals(other.getAddress()))
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()));
     }
 
     /**
@@ -262,12 +262,12 @@ public class PayCloudEmployee implements Serializable {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getRegip() == null) ? 0 : getRegip().hashCode());
         result = prime * result + ((getRegdate() == null) ? 0 : getRegdate().hashCode());
-        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getCloudloginpwd() == null) ? 0 : getCloudloginpwd().hashCode());
         result = prime * result + ((getLinkname() == null) ? 0 : getLinkname().hashCode());
         result = prime * result + ((getProvince() == null) ? 0 : getProvince().hashCode());
         result = prime * result + ((getCity() == null) ? 0 : getCity().hashCode());
         result = prime * result + ((getAddress() == null) ? 0 : getAddress().hashCode());
+        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         return result;
     }
 }

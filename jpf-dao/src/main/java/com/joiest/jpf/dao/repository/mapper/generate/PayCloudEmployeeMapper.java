@@ -24,7 +24,7 @@ public interface PayCloudEmployeeMapper {
      *
      * @param uid
      */
-    int deleteByPrimaryKey(String uid);
+    int deleteByPrimaryKey(Integer uid);
 
     /**
      * 插入数据库记录
@@ -52,7 +52,7 @@ public interface PayCloudEmployeeMapper {
      *
      * @param uid
      */
-    PayCloudEmployee selectByPrimaryKey(String uid);
+    PayCloudEmployee selectByPrimaryKey(Integer uid);
 
     /**
      * 选择性更新数据库记录

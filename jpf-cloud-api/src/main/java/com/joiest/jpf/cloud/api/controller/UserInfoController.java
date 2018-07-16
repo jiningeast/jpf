@@ -653,7 +653,8 @@ public class UserInfoController {
         userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
         userInfo.put("commoney",cloudDfMoneyInterfaceInfo.getCommoney().toString());//发放金额
 
-
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }
@@ -744,7 +745,6 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "合同签订失败", resData);
         }
     }
-         ////生成默认密码
-        //String  companypass= SHA1.getInstance().getMySHA1Code(passlogin);
+
 }
 
