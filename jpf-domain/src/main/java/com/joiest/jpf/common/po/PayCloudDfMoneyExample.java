@@ -1956,73 +1956,73 @@ public class PayCloudDfMoneyExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidIsNull() {
-            addCriterion("ordernewid is null");
+        public Criteria andOrderidsIsNull() {
+            addCriterion("orderids is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidIsNotNull() {
-            addCriterion("ordernewid is not null");
+        public Criteria andOrderidsIsNotNull() {
+            addCriterion("orderids is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidEqualTo(String value) {
-            addCriterion("ordernewid =", value, "ordernewid");
+        public Criteria andOrderidsEqualTo(String value) {
+            addCriterion("orderids =", value, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidNotEqualTo(String value) {
-            addCriterion("ordernewid <>", value, "ordernewid");
+        public Criteria andOrderidsNotEqualTo(String value) {
+            addCriterion("orderids <>", value, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidGreaterThan(String value) {
-            addCriterion("ordernewid >", value, "ordernewid");
+        public Criteria andOrderidsGreaterThan(String value) {
+            addCriterion("orderids >", value, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidGreaterThanOrEqualTo(String value) {
-            addCriterion("ordernewid >=", value, "ordernewid");
+        public Criteria andOrderidsGreaterThanOrEqualTo(String value) {
+            addCriterion("orderids >=", value, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidLessThan(String value) {
-            addCriterion("ordernewid <", value, "ordernewid");
+        public Criteria andOrderidsLessThan(String value) {
+            addCriterion("orderids <", value, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidLessThanOrEqualTo(String value) {
-            addCriterion("ordernewid <=", value, "ordernewid");
+        public Criteria andOrderidsLessThanOrEqualTo(String value) {
+            addCriterion("orderids <=", value, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidLike(String value) {
-            addCriterion("ordernewid like", value, "ordernewid");
+        public Criteria andOrderidsLike(String value) {
+            addCriterion("orderids like", value, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidNotLike(String value) {
-            addCriterion("ordernewid not like", value, "ordernewid");
+        public Criteria andOrderidsNotLike(String value) {
+            addCriterion("orderids not like", value, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidIn(List<String> values) {
-            addCriterion("ordernewid in", values, "ordernewid");
+        public Criteria andOrderidsIn(List<String> values) {
+            addCriterion("orderids in", values, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidNotIn(List<String> values) {
-            addCriterion("ordernewid not in", values, "ordernewid");
+        public Criteria andOrderidsNotIn(List<String> values) {
+            addCriterion("orderids not in", values, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidBetween(String value1, String value2) {
-            addCriterion("ordernewid between", value1, value2, "ordernewid");
+        public Criteria andOrderidsBetween(String value1, String value2) {
+            addCriterion("orderids between", value1, value2, "orderids");
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidNotBetween(String value1, String value2) {
-            addCriterion("ordernewid not between", value1, value2, "ordernewid");
+        public Criteria andOrderidsNotBetween(String value1, String value2) {
+            addCriterion("orderids not between", value1, value2, "orderids");
             return (Criteria) this;
         }
 
@@ -2416,8 +2416,8 @@ public class PayCloudDfMoneyExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrdernewidLikeInsensitive(String value) {
-            addCriterion("upper(ordernewid) like", value.toUpperCase(), "ordernewid");
+        public Criteria andOrderidsLikeInsensitive(String value) {
+            addCriterion("upper(orderids) like", value.toUpperCase(), "orderids");
             return (Criteria) this;
         }
 
