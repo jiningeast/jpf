@@ -1,10 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.dto.GetCloudCompanyRequest;
-import com.joiest.jpf.dto.GetCloudCompanyResponse;
-import com.joiest.jpf.dto.GetCloudCompanysRequest;
-import com.joiest.jpf.dto.GetCloudCompanysResponse;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 
 
@@ -56,4 +53,9 @@ public interface CloudCompanyServiceFacade {
      * 根据主键id获取单个公司的信息
      */
     public CloudCompanyInfo getRecById(String id);
+    /**
+     * 商户后台
+     * 根据商户编号获取单个公司的信息
+     */
+    public CloudCompanyInfo getMerchInfoByMerchNo(String merchNo);
 }

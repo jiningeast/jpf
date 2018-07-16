@@ -16,10 +16,7 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyAgentMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanySalesMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudEmployeeMapper;
-import com.joiest.jpf.dto.GetCloudCompanyRequest;
-import com.joiest.jpf.dto.GetCloudCompanyResponse;
-import com.joiest.jpf.dto.GetCloudCompanysRequest;
-import com.joiest.jpf.dto.GetCloudCompanysResponse;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -602,5 +599,24 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         beanCopier.copy(payCloudCompanyCustom,cloudCompanyInfo,null);
 
         return cloudCompanyInfo;
+    }
+
+    public CloudCompanyInfo getMerchInfoByMerchNo(String merchNo){
+        PayCloudCompanyExample example= new PayCloudCompanyExample();
+        PayCloudCompanyExample.Criteria c = example.createCriteria();
+        c.andMerchNoEqualTo(merchNo);
+        List<PayCloudCompany> merchNoInfoList = payCloudCompanyMapper.selectByExample(example);
+        if(merchNoInfoList.size() != 1 || merchNoInfoList == null){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "无效商户号");
+        }
+
+        CloudCompanyInfo cloudCompanyRep = new CloudCompanyInfo();
+        for (PayCloudCompany one : merchNoInfoList)
+        {
+            BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class, CloudCompanyInfo.class, false);
+            beanCopier.copy(one, cloudCompanyRep, null);
+        }
+
+        return cloudCompanyRep;
     }
 }
