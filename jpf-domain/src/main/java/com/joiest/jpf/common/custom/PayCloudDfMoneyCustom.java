@@ -537,7 +537,7 @@ public class PayCloudDfMoneyCustom {
                 && (this.getOperastate() == null ? other.getOperastate() == null : this.getOperastate().equals(other.getOperastate()))
                 && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
                 && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
-                && (this.getOrdernewid() == null ? other.getOrdernewid() == null : this.getOrdernewid().equals(other.getOrdernewid()))
+                && (this.getOrdernewid() == null ? other.getOrderids() == null : this.getOrdernewid().equals(other.getOrderids()))
                 && (this.getPayablemoney() == null ? other.getPayablemoney() == null : this.getPayablemoney().equals(other.getPayablemoney()))
                 && (this.getWithholdmoney() == null ? other.getWithholdmoney() == null : this.getWithholdmoney().equals(other.getWithholdmoney()))
                 && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()))
