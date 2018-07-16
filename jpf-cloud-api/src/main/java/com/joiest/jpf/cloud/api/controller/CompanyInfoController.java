@@ -133,10 +133,14 @@ public class CompanyInfoController {
     @RequestMapping("companyUpPwd")
     @ResponseBody
     public String companyUpPwd(HttpServletRequest request){
-/*
+
         String token = request.getParameter("token");
         String originPwd = request.getParameter("originPwd");
         String nowPwd = request.getParameter("nowPwd");
+
+        nowPwd = Base64CustomUtils.base64Decoder(nowPwd);
+        originPwd = Base64CustomUtils.base64Decoder(originPwd);
+
 
         Map<String,String> loginResultMap = companyIsLogin(token);
         if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
@@ -154,16 +158,17 @@ public class CompanyInfoController {
         if(companyInfo.getCloudloginpwd().equals(originpass)){
 
             Map<String,String> upCom = new HashMap<>();
+            upCom.put("cloudloginpwd",nowpass);
 
-            upCom.put("cloudloginpwd",nowPwd);
+            int isSuc = cloudEmployeeServiceFacade.upCompanyEmployeePwdByUid(upCom,new Integer(uid));
+            if(isSuc>0){
 
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "密码修改成功", null);
+            }
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "密码修改失败", null);
         }else{
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "原密码有误", null);
         }
-
-        return null;*/
-        return null;
     }
-
 }
