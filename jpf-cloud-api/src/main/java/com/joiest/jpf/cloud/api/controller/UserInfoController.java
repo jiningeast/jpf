@@ -106,7 +106,7 @@ public class UserInfoController {
             month = calstar.get(Calendar.MONTH) + 1;
         }
 
-        Map<String,String> map =  ToolUtils.getMonthStartAndEnd(year,month);
+        Map<String,String> map =  ToolUtils.getMonthFirstAndEndSenond(year,month);
 
         //获取指定月份的信息
         long pageNo = 1;
