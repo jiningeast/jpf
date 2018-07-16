@@ -12,11 +12,11 @@
     </resultMap>
 
     <select id="findPayMerchantsTypeTree" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select * from pay_merchants_type where catid=#{catid,jdbcType=INTEGER}
+        select * from pay_merchants_type where catid=#{catId,jdbcType=INTEGER}
     </select>
 
     <select id="findPayMerchantsTypeByPid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select * from pay_merchants_type where pid=#{catid,jdbcType=INTEGER}
+        select * from pay_merchants_type where pid=#{catid,jdbcType=VARCHAR}
     </select>
 
 </mapper>
