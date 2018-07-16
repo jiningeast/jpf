@@ -308,7 +308,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
             Employee.setCreated(date);
             Employee.setRoles("");
             Employee.setRegip("");
-            Employee.setRegdate(1);
+            Employee.setRegdate(new Date());
             Employee.setCloudloginpwd(companypass);
             int resEmploee=payCloudEmployeeMapper.insertSelective(Employee);
            //所有都插入成功执行发送短信或者发送邮件的代码
@@ -489,7 +489,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         PayCloudEmployee Employee= new PayCloudEmployee();
         Employee.setLinkphone(request.getPhone());
         Employee.setStatus(request.getStatus());
-        Employee.setRegdate(1);
+        Employee.setRegdate(new Date());
         PayCloudEmployeeExample ExamplePloyee = new PayCloudEmployeeExample();
         PayCloudEmployeeExample.Criteria caEmploee = ExamplePloyee.createCriteria();
         caEmploee.andMerchNoEqualTo(MerchNo);

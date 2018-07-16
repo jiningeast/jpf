@@ -85,6 +85,17 @@ public class UserInfoController {
     {
         ValidatorUtils.validateInterface(request);
 
+        String date_requestStr = "";
+        if ( StringUtils.isNotBlank(request.getData()) )
+        {
+            date_requestStr = Base64CustomUtils.base64Decoder(request.getData());
+            String reg_date = "^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-((0[13578]|1[02])|(0[469]|11)|(02))$";
+            Boolean regDate_IsTrue = Pattern.compile(reg_date).matcher(date_requestStr).matches();
+            if ( !regDate_IsTrue )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USERINFO_DATE_ERROR.getCode(), JpfInterfaceErrorInfo.USERINFO_DATE_ERROR.getDesc(), null);
+            }
+        }
         Map<String,String> loginResultMap = userIsLogin(request.getToken());
 
         if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
@@ -94,9 +105,9 @@ public class UserInfoController {
 
         String[] date;
         int year,month;
-        if (StringUtils.isNotBlank(request.getData()))
+        if (StringUtils.isNotBlank(date_requestStr))
         {
-            date = request.getData().split("-");
+            date = date_requestStr.split("-");
             year = Integer.parseInt(date[0]);
             month = Integer.parseInt(date[1]);
         } else
@@ -112,7 +123,7 @@ public class UserInfoController {
         long pageNo = 1;
         long pageSize = 15;
         int flag = 1;   //当前月份
-        if ( StringUtils.isNotBlank(request.getData()) )
+        if ( StringUtils.isNotBlank(date_requestStr) )
         {
             //指定月份
             flag = 2;
@@ -653,7 +664,9 @@ public class UserInfoController {
         userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
         userInfo.put("commoney",cloudDfMoneyInterfaceInfo.getCommoney().toString());//发放金额
 
-
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        userInfo.put("curTime",myfmt.toString());//发放金额
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }
@@ -744,7 +757,6 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "合同签订失败", resData);
         }
     }
-         ////生成默认密码
-        //String  companypass= SHA1.getInstance().getMySHA1Code(passlogin);
+
 }
 

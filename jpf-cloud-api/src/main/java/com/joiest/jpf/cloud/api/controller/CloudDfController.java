@@ -69,11 +69,10 @@ public class CloudDfController {
         //获取批次df详情
         int flag = 0;
         GetCloudMoneyDfResponse response = cloudDfMoneyServiceFacade.getDfDetailList(batchid,dfid,0,0, flag);
-        if ( response.getList().isEmpty() || response.getList() == null )
+        if ( response == null || response.getList().isEmpty() )
         {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.DF_INFOLIST_EMPTY.getCode(),JpfInterfaceErrorInfo.DF_INFOLIST_EMPTY.getDesc());
         }
-
 
         //添加任务
         String batchid_self = ToolsUtils.createOrderid();

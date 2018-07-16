@@ -9,7 +9,7 @@ public class GetUserBlanceRequest {
     @NotBlank(message = "token不能为空")
     private String token;
 
-    @Pattern(regexp = "^^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-((0[13578]|1[02])|(0[469]|11)|(02))$$", message = "日期格式错误")
+//    @Pattern(regexp = "^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-((0[13578]|1[02])|(0[469]|11)|(02))$", message = "日期格式错误")
     private String data;
 
     public String getToken() {

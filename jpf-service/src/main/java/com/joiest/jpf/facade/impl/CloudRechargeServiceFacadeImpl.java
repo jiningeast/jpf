@@ -585,15 +585,15 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             exampleCriteria.andPactstatusEqualTo(request.getPactstatus());
         }
         int count = payCloudRechargeMapper.countByExample(example);
-        if (pageNo < 0) {
+        if (pageNo==null||pageNo <= 0) {
             pageNo = Long.valueOf(1);
         }
-        if (pageSize <= 0) {
+        if (pageSize==null||pageSize <= 0) {
             pageSize = Long.valueOf(20);
         }
         example.setPageNo(pageNo);
         example.setPageSize(pageSize);
-        example.setOrderByClause("DESC addtime");
+        example.setOrderByClause("addtime DESC");
         List<PayCloudRecharge> payCloudRecharges = payCloudRechargeMapper.selectByExample(example);
         List<RechargeNeedInfo> info = new ArrayList<>();
         for (PayCloudRecharge payCloudRecharge : payCloudRecharges) {
@@ -606,6 +606,23 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         response.setCount(count);
         response.setInfo(info);
         return response;
+    }
+
+    public String createOrderid(){
+        int pre = getRandomInt(100,999);
+        int last = getRandomInt(100,999);
+        String middle = String.valueOf(System.currentTimeMillis());
+        middle = middle.substring(3,middle.length());
+
+        return ""+pre+middle+last;
+    }
+
+    // 生成指定范围内的随机整数
+    public int getRandomInt(int min, int max){
+        Random random = new Random();
+        int randomInt = random.nextInt(max)%(max-min+1) + min;
+
+        return randomInt;
     }
 
     @Override
@@ -628,14 +645,15 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "该" + request.getMerchNo() + "企业不存在");
         }
         PayCloudCompanySales payCloudCompanySales = payCloudCompanySalesList.get(0);
-        BigDecimal feemoney = request.getMoney().multiply(payCloudCompanySales.getSalesRate());//计算手续费
+        BigDecimal feemoney = request.getMoney().multiply(payCloudCompanySales.getSalesRate().multiply(new BigDecimal(100)));//计算手续费
         BigDecimal realmoney = feemoney.add(request.getMoney());//计算实际汇款金额
+
         //校验与前端的手续费或者实际汇款金额是否一致
         if (feemoney.compareTo(request.getFeemoney())!=0||realmoney.compareTo(request.getRealmoney())!=0) {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "企业手续费或实际汇款金额不一致");
         }
         PayCloudRecharge record = new PayCloudRecharge();
-        record.setFid("");
+        record.setFid(createOrderid());
         record.setNeedid(request.getNeedid());
         record.setNeedcatpath(request.getNeedcatpath());
         record.setAgentNo(request.getAgentNo());
@@ -663,7 +681,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     }
 
     @Override
-    public JpfResponseDto rechargeNeedDelete(Long id,String fid) {
+    public JpfResponseDto rechargeNeedDelete(String merchNo,String agentNo,Long id,String fid) {
         if (id == null) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
         }
@@ -674,6 +692,12 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (!payCloudRecharge.getFid().equals(fid)) {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]订单号不一致");
         }
+        if (!payCloudRecharge.getAgentNo().equals(agentNo)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[agentNo]代理商户号不一致");
+        }
+        if (!payCloudRecharge.getMerchNo().equals(merchNo)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[merchNo]企业商户号不一致");
+        }
         if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.APPLYING.value())) {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "非初始状态，不可以操作");
         }
@@ -682,7 +706,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     }
 
     @Override
-    public JpfResponseDto rechargeNeedVoucher(Long id,String fid,String imgurl) {
+    public JpfResponseDto rechargeNeedVoucher(String merchNo,String agentNo,Long id,String fid,String imgurl) {
         if (id == null) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
         }
@@ -695,6 +719,12 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         }
         if (!payCloudRecharge.getFid().equals(fid)) {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]订单号不一致");
+        }
+        if (!payCloudRecharge.getAgentNo().equals(agentNo)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[agentNo]代理商户号不一致");
+        }
+        if (!payCloudRecharge.getMerchNo().equals(merchNo)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[merchNo]企业商户号不一致");
         }
         if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())) {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "状态不匹配，不可以操作");
@@ -711,7 +741,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     }
 
     @Override
-    public JpfResponseDto rechargeNeedAffirm(Long id,String fid,Byte pactstatus) {
+    public JpfResponseDto rechargeNeedAffirm(String merchNo,String agentNo,Long id,String fid,Byte pactstatus) {
         if (id == null) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请求参数[id]不能为空");
         }
@@ -724,6 +754,12 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         }
         if (!payCloudRecharge.getFid().equals(fid)) {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[id]订单号不一致");
+        }
+        if (!payCloudRecharge.getAgentNo().equals(agentNo)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[agentNo]代理商户号不一致");
+        }
+        if (!payCloudRecharge.getMerchNo().equals(merchNo)) {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "操作记录[merchNo]企业商户号不一致");
         }
         if (payCloudRecharge.getPactstatus().equals(EnumConstants.RechargePactStatus.CONFIRMED.value())) {
             throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "已验收，不需要重复验收");
