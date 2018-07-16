@@ -12,13 +12,13 @@ import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyInterfaceCusto
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyMapper;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudDfMoneyInfo;
-import com.joiest.jpf.entity.CloudCompactStaffInterfaceCustomInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,7 +68,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         }
         GetCloudMoneyDfResponse response = new GetCloudMoneyDfResponse();
         response.setList(listnew);
-        response.setMonthTotal(monthTotal);
+        response.setMonthTotal(new BigDecimal(monthTotal));
         return response;
     }
 
@@ -124,8 +124,8 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
     }
 
     /*
-    **根据订单号更新 代付明细状态
-    * fid  订单号
+     **根据订单号更新 代付明细状态
+     * fid  订单号
      */
     @Override
     public JpfResponseDto updateDfRecordsByFid(PayCloudDfMoney record,String fid){
@@ -190,6 +190,52 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
         return new JpfResponseDto();
     }
+
+    @Override
+    public GetCloudMoneyDfResponse getDfDetailList(String batchId, String dfid, long pageNo, long pageSize, int flag)
+    {
+        PayCloudDfMoneyExample e = new PayCloudDfMoneyExample();
+        if (flag == 1 )
+        {
+            e.setPageNo(pageNo);
+            e.setPageSize(pageSize);
+        }
+
+        e.setOrderByClause("id ASC");
+
+        PayCloudDfMoneyExample.Criteria c = e.createCriteria();
+        c.andCompanyMoneyIdEqualTo(batchId);
+        c.andIsActiveEqualTo(1);
+        if ( !dfid.equals("0") )
+        {
+            c.andIdEqualTo(Long.parseLong(dfid));
+        }
+
+        List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(e);
+        List<CloudDfMoneyInterfaceInfo> listnew = new ArrayList<>();
+
+        if ( list.isEmpty() || list == null )
+        {
+            return null;
+        }
+
+        Double monthTotal = 0.00;
+        for (PayCloudDfMoney one : list)
+        {
+            CloudDfMoneyInterfaceInfo info = new CloudDfMoneyInterfaceInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoney.class, CloudDfMoneyInterfaceInfo.class, false);
+            beanCopier.copy(one, info, null);
+            listnew.add(info);
+
+            monthTotal = BigDecimalCalculateUtils.add(new Double(one.getCommoney().toString()), monthTotal);
+        }
+        GetCloudMoneyDfResponse response = new GetCloudMoneyDfResponse();
+        response.setList(listnew);
+        response.setMonthTotal(new BigDecimal(monthTotal));
+        response.setCount(list.size());
+        return response;
+    }
+
 
     @Override
     public int addDfMoney(CloudDfMoneyInfo cloudDfMoneyInfo){

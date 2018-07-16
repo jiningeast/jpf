@@ -296,73 +296,213 @@ public class PayCloudDfOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidIsNull() {
-            addCriterion("foreign_orderid is null");
+        public Criteria andBatchidIsNull() {
+            addCriterion("batchid is null");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidIsNotNull() {
-            addCriterion("foreign_orderid is not null");
+        public Criteria andBatchidIsNotNull() {
+            addCriterion("batchid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidEqualTo(String value) {
-            addCriterion("foreign_orderid =", value, "foreignOrderid");
+        public Criteria andBatchidEqualTo(String value) {
+            addCriterion("batchid =", value, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidNotEqualTo(String value) {
-            addCriterion("foreign_orderid <>", value, "foreignOrderid");
+        public Criteria andBatchidNotEqualTo(String value) {
+            addCriterion("batchid <>", value, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidGreaterThan(String value) {
-            addCriterion("foreign_orderid >", value, "foreignOrderid");
+        public Criteria andBatchidGreaterThan(String value) {
+            addCriterion("batchid >", value, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidGreaterThanOrEqualTo(String value) {
-            addCriterion("foreign_orderid >=", value, "foreignOrderid");
+        public Criteria andBatchidGreaterThanOrEqualTo(String value) {
+            addCriterion("batchid >=", value, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidLessThan(String value) {
-            addCriterion("foreign_orderid <", value, "foreignOrderid");
+        public Criteria andBatchidLessThan(String value) {
+            addCriterion("batchid <", value, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidLessThanOrEqualTo(String value) {
-            addCriterion("foreign_orderid <=", value, "foreignOrderid");
+        public Criteria andBatchidLessThanOrEqualTo(String value) {
+            addCriterion("batchid <=", value, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidLike(String value) {
-            addCriterion("foreign_orderid like", value, "foreignOrderid");
+        public Criteria andBatchidLike(String value) {
+            addCriterion("batchid like", value, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidNotLike(String value) {
-            addCriterion("foreign_orderid not like", value, "foreignOrderid");
+        public Criteria andBatchidNotLike(String value) {
+            addCriterion("batchid not like", value, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidIn(List<String> values) {
-            addCriterion("foreign_orderid in", values, "foreignOrderid");
+        public Criteria andBatchidIn(List<String> values) {
+            addCriterion("batchid in", values, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidNotIn(List<String> values) {
-            addCriterion("foreign_orderid not in", values, "foreignOrderid");
+        public Criteria andBatchidNotIn(List<String> values) {
+            addCriterion("batchid not in", values, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidBetween(String value1, String value2) {
-            addCriterion("foreign_orderid between", value1, value2, "foreignOrderid");
+        public Criteria andBatchidBetween(String value1, String value2) {
+            addCriterion("batchid between", value1, value2, "batchid");
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidNotBetween(String value1, String value2) {
-            addCriterion("foreign_orderid not between", value1, value2, "foreignOrderid");
+        public Criteria andBatchidNotBetween(String value1, String value2) {
+            addCriterion("batchid not between", value1, value2, "batchid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoIsNull() {
+            addCriterion("request_batchno is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoIsNotNull() {
+            addCriterion("request_batchno is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoEqualTo(String value) {
+            addCriterion("request_batchno =", value, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoNotEqualTo(String value) {
+            addCriterion("request_batchno <>", value, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoGreaterThan(String value) {
+            addCriterion("request_batchno >", value, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoGreaterThanOrEqualTo(String value) {
+            addCriterion("request_batchno >=", value, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoLessThan(String value) {
+            addCriterion("request_batchno <", value, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoLessThanOrEqualTo(String value) {
+            addCriterion("request_batchno <=", value, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoLike(String value) {
+            addCriterion("request_batchno like", value, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoNotLike(String value) {
+            addCriterion("request_batchno not like", value, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoIn(List<String> values) {
+            addCriterion("request_batchno in", values, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoNotIn(List<String> values) {
+            addCriterion("request_batchno not in", values, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoBetween(String value1, String value2) {
+            addCriterion("request_batchno between", value1, value2, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoNotBetween(String value1, String value2) {
+            addCriterion("request_batchno not between", value1, value2, "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdIsNull() {
+            addCriterion("request_df_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdIsNotNull() {
+            addCriterion("request_df_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdEqualTo(String value) {
+            addCriterion("request_df_id =", value, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdNotEqualTo(String value) {
+            addCriterion("request_df_id <>", value, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdGreaterThan(String value) {
+            addCriterion("request_df_id >", value, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdGreaterThanOrEqualTo(String value) {
+            addCriterion("request_df_id >=", value, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdLessThan(String value) {
+            addCriterion("request_df_id <", value, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdLessThanOrEqualTo(String value) {
+            addCriterion("request_df_id <=", value, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdLike(String value) {
+            addCriterion("request_df_id like", value, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdNotLike(String value) {
+            addCriterion("request_df_id not like", value, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdIn(List<String> values) {
+            addCriterion("request_df_id in", values, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdNotIn(List<String> values) {
+            addCriterion("request_df_id not in", values, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdBetween(String value1, String value2) {
+            addCriterion("request_df_id between", value1, value2, "requestDfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdNotBetween(String value1, String value2) {
+            addCriterion("request_df_id not between", value1, value2, "requestDfId");
             return (Criteria) this;
         }
 
@@ -553,76 +693,6 @@ public class PayCloudDfOrderExample {
 
         public Criteria andRequeststrNotBetween(String value1, String value2) {
             addCriterion("requestStr not between", value1, value2, "requeststr");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestIsNull() {
-            addCriterion("foreign_request is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestIsNotNull() {
-            addCriterion("foreign_request is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestEqualTo(String value) {
-            addCriterion("foreign_request =", value, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestNotEqualTo(String value) {
-            addCriterion("foreign_request <>", value, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestGreaterThan(String value) {
-            addCriterion("foreign_request >", value, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestGreaterThanOrEqualTo(String value) {
-            addCriterion("foreign_request >=", value, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestLessThan(String value) {
-            addCriterion("foreign_request <", value, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestLessThanOrEqualTo(String value) {
-            addCriterion("foreign_request <=", value, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestLike(String value) {
-            addCriterion("foreign_request like", value, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestNotLike(String value) {
-            addCriterion("foreign_request not like", value, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestIn(List<String> values) {
-            addCriterion("foreign_request in", values, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestNotIn(List<String> values) {
-            addCriterion("foreign_request not in", values, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestBetween(String value1, String value2) {
-            addCriterion("foreign_request between", value1, value2, "foreignRequest");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestNotBetween(String value1, String value2) {
-            addCriterion("foreign_request not between", value1, value2, "foreignRequest");
             return (Criteria) this;
         }
 
@@ -1246,52 +1316,52 @@ public class PayCloudDfOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Byte value) {
+        public Criteria andStatusEqualTo(Integer value) {
             addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Byte value) {
+        public Criteria andStatusNotEqualTo(Integer value) {
             addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Byte value) {
+        public Criteria andStatusGreaterThan(Integer value) {
             addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
+        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
             addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Byte value) {
+        public Criteria andStatusLessThan(Integer value) {
             addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Byte value) {
+        public Criteria andStatusLessThanOrEqualTo(Integer value) {
             addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Byte> values) {
+        public Criteria andStatusIn(List<Integer> values) {
             addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Byte> values) {
+        public Criteria andStatusNotIn(List<Integer> values) {
             addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(Byte value1, Byte value2) {
+        public Criteria andStatusBetween(Integer value1, Integer value2) {
             addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
+        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
@@ -1436,18 +1506,23 @@ public class PayCloudDfOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andForeignOrderidLikeInsensitive(String value) {
-            addCriterion("upper(foreign_orderid) like", value.toUpperCase(), "foreignOrderid");
+        public Criteria andBatchidLikeInsensitive(String value) {
+            addCriterion("upper(batchid) like", value.toUpperCase(), "batchid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestBatchnoLikeInsensitive(String value) {
+            addCriterion("upper(request_batchno) like", value.toUpperCase(), "requestBatchno");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDfIdLikeInsensitive(String value) {
+            addCriterion("upper(request_df_id) like", value.toUpperCase(), "requestDfId");
             return (Criteria) this;
         }
 
         public Criteria andRequeststrLikeInsensitive(String value) {
             addCriterion("upper(requestStr) like", value.toUpperCase(), "requeststr");
-            return (Criteria) this;
-        }
-
-        public Criteria andForeignRequestLikeInsensitive(String value) {
-            addCriterion("upper(foreign_request) like", value.toUpperCase(), "foreignRequest");
             return (Criteria) this;
         }
 

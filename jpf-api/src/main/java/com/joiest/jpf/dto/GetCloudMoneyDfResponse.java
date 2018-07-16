@@ -2,6 +2,7 @@ package com.joiest.jpf.dto;
 
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class GetCloudMoneyDfResponse {
@@ -10,7 +11,7 @@ public class GetCloudMoneyDfResponse {
 
     private List<CloudDfMoneyInterfaceInfo> list;
 
-    private Double monthTotal;
+    private BigDecimal monthTotal;
 
     public List<CloudDfMoneyInterfaceInfo> getList() {
         return list;
@@ -20,11 +21,11 @@ public class GetCloudMoneyDfResponse {
         this.list = list;
     }
 
-    public Double getMonthTotal() {
+    public BigDecimal getMonthTotal() {
         return monthTotal;
     }
 
-    public void setMonthTotal(Double monthTotal) {
+    public void setMonthTotal(BigDecimal monthTotal) {
         this.monthTotal = monthTotal;
     }
 

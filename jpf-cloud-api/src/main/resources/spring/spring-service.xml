@@ -13,6 +13,9 @@
 	<bean id="CloudIdenauthServiceFacade" class="com.joiest.jpf.facade.impl.CloudIdenauthServiceFacadeImpl"></bean>
 	<bean id="CloudBankcheckServiceFacade" class="com.joiest.jpf.facade.impl.CloudBankcheckServiceFacadeImpl"></bean>
 	<bean id="CloudCompactStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompactStaffInterfaceServiceFacadeImpl"></bean>
+	<bean id="CloudDfTaskInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfTaskInterfaceServiceFacadeImpl"></bean>
+	<bean id="CloudDfOrderInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfOrderInterfaceServiceFacadeImpl"></bean>
+
 	<bean id="CloudCompanyBankServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyBankServiceFacadeImpl"></bean>
 	<bean id="CloudCompanyServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyServiceFacadeImpl"></bean>
 	<bean id="CloudEmployeeServiceFacade" class="com.joiest.jpf.facade.impl.CloudEmployeeServiceFacadeImpl"></bean>

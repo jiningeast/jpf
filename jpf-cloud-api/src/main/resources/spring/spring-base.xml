@@ -126,4 +126,7 @@
 		<property name="keySerializer" ref="stringRedisSerializer"/>
 		<property name="hashKeySerializer" ref="stringRedisSerializer"/>
 	</bean>
+
+	<bean id="springContextUtil" class="com.joiest.jpf.cloud.api.util.SpringContextUtil"  />
+
 </beans>
