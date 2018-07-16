@@ -92,7 +92,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         Double monthTotal = 0.00;
         for (PayCloudDfMoney one : list)
         {
-            monthTotal = BigDecimalCalculateUtils.add(new Double(one.getPayablemoney().toString()), monthTotal);
+            monthTotal = BigDecimalCalculateUtils.add(new Double(one.getCommoney().toString()), monthTotal);
         }
         return monthTotal;
     }
@@ -184,6 +184,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
         PayCloudDfMoneyExample.Criteria c = example.createCriteria();
         c.andIdIn(ids);
+
 
         int count = payCloudDfMoneyMapper.updateByExampleSelective(record,example);
 
