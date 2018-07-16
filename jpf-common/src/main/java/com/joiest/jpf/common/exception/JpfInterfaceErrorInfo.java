@@ -91,6 +91,7 @@ public enum JpfInterfaceErrorInfo {
     //个人相关
     USERINFO_VALID_FAIL("20001", "个人信息校验失败"),
     USERINFO_NOT_EXIST("20002", "个人信息不存在"),
+    USERINFO_DATE_ERROR("20003","日期格式错误"),
 
     //云帐户
     //企业相关
