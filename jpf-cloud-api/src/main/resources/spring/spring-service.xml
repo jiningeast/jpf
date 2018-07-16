@@ -15,5 +15,7 @@
 	<bean id="CloudCompactStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompactStaffInterfaceServiceFacadeImpl"></bean>
 	<bean id="CloudDfTaskInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfTaskInterfaceServiceFacadeImpl"></bean>
 	<bean id="CloudDfOrderInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfOrderInterfaceServiceFacadeImpl"></bean>
-
+	<bean id="cloudRechargeServiceFacade" class="com.joiest.jpf.facade.impl.CloudRechargeServiceFacadeImpl"></bean>
+	<bean id="merTypeServiceFacade" class="com.joiest.jpf.facade.impl.MerTypeServiceFacadeImpl"></bean>
+	<bean id="cloudCompanyServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyServiceFacadeImpl"></bean>
 </beans>
