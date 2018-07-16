@@ -37,7 +37,7 @@
     <result column="operastate" jdbcType="TINYINT" property="operastate" />
     <result column="tranNo" jdbcType="VARCHAR" property="tranno" />
     <result column="orderid" jdbcType="VARCHAR" property="orderid" />
-    <result column="ordernewid" jdbcType="VARCHAR" property="ordernewid" />
+    <result column="orderids" jdbcType="VARCHAR" property="orderids" />
     <result column="payablemoney" jdbcType="DECIMAL" property="payablemoney" />
     <result column="withholdmoney" jdbcType="DECIMAL" property="withholdmoney" />
     <result column="invostatus" jdbcType="TINYINT" property="invostatus" />
@@ -93,7 +93,7 @@
     id, agent_no, merch_no, uid, fid, busstaffid, username, commoney, bankno, banknickname,
     bankphone, bankname, bankprovince, bankcity, banktype, bankAcctAttr, addtime, realname,
     montype, remark, vid, is_active, content, updatetime,
-    operastate, tranNo, orderid, ordernewid, payablemoney, withholdmoney, invostatus,count(*) AS count, sum(commoney) AS totalMoney,DATE_FORMAT(addtime, "%Y-%m") AS datemonth
+    operastate, tranNo, orderid, orderids, payablemoney, withholdmoney, invostatus,count(*) AS count, sum(commoney) AS totalMoney,DATE_FORMAT(addtime, "%Y-%m") AS datemonth
   </sql>
 
   <select id="getUserMonthList" parameterType="java.math.BigInteger" resultMap="BaseResultMap">

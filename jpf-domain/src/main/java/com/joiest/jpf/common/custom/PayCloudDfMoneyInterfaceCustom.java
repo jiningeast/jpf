@@ -1,5 +1,7 @@
 package com.joiest.jpf.common.custom;
 
+import com.joiest.jpf.common.po.PayCloudDfMoney;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -56,6 +58,11 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
     private String banknickname;
 
     /**
+     * 身份证号
+     */
+    private String idno;
+
+    /**
      * 银行预留手机号
      */
     private String bankphone;
@@ -79,6 +86,11 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
      * 卡类型 例如：建行 工商
      */
     private String banktype;
+
+    /**
+     * 银行编码 如：ICBC，CCB等
+     */
+    private String bankcode;
 
     /**
      * 收款人账号属性 0=PRIVATE对私,1=PUBLIC对公
@@ -141,9 +153,9 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
     private String orderid;
 
     /**
-     * 重新打款单号
+     * 打款单号顺序集合
      */
-    private String ordernewid;
+    private String orderids;
 
     /**
      * 应发金额
@@ -160,6 +172,16 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
      */
     private Integer invostatus;
 
+    /**
+     * 关联批次订单表的id
+     */
+    private String companyMoneyId;
+
+    /**
+     * 企业充值合同编号
+     */
+    private String pactno;
+
     //月份的记录总数
     private Integer count;
 
@@ -168,8 +190,6 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
 
     //月份
     private String datemonth;
-
-    private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
@@ -387,14 +407,6 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
         this.orderid = orderid == null ? null : orderid.trim();
     }
 
-    public String getOrdernewid() {
-        return ordernewid;
-    }
-
-    public void setOrdernewid(String ordernewid) {
-        this.ordernewid = ordernewid == null ? null : ordernewid.trim();
-    }
-
     public BigDecimal getPayablemoney() {
         return payablemoney;
     }
@@ -443,6 +455,46 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
         this.datemonth = datemonth;
     }
 
+    public String getIdno() {
+        return idno;
+    }
+
+    public void setIdno(String idno) {
+        this.idno = idno;
+    }
+
+    public String getBankcode() {
+        return bankcode;
+    }
+
+    public void setBankcode(String bankcode) {
+        this.bankcode = bankcode;
+    }
+
+    public String getOrderids() {
+        return orderids;
+    }
+
+    public void setOrderids(String orderids) {
+        this.orderids = orderids;
+    }
+
+    public String getCompanyMoneyId() {
+        return companyMoneyId;
+    }
+
+    public void setCompanyMoneyId(String companyMoneyId) {
+        this.companyMoneyId = companyMoneyId;
+    }
+
+    public String getPactno() {
+        return pactno;
+    }
+
+    public void setPactno(String pactno) {
+        this.pactno = pactno;
+    }
+
     /**
      *
      */
@@ -462,11 +514,13 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
         sb.append(", commoney=").append(commoney);
         sb.append(", bankno=").append(bankno);
         sb.append(", banknickname=").append(banknickname);
+        sb.append(", idno=").append(idno);
         sb.append(", bankphone=").append(bankphone);
         sb.append(", bankname=").append(bankname);
         sb.append(", bankprovince=").append(bankprovince);
         sb.append(", bankcity=").append(bankcity);
         sb.append(", banktype=").append(banktype);
+        sb.append(", bankcode=").append(bankcode);
         sb.append(", bankacctattr=").append(bankacctattr);
         sb.append(", addtime=").append(addtime);
         sb.append(", realname=").append(realname);
@@ -479,10 +533,12 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
         sb.append(", operastate=").append(operastate);
         sb.append(", tranno=").append(tranno);
         sb.append(", orderid=").append(orderid);
-        sb.append(", ordernewid=").append(ordernewid);
+        sb.append(", orderids=").append(orderids);
         sb.append(", payablemoney=").append(payablemoney);
         sb.append(", withholdmoney=").append(withholdmoney);
         sb.append(", invostatus=").append(invostatus);
+        sb.append(", companyMoneyId=").append(companyMoneyId);
+        sb.append(", pactno=").append(pactno);
         sb.append("]");
         return sb.toString();
     }
@@ -502,38 +558,42 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        PayCloudDfMoneyInterfaceCustom other = (PayCloudDfMoneyInterfaceCustom) that;
+        PayCloudDfMoney other = (PayCloudDfMoney) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getAgentNo() == null ? other.getAgentNo() == null : this.getAgentNo().equals(other.getAgentNo()))
-            && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
-            && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
-            && (this.getFid() == null ? other.getFid() == null : this.getFid().equals(other.getFid()))
-            && (this.getBusstaffid() == null ? other.getBusstaffid() == null : this.getBusstaffid().equals(other.getBusstaffid()))
-            && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
-            && (this.getCommoney() == null ? other.getCommoney() == null : this.getCommoney().equals(other.getCommoney()))
-            && (this.getBankno() == null ? other.getBankno() == null : this.getBankno().equals(other.getBankno()))
-            && (this.getBanknickname() == null ? other.getBanknickname() == null : this.getBanknickname().equals(other.getBanknickname()))
-            && (this.getBankphone() == null ? other.getBankphone() == null : this.getBankphone().equals(other.getBankphone()))
-            && (this.getBankname() == null ? other.getBankname() == null : this.getBankname().equals(other.getBankname()))
-            && (this.getBankprovince() == null ? other.getBankprovince() == null : this.getBankprovince().equals(other.getBankprovince()))
-            && (this.getBankcity() == null ? other.getBankcity() == null : this.getBankcity().equals(other.getBankcity()))
-            && (this.getBanktype() == null ? other.getBanktype() == null : this.getBanktype().equals(other.getBanktype()))
-            && (this.getBankacctattr() == null ? other.getBankacctattr() == null : this.getBankacctattr().equals(other.getBankacctattr()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getRealname() == null ? other.getRealname() == null : this.getRealname().equals(other.getRealname()))
-            && (this.getMontype() == null ? other.getMontype() == null : this.getMontype().equals(other.getMontype()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getVid() == null ? other.getVid() == null : this.getVid().equals(other.getVid()))
-            && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getOperastate() == null ? other.getOperastate() == null : this.getOperastate().equals(other.getOperastate()))
-            && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
-            && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
-            && (this.getOrdernewid() == null ? other.getOrdernewid() == null : this.getOrdernewid().equals(other.getOrdernewid()))
-            && (this.getPayablemoney() == null ? other.getPayablemoney() == null : this.getPayablemoney().equals(other.getPayablemoney()))
-            && (this.getWithholdmoney() == null ? other.getWithholdmoney() == null : this.getWithholdmoney().equals(other.getWithholdmoney()))
-            && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()));
+                && (this.getAgentNo() == null ? other.getAgentNo() == null : this.getAgentNo().equals(other.getAgentNo()))
+                && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
+                && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
+                && (this.getFid() == null ? other.getFid() == null : this.getFid().equals(other.getFid()))
+                && (this.getBusstaffid() == null ? other.getBusstaffid() == null : this.getBusstaffid().equals(other.getBusstaffid()))
+                && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
+                && (this.getCommoney() == null ? other.getCommoney() == null : this.getCommoney().equals(other.getCommoney()))
+                && (this.getBankno() == null ? other.getBankno() == null : this.getBankno().equals(other.getBankno()))
+                && (this.getBanknickname() == null ? other.getBanknickname() == null : this.getBanknickname().equals(other.getBanknickname()))
+                && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
+                && (this.getBankphone() == null ? other.getBankphone() == null : this.getBankphone().equals(other.getBankphone()))
+                && (this.getBankname() == null ? other.getBankname() == null : this.getBankname().equals(other.getBankname()))
+                && (this.getBankprovince() == null ? other.getBankprovince() == null : this.getBankprovince().equals(other.getBankprovince()))
+                && (this.getBankcity() == null ? other.getBankcity() == null : this.getBankcity().equals(other.getBankcity()))
+                && (this.getBanktype() == null ? other.getBanktype() == null : this.getBanktype().equals(other.getBanktype()))
+                && (this.getBankcode() == null ? other.getBankcode() == null : this.getBankcode().equals(other.getBankcode()))
+                && (this.getBankacctattr() == null ? other.getBankacctattr() == null : this.getBankacctattr().equals(other.getBankacctattr()))
+                && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+                && (this.getRealname() == null ? other.getRealname() == null : this.getRealname().equals(other.getRealname()))
+                && (this.getMontype() == null ? other.getMontype() == null : this.getMontype().equals(other.getMontype()))
+                && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+                && (this.getVid() == null ? other.getVid() == null : this.getVid().equals(other.getVid()))
+                && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
+                && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
+                && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+                && (this.getOperastate() == null ? other.getOperastate() == null : this.getOperastate().equals(other.getOperastate()))
+                && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
+                && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
+                && (this.getOrderids() == null ? other.getOrderids() == null : this.getOrderids().equals(other.getOrderids()))
+                && (this.getPayablemoney() == null ? other.getPayablemoney() == null : this.getPayablemoney().equals(other.getPayablemoney()))
+                && (this.getWithholdmoney() == null ? other.getWithholdmoney() == null : this.getWithholdmoney().equals(other.getWithholdmoney()))
+                && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()))
+                && (this.getCompanyMoneyId() == null ? other.getCompanyMoneyId() == null : this.getCompanyMoneyId().equals(other.getCompanyMoneyId()))
+                && (this.getPactno() == null ? other.getPactno() == null : this.getPactno().equals(other.getPactno()));
     }
 
     /**
@@ -553,11 +613,13 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
         result = prime * result + ((getCommoney() == null) ? 0 : getCommoney().hashCode());
         result = prime * result + ((getBankno() == null) ? 0 : getBankno().hashCode());
         result = prime * result + ((getBanknickname() == null) ? 0 : getBanknickname().hashCode());
+        result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
         result = prime * result + ((getBankphone() == null) ? 0 : getBankphone().hashCode());
         result = prime * result + ((getBankname() == null) ? 0 : getBankname().hashCode());
         result = prime * result + ((getBankprovince() == null) ? 0 : getBankprovince().hashCode());
         result = prime * result + ((getBankcity() == null) ? 0 : getBankcity().hashCode());
         result = prime * result + ((getBanktype() == null) ? 0 : getBanktype().hashCode());
+        result = prime * result + ((getBankcode() == null) ? 0 : getBankcode().hashCode());
         result = prime * result + ((getBankacctattr() == null) ? 0 : getBankacctattr().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getRealname() == null) ? 0 : getRealname().hashCode());
@@ -570,10 +632,12 @@ public class PayCloudDfMoneyInterfaceCustom implements Serializable {
         result = prime * result + ((getOperastate() == null) ? 0 : getOperastate().hashCode());
         result = prime * result + ((getTranno() == null) ? 0 : getTranno().hashCode());
         result = prime * result + ((getOrderid() == null) ? 0 : getOrderid().hashCode());
-        result = prime * result + ((getOrdernewid() == null) ? 0 : getOrdernewid().hashCode());
+        result = prime * result + ((getOrderids() == null) ? 0 : getOrderids().hashCode());
         result = prime * result + ((getPayablemoney() == null) ? 0 : getPayablemoney().hashCode());
         result = prime * result + ((getWithholdmoney() == null) ? 0 : getWithholdmoney().hashCode());
         result = prime * result + ((getInvostatus() == null) ? 0 : getInvostatus().hashCode());
+        result = prime * result + ((getCompanyMoneyId() == null) ? 0 : getCompanyMoneyId().hashCode());
+        result = prime * result + ((getPactno() == null) ? 0 : getPactno().hashCode());
         return result;
     }
 }
