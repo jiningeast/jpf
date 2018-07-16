@@ -56,6 +56,11 @@ public class PayCloudDfMoney implements Serializable {
     private String banknickname;
 
     /**
+     * 身份证号
+     */
+    private String idno;
+
+    /**
      * 银行预留手机号
      */
     private String bankphone;
@@ -79,6 +84,11 @@ public class PayCloudDfMoney implements Serializable {
      * 卡类型 例如：建行 工商
      */
     private String banktype;
+
+    /**
+     * 银行编码 如：ICBC，CCB等
+     */
+    private String bankcode;
 
     /**
      * 收款人账号属性 0=PRIVATE对私,1=PUBLIC对公
@@ -252,6 +262,14 @@ public class PayCloudDfMoney implements Serializable {
         this.banknickname = banknickname == null ? null : banknickname.trim();
     }
 
+    public String getIdno() {
+        return idno;
+    }
+
+    public void setIdno(String idno) {
+        this.idno = idno == null ? null : idno.trim();
+    }
+
     public String getBankphone() {
         return bankphone;
     }
@@ -290,6 +308,14 @@ public class PayCloudDfMoney implements Serializable {
 
     public void setBanktype(String banktype) {
         this.banktype = banktype == null ? null : banktype.trim();
+    }
+
+    public String getBankcode() {
+        return bankcode;
+    }
+
+    public void setBankcode(String bankcode) {
+        this.bankcode = bankcode == null ? null : bankcode.trim();
     }
 
     public Integer getBankacctattr() {
@@ -455,11 +481,13 @@ public class PayCloudDfMoney implements Serializable {
         sb.append(", commoney=").append(commoney);
         sb.append(", bankno=").append(bankno);
         sb.append(", banknickname=").append(banknickname);
+        sb.append(", idno=").append(idno);
         sb.append(", bankphone=").append(bankphone);
         sb.append(", bankname=").append(bankname);
         sb.append(", bankprovince=").append(bankprovince);
         sb.append(", bankcity=").append(bankcity);
         sb.append(", banktype=").append(banktype);
+        sb.append(", bankcode=").append(bankcode);
         sb.append(", bankacctattr=").append(bankacctattr);
         sb.append(", addtime=").append(addtime);
         sb.append(", realname=").append(realname);
@@ -508,11 +536,13 @@ public class PayCloudDfMoney implements Serializable {
             && (this.getCommoney() == null ? other.getCommoney() == null : this.getCommoney().equals(other.getCommoney()))
             && (this.getBankno() == null ? other.getBankno() == null : this.getBankno().equals(other.getBankno()))
             && (this.getBanknickname() == null ? other.getBanknickname() == null : this.getBanknickname().equals(other.getBanknickname()))
+            && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
             && (this.getBankphone() == null ? other.getBankphone() == null : this.getBankphone().equals(other.getBankphone()))
             && (this.getBankname() == null ? other.getBankname() == null : this.getBankname().equals(other.getBankname()))
             && (this.getBankprovince() == null ? other.getBankprovince() == null : this.getBankprovince().equals(other.getBankprovince()))
             && (this.getBankcity() == null ? other.getBankcity() == null : this.getBankcity().equals(other.getBankcity()))
             && (this.getBanktype() == null ? other.getBanktype() == null : this.getBanktype().equals(other.getBanktype()))
+            && (this.getBankcode() == null ? other.getBankcode() == null : this.getBankcode().equals(other.getBankcode()))
             && (this.getBankacctattr() == null ? other.getBankacctattr() == null : this.getBankacctattr().equals(other.getBankacctattr()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getRealname() == null ? other.getRealname() == null : this.getRealname().equals(other.getRealname()))
@@ -550,11 +580,13 @@ public class PayCloudDfMoney implements Serializable {
         result = prime * result + ((getCommoney() == null) ? 0 : getCommoney().hashCode());
         result = prime * result + ((getBankno() == null) ? 0 : getBankno().hashCode());
         result = prime * result + ((getBanknickname() == null) ? 0 : getBanknickname().hashCode());
+        result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
         result = prime * result + ((getBankphone() == null) ? 0 : getBankphone().hashCode());
         result = prime * result + ((getBankname() == null) ? 0 : getBankname().hashCode());
         result = prime * result + ((getBankprovince() == null) ? 0 : getBankprovince().hashCode());
         result = prime * result + ((getBankcity() == null) ? 0 : getBankcity().hashCode());
         result = prime * result + ((getBanktype() == null) ? 0 : getBanktype().hashCode());
+        result = prime * result + ((getBankcode() == null) ? 0 : getBankcode().hashCode());
         result = prime * result + ((getBankacctattr() == null) ? 0 : getBankacctattr().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getRealname() == null) ? 0 : getRealname().hashCode());
