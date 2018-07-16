@@ -585,15 +585,15 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             exampleCriteria.andPactstatusEqualTo(request.getPactstatus());
         }
         int count = payCloudRechargeMapper.countByExample(example);
-        if (pageNo < 0) {
+        if (pageNo==null||pageNo <= 0) {
             pageNo = Long.valueOf(1);
         }
-        if (pageSize <= 0) {
+        if (pageSize==null||pageSize <= 0) {
             pageSize = Long.valueOf(20);
         }
         example.setPageNo(pageNo);
         example.setPageSize(pageSize);
-        example.setOrderByClause("DESC addtime");
+        example.setOrderByClause("addtime DESC");
         List<PayCloudRecharge> payCloudRecharges = payCloudRechargeMapper.selectByExample(example);
         List<RechargeNeedInfo> info = new ArrayList<>();
         for (PayCloudRecharge payCloudRecharge : payCloudRecharges) {
