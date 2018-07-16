@@ -99,10 +99,10 @@ public class CloudTaskController {
      */
     @RequestMapping(value = "/submitTask", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String submitTask(String company_id, String company_name, @RequestParam("uploadfile") MultipartFile uploadfile) throws Exception{
+    public String submitTask(String company_id, String company_name, @RequestParam("uploadfile") MultipartFile uploadfile, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception{
         CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(company_id);
 
-        // 保存excel文件
+        // 保存excel文件@RequestParam("file") MultipartFile file
 
         // 判断excel数据正确完整性
         //获取当前的文件名
@@ -188,32 +188,32 @@ public class CloudTaskController {
             responseMap.put("code","10004");
             responseMap.put("info","批次号与文件名不一致请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(count !=samecount){
             responseMap.put("code","10004");
             responseMap.put("info","总笔数与实际笔数不符请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(count>1000){
             responseMap.put("code","10004");
             responseMap.put("info","最大支持1000条数据请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(companyMoney!=companyMoneySame){
             responseMap.put("code","10004");
             responseMap.put("info","总金额与实际金额不符请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( staffInfosFailed.size() > 0 ){
             responseMap.put("code","10001");
             responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
             responseMap.put("data",staffInfosFailed);
 
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else{
             responseMap.put("code","10000");
@@ -223,7 +223,19 @@ public class CloudTaskController {
             responseMap.put("persons",""+count);
             responseMap.put("contractNo",contractNo);
             responseMap.put("data",staffInfosSuccess);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+
+            // 上传方法1
+            /*UploadUtils uploadUtils = new UploadUtils();
+            uploadUtils.doPost(httpRequest, httpResponse);*/
+
+            // 上传方法2
+            /*UploadHandleServlet uploadHandleServlet = new UploadHandleServlet();
+            uploadHandleServlet.doPost(httpRequest,httpResponse);*/
+
+            String savePre = "D:/tmp/";
+            String cc = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);
+
             return uuid.toString();
         }
     }
@@ -238,7 +250,7 @@ public class CloudTaskController {
         up = StringUtils.strip(up,"\"");
         up = StringUtils.stripEnd(up,"\"");
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+up+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+up+".txt","GB2312");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         String code=jsonMap.get("code");
         String info=jsonMap.get("info");
@@ -259,7 +271,7 @@ public class CloudTaskController {
     @ResponseBody
     public Map<String, Object> personsData(String data){
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+data+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
         Map<String,List< LinkedHashMap<String,String> >> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > list = jsonMap.get("data");
 
@@ -276,27 +288,15 @@ public class CloudTaskController {
     @RequestMapping(value = "/confirmPersons", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     @Transactional
-    public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+    public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) {
         // OSS上传excel文件
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("path","");
-        String response = OkHttpUtils.postForm("",requestMap);
-
-        // 增加OSS接口流水
-        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
-        cloudInterfaceStreamInfo.setType((byte)0);
-        /*cloudInterfaceStreamInfo.setRequestUrl();
-        cloudInterfaceStreamInfo.setRequestContent();
-        cloudInterfaceStreamInfo.setResponseContent();
-        cloudInterfaceStreamInfo.setTaskId();
-        cloudInterfaceStreamInfo.setStaffId();
-        cloudInterfaceStreamInfo.setStaffBanksId();
-        cloudInterfaceStreamInfo.setCompanyMoneyId();
-        cloudInterfaceStreamInfo.setAddtime();*/
-        cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+        String url = "/oss/upload";
+        String response = OkHttpUtils.postForm(url,requestMap);
 
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+data+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         String batchNo = jsonMap.get("batchNo");
         String persons = ""+jsonMap.get("persons");
@@ -323,18 +323,30 @@ public class CloudTaskController {
         cloudTaskInfo.setPersons(Integer.parseInt(persons));
         cloudTaskInfo.setMoney(new BigDecimal(money));
         cloudTaskInfo.setContractNo(contractNo);
-        cloudTaskInfo.setFilePath(response);
+        cloudTaskInfo.setFilePath(ConfigUtil.getValue("CACHE_PATH")+data+".txt");
         cloudTaskInfo.setStatus((byte)2);
         cloudTaskInfo.setIsLock((byte)0);
         cloudTaskInfo.setCreated(new Date());
-        int taskRes = cloudTaskServiceFacade.insTask(cloudTaskInfo);
+        String taskRes = cloudTaskServiceFacade.insTask(cloudTaskInfo);
         JpfResponseDto jpfResponseDto = new JpfResponseDto();
-        if ( taskRes <= 0 ){
+        if ( Integer.parseInt(taskRes) <= 0 ){
             jpfResponseDto.setRetCode("10001");
             jpfResponseDto.setRetMsg("新建任务失败");
 
             return jpfResponseDto;
         }
+
+        // 增加OSS接口流水
+        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+        cloudInterfaceStreamInfo.setType((byte)0);
+        cloudInterfaceStreamInfo.setRequestUrl("null");
+        /*cloudInterfaceStreamInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
+        cloudInterfaceStreamInfo.setResponseContent(response);*/
+        cloudInterfaceStreamInfo.setRequestContent("requestContent");
+        cloudInterfaceStreamInfo.setResponseContent("responseContent");
+        cloudInterfaceStreamInfo.setTaskId(taskRes);
+        cloudInterfaceStreamInfo.setAddtime(new Date());
+        cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
 
         // 新建一个待锁定的代付款批次订单
         CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();

@@ -15,7 +15,7 @@ public interface CloudTaskServiceFacade {
     /**
      * 新建任务记录
      */
-    public int insTask(CloudTaskInfo cloudTaskInfo);
+    public String insTask(CloudTaskInfo cloudTaskInfo);
 
     /**
      * 获取单条任务记录
