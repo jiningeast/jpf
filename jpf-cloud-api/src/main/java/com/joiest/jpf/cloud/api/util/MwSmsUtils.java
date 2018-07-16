@@ -14,9 +14,13 @@ import java.util.Date;
 public class MwSmsUtils {
 
     //梦网短信发送公共参数====start
-        private String  MwMongateSendSubmitUrl  = "http://61.145.229.29:9006/MWGate/wmgw.asmx/MongateSendSubmit";
-        private String  MwUserId = "JC2451";
-        private String  MwPassword = "787878";
+//        private String  MwMongateSendSubmitUrl  = "http://61.145.229.29:9006/MWGate/wmgw.asmx/MongateSendSubmit";
+//        private String  MwUserId = "JC2451";
+//        private String  MwPassword = "787878";
+
+    private String  MwMongateSendSubmitUrl  = "http://61.145.229.26:8086/MWGate/wmgw.asmx/MongateSendSubmit";
+    private String  MwUserId = "J26100";
+    private String  MwPassword = "658844";
     //梦网短信发送公共参数====end
 
     /**

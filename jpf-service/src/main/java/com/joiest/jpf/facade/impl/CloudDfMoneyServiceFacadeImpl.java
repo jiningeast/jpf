@@ -44,8 +44,8 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         e.setOrderByClause("addtime DESC");
 
         PayCloudDfMoneyExample.Criteria c = e.createCriteria();
-        c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(start,DateUtils.DATEFORMATSHORT));
-        c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(end,DateUtils.DATEFORMATSHORT));
+        c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(start,DateUtils.DATEFORMATLONG));
+        c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(end,DateUtils.DATEFORMATLONG));
         c.andUidEqualTo(Long.parseLong(uid));
 
         List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(e);
