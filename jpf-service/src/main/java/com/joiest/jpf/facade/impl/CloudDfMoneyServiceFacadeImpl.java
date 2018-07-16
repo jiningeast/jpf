@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade {
 
@@ -208,7 +205,14 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         c.andIsActiveEqualTo(1);
         if ( !dfid.equals("0") )
         {
-            c.andIdEqualTo(Long.parseLong(dfid));
+            String[] dfid_arr = dfid.split(",");
+            List<String> dfidList_str = Arrays.asList(dfid_arr);
+            List<Long> dfidList_Long = new ArrayList<>();
+            for (String one : dfidList_str)
+            {
+                dfidList_Long.add(Long.parseLong(one));
+            }
+            c.andIdIn(dfidList_Long);
         }
 
         List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(e);
