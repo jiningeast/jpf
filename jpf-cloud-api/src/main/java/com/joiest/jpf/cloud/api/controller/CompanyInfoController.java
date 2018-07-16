@@ -3,6 +3,7 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.AESUtils;
+import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.SHA1;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.CloudCompanyStaffInfo;
@@ -80,6 +81,9 @@ public class CompanyInfoController {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+
+        email = Base64CustomUtils.base64Decoder(email);
+        password = Base64CustomUtils.base64Decoder(password);
 
         String  companypass= SHA1.getInstance().getMySHA1Code(password);
 
