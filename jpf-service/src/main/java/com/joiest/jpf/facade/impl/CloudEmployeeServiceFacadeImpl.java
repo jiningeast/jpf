@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.List;
+import java.util.Map;
 
 public class CloudEmployeeServiceFacadeImpl implements CloudEmployeeServiceFacade {
 
@@ -50,7 +51,20 @@ public class CloudEmployeeServiceFacadeImpl implements CloudEmployeeServiceFacad
 
         BeanCopier beanCopier = BeanCopier.create(PayCloudEmployee.class,CloudEmployeeInfo.class,false);
         beanCopier.copy(payCloudEmployee,cloudEmployeeInfo,null);
-        
+
         return cloudEmployeeInfo;
+    }
+
+    /**
+     * 修改登录密码
+     **/
+    public int upCompanyEmployeePwdByUid(Map<String,String> comInfo, Integer uid){
+
+        PayCloudEmployee payCloudEmployee = new PayCloudEmployee();
+
+        payCloudEmployee.setUid(uid);
+        payCloudEmployee.setCloudloginpwd(comInfo.get("cloudloginpwd"));
+
+        return payCloudEmployeeMapper.updateByPrimaryKeySelective(payCloudEmployee);
     }
 }
