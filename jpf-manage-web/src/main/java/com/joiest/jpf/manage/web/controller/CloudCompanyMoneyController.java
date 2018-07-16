@@ -68,7 +68,8 @@ public class CloudCompanyMoneyController {
     @RequestMapping("/caiwu/list")
     @ResponseBody
     public Map<String, Object> caiwuList(CloudCompanyMoneyRequest cloudCompanyMoneyRequest){
-        CloudCompanyMoneyResponse cloudCompanyMoneyResponse = cloudCompanyMoneyServiceFacade.getRecords(cloudCompanyMoneyRequest);
+
+        CloudCompanyMoneyResponse cloudCompanyMoneyResponse = cloudCompanyMoneyServiceFacade.getCaiwuRecords(cloudCompanyMoneyRequest);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", cloudCompanyMoneyResponse.getCount());

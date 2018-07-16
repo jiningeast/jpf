@@ -150,9 +150,9 @@ public class CloudDfMoneyInfo {
     private String orderid;
 
     /**
-     * 重新打款单号
+     * 打款单号顺序集合
      */
-    private String ordernewid;
+    private String orderids;
 
     /**
      * 应发金额
@@ -395,12 +395,12 @@ public class CloudDfMoneyInfo {
         this.orderid = orderid;
     }
 
-    public String getOrdernewid() {
-        return ordernewid;
+    public String getOrderids() {
+        return orderids;
     }
 
-    public void setOrdernewid(String ordernewid) {
-        this.ordernewid = ordernewid;
+    public void setOrderids(String orderids) {
+        this.orderids = orderids;
     }
 
     public BigDecimal getPayablemoney() {

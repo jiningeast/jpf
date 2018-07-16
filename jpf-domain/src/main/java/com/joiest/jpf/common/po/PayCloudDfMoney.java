@@ -141,9 +141,9 @@ public class PayCloudDfMoney implements Serializable {
     private String orderid;
 
     /**
-     * 重新打款单号
+     * 打款单号顺序集合
      */
-    private String ordernewid;
+    private String orderids;
 
     /**
      * 应发金额
@@ -388,12 +388,12 @@ public class PayCloudDfMoney implements Serializable {
         this.orderid = orderid == null ? null : orderid.trim();
     }
 
-    public String getOrdernewid() {
-        return ordernewid;
+    public String getOrderids() {
+        return orderids;
     }
 
-    public void setOrdernewid(String ordernewid) {
-        this.ordernewid = ordernewid == null ? null : ordernewid.trim();
+    public void setOrderids(String orderids) {
+        this.orderids = orderids == null ? null : orderids.trim();
     }
 
     public BigDecimal getPayablemoney() {
@@ -472,7 +472,7 @@ public class PayCloudDfMoney implements Serializable {
         sb.append(", operastate=").append(operastate);
         sb.append(", tranno=").append(tranno);
         sb.append(", orderid=").append(orderid);
-        sb.append(", ordernewid=").append(ordernewid);
+        sb.append(", orderids=").append(orderids);
         sb.append(", payablemoney=").append(payablemoney);
         sb.append(", withholdmoney=").append(withholdmoney);
         sb.append(", invostatus=").append(invostatus);
@@ -525,7 +525,7 @@ public class PayCloudDfMoney implements Serializable {
             && (this.getOperastate() == null ? other.getOperastate() == null : this.getOperastate().equals(other.getOperastate()))
             && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
             && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
-            && (this.getOrdernewid() == null ? other.getOrdernewid() == null : this.getOrdernewid().equals(other.getOrdernewid()))
+            && (this.getOrderids() == null ? other.getOrderids() == null : this.getOrderids().equals(other.getOrderids()))
             && (this.getPayablemoney() == null ? other.getPayablemoney() == null : this.getPayablemoney().equals(other.getPayablemoney()))
             && (this.getWithholdmoney() == null ? other.getWithholdmoney() == null : this.getWithholdmoney().equals(other.getWithholdmoney()))
             && (this.getInvostatus() == null ? other.getInvostatus() == null : this.getInvostatus().equals(other.getInvostatus()))
@@ -567,7 +567,7 @@ public class PayCloudDfMoney implements Serializable {
         result = prime * result + ((getOperastate() == null) ? 0 : getOperastate().hashCode());
         result = prime * result + ((getTranno() == null) ? 0 : getTranno().hashCode());
         result = prime * result + ((getOrderid() == null) ? 0 : getOrderid().hashCode());
-        result = prime * result + ((getOrdernewid() == null) ? 0 : getOrdernewid().hashCode());
+        result = prime * result + ((getOrderids() == null) ? 0 : getOrderids().hashCode());
         result = prime * result + ((getPayablemoney() == null) ? 0 : getPayablemoney().hashCode());
         result = prime * result + ((getWithholdmoney() == null) ? 0 : getWithholdmoney().hashCode());
         result = prime * result + ((getInvostatus() == null) ? 0 : getInvostatus().hashCode());
