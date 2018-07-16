@@ -106,4 +106,28 @@ public class CloudStaffBanksServiceFacadeImpl implements CloudStaffBanksServiceF
 
         return payCloudStaffBanksMapper.insert(payCloudStaffBanks);
     }
+
+    /**
+     * 更新字段
+     */
+    @Override
+    public int updateColumn(CloudStaffBanksInfo cloudStaffBanksInfo){
+        PayCloudStaffBanksExample e = new PayCloudStaffBanksExample();
+        PayCloudStaffBanksExample.Criteria c = e.createCriteria();
+        if ( cloudStaffBanksInfo.getId() != null ){
+            c.andIdEqualTo(cloudStaffBanksInfo.getId());
+        }
+        if ( cloudStaffBanksInfo.getBankno() != null ){
+            c.andBanknoEqualTo(cloudStaffBanksInfo.getBankno());
+        }
+        if ( cloudStaffBanksInfo.getBankphone() != null ){
+            c.andBankphoneEqualTo(cloudStaffBanksInfo.getBankphone());
+        }
+
+        PayCloudStaffBanks payCloudStaffBanks = new PayCloudStaffBanks();
+        BeanCopier beanCopier = BeanCopier.create( CloudStaffBanksInfo.class, PayCloudStaffBanks.class, false);
+        beanCopier.copy(cloudStaffBanksInfo, payCloudStaffBanks, null);
+
+        return payCloudStaffBanksMapper.updateByExampleSelective(payCloudStaffBanks,e);
+    }
 }

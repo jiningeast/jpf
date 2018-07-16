@@ -1,7 +1,9 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.CheckBanksRequest;
 import com.joiest.jpf.dto.CloudTaskRequest;
 import com.joiest.jpf.dto.CloudTaskResponse;
 import com.joiest.jpf.entity.*;
@@ -102,7 +104,7 @@ public class CloudTaskController {
     public String submitTask(String company_id, String company_name, @RequestParam("uploadfile") MultipartFile uploadfile, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception{
         CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(company_id);
 
-        // 保存excel文件@RequestParam("file") MultipartFile file
+        // 保存excel文件
 
         // 判断excel数据正确完整性
         //获取当前的文件名
@@ -233,8 +235,8 @@ public class CloudTaskController {
             /*UploadHandleServlet uploadHandleServlet = new UploadHandleServlet();
             uploadHandleServlet.doPost(httpRequest,httpResponse);*/
 
-            String savePre = "D:/tmp/";
-            String cc = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);
+            /*String savePre = "D:/tmp/";
+            String cc = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);*/
 
             return uuid.toString();
         }
@@ -290,10 +292,10 @@ public class CloudTaskController {
     @Transactional
     public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) {
         // OSS上传excel文件
-        Map<String,Object> requestMap = new HashMap<>();
+        /*Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("path","");
         String url = "/oss/upload";
-        String response = OkHttpUtils.postForm(url,requestMap);
+        String response = OkHttpUtils.postForm(url,requestMap);*/
 
         // 读取暂存文件
         String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
@@ -560,5 +562,66 @@ public class CloudTaskController {
         int companyMoneyRes = CloudCompanyMoneyServiceFacade.updateColumn(upCompanyMoneyInfo);
 
         return new JpfResponseDto();
+    }
+
+    /**
+     * 鉴权操作
+     */
+    public int checkBanks(CheckBanksRequest checkBanksRequest){
+        // 先查询这个银行卡号和手机号是否已鉴权过
+        CloudStaffBanksInfo isCheckedInfo = new CloudStaffBanksInfo();
+        isCheckedInfo.setBankno(checkBanksRequest.getAccountNo());
+        isCheckedInfo.setBankphone(checkBanksRequest.getMobile());
+        CloudStaffBanksInfo queryRecord = cloudStaffBanksServiceFacade.getStaffBankByInfo(isCheckedInfo);
+        if ( queryRecord.getBankActive().equals("1") ){
+            return 1;
+        }
+
+        // 拼接鉴权4要素参数并触发接口
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("accountNo",checkBanksRequest.getAccountNo());
+        requestMap.put("idCard",checkBanksRequest.getIdCard());
+        requestMap.put("mobile",checkBanksRequest.getMobile());
+        requestMap.put("name",checkBanksRequest.getName());
+        requestMap.put("dateTime",checkBanksRequest.getDateTime());
+        String sign = Md5Encrypt.md5(ToolUtils.mapToUrl(requestMap) + ConfigUtil.getValue("API_SECRET")).toUpperCase();
+        requestMap.put("sign",sign);
+        String requestUrl = "/toolcate/bankFourCheck";
+        String response = OkHttpUtils.postForm("/toolcate/bankFourCheck",requestMap);
+        Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
+
+        // 添加流水记录
+        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+        cloudInterfaceStreamInfo.setType((byte)1);
+        cloudInterfaceStreamInfo.setRequestUrl(requestUrl);
+        cloudInterfaceStreamInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
+        cloudInterfaceStreamInfo.setResponseContent(response);
+        cloudInterfaceStreamInfo.setTaskId(checkBanksRequest.getTaskId());
+        cloudInterfaceStreamInfo.setStaffId(checkBanksRequest.getStaffId());
+        cloudInterfaceStreamInfo.setStaffBanksId(checkBanksRequest.getStaffBanksId());
+        cloudInterfaceStreamInfo.setAddtime(new Date());
+        int streamRes = cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+        if ( streamRes > 0 ){
+            logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的流水记录创建成功");
+        }else{
+            logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的流水记录创建失败");
+        }
+
+        if ( responseMap.get("code").equals("10000") ){
+            // 鉴权成功
+            CloudStaffBanksInfo cloudStaffBanksInfo = new CloudStaffBanksInfo();
+            cloudStaffBanksInfo.setBankno(checkBanksRequest.getAccountNo());
+            cloudStaffBanksInfo.setBankphone(checkBanksRequest.getMobile());
+            cloudStaffBanksInfo.setBankActive("1");
+            int staffBanksRes = cloudStaffBanksServiceFacade.updateColumn(cloudStaffBanksInfo);
+            if ( staffBanksRes > 0 ){
+                logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的鉴权成功，已更新银行卡为已鉴权");
+            }
+        }else {
+            // 鉴权失败
+            logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的鉴权失败");
+        }
+
+        return 2;
     }
 }
