@@ -55,6 +55,9 @@ public class CloudTaskController {
     @Autowired
     private CloudDfMoneyServiceFacade cloudDfMoneyServiceFacade;
 
+    @Autowired
+    private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
+
     private static final Logger logger = LogManager.getLogger(CloudTaskController.class);
 
     /**
@@ -275,17 +278,22 @@ public class CloudTaskController {
     @Transactional
     public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         // OSS上传excel文件
-        // 先上传到本地
-        /*UploadUtils uploadUtils = new UploadUtils();
-        try {
-            uploadUtils.doPost(httpRequest,httpResponse);
-        }catch (Exception e){
-            Map<String,Object> responseMap = new HashMap<>();
-            responseMap.put("code","10002");
-            responseMap.put("info","上传文件失败");
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("path","");
+        String response = OkHttpUtils.postForm("",requestMap);
 
-            return responseMap;
-        }*/
+        // 增加OSS接口流水
+        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+        cloudInterfaceStreamInfo.setType((byte)0);
+        /*cloudInterfaceStreamInfo.setRequestUrl();
+        cloudInterfaceStreamInfo.setRequestContent();
+        cloudInterfaceStreamInfo.setResponseContent();
+        cloudInterfaceStreamInfo.setTaskId();
+        cloudInterfaceStreamInfo.setStaffId();
+        cloudInterfaceStreamInfo.setStaffBanksId();
+        cloudInterfaceStreamInfo.setCompanyMoneyId();
+        cloudInterfaceStreamInfo.setAddtime();*/
+        cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
 
         // 读取暂存文件
         String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+data+".txt","GB2312");
@@ -315,7 +323,7 @@ public class CloudTaskController {
         cloudTaskInfo.setPersons(Integer.parseInt(persons));
         cloudTaskInfo.setMoney(new BigDecimal(money));
         cloudTaskInfo.setContractNo(contractNo);
-        cloudTaskInfo.setFilePath(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+data+".txt");
+        cloudTaskInfo.setFilePath(response);
         cloudTaskInfo.setStatus((byte)2);
         cloudTaskInfo.setIsLock((byte)0);
         cloudTaskInfo.setCreated(new Date());
@@ -458,7 +466,7 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setOperastate(0);  // 待修改
             cloudDfMoneyInfo.setTranno("");
             cloudDfMoneyInfo.setOrderid("");
-            cloudDfMoneyInfo.setOrdernewid("");
+            cloudDfMoneyInfo.setOrderids("");
             cloudDfMoneyInfo.setPayablemoney(new BigDecimal(String.valueOf(singlePerson.get("money"))));
             cloudDfMoneyInfo.setWithholdmoney(new BigDecimal("0"));
             cloudDfMoneyInfo.setInvostatus(2);
