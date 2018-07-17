@@ -20,4 +20,10 @@ public interface CloudEmployeeServiceFacade {
      * 修改登录密码
      **/
     public int upCompanyEmployeePwdByUid(Map<String,String> comInfo,Integer uid);
+
+    /**
+     * 获取商户信息通过token
+     * */
+    public CloudEmployeeInfo companyIsLogin(String token);
+
 }

@@ -1,20 +1,31 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayCloudEmployee;
 import com.joiest.jpf.common.po.PayCloudEmployeeExample;
+import com.joiest.jpf.common.util.AESUtils;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudEmployeeMapper;
 import com.joiest.jpf.entity.CloudEmployeeInfo;
 import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
+import com.joiest.jpf.facade.RedisCustomServiceFacade;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class CloudEmployeeServiceFacadeImpl implements CloudEmployeeServiceFacade {
 
     @Autowired
     private PayCloudEmployeeMapper payCloudEmployeeMapper;
+
+    @Autowired
+    private RedisCustomServiceFacade redisCustomServiceFacade;
 
     /**
      * 获取公司登录信息通过邮箱
@@ -66,5 +77,31 @@ public class CloudEmployeeServiceFacadeImpl implements CloudEmployeeServiceFacad
         payCloudEmployee.setCloudloginpwd(comInfo.get("cloudloginpwd"));
 
         return payCloudEmployeeMapper.updateByPrimaryKeySelective(payCloudEmployee);
+    }
+
+
+    /**
+     * 获取商户信息通过token
+     * */
+    public CloudEmployeeInfo companyIsLogin(String token){
+
+        Map<String,String> resultMap = new HashMap<>();
+        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_EMPLOY_LOGIN_KEY") + token);
+        String uid = null;
+        CloudEmployeeInfo companyInfo = null;
+
+        if (StringUtils.isBlank(uid_encrypt)) {
+
+            return null;
+        }
+        uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY"));
+        String reg_mid = "^\\d{1,10}$";
+        Boolean uidIsTrue = Pattern.compile(reg_mid).matcher(uid).matches();
+        if ( !uidIsTrue ) {
+
+            return null;
+        }
+        companyInfo = getCompayEmployeeByUid(new Integer(uid));
+        return companyInfo;
     }
 }
