@@ -61,7 +61,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
             beanCopier.copy(one, info, null);
             listnew.add(info);
 
-            monthTotal = BigDecimalCalculateUtils.add(new Double(one.getPayablemoney().toString()), monthTotal);
+            monthTotal = BigDecimalCalculateUtils.add(new Double(one.getCommoney().toString()), monthTotal);
         }
         GetCloudMoneyDfResponse response = new GetCloudMoneyDfResponse();
         response.setList(listnew);
