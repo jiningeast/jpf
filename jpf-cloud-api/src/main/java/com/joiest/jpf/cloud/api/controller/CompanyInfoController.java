@@ -194,6 +194,13 @@ public class CompanyInfoController {
         mobile = Base64CustomUtils.base64Decoder(mobile);
         name = Base64CustomUtils.base64Decoder(name);
 
+        String reg = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[8|9])|(16[6]))\\d{8}$";
+        Boolean mobile_IsTrue = Pattern.compile(reg).matcher(mobile).matches();
+        if ( !mobile_IsTrue )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请输入正确的手机号", null);
+        }
+
         CloudFanSourceInfo cloudFanSourceInfo = cloudFanSourceServiceFacade.getFanSourceByMobile(mobile);
         if(cloudFanSourceInfo != null){
 
