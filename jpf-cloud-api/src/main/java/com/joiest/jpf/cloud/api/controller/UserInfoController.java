@@ -665,8 +665,12 @@ public class UserInfoController {
         userInfo.put("commoney",cloudDfMoneyInterfaceInfo.getCommoney().toString());//发放金额
 
         Date date = new Date();
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        userInfo.put("timedata",myfmt.toString());//发放金额
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat detailTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        userInfo.put("detailTime",detailTime.toString());//详细时间
+        userInfo.put("curTime",myfmt.toString());//签约时间
+        userInfo.put("created",cloudCompanyStaffInfo.getCreated().toString());//合同创建时间
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }
