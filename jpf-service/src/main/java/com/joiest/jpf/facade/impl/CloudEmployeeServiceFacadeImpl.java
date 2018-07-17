@@ -9,6 +9,7 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayCloudEmployeeMapper;
 import com.joiest.jpf.entity.CloudEmployeeInfo;
 import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -88,18 +89,19 @@ public class CloudEmployeeServiceFacadeImpl implements CloudEmployeeServiceFacad
         String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_EMPLOY_LOGIN_KEY") + token);
         String uid = null;
         CloudEmployeeInfo companyInfo = null;
-        if (StringUtils.isNotBlank(uid_encrypt)) {
 
-            uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY"));
-            String reg_mid = "^\\d{1,10}$";
-            Boolean uidIsTrue = Pattern.compile(reg_mid).matcher(uid).matches();
-            if ( !uidIsTrue ) {
+        if (StringUtils.isBlank(uid_encrypt)) {
 
-                return null;
-            }
-            companyInfo = getCompayEmployeeByUid(new Integer(uid));
-            return companyInfo;
+            return null;
         }
-        return null;
+        uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY"));
+        String reg_mid = "^\\d{1,10}$";
+        Boolean uidIsTrue = Pattern.compile(reg_mid).matcher(uid).matches();
+        if ( !uidIsTrue ) {
+
+            return null;
+        }
+        companyInfo = getCompayEmployeeByUid(new Integer(uid));
+        return companyInfo;
     }
 }
