@@ -81,7 +81,6 @@ public class IdentAuth {
             }else {
 
                 dealFirst = JSONObject.fromObject(res);
-                dealFirst.discard("respMessage");
 
                 if(dealFirst.get("respCode").equals("0000")){
 
@@ -96,6 +95,9 @@ public class IdentAuth {
                     ocrResult.put("code","10008");
                     ocrResult.put("info",dealFirst.get("respMessage"));
                     ocrResult.put("data",dealFirst);
+
+                    dealFirst.discard("respMessage");
+
                 }
             }
             ocrResult.put("rawdata",allParam);

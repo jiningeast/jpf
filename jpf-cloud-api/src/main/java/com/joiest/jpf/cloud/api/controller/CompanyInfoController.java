@@ -2,14 +2,15 @@ package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.po.PayCloudFansource;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.SHA1;
 import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.entity.CloudEmployeeInfo;
-import com.joiest.jpf.facade.CloudCompanyStaffServiceFacade;
+import com.joiest.jpf.entity.CloudFanSourceInfo;
 import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
+import com.joiest.jpf.facade.CloudFanSourceServiceFacade;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,8 @@ public class CompanyInfoController {
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
 
-
     @Autowired
-    private CloudCompanyStaffServiceFacade cloudCompanyStaffServiceFacade;
-
+    private CloudFanSourceServiceFacade cloudFanSourceServiceFacade;
 
     private String uid;
     private CloudEmployeeInfo companyInfo;
@@ -177,6 +176,53 @@ public class CompanyInfoController {
         }else{
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "原密码有误", null);
+        }
+    }
+
+    /**
+     * 操作来源
+     * */
+    @RequestMapping("sourceAdd")
+    @ResponseBody
+    public String sourceAdd(HttpServletRequest request){
+
+        String catId = request.getParameter("catId");
+        String cat = request.getParameter("cat");
+        String mobile = request.getParameter("mobile");
+        String name = request.getParameter("name");
+
+        catId = Base64CustomUtils.base64Decoder(catId);
+        cat = Base64CustomUtils.base64Decoder(cat);
+        mobile = Base64CustomUtils.base64Decoder(mobile);
+        name = Base64CustomUtils.base64Decoder(name);
+
+        String reg = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[8|9])|(16[6]))\\d{8}$";
+        Boolean mobile_IsTrue = Pattern.compile(reg).matcher(mobile).matches();
+        if ( !mobile_IsTrue )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请输入正确的手机号", null);
+        }
+
+        CloudFanSourceInfo cloudFanSourceInfo = cloudFanSourceServiceFacade.getFanSourceByMobile(mobile);
+        if(cloudFanSourceInfo != null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "您已录入，请勿重复操作", null);
+        }
+        Map<String,String> map = new HashMap<>();
+
+        map.put("catId",catId);
+        map.put("cat",cat);
+        map.put("mobile",mobile);
+        map.put("name",name);
+
+        int res = cloudFanSourceServiceFacade.addFanSource(map);
+
+        if(res>0){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "SUCCESS", null);
+        }else{
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "ERROR", null);
         }
     }
 

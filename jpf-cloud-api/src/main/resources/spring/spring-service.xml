@@ -19,9 +19,7 @@
 	<bean id="merTypeServiceFacade" class="com.joiest.jpf.facade.impl.MerTypeServiceFacadeImpl"></bean>
 	<bean id="cloudCompanyServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyServiceFacadeImpl"></bean>
 	<bean id="CloudEmployeeServiceFacade" class="com.joiest.jpf.facade.impl.CloudEmployeeServiceFacadeImpl"></bean>
-
-
-
+	<bean id="CloudFanSourceServiceFacade" class="com.joiest.jpf.facade.impl.CloudFanSourceServiceFacadeImpl"></bean>
 
 
 </beans>
