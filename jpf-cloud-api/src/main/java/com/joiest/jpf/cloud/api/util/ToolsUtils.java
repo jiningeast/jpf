@@ -1,5 +1,6 @@
 package com.joiest.jpf.cloud.api.util;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Random;
 
 public class ToolsUtils {

@@ -666,7 +666,7 @@ public class UserInfoController {
 
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        userInfo.put("curTime",myfmt.toString());//发放金额
+        userInfo.put("timedata",myfmt.toString());//发放金额
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }

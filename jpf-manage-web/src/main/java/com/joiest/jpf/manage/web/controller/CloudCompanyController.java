@@ -2,6 +2,7 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.util.PhotoUtil;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
@@ -75,12 +76,13 @@ public class CloudCompanyController {
     //添加公司
     @RequestMapping("/add")
     @ResponseBody
-    public JpfResponseDto add(GetCloudCompanyRequest request, HttpSession httpSession) throws Exception {
+    public JpfResponseDto add(GetCloudCompanyRequest request, HttpSession httpSession,HttpServletRequest serRequest) throws Exception {
 
         //获取登录帐号
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
         int account = userInfo.getId();
-        return cloudCompanyServiceFacade.addCloudCompany(request, account);
+        String ipAddress= ToolUtils.getIpAddr(serRequest);
+        return cloudCompanyServiceFacade.addCloudCompany(request, account,ipAddress);
     }
 
     /**
