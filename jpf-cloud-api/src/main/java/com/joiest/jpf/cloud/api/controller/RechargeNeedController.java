@@ -4,6 +4,8 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.CloudRechargeNeedReleaseRequest;
 import com.joiest.jpf.dto.GetRechargeNeedRequest;
+import com.joiest.jpf.entity.CloudEmployeeInfo;
+import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
 import com.joiest.jpf.facade.CloudRechargeServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Random;
 
 /**
@@ -23,13 +27,18 @@ public class RechargeNeedController {
     @Autowired
     private CloudRechargeServiceFacade cloudRechargeServiceFacade;
 
+    @Autowired
+    private CloudEmployeeServiceFacade cloudEmployeeServiceFacade;
+
     /**
      * 获取企业需求列表
      */
     @RequestMapping(value = "/getInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String getRechargeNeedInfo(GetRechargeNeedRequest request, String pageNo, String pageSize) {
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.getRechargeNeedInfo(request,pageNo,pageSize));
+    public String getRechargeNeedInfo(GetRechargeNeedRequest requestParam, String pageNo, String pageSize, HttpServletRequest request) {
+        CloudEmployeeInfo cloudEmployeeInfo = cloudEmployeeServiceFacade.companyIsLogin(request.getHeader("token"));
+        requestParam.setMerchNo(cloudEmployeeInfo.getMerchNo());
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.getRechargeNeedInfo(requestParam,pageNo,pageSize));
     }
 
     /**
@@ -37,8 +46,10 @@ public class RechargeNeedController {
      */
     @RequestMapping(value = "/release", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String rechargeNeedRelease(CloudRechargeNeedReleaseRequest request) {
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedRelease(request));
+    public String rechargeNeedRelease(CloudRechargeNeedReleaseRequest requestParam, HttpServletRequest request) {
+        CloudEmployeeInfo cloudEmployeeInfo = cloudEmployeeServiceFacade.companyIsLogin(request.getHeader("token"));
+        requestParam.setMerchNo(cloudEmployeeInfo.getMerchNo());
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedRelease(requestParam));
     }
 
     /**
@@ -46,8 +57,9 @@ public class RechargeNeedController {
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String rechargeNeedDelete(String merchNo,String agentNo,String id,String fid) {
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedDelete(merchNo,agentNo,id,fid));
+    public String rechargeNeedDelete(String agentNo, String id, String fid, HttpServletRequest request) {
+        CloudEmployeeInfo cloudEmployeeInfo = cloudEmployeeServiceFacade.companyIsLogin(request.getHeader("token"));
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedDelete(cloudEmployeeInfo.getMerchNo(),agentNo,id,fid));
     }
 
     /**
@@ -55,8 +67,9 @@ public class RechargeNeedController {
      */
     @RequestMapping(value = "/voucher", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String rechargeNeedVoucher(String merchNo,String agentNo,String id,String fid,String imgurl) {
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedVoucher(merchNo,agentNo,id,fid,imgurl));
+    public String rechargeNeedVoucher(String agentNo,String id,String fid,String imgurl, HttpServletRequest request) {
+        CloudEmployeeInfo cloudEmployeeInfo = cloudEmployeeServiceFacade.companyIsLogin(request.getHeader("token"));
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedVoucher(cloudEmployeeInfo.getMerchNo(),agentNo,id,fid,imgurl));
     }
 
     /**
@@ -64,8 +77,9 @@ public class RechargeNeedController {
      */
     @RequestMapping(value = "/affirm", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String rechargeNeedAffirm(String merchNo,String agentNo,String id,String fid) {
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedAffirm(merchNo,agentNo,id,fid));
+    public String rechargeNeedAffirm(String agentNo,String id,String fid, HttpServletRequest request) {
+        CloudEmployeeInfo cloudEmployeeInfo = cloudEmployeeServiceFacade.companyIsLogin(request.getHeader("token"));
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedAffirm(cloudEmployeeInfo.getMerchNo(),agentNo,id,fid));
     }
 
 }
