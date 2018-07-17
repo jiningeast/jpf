@@ -204,7 +204,7 @@ public class CompanyInfoController {
         CloudFanSourceInfo cloudFanSourceInfo = cloudFanSourceServiceFacade.getFanSourceByMobile(mobile);
         if(cloudFanSourceInfo != null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "您已录入，请勿重复操作", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您的信息我们已经收到，请勿重复操作", null);
         }
         Map<String,String> map = new HashMap<>();
 
@@ -217,10 +217,10 @@ public class CompanyInfoController {
 
         if(res>0){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "SUCCESS", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "您的信息我们已经收到!我们将尽快与您联系!\n", null);
         }else{
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "ERROR", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息错误，请重新填写", null);
         }
     }
 }
