@@ -31,11 +31,10 @@ public class OssController {
      * 获取用户总金额
      * @return
      */
-    @RequestMapping(value = "/userdf", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String userdf() {
-        logger.info("33333333333");
-        String files  = "/Users/liuxiwu/Desktop/joiest.png";
+    public String upload(String path) {
+        String files  = path;
         String[] filex = files.split(",");
         String md5key = "";
 

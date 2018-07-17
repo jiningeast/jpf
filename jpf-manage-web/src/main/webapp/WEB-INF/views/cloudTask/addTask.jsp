@@ -68,9 +68,11 @@
         });
 
         // form表单属性
+        var data = new FormData($("#taskForm")[0]);
         $("#taskForm").form({
             type:'post',
             url:"../cloudTask/submitTask",
+            data:data,
             dataType:"json",
             contentType:"application/json",
             enctype:"multipart/form-data",

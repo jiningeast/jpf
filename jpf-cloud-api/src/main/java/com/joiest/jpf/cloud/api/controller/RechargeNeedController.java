@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Random;
+
 /**
  * 需求中心
  */
@@ -44,8 +46,8 @@ public class RechargeNeedController {
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String rechargeNeedDelete(Long id,String fid) {
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedDelete(id,fid));
+    public String rechargeNeedDelete(String merchNo,String agentNo,Long id,String fid) {
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedDelete(merchNo,agentNo,id,fid));
     }
 
     /**
@@ -53,8 +55,8 @@ public class RechargeNeedController {
      */
     @RequestMapping(value = "/voucher", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String rechargeNeedVoucher(Long id,String fid,String imgurl) {
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedVoucher(id,fid,imgurl));
+    public String rechargeNeedVoucher(String merchNo,String agentNo,Long id,String fid,String imgurl) {
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedVoucher(merchNo,agentNo,id,fid,imgurl));
     }
 
     /**
@@ -62,7 +64,8 @@ public class RechargeNeedController {
      */
     @RequestMapping(value = "/affirm", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String rechargeNeedAffirm(Long id,String fid,Byte pactstatus) {
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedAffirm(id,fid,pactstatus));
+    public String rechargeNeedAffirm(String merchNo,String agentNo,Long id,String fid,Byte pactstatus) {
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedAffirm(merchNo,agentNo,id,fid,pactstatus));
     }
+
 }

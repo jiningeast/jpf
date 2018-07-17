@@ -26,4 +26,9 @@ public interface CloudStaffBanksServiceFacade {
      */
     public int addStaffBank(CloudStaffBanksInfo cloudStaffBanksInfo);
 
+    /**
+     * 更新字段
+     */
+    public int updateColumn(CloudStaffBanksInfo cloudStaffBanksInfo);
+
 }

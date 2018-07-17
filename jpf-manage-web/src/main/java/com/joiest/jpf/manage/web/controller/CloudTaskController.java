@@ -1,7 +1,9 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.CheckBanksRequest;
 import com.joiest.jpf.dto.CloudTaskRequest;
 import com.joiest.jpf.dto.CloudTaskResponse;
 import com.joiest.jpf.entity.*;
@@ -99,7 +101,7 @@ public class CloudTaskController {
      */
     @RequestMapping(value = "/submitTask", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String submitTask(String company_id, String company_name, @RequestParam("uploadfile") MultipartFile uploadfile) throws Exception{
+    public String submitTask(String company_id, String company_name, @RequestParam("uploadfile") MultipartFile uploadfile, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception{
         CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(company_id);
 
         // 保存excel文件
@@ -188,32 +190,32 @@ public class CloudTaskController {
             responseMap.put("code","10004");
             responseMap.put("info","批次号与文件名不一致请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(count !=samecount){
             responseMap.put("code","10004");
             responseMap.put("info","总笔数与实际笔数不符请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(count>1000){
             responseMap.put("code","10004");
             responseMap.put("info","最大支持1000条数据请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(companyMoney!=companyMoneySame){
             responseMap.put("code","10004");
             responseMap.put("info","总金额与实际金额不符请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( staffInfosFailed.size() > 0 ){
             responseMap.put("code","10001");
             responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
             responseMap.put("data",staffInfosFailed);
 
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else{
             responseMap.put("code","10000");
@@ -223,7 +225,19 @@ public class CloudTaskController {
             responseMap.put("persons",""+count);
             responseMap.put("contractNo",contractNo);
             responseMap.put("data",staffInfosSuccess);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+
+            // 上传方法1
+            /*UploadUtils uploadUtils = new UploadUtils();
+            uploadUtils.doPost(httpRequest, httpResponse);*/
+
+            // 上传方法2
+            /*UploadHandleServlet uploadHandleServlet = new UploadHandleServlet();
+            uploadHandleServlet.doPost(httpRequest,httpResponse);*/
+
+            /*String savePre = "D:/tmp/";
+            String cc = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);*/
+
             return uuid.toString();
         }
     }
@@ -238,7 +252,7 @@ public class CloudTaskController {
         up = StringUtils.strip(up,"\"");
         up = StringUtils.stripEnd(up,"\"");
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+up+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+up+".txt","GB2312");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         String code=jsonMap.get("code");
         String info=jsonMap.get("info");
@@ -259,7 +273,7 @@ public class CloudTaskController {
     @ResponseBody
     public Map<String, Object> personsData(String data){
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+data+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
         Map<String,List< LinkedHashMap<String,String> >> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > list = jsonMap.get("data");
 
@@ -276,27 +290,15 @@ public class CloudTaskController {
     @RequestMapping(value = "/confirmPersons", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     @Transactional
-    public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+    public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) {
         // OSS上传excel文件
-        Map<String,Object> requestMap = new HashMap<>();
+        /*Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("path","");
-        String response = OkHttpUtils.postForm("",requestMap);
-
-        // 增加OSS接口流水
-        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
-        cloudInterfaceStreamInfo.setType((byte)0);
-        /*cloudInterfaceStreamInfo.setRequestUrl();
-        cloudInterfaceStreamInfo.setRequestContent();
-        cloudInterfaceStreamInfo.setResponseContent();
-        cloudInterfaceStreamInfo.setTaskId();
-        cloudInterfaceStreamInfo.setStaffId();
-        cloudInterfaceStreamInfo.setStaffBanksId();
-        cloudInterfaceStreamInfo.setCompanyMoneyId();
-        cloudInterfaceStreamInfo.setAddtime();*/
-        cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+        String url = "/oss/upload";
+        String response = OkHttpUtils.postForm(url,requestMap);*/
 
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("TASK_PERSONS_FILE_PATH")+data+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         String batchNo = jsonMap.get("batchNo");
         String persons = ""+jsonMap.get("persons");
@@ -323,18 +325,30 @@ public class CloudTaskController {
         cloudTaskInfo.setPersons(Integer.parseInt(persons));
         cloudTaskInfo.setMoney(new BigDecimal(money));
         cloudTaskInfo.setContractNo(contractNo);
-        cloudTaskInfo.setFilePath(response);
+        cloudTaskInfo.setFilePath(ConfigUtil.getValue("CACHE_PATH")+data+".txt");
         cloudTaskInfo.setStatus((byte)2);
         cloudTaskInfo.setIsLock((byte)0);
         cloudTaskInfo.setCreated(new Date());
-        int taskRes = cloudTaskServiceFacade.insTask(cloudTaskInfo);
+        String taskRes = cloudTaskServiceFacade.insTask(cloudTaskInfo);
         JpfResponseDto jpfResponseDto = new JpfResponseDto();
-        if ( taskRes <= 0 ){
+        if ( Integer.parseInt(taskRes) <= 0 ){
             jpfResponseDto.setRetCode("10001");
             jpfResponseDto.setRetMsg("新建任务失败");
 
             return jpfResponseDto;
         }
+
+        // 增加OSS接口流水
+        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+        cloudInterfaceStreamInfo.setType((byte)0);
+        cloudInterfaceStreamInfo.setRequestUrl("null");
+        /*cloudInterfaceStreamInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
+        cloudInterfaceStreamInfo.setResponseContent(response);*/
+        cloudInterfaceStreamInfo.setRequestContent("requestContent");
+        cloudInterfaceStreamInfo.setResponseContent("responseContent");
+        cloudInterfaceStreamInfo.setTaskId(taskRes);
+        cloudInterfaceStreamInfo.setAddtime(new Date());
+        cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
 
         // 新建一个待锁定的代付款批次订单
         CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
@@ -548,5 +562,66 @@ public class CloudTaskController {
         int companyMoneyRes = CloudCompanyMoneyServiceFacade.updateColumn(upCompanyMoneyInfo);
 
         return new JpfResponseDto();
+    }
+
+    /**
+     * 鉴权操作
+     */
+    public int checkBanks(CheckBanksRequest checkBanksRequest){
+        // 先查询这个银行卡号和手机号是否已鉴权过
+        CloudStaffBanksInfo isCheckedInfo = new CloudStaffBanksInfo();
+        isCheckedInfo.setBankno(checkBanksRequest.getAccountNo());
+        isCheckedInfo.setBankphone(checkBanksRequest.getMobile());
+        CloudStaffBanksInfo queryRecord = cloudStaffBanksServiceFacade.getStaffBankByInfo(isCheckedInfo);
+        if ( queryRecord.getBankActive().equals("1") ){
+            return 1;
+        }
+
+        // 拼接鉴权4要素参数并触发接口
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("accountNo",checkBanksRequest.getAccountNo());
+        requestMap.put("idCard",checkBanksRequest.getIdCard());
+        requestMap.put("mobile",checkBanksRequest.getMobile());
+        requestMap.put("name",checkBanksRequest.getName());
+        requestMap.put("dateTime",checkBanksRequest.getDateTime());
+        String sign = Md5Encrypt.md5(ToolUtils.mapToUrl(requestMap) + ConfigUtil.getValue("API_SECRET")).toUpperCase();
+        requestMap.put("sign",sign);
+        String requestUrl = "/toolcate/bankFourCheck";
+        String response = OkHttpUtils.postForm("/toolcate/bankFourCheck",requestMap);
+        Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
+
+        // 添加流水记录
+        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+        cloudInterfaceStreamInfo.setType((byte)1);
+        cloudInterfaceStreamInfo.setRequestUrl(requestUrl);
+        cloudInterfaceStreamInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
+        cloudInterfaceStreamInfo.setResponseContent(response);
+        cloudInterfaceStreamInfo.setTaskId(checkBanksRequest.getTaskId());
+        cloudInterfaceStreamInfo.setStaffId(checkBanksRequest.getStaffId());
+        cloudInterfaceStreamInfo.setStaffBanksId(checkBanksRequest.getStaffBanksId());
+        cloudInterfaceStreamInfo.setAddtime(new Date());
+        int streamRes = cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+        if ( streamRes > 0 ){
+            logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的流水记录创建成功");
+        }else{
+            logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的流水记录创建失败");
+        }
+
+        if ( responseMap.get("code").equals("10000") ){
+            // 鉴权成功
+            CloudStaffBanksInfo cloudStaffBanksInfo = new CloudStaffBanksInfo();
+            cloudStaffBanksInfo.setBankno(checkBanksRequest.getAccountNo());
+            cloudStaffBanksInfo.setBankphone(checkBanksRequest.getMobile());
+            cloudStaffBanksInfo.setBankActive("1");
+            int staffBanksRes = cloudStaffBanksServiceFacade.updateColumn(cloudStaffBanksInfo);
+            if ( staffBanksRes > 0 ){
+                logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的鉴权成功，已更新银行卡为已鉴权");
+            }
+        }else {
+            // 鉴权失败
+            logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的鉴权失败");
+        }
+
+        return 2;
     }
 }

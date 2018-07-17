@@ -101,7 +101,7 @@ public enum JpfInterfaceErrorInfo {
     //代付接口
     DF_SIGN_ERROR("30001","签名错误"),
     DF_BATCHNO_NOTEMPTY("30002","批次号不能为空"),
-    DF_INFOLIST_EMPTY("30003","打款信息为空");
+    DF_INFOLIST_EMPTY("30003","待打款信息列表为空");
 
     private final String desc;
 
