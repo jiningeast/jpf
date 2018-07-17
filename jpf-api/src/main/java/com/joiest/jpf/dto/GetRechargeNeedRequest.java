@@ -6,7 +6,7 @@ public class GetRechargeNeedRequest {
     /**
      * 主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 交易充值记录ID，唯一值，CZ+10位时间戳+6位随机码
@@ -31,19 +31,19 @@ public class GetRechargeNeedRequest {
     /**
      * 支付方式 1=线下
      */
-    private Byte payway;
+    private String payway;
 
     /**
      * 操作人ID
      */
-    private Long employeeUid;
+    private String employeeUid;
 
     /**
      * 状态 ：1:申请中(需求提交，合同待审核first) 2:已审核(已签约，待上传付款凭证) 3:已支付(已上传凭证) 4:已充值开票中(第二次审核); 5:已充值已开票; 6:已发货; 7:已完成(客户收到发票) 0:已取消
      */
-    private Byte status;
+    private String status;
 
-    private List<Byte> statusList;
+    private List<String> statusList;
 
     /**
      * 申请时间
@@ -72,13 +72,13 @@ public class GetRechargeNeedRequest {
     /**
      * 需求确认：1默认，2:确认需求
      */
-    private Byte pactstatus;
+    private String pactstatus;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -114,35 +114,35 @@ public class GetRechargeNeedRequest {
         this.merchNo = merchNo;
     }
 
-    public Byte getPayway() {
+    public String getPayway() {
         return payway;
     }
 
-    public void setPayway(Byte payway) {
+    public void setPayway(String payway) {
         this.payway = payway;
     }
 
-    public Long getEmployeeUid() {
+    public String getEmployeeUid() {
         return employeeUid;
     }
 
-    public void setEmployeeUid(Long employeeUid) {
+    public void setEmployeeUid(String employeeUid) {
         this.employeeUid = employeeUid;
     }
 
-    public Byte getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public List<Byte> getStatusList() {
+    public List<String> getStatusList() {
         return statusList;
     }
 
-    public void setStatusList(List<Byte> statusList) {
+    public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
     }
 
@@ -210,11 +210,35 @@ public class GetRechargeNeedRequest {
         this.pacttimeEnd = pacttimeEnd;
     }
 
-    public Byte getPactstatus() {
+    public String getPactstatus() {
         return pactstatus;
     }
 
-    public void setPactstatus(Byte pactstatus) {
+    public void setPactstatus(String pactstatus) {
         this.pactstatus = pactstatus;
+    }
+
+    @Override
+    public String toString() {
+        return "GetRechargeNeedRequest{" +
+                "id='" + id + '\'' +
+                ", fid='" + fid + '\'' +
+                ", pactno='" + pactno + '\'' +
+                ", agentNo='" + agentNo + '\'' +
+                ", merchNo='" + merchNo + '\'' +
+                ", payway='" + payway + '\'' +
+                ", employeeUid='" + employeeUid + '\'' +
+                ", status='" + status + '\'' +
+                ", statusList=" + statusList +
+                ", addtimeStart='" + addtimeStart + '\'' +
+                ", addtimeEnd='" + addtimeEnd + '\'' +
+                ", shenhetimeStart='" + shenhetimeStart + '\'' +
+                ", shenhetimeEnd='" + shenhetimeEnd + '\'' +
+                ", chargetimeStart='" + chargetimeStart + '\'' +
+                ", chargetimeEnd='" + chargetimeEnd + '\'' +
+                ", pacttimeStart='" + pacttimeStart + '\'' +
+                ", pacttimeEnd='" + pacttimeEnd + '\'' +
+                ", pactstatus='" + pactstatus + '\'' +
+                '}';
     }
 }
