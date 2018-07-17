@@ -122,4 +122,21 @@ public class CloudDfController {
 
     }
 
+    @RequestMapping("/doDfApi")
+    @ResponseBody
+    public String doDfApi()
+    {
+        //获取信息
+        GetCloudDfTaskInterfaceResponse taskResponse = cloudDfTaskInterfaceServiceFacade.getCanableTaskList();
+        if ( taskResponse == null )
+        {
+            System.exit(0);
+        }
+        for ( CloudDfTaskInterfaceInfo one : taskResponse.getList() )
+        {
+            //执行
+        }
+        return "";
+    }
+
 }
