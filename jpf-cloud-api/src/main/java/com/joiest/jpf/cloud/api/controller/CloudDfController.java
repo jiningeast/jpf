@@ -9,20 +9,21 @@ import com.joiest.jpf.common.util.ClassUtil;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
-import com.joiest.jpf.dto.AddCloudDfTaskRequest;
-import com.joiest.jpf.dto.CloudDfRequest;
-import com.joiest.jpf.dto.DfApiInterfaceRequest;
-import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
+import com.joiest.jpf.dto.*;
+import com.joiest.jpf.entity.CloudDfTaskInterfaceInfo;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudDfTaskInterfaceServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Controller
@@ -84,7 +85,6 @@ public class CloudDfController {
 
         //添加任务
         String batchid_self = ToolsUtils.createOrderid();
-        Map<String,String> taskMap = new HashMap<>();
         AddCloudDfTaskRequest requestTask = new AddCloudDfTaskRequest();
         requestTask.setBatchid(batchid_self);
         requestTask.setRequestBatchno(request.getBatchid());
@@ -95,13 +95,9 @@ public class CloudDfController {
         requestTask.setCreated(new Date());
         cloudDfTaskInterfaceServiceFacade.addTask(requestTask);
 
-
-//        taskMap.put();
-
         Thread dfDataUtils = new DfDataUtils("131","0", response.getList(),batchid_self);
         dfDataUtils.setName("线程:" + request.getBatchid());
         dfDataUtils.start();
-
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("code","10000");
@@ -113,6 +109,34 @@ public class CloudDfController {
 
         return resultJson;
 
+    }
+
+    @ModelAttribute
+    public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
+    {
+        // 跨域
+        String originHeader = httpRequest.getHeader("Origin");
+        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
+        response.setHeader("Access-Control-Allow-Method", "POST");
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
+
+    }
+
+    @RequestMapping("/doDfApi")
+    @ResponseBody
+    public String doDfApi()
+    {
+        //获取信息
+        GetCloudDfTaskInterfaceResponse taskResponse = cloudDfTaskInterfaceServiceFacade.getCanableTaskList();
+        if ( taskResponse == null )
+        {
+            System.exit(0);
+        }
+        for ( CloudDfTaskInterfaceInfo one : taskResponse.getList() )
+        {
+            //执行
+        }
+        return "";
     }
 
 }
