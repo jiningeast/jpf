@@ -151,6 +151,12 @@ public class CompanyInfoController {
         String originpass= SHA1.getInstance().getMySHA1Code(originPwd);
         String nowpass= SHA1.getInstance().getMySHA1Code(nowPwd);
 
+        String reg = "^(?![0-9]+$)(?![a-zA-Z]+$)(?![_]+$)[0-9A-Za-z_]{6,16}$";
+        Boolean regDate_IsTrue = Pattern.compile(reg).matcher(nowPwd).matches();
+        if ( !regDate_IsTrue )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "密码格式有误", null);
+        }
         if(companyInfo.getCloudloginpwd().equals(nowpass)){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "抱歉,不能与原密码相同", null);
