@@ -245,6 +245,15 @@ public class CloudTaskController {
             requestMap.put("path",path);
             String url = ConfigUtil.getValue("OSS_URL");
             String response = OkHttpUtils.postForm(url,requestMap);
+
+            // 增加==OSS接口流水==
+            CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+            cloudInterfaceStreamInfo.setType((byte)0);
+            cloudInterfaceStreamInfo.setRequestUrl(url);
+            cloudInterfaceStreamInfo.setRequestContent(path);
+            cloudInterfaceStreamInfo.setResponseContent(response);
+            cloudInterfaceStreamInfo.setAddtime(new Date());
+            cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
             return uuid.toString();
         }
     }
@@ -341,17 +350,7 @@ public class CloudTaskController {
             return jpfResponseDto;
         }
 
-        // 增加OSS接口流水
-        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
-        cloudInterfaceStreamInfo.setType((byte)0);
-        cloudInterfaceStreamInfo.setRequestUrl("null");
-        /*cloudInterfaceStreamInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
-        cloudInterfaceStreamInfo.setResponseContent(response);*/
-        cloudInterfaceStreamInfo.setRequestContent("requestContent");
-        cloudInterfaceStreamInfo.setResponseContent("responseContent");
-        cloudInterfaceStreamInfo.setTaskId(taskRes);
-        cloudInterfaceStreamInfo.setAddtime(new Date());
-        cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+
 
         // 新建一个待锁定的代付款批次订单
         CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
