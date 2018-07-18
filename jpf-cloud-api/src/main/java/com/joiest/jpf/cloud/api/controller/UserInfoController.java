@@ -654,9 +654,14 @@ public class UserInfoController {
 
         Map<String,String> userInfo = new HashMap<>();
 
-
+        System.out.println("内容获取：+++"+cloudCompactStaffInterfaceCustomInfo.getContent());
         String baseRe = Base64CustomUtils.base64Encoder(cloudCompactStaffInterfaceCustomInfo.getContent());
+
+        System.out.println("内容base64：+++"+baseRe);
+
         baseRe = baseRe.replaceAll("\r\n","");
+        System.out.println("内容去掉换行：+++"+baseRe);
+
 
 
        /*
