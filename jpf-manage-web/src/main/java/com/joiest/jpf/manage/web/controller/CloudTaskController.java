@@ -156,6 +156,7 @@ public class CloudTaskController {
                     // 第一列类型必须是0或者1
                     if ( !singlePerson.get(0).equals("0") && !singlePerson.get(0).equals("1") ){
                         flag = 0;
+
                     }else{
                         // 前9列数据必填
                         if ( StringUtils.isBlank(singlePerson.get(j)) ){
@@ -237,9 +238,13 @@ public class CloudTaskController {
             /*UploadHandleServlet uploadHandleServlet = new UploadHandleServlet();
             uploadHandleServlet.doPost(httpRequest,httpResponse);*/
 
-            /*String savePre = "D:/tmp/";
-            String cc = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);*/
-
+            String savePre = ConfigUtil.getValue("EXCEL_PATH");
+            String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);
+            // OSS上传excel文件
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("path",path);
+            String url = ConfigUtil.getValue("OSS_URL");
+            String response = OkHttpUtils.postForm(url,requestMap);
             return uuid.toString();
         }
     }
@@ -293,11 +298,7 @@ public class CloudTaskController {
     @ResponseBody
     @Transactional
     public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) {
-        // OSS上传excel文件
-        /*Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("path","");
-        String url = "/oss/upload";
-        String response = OkHttpUtils.postForm(url,requestMap);*/
+
 
         // 读取暂存文件
         String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");

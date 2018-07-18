@@ -16,28 +16,32 @@
          style="padding: 10px; background: #fff; border: 1px solid #ccc;">
         <form id="editForm" method="post" enctype="multipart/form-data"
               accept="image/gif, image/jpeg,image/jpg, image/png">
+            <h2 align="center">修改基本信息</h2>
             <input type="hidden" id="id_m" name="id" value="${cloudCompanyInfo.id}">
             <input type="hidden" id="merchNo" name="merchNo" value="${cloudCompanyInfo.merchNo}">
             <table cellpadding=3 class="table table-bordered">
                 <tr>
-                    <th>基本信息</th>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">公司名称：</td>
+                    <td style="text-align: right;width:40%" bgcolor="#f1f1f1">公司名称：</td>
                     <td>
                         <input id="name" name="name" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value="${cloudCompanyInfo.name}"/>
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">联系人姓名：</td>
                     <td>
                         <input id="phonename" name="phonename" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value="${cloudCompanyInfo.phonename}"/>
                     </td>
+                    </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">联系人电话：</td>
                     <td>
                         <input id="phone" name="phone" type="text" style="width:150px" class="easyui-textbox"
                                value="${cloudCompanyInfo.phone}" data-options="required:true,validType:'phoneRex'"/>
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">邮　箱：</td>
                     <td>
                         <%--<input id="linkemail" name="linkemail" readonly type="text" style="width:150px;color:--%>
@@ -63,6 +67,8 @@
 
 
                     </td>
+                      </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
                         <select id="attestation" name="attestation" data-options="required:true"
@@ -72,11 +78,15 @@
                             <option value="1" <c:if  test="${cloudCompanyInfo.attestation eq 1 }">selected</c:if>>已认证</option>
                         </select>
                     </td>
+                </tr>
+                <tr>
                       <td style="text-align: right;background-color: #f1f1f1;">服务费：</td>
                       <td>
                           <input  id="salesRate" name="salesRate" type="text" style="width:150px" class="easyui-numberbox"
                                  value="<c:if  test="${cloudCompanyInfo.type == 1 }">${cloudCompanyInfo.agentRate}</c:if><c:if  test="${cloudCompanyInfo.type == 0 }">${cloudCompanyInfo.salesRate}</c:if>" data-options="required:true" precision="2"/><span style="color: #FF2F2F"> 注：当为0.00时不收取服务费</span>
                       </td>
+                </tr>
+                <tr>
                       <td style="text-align: right;background-color: #f1f1f1;">登录状态：</td>
                       <td>
                           <select id="status" name="status" data-options="required:true"
@@ -86,28 +96,32 @@
                               <option value="-1" <c:if  test="${cloudCompanyInfo.status eq -1 }">selected</c:if>>禁闭</option>
                           </select>
                       </td>
+                </tr>
+
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">营业执照：</td>
                     <td>
 
-                        <p>上传文件：  <input type="file" name="file"></p>
+                        <p>上传文件：  <input type="file" name="file" id="file1"></p>
                         <input type="button" value="上传" onclick="doUploadY()"/>
-                        <div  id="apy"><img style="width: 200px;height: 200px;" src="${pageContext.request.contextPath}/resources/${cloudCompanyInfo.bslicense}"></div>
+                        <div  id="apy"><img style="width: 200px;height: 200px;" src="${cloudCompanyInfo.bslicense}"></div>
                      <input id="bslicense" name="bslicense" type="hidden" style="width:150px"
                                required="true" value="${cloudCompanyInfo.bslicense}"/>
                     </td>
-
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业资质：</td>
                     <td>
 
-                            <p>上传文件： <input type="file" name="file"></p>
+                            <p>上传文件： <input type="file" name="file" id="file2"></p>
                             <input type="button" value="上传" onclick="doUpload()"/>
 
 
-                    <div  id="ap"><img style="width: 200px;height: 200px;" src="${pageContext.request.contextPath}/resources/${cloudCompanyInfo.aptitude}"></div>
+                    <div  id="ap"><img style="width: 200px;height: 200px;" src="${cloudCompanyInfo.aptitude}"></div>
                         <input id="aptitude" name="aptitude" type="hidden" style="width:150px"
                                required="true" value="${cloudCompanyInfo.aptitude}" />
                     </td>
+                </tr>
             <%--    <td style="text-align:right; background-color: #f1f1f1;">账户通知方式：</td>
                 <td style="text-align:left">
                               &lt;%&ndash;      <span class="radioSpan">
@@ -123,12 +137,6 @@
 
 
                 </td>--%>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-
                 <tr>
 
                     <%--     <td style="text-align:right;">短信发送：</td>
@@ -158,15 +166,13 @@
                             <input id="serviclinkuser" name="serviclinkuser" type="text" style="width:150px"
                                    class="easyui-textbox" value="${cloudCompanyInfo.serviclinkuser}"/>
                         </td>
+                </tr>
+                <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">手机号：</td>
                         <td>
                             <input id="linkphone" name="linkphone" type="text" style="width:150px" class="easyui-textbox"
                                    value="${cloudCompanyInfo.linkphone}"/>
                         </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                 </tr>
             </table>
         </form>
@@ -223,7 +229,8 @@
         <%--$('#paytype').combobox('select', '${rolesInfo.zftype}');--%>
     }
     function doUploadY() {
-        var formData = new FormData($( "#editForm" )[0]);
+        var formData = new FormData();
+        formData.append('file', $('#file1')[0].files[0]);
         $.ajax({
             url: '../cloudCompany/upload',
             type: 'POST',
@@ -233,7 +240,7 @@
             contentType: false,
             processData: false,
             success: function (returndata) {
-                var yc=   '<img width="200px" height="200px" src="${pageContext.request.contextPath}/resources/'+returndata+'"/>';
+                var yc=   '<img width="200px" height="200px" src="'+returndata+'"/>';
                 $("#apy").html(yc);
                 $("#bslicense").val(returndata);
             },
@@ -243,7 +250,8 @@
         });
     }
     function doUpload() {
-        var formData = new FormData($( "#editForm" )[0]);
+        var formData = new FormData();
+        formData.append('file', $('#file2')[0].files[0]);
         $.ajax({
             url: '../cloudCompany/upload',
             type: 'POST',
@@ -253,7 +261,7 @@
             contentType: false,
             processData: false,
             success: function (ret) {
-                var c=   '<img width="200px" height="200px" src="${pageContext.request.contextPath}/resources/'+ret+'"/>';
+                var c=   '<img width="200px" height="200px" src="'+ret+'"/>';
                 $("#ap").html(c);
                 $("#aptitude").val(ret);
             },
