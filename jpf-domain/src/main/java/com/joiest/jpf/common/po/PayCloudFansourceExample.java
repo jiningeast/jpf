@@ -565,6 +565,136 @@ public class PayCloudFansourceExample {
             return (Criteria) this;
         }
 
+        public Criteria andRemarkIsNull() {
+            addCriterion("remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIsNotNull() {
+            addCriterion("remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkEqualTo(String value) {
+            addCriterion("remark =", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotEqualTo(String value) {
+            addCriterion("remark <>", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThan(String value) {
+            addCriterion("remark >", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("remark >=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThan(String value) {
+            addCriterion("remark <", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThanOrEqualTo(String value) {
+            addCriterion("remark <=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLike(String value) {
+            addCriterion("remark like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotLike(String value) {
+            addCriterion("remark not like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIn(List<String> values) {
+            addCriterion("remark in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotIn(List<String> values) {
+            addCriterion("remark not in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkBetween(String value1, String value2) {
+            addCriterion("remark between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotBetween(String value1, String value2) {
+            addCriterion("remark not between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidIsNull() {
+            addCriterion("remarkuid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidIsNotNull() {
+            addCriterion("remarkuid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidEqualTo(Long value) {
+            addCriterion("remarkuid =", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidNotEqualTo(Long value) {
+            addCriterion("remarkuid <>", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidGreaterThan(Long value) {
+            addCriterion("remarkuid >", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidGreaterThanOrEqualTo(Long value) {
+            addCriterion("remarkuid >=", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidLessThan(Long value) {
+            addCriterion("remarkuid <", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidLessThanOrEqualTo(Long value) {
+            addCriterion("remarkuid <=", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidIn(List<Long> values) {
+            addCriterion("remarkuid in", values, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidNotIn(List<Long> values) {
+            addCriterion("remarkuid not in", values, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidBetween(Long value1, Long value2) {
+            addCriterion("remarkuid between", value1, value2, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidNotBetween(Long value1, Long value2) {
+            addCriterion("remarkuid not between", value1, value2, "remarkuid");
+            return (Criteria) this;
+        }
+
         public Criteria andCatLikeInsensitive(String value) {
             addCriterion("upper(cat) like", value.toUpperCase(), "cat");
             return (Criteria) this;
@@ -577,6 +707,11 @@ public class PayCloudFansourceExample {
 
         public Criteria andNameLikeInsensitive(String value) {
             addCriterion("upper(name) like", value.toUpperCase(), "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLikeInsensitive(String value) {
+            addCriterion("upper(remark) like", value.toUpperCase(), "remark");
             return (Criteria) this;
         }
     }

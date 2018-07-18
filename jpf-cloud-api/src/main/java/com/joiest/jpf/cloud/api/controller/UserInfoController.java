@@ -3,7 +3,6 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.cloud.api.util.IdentAuth;
 import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
-import com.joiest.jpf.common.po.PayCloudCompactStaff;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
@@ -325,6 +324,14 @@ public class UserInfoController {
         //身份证信息
         CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(String.valueOf(cloudCompanyStaffInfo.getUcardid()));
         Map<String,String> uinfo = new HashMap<String, String>();
+
+        if(cloudIdcardInfo == null){
+
+            uinfo.put("type","0");//身份证上传类型
+        }else{
+
+            uinfo.put("type",cloudIdcardInfo.getType());//身份证上传类型
+        }
         if(cloudIdcardInfo == null){
 
             uinfo.put("faceCardLocal",null);
@@ -647,10 +654,11 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
         }
 
+        Map<String,String> userInfo = new HashMap<>();
+
         String baseRe = Base64CustomUtils.base64Encoder(cloudCompactStaffInterfaceCustomInfo.getContent());
         baseRe = baseRe.replaceAll("\r\n","");
 
-        Map<String,String> userInfo = new HashMap<>();
 
         userInfo.put("name",cloudDfMoneyInterfaceInfo.getBanknickname());//名称
         userInfo.put("idCard",cloudCompanyStaffInfo.getIdcard());//身份证号

@@ -9,19 +9,23 @@ import com.joiest.jpf.common.util.SHA1;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.CloudEmployeeInfo;
 import com.joiest.jpf.entity.CloudFanSourceInfo;
+import com.joiest.jpf.entity.PcaInfo;
 import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
 import com.joiest.jpf.facade.CloudFanSourceServiceFacade;
+import com.joiest.jpf.facade.PcaServiceFacade;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -38,6 +42,9 @@ public class CompanyInfoController {
 
     @Autowired
     private CloudFanSourceServiceFacade cloudFanSourceServiceFacade;
+
+    @Autowired
+    private PcaServiceFacade pcaServiceFacade;
 
     private String uid;
     private CloudEmployeeInfo companyInfo;
@@ -76,7 +83,7 @@ public class CompanyInfoController {
     /**
      * 公司登陆
      * */
-    @RequestMapping("/companyLogin")
+    @RequestMapping(value = "/companyLogin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String companyLogin(HttpServletRequest request){
 
@@ -117,8 +124,7 @@ public class CompanyInfoController {
     @ResponseBody
     public String companyLoginOut(HttpServletRequest request){
 
-        String token = request.getParameter("token");
-
+        String token = request.getHeader("token");
         String UID =  redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_EMPLOY_LOGIN_KEY") + token);
         if ( StringUtils.isBlank(token) )
         {
@@ -135,14 +141,20 @@ public class CompanyInfoController {
     @ResponseBody
     public String companyUpPwd(HttpServletRequest request){
 
-        String token = request.getParameter("token");
-        String originPwd = request.getParameter("originPwd");
-        String nowPwd = request.getParameter("nowPwd");
+        String token = request.getHeader("token");
+
+        String originPwd = request.getParameter("originPwd");//原密码
+        String nowPwd = request.getParameter("nowPwd");      //现密码
+        String nowComPwd = request.getParameter("nowComPwd");//确认密码
 
         nowPwd = Base64CustomUtils.base64Decoder(nowPwd);
+        nowComPwd = Base64CustomUtils.base64Decoder(nowComPwd);
         originPwd = Base64CustomUtils.base64Decoder(originPwd);
 
+        if(!nowComPwd.equals(nowPwd)){
 
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "密码与确认密码不一致", null);
+        }
         Map<String,String> loginResultMap = companyIsLogin(token);
         if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
         {
@@ -178,6 +190,27 @@ public class CompanyInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "原密码有误", null);
         }
     }
+    /*
+    * 获取地区
+    * */
+    @RequestMapping("regionInfo")
+    @ResponseBody
+    public String regionInfo(HttpServletRequest request){
+
+        String pid = request.getParameter("pid");
+
+        pid = Base64CustomUtils.base64Decoder(pid);
+
+        if(StringUtils.isBlank(pid)){
+            pid = "0";
+        }
+        List<PcaInfo > pcaInfo =  pcaServiceFacade.getPcasInner(pid);
+        if(pcaInfo.isEmpty()){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到数据", null);
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "SUCCESS", pcaInfo);
+    }
 
     /**
      * 操作来源
@@ -206,7 +239,7 @@ public class CompanyInfoController {
         CloudFanSourceInfo cloudFanSourceInfo = cloudFanSourceServiceFacade.getFanSourceByMobile(mobile);
         if(cloudFanSourceInfo != null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "您已录入，请勿重复操作", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您的信息我们已经收到，请勿重复操作", null);
         }
         Map<String,String> map = new HashMap<>();
 
@@ -219,10 +252,10 @@ public class CompanyInfoController {
 
         if(res>0){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "SUCCESS", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "您的信息我们已经收到,我们将尽快与您联系", null);
         }else{
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "ERROR", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息错误，请重新填写", null);
         }
     }
 

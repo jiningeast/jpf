@@ -86,7 +86,7 @@ public class CloudIdcardInfo {
     /**
      * 1 OCR识别，2手动录入
      */
-    private Byte type;
+    private String type;
 
     /**
      *
@@ -228,12 +228,12 @@ public class CloudIdcardInfo {
         this.backimgserver = backimgserver == null ? null : backimgserver.trim();
     }
 
-    public Byte getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Byte type) {
-        this.type = type;
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
     }
 
     public Date getAddtime() {
@@ -251,5 +251,6 @@ public class CloudIdcardInfo {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
 
 }
