@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,7 +77,7 @@ public class CompanyInfoController {
     /**
      * 公司登陆
      * */
-    @RequestMapping("/companyLogin")
+    @RequestMapping(value = "/companyLogin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String companyLogin(HttpServletRequest request){
 
@@ -136,13 +137,18 @@ public class CompanyInfoController {
     public String companyUpPwd(HttpServletRequest request){
 
         String token = request.getParameter("token");
-        String originPwd = request.getParameter("originPwd");
-        String nowPwd = request.getParameter("nowPwd");
+        String originPwd = request.getParameter("originPwd");//原密码
+        String nowPwd = request.getParameter("nowPwd");      //现密码
+        String nowComPwd = request.getParameter("nowComPwd");//确认密码
 
         nowPwd = Base64CustomUtils.base64Decoder(nowPwd);
+        nowComPwd = Base64CustomUtils.base64Decoder(nowComPwd);
         originPwd = Base64CustomUtils.base64Decoder(originPwd);
 
+        if(!nowComPwd.equals(nowPwd)){
 
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "密码与确认密码不一致", null);
+        }
         Map<String,String> loginResultMap = companyIsLogin(token);
         if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
         {
