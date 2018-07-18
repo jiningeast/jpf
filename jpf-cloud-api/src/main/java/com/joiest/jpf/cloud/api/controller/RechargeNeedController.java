@@ -11,13 +11,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Random;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 需求中心
@@ -89,6 +89,17 @@ public class RechargeNeedController {
         logger.debug("token={},agentNo={},id={},fid={}",request.getHeader("token"),agentNo,id,fid);
         CloudEmployeeInfo cloudEmployeeInfo = cloudEmployeeServiceFacade.companyIsLogin(request.getHeader("token"));
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), cloudRechargeServiceFacade.rechargeNeedAffirm(cloudEmployeeInfo.getMerchNo(),agentNo,id,fid));
+    }
+
+    @ModelAttribute
+    public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
+    {
+        // 跨域
+        String originHeader = httpRequest.getHeader("Origin");
+        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
+        response.setHeader("Access-Control-Allow-Method", "POST");
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
+
     }
 
 }

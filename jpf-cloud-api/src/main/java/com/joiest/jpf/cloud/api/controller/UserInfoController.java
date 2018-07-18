@@ -617,7 +617,7 @@ public class UserInfoController {
     /**
      * 获区单个合同信息
      * */
-    @RequestMapping(value = "/compactSigle", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/compactSigle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String compactSigle(HttpServletRequest request) {
 
@@ -654,11 +654,22 @@ public class UserInfoController {
 
         Map<String,String> userInfo = new HashMap<>();
 
-        String jsonContent = JsonUtils.toJson(cloudCompactStaffInterfaceCustomInfo.getContent().replaceAll("\r","").replaceAll("\n","").replaceAll("\t","")).replaceAll("\\\\","");
+        System.out.println("内容获取：+++"+cloudCompactStaffInterfaceCustomInfo.getContent());
+        String baseRe = Base64CustomUtils.base64Encoder(cloudCompactStaffInterfaceCustomInfo.getContent());
 
+        System.out.println("内容base64：+++"+baseRe);
+
+        baseRe = baseRe.replaceAll("\r\n","");
+        System.out.println("内容去掉换行：+++"+baseRe);
+
+
+
+
+        String jsonContent = JsonUtils.toJson(cloudCompactStaffInterfaceCustomInfo.getContent().replaceAll("\r","").replaceAll("\n","").replaceAll("\t","")).replaceAll("\\\\","");
+ /*
         String baseRe = Base64CustomUtils.base64Encoder(jsonContent);
         baseRe = baseRe.replaceAll("\r\n","");
-
+*/
 
         userInfo.put("name",cloudDfMoneyInterfaceInfo.getBanknickname());//名称
         userInfo.put("idCard",cloudCompanyStaffInfo.getIdcard());//身份证号
@@ -668,7 +679,8 @@ public class UserInfoController {
         userInfo.put("bankno",cloudDfMoneyInterfaceInfo.getBankno());//银行卡号
         userInfo.put("compact_no",cloudCompactStaffInterfaceCustomInfo.getCompactNo());//自由职业者合同编号
         userInfo.put("pactno",cloudCompactStaffInterfaceCustomInfo.getPactno());//合同编号
-        userInfo.put("content",baseRe);//合同内容
+        //userInfo.put("content",baseRe);//合同内容
+        userInfo.put("content",jsonContent);//合同内容
         userInfo.put("compact_active",cloudCompactStaffInterfaceCustomInfo.getCompactActive().toString());//用户状态
         userInfo.put("ticketContent",cloudCompactStaffInterfaceCustomInfo.getTicketcontent());//服务内容
         userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
