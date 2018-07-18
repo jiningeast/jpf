@@ -24,4 +24,9 @@ public interface MerTypeServiceFacade {
 
     public List<MerchantTypeTree> getMerchantTypeTree(int catId);
 
+    /**
+     * 根据catpath获取获取三级信息
+     */
+    public List<MerchantTypeInfo> getTypesByCatpath(String catpath);
+
 }

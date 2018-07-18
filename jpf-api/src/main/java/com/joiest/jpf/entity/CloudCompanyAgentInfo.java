@@ -34,7 +34,7 @@ public class CloudCompanyAgentInfo {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getAgentNo() {
@@ -42,7 +42,7 @@ public class CloudCompanyAgentInfo {
     }
 
     public void setAgentNo(String agentNo) {
-        this.agentNo = agentNo == null ? null : agentNo.trim();
+        this.agentNo = agentNo;
     }
 
     public BigDecimal getAgentRate() {

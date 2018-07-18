@@ -103,4 +103,18 @@ public class MerTypeServiceFacadeImpl implements MerTypeServiceFacade {
         return merchantTypeTrees;
     }
 
+    /**
+     * 根据catpath获取获取三级信息
+     */
+    @Override
+    public List<MerchantTypeInfo> getTypesByCatpath(String catpath){
+        List<MerchantTypeInfo> list = new ArrayList<>();
+
+        String[] catids = StringUtils.split(catpath,':');
+        list.add(getOneTypeByCatid(catids[0]));
+        list.add(getOneTypeByCatid(catids[1]));
+        list.add(getOneTypeByCatid(catids[2]));
+
+        return list;
+    }
 }

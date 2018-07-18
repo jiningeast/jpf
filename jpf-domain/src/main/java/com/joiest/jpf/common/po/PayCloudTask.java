@@ -71,6 +71,11 @@ public class PayCloudTask implements Serializable {
     private String filePath;
 
     /**
+     * 上传excel到阿里云oss的路径
+     */
+    private String ossPath;
+
+    /**
      * 处理状态 0=未处理 1=处理中 2=完成 3=失败
      */
     private Byte status;
@@ -196,6 +201,14 @@ public class PayCloudTask implements Serializable {
         this.filePath = filePath == null ? null : filePath.trim();
     }
 
+    public String getOssPath() {
+        return ossPath;
+    }
+
+    public void setOssPath(String ossPath) {
+        this.ossPath = ossPath == null ? null : ossPath.trim();
+    }
+
     public Byte getStatus() {
         return status;
     }
@@ -250,6 +263,7 @@ public class PayCloudTask implements Serializable {
         sb.append(", money=").append(money);
         sb.append(", contractNo=").append(contractNo);
         sb.append(", filePath=").append(filePath);
+        sb.append(", ossPath=").append(ossPath);
         sb.append(", status=").append(status);
         sb.append(", isLock=").append(isLock);
         sb.append(", created=").append(created);
@@ -287,6 +301,7 @@ public class PayCloudTask implements Serializable {
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getContractNo() == null ? other.getContractNo() == null : this.getContractNo().equals(other.getContractNo()))
             && (this.getFilePath() == null ? other.getFilePath() == null : this.getFilePath().equals(other.getFilePath()))
+            && (this.getOssPath() == null ? other.getOssPath() == null : this.getOssPath().equals(other.getOssPath()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getIsLock() == null ? other.getIsLock() == null : this.getIsLock().equals(other.getIsLock()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
@@ -313,6 +328,7 @@ public class PayCloudTask implements Serializable {
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
         result = prime * result + ((getContractNo() == null) ? 0 : getContractNo().hashCode());
         result = prime * result + ((getFilePath() == null) ? 0 : getFilePath().hashCode());
+        result = prime * result + ((getOssPath() == null) ? 0 : getOssPath().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getIsLock() == null) ? 0 : getIsLock().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());

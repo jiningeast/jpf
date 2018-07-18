@@ -75,4 +75,23 @@ public class CloudTaskServiceFacadeImpl implements CloudTaskServiceFacade {
 
         return payCloudTaskMapper.updateByPrimaryKeySelective(payCloudTask);
     }
+
+    /**
+     * 根据合同号获取任务
+     */
+    @Override
+    public CloudTaskInfo getOneTaskByBatchNo(String batchNo){
+        PayCloudTaskExample e = new PayCloudTaskExample();
+        PayCloudTaskExample.Criteria c = e.createCriteria();
+        c.andBatchnoEqualTo(batchNo);
+        List<PayCloudTask> list = payCloudTaskMapper.selectByExample(e);
+
+        CloudTaskInfo cloudTaskInfo = new CloudTaskInfo();
+        if ( !list.isEmpty() ){
+            BeanCopier beanCopier = BeanCopier.create(PayCloudTask.class, CloudTaskInfo.class, false);
+            beanCopier.copy(list.get(0), cloudTaskInfo, null);
+        }
+
+        return cloudTaskInfo;
+    }
 }

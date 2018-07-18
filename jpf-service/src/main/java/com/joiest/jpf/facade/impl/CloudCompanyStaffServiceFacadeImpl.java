@@ -86,12 +86,13 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
     }
 
     @Override
-    public int addStaff(CloudCompanyStaffInfo cloudCompanyStaffInfo){
+    public String addStaff(CloudCompanyStaffInfo cloudCompanyStaffInfo){
         PayCloudCompanyStaff payCloudCompanyStaff = new PayCloudCompanyStaff();
         BeanCopier beanCopier = BeanCopier.create( CloudCompanyStaffInfo.class, PayCloudCompanyStaff.class, false);
         beanCopier.copy(cloudCompanyStaffInfo, payCloudCompanyStaff, null);
 
-        return payCloudCompanyStaffCustomMapper.insertSelective(payCloudCompanyStaff);
+        payCloudCompanyStaffCustomMapper.insertSelective(payCloudCompanyStaff);
+        return payCloudCompanyStaff.getId();
     }
 
     /**
