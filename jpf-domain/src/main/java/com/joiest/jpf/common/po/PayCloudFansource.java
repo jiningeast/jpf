@@ -10,29 +10,39 @@ public class PayCloudFansource implements Serializable {
     private Long id;
 
     /**
-     * 
+     * 地区ID
      */
     private Integer catid;
 
     /**
-     * 
+     * 地区
      */
     private String cat;
 
     /**
-     * 
+     * 手机号
      */
     private String mobile;
 
     /**
-     * 
+     * 姓名
      */
     private String name;
 
     /**
-     * 
+     * 创建时间
      */
     private Date created;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 备注人ID
+     */
+    private Long remarkuid;
 
     private static final long serialVersionUID = 1L;
 
@@ -84,6 +94,22 @@ public class PayCloudFansource implements Serializable {
         this.created = created;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Long getRemarkuid() {
+        return remarkuid;
+    }
+
+    public void setRemarkuid(Long remarkuid) {
+        this.remarkuid = remarkuid;
+    }
+
     /**
      *
      */
@@ -99,6 +125,8 @@ public class PayCloudFansource implements Serializable {
         sb.append(", mobile=").append(mobile);
         sb.append(", name=").append(name);
         sb.append(", created=").append(created);
+        sb.append(", remark=").append(remark);
+        sb.append(", remarkuid=").append(remarkuid);
         sb.append("]");
         return sb.toString();
     }
@@ -124,7 +152,9 @@ public class PayCloudFansource implements Serializable {
             && (this.getCat() == null ? other.getCat() == null : this.getCat().equals(other.getCat()))
             && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()));
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+            && (this.getRemarkuid() == null ? other.getRemarkuid() == null : this.getRemarkuid().equals(other.getRemarkuid()));
     }
 
     /**
@@ -140,6 +170,8 @@ public class PayCloudFansource implements Serializable {
         result = prime * result + ((getMobile() == null) ? 0 : getMobile().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getRemarkuid() == null) ? 0 : getRemarkuid().hashCode());
         return result;
     }
 }

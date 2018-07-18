@@ -647,10 +647,21 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
         }
 
+        Map<String,String> userInfo = new HashMap<>();
+
+        //用户身份证信息
+        CloudIdcardInfo cloudIdcardInfo = cloudIdcardServiceFacade.getCloudIdcardById(cloudCompanyStaffInfo.getUcardid());
+        if(cloudIdcardInfo == null){
+
+            userInfo.put("type",null);//身份证上传类型
+        }else{
+
+            userInfo.put("type",cloudDfMoneyInterfaceInfo.getCommoney().toString());//身份证上传类型
+        }
+
         String baseRe = Base64CustomUtils.base64Encoder(cloudCompactStaffInterfaceCustomInfo.getContent());
         baseRe = baseRe.replaceAll("\r\n","");
 
-        Map<String,String> userInfo = new HashMap<>();
 
         userInfo.put("name",cloudDfMoneyInterfaceInfo.getBanknickname());//名称
         userInfo.put("idCard",cloudCompanyStaffInfo.getIdcard());//身份证号

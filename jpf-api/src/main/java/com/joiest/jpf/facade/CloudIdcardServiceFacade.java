@@ -8,7 +8,7 @@ public interface CloudIdcardServiceFacade{
     /*
      * 新增退单记录
      * */
-    public int addCloudIdcard(JSONObject faceResult, JSONObject backResult,Byte type);
+    public int addCloudIdcard(JSONObject faceResult, JSONObject backResult,String type);
 
     /*
      * 查询身份证信息通过身份证号
