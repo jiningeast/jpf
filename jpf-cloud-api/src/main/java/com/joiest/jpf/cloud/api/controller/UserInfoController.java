@@ -664,9 +664,9 @@ public class UserInfoController {
 
 
 
-       /*
-        String jsonContent = JsonUtils.toJson(cloudCompactStaffInterfaceCustomInfo.getContent().replaceAll("\r","").replaceAll("\n","").replaceAll("\t","")).replaceAll("\\\\","");
 
+        String jsonContent = JsonUtils.toJson(cloudCompactStaffInterfaceCustomInfo.getContent().replaceAll("\r","").replaceAll("\n","").replaceAll("\t","")).replaceAll("\\\\","");
+ /*
         String baseRe = Base64CustomUtils.base64Encoder(jsonContent);
         baseRe = baseRe.replaceAll("\r\n","");
 */
@@ -679,7 +679,8 @@ public class UserInfoController {
         userInfo.put("bankno",cloudDfMoneyInterfaceInfo.getBankno());//银行卡号
         userInfo.put("compact_no",cloudCompactStaffInterfaceCustomInfo.getCompactNo());//自由职业者合同编号
         userInfo.put("pactno",cloudCompactStaffInterfaceCustomInfo.getPactno());//合同编号
-        userInfo.put("content",baseRe);//合同内容
+        //userInfo.put("content",baseRe);//合同内容
+        userInfo.put("content",jsonContent);//合同内容
         userInfo.put("compact_active",cloudCompactStaffInterfaceCustomInfo.getCompactActive().toString());//用户状态
         userInfo.put("ticketContent",cloudCompactStaffInterfaceCustomInfo.getTicketcontent());//服务内容
         userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
