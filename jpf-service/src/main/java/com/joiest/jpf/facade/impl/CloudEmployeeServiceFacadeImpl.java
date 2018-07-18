@@ -28,6 +28,25 @@ public class CloudEmployeeServiceFacadeImpl implements CloudEmployeeServiceFacad
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
 
+    public CloudEmployeeInfo getEmployeeInfoByMerchNo(String merchNo){
+        PayCloudEmployeeExample example= new PayCloudEmployeeExample();
+        PayCloudEmployeeExample.Criteria c = example.createCriteria();
+        c.andMerchNoEqualTo(merchNo);
+        List<PayCloudEmployee> employeeInfoList = payCloudEmployeeMapper.selectByExample(example);
+        if(employeeInfoList.size() != 1 || employeeInfoList == null){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "无效商户号");
+        }
+
+        CloudEmployeeInfo cloudEmployeeRep = new CloudEmployeeInfo();
+        for (PayCloudEmployee one : employeeInfoList)
+        {
+            BeanCopier beanCopier = BeanCopier.create(PayCloudEmployee.class, CloudEmployeeInfo.class, false);
+            beanCopier.copy(one, cloudEmployeeRep, null);
+        }
+
+        return cloudEmployeeRep;
+    }
+
     /**
      * 获取公司登录信息通过邮箱
      **/
