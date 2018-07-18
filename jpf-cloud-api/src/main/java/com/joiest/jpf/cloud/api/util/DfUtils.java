@@ -4,6 +4,7 @@ import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ public class DfUtils {
 
     private String DFPAY_URL = "http://vip2.7shengqian.com/trade/api/";
     private String SERVICE = "applyAgentPay";
+    private String SELECT_SERVICE = "queryAgentPay";
     private String signType = "MD5";
     private String inputCharset = "UTF-8";
     private String sysMerchNo = "152018052300555";
@@ -55,5 +57,34 @@ public class DfUtils {
         LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName, true);
 
         return resultJosn;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    public JSONObject queryAgentPay(Map<String,String> requestMap){
+
+        JSONObject result = new JSONObject();
+
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(requestMap);
+
+        String sortStr = ToolUtils.mapToUrl (treeMap);
+        String signStr = Md5Encrypt.md5(sortStr + this.DF_KEY);
+        treeMap.put("sign", signStr);
+        treeMap.put("signType", this.signType);
+
+        String requestParam = ToolUtils.mapToUrl(treeMap);
+        String requestUrl = this.DFPAY_URL + this.SERVICE;
+
+        return result;
     }
 }

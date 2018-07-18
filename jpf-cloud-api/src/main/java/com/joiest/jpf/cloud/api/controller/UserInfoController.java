@@ -334,11 +334,11 @@ public class UserInfoController {
         }
         if(cloudIdcardInfo == null){
 
-            uinfo.put("faceCardLocal",null);
-            uinfo.put("faceCardServer",null);
+            uinfo.put("faceCardLocal","");
+            uinfo.put("faceCardServer","");
 
-            uinfo.put("backCardLocal",null);
-            uinfo.put("backCardServer",null);
+            uinfo.put("backCardLocal","");
+            uinfo.put("backCardServer","");
             //return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息不存在",null);
         }else{
 
@@ -675,12 +675,13 @@ public class UserInfoController {
         userInfo.put("commoney",cloudDfMoneyInterfaceInfo.getCommoney().toString());//发放金额
 
         Date date = new Date();
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy 年 MM 月 dd 日");
         SimpleDateFormat detailTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat createTime = new SimpleDateFormat("yyyy 年 MM 月 dd 日");
 
-        userInfo.put("detailTime",detailTime.toString());//详细时间
-        userInfo.put("curTime",myfmt.toString());//签约时间
-        userInfo.put("created",cloudCompanyStaffInfo.getCreated().toString());//合同创建时间
+        userInfo.put("detailTime",detailTime.format(date));//详细时间
+        userInfo.put("curTime",myfmt.format(date));//签约时间
+        userInfo.put("created",createTime.format(cloudCompanyStaffInfo.getCreated()));//合同创建时间
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }
