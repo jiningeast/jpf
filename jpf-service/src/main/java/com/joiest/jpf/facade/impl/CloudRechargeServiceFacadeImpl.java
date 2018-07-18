@@ -87,6 +87,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if ( cloudRechargeRequest.getStatus() != null  ){
             c.andStatusEqualTo(cloudRechargeRequest.getStatus());
         }
+        if ( cloudRechargeRequest.getPactno() != null ){
+            c.andPactnoEqualTo(cloudRechargeRequest.getPactno());
+        }
         // 添加时间搜索
         Date addtimeStart = new Date();
         if ( StringUtils.isNotBlank(cloudRechargeRequest.getAddtimeStart()) ){

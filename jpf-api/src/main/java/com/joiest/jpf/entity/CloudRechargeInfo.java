@@ -120,6 +120,8 @@ public class CloudRechargeInfo {
 
     private String needid;
 
+    private String needcatpath;
+
     private Date pacttime;
 
     public String getId() {
@@ -330,4 +332,11 @@ public class CloudRechargeInfo {
         this.needid = needid == null ? null : needid.trim();
     }
 
+    public String getNeedcatpath() {
+        return needcatpath;
+    }
+
+    public void setNeedcatpath(String needcatpath) {
+        this.needcatpath = needcatpath;
+    }
 }

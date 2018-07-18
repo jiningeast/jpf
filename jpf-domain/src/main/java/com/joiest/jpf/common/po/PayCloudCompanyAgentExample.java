@@ -1,6 +1,5 @@
 package com.joiest.jpf.common.po;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,22 +14,6 @@ public class PayCloudCompanyAgentExample {
     protected long pageNo;
 
     protected long pageSize;
-
-    public long getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(long pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public long getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(long pageSize) {
-        this.pageSize = pageSize;
-    }
 
     /**
      *
@@ -119,6 +102,36 @@ public class PayCloudCompanyAgentExample {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
+    }
+
+    /**
+     *
+     * @param pageNo
+     */
+    public void setPageNo(long pageNo) {
+        this.pageNo=pageNo;
+    }
+
+    /**
+     *
+     */
+    public long getPageNo() {
+        return pageNo;
+    }
+
+    /**
+     *
+     * @param pageSize
+     */
+    public void setPageSize(long pageSize) {
+        this.pageSize=pageSize;
+    }
+
+    /**
+     *
+     */
+    public long getPageSize() {
+        return pageSize;
     }
 
     protected abstract static class GeneratedCriteria {
@@ -302,52 +315,52 @@ public class PayCloudCompanyAgentExample {
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateEqualTo(BigDecimal value) {
+        public Criteria andAgentRateEqualTo(Double value) {
             addCriterion("agent_rate =", value, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateNotEqualTo(BigDecimal value) {
+        public Criteria andAgentRateNotEqualTo(Double value) {
             addCriterion("agent_rate <>", value, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateGreaterThan(BigDecimal value) {
+        public Criteria andAgentRateGreaterThan(Double value) {
             addCriterion("agent_rate >", value, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andAgentRateGreaterThanOrEqualTo(Double value) {
             addCriterion("agent_rate >=", value, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateLessThan(BigDecimal value) {
+        public Criteria andAgentRateLessThan(Double value) {
             addCriterion("agent_rate <", value, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andAgentRateLessThanOrEqualTo(Double value) {
             addCriterion("agent_rate <=", value, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateIn(List<BigDecimal> values) {
+        public Criteria andAgentRateIn(List<Double> values) {
             addCriterion("agent_rate in", values, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateNotIn(List<BigDecimal> values) {
+        public Criteria andAgentRateNotIn(List<Double> values) {
             addCriterion("agent_rate not in", values, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andAgentRateBetween(Double value1, Double value2) {
             addCriterion("agent_rate between", value1, value2, "agentRate");
             return (Criteria) this;
         }
 
-        public Criteria andAgentRateNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andAgentRateNotBetween(Double value1, Double value2) {
             addCriterion("agent_rate not between", value1, value2, "agentRate");
             return (Criteria) this;
         }
@@ -469,6 +482,11 @@ public class PayCloudCompanyAgentExample {
 
         public Criteria andUpdatedNotBetween(Date value1, Date value2) {
             addCriterion("updated not between", value1, value2, "updated");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNoLikeInsensitive(String value) {
+            addCriterion("upper(agent_no) like", value.toUpperCase(), "agentNo");
             return (Criteria) this;
         }
     }

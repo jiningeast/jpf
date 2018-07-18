@@ -77,6 +77,9 @@ public class CloudStaffBanksServiceFacadeImpl implements CloudStaffBanksServiceF
     public CloudStaffBanksInfo getStaffBankByInfo(CloudStaffBanksInfo cloudStaffBanksInfo){
         PayCloudStaffBanksExample e = new PayCloudStaffBanksExample();
         PayCloudStaffBanksExample.Criteria c = e.createCriteria();
+        if ( cloudStaffBanksInfo.getStaffid() != null ){
+            c.andStaffidEqualTo(cloudStaffBanksInfo.getStaffid());
+        }
         if ( cloudStaffBanksInfo.getBankno() != null ){
             c.andBanknoEqualTo(cloudStaffBanksInfo.getBankno());
         }
