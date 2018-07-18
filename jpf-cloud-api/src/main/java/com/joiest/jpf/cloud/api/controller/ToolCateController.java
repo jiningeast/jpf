@@ -515,7 +515,7 @@ public class ToolCateController {
         YjResponseDto yjResponseDto= new YjResponseDto();
         if(cloudIdcardInfo == null){
 
-            int idCard= cloudIdcardServiceFacade.addCloudIdcard(faceResult,backResult,new Byte(type));
+            int idCard= cloudIdcardServiceFacade.addCloudIdcard(faceResult,backResult,type);
             if(idCard > 0){
 
                 Map<String,Object> map = new HashMap<>();
