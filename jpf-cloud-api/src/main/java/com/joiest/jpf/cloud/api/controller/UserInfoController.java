@@ -510,6 +510,7 @@ public class UserInfoController {
 
                 map.put("is_active","1");
                 map.put("code",verificate);
+                map.put("ucardid",cardId);
 
                 int res = cloudCompanyStaffServiceFacade.upCloudCompanyStaffByIdcard(cloudCompanyStaffInfo.getIdcard(),map);
                 if(res>0){
