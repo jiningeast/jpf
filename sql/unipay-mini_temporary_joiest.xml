@@ -159,36 +159,79 @@
             <columnOverride column="is_lock" javaType="java.lang.Byte" jdbcType="TINYINT" />
         </table>
 
-        <!--<table tableName="pay_cloud_company_staff">
-            <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
-            <columnOverride column="uid" javaType="java.lang.String" jdbcType="BIGINT" />
-            <columnOverride column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
-            <columnOverride column="is_active" javaType="java.lang.Byte" jdbcType="TINYINT" />
-            <columnOverride column="ucardid" javaType="java.lang.String" jdbcType="INTEGER" />
-        </table>-->
-
-        <!--<table tableName="pay_cloud_df_money">
-            <columnOverride column="commoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-            <columnOverride column="payablemoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-            <columnOverride column="withholdmoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-            <columnOverride column="bankAcctAttr" javaType="java.lang.Integer" jdbcType="TINYINT" />
-            <columnOverride column="montype" javaType="java.lang.Integer" jdbcType="TINYINT" />
-            <columnOverride column="vid" javaType="java.lang.Integer" jdbcType="TINYINT" />
-            <columnOverride column="is_active" javaType="java.lang.Integer" jdbcType="TINYINT" />
-            <columnOverride column="operastate" javaType="java.lang.Integer" jdbcType="TINYINT" />
-            <columnOverride column="invostatus" javaType="java.lang.Integer" jdbcType="TINYINT" />
-            <columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
-            <columnOverride column="company_money_id" javaType="java.lang.String" jdbcType="BIGINT" />
-        </table>-->
+        <!--
+            <table tableName="pay_cloud_fansource">
+            </table>
+        -->
+        <!--
+            <table tableName="pay_cloud_employee">
+            </table>
+        -->
+        <!--
+           <table tableName="pay_cloud_idcard">
+               <columnOverride column="id" javaType="java.lang.String" jdbcType="INTEGER" />
+               <columnOverride column="type" javaType="java.lang.String" jdbcType="TINYINT" />
+           </table>
+         -->
+        <!--
+            <table tableName="pay_cloud_idenauth">
+                <columnOverride column="id" javaType="java.math.BigInteger" jdbcType="BIGINT" />
+                <columnOverride column="requestParam" javaType="java.lang.String" jdbcType="VARCHAR" />
+                <columnOverride column="responseParam" javaType="java.lang.String" jdbcType="VARCHAR" />
+                <columnOverride column="apiParam" javaType="java.lang.String" jdbcType="VARCHAR" />
+            </table>
+        -->
+        <!--
+            <table tableName="pay_cloud_bankcheck">
+               <columnOverride column="id" javaType="java.math.BigInteger" jdbcType="BIGINT" />
+               <columnOverride column="accountNo" javaType="java.lang.String" jdbcType="VARCHAR" />
+               <columnOverride column="num" javaType="java.lang.String" jdbcType="VARCHAR" />
+               <columnOverride column="mobile" javaType="java.lang.String" jdbcType="VARCHAR" />
+               <columnOverride column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+               <columnOverride column="requestParam" javaType="java.lang.String" jdbcType="VARCHAR" />
+               <columnOverride column="responseParam" javaType="java.lang.String" jdbcType="VARCHAR" />
+               <columnOverride column="apiParam" javaType="java.lang.String" jdbcType="VARCHAR" />
+           </table>
+       -->
 
         <!--
-        常规字段处理方法：
-        1.ID转字符串
-        2.tinyint长度为1转Byte
-        3.金额字段转BigDecimal
-        4.text字段转String
+            <table tableName="pay_cloud_company_staff">
+                <columnOverride column="id" javaType="java.lang.String" jdbcType="BIGINT" />
+                <columnOverride column="uid" javaType="java.lang.String" jdbcType="BIGINT" />
+                <columnOverride column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+                <columnOverride column="is_active" javaType="java.lang.Byte" jdbcType="TINYINT" />
+                <columnOverride column="ucardid" javaType="java.lang.String" jdbcType="INTEGER" />
+            </table>
+         -->
+        <!--
+            <table tableName="pay_cloud_staff_banks">
+                 <columnOverride column="id" javaType="java.math.BigInteger" jdbcType="BIGINT" />
+                 <columnOverride column="bank_active" javaType="java.lang.String" jdbcType="TINYINT" />
+                 <columnOverride column="bankAcctAttr" javaType="java.lang.String" jdbcType="TINYINT" />
+             </table>
         -->
-
+        <!--
+            <table tableName="pay_cloud_df_money">
+                <columnOverride column="commoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+                <columnOverride column="payablemoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+                <columnOverride column="withholdmoney" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+                <columnOverride column="bankAcctAttr" javaType="java.lang.Integer" jdbcType="TINYINT" />
+                <columnOverride column="montype" javaType="java.lang.Integer" jdbcType="TINYINT" />
+                <columnOverride column="vid" javaType="java.lang.Integer" jdbcType="TINYINT" />
+                <columnOverride column="is_active" javaType="java.lang.Integer" jdbcType="TINYINT" />
+                <columnOverride column="operastate" javaType="java.lang.Integer" jdbcType="TINYINT" />
+                <columnOverride column="invostatus" javaType="java.lang.Integer" jdbcType="TINYINT" />
+                <columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+                <columnOverride column="company_money_id" javaType="java.lang.String" jdbcType="BIGINT" />
+            </table>
+        -->
+        <!--
+            常规字段处理方法：
+            1.ID转字符串
+            2.tinyint长度为1转Byte
+            3.金额字段转BigDecimal
+            4.text字段转String
+        -->
 
     </context>
 </generatorConfiguration>
