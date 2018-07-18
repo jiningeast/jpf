@@ -60,6 +60,7 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
 
         staff.setIsActive(Byte.parseByte(map.get("is_active")));
         staff.setCode(map.get("code"));
+        staff.setUcardid(map.get("ucardid"));
 
         return payCloudCompanyStaffMapper.updateByExampleSelective(staff, example);
     }
