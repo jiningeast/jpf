@@ -617,7 +617,7 @@ public class UserInfoController {
     /**
      * 获区单个合同信息
      * */
-    @RequestMapping(value = "/compactSigle", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/compactSigle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String compactSigle(HttpServletRequest request) {
 
@@ -654,11 +654,17 @@ public class UserInfoController {
 
         Map<String,String> userInfo = new HashMap<>();
 
+
+        String baseRe = Base64CustomUtils.base64Encoder(cloudCompactStaffInterfaceCustomInfo.getContent());
+        baseRe = baseRe.replaceAll("\r\n","");
+
+
+       /*
         String jsonContent = JsonUtils.toJson(cloudCompactStaffInterfaceCustomInfo.getContent().replaceAll("\r","").replaceAll("\n","").replaceAll("\t","")).replaceAll("\\\\","");
 
         String baseRe = Base64CustomUtils.base64Encoder(jsonContent);
         baseRe = baseRe.replaceAll("\r\n","");
-
+*/
 
         userInfo.put("name",cloudDfMoneyInterfaceInfo.getBanknickname());//名称
         userInfo.put("idCard",cloudCompanyStaffInfo.getIdcard());//身份证号
