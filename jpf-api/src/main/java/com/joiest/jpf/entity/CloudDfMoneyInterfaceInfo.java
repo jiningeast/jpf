@@ -66,6 +66,11 @@ public class CloudDfMoneyInterfaceInfo {
     private String banknickname;
 
     /**
+     * 身份证号
+     */
+    private String idno;
+
+    /**
      * 银行预留手机号
      */
     private String bankphone;
@@ -89,6 +94,11 @@ public class CloudDfMoneyInterfaceInfo {
      * 卡类型 例如：建行 工商
      */
     private String banktype;
+
+    /**
+     * 银行编码 如：ICBC，CCB等
+     */
+    private String bankcode;
 
     /**
      * 收款人账号属性 0=PRIVATE对私,1=PUBLIC对公
@@ -151,9 +161,9 @@ public class CloudDfMoneyInterfaceInfo {
     private String orderid;
 
     /**
-     * 重新打款单号
+     * 打款单号顺序集合
      */
-    private String ordernewid;
+    private String orderids;
 
     /**
      * 应发金额
@@ -170,6 +180,16 @@ public class CloudDfMoneyInterfaceInfo {
      */
     private Integer invostatus;
 
+    /**
+     * 关联批次订单表的id
+     */
+    private String companyMoneyId;
+
+    /**
+     * 企业充值合同编号
+     */
+    private String pactno;
+
 
     //月份的记录总数
     private Integer count;
@@ -179,11 +199,6 @@ public class CloudDfMoneyInterfaceInfo {
 
     //月份
     private String datemonth;
-
-    /**
-     * 企业充值合同编号
-     */
-    private String pactno;
 
     public Long getId() {
         return id;
@@ -401,12 +416,28 @@ public class CloudDfMoneyInterfaceInfo {
         this.orderid = orderid;
     }
 
-    public String getOrdernewid() {
-        return ordernewid;
+    public String getIdno() {
+        return idno;
     }
 
-    public void setOrdernewid(String ordernewid) {
-        this.ordernewid = ordernewid;
+    public void setIdno(String idno) {
+        this.idno = idno;
+    }
+
+    public String getBankcode() {
+        return bankcode;
+    }
+
+    public void setBankcode(String bankcode) {
+        this.bankcode = bankcode;
+    }
+
+    public String getOrderids() {
+        return orderids;
+    }
+
+    public void setOrderids(String orderids) {
+        this.orderids = orderids;
     }
 
     public BigDecimal getPayablemoney() {
@@ -479,6 +510,14 @@ public class CloudDfMoneyInterfaceInfo {
 
     public void setPactno(String pactno) {
         this.pactno = pactno;
+    }
+
+    public String getCompanyMoneyId() {
+        return companyMoneyId;
+    }
+
+    public void setCompanyMoneyId(String companyMoneyId) {
+        this.companyMoneyId = companyMoneyId;
     }
 
 }

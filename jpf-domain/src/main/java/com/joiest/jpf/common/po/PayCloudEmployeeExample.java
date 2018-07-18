@@ -185,52 +185,52 @@ public class PayCloudEmployeeExample {
             return (Criteria) this;
         }
 
-        public Criteria andUidEqualTo(String value) {
+        public Criteria andUidEqualTo(Integer value) {
             addCriterion("uid =", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidNotEqualTo(String value) {
+        public Criteria andUidNotEqualTo(Integer value) {
             addCriterion("uid <>", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidGreaterThan(String value) {
+        public Criteria andUidGreaterThan(Integer value) {
             addCriterion("uid >", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidGreaterThanOrEqualTo(String value) {
+        public Criteria andUidGreaterThanOrEqualTo(Integer value) {
             addCriterion("uid >=", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidLessThan(String value) {
+        public Criteria andUidLessThan(Integer value) {
             addCriterion("uid <", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidLessThanOrEqualTo(String value) {
+        public Criteria andUidLessThanOrEqualTo(Integer value) {
             addCriterion("uid <=", value, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidIn(List<String> values) {
+        public Criteria andUidIn(List<Integer> values) {
             addCriterion("uid in", values, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidNotIn(List<String> values) {
+        public Criteria andUidNotIn(List<Integer> values) {
             addCriterion("uid not in", values, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidBetween(String value1, String value2) {
+        public Criteria andUidBetween(Integer value1, Integer value2) {
             addCriterion("uid between", value1, value2, "uid");
             return (Criteria) this;
         }
 
-        public Criteria andUidNotBetween(String value1, String value2) {
+        public Criteria andUidNotBetween(Integer value1, Integer value2) {
             addCriterion("uid not between", value1, value2, "uid");
             return (Criteria) this;
         }
@@ -655,113 +655,53 @@ public class PayCloudEmployeeExample {
             return (Criteria) this;
         }
 
-        public Criteria andRegdateEqualTo(Integer value) {
+        public Criteria andRegdateEqualTo(Date value) {
             addCriterion("regdate =", value, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateNotEqualTo(Integer value) {
+        public Criteria andRegdateNotEqualTo(Date value) {
             addCriterion("regdate <>", value, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateGreaterThan(Integer value) {
+        public Criteria andRegdateGreaterThan(Date value) {
             addCriterion("regdate >", value, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateGreaterThanOrEqualTo(Integer value) {
+        public Criteria andRegdateGreaterThanOrEqualTo(Date value) {
             addCriterion("regdate >=", value, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateLessThan(Integer value) {
+        public Criteria andRegdateLessThan(Date value) {
             addCriterion("regdate <", value, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateLessThanOrEqualTo(Integer value) {
+        public Criteria andRegdateLessThanOrEqualTo(Date value) {
             addCriterion("regdate <=", value, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateIn(List<Integer> values) {
+        public Criteria andRegdateIn(List<Date> values) {
             addCriterion("regdate in", values, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateNotIn(List<Integer> values) {
+        public Criteria andRegdateNotIn(List<Date> values) {
             addCriterion("regdate not in", values, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateBetween(Integer value1, Integer value2) {
+        public Criteria andRegdateBetween(Date value1, Date value2) {
             addCriterion("regdate between", value1, value2, "regdate");
             return (Criteria) this;
         }
 
-        public Criteria andRegdateNotBetween(Integer value1, Integer value2) {
+        public Criteria andRegdateNotBetween(Date value1, Date value2) {
             addCriterion("regdate not between", value1, value2, "regdate");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedIsNull() {
-            addCriterion("created is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedIsNotNull() {
-            addCriterion("created is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedEqualTo(Date value) {
-            addCriterion("created =", value, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedNotEqualTo(Date value) {
-            addCriterion("created <>", value, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedGreaterThan(Date value) {
-            addCriterion("created >", value, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedGreaterThanOrEqualTo(Date value) {
-            addCriterion("created >=", value, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedLessThan(Date value) {
-            addCriterion("created <", value, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedLessThanOrEqualTo(Date value) {
-            addCriterion("created <=", value, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedIn(List<Date> values) {
-            addCriterion("created in", values, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedNotIn(List<Date> values) {
-            addCriterion("created not in", values, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedBetween(Date value1, Date value2) {
-            addCriterion("created between", value1, value2, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedNotBetween(Date value1, Date value2) {
-            addCriterion("created not between", value1, value2, "created");
             return (Criteria) this;
         }
 
@@ -915,52 +855,52 @@ public class PayCloudEmployeeExample {
             return (Criteria) this;
         }
 
-        public Criteria andProvinceEqualTo(String value) {
+        public Criteria andProvinceEqualTo(Long value) {
             addCriterion("province =", value, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceNotEqualTo(String value) {
+        public Criteria andProvinceNotEqualTo(Long value) {
             addCriterion("province <>", value, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceGreaterThan(String value) {
+        public Criteria andProvinceGreaterThan(Long value) {
             addCriterion("province >", value, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceGreaterThanOrEqualTo(String value) {
+        public Criteria andProvinceGreaterThanOrEqualTo(Long value) {
             addCriterion("province >=", value, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceLessThan(String value) {
+        public Criteria andProvinceLessThan(Long value) {
             addCriterion("province <", value, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceLessThanOrEqualTo(String value) {
+        public Criteria andProvinceLessThanOrEqualTo(Long value) {
             addCriterion("province <=", value, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIn(List<String> values) {
+        public Criteria andProvinceIn(List<Long> values) {
             addCriterion("province in", values, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceNotIn(List<String> values) {
+        public Criteria andProvinceNotIn(List<Long> values) {
             addCriterion("province not in", values, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceBetween(String value1, String value2) {
+        public Criteria andProvinceBetween(Long value1, Long value2) {
             addCriterion("province between", value1, value2, "province");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceNotBetween(String value1, String value2) {
+        public Criteria andProvinceNotBetween(Long value1, Long value2) {
             addCriterion("province not between", value1, value2, "province");
             return (Criteria) this;
         }
@@ -975,52 +915,52 @@ public class PayCloudEmployeeExample {
             return (Criteria) this;
         }
 
-        public Criteria andCityEqualTo(String value) {
+        public Criteria andCityEqualTo(Long value) {
             addCriterion("city =", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityNotEqualTo(String value) {
+        public Criteria andCityNotEqualTo(Long value) {
             addCriterion("city <>", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityGreaterThan(String value) {
+        public Criteria andCityGreaterThan(Long value) {
             addCriterion("city >", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityGreaterThanOrEqualTo(String value) {
+        public Criteria andCityGreaterThanOrEqualTo(Long value) {
             addCriterion("city >=", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityLessThan(String value) {
+        public Criteria andCityLessThan(Long value) {
             addCriterion("city <", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityLessThanOrEqualTo(String value) {
+        public Criteria andCityLessThanOrEqualTo(Long value) {
             addCriterion("city <=", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityIn(List<String> values) {
+        public Criteria andCityIn(List<Long> values) {
             addCriterion("city in", values, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityNotIn(List<String> values) {
+        public Criteria andCityNotIn(List<Long> values) {
             addCriterion("city not in", values, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityBetween(String value1, String value2) {
+        public Criteria andCityBetween(Long value1, Long value2) {
             addCriterion("city between", value1, value2, "city");
             return (Criteria) this;
         }
 
-        public Criteria andCityNotBetween(String value1, String value2) {
+        public Criteria andCityNotBetween(Long value1, Long value2) {
             addCriterion("city not between", value1, value2, "city");
             return (Criteria) this;
         }
@@ -1092,6 +1032,66 @@ public class PayCloudEmployeeExample {
 
         public Criteria andAddressNotBetween(String value1, String value2) {
             addCriterion("address not between", value1, value2, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedIsNull() {
+            addCriterion("created is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedIsNotNull() {
+            addCriterion("created is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedEqualTo(Date value) {
+            addCriterion("created =", value, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedNotEqualTo(Date value) {
+            addCriterion("created <>", value, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedGreaterThan(Date value) {
+            addCriterion("created >", value, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedGreaterThanOrEqualTo(Date value) {
+            addCriterion("created >=", value, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedLessThan(Date value) {
+            addCriterion("created <", value, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedLessThanOrEqualTo(Date value) {
+            addCriterion("created <=", value, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedIn(List<Date> values) {
+            addCriterion("created in", values, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedNotIn(List<Date> values) {
+            addCriterion("created not in", values, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedBetween(Date value1, Date value2) {
+            addCriterion("created between", value1, value2, "created");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedNotBetween(Date value1, Date value2) {
+            addCriterion("created not between", value1, value2, "created");
             return (Criteria) this;
         }
 

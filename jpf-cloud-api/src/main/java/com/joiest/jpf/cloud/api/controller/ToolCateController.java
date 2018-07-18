@@ -16,15 +16,13 @@ import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import net.sf.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 
@@ -517,7 +515,7 @@ public class ToolCateController {
         YjResponseDto yjResponseDto= new YjResponseDto();
         if(cloudIdcardInfo == null){
 
-            int idCard= cloudIdcardServiceFacade.addCloudIdcard(faceResult,backResult,new Byte(type));
+            int idCard= cloudIdcardServiceFacade.addCloudIdcard(faceResult,backResult,type);
             if(idCard > 0){
 
                 Map<String,Object> map = new HashMap<>();
@@ -536,6 +534,17 @@ public class ToolCateController {
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "身份证信息上传成功",map);
         }
+    }
+
+    @ModelAttribute
+    public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
+    {
+        // 跨域
+        String originHeader = httpRequest.getHeader("Origin");
+        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
+        response.setHeader("Access-Control-Allow-Method", "POST");
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
+
     }
 
 }

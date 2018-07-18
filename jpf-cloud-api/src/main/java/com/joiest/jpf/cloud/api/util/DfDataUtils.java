@@ -28,38 +28,26 @@ public class DfDataUtils extends Thread{
 
     private CloudDfOrderInterfaceServiceFacade cloudDfOrderInterfaceServiceFacade;
 
-    volatile boolean keepRunning = true;
-
-    public DfDataUtils() {
-
-
-    }
-
+//
+    private boolean keepRunning = true;
 
     public DfDataUtils(String batchid, String dfid, List<CloudDfMoneyInterfaceInfo> list, String batchid_self) {
 
         this.batchid = batchid;
         this.dfid = dfid;
         this.list = list;
-        int flag = 0;
         this.batchid_self = batchid_self;
 
         ApplicationContext beanFactory= SpringContextUtil.getApplicationContext();
         cloudDfOrderInterfaceServiceFacade = beanFactory.getBean(CloudDfOrderInterfaceServiceFacade.class);
-        System.out.println("33333333333333333 ");
     }
 
     @Override
     public void run() {
-
         int count = 0;
-
         System.out.println("【" + getName() + "】 : 开始执行");
         while ( keepRunning )
         {
-//            MySQL mysql = new MySQL();
-//            ResultSet result = null;
-//            Statement state = mysql.MysqlOpen();
             try {
                 int res_add = 0;
                 while (keepRunning)
@@ -71,18 +59,8 @@ public class DfDataUtils extends Thread{
                         keepRunning = false;
                     }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
-//            } finally {
-//                try {
-//
-//                    result.close();
-//                    state.close();
-//                    MySQL.con.close();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
             }
             try {
                 Thread.sleep(30000);

@@ -35,13 +35,13 @@ public class CloudDfOrderInterfaceServiceFacadeImpl implements CloudDfOrderInter
             payCloudDfOrder.setRequestDfId(dfid);
             payCloudDfOrder.setApplyamt(one.getCommoney());
             payCloudDfOrder.setOrderStdPrice(one.getCommoney());
-            payCloudDfOrder.setFinacode("ICBC");    //TODO df_money 需要添加此字段
+            payCloudDfOrder.setFinacode(one.getBankcode());    //TODO df_money 需要添加此字段
             payCloudDfOrder.setPayeeacct(one.getBankno());
             payCloudDfOrder.setPayeename(one.getBanknickname());
             String payeeAcctAttr = one.getBankacctattr() == 0 ? "PRIVATE" : "PUBLIC";
             payCloudDfOrder.setPayeeacctattr(payeeAcctAttr);     //TODO  df_money 此字段为0
             payCloudDfOrder.setPhoneno(one.getBankphone());
-            payCloudDfOrder.setCertno("401702198702192515");    //TODO df_money 添加此字段
+            payCloudDfOrder.setCertno(one.getIdno());    //TODO df_money 添加此字段
             payCloudDfOrder.setCreated(new Date());
             payCloudDfOrder.setStatus(0);
 

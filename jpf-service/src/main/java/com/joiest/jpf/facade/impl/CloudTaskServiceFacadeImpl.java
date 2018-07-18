@@ -2,6 +2,7 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayCloudTask;
 import com.joiest.jpf.common.po.PayCloudTaskExample;
+import com.joiest.jpf.dao.repository.mapper.custom.PayCloudTaskCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudTaskMapper;
 import com.joiest.jpf.dto.CloudTaskRequest;
 import com.joiest.jpf.dto.CloudTaskResponse;
@@ -17,6 +18,9 @@ public class CloudTaskServiceFacadeImpl implements CloudTaskServiceFacade {
 
     @Autowired
     private PayCloudTaskMapper payCloudTaskMapper;
+
+    @Autowired
+    private PayCloudTaskCustomMapper payCloudTaskCustomMapper;
 
     @Override
     public CloudTaskResponse getTasks(CloudTaskRequest request){
@@ -42,12 +46,13 @@ public class CloudTaskServiceFacadeImpl implements CloudTaskServiceFacade {
     }
 
     @Override
-    public int insTask(CloudTaskInfo cloudTaskInfo){
+    public String insTask(CloudTaskInfo cloudTaskInfo){
         PayCloudTask payCloudTask = new PayCloudTask();
         BeanCopier beanCopier = BeanCopier.create(CloudTaskInfo.class, PayCloudTask.class, false);
         beanCopier.copy(cloudTaskInfo, payCloudTask, null);
 
-        return payCloudTaskMapper.insert(payCloudTask);
+        payCloudTaskCustomMapper.insert(payCloudTask);
+        return payCloudTask.getId();
     }
 
     @Override

@@ -46,7 +46,7 @@ public interface CloudRechargeServiceFacade {
     /**
      * 获取企业需求列表
      */
-    public GetRechargeNeedResponse getRechargeNeedInfo(GetRechargeNeedRequest request,Long pageNo,Long pageSize);
+    public GetRechargeNeedResponse getRechargeNeedInfo(GetRechargeNeedRequest request,String pageNo, String pageSize);
 
     /**
      * 发布需求接口
@@ -56,16 +56,16 @@ public interface CloudRechargeServiceFacade {
     /**
      * 删除发布需求接口 status=1时可以有此操作
      */
-    public JpfResponseDto rechargeNeedDelete(Long id,String fid);
+    public JpfResponseDto rechargeNeedDelete(String merchNo,String agentNo,String id,String fid);
 
     /**
      * 上传凭证接口 status=2时可以有此操作
      */
-    public JpfResponseDto rechargeNeedVoucher(Long id,String fid,String imgurl);
+    public JpfResponseDto rechargeNeedVoucher(String merchNo,String agentNo,String id,String fid,String imgurl);
 
     /**
      * 确认验收接口 pacttime时间到了、pactstatus=1、status=0或1或2或3时可以有此操作
      */
-    public JpfResponseDto rechargeNeedAffirm(Long id,String fid,Byte pactstatus);
+    public JpfResponseDto rechargeNeedAffirm(String merchNo,String agentNo,String id,String fid);
 
 }

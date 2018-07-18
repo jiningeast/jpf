@@ -35,4 +35,5 @@
 	<bean id="CloudDfMoneyServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfMoneyServiceFacadeImpl"></bean>
 	<bean id="CloudCompanyStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyStaffServiceFacadeImpl"></bean>
 	<bean id="CloudStaffBanksServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl"></bean>
+	<bean id="CloudInterfaceStreamServiceFacade" class="com.joiest.jpf.facade.impl.CloudInterfaceStreamServiceFacadeImpl"></bean>
 </beans>

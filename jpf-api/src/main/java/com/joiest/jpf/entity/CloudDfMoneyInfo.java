@@ -40,16 +40,6 @@ public class CloudDfMoneyInfo {
     private String username;
 
     /**
-     * 员工表用户签约状态
-     */
-    private String companyStaffIsActice;
-
-    /**
-     * 合同表合同签约状态
-     */
-    private String compactStaffCompactActive;
-
-    /**
      * 发放金额
      */
     private BigDecimal commoney;
@@ -63,6 +53,11 @@ public class CloudDfMoneyInfo {
      * 收款人
      */
     private String banknickname;
+
+    /**
+     * 身份证号
+     */
+    private String idno;
 
     /**
      * 银行预留手机号
@@ -88,6 +83,11 @@ public class CloudDfMoneyInfo {
      * 卡类型 例如：建行 工商
      */
     private String banktype;
+
+    /**
+     * 银行编码 如：ICBC，CCB等
+     */
+    private String bankcode;
 
     /**
      * 收款人账号属性 0=PRIVATE对私,1=PUBLIC对公
@@ -259,6 +259,14 @@ public class CloudDfMoneyInfo {
         this.banknickname = banknickname;
     }
 
+    public String getIdno() {
+        return idno;
+    }
+
+    public void setIdno(String idno) {
+        this.idno = idno;
+    }
+
     public String getBankphone() {
         return bankphone;
     }
@@ -297,6 +305,14 @@ public class CloudDfMoneyInfo {
 
     public void setBanktype(String banktype) {
         this.banktype = banktype;
+    }
+
+    public String getBankcode() {
+        return bankcode;
+    }
+
+    public void setBankcode(String bankcode) {
+        this.bankcode = bankcode;
     }
 
     public Integer getBankacctattr() {
@@ -441,21 +457,5 @@ public class CloudDfMoneyInfo {
 
     public void setPactno(String pactno) {
         this.pactno = pactno;
-    }
-
-    public String getCompanyStaffIsActice() {
-        return companyStaffIsActice;
-    }
-
-    public void setCompanyStaffIsActice(String companyStaffIsActice) {
-        this.companyStaffIsActice = companyStaffIsActice;
-    }
-
-    public String getCompactStaffCompactActive() {
-        return compactStaffCompactActive;
-    }
-
-    public void setCompactStaffCompactActive(String compactStaffCompactActive) {
-        this.compactStaffCompactActive = compactStaffCompactActive;
     }
 }

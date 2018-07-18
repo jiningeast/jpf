@@ -3,7 +3,6 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.cloud.api.util.IdentAuth;
 import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
-import com.joiest.jpf.common.po.PayCloudCompactStaff;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
@@ -16,11 +15,13 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -85,6 +86,17 @@ public class UserInfoController {
     {
         ValidatorUtils.validateInterface(request);
 
+        String date_requestStr = "";
+        if ( StringUtils.isNotBlank(request.getData()) )
+        {
+            date_requestStr = Base64CustomUtils.base64Decoder(request.getData());
+            String reg_date = "^([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-((0[13578]|1[02])|(0[469]|11)|(02))$";
+            Boolean regDate_IsTrue = Pattern.compile(reg_date).matcher(date_requestStr).matches();
+            if ( !regDate_IsTrue )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USERINFO_DATE_ERROR.getCode(), JpfInterfaceErrorInfo.USERINFO_DATE_ERROR.getDesc(), null);
+            }
+        }
         Map<String,String> loginResultMap = userIsLogin(request.getToken());
 
         if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
@@ -94,9 +106,9 @@ public class UserInfoController {
 
         String[] date;
         int year,month;
-        if (StringUtils.isNotBlank(request.getData()))
+        if (StringUtils.isNotBlank(date_requestStr))
         {
-            date = request.getData().split("-");
+            date = date_requestStr.split("-");
             year = Integer.parseInt(date[0]);
             month = Integer.parseInt(date[1]);
         } else
@@ -106,13 +118,13 @@ public class UserInfoController {
             month = calstar.get(Calendar.MONTH) + 1;
         }
 
-        Map<String,String> map =  ToolUtils.getMonthStartAndEnd(year,month);
+        Map<String,String> map =  ToolUtils.getMonthFirstAndEndSenond(year,month);
 
         //获取指定月份的信息
         long pageNo = 1;
         long pageSize = 15;
         int flag = 1;   //当前月份
-        if ( StringUtils.isNotBlank(request.getData()) )
+        if ( StringUtils.isNotBlank(date_requestStr) )
         {
             //指定月份
             flag = 2;
@@ -312,6 +324,14 @@ public class UserInfoController {
         //身份证信息
         CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(String.valueOf(cloudCompanyStaffInfo.getUcardid()));
         Map<String,String> uinfo = new HashMap<String, String>();
+
+        if(cloudIdcardInfo == null){
+
+            uinfo.put("type","0");//身份证上传类型
+        }else{
+
+            uinfo.put("type",cloudIdcardInfo.getType());//身份证上传类型
+        }
         if(cloudIdcardInfo == null){
 
             uinfo.put("faceCardLocal",null);
@@ -634,10 +654,11 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
         }
 
+        Map<String,String> userInfo = new HashMap<>();
+
         String baseRe = Base64CustomUtils.base64Encoder(cloudCompactStaffInterfaceCustomInfo.getContent());
         baseRe = baseRe.replaceAll("\r\n","");
 
-        Map<String,String> userInfo = new HashMap<>();
 
         userInfo.put("name",cloudDfMoneyInterfaceInfo.getBanknickname());//名称
         userInfo.put("idCard",cloudCompanyStaffInfo.getIdcard());//身份证号
@@ -653,7 +674,13 @@ public class UserInfoController {
         userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
         userInfo.put("commoney",cloudDfMoneyInterfaceInfo.getCommoney().toString());//发放金额
 
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat detailTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        userInfo.put("detailTime",detailTime.toString());//详细时间
+        userInfo.put("curTime",myfmt.toString());//签约时间
+        userInfo.put("created",cloudCompanyStaffInfo.getCreated().toString());//合同创建时间
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }
@@ -744,7 +771,17 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "合同签订失败", resData);
         }
     }
-         ////生成默认密码
-        //String  companypass= SHA1.getInstance().getMySHA1Code(passlogin);
+
+    @ModelAttribute
+    public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
+    {
+        // 跨域
+        String originHeader = httpRequest.getHeader("Origin");
+        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
+        response.setHeader("Access-Control-Allow-Method", "POST");
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
+
+    }
+
 }
 

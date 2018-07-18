@@ -25,7 +25,7 @@ public class CloudIdcardServiceFacadeImpl implements CloudIdcardServiceFacade {
      * 新增身份证信息
      * */
     @Override
-    public int addCloudIdcard(JSONObject faceResult, JSONObject backResult,Byte type){
+    public int addCloudIdcard(JSONObject faceResult, JSONObject backResult,String type){
 
         PayCloudIdcard cloudId = new PayCloudIdcard();
 

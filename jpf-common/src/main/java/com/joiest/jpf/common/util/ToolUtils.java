@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.util;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -116,6 +117,12 @@ public class ToolUtils {
         return urlEncoded;
     }
 
+    /**
+     * 获取月份第的一天 2018-07-01 2018-07-31
+     * @param year
+     * @param month
+     * @return
+     */
     public static Map<String,String> getMonthStartAndEnd(int year, int month)
     {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -137,11 +144,51 @@ public class ToolUtils {
         calstar.set(Calendar.MONTH, month);
 
         calstar.set(Calendar.DAY_OF_MONTH, 0);//最后一天
-
+        System.out.println(calstar.getTime());
         String end = fmt.format(calstar.getTime());
 
         map.put("end", end);
 
+        return map;
+    }
+
+    /**
+     * 获取月份第一天和最后一天 2018-07-01 00:00:00  2018-07-31 23:59:59
+     * @param year
+     * @param month
+     * @return
+     */
+    public static Map<String,String> getMonthFirstAndEndSenond(int year, int month)
+    {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.YEAR, year);
+
+        calendar.set(Calendar.MONTH, month-1);
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        //将小时至0
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        //将分钟至0
+        calendar.set(Calendar.MINUTE, 0);
+        //将秒至0
+        calendar.set(Calendar.SECOND,0);
+        //将毫秒至0
+        calendar.set(Calendar.MILLISECOND, 0);
+        //获得当前月第一天
+        Date sdate = calendar.getTime();
+        //将当前月加1；
+        calendar.add(Calendar.MONTH, 1);
+        //在当前月的下一月基础上减去1毫秒
+        calendar.add(Calendar.MILLISECOND, -1);
+        //获得当前月最后一天
+        Date edate = calendar.getTime();
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String start = fmt.format(sdate.getTime());
+        String end = fmt.format(edate.getTime());
+        Map<String,String> map = new HashMap<>();
+        map.put("start", start);
+        map.put("end", end);
         return map;
     }
 
@@ -235,5 +282,28 @@ public class ToolUtils {
 
         return randomInt;
     }
+    /**
+     * 获取ip地址
+     * */
+    public static String getIpAddr(HttpServletRequest request) {
+        if (request == null) return "";
 
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
 }

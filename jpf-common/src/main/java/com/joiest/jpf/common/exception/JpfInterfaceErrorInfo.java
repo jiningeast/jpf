@@ -91,11 +91,17 @@ public enum JpfInterfaceErrorInfo {
     //个人相关
     USERINFO_VALID_FAIL("20001", "个人信息校验失败"),
     USERINFO_NOT_EXIST("20002", "个人信息不存在"),
+    USERINFO_DATE_ERROR("20003","日期格式错误"),
+
+    //云帐户
+    //企业相关
+    COMPANYINFO_VALID_FAIL("40001", "企业信息校验失败"),
+    COMPANYINFO_NOT_EXIST("40002", "企业信息不存在"),
 
     //代付接口
     DF_SIGN_ERROR("30001","签名错误"),
     DF_BATCHNO_NOTEMPTY("30002","批次号不能为空"),
-    DF_INFOLIST_EMPTY("30003","打款信息为空");
+    DF_INFOLIST_EMPTY("30003","待打款信息列表为空");
 
     private final String desc;
 

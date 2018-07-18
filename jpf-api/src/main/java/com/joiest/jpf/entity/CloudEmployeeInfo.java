@@ -53,26 +53,6 @@ public class CloudEmployeeInfo{
      */
     private String cloudloginpwd;
 
-    /**
-     * 联系人姓名
-     */
-    private String linkname;
-
-    /**
-     * 省份
-     */
-    private String province;
-
-    /**
-     * 城市
-     */
-    private String city;
-
-    /**
-     * 地址详情
-     */
-    private String address;
-
     public String getUid() {
         return uid;
     }
@@ -151,37 +131,5 @@ public class CloudEmployeeInfo{
 
     public void setCloudloginpwd(String cloudloginpwd) {
         this.cloudloginpwd = cloudloginpwd == null ? null : cloudloginpwd.trim();
-    }
-
-    public String getLinkname() {
-        return linkname;
-    }
-
-    public void setLinkname(String linkname) {
-        this.linkname = linkname;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 }

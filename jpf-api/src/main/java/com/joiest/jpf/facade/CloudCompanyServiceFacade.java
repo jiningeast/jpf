@@ -24,7 +24,7 @@ public interface CloudCompanyServiceFacade {
     /**
      * 添加公司
      */
-    public JpfResponseDto addCloudCompany(GetCloudCompanyRequest request,int account) throws Exception;
+    public JpfResponseDto addCloudCompany(GetCloudCompanyRequest request,int account,String ipAddress) throws Exception;
 
 
     /**

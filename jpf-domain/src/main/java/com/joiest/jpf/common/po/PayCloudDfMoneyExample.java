@@ -836,6 +836,76 @@ public class PayCloudDfMoneyExample {
             return (Criteria) this;
         }
 
+        public Criteria andIdnoIsNull() {
+            addCriterion("idno is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoIsNotNull() {
+            addCriterion("idno is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoEqualTo(String value) {
+            addCriterion("idno =", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoNotEqualTo(String value) {
+            addCriterion("idno <>", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoGreaterThan(String value) {
+            addCriterion("idno >", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoGreaterThanOrEqualTo(String value) {
+            addCriterion("idno >=", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoLessThan(String value) {
+            addCriterion("idno <", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoLessThanOrEqualTo(String value) {
+            addCriterion("idno <=", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoLike(String value) {
+            addCriterion("idno like", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoNotLike(String value) {
+            addCriterion("idno not like", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoIn(List<String> values) {
+            addCriterion("idno in", values, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoNotIn(List<String> values) {
+            addCriterion("idno not in", values, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoBetween(String value1, String value2) {
+            addCriterion("idno between", value1, value2, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoNotBetween(String value1, String value2) {
+            addCriterion("idno not between", value1, value2, "idno");
+            return (Criteria) this;
+        }
+
         public Criteria andBankphoneIsNull() {
             addCriterion("bankphone is null");
             return (Criteria) this;
@@ -1183,6 +1253,76 @@ public class PayCloudDfMoneyExample {
 
         public Criteria andBanktypeNotBetween(String value1, String value2) {
             addCriterion("banktype not between", value1, value2, "banktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeIsNull() {
+            addCriterion("bankcode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeIsNotNull() {
+            addCriterion("bankcode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeEqualTo(String value) {
+            addCriterion("bankcode =", value, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeNotEqualTo(String value) {
+            addCriterion("bankcode <>", value, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeGreaterThan(String value) {
+            addCriterion("bankcode >", value, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeGreaterThanOrEqualTo(String value) {
+            addCriterion("bankcode >=", value, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeLessThan(String value) {
+            addCriterion("bankcode <", value, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeLessThanOrEqualTo(String value) {
+            addCriterion("bankcode <=", value, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeLike(String value) {
+            addCriterion("bankcode like", value, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeNotLike(String value) {
+            addCriterion("bankcode not like", value, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeIn(List<String> values) {
+            addCriterion("bankcode in", values, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeNotIn(List<String> values) {
+            addCriterion("bankcode not in", values, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeBetween(String value1, String value2) {
+            addCriterion("bankcode between", value1, value2, "bankcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeNotBetween(String value1, String value2) {
+            addCriterion("bankcode not between", value1, value2, "bankcode");
             return (Criteria) this;
         }
 
@@ -2366,6 +2506,11 @@ public class PayCloudDfMoneyExample {
             return (Criteria) this;
         }
 
+        public Criteria andIdnoLikeInsensitive(String value) {
+            addCriterion("upper(idno) like", value.toUpperCase(), "idno");
+            return (Criteria) this;
+        }
+
         public Criteria andBankphoneLikeInsensitive(String value) {
             addCriterion("upper(bankphone) like", value.toUpperCase(), "bankphone");
             return (Criteria) this;
@@ -2388,6 +2533,11 @@ public class PayCloudDfMoneyExample {
 
         public Criteria andBanktypeLikeInsensitive(String value) {
             addCriterion("upper(banktype) like", value.toUpperCase(), "banktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankcodeLikeInsensitive(String value) {
+            addCriterion("upper(bankcode) like", value.toUpperCase(), "bankcode");
             return (Criteria) this;
         }
 
