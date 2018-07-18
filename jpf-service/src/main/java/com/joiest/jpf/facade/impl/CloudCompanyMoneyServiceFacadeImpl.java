@@ -167,7 +167,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         GetCloudMoneyDfResponse getCloudMoneyDfResponse = new GetCloudMoneyDfResponse();
 
         if( StringUtils.isBlank(companyMoneyId) || companyMoneyId==null  ){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单号不能空");
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "参数不能为空");
         }
 
         PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();

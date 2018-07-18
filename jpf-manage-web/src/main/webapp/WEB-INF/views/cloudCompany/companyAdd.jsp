@@ -227,9 +227,9 @@
             contentType: false,
             processData: false,
             success: function (returndata) {
-                var yc=   '<img width="200px" height="200px" src="${pageContext.request.contextPath}/resources/'+returndata+'"/>';
+                var yc=   '<img width="200px" height="200px" src="'+returndata+'"/>';
                 $("#apy").html(yc);
-                $("#bslicense").val(returndata);
+                //$("#bslicense").val(returndata);
             },
             error: function (returndata) {
                 $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
@@ -247,9 +247,9 @@
             contentType: false,
             processData: false,
             success: function (ret) {
-                var c=   '<img width="200px" height="200px" src="${pageContext.request.contextPath}/resources/'+ret+'"/>';
+                var c=   '<img width="200px" height="200px" src="'+ret+'" />';
                 $("#ap").html(c);
-                $("#aptitude").val(ret);
+                //$("#aptitude").val(ret);
             },
             error: function (ret) {
                 $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');

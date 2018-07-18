@@ -50,7 +50,9 @@ public class PhotoUtil {
 			out.write(filedata.getBytes());
 			out.flush();
 			out.close();
-			return imgPath;
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			String imgsPath = "http://" + request.getServerName()+":"+request.getServerPort()+httpRequest.getContextPath()+"/resources/"+imgPath; //服务器地址
+			return imgsPath;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
