@@ -3,12 +3,14 @@ package com.joiest.jpf.manage.web.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.CloudDfMoneyRequest;
 import com.joiest.jpf.dto.CheckBanksRequest;
 import com.joiest.jpf.dto.CloudTaskRequest;
 import com.joiest.jpf.dto.CloudTaskResponse;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import com.joiest.jpf.manage.web.util.SmsUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -560,6 +562,74 @@ public class CloudTaskController {
         upCompanyMoneyInfo.setId(cloudCompanyMoneyInfo.getId());
         upCompanyMoneyInfo.setMontype((byte)1);
         int companyMoneyRes = CloudCompanyMoneyServiceFacade.updateColumn(upCompanyMoneyInfo);
+
+        //查询用户是否实名签约
+        String webName = "欣享科技";
+        String heTongUrl = "http://10.10.18.15:8080/#/Identityno";  //实名签约地址
+        String shiMingUrl = "http://10.10.18.15:8080/#/Idtesttwo";//合同签约地址
+
+        String company_money_id = cloudCompanyMoneyInfo.getId(); //关联批次订单表的id
+        CloudDfMoneyRequest dfRequest = new CloudDfMoneyRequest();
+        dfRequest.setCompanyMoneyId(company_money_id);
+        List<CloudDfMoneyInfo> dfMoneyInfoList=  cloudDfMoneyServiceFacade.getAllBySective(dfRequest);
+
+        //记录pay_cloud_interface_stream表操作记录
+        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+
+
+        Date date = new Date();
+        String dateTime = date.toString();
+
+        //循环发送短信
+        for (int i = 0; i < dfMoneyInfoList.size() ; i++) {
+
+            String banknickname = dfMoneyInfoList.get(i).getBanknickname();//收款人
+            String mobile = dfMoneyInfoList.get(i).getBankphone(); //手机号
+            Long busstaffid = dfMoneyInfoList.get(i).getBusstaffid(); //员工ID
+
+            //短信发送
+            String content = "";
+
+            if ( dfMoneyInfoList.get(i).getCompactStaffCompactActive() != "1" ){ //未签合同
+                content = "尊敬的"+banknickname+"委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
+                content += "签约合同。点击： "+heTongUrl;//短信内容
+            }
+            if ( dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" ){ //未实名签约
+                content = "尊敬的"+banknickname+"委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
+                content += "签约。点击： "+shiMingUrl;//短信内容
+            }
+            if ( dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" && dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" ){ //未实名签约
+                content = "尊敬的"+banknickname+"委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
+                content += "签约认证并完成合同签约。点击： "+shiMingUrl;//短信内容
+            }
+            if( content != "" ){
+                //发送短信
+                Map<String,String> retsult = SmsUtils.send(mobile,content);
+                String requestUrl = retsult.get("requestUrl"); //请求Url
+                String requestParam = retsult.get("requestParam");//请求参数
+                String response =  retsult.get("response");//返回结果json字符串
+
+                //存取短信接口调用记录
+                cloudInterfaceStreamInfo.setRequestUrl(requestUrl);
+                cloudInterfaceStreamInfo.setRequestContent(requestParam);
+                cloudInterfaceStreamInfo.setType((byte)2);
+                cloudInterfaceStreamInfo.setResponseContent(response);
+                cloudInterfaceStreamInfo.setCompanyMoneyId(company_money_id);
+                cloudInterfaceStreamInfo.setTaskId(taskId);
+                cloudInterfaceStreamInfo.setStaffId(busstaffid.toString());
+                cloudInterfaceStreamInfo.setAddtime(date);
+                cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+
+                //json---转换代码---
+                Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
+                //String result=responseMap.get("code");
+                //返回值10000 代表成功
+                //短信发送是否成功  之后 如何处理 ？？？？？？？？
+
+            }
+
+        }
+
 
         return new JpfResponseDto();
     }

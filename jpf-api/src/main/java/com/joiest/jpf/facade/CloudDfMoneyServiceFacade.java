@@ -2,6 +2,7 @@ package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
+import com.joiest.jpf.dto.CloudDfMoneyRequest;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
@@ -48,6 +49,11 @@ public interface CloudDfMoneyServiceFacade {
      * @return
      */
     public GetCloudMoneyDfResponse getDfDetailList(String batchId, String dfif, long pageNo, long pageSize, int flag);
+
+    //查询代付明细信息
+    public List<CloudDfMoneyInfo> getAllBySective(CloudDfMoneyRequest request);
+
+
 }
 
 

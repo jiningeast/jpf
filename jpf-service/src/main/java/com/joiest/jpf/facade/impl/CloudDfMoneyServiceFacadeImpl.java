@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.custom.PayCloudDfMoneyCustom;
 import com.joiest.jpf.common.custom.PayCloudDfMoneyInterfaceCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
@@ -8,8 +9,10 @@ import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
 import com.joiest.jpf.common.util.BigDecimalCalculateUtils;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyInterfaceCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyMapper;
+import com.joiest.jpf.dto.CloudDfMoneyRequest;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
@@ -28,6 +31,9 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
     @Autowired
     private PayCloudDfMoneyInterfaceCustomMapper payCloudDfMoneyInterfaceCustomMapper;
+
+    @Autowired
+    private PayCloudDfMoneyCustomMapper payCloudDfMoneyCustomMapper;
 
     @Override
     public GetCloudMoneyDfResponse getDfMoneyList(String start, String end, String uid, long pageNo, long pageSize, int flag)
@@ -248,6 +254,39 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         beanCopier.copy(cloudDfMoneyInfo, payCloudDfMoney, null);
 
         return payCloudDfMoneyMapper.insert(payCloudDfMoney);
+    }
+
+    @Override
+    public List<CloudDfMoneyInfo> getAllBySective(CloudDfMoneyRequest request){
+
+        PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
+        PayCloudDfMoneyExample.Criteria c = example.createCriteria();
+
+        c.andCompanyMoneyIdEqualTo(request.getCompanyMoneyId());
+
+        List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);
+        List<CloudDfMoneyInfo> infos = new ArrayList<>();
+        for (PayCloudDfMoneyCustom payCloudDfMoneyCustom : list) {
+            CloudDfMoneyInfo cloudDfMoneyInfo = new CloudDfMoneyInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoneyCustom.class, CloudDfMoneyInfo.class, false);
+            beanCopier.copy(payCloudDfMoneyCustom, cloudDfMoneyInfo, null);
+
+            infos.add(cloudDfMoneyInfo);
+        }
+        /*List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(example);
+        List<CloudDfMoneyInfo> infos = new ArrayList<>();
+        if(list.isEmpty() || list==null ){
+            return null;
+        }
+        for(PayCloudDfMoney payCloudDfMoney:list){
+            CloudDfMoneyInfo cloudDfMoneyInfo = new CloudDfMoneyInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoney.class,CloudDfMoneyInfo.class,false);
+            beanCopier.copy(payCloudDfMoney,cloudDfMoneyInfo,null);
+            infos.add(cloudDfMoneyInfo);
+        }*/
+
+        return infos;
+
     }
 
 }

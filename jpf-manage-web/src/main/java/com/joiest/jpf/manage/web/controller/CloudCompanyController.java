@@ -1,6 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.common.util.PhotoUtil;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
@@ -11,6 +12,7 @@ import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -102,13 +104,25 @@ public class CloudCompanyController {
             , HttpServletRequest request) throws UnknownHostException {
         String address = InetAddress.getLocalHost().getHostAddress().toString();
 
-        String savePre = "images/uploadFile/";
-        String cc = PhotoUtil.saveFile(file, request, savePre);
+        String savePre = ConfigUtil.getValue("ROOT_PATH");//"images/uploadFile/";
+        String allpath = PhotoUtil.saveFile(file, request, savePre);
+
+       /* String savePre = ConfigUtil.getValue("EXCEL_PATH");
+        String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);*/
+        // OSS上传excel文件
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("path",allpath);
+        String url = "http://10.10.18.16:8081/cloud-api/oss/upload";
+        String response = OkHttpUtils.postForm(url,requestMap);
+        response = StringUtils.strip(response,"\"");
+        response = StringUtils.stripEnd(response,"\"");
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String YOU = "1530514343788.jpg";
+    /*    String YOU = "1530514343788.jpg";
         // String strBackUrl = "http://" + request.getServerName()+":"+request.getServerPort()+httpRequest.getContextPath()+"/resources/"+cc; //服务器地址
-        String strBackUrl = "http://" + address + ":" + request.getServerPort() + httpRequest.getContextPath() + "/resources/" + cc;
-        return cc;
+        String strBackUrl = "http://" + address + ":" + request.getServerPort() + httpRequest.getContextPath() + "/resources/" + cc;*/
+
+        return response;
     }
 
     /**
