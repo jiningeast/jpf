@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -238,26 +237,9 @@ public class CloudTaskController {
             LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else{
-            responseMap.put("code","10000");
-            responseMap.put("info","数据检测无误");
-            responseMap.put("batchNo",Batchno);
-            responseMap.put("money",""+companyMoney);
-            responseMap.put("persons",""+count);
-            responseMap.put("contractNo",contractNo);
-            responseMap.put("data",staffInfosSuccess);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
-
-            // 上传方法1
-            /*UploadUtils uploadUtils = new UploadUtils();
-            uploadUtils.doPost(httpRequest, httpResponse);*/
-
-            // 上传方法2
-            /*UploadHandleServlet uploadHandleServlet = new UploadHandleServlet();
-            uploadHandleServlet.doPost(httpRequest,httpResponse);*/
-
+            // OSS上传excel文件
             String savePre = ConfigUtil.getValue("EXCEL_PATH");
             String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);
-            // OSS上传excel文件
             Map<String,Object> requestMap = new HashMap<>();
             requestMap.put("path",path);
             String url = ConfigUtil.getValue("OSS_URL");
@@ -271,6 +253,18 @@ public class CloudTaskController {
             cloudInterfaceStreamInfo.setResponseContent(response);
             cloudInterfaceStreamInfo.setAddtime(new Date());
             cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+
+            // 写入缓存文件
+            responseMap.put("code","10000");
+            responseMap.put("info","数据检测无误");
+            responseMap.put("batchNo",Batchno);
+            responseMap.put("money",""+companyMoney);
+            responseMap.put("persons",""+count);
+            responseMap.put("contractNo",contractNo);
+            responseMap.put("data",staffInfosSuccess);
+            responseMap.put("ossUrl",response);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+
             return uuid.toString();
         }
     }
@@ -339,6 +333,8 @@ public class CloudTaskController {
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("0001");
             jpfResponseDto.setRetMsg("该批次号已经存在，请不要重复上传");
+
+            return jpfResponseDto;
         }
 
         // 查询商户信息
