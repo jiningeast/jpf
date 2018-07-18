@@ -329,9 +329,9 @@ public class CloudTaskController {
 
         // 判断任务记录中批次号的唯一性
         CloudTaskInfo existTask = cloudTaskServiceFacade.getOneTaskByBatchNo(batchNo);
-        if ( existTask != null ){
-            JpfResponseDto jpfResponseDto = new JpfResponseDto();
-            jpfResponseDto.setRetCode("0001");
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        if ( existTask.getId() != null ){
+            jpfResponseDto.setRetCode("10001");
             jpfResponseDto.setRetMsg("该批次号已经存在，请不要重复上传");
 
             return jpfResponseDto;
@@ -368,9 +368,8 @@ public class CloudTaskController {
         cloudTaskInfo.setIsLock((byte)0);   // 任务锁定 0=未锁 1=锁定
         cloudTaskInfo.setCreated(new Date());
         String taskRes = cloudTaskServiceFacade.insTask(cloudTaskInfo);
-        JpfResponseDto jpfResponseDto = new JpfResponseDto();
         if ( Integer.parseInt(taskRes) <= 0 ){
-            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetCode("10002");
             jpfResponseDto.setRetMsg("新建任务失败");
 
             return jpfResponseDto;
@@ -404,21 +403,29 @@ public class CloudTaskController {
         Double feeMoney = totalRate * moneyDouble;
         cloudCompanyMoneyInfo.setFeemoney(new BigDecimal(feeMoney));   // 服务费金额：实发金额*服务费率
         // 增值税金额
-        Double addedValueTax = Double.parseDouble(ConfigUtil.getValue("ADDED_VALUE_TAX"));
+        Double addedValueTax = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX"));
         Double taxMoney = ( moneyDouble + feeMoney ) / ( 1 + addedValueTax ) * addedValueTax;
         cloudCompanyMoneyInfo.setTaxmoney(new BigDecimal(taxMoney));
         // 增值税附加金额
-        Double addedValueTaxAddtion = Double.parseDouble(ConfigUtil.getValue("ADDED_VALUE_TAX_ADDITION"));
+        Double addedValueTaxAddtion = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX_ADDITION"));
         Double addedValueTaxAddtionMoney = taxMoney*addedValueTaxAddtion;
         cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal(addedValueTaxAddtionMoney));
         // 毛利金额
-        Double individualTax = Double.parseDouble(ConfigUtil.getValue("INDIVIDUAL_TAX"));
+        Double individualTax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
         Double supposePay = moneyDouble / (1-individualTax);   // 应发金额
         Double profit = (moneyDouble + feeMoney) - (supposePay + taxMoney + addedValueTaxAddtionMoney);
         cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit));      // 毛利金额
+        // 判断有没有已经存在的合同编号
+        CloudCompanyMoneyInfo existCompanyMoneyInfo = CloudCompanyMoneyServiceFacade.getRecByFid(contractNo);
+        if ( existCompanyMoneyInfo.getId() != null ){
+            jpfResponseDto.setRetCode("10003");
+            jpfResponseDto.setRetMsg("该合同编号已经存在，请修改后上传");
+
+            return jpfResponseDto;
+        }
         int companyMoneyRes = CloudCompanyMoneyServiceFacade.addRec(cloudCompanyMoneyInfo);
         if ( companyMoneyRes <= 0 ){
-            jpfResponseDto.setRetCode("10002");
+            jpfResponseDto.setRetCode("10004");
             jpfResponseDto.setRetMsg("新建批次订单失败");
 
             return jpfResponseDto;
@@ -470,7 +477,7 @@ public class CloudTaskController {
             searchBank.setBankphone(singlePerson.get("phone"));
             searchBank.setBankActive("1");
             CloudStaffBanksInfo existBank = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchBank);
-            if ( existBank == null ){
+            if ( existBank.getId() == null ){
                 // 插入员工银行卡信息
                 CloudStaffBanksInfo cloudStaffBanksInfo = new CloudStaffBanksInfo();
                 cloudStaffBanksInfo.setStaffid(Long.parseLong(""+staffId));
@@ -530,7 +537,9 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setOrderids("");
             // 计算应发金额（税前）
             Double tax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
-            Double beforeTaxMoney = new Double(singlePerson.get("money")) / (1-tax);
+            Double num1 = new Double(String.valueOf(singlePerson.get("money")));
+            Double num2 = new Double("1")-tax;
+            Double beforeTaxMoney = num1 / num2;
             cloudDfMoneyInfo.setPayablemoney(new BigDecimal(beforeTaxMoney));
             Double individualTaxMoney = beforeTaxMoney * tax;
             cloudDfMoneyInfo.setWithholdmoney(new BigDecimal(individualTaxMoney));
@@ -724,6 +733,7 @@ public class CloudTaskController {
 
     /**
      * 鉴权操作
+     * 返回 1=已经鉴权过 2=流水创建失败 3=鉴权失败 4=鉴权成功
      */
     public int checkBanks(CheckBanksRequest checkBanksRequest){
         // 先查询这个银行卡号和手机号是否已鉴权过
@@ -744,8 +754,8 @@ public class CloudTaskController {
         requestMap.put("dateTime",checkBanksRequest.getDateTime());
         String sign = Md5Encrypt.md5(ToolUtils.mapToUrl(requestMap) + ConfigUtil.getValue("API_SECRET")).toUpperCase();
         requestMap.put("sign",sign);
-        String requestUrl = "/toolcate/bankFourCheck";
-        String response = OkHttpUtils.postForm("/toolcate/bankFourCheck",requestMap);
+        String requestUrl = ConfigUtil.getValue("CLOUD_API")+"/toolcate/bankFourCheck";
+        String response = OkHttpUtils.postForm(requestUrl,requestMap);
         Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
 
         // 添加流水记录
@@ -763,6 +773,7 @@ public class CloudTaskController {
             logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的流水记录创建成功");
         }else{
             logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的流水记录创建失败");
+            return 2;
         }
 
         if ( responseMap.get("code").equals("10000") ){
@@ -778,8 +789,9 @@ public class CloudTaskController {
         }else {
             // 鉴权失败
             logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的鉴权失败");
+            return 3;
         }
 
-        return 2;
+        return 4;
     }
 }
