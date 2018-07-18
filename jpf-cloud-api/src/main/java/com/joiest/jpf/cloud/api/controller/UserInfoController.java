@@ -3,10 +3,7 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.cloud.api.util.IdentAuth;
 import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
-import com.joiest.jpf.common.util.AESUtils;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.common.util.ValidatorUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.dto.GetUserBlanceRequest;
 import com.joiest.jpf.entity.*;
@@ -657,7 +654,9 @@ public class UserInfoController {
 
         Map<String,String> userInfo = new HashMap<>();
 
-        String baseRe = Base64CustomUtils.base64Encoder(cloudCompactStaffInterfaceCustomInfo.getContent());
+        String jsonContent = JsonUtils.toJson(cloudCompactStaffInterfaceCustomInfo.getContent().replaceAll("\r","").replaceAll("\n","").replaceAll("\t","")).replaceAll("\\\\","");
+
+        String baseRe = Base64CustomUtils.base64Encoder(jsonContent);
         baseRe = baseRe.replaceAll("\r\n","");
 
 
