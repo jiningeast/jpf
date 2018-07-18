@@ -17,6 +17,12 @@ public interface PcaServiceFacade {
     public List<PcaInfo> getPcas(String pid);
 
     /**
+     * 获取省市区。不传之默认获取省 去掉国外数据
+     * @param pid
+     * @return
+     */
+    public List<PcaInfo> getPcasInner(String pid);
+    /**
      * 分页获取地区信息
      * @param page
      * @param pageSize
