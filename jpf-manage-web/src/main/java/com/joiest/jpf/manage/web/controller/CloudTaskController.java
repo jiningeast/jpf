@@ -3,10 +3,7 @@ package com.joiest.jpf.manage.web.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.dto.CloudDfMoneyRequest;
-import com.joiest.jpf.dto.CheckBanksRequest;
-import com.joiest.jpf.dto.CloudTaskRequest;
-import com.joiest.jpf.dto.CloudTaskResponse;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
@@ -61,7 +58,6 @@ public class CloudTaskController {
 
     @Autowired
     private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
-
 
     @Autowired
     private CloudCompanyAgentServiceFacade cloudCompanyAgentServiceFacade;
