@@ -22,6 +22,8 @@ import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudRechargeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -32,6 +34,8 @@ import java.util.*;
 
 
 public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacade {
+
+    private static final Logger logger = LogManager.getLogger(CloudRechargeServiceFacadeImpl.class);
 
     @Autowired
     private PayCloudRechargeMapper payCloudRechargeMapper;
@@ -543,12 +547,38 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     @Override
     public GetRechargeNeedResponse getRechargeNeedInfo(GetRechargeNeedRequest request,String pageNo,String pageSize) {
         //参数转换
-        Long reqId = Long.valueOf(request.getId());
-        Byte reqPayway= Byte.valueOf(request.getPayway());
-        Long reqEmployeeUid = Long.valueOf(request.getEmployeeUid());
-        Byte reqStatus = Byte.valueOf(request.getStatus());
-        Byte reqPactstatus = Byte.valueOf(request.getPactstatus());
-        List<String> statusList = request.getStatusList();
+        Long reqId = null;
+        if (StringUtils.isNotBlank(request.getId())) {
+            reqId = Long.valueOf(request.getId());
+        }
+        Byte reqPayway = null;
+        if (StringUtils.isNotBlank(request.getPayway())) {
+            reqPayway= Byte.valueOf(request.getPayway());
+        }
+        Long reqEmployeeUid = null;
+        if (StringUtils.isNotBlank(request.getEmployeeUid())) {
+            reqEmployeeUid = Long.valueOf(request.getEmployeeUid());
+        }
+        Byte reqStatus = null;
+        if (StringUtils.isNotBlank(request.getStatus())) {
+            reqStatus = Byte.valueOf(request.getStatus());
+        }
+        Byte reqPactstatus = null;
+        if (StringUtils.isNotBlank(request.getPactstatus())) {
+            reqPactstatus = Byte.valueOf(request.getPactstatus());
+        }
+        Long reqPageNo = null;
+        if (StringUtils.isNotBlank(pageNo)) {
+            reqPageNo = Long.valueOf(pageNo);
+        }
+        Long reqPageSize = null;
+        if (StringUtils.isNotBlank(pageSize)) {
+            reqPageSize = Long.valueOf(pageSize);
+        }
+        List<String> statusList = new ArrayList<>();
+        if (request.getStatusList()!=null&&!request.getStatusList().isEmpty()) {
+            statusList = request.getStatusList();
+        }
         List<Byte> reqStatusList = new ArrayList<>();
         for (String s : statusList) {
             reqStatusList.add(new Byte(s));
@@ -599,8 +629,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             exampleCriteria.andPactstatusEqualTo(reqPactstatus);
         }
         int count = payCloudRechargeMapper.countByExample(example);
-        Long reqPageNo = Long.valueOf(pageNo);
-        Long reqPageSize = Long.valueOf(pageSize);
+
         if (reqPageNo==null||reqPageNo <= 0) {
             reqPageNo = Long.valueOf(1);
         }
