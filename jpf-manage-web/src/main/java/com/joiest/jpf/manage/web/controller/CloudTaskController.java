@@ -688,15 +688,15 @@ public class CloudTaskController {
             String content = "";
 
             if ( dfMoneyInfoList.get(i).getCompactStaffCompactActive() != "1" ){ //未签合同
-                content = "尊敬的"+banknickname+"委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
+                content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
                 content += "签约合同。点击： "+heTongUrl;//短信内容
             }
             if ( dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" ){ //未实名签约
-                content = "尊敬的"+banknickname+"委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
+                content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
                 content += "签约。点击： "+shiMingUrl;//短信内容
             }
             if ( dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" && dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" ){ //未实名签约
-                content = "尊敬的"+banknickname+"委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
+                content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
                 content += "签约认证并完成合同签约。点击： "+shiMingUrl;//短信内容
             }
             if( content != "" ){

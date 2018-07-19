@@ -16,6 +16,8 @@ import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import net.sf.json.JSONObject;
+import netscape.javascript.JSObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,7 +83,7 @@ public class CloudDfMoneyController {
         String dateTime = date.toString();
         Map<String,Object> map = new HashMap<>();
         map.put("batchid",companyMoneyId);
-        map.put("dfid",ids);
+        map.put("dfid",dfIds);
         String cloudWaitpayKeycode = ManageConstants.ClOUD_WAITPAY_KEYCODE; //校验码keycode
         String requestUrl = ManageConstants.ClOUD_WAITPAY_URl; //校验码keycode
 
@@ -92,16 +94,18 @@ public class CloudDfMoneyController {
         map.put("token",cloudWaitpayKeycode);
 
         String requestParam = ToolUtils.mapToUrl(map);//请求参数
-
         String response = OkHttpUtils.postForm(requestUrl,map);
 
         //json---转换代码---
-        Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
-        if( responseMap.isEmpty() ){
+        //Map<String,Object> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, Object>>() {});
+        JSONObject responseMap = JSONObject.fromObject(response);
+        if( responseMap.isEmpty() || responseMap == null ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "代付接口异常");
         }
-        String code=responseMap.get("code");
-        if( code =="10000" ){ //代付成功
+        String code=responseMap.get("code").toString();
+
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        if( code.equals("10000") ){ //代付成功
             //记录pay_cloud_interface_stream表操作记录
             CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
             //存取短信接口调用记录
@@ -114,13 +118,17 @@ public class CloudDfMoneyController {
             cloudInterfaceStreamInfo.setStaffId("0");
             cloudInterfaceStreamInfo.setAddtime(date);
             cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+
+            //更新订单下对应的代付明细状态为：打款中
+            PayCloudDfMoney recordData = new PayCloudDfMoney();
+            recordData.setMontype(4); //更新为打款中
+
+            jpfResponseDto = cloudDfMoneyServiceFacade.updateDfRecordsByids(recordData,ids);
+        }else{
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "代付请求失败");
         }
 
-        //更新订单下对应的代付明细状态为：打款中
-        PayCloudDfMoney recordData = new PayCloudDfMoney();
-        recordData.setMontype(4); //更新为打款中
 
-        JpfResponseDto jpfResponseDto = cloudDfMoneyServiceFacade.updateDfRecordsByids(recordData,ids);
 
         return jpfResponseDto;
     }

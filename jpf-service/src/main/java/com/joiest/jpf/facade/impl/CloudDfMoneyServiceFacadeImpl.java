@@ -190,7 +190,9 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
 
         int count = payCloudDfMoneyMapper.updateByExampleSelective(record,example);
-
+        if( count >= 0 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "代付操作失败");
+        }
         return new JpfResponseDto();
     }
 
