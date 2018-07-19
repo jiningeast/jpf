@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayCloudDfOrder;
+import com.joiest.jpf.common.po.PayCloudDfOrderExample;
 import com.joiest.jpf.common.po.PayCloudDfTask;
 import com.joiest.jpf.common.po.PayCloudDfTaskExample;
 import com.joiest.jpf.common.util.ToolUtils;
@@ -62,5 +63,17 @@ public class CloudDfOrderInterfaceServiceFacadeImpl implements CloudDfOrderInter
         payCloudDfTask.setUpdated(new Date());
         int res_up = payCloudDfTaskMapper.updateByExampleSelective(payCloudDfTask, example);
         return res;
+    }
+    /**
+     *根据外来单号查询代付数据  request_orderid
+     * **/
+    public CloudDfMoneyInterfaceInfo getDfOrderByRequestOrderid(String request_orderid){
+
+        PayCloudDfOrderExample example = new PayCloudDfOrderExample();
+        PayCloudDfOrderExample.Criteria c = example.createCriteria();
+        //c.
+
+
+        return null;
     }
 }
