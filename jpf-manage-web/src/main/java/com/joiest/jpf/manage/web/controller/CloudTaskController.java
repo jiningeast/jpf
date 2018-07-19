@@ -242,7 +242,7 @@ public class CloudTaskController {
             String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);
             Map<String,Object> requestMap = new HashMap<>();
             requestMap.put("path",path);
-            String url = ConfigUtil.getValue("OSS_URL");
+            String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
             String response = OkHttpUtils.postForm(url,requestMap);
 
             // 增加==OSS接口流水==

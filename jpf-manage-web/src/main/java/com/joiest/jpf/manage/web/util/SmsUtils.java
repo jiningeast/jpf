@@ -34,10 +34,10 @@ public class SmsUtils {
 
         map.put("sign",selfSign);
 
-        String requestUrl = ConfigUtil.getValue("MESSAGE_URL")+"sendSmsApi";//请求Url
+        String requestUrl = ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi";//请求Url
         String requestParam = ToolUtils.mapToUrl(map);//请求参数
 
-        String response = OkHttpUtils.postForm(ConfigUtil.getValue("MESSAGE_URL")+"sendSmsApi",map);
+        String response = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi",map);
 
         //json---转换代码---
         Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});

@@ -68,4 +68,25 @@ public class CloudDfTaskInterfaceServiceFacadeImpl implements CloudDfTaskInterfa
 
         return response;
     }
+
+    public int updateTask(CloudDfTaskInterfaceInfo info)
+    {
+        PayCloudDfTask payCloudDfTask = new PayCloudDfTask();
+        BeanCopier beanCopier = BeanCopier.create(CloudDfTaskInterfaceInfo.class , PayCloudDfTask.class, false);
+        beanCopier.copy(info, payCloudDfTask, null);
+
+        return payCloudDfTaskMapper.updateByPrimaryKeySelective(payCloudDfTask);
+    }
+
+    public int updateTaskByExample(CloudDfTaskInterfaceInfo info)
+    {
+        PayCloudDfTask payCloudDfTask = new PayCloudDfTask();
+        PayCloudDfTaskExample example = new PayCloudDfTaskExample();
+        PayCloudDfTaskExample.Criteria c = example.createCriteria();
+        BeanCopier beanCopier = BeanCopier.create(CloudDfTaskInterfaceInfo.class, PayCloudDfTask.class, false);
+        beanCopier.copy(info, payCloudDfTask, null);
+        c.andBatchidEqualTo(info.getBatchid());
+
+        return  payCloudDfTaskMapper.updateByExampleSelective(payCloudDfTask,example);
+    }
 }
