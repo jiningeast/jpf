@@ -24,7 +24,7 @@ public interface CloudCompanyStaffServiceFacade {
     /**
      * 插入员工信息
      */
-    public int addStaff(CloudCompanyStaffInfo cloudCompanyStaffInfo);
+    public String addStaff(CloudCompanyStaffInfo cloudCompanyStaffInfo);
 
     /**
      * 根据多个字段获取员工

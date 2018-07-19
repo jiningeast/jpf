@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -102,26 +103,24 @@ public class CloudCompanyController {
     @ResponseBody
     public String upload(@RequestParam("file") MultipartFile file
             , HttpServletRequest request) throws UnknownHostException {
+
         String address = InetAddress.getLocalHost().getHostAddress().toString();
 
         String savePre = ConfigUtil.getValue("ROOT_PATH");//"images/uploadFile/";
         String allpath = PhotoUtil.saveFile(file, request, savePre);
-
        /* String savePre = ConfigUtil.getValue("EXCEL_PATH");
         String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);*/
         // OSS上传excel文件
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("path",allpath);
-        String url = "http://10.10.18.16:8081/cloud-api/oss/upload";
+//        String url = "http://10.10.18.16:8081/cloud-api/oss/upload";
+        String url = ConfigUtil.getValue("OSS_URL");
         String response = OkHttpUtils.postForm(url,requestMap);
         response = StringUtils.strip(response,"\"");
         response = StringUtils.stripEnd(response,"\"");
-
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
     /*    String YOU = "1530514343788.jpg";
         // String strBackUrl = "http://" + request.getServerName()+":"+request.getServerPort()+httpRequest.getContextPath()+"/resources/"+cc; //服务器地址
         String strBackUrl = "http://" + address + ":" + request.getServerPort() + httpRequest.getContextPath() + "/resources/" + cc;*/
-
         return response;
     }
 
@@ -161,6 +160,7 @@ public class CloudCompanyController {
     @ResponseBody
     public JpfResponseDto edit(GetCloudCompanyRequest request, HttpSession httpSession) throws Exception {
         //获取登录帐号
+
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
         int account = userInfo.getId();
         return cloudCompanyServiceFacade.editCloudCompany(request, account);

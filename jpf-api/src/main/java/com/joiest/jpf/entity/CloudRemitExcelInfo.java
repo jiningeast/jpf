@@ -63,6 +63,11 @@ public class CloudRemitExcelInfo {
      */
     private String memo;
 
+    /**
+     * 失败原因
+     */
+    private String failure;
+
     public byte getType() {
         return type;
     }
@@ -157,5 +162,13 @@ public class CloudRemitExcelInfo {
 
     public void setBatchno(String batchno) {
         this.batchno = batchno;
+    }
+
+    public String getFailure() {
+        return failure;
+    }
+
+    public void setFailure(String failure) {
+        this.failure = failure;
     }
 }

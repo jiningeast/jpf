@@ -87,6 +87,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if ( cloudRechargeRequest.getStatus() != null  ){
             c.andStatusEqualTo(cloudRechargeRequest.getStatus());
         }
+        if ( cloudRechargeRequest.getPactno() != null ){
+            c.andPactnoEqualTo(cloudRechargeRequest.getPactno());
+        }
         // 添加时间搜索
         Date addtimeStart = new Date();
         if ( StringUtils.isNotBlank(cloudRechargeRequest.getAddtimeStart()) ){
@@ -677,7 +680,6 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         BigDecimal reqMoney = new BigDecimal(request.getMoney());
         BigDecimal reqFeemoney = new BigDecimal(request.getFeemoney());
         BigDecimal reqRealmoney = new BigDecimal(request.getRealmoney());
-        Long reqEmployeeUid = StringUtils.isNotBlank(request.getEmployeeUid())?Long.valueOf(request.getEmployeeUid()):null;
         Byte reqPayway = Byte.valueOf(request.getPayway());
         //代理公司校验
         PayCloudCompanyExample payCloudCompanyExample = new PayCloudCompanyExample();
@@ -710,15 +712,6 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         record.setAgentNo(request.getAgentNo());
         record.setMerchNo(request.getMerchNo());
         record.setPayway(reqPayway);
-        if(reqEmployeeUid!=null){
-            record.setEmployeeUid(reqEmployeeUid);
-        }
-        if (StringUtils.isNotBlank(request.getLinkphone())) {
-            record.setLinkphone(request.getLinkphone());
-        }
-        if (StringUtils.isNotBlank(request.getLinkemail())) {
-            record.setLinkemail(request.getLinkemail());
-        }
         record.setStatus(EnumConstants.RechargeStatus.APPLYING.value());
         record.setMoney(reqMoney);
         record.setRealmoney(reqRealmoney);

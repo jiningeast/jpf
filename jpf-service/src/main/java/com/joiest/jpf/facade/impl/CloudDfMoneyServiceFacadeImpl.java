@@ -248,12 +248,14 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
 
     @Override
-    public int addDfMoney(CloudDfMoneyInfo cloudDfMoneyInfo){
+    public long addDfMoney(CloudDfMoneyInfo cloudDfMoneyInfo){
         PayCloudDfMoney payCloudDfMoney = new PayCloudDfMoney();
         BeanCopier beanCopier = BeanCopier.create(CloudDfMoneyInfo.class, PayCloudDfMoney.class, false);
         beanCopier.copy(cloudDfMoneyInfo, payCloudDfMoney, null);
 
-        return payCloudDfMoneyMapper.insert(payCloudDfMoney);
+        payCloudDfMoneyCustomMapper.insert(payCloudDfMoney);
+
+        return payCloudDfMoney.getId();
     }
 
     @Override

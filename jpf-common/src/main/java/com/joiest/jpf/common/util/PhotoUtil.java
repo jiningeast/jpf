@@ -29,7 +29,7 @@ public class PhotoUtil {
         File tempFile = new File(path, new Date().getTime() + String.valueOf(fileName));
 
         // TODO Auto-generated method stub
-		String pathval = request.getSession().getServletContext().getRealPath("")+"/../../src/main/webapp/resources/";
+		String pathval ="";// request.getSession().getServletContext().getRealPath("")+"/../../src/main/webapp/resources/";
 		// 根据配置文件获取服务器图片存放路径
 		String newFileName = String.valueOf( System.currentTimeMillis());
 		String saveFilePath = savePre;
@@ -51,8 +51,8 @@ public class PhotoUtil {
 			out.flush();
 			out.close();
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			String imgsPath = "http://" + request.getServerName()+":"+request.getServerPort()+httpRequest.getContextPath()+"/resources/"+imgPath; //服务器地址
-			return imgsPath;
+			 //服务器地址
+			return imgPath;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

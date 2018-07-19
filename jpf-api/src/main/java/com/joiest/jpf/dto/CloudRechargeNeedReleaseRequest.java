@@ -42,22 +42,6 @@ public class CloudRechargeNeedReleaseRequest {
     private String payway;
 
     /**
-     * 操作人ID
-     */
-    @NotEmpty(message = "employeeUid不能为空！")
-    private String employeeUid;
-
-    /**
-     * 操作人手机号
-     */
-    private String linkphone;
-
-    /**
-     * 操作人邮箱
-     */
-    private String linkemail;
-
-    /**
      * 金额
      */
     @NotEmpty(message = "money不能为空")
@@ -128,30 +112,6 @@ public class CloudRechargeNeedReleaseRequest {
         this.payway = payway;
     }
 
-    public String getEmployeeUid() {
-        return employeeUid;
-    }
-
-    public void setEmployeeUid(String employeeUid) {
-        this.employeeUid = employeeUid;
-    }
-
-    public String getLinkphone() {
-        return linkphone;
-    }
-
-    public void setLinkphone(String linkphone) {
-        this.linkphone = linkphone;
-    }
-
-    public String getLinkemail() {
-        return linkemail;
-    }
-
-    public void setLinkemail(String linkemail) {
-        this.linkemail = linkemail;
-    }
-
     public String getMoney() {
         return money;
     }
@@ -192,9 +152,6 @@ public class CloudRechargeNeedReleaseRequest {
                 ", agentNo='" + agentNo + '\'' +
                 ", merchNo='" + merchNo + '\'' +
                 ", payway='" + payway + '\'' +
-                ", employeeUid='" + employeeUid + '\'' +
-                ", linkphone='" + linkphone + '\'' +
-                ", linkemail='" + linkemail + '\'' +
                 ", money='" + money + '\'' +
                 ", realmoney='" + realmoney + '\'' +
                 ", feemoney='" + feemoney + '\'' +

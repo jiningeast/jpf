@@ -37,7 +37,7 @@ public interface CloudDfMoneyServiceFacade {
     /**
      * 插入记录
      */
-    public int addDfMoney(CloudDfMoneyInfo cloudDfMoneyInfo);
+    public long addDfMoney(CloudDfMoneyInfo cloudDfMoneyInfo);
 
     /**
      * 获取指定批次充值列表

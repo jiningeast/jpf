@@ -3,10 +3,7 @@ package com.joiest.jpf.manage.web.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.dto.CloudDfMoneyRequest;
-import com.joiest.jpf.dto.CheckBanksRequest;
-import com.joiest.jpf.dto.CloudTaskRequest;
-import com.joiest.jpf.dto.CloudTaskResponse;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
@@ -30,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -61,6 +57,27 @@ public class CloudTaskController {
 
     @Autowired
     private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
+
+    @Autowired
+    private CloudCompanyAgentServiceFacade cloudCompanyAgentServiceFacade;
+
+    @Autowired
+    private CloudCompanySalesServiceFacade cloudCompanySalesServiceFacade;
+
+    @Autowired
+    private BankCardServiceFacade bankCardServiceFacade;
+
+    @Autowired
+    private CloudCompactServiceFacade cloudCompactServiceFacade;
+
+    @Autowired
+    private CloudRechargeServiceFacade cloudRechargeServiceFacade;
+
+    @Autowired
+    private MerTypeServiceFacade merTypeServiceFacade;
+
+    @Autowired
+    private CloudCompactStaffServiceFacade cloudCompactStaffServiceFacade;
 
     private static final Logger logger = LogManager.getLogger(CloudTaskController.class);
 
@@ -220,6 +237,24 @@ public class CloudTaskController {
             LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else{
+            // OSS上传excel文件
+            String savePre = ConfigUtil.getValue("EXCEL_PATH");
+            String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("path",path);
+            String url = ConfigUtil.getValue("OSS_URL");
+            String response = OkHttpUtils.postForm(url,requestMap);
+
+            // 增加==OSS接口流水==
+            CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+            cloudInterfaceStreamInfo.setType((byte)0);
+            cloudInterfaceStreamInfo.setRequestUrl(url);
+            cloudInterfaceStreamInfo.setRequestContent(path);
+            cloudInterfaceStreamInfo.setResponseContent(response);
+            cloudInterfaceStreamInfo.setAddtime(new Date());
+            cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+
+            // 写入缓存文件
             responseMap.put("code","10000");
             responseMap.put("info","数据检测无误");
             responseMap.put("batchNo",Batchno);
@@ -227,18 +262,8 @@ public class CloudTaskController {
             responseMap.put("persons",""+count);
             responseMap.put("contractNo",contractNo);
             responseMap.put("data",staffInfosSuccess);
+            responseMap.put("ossUrl",response);
             LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
-
-            // 上传方法1
-            /*UploadUtils uploadUtils = new UploadUtils();
-            uploadUtils.doPost(httpRequest, httpResponse);*/
-
-            // 上传方法2
-            /*UploadHandleServlet uploadHandleServlet = new UploadHandleServlet();
-            uploadHandleServlet.doPost(httpRequest,httpResponse);*/
-
-            /*String savePre = "D:/tmp/";
-            String cc = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);*/
 
             return uuid.toString();
         }
@@ -293,11 +318,6 @@ public class CloudTaskController {
     @ResponseBody
     @Transactional
     public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) {
-        // OSS上传excel文件
-        /*Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("path","");
-        String url = "/oss/upload";
-        String response = OkHttpUtils.postForm(url,requestMap);*/
 
         // 读取暂存文件
         String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
@@ -307,6 +327,16 @@ public class CloudTaskController {
         String money = jsonMap.get("money");
         String contractNo = jsonMap.get("contractNo");
 
+        // 判断任务记录中批次号的唯一性
+        CloudTaskInfo existTask = cloudTaskServiceFacade.getOneTaskByBatchNo(batchNo);
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        if ( existTask.getId() != null ){
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("该批次号已经存在，请不要重复上传");
+
+            return jpfResponseDto;
+        }
+
         // 查询商户信息
         CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(companyId);
 
@@ -315,71 +345,87 @@ public class CloudTaskController {
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
         // 新建任务记录
+        String agentNo;
+        if ( httpRequest.getRequestURI().indexOf("xinxiangfuwu.com") > 0 ){
+            agentNo = ConfigUtil.getValue("XINXIANG_AGENT_NO");
+        }else{
+            agentNo = ConfigUtil.getValue("ZHENXIANG_AGENT_NO");
+        }
         CloudTaskInfo cloudTaskInfo = new CloudTaskInfo();
         cloudTaskInfo.setOpratorId(""+userInfo.getId());
         cloudTaskInfo.setOpratorName(userInfo.getUserName());
         cloudTaskInfo.setCompanyId(companyInfo.getId());
         cloudTaskInfo.setCompanyName(companyInfo.getName());
-        cloudTaskInfo.setAgentNo("CY1530862557288877");     // 待修改
+        cloudTaskInfo.setAgentNo(agentNo);
         cloudTaskInfo.setMerchNo(companyInfo.getMerchNo());
         cloudTaskInfo.setCompanyType(companyInfo.getType());
         cloudTaskInfo.setBatchno(batchNo);
-        cloudTaskInfo.setPersons(Integer.parseInt(persons));
+        cloudTaskInfo.setPersons(Integer.parseInt(persons));    // 人数总计
         cloudTaskInfo.setMoney(new BigDecimal(money));
         cloudTaskInfo.setContractNo(contractNo);
-        cloudTaskInfo.setFilePath(ConfigUtil.getValue("CACHE_PATH")+data+".txt");
-        cloudTaskInfo.setStatus((byte)2);
-        cloudTaskInfo.setIsLock((byte)0);
+        cloudTaskInfo.setFilePath(ConfigUtil.getValue("CACHE_PATH")+data+".txt");   // 待修改
+        cloudTaskInfo.setStatus((byte)1);   // 任务状态 0=未处理 1=处理中 2=完成 3=失败
+        cloudTaskInfo.setIsLock((byte)0);   // 任务锁定 0=未锁 1=锁定
         cloudTaskInfo.setCreated(new Date());
         String taskRes = cloudTaskServiceFacade.insTask(cloudTaskInfo);
-        JpfResponseDto jpfResponseDto = new JpfResponseDto();
         if ( Integer.parseInt(taskRes) <= 0 ){
-            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetCode("10002");
             jpfResponseDto.setRetMsg("新建任务失败");
 
             return jpfResponseDto;
         }
 
-        // 增加OSS接口流水
-        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
-        cloudInterfaceStreamInfo.setType((byte)0);
-        cloudInterfaceStreamInfo.setRequestUrl("null");
-        /*cloudInterfaceStreamInfo.setRequestContent(ToolUtils.mapToUrl(requestMap));
-        cloudInterfaceStreamInfo.setResponseContent(response);*/
-        cloudInterfaceStreamInfo.setRequestContent("requestContent");
-        cloudInterfaceStreamInfo.setResponseContent("responseContent");
-        cloudInterfaceStreamInfo.setTaskId(taskRes);
-        cloudInterfaceStreamInfo.setAddtime(new Date());
-        cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
-
         // 新建一个待锁定的代付款批次订单
         CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
-        String agentNo = "CY1530862557288877";
-        String companyMoneyId = "";
+        String companyMoneyId;
         cloudCompanyMoneyInfo.setAgentNo(agentNo);   // 待修改
         cloudCompanyMoneyInfo.setMerchNo(companyInfo.getMerchNo());
         cloudCompanyMoneyInfo.setCommoney(new BigDecimal(jsonMap.get("money")));
         cloudCompanyMoneyInfo.setAddtime(new Date());
         cloudCompanyMoneyInfo.setUid(""+companyInfo.getId());   // 待修改
-        cloudCompanyMoneyInfo.setFid(""+new Date().getTime());   // 待修改
-        cloudCompanyMoneyInfo.setVid((byte)1);       // 待修改
-        cloudCompanyMoneyInfo.setIntro("");       //待修改
-        cloudCompanyMoneyInfo.setMontype((byte)0);
-        cloudCompanyMoneyInfo.setBatchstatus((byte)0);
-        cloudCompanyMoneyInfo.setBatchno(batchNo);
-        cloudCompanyMoneyInfo.setBatchitems(persons);
-        cloudCompanyMoneyInfo.setBatchallmoney(new BigDecimal(money));
-        cloudCompanyMoneyInfo.setBatchdealitems("0");
-        cloudCompanyMoneyInfo.setBatchdealmoney(new BigDecimal("0"));
-        cloudCompanyMoneyInfo.setBatchfailitems("0");
-        cloudCompanyMoneyInfo.setBatchfailmoney(new BigDecimal("0"));
-        cloudCompanyMoneyInfo.setFeemoney(new BigDecimal("0"));
-        cloudCompanyMoneyInfo.setTaxmoney(new BigDecimal("0"));
-        cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal("0"));
-        cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal("0"));
+        cloudCompanyMoneyInfo.setFid(contractNo);   // 合同编号
+        cloudCompanyMoneyInfo.setVid((byte)8);
+        cloudCompanyMoneyInfo.setIntro("");
+        cloudCompanyMoneyInfo.setMontype((byte)0);      // 发放状态 -1删除 0=待锁定 1=待付款 2=处理完成,3=处理完成(部分失败),4=处理失败
+        cloudCompanyMoneyInfo.setBatchstatus((byte)0);  // 打款状态 0=未处理 1=部分失败 2=全部失败 3=全部成功
+        cloudCompanyMoneyInfo.setBatchno(batchNo);                          // 用户批次号
+        cloudCompanyMoneyInfo.setBatchitems(persons);                       // 批次总笔数
+        cloudCompanyMoneyInfo.setBatchallmoney(new BigDecimal(money));      // 批次总金额
+        cloudCompanyMoneyInfo.setBatchdealitems("0");                        // 批次成功笔数
+        cloudCompanyMoneyInfo.setBatchdealmoney(new BigDecimal("0"));   // 批次成功总金额
+        cloudCompanyMoneyInfo.setBatchfailitems("0");                        // 批次失败笔数
+        cloudCompanyMoneyInfo.setBatchfailmoney(new BigDecimal("0"));   // 批次失败总金额
+        // 查询代理商户和业务商户的费率，计算总费率
+        CloudCompanyAgentInfo agentInfo = cloudCompanyAgentServiceFacade.getAgentByAgentNo(agentNo);
+        CloudCompanySalesInfo salesInfo = cloudCompanySalesServiceFacade.getSalesBySalesNo(companyInfo.getMerchNo());
+        Double totalRate = Double.parseDouble(agentInfo.getAgentRate().toString()) + Double.parseDouble(salesInfo.getSalesRate().toString());
+        Double moneyDouble = new Double(money);
+        Double feeMoney = totalRate * moneyDouble;
+        cloudCompanyMoneyInfo.setFeemoney(new BigDecimal(feeMoney));   // 服务费金额：实发金额*服务费率
+        // 增值税金额
+        Double addedValueTax = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX"));
+        Double taxMoney = ( moneyDouble + feeMoney ) / ( 1 + addedValueTax ) * addedValueTax;
+        cloudCompanyMoneyInfo.setTaxmoney(new BigDecimal(taxMoney));
+        // 增值税附加金额
+        Double addedValueTaxAddtion = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX_ADDITION"));
+        Double addedValueTaxAddtionMoney = taxMoney*addedValueTaxAddtion;
+        cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal(addedValueTaxAddtionMoney));
+        // 毛利金额
+        Double individualTax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
+        Double supposePay = moneyDouble / (1-individualTax);   // 应发金额
+        Double profit = (moneyDouble + feeMoney) - (supposePay + taxMoney + addedValueTaxAddtionMoney);
+        cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit));      // 毛利金额
+        // 判断有没有已经存在的合同编号
+        CloudCompanyMoneyInfo existCompanyMoneyInfo = CloudCompanyMoneyServiceFacade.getRecByFid(contractNo);
+        if ( existCompanyMoneyInfo.getId() != null ){
+            jpfResponseDto.setRetCode("10003");
+            jpfResponseDto.setRetMsg("该合同编号已经存在，请修改后上传");
+
+            return jpfResponseDto;
+        }
         int companyMoneyRes = CloudCompanyMoneyServiceFacade.addRec(cloudCompanyMoneyInfo);
         if ( companyMoneyRes <= 0 ){
-            jpfResponseDto.setRetCode("10002");
+            jpfResponseDto.setRetCode("10004");
             jpfResponseDto.setRetMsg("新建批次订单失败");
 
             return jpfResponseDto;
@@ -394,7 +440,7 @@ public class CloudTaskController {
         CloudCompanyStaffInfo cloudCompanyStaffInfo = new CloudCompanyStaffInfo();
 
         for ( LinkedHashMap<String,String> singlePerson:personsList ){
-            // 通过身份证号先判断企业有没有这个员工
+            // 通过身份证号和手机号先判断企业有没有这个员工
             CloudCompanyStaffInfo info = new CloudCompanyStaffInfo();
             info.setIdcard(singlePerson.get("idno"));
             info.setMobile(singlePerson.get("phone"));
@@ -408,22 +454,15 @@ public class CloudTaskController {
                 cloudCompanyStaffInfo.setMobile(singlePerson.get("phone"));
                 cloudCompanyStaffInfo.setMerchNo(companyInfo.getMerchNo());
                 cloudCompanyStaffInfo.setStatus((byte)1);
-                cloudCompanyStaffInfo.setIsActive((byte)1);     // 待修改
-                cloudCompanyStaffInfo.setEmail("");       // 待修改
-                cloudCompanyStaffInfo.setCode("");        // 待修改
+                cloudCompanyStaffInfo.setIsActive((byte)0);
+                cloudCompanyStaffInfo.setEmail("");
+                cloudCompanyStaffInfo.setCode("");
                 cloudCompanyStaffInfo.setIdcard(singlePerson.get("idno"));
                 cloudCompanyStaffInfo.setUcardid(""+0);
                 cloudCompanyStaffInfo.setCreated(new Date());
                 cloudCompanyStaffInfo.setUpdated(new Date());
-                staffId = cloudCompanyStaffServiceFacade.addStaff(cloudCompanyStaffInfo);
+                staffId = Integer.parseInt(cloudCompanyStaffServiceFacade.addStaff(cloudCompanyStaffInfo));
                 if ( staffId > 0 ){
-                    // 获取自增id
-                    CloudCompanyStaffInfo info1 = new CloudCompanyStaffInfo();
-                    info1.setIdcard(singlePerson.get("idno"));
-                    info1.setMobile(singlePerson.get("phone"));
-                    info1.setStatus((byte)1);
-                    CloudCompanyStaffInfo info2 = cloudCompanyStaffServiceFacade.getStaffByInfo(info1);
-                    staffId = Integer.parseInt(info2.getId());
                     logger.info(singlePerson.get("name")+"插入员工信息表成功");
                 }
             }else{
@@ -431,9 +470,14 @@ public class CloudTaskController {
                 staffId = Integer.parseInt(existStaff.getId());
             }
 
-            // 通过银行卡号和员工id先判断这个员工是否添加过这个银行卡
-            CloudStaffBanksInfo existBank = cloudStaffBanksServiceFacade.getStaffBankByNumSid(singlePerson.get("bankNo"), BigInteger.valueOf(staffId));
-            if ( existBank == null ){
+            // 通过银行卡号、手机号和员工id先判断这个员工是否添加过这个银行卡
+            CloudStaffBanksInfo searchBank = new CloudStaffBanksInfo();
+            searchBank.setStaffid(Long.parseLong(""+staffId));
+            searchBank.setBankno(singlePerson.get("bankNo"));
+            searchBank.setBankphone(singlePerson.get("phone"));
+            searchBank.setBankActive("1");
+            CloudStaffBanksInfo existBank = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchBank);
+            if ( existBank.getId() == null ){
                 // 插入员工银行卡信息
                 CloudStaffBanksInfo cloudStaffBanksInfo = new CloudStaffBanksInfo();
                 cloudStaffBanksInfo.setStaffid(Long.parseLong(""+staffId));
@@ -445,7 +489,7 @@ public class CloudTaskController {
                 cloudStaffBanksInfo.setBankname(singlePerson.get("bankName"));
                 cloudStaffBanksInfo.setBankprovince(singlePerson.get("province"));
                 cloudStaffBanksInfo.setBankcity(singlePerson.get("city"));
-                cloudStaffBanksInfo.setBankActive("1");
+                cloudStaffBanksInfo.setBankActive("0");
                 cloudStaffBanksInfo.setBankacctattr(String.valueOf(singlePerson.get("type")));
                 int staffBanksRes = cloudStaffBanksServiceFacade.addStaffBank(cloudStaffBanksInfo);
                 if ( staffBanksRes > 0 ){
@@ -455,22 +499,30 @@ public class CloudTaskController {
                 logger.info(singlePerson.get("name")+"的银行卡信息已经存在，无需再插入");
             }
 
+            // 根据卡号查询银行编码
+            BankCardInfo bankCardInfo = bankCardServiceFacade.getBankCardByCardNO(singlePerson.get("bankNo"));
+            if ( bankCardInfo.getCode() == null ){
+                logger.info(singlePerson.get("name")+"的银行卡号是"+singlePerson.get("bankNo")+"，未查找到银行编码");
+            }
+
             // 按人员生成代付记录
             CloudDfMoneyInfo cloudDfMoneyInfo = new CloudDfMoneyInfo();
             cloudDfMoneyInfo.setAgentNo(agentNo);
             cloudDfMoneyInfo.setMerchNo(companyInfo.getMerchNo());
-            cloudDfMoneyInfo.setUid(Long.parseLong(companyInfo.getId()));   // 待修改
-            cloudDfMoneyInfo.setFid("");        // 待修改
-            cloudDfMoneyInfo.setBusstaffid(Long.parseLong(""+staffId));   //
+            cloudDfMoneyInfo.setUid(Long.parseLong(""+userInfo.getId()));
+            cloudDfMoneyInfo.setFid(companyInfo.getId());   // 企业id
+            cloudDfMoneyInfo.setBusstaffid(Long.parseLong(""+staffId));
             cloudDfMoneyInfo.setUsername(singlePerson.get("phone"));
             cloudDfMoneyInfo.setCommoney(new BigDecimal(String.valueOf(singlePerson.get("money"))));
             cloudDfMoneyInfo.setBankno(singlePerson.get("bankNo"));
             cloudDfMoneyInfo.setBanknickname(singlePerson.get("name"));
+            cloudDfMoneyInfo.setIdno(singlePerson.get("idno"));
             cloudDfMoneyInfo.setBankphone(singlePerson.get("phone"));
             cloudDfMoneyInfo.setBankname(singlePerson.get("bankName"));     // 开户行
             cloudDfMoneyInfo.setBankprovince(singlePerson.get("province"));
             cloudDfMoneyInfo.setBankcity(singlePerson.get("city"));
             cloudDfMoneyInfo.setBanktype(singlePerson.get("bankName"));         // 卡类型 例如：建行 工商
+            cloudDfMoneyInfo.setBankcode(bankCardInfo.getCode());
             cloudDfMoneyInfo.setBankacctattr(Integer.parseInt(String.valueOf(singlePerson.get("type"))));
             cloudDfMoneyInfo.setAddtime(new Date());
             cloudDfMoneyInfo.setRealname(singlePerson.get("name"));
@@ -483,17 +535,62 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setTranno("");
             cloudDfMoneyInfo.setOrderid("");
             cloudDfMoneyInfo.setOrderids("");
-            cloudDfMoneyInfo.setPayablemoney(new BigDecimal(String.valueOf(singlePerson.get("money"))));
-            cloudDfMoneyInfo.setWithholdmoney(new BigDecimal("0"));
-            cloudDfMoneyInfo.setInvostatus(2);
+            // 计算应发金额（税前）
+            Double tax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
+            Double num1 = new Double(String.valueOf(singlePerson.get("money")));
+            Double num2 = new Double("1")-tax;
+            Double beforeTaxMoney = num1 / num2;
+            cloudDfMoneyInfo.setPayablemoney(new BigDecimal(beforeTaxMoney));
+            Double individualTaxMoney = beforeTaxMoney * tax;
+            cloudDfMoneyInfo.setWithholdmoney(new BigDecimal(individualTaxMoney));
+            cloudDfMoneyInfo.setInvostatus(1);
             cloudDfMoneyInfo.setCompanyMoneyId(companyMoneyId);
             cloudDfMoneyInfo.setPactno(contractNo);
-            int dfMoneyRes = cloudDfMoneyServiceFacade.addDfMoney(cloudDfMoneyInfo);
+            long dfMoneyRes = cloudDfMoneyServiceFacade.addDfMoney(cloudDfMoneyInfo);
             if ( dfMoneyRes > 0 ){
                 logger.info(singlePerson.get("name")+"插入员工打款记录表成功");
             }else{
                 logger.info(singlePerson.get("name")+"插入员工打款记录表失败");
             }
+
+            // 新增个人合同记录
+            CloudCompactStaffInfo cloudCompactStaffInfo = new CloudCompactStaffInfo();
+            String compactNo = StringUtils.substring(singlePerson.get("idno"),-6) + new Date().getTime();    // 自由职业者合同编号：身份证后六位+时间戳
+            cloudCompactStaffInfo.setCompactNo(compactNo);
+            cloudCompactStaffInfo.setStaffid(Long.parseLong(""+staffId));
+            cloudCompactStaffInfo.setDfid(dfMoneyRes);
+            cloudCompactStaffInfo.setPactno(contractNo);
+            // 查询合同内容
+            CloudCompactInfo cloudCompactInfo = cloudCompactServiceFacade.getRecByType((byte)1);
+            cloudCompactStaffInfo.setContent(cloudCompactInfo.getContent());
+            cloudCompactStaffInfo.setCompactActive((byte)0);
+            cloudCompactStaffInfo.setCompactid(Long.parseLong(cloudCompactInfo.getId()));
+            // 获取充值信息中需求字段相关内容
+            CloudRechargeRequest cloudRechargeRequest = new CloudRechargeRequest();
+            cloudRechargeRequest.setPactno(contractNo);
+            CloudRechargeResponse cloudRechargeResponse = cloudRechargeServiceFacade.getRecords(cloudRechargeRequest);
+            CloudRechargeInfo cloudRechargeInfo = cloudRechargeResponse.getList().get(0);
+            List<MerchantTypeInfo> typesList = merTypeServiceFacade.getTypesByCatpath(cloudRechargeInfo.getNeedcatpath());
+            cloudCompactStaffInfo.setTicketid(typesList.get(1).getCatid());
+            cloudCompactStaffInfo.setTicketcontent(typesList.get(1).getCat());
+            cloudCompactStaffInfo.setEntryid(""+typesList.get(2).getCatid());
+            cloudCompactStaffInfo.setEntryname(typesList.get(2).getCat());
+            cloudCompactStaffInfo.setCreated(new Date());
+            int compactStaffRes = cloudCompactStaffServiceFacade.insRecord(cloudCompactStaffInfo);
+            if ( compactStaffRes > 0 ){
+                logger.info(singlePerson.get("name")+"个人合同记录插入成功");
+            }else{
+                logger.info(singlePerson.get("name")+"个人合同记录插入失败");
+            }
+
+            // 鉴权功能
+            CheckBanksRequest checkBanksRequest = new CheckBanksRequest();
+            checkBanksRequest.setAccountNo(singlePerson.get("bankNo"));
+            checkBanksRequest.setIdCard(singlePerson.get("idno"));
+            checkBanksRequest.setMobile(singlePerson.get("phone"));
+            checkBanksRequest.setName(singlePerson.get("name"));
+            checkBanksRequest.setDateTime(new Date());
+            checkBanks(checkBanksRequest);
         }
 
         return new JpfResponseDto();
@@ -636,6 +733,7 @@ public class CloudTaskController {
 
     /**
      * 鉴权操作
+     * 返回 1=已经鉴权过 2=流水创建失败 3=鉴权失败 4=鉴权成功
      */
     public int checkBanks(CheckBanksRequest checkBanksRequest){
         // 先查询这个银行卡号和手机号是否已鉴权过
@@ -656,8 +754,8 @@ public class CloudTaskController {
         requestMap.put("dateTime",checkBanksRequest.getDateTime());
         String sign = Md5Encrypt.md5(ToolUtils.mapToUrl(requestMap) + ConfigUtil.getValue("API_SECRET")).toUpperCase();
         requestMap.put("sign",sign);
-        String requestUrl = "/toolcate/bankFourCheck";
-        String response = OkHttpUtils.postForm("/toolcate/bankFourCheck",requestMap);
+        String requestUrl = ConfigUtil.getValue("CLOUD_API")+"/toolcate/bankFourCheck";
+        String response = OkHttpUtils.postForm(requestUrl,requestMap);
         Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
 
         // 添加流水记录
@@ -675,6 +773,7 @@ public class CloudTaskController {
             logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的流水记录创建成功");
         }else{
             logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的流水记录创建失败");
+            return 2;
         }
 
         if ( responseMap.get("code").equals("10000") ){
@@ -690,8 +789,9 @@ public class CloudTaskController {
         }else {
             // 鉴权失败
             logger.info("员工id为 " + checkBanksRequest.getStaffId() + "，银行卡id为 " + checkBanksRequest.getStaffBanksId() + " 的鉴权失败");
+            return 3;
         }
 
-        return 2;
+        return 4;
     }
 }

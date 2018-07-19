@@ -62,6 +62,7 @@
                             return "企业";
                         }
                     }},
+              //  {field:'failure',title:'失败原因',width:"10%"},
                 {field:'bankName',title:'总行名称',width:"10%"},
                 {field:'province',title:'开户行省',width:"10%"},
                 {field:'city',title:'开户行市',width:"10%"},

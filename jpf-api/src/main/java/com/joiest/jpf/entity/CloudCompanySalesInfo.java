@@ -34,7 +34,7 @@ public class CloudCompanySalesInfo {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getSalesNo() {
@@ -42,7 +42,7 @@ public class CloudCompanySalesInfo {
     }
 
     public void setSalesNo(String salesNo) {
-        this.salesNo = salesNo == null ? null : salesNo.trim();
+        this.salesNo = salesNo;
     }
 
     public BigDecimal getSalesRate() {
