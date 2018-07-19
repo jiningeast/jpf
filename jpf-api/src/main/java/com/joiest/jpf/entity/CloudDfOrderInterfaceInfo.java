@@ -1,9 +1,9 @@
-package com.joiest.jpf.dto;
+package com.joiest.jpf.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class AddCloudDfOrderRequest {
+public class CloudDfOrderInterfaceInfo {
 
     /**
      *
@@ -81,14 +81,19 @@ public class AddCloudDfOrderRequest {
     private String certno;
 
     /**
-     * 添加时间
+     * 开户行名称
      */
-    private Date created;
+    private String bankname;
 
     /**
-     * 更新时间
+     * 开户行省
      */
-    private Date updated;
+    private String bankprovince;
+
+    /**
+     * 开户行市
+     */
+    private String bankcity;
 
     /**
      * 交易号
@@ -109,6 +114,26 @@ public class AddCloudDfOrderRequest {
      * 同步返回信息
      */
     private String returncontent;
+
+    /**
+     * 查询次数
+     */
+    private Integer querycount;
+
+    /**
+     * 最后一次查询响应
+     */
+    private String lastrespose;
+
+    /**
+     * 添加时间
+     */
+    private Date created;
+
+    /**
+     * 更新时间
+     */
+    private Date updated;
 
     public Long getId() {
         return id;
@@ -230,20 +255,28 @@ public class AddCloudDfOrderRequest {
         this.certno = certno;
     }
 
-    public Date getCreated() {
-        return created;
+    public String getBankname() {
+        return bankname;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setBankname(String bankname) {
+        this.bankname = bankname;
     }
 
-    public Date getUpdated() {
-        return updated;
+    public String getBankprovince() {
+        return bankprovince;
     }
 
-    public void setUpdated(Date updated) {
-        this.updated = updated;
+    public void setBankprovince(String bankprovince) {
+        this.bankprovince = bankprovince;
+    }
+
+    public String getBankcity() {
+        return bankcity;
+    }
+
+    public void setBankcity(String bankcity) {
+        this.bankcity = bankcity;
     }
 
     public String getTranno() {
@@ -276,5 +309,37 @@ public class AddCloudDfOrderRequest {
 
     public void setReturncontent(String returncontent) {
         this.returncontent = returncontent;
+    }
+
+    public Integer getQuerycount() {
+        return querycount;
+    }
+
+    public void setQuerycount(Integer querycount) {
+        this.querycount = querycount;
+    }
+
+    public String getLastrespose() {
+        return lastrespose;
+    }
+
+    public void setLastrespose(String lastrespose) {
+        this.lastrespose = lastrespose;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 }

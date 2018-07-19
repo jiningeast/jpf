@@ -93,7 +93,7 @@ public class CloudRechargeController {
      * */
     @RequestMapping("/caiwu/audit/page")
     @ResponseBody
-    public ModelAndView caiwuAudit(String id,ModelMap modelMap){
+    public ModelAndView caiwuAudit(Long id,ModelMap modelMap){
         CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecharge(id);
         cloudRechargeInfo.setStatus_cn(ManageConstants.STATUSLIST.get(cloudRechargeInfo.getStatus().toString()));
         modelMap.addAttribute("cloudRechargeInfo", cloudRechargeInfo);
@@ -122,7 +122,7 @@ public class CloudRechargeController {
      * */
     @RequestMapping("/audit/page")
     @ResponseBody
-    public ModelAndView audit(String id,ModelMap modelMap){
+    public ModelAndView audit(Long id,ModelMap modelMap){
         CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecharge(id);
         cloudRechargeInfo.setStatus_cn(ManageConstants.STATUSLIST.get(cloudRechargeInfo.getStatus().toString()));
         modelMap.addAttribute("cloudRechargeInfo", cloudRechargeInfo);

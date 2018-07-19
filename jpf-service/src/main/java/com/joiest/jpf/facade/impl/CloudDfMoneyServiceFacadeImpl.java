@@ -243,7 +243,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         }
         GetCloudMoneyDfResponse response = new GetCloudMoneyDfResponse();
         response.setList(listnew);
-        response.setMonthTotal(new BigDecimal(monthTotal));
+        response.setMonthTotal(new BigDecimal(monthTotal.toString()));
         response.setCount(list.size());
         return response;
     }
