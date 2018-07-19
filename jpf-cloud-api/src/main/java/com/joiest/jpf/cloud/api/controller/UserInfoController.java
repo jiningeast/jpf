@@ -636,6 +636,7 @@ public class UserInfoController {
         }
         CloudCompactStaffInterfaceCustomInfo cloudCompactStaffInterfaceCustomInfo = cloudCompactStaffServiceFacade.getUserCompactById(new Long(compactId));
 
+
         if(cloudCompactStaffInterfaceCustomInfo == null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此合同", null);
@@ -651,26 +652,14 @@ public class UserInfoController {
         if(cloudDfMoneyInterfaceInfo == null){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
         }
-
         Map<String,String> userInfo = new HashMap<>();
-
-        System.out.println("内容获取：+++"+cloudCompactStaffInterfaceCustomInfo.getContent());
-        String baseRe = Base64CustomUtils.base64Encoder(cloudCompactStaffInterfaceCustomInfo.getContent());
-
-        System.out.println("内容base64：+++"+baseRe);
-
-        baseRe = baseRe.replaceAll("\r\n","");
-        System.out.println("内容去掉换行：+++"+baseRe);
-
-
-
-
-        String jsonContent = JsonUtils.toJson(cloudCompactStaffInterfaceCustomInfo.getContent().replaceAll("\r","").replaceAll("\n","").replaceAll("\t","")).replaceAll("\\\\","");
  /*
         String baseRe = Base64CustomUtils.base64Encoder(jsonContent);
         baseRe = baseRe.replaceAll("\r\n","");
 */
 
+        userInfo.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());//code 码
+        userInfo.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());//info信息
         userInfo.put("name",cloudDfMoneyInterfaceInfo.getBanknickname());//名称
         userInfo.put("idCard",cloudCompanyStaffInfo.getIdcard());//身份证号
         userInfo.put("mobile",cloudDfMoneyInterfaceInfo.getBankphone());//手机号
@@ -680,7 +669,7 @@ public class UserInfoController {
         userInfo.put("compact_no",cloudCompactStaffInterfaceCustomInfo.getCompactNo());//自由职业者合同编号
         userInfo.put("pactno",cloudCompactStaffInterfaceCustomInfo.getPactno());//合同编号
         //userInfo.put("content",baseRe);//合同内容
-        userInfo.put("content",jsonContent);//合同内容
+        //userInfo.put("content",jsonContent);//合同内容
         userInfo.put("compact_active",cloudCompactStaffInterfaceCustomInfo.getCompactActive().toString());//用户状态
         userInfo.put("ticketContent",cloudCompactStaffInterfaceCustomInfo.getTicketcontent());//服务内容
         userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
@@ -695,7 +684,24 @@ public class UserInfoController {
         userInfo.put("curTime",myfmt.format(date));//签约时间
         userInfo.put("created",createTime.format(cloudCompanyStaffInfo.getCreated()));//合同创建时间
 
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
+
+        String jsonStr = JsonUtils.toJson(userInfo).replaceAll("\\\\","");
+        String base64Str = Base64CustomUtils.base64Encoder(jsonStr);
+        base64Str = base64Str.replaceAll("\r","");
+        base64Str = base64Str.replaceAll("\n","");
+
+        //JsonUtils.toJson(cloudCompactStaffInterfaceCustomInfo.getContent()).replaceAll("\\\\","");//
+        String jsonContent = cloudCompactStaffInterfaceCustomInfo.getContent().replaceAll("\r","").replaceAll("\n","").replaceAll("\t","");//.replaceAll("\\\\","");
+        String base64Con = Base64CustomUtils.base64Encoder(jsonContent);
+        base64Con = base64Con.replaceAll("\r","");
+        base64Con = base64Con.replaceAll("\n","");
+
+        JSONObject resPos = new JSONObject();
+        resPos.put("logic",base64Str);
+        resPos.put("content",base64Con);
+
+        return resPos.toString();
+        //return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo);
     }
     /**
      * 合同签约
