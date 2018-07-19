@@ -1,5 +1,6 @@
 package com.joiest.jpf.cloud.api.controller;
 
+import com.aliyun.oss.OSSClient;
 import com.joiest.jpf.cloud.api.util.BankCheck;
 import com.joiest.jpf.cloud.api.util.ExcelDealUtils;
 import com.joiest.jpf.cloud.api.util.IdentAuth;
@@ -14,6 +15,7 @@ import com.joiest.jpf.facade.CloudBankcheckServiceFacade;
 import com.joiest.jpf.facade.CloudIdcardServiceFacade;
 import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
 import net.sf.json.JSONArray;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 @Controller
@@ -528,12 +532,39 @@ public class ToolCateController {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息上传失败",null);
             }
         }else{
-
+            
             Map<String,Object> map = new HashMap<>();
             map.put("id",cloudIdcardInfo.getId());
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "身份证信息上传成功",map);
         }
+    }
+    /**
+     * 公共上传文件接口 文件流形式
+     * */
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject uploadFile(@RequestParam("file") MultipartFile file) throws UnknownHostException {
+
+        String savePre = ConfigUtil.getValue("ROOT_PATH");
+        String allpath = PhotoUtil.saveFile(file, savePre);
+
+        String md5key = "";
+        OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
+
+        // 上传文件流。
+        File fileOne = new File(allpath);
+        md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
+
+        // 关闭OSSClient。
+        System.out.println(md5key);
+        System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
+
+        JSONObject resposeData = new JSONObject();
+        resposeData.put("localUrl",allpath);
+        resposeData.put("serverUrl",md5key);
+
+        return resposeData;
     }
 
     @ModelAttribute

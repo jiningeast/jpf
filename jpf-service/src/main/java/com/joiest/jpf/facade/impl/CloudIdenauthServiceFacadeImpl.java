@@ -5,7 +5,6 @@ import com.joiest.jpf.common.po.PayCloudIdenauthExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudIdenauthMapper;
 import com.joiest.jpf.entity.CloudIdenauthInfo;
 import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 

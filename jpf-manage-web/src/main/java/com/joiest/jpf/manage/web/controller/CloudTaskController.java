@@ -8,10 +8,15 @@ import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.joiest.jpf.manage.web.util.SmsUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -26,6 +31,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -239,7 +246,7 @@ public class CloudTaskController {
         }else{
             // OSS上传excel文件
             String savePre = ConfigUtil.getValue("EXCEL_PATH");
-            String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);
+            String path = PhotoUtil.saveFile(uploadfile, savePre);
             Map<String,Object> requestMap = new HashMap<>();
             requestMap.put("path",path);
             String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
@@ -267,6 +274,23 @@ public class CloudTaskController {
 
             return uuid.toString();
         }
+    }
+
+
+    /**
+     * 下载模板
+     */
+    @RequestMapping("/download")
+    public ResponseEntity<byte[]> download(String fileName,String filePath) throws IOException {
+
+        HttpHeaders headers = new HttpHeaders();
+        File file = new File(filePath);
+
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", fileName);
+
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+                headers, HttpStatus.CREATED);
     }
 
     /**
