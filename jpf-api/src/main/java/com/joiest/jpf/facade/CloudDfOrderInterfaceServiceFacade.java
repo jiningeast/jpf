@@ -2,6 +2,7 @@ package com.joiest.jpf.facade;
 
 import com.joiest.jpf.dto.AddCloudDfTaskRequest;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
+import com.joiest.jpf.entity.CloudDfOrderInterfaceInfo;
 
 import java.util.List;
 
@@ -13,4 +14,18 @@ public interface CloudDfOrderInterfaceServiceFacade {
      * @return
      */
     public int addOrder(String batchid, String dfid, List<CloudDfMoneyInterfaceInfo> list, String batchid_self);
+
+    /**
+     * 获取批次下的代付信息
+     * @param batchid 批次号
+     * @return
+     */
+    public List<CloudDfOrderInterfaceInfo> getOrdersList(String batchid);
+
+    /**
+     * 更新信息---请求接口之后
+     * @param info
+     * @return
+     */
+    public int updateDfOrderStatus(CloudDfOrderInterfaceInfo info);
 }

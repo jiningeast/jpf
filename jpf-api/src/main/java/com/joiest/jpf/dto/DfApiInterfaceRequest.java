@@ -13,6 +13,7 @@ public class DfApiInterfaceRequest {
     /**
      * 单独id
      */
+    @NotBlank(message = "代付ID不能为空")
     private String dfid;
 
     public String getBatchid() {
