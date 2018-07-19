@@ -93,7 +93,7 @@ public class CloudDfMoneyController {
         List<Long> limitData = new ArrayList<>(); //不能打款的订单数据
         for(CloudDfMoneyInfo onetimes:infos){
             Long dfMoneyId = onetimes.getId();
-            if( onetimes.getIsActive() != 1 || onetimes.getMontype() !=1 || onetimes.getMontype() !=3 ){ //过滤已打款或 不能打款 代付信息
+            if( onetimes.getIsActive() != 1 || (onetimes.getMontype() !=1 && onetimes.getMontype() !=3) ){ //过滤已打款或 不能打款 代付信息
                 limitData.add(dfMoneyId);
             }
 
@@ -144,7 +144,8 @@ public class CloudDfMoneyController {
         Map<String,Object> treeMap = new TreeMap<>();
         treeMap.putAll(map);
         String respos = ToolUtils.mapToUrl(treeMap);
-        map.put("token",cloudWaitpayKeycode);
+        String sign = Md5Encrypt.md5(respos+cloudWaitpayKeycode);
+        map.put("sign",sign);
 
         String requestParam = ToolUtils.mapToUrl(map);//请求参数
         String response = OkHttpUtils.postForm(requestUrl,map);
