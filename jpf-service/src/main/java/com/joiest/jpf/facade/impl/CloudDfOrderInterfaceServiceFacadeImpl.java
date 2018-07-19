@@ -113,13 +113,23 @@ public class CloudDfOrderInterfaceServiceFacadeImpl implements CloudDfOrderInter
     /**
      *根据外来单号查询代付数据  request_orderid
      * **/
-    public CloudDfMoneyInterfaceInfo getDfOrderByRequestOrderid(String request_orderid){
+    public CloudDfOrderInterfaceInfo getDfOrderByRequestOrderid(String request_orderid){
 
         PayCloudDfOrderExample example = new PayCloudDfOrderExample();
         PayCloudDfOrderExample.Criteria c = example.createCriteria();
-        //c.
+        c.andRequestOrderidEqualTo(request_orderid);
 
+        List<PayCloudDfOrder> getPayCloudDfOrder = payCloudDfOrderMapper.selectByExample(example);
 
-        return null;
+        if(getPayCloudDfOrder == null || getPayCloudDfOrder.isEmpty()) return null;
+
+        PayCloudDfOrder payCloudDfOrder = getPayCloudDfOrder.get(0);
+
+        CloudDfOrderInterfaceInfo cloudDfOrderInterfaceInfo = new CloudDfOrderInterfaceInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayCloudDfOrder.class,CloudDfOrderInterfaceInfo.class,false);
+        beanCopier.copy(payCloudDfOrder,cloudDfOrderInterfaceInfo,null);
+
+        return cloudDfOrderInterfaceInfo;
     }
 }

@@ -70,20 +70,47 @@ public class DfUtils {
 
 
 
+
+
+
+
+
+
+
+
+
     public JSONObject queryAgentPay(Map<String,String> requestMap){
 
         JSONObject result = new JSONObject();
+        requestMap.put("service",SELECT_SERVICE);
+        requestMap.put("inputCharset",inputCharset);
+        requestMap.put("sysMerchNo",sysMerchNo);
 
         Map<String,Object> treeMap = new TreeMap<>();
         treeMap.putAll(requestMap);
 
         String sortStr = ToolUtils.mapToUrl (treeMap);
-        String signStr = Md5Encrypt.md5(sortStr + this.DF_KEY);
+        String signStr = Md5Encrypt.md5(sortStr + DF_KEY);
         treeMap.put("sign", signStr);
         treeMap.put("signType", this.signType);
 
         String requestParam = ToolUtils.mapToUrl(treeMap);
-        String requestUrl = this.DFPAY_URL + this.SERVICE;
+        String requestUrl = DFPAY_URL + SELECT_SERVICE;
+
+        String res = OkHttpUtils.postForm(requestUrl, treeMap);
+
+        result.put("requestParam",treeMap);
+        result.put("responseParam",res);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + requestUrl);
+        sbf.append("\n接口参数：" + requestParam);
+        sbf.append("\n回调信息：" + res);
+        String fileName = "queryAgentPayLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName, true);
 
         return result;
     }
