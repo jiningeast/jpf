@@ -9,7 +9,7 @@ public class CloudRechargeRequest {
     /**
      * 主键
      */
-    private String id;
+    private Long id;
 
     /**
      * 交易充值记录ID，唯一值，CZ+10位时间戳+6位随机码
@@ -141,12 +141,12 @@ public class CloudRechargeRequest {
 
     private long page;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFid() {

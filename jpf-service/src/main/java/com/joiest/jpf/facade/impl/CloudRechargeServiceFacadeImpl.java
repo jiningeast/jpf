@@ -198,7 +198,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     * 审核详情页页面
      * */
     @Override
-    public CloudRechargeInfo getRecharge(String id){
+    public CloudRechargeInfo getRecharge(Long id){
 
         if (id == null) {
             //logger.info("求情参数id为空");
@@ -238,12 +238,12 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getAuditRecharge(CloudRechargeRequest request){
 
-        String infoId = request.getId();
+        Long infoId = request.getId();
         String infoKfremarks = request.getKfremarks();
         Byte infoStatus = request.getStatus();
         String infoPactno = request.getPactno();
 
-        if( StringUtils.isBlank(infoId) ){
+        if( infoId == null  ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(infoId));
@@ -368,11 +368,11 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getCaiwuAuditRecharge(CloudRechargeRequest request){
 
-        String infoId = request.getId();
+        Long infoId = request.getId();
         String infoKfremarks = request.getKfremarks();
         Byte infoStatus = request.getStatus();
 
-        if( StringUtils.isBlank(infoId) ){
+        if( infoId == null  ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(infoId));
@@ -488,7 +488,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     /*
     * 给公司账户充值金额
     * */
-    public Integer rechargeCompanyMoney(String id){
+    public Integer rechargeCompanyMoney(Long id){
 
         //查询充值信息
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(id));

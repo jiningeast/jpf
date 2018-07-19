@@ -11,7 +11,7 @@
             var toolbar = [
                 {
                     text : '审核',
-                    iconCls : 'icon-key-ok',
+                    iconCls : 'icon-key-add',
                     handler : function(){
                         var rows = $('#dg').datagrid('getSelections');
                         if (rows.length != 1) {
