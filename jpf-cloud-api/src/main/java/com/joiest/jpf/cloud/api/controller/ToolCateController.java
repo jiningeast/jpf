@@ -532,19 +532,22 @@ public class ToolCateController {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息上传失败",null);
             }
         }else{
-
+            
             Map<String,Object> map = new HashMap<>();
             map.put("id",cloudIdcardInfo.getId());
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "身份证信息上传成功",map);
         }
     }
+    /**
+     * 公共上传文件接口 文件流形式
+     * */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws UnknownHostException {
+    public JSONObject uploadFile(@RequestParam("file") MultipartFile file) throws UnknownHostException {
 
         String savePre = ConfigUtil.getValue("ROOT_PATH");
-        String allpath = PhotoUtil.saveFile(file, request, savePre);
+        String allpath = PhotoUtil.saveFile(file, savePre);
 
         String md5key = "";
         OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
@@ -558,7 +561,6 @@ public class ToolCateController {
         System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
 
         JSONObject resposeData = new JSONObject();
-
         resposeData.put("localUrl",allpath);
         resposeData.put("serverUrl",md5key);
 

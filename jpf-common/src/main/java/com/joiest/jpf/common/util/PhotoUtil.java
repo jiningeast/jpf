@@ -14,61 +14,48 @@ import java.util.Date;
 public class PhotoUtil {
 
 	/**
-	 *
 	 * 功能描述   保存图片
-	 *
 	 * @param filedata
-	 *           文件数据
-	 *　　返回图片位置
+	 *  文件数据
+	 *　返回图片位置
 	 */
+	public static String saveFile( MultipartFile filedata,String savePre) {
 
-	public static String saveFile( MultipartFile filedata, HttpServletRequest request,String savePre) {
-
-        String fileName = filedata.getOriginalFilename();
-        String path=request.getSession().getServletContext().getRealPath("images/");
-        File tempFile = new File(path, new Date().getTime() + String.valueOf(fileName));
-
-        // TODO Auto-generated method stub
-		String pathval ="";// request.getSession().getServletContext().getRealPath("")+"/../../src/main/webapp/resources/";
 		// 根据配置文件获取服务器图片存放路径
 		String newFileName = String.valueOf( System.currentTimeMillis());
 		String saveFilePath = savePre;
 		/* 构建文件目录 */
-		File fileDir = new File(pathval + saveFilePath);
+		File fileDir = new File(saveFilePath);
 		if (!fileDir.exists()) {
+
 			fileDir.mkdirs();
 		}
 		//上传的文件名
 		String filename=filedata.getOriginalFilename();
-		//文件的扩张名
+		//文件的扩展名
 		String extensionName = filename.substring(filename.lastIndexOf(".") + 1);
 		try {
+
 			String imgPath = saveFilePath + newFileName + "." +extensionName;
-			//System.out.println(pathval + imgPath);打印图片位置
-			FileOutputStream out = new FileOutputStream(pathval + imgPath);
+			FileOutputStream out = new FileOutputStream(imgPath);
 			// 写入文件
 			out.write(filedata.getBytes());
 			out.flush();
 			out.close();
-			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			 //服务器地址
+
+			 //本地服务器地址
 			return imgPath;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-
-
 	/**
-	 *
 	 * 功能描述：删除图片
-	 *
 	 * @param oldPic
-	 *
 	 */
     public static void deleteFile(String oldPic,HttpServletRequest request) {
-		// TODO Auto-generated method stub
+
         String pathval = request.getSession().getServletContext().getRealPath("/")+"/../../src/main/webapp/resources/";
 		/* 构建文件目录 */
 		File fileDir = new File(pathval+oldPic);
