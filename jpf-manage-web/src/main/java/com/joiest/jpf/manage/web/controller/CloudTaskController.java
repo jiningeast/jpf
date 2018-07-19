@@ -442,7 +442,7 @@ public class CloudTaskController {
         for ( LinkedHashMap<String,String> singlePerson:personsList ){
             // 通过身份证号和手机号先判断企业有没有这个员工
             CloudCompanyStaffInfo info = new CloudCompanyStaffInfo();
-            info.setIdcard(singlePerson.get("idno"));
+            info.setIdcard(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
             info.setMobile(singlePerson.get("phone"));
             info.setStatus((byte)1);
             CloudCompanyStaffInfo existStaff = cloudCompanyStaffServiceFacade.getStaffByInfo(info);
@@ -457,7 +457,7 @@ public class CloudTaskController {
                 cloudCompanyStaffInfo.setIsActive((byte)0);
                 cloudCompanyStaffInfo.setEmail("");
                 cloudCompanyStaffInfo.setCode("");
-                cloudCompanyStaffInfo.setIdcard(singlePerson.get("idno"));
+                cloudCompanyStaffInfo.setIdcard(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
                 cloudCompanyStaffInfo.setUcardid(""+0);
                 cloudCompanyStaffInfo.setCreated(new Date());
                 cloudCompanyStaffInfo.setUpdated(new Date());
@@ -516,7 +516,7 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setCommoney(new BigDecimal(String.valueOf(singlePerson.get("money"))));
             cloudDfMoneyInfo.setBankno(singlePerson.get("bankNo"));
             cloudDfMoneyInfo.setBanknickname(singlePerson.get("name"));
-            cloudDfMoneyInfo.setIdno(singlePerson.get("idno"));
+            cloudDfMoneyInfo.setIdno(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
             cloudDfMoneyInfo.setBankphone(singlePerson.get("phone"));
             cloudDfMoneyInfo.setBankname(singlePerson.get("bankName"));     // 开户行
             cloudDfMoneyInfo.setBankprovince(singlePerson.get("province"));
@@ -555,7 +555,7 @@ public class CloudTaskController {
 
             // 新增个人合同记录
             CloudCompactStaffInfo cloudCompactStaffInfo = new CloudCompactStaffInfo();
-            String compactNo = StringUtils.substring(singlePerson.get("idno"),-6) + new Date().getTime();    // 自由职业者合同编号：身份证后六位+时间戳
+            String compactNo = StringUtils.substring(singlePerson.get("idno").toUpperCase(),-6) + new Date().getTime();    // 自由职业者合同编号：身份证后六位+时间戳
             cloudCompactStaffInfo.setCompactNo(compactNo);
             cloudCompactStaffInfo.setStaffid(Long.parseLong(""+staffId));
             cloudCompactStaffInfo.setDfid(dfMoneyRes);
@@ -586,7 +586,7 @@ public class CloudTaskController {
             // 鉴权功能
             CheckBanksRequest checkBanksRequest = new CheckBanksRequest();
             checkBanksRequest.setAccountNo(singlePerson.get("bankNo"));
-            checkBanksRequest.setIdCard(singlePerson.get("idno"));
+            checkBanksRequest.setIdCard(singlePerson.get("idno").toUpperCase());
             checkBanksRequest.setMobile(singlePerson.get("phone"));
             checkBanksRequest.setName(singlePerson.get("name"));
             checkBanksRequest.setDateTime(new Date());

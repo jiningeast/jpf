@@ -37,7 +37,7 @@
                 singleSelect:true,
                 multiselect:false,
                 selectOnCheck:true,
-                url : 'list',
+                url : '/caiwu/list',
                 columns : [[
                     {field:'id', title:'ID',width:'4%'},
                     {field:'fid', title:'充值单号',width:'10%'},

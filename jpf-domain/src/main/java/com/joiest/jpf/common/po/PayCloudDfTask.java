@@ -61,7 +61,7 @@ public class PayCloudDfTask implements Serializable {
     private BigDecimal failMoney;
 
     /**
-     * 数据写入状态 0未写入 1处理中 2处理完成
+     * 数据写入状态 -1异常 0未写入 1处理中 2处理完成
      */
     private Integer insertStatus;
 
