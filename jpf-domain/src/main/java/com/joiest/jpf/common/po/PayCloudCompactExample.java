@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PayCloudCompanySalesExample {
+public class PayCloudCompactExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -18,7 +18,7 @@ public class PayCloudCompanySalesExample {
     /**
      *
      */
-    public PayCloudCompanySalesExample() {
+    public PayCloudCompactExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -235,133 +235,133 @@ public class PayCloudCompanySalesExample {
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoIsNull() {
-            addCriterion("sales_no is null");
+        public Criteria andContentIsNull() {
+            addCriterion("content is null");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoIsNotNull() {
-            addCriterion("sales_no is not null");
+        public Criteria andContentIsNotNull() {
+            addCriterion("content is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoEqualTo(String value) {
-            addCriterion("sales_no =", value, "salesNo");
+        public Criteria andContentEqualTo(String value) {
+            addCriterion("content =", value, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoNotEqualTo(String value) {
-            addCriterion("sales_no <>", value, "salesNo");
+        public Criteria andContentNotEqualTo(String value) {
+            addCriterion("content <>", value, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoGreaterThan(String value) {
-            addCriterion("sales_no >", value, "salesNo");
+        public Criteria andContentGreaterThan(String value) {
+            addCriterion("content >", value, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoGreaterThanOrEqualTo(String value) {
-            addCriterion("sales_no >=", value, "salesNo");
+        public Criteria andContentGreaterThanOrEqualTo(String value) {
+            addCriterion("content >=", value, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoLessThan(String value) {
-            addCriterion("sales_no <", value, "salesNo");
+        public Criteria andContentLessThan(String value) {
+            addCriterion("content <", value, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoLessThanOrEqualTo(String value) {
-            addCriterion("sales_no <=", value, "salesNo");
+        public Criteria andContentLessThanOrEqualTo(String value) {
+            addCriterion("content <=", value, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoLike(String value) {
-            addCriterion("sales_no like", value, "salesNo");
+        public Criteria andContentLike(String value) {
+            addCriterion("content like", value, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoNotLike(String value) {
-            addCriterion("sales_no not like", value, "salesNo");
+        public Criteria andContentNotLike(String value) {
+            addCriterion("content not like", value, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoIn(List<String> values) {
-            addCriterion("sales_no in", values, "salesNo");
+        public Criteria andContentIn(List<String> values) {
+            addCriterion("content in", values, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoNotIn(List<String> values) {
-            addCriterion("sales_no not in", values, "salesNo");
+        public Criteria andContentNotIn(List<String> values) {
+            addCriterion("content not in", values, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoBetween(String value1, String value2) {
-            addCriterion("sales_no between", value1, value2, "salesNo");
+        public Criteria andContentBetween(String value1, String value2) {
+            addCriterion("content between", value1, value2, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesNoNotBetween(String value1, String value2) {
-            addCriterion("sales_no not between", value1, value2, "salesNo");
+        public Criteria andContentNotBetween(String value1, String value2) {
+            addCriterion("content not between", value1, value2, "content");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateIsNull() {
-            addCriterion("sales_rate is null");
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateIsNotNull() {
-            addCriterion("sales_rate is not null");
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateEqualTo(Double value) {
-            addCriterion("sales_rate =", value, "salesRate");
+        public Criteria andTypeEqualTo(Byte value) {
+            addCriterion("type =", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateNotEqualTo(Double value) {
-            addCriterion("sales_rate <>", value, "salesRate");
+        public Criteria andTypeNotEqualTo(Byte value) {
+            addCriterion("type <>", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateGreaterThan(Double value) {
-            addCriterion("sales_rate >", value, "salesRate");
+        public Criteria andTypeGreaterThan(Byte value) {
+            addCriterion("type >", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateGreaterThanOrEqualTo(Double value) {
-            addCriterion("sales_rate >=", value, "salesRate");
+        public Criteria andTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("type >=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateLessThan(Double value) {
-            addCriterion("sales_rate <", value, "salesRate");
+        public Criteria andTypeLessThan(Byte value) {
+            addCriterion("type <", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateLessThanOrEqualTo(Double value) {
-            addCriterion("sales_rate <=", value, "salesRate");
+        public Criteria andTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("type <=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateIn(List<Double> values) {
-            addCriterion("sales_rate in", values, "salesRate");
+        public Criteria andTypeIn(List<Byte> values) {
+            addCriterion("type in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateNotIn(List<Double> values) {
-            addCriterion("sales_rate not in", values, "salesRate");
+        public Criteria andTypeNotIn(List<Byte> values) {
+            addCriterion("type not in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateBetween(Double value1, Double value2) {
-            addCriterion("sales_rate between", value1, value2, "salesRate");
+        public Criteria andTypeBetween(Byte value1, Byte value2) {
+            addCriterion("type between", value1, value2, "type");
             return (Criteria) this;
         }
 
-        public Criteria andSalesRateNotBetween(Double value1, Double value2) {
-            addCriterion("sales_rate not between", value1, value2, "salesRate");
+        public Criteria andTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("type not between", value1, value2, "type");
             return (Criteria) this;
         }
 
@@ -425,68 +425,8 @@ public class PayCloudCompanySalesExample {
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedIsNull() {
-            addCriterion("updated is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedIsNotNull() {
-            addCriterion("updated is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedEqualTo(Date value) {
-            addCriterion("updated =", value, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedNotEqualTo(Date value) {
-            addCriterion("updated <>", value, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedGreaterThan(Date value) {
-            addCriterion("updated >", value, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedGreaterThanOrEqualTo(Date value) {
-            addCriterion("updated >=", value, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedLessThan(Date value) {
-            addCriterion("updated <", value, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedLessThanOrEqualTo(Date value) {
-            addCriterion("updated <=", value, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedIn(List<Date> values) {
-            addCriterion("updated in", values, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedNotIn(List<Date> values) {
-            addCriterion("updated not in", values, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedBetween(Date value1, Date value2) {
-            addCriterion("updated between", value1, value2, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedNotBetween(Date value1, Date value2) {
-            addCriterion("updated not between", value1, value2, "updated");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalesNoLikeInsensitive(String value) {
-            addCriterion("upper(sales_no) like", value.toUpperCase(), "salesNo");
+        public Criteria andContentLikeInsensitive(String value) {
+            addCriterion("upper(content) like", value.toUpperCase(), "content");
             return (Criteria) this;
         }
     }

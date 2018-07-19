@@ -4,6 +4,8 @@ import com.joiest.jpf.dto.CloudTaskRequest;
 import com.joiest.jpf.dto.CloudTaskResponse;
 import com.joiest.jpf.entity.CloudTaskInfo;
 
+import java.util.List;
+
 
 public interface CloudTaskServiceFacade {
 
@@ -26,4 +28,9 @@ public interface CloudTaskServiceFacade {
      * 更新任务记录
      */
     public int updateColumn(CloudTaskInfo cloudTaskInfo);
+
+    /**
+     * 根据合同号获取任务
+     */
+    public CloudTaskInfo getOneTaskByBatchNo(String batchNo);
 }

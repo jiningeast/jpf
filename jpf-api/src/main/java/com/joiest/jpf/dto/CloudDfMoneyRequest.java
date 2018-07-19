@@ -1,9 +1,9 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CloudDfMoneyInfo {
+public class CloudDfMoneyRequest {
     /**
      * 自增ID
      */
@@ -18,16 +18,6 @@ public class CloudDfMoneyInfo {
      * 聚合商户企业编号
      */
     private String merchNo;
-
-    /**
-     * 员工表用户签约状态
-     */
-    private String companyStaffIsActice;
-
-    /**
-     * 合同表合同签约状态
-     */
-    private String compactStaffCompactActive;
 
     /**
      * 企业添加人ID
@@ -467,21 +457,5 @@ public class CloudDfMoneyInfo {
 
     public void setPactno(String pactno) {
         this.pactno = pactno;
-    }
-
-    public String getCompanyStaffIsActice() {
-        return companyStaffIsActice;
-    }
-
-    public void setCompanyStaffIsActice(String companyStaffIsActice) {
-        this.companyStaffIsActice = companyStaffIsActice;
-    }
-
-    public String getCompactStaffCompactActive() {
-        return compactStaffCompactActive;
-    }
-
-    public void setCompactStaffCompactActive(String compactStaffCompactActive) {
-        this.compactStaffCompactActive = compactStaffCompactActive;
     }
 }

@@ -30,6 +30,10 @@ public class ManageConstants {
     //后台商户认证发送短信
     public static final String SEND_SMS_URL =  "https://api.7shengqian.com/index.php?r=Sms/YinjiaStageSend";
 
+    //代付接口秘钥
+    public static final String ClOUD_WAITPAY_KEYCODE =  "2298367955ECDEF6F96A8EF4B36CA49E";
+    public static final String ClOUD_WAITPAY_URl =  "http://10.10.18.12:8088/cloud-api/clouddf/dfApi";
+
     public static final Map<String,String> USER_OPERATE_STATUS = new HashMap<String,String>(){
         {
             put("0","订单生成,未选分期");

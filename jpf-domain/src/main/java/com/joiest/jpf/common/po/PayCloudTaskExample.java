@@ -1026,6 +1026,76 @@ public class PayCloudTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andOssPathIsNull() {
+            addCriterion("oss_path is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathIsNotNull() {
+            addCriterion("oss_path is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathEqualTo(String value) {
+            addCriterion("oss_path =", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathNotEqualTo(String value) {
+            addCriterion("oss_path <>", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathGreaterThan(String value) {
+            addCriterion("oss_path >", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathGreaterThanOrEqualTo(String value) {
+            addCriterion("oss_path >=", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathLessThan(String value) {
+            addCriterion("oss_path <", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathLessThanOrEqualTo(String value) {
+            addCriterion("oss_path <=", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathLike(String value) {
+            addCriterion("oss_path like", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathNotLike(String value) {
+            addCriterion("oss_path not like", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathIn(List<String> values) {
+            addCriterion("oss_path in", values, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathNotIn(List<String> values) {
+            addCriterion("oss_path not in", values, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathBetween(String value1, String value2) {
+            addCriterion("oss_path between", value1, value2, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathNotBetween(String value1, String value2) {
+            addCriterion("oss_path not between", value1, value2, "ossPath");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -1298,6 +1368,11 @@ public class PayCloudTaskExample {
 
         public Criteria andFilePathLikeInsensitive(String value) {
             addCriterion("upper(file_path) like", value.toUpperCase(), "filePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathLikeInsensitive(String value) {
+            addCriterion("upper(oss_path) like", value.toUpperCase(), "ossPath");
             return (Criteria) this;
         }
     }

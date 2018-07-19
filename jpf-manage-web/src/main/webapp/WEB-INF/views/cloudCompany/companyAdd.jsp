@@ -16,31 +16,35 @@
          style="padding: 10px; background: #fff; border: 1px solid #ccc;">
         <form id="editForm" method="post" enctype="multipart/form-data"
               accept="image/gif, image/jpeg,image/jpg, image/png">
-            <table cellpadding=3 class="table table-bordered">
+            <h2 align="center">添加基本信息</h2>
+            <table cellpadding=3 class="table table-bordered" align="center">
+
                 <tr>
-                    <th>基本信息</th>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">公司名称：</td>
+                    <td  style="text-align: right;width:40%" bgcolor="#f1f1f1">公司名称：</td>
                     <td>
                         <input id="name" name="name" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value=""/>
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">联系人姓名：</td>
+                </tr>
+                <tr>
+                    <td  style="text-align: right;width:30%" bgcolor="#f1f1f1">联系人姓名：</td>
                     <td>
                         <input id="phonename" name="phonename" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value=""/>
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1; width: 7%">联系人电话：</td>
                     <td>
                         <input id="phone" name="phone" type="text" style="width:150px" class="easyui-textbox"
                                value="" data-options="required:true,validType:'phoneRex'"/>
                     </td>
+                </tr>
+                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1; width: 7%">邮　箱：</td>
                     <td>
                         <input id="linkemail" name="linkemail" type="text"style="width:150px" class="easyui-textbox" value="" data-options="prompt:'Enter a valid email.',required:true,validType:'email'"/>
                     </td>
-
 
                 </tr>
                 <tr>
@@ -59,6 +63,8 @@
                             <option value="0" selected="selected">业务公司</option>
                         </select>
                     </td>
+                        </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
                         <select id="attestation" name="attestation" data-options="required:true"
@@ -68,11 +74,15 @@
                             <option value="1">已认证</option>
                         </select>
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">服务费：</td>
                     <td>
-                        <input id="salesRate" name="salesRate" type="text" style="width:150px" class="easyui-numberbox"
+                        <input id="salesRate" name="salesRate" type="text" style="width:150px"
                                value="" data-options="required:true"/><span style="color: #FF2F2F"> 注：当为0.00时不收取服务费</span>
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">登录状态：</td>
                     <td>
                         <select id="status" name="status" data-options="required:true"
@@ -82,21 +92,23 @@
                             <option value="-1">禁闭</option>
                         </select>
                     </td>
+                </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">营业执照：</td>
                     <td>
 
-                        <p>上传文件：  <input type="file" name="file"></p>
+                        <p>上传文件：  <input type="file" name="file" id="file1"></p>
                         <input type="button" value="上传" onclick="doUploadY()"/>
                         <div id="apy"></div>
                         <input id="bslicense" name="bslicense" type="hidden" style="width:150px"
                                required="true" value=""/>
                     </td>
-
+                    </tr>
+                    <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业资质：</td>
                     <td>
 
-                        <p>上传文件： <input type="file" name="file"></p>
+                        <p>上传文件： <input type="file" name="file" id="file2"></p>
                         <input type="button" value="上传" onclick="doUpload()"/>
 
 
@@ -104,6 +116,8 @@
                         <input id="aptitude" name="aptitude" type="hidden" style="width:150px"
                                required="true" value="${admin_id}" />
                     </td>
+                    </tr>
+                    <tr>
                     <td style="text-align:right; background-color: #f1f1f1;">账户通知方式：</td>
                     <td style="text-align:left">
                         <%--      <span class="radioSpan">
@@ -119,10 +133,7 @@
 
 
                     </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
+                        </tr>
                 <tr>
 
                     <%--     <td style="text-align:right;">短信发送：</td>
@@ -152,16 +163,15 @@
                         <input id="serviclinkuser" name="serviclinkuser" type="text" style="width:150px"
                                class="easyui-textbox" value=""/>
                     </td>
+                        </tr>
+                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">手机号：</td>
                     <td>
                         <input id="linkphone" name="linkphone" type="text" style="width:150px" class="easyui-textbox"
                                value=""/>
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                     </tr>
+
             </table>
         </form>
         <!--上传图片、文件的代码-->
@@ -217,7 +227,9 @@
         <%--$('#paytype').combobox('select', '${rolesInfo.zftype}');--%>
     }
     function doUploadY() {
-        var formData = new FormData($( "#editForm" )[0]);
+        var formData = new FormData();
+        formData.append('file', $('#file1')[0].files[0]);
+
         $.ajax({
             url: '../cloudCompany/upload',
             type: 'POST',
@@ -227,7 +239,8 @@
             contentType: false,
             processData: false,
             success: function (returndata) {
-                var yc=   '<img width="200px" height="200px" src="${pageContext.request.contextPath}/resources/'+returndata+'"/>';
+                var yc=   '<img width="200px" height="200px" src="'+returndata+'"/>';
+             console.log(yc);
                 $("#apy").html(yc);
                 $("#bslicense").val(returndata);
             },
@@ -237,7 +250,8 @@
         });
     }
     function doUpload() {
-        var formData = new FormData($( "#editForm" )[0]);
+        var formData = new FormData();
+        formData.append('file', $('#file2')[0].files[0]);
         $.ajax({
             url: '../cloudCompany/upload',
             type: 'POST',
@@ -247,7 +261,7 @@
             contentType: false,
             processData: false,
             success: function (ret) {
-                var c=   '<img width="200px" height="200px" src="${pageContext.request.contextPath}/resources/'+ret+'"/>';
+                var c=   '<img width="200px" height="200px" src="'+ret+'"/>';
                 $("#ap").html(c);
                 $("#aptitude").val(ret);
             },

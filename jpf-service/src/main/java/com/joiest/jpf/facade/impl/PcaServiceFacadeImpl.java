@@ -64,6 +64,27 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
     }
 
     @Override
+    public List<PcaInfo> getPcasInner(String pid) {
+
+        PayPcaExample example = new PayPcaExample();
+        PayPcaExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(pid)) {
+            criteria.andPidEqualTo(Integer.valueOf(pid));
+        }else{
+            criteria.andPidEqualTo(0);
+        }
+        criteria.andCatidLessThan(3358);
+        List<PayPca> pcas = payPcaMapper.selectByExample(example);
+        List<PcaInfo> pcaInfos = new ArrayList<>();
+        for (PayPca payPca : pcas) {
+            PcaInfo pcaInfo = new PcaInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayPca.class, PcaInfo.class, false);
+            beanCopier.copy(payPca, pcaInfo, null);
+            pcaInfos.add(pcaInfo);
+        }
+        return pcaInfos;
+    }
+    @Override
     public List<PcaInfo> getPca(long page, long pageSize) {
         PayPcaExample example = new PayPcaExample();
         if ( page <= 0 )

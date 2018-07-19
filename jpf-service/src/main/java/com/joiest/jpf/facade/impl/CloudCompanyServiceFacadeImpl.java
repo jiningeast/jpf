@@ -168,7 +168,8 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         if(StringUtils.isBlank(request.getPhone())){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "联系电话不能为空");
         }
-        String pattern = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$";
+        System.out.println(request.getPhone());
+        String pattern = "^[1][3,4,5,7,8][0-9]{9}$";
         boolean isphone = Pattern.matches(pattern, request.getPhone());
 
         if(isphone==false){
@@ -309,6 +310,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
             Employee.setCloudloginpwd(companypass);
             int resEmploee=payCloudEmployeeMapper.insertSelective(Employee);
            //所有都插入成功执行发送短信或者发送邮件的代码
+        System.out.println(request.getTipstype());
            if(request.getTipstype() == (byte)1){
                //发送邮件
                String email=request.getLinkemail();
@@ -395,7 +397,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         if(StringUtils.isBlank(request.getPhone())){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "联系电话不能为空");
         }
-        String pattern = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$";
+        String pattern = "^[1][3,4,5,7,8][0-9]{9}$";
         boolean isphone = Pattern.matches(pattern, request.getPhone());
 
         if(isphone==false){

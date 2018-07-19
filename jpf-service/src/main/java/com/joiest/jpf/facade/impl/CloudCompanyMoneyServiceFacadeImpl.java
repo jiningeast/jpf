@@ -167,7 +167,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         GetCloudMoneyDfResponse getCloudMoneyDfResponse = new GetCloudMoneyDfResponse();
 
         if( StringUtils.isBlank(companyMoneyId) || companyMoneyId==null  ){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单号不能空");
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "参数不能为空");
         }
 
         PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
@@ -294,5 +294,25 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
 
          return payCloudCompanyMoneyMapper.updateByPrimaryKeySelective(payCloudCompanyMoney);
 
+    }
+
+    /**
+     * 根据合同编号获取记录
+     */
+    @Override
+    public CloudCompanyMoneyInfo getRecByFid(String fid){
+        PayCloudCompanyMoneyExample e = new PayCloudCompanyMoneyExample();
+        PayCloudCompanyMoneyExample.Criteria c = e.createCriteria();
+        c.andFidEqualTo(fid);
+
+        List<PayCloudCompanyMoney> list = payCloudCompanyMoneyMapper.selectByExample(e);
+        CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
+
+        if ( !list.isEmpty() ){
+            BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyMoney.class, CloudCompanyMoneyInfo.class, false);
+            beanCopier.copy(list.get(0), cloudCompanyMoneyInfo, null);
+        }
+
+        return cloudCompanyMoneyInfo;
     }
 }

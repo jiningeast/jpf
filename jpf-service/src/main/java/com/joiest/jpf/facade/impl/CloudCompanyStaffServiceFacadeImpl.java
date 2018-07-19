@@ -60,6 +60,7 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
 
         staff.setIsActive(Byte.parseByte(map.get("is_active")));
         staff.setCode(map.get("code"));
+        staff.setUcardid(map.get("ucardid"));
 
         return payCloudCompanyStaffMapper.updateByExampleSelective(staff, example);
     }
@@ -85,12 +86,13 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
     }
 
     @Override
-    public int addStaff(CloudCompanyStaffInfo cloudCompanyStaffInfo){
+    public String addStaff(CloudCompanyStaffInfo cloudCompanyStaffInfo){
         PayCloudCompanyStaff payCloudCompanyStaff = new PayCloudCompanyStaff();
         BeanCopier beanCopier = BeanCopier.create( CloudCompanyStaffInfo.class, PayCloudCompanyStaff.class, false);
         beanCopier.copy(cloudCompanyStaffInfo, payCloudCompanyStaff, null);
 
-        return payCloudCompanyStaffCustomMapper.insertSelective(payCloudCompanyStaff);
+        payCloudCompanyStaffCustomMapper.insertSelective(payCloudCompanyStaff);
+        return payCloudCompanyStaff.getId();
     }
 
     /**

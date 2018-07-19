@@ -54,4 +54,9 @@ public interface CloudCompanyMoneyServiceFacade {
      * 更新记录
      */
     public int updateColumn(CloudCompanyMoneyInfo cloudCompanyMoneyInfo);
+
+    /**
+     * 根据合同编号获取记录
+     */
+    public CloudCompanyMoneyInfo getRecByFid(String fid);
 }

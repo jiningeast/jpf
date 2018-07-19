@@ -1,15 +1,21 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayCloudCompanyMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
+import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
+import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.facade.CloudCompanyMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
+import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
+import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,8 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/cloudDfMoney")
@@ -31,6 +36,8 @@ public class CloudDfMoneyController {
     @Autowired
     private CloudCompanyMoneyServiceFacade cloudCompanyMoneyServiceFacade;
 
+    @Autowired
+    private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
 
     /**
      * 代付开始打款
@@ -61,10 +68,53 @@ public class CloudDfMoneyController {
         for (int i = 0; i < ids_str.length; i++) {
             ids.add(Long.parseLong(ids_str[i]));
         }
+        if( ids.isEmpty() || ids.size() <=0 ){//未选择代付明细ID
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请选择代付信息");
+        }
 
         PayCloudCompanyMoney comMoneyData = new PayCloudCompanyMoney();
         comMoneyData.setMontype((byte)3);
         JpfResponseDto jpfcomMoneyDto = cloudCompanyMoneyServiceFacade.updateRecById(comMoneyData,companyMoneyId);
+
+        //调用代付接口
+        Date date = new Date();
+        String dateTime = date.toString();
+        Map<String,Object> map = new HashMap<>();
+        map.put("batchid",companyMoneyId);
+        map.put("dfid",ids);
+        String cloudWaitpayKeycode = ManageConstants.ClOUD_WAITPAY_KEYCODE; //校验码keycode
+        String requestUrl = ManageConstants.ClOUD_WAITPAY_URl; //校验码keycode
+
+        //排序转换
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(map);
+        String respos = ToolUtils.mapToUrl(treeMap);
+        map.put("token",cloudWaitpayKeycode);
+
+        String requestParam = ToolUtils.mapToUrl(map);//请求参数
+
+        String response = OkHttpUtils.postForm(requestUrl,map);
+
+        //json---转换代码---
+        Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
+        if( responseMap.isEmpty() ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "代付接口异常");
+        }
+        String code=responseMap.get("code");
+        if( code =="10000" ){ //代付成功
+            //记录pay_cloud_interface_stream表操作记录
+            CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+            //存取短信接口调用记录
+            cloudInterfaceStreamInfo.setRequestUrl(requestUrl);
+            cloudInterfaceStreamInfo.setRequestContent(requestParam);
+            cloudInterfaceStreamInfo.setType((byte)2);
+            cloudInterfaceStreamInfo.setResponseContent(response);
+            cloudInterfaceStreamInfo.setCompanyMoneyId(companyMoneyId);
+            cloudInterfaceStreamInfo.setTaskId("0");
+            cloudInterfaceStreamInfo.setStaffId("0");
+            cloudInterfaceStreamInfo.setAddtime(date);
+            cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+        }
 
         //更新订单下对应的代付明细状态为：打款中
         PayCloudDfMoney recordData = new PayCloudDfMoney();
@@ -74,7 +124,5 @@ public class CloudDfMoneyController {
 
         return jpfResponseDto;
     }
-
-
 
 }

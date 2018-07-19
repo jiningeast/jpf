@@ -1,9 +1,9 @@
 package com.joiest.jpf.facade.impl;
 
-import com.joiest.jpf.common.po.PayCloudCompanyStaff;
 import com.joiest.jpf.common.po.PayCloudStaffBanks;
 import com.joiest.jpf.common.po.PayCloudStaffBanksExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudStaffBanksMapper;
+import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
 import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,9 +74,13 @@ public class CloudStaffBanksServiceFacadeImpl implements CloudStaffBanksServiceF
     /**
      * 根据指定条件获取信息
      */
+    @Override
     public CloudStaffBanksInfo getStaffBankByInfo(CloudStaffBanksInfo cloudStaffBanksInfo){
         PayCloudStaffBanksExample e = new PayCloudStaffBanksExample();
         PayCloudStaffBanksExample.Criteria c = e.createCriteria();
+        if ( cloudStaffBanksInfo.getStaffid() != null ){
+            c.andStaffidEqualTo(cloudStaffBanksInfo.getStaffid());
+        }
         if ( cloudStaffBanksInfo.getBankno() != null ){
             c.andBanknoEqualTo(cloudStaffBanksInfo.getBankno());
         }
@@ -89,8 +93,12 @@ public class CloudStaffBanksServiceFacadeImpl implements CloudStaffBanksServiceF
         List<PayCloudStaffBanks> list = payCloudStaffBanksMapper.selectByExample(e);
         CloudStaffBanksInfo cloudStaffBanksInfo1 = new CloudStaffBanksInfo();
 
-        BeanCopier beanCopier = BeanCopier.create( PayCloudStaffBanks.class, CloudStaffBanksInfo.class, false);
-        beanCopier.copy(list.get(0), cloudStaffBanksInfo1, null);
+        if ( !list.isEmpty() ){
+            BeanCopier beanCopier = BeanCopier.create( PayCloudStaffBanks.class, CloudStaffBanksInfo.class, false);
+            beanCopier.copy(list.get(0), cloudStaffBanksInfo1, null);
+        }else{
+            return new CloudStaffBanksInfo();
+        }
 
         return cloudStaffBanksInfo1;
     }

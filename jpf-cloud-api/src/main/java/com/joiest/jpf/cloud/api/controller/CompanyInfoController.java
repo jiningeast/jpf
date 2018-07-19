@@ -124,8 +124,7 @@ public class CompanyInfoController {
     @ResponseBody
     public String companyLoginOut(HttpServletRequest request){
 
-        String token = request.getParameter("token");
-
+        String token = request.getHeader("token");
         String UID =  redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_EMPLOY_LOGIN_KEY") + token);
         if ( StringUtils.isBlank(token) )
         {
@@ -142,7 +141,8 @@ public class CompanyInfoController {
     @ResponseBody
     public String companyUpPwd(HttpServletRequest request){
 
-        String token = request.getParameter("token");
+        String token = request.getHeader("token");
+
         String originPwd = request.getParameter("originPwd");//原密码
         String nowPwd = request.getParameter("nowPwd");      //现密码
         String nowComPwd = request.getParameter("nowComPwd");//确认密码
@@ -204,7 +204,7 @@ public class CompanyInfoController {
         if(StringUtils.isBlank(pid)){
             pid = "0";
         }
-        List<PcaInfo > pcaInfo =  pcaServiceFacade.getPcas(pid);
+        List<PcaInfo > pcaInfo =  pcaServiceFacade.getPcasInner(pid);
         if(pcaInfo.isEmpty()){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到数据", null);

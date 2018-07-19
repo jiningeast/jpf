@@ -70,6 +70,11 @@ public class CloudTaskInfo {
     private String filePath;
 
     /**
+     * 上传excel到阿里云oss的路径
+     */
+    private String ossPath;
+
+    /**
      * 处理状态 0=未处理 1=处理中 2=完成 3=失败
      */
     private Byte status;
@@ -191,6 +196,14 @@ public class CloudTaskInfo {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getOssPath() {
+        return ossPath;
+    }
+
+    public void setOssPath(String ossPath) {
+        this.ossPath = ossPath;
     }
 
     public Byte getStatus() {
