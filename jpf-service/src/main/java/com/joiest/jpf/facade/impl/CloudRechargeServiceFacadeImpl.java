@@ -620,16 +620,16 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             exampleCriteria.andStatusIn(reqStatusList);
         }
         if (StringUtils.isNotBlank(request.getAddtimeStart()) && StringUtils.isNotBlank(request.getAddtimeEnd())) {
-            exampleCriteria.andAddtimeBetween(DateUtils.getFdate(request.getAddtimeStart(), DateUtils.DATEFORMATSHORT ),DateUtils.getFdate(request.getAddtimeEnd(), DateUtils.DATEFORMATSHORT ));
+            exampleCriteria.andAddtimeBetween(DateUtils.getFdate(request.getAddtimeStart(), DateUtils.DATEFORMATSHORT ),DateUtils.addInteger(request.getAddtimeEnd(),5,1,DateUtils.DATEFORMATSHORT));
         }
         if (StringUtils.isNotBlank(request.getShenhetimeStart()) && StringUtils.isNotBlank(request.getShenhetimeEnd())) {
-            exampleCriteria.andShenhetimeBetween(DateUtils.getFdate(request.getShenhetimeStart(), DateUtils.DATEFORMATSHORT ),DateUtils.getFdate(request.getShenhetimeEnd(), DateUtils.DATEFORMATSHORT ));
+            exampleCriteria.andShenhetimeBetween(DateUtils.getFdate(request.getShenhetimeStart(), DateUtils.DATEFORMATSHORT ),DateUtils.addInteger(request.getShenhetimeEnd(),5,1,DateUtils.DATEFORMATSHORT));
         }
         if (StringUtils.isNotBlank(request.getChargetimeStart()) && StringUtils.isNotBlank(request.getChargetimeEnd())) {
-            exampleCriteria.andChargetimeBetween(DateUtils.getFdate(request.getChargetimeStart(), DateUtils.DATEFORMATSHORT), DateUtils.getFdate(request.getChargetimeEnd(), DateUtils.DATEFORMATSHORT));
+            exampleCriteria.andChargetimeBetween(DateUtils.getFdate(request.getChargetimeStart(), DateUtils.DATEFORMATSHORT), DateUtils.addInteger(request.getChargetimeEnd(),5,1,DateUtils.DATEFORMATSHORT));
         }
         if (StringUtils.isNotBlank(request.getPacttimeStart()) && StringUtils.isNotBlank(request.getPacttimeEnd())) {
-            exampleCriteria.andPacttimeBetween(DateUtils.getFdate(request.getPacttimeStart(), DateUtils.DATEFORMATSHORT), DateUtils.getFdate(request.getPacttimeEnd(), DateUtils.DATEFORMATSHORT));
+            exampleCriteria.andPacttimeBetween(DateUtils.getFdate(request.getPacttimeStart(), DateUtils.DATEFORMATSHORT), DateUtils.addInteger(request.getPacttimeEnd(),5,1,DateUtils.DATEFORMATSHORT));
         }
         if (null != reqPactstatus) {
             exampleCriteria.andPactstatusEqualTo(reqPactstatus);
