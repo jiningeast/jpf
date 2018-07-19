@@ -11,6 +11,7 @@ import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ValidatorUtils;
+import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyAgentMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanySalesMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudRechargeMapper;
@@ -18,7 +19,6 @@ import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudRechargeInfo;
 import com.joiest.jpf.entity.RechargeNeedInfo;
-import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudRechargeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +48,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
     @Autowired
     private PayCloudCompanySalesMapper payCloudCompanySalesMapper;
+
+    @Autowired
+    private PayCloudCompanyAgentMapper payCloudCompanyAgentMapper;
     /*
     * 统计充值总笔数
     * */
@@ -198,7 +201,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     * 审核详情页页面
      * */
     @Override
-    public CloudRechargeInfo getRecharge(String id){
+    public CloudRechargeInfo getRecharge(Long id){
 
         if (id == null) {
             //logger.info("求情参数id为空");
@@ -238,12 +241,12 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getAuditRecharge(CloudRechargeRequest request){
 
-        String infoId = request.getId();
+        Long infoId = request.getId();
         String infoKfremarks = request.getKfremarks();
         Byte infoStatus = request.getStatus();
         String infoPactno = request.getPactno();
 
-        if( StringUtils.isBlank(infoId) ){
+        if( infoId == null  ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(infoId));
@@ -368,11 +371,11 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getCaiwuAuditRecharge(CloudRechargeRequest request){
 
-        String infoId = request.getId();
+        Long infoId = request.getId();
         String infoKfremarks = request.getKfremarks();
         Byte infoStatus = request.getStatus();
 
-        if( StringUtils.isBlank(infoId) ){
+        if( infoId == null  ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(infoId));
@@ -488,7 +491,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
     /*
     * 给公司账户充值金额
     * */
-    public Integer rechargeCompanyMoney(String id){
+    public Integer rechargeCompanyMoney(Long id){
 
         //查询充值信息
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(Long.valueOf(id));
@@ -682,12 +685,12 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         BigDecimal reqRealmoney = new BigDecimal(request.getRealmoney());
         Byte reqPayway = Byte.valueOf(request.getPayway());
         //代理公司校验
-        PayCloudCompanyExample payCloudCompanyExample = new PayCloudCompanyExample();
-        PayCloudCompanyExample.Criteria companyExampleCriteria = payCloudCompanyExample.createCriteria();
-        companyExampleCriteria.andMerchNoEqualTo(request.getAgentNo());
-        List<PayCloudCompany> payCloudCompanyList = payCloudCompanyMapper.selectByExample(payCloudCompanyExample);
-        if (payCloudCompanyList == null || payCloudCompanyList.isEmpty()) {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "代理企业不存在");
+        PayCloudCompanyAgentExample payCloudCompanyAgentExample = new PayCloudCompanyAgentExample();
+        PayCloudCompanyAgentExample.Criteria companyAgentCriteria = payCloudCompanyAgentExample.createCriteria();
+        companyAgentCriteria.andAgentNoEqualTo(request.getAgentNo());
+        List<PayCloudCompanyAgent> cloudCompanyAgentList = payCloudCompanyAgentMapper.selectByExample(payCloudCompanyAgentExample);
+        if (cloudCompanyAgentList == null || cloudCompanyAgentList.isEmpty()) {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "该"+request.getAgentNo()+"代理企业不存在");
         }
         //业务公司校验
         PayCloudCompanySalesExample payCloudCompanySalesExample = new PayCloudCompanySalesExample();

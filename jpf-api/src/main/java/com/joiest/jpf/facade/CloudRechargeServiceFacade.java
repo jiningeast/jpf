@@ -26,7 +26,7 @@ public interface CloudRechargeServiceFacade {
     /*
      * 查询单条充值信息
      * */
-    public CloudRechargeInfo getRecharge(String id);
+    public CloudRechargeInfo getRecharge(Long id);
 
     /*
     * 审核充值信息
@@ -41,7 +41,7 @@ public interface CloudRechargeServiceFacade {
     /**
      * 充值公司账户金额
      */
-    public Integer rechargeCompanyMoney(String id);
+    public Integer rechargeCompanyMoney(Long id);
 
     /**
      * 获取企业需求列表

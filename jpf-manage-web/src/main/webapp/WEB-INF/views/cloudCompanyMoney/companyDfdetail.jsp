@@ -84,7 +84,7 @@
                 {field:'commoney', title:'打款金额(元)',width:'6%'},
                 {field:'companyStaffIsActice', title:'是否签约',width:'8%',
                     formatter:function (value, row, index) {
-                        if ( value == 0 ){
+                        if ( value == 0 ||  value == null ){
                             return '<span style="color:red">未签约</span>';
                         }else if ( value == 1 ){
                             return '已签约';
@@ -93,7 +93,7 @@
                 },
                 {field:'compactStaffCompactActive', title:'是否签合同',width:'8%',
                     formatter:function (value, row, index) {
-                        if ( value == 0 ){
+                        if ( value == 0 ||  value == null  ){
                             return '<span style="color:red">未签协议合同</span>';
                         }else if ( value == 1 ){
                             return '已签协议合同';
@@ -102,7 +102,7 @@
                 },
                 {field:'isActive', title:'代付状态',width:'10%',
                     formatter:function (value, row, index) {
-                        if ( value == 0 ){
+                        if ( value == 0 ||  value == null  ){
                             return '<span style="color:red">不可代付</span>';
                         }else if ( value == 1 ){
                             return '可代付';

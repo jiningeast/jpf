@@ -31,6 +31,11 @@ public class PayCloudDfOrder implements Serializable {
     private String requestDfId;
 
     /**
+     * 外来orderid
+     */
+    private String requestOrderid;
+
+    /**
      * 交易金额
      */
     private BigDecimal applyamt;
@@ -76,14 +81,19 @@ public class PayCloudDfOrder implements Serializable {
     private String certno;
 
     /**
-     * 添加时间
+     * 开户行名称
      */
-    private Date created;
+    private String bankname;
 
     /**
-     * 更新时间
+     * 开户行省
      */
-    private Date updated;
+    private String bankprovince;
+
+    /**
+     * 开户行市
+     */
+    private String bankcity;
 
     /**
      * 交易号
@@ -91,7 +101,7 @@ public class PayCloudDfOrder implements Serializable {
     private String tranno;
 
     /**
-     * 订单状态 1处理中
+     * 订单状态 0未处理 1处理中
      */
     private Integer status;
 
@@ -104,6 +114,26 @@ public class PayCloudDfOrder implements Serializable {
      * 同步返回信息
      */
     private String returncontent;
+
+    /**
+     * 查询次数
+     */
+    private Integer querycount;
+
+    /**
+     * 最后一次查询响应
+     */
+    private String lastrespose;
+
+    /**
+     * 添加时间
+     */
+    private Date created;
+
+    /**
+     * 更新时间
+     */
+    private Date updated;
 
     private static final long serialVersionUID = 1L;
 
@@ -145,6 +175,14 @@ public class PayCloudDfOrder implements Serializable {
 
     public void setRequestDfId(String requestDfId) {
         this.requestDfId = requestDfId == null ? null : requestDfId.trim();
+    }
+
+    public String getRequestOrderid() {
+        return requestOrderid;
+    }
+
+    public void setRequestOrderid(String requestOrderid) {
+        this.requestOrderid = requestOrderid == null ? null : requestOrderid.trim();
     }
 
     public BigDecimal getApplyamt() {
@@ -219,20 +257,28 @@ public class PayCloudDfOrder implements Serializable {
         this.certno = certno == null ? null : certno.trim();
     }
 
-    public Date getCreated() {
-        return created;
+    public String getBankname() {
+        return bankname;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setBankname(String bankname) {
+        this.bankname = bankname == null ? null : bankname.trim();
     }
 
-    public Date getUpdated() {
-        return updated;
+    public String getBankprovince() {
+        return bankprovince;
     }
 
-    public void setUpdated(Date updated) {
-        this.updated = updated;
+    public void setBankprovince(String bankprovince) {
+        this.bankprovince = bankprovince == null ? null : bankprovince.trim();
+    }
+
+    public String getBankcity() {
+        return bankcity;
+    }
+
+    public void setBankcity(String bankcity) {
+        this.bankcity = bankcity == null ? null : bankcity.trim();
     }
 
     public String getTranno() {
@@ -267,6 +313,38 @@ public class PayCloudDfOrder implements Serializable {
         this.returncontent = returncontent == null ? null : returncontent.trim();
     }
 
+    public Integer getQuerycount() {
+        return querycount;
+    }
+
+    public void setQuerycount(Integer querycount) {
+        this.querycount = querycount;
+    }
+
+    public String getLastrespose() {
+        return lastrespose;
+    }
+
+    public void setLastrespose(String lastrespose) {
+        this.lastrespose = lastrespose == null ? null : lastrespose.trim();
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
     /**
      *
      */
@@ -281,6 +359,7 @@ public class PayCloudDfOrder implements Serializable {
         sb.append(", batchid=").append(batchid);
         sb.append(", requestBatchno=").append(requestBatchno);
         sb.append(", requestDfId=").append(requestDfId);
+        sb.append(", requestOrderid=").append(requestOrderid);
         sb.append(", applyamt=").append(applyamt);
         sb.append(", orderStdPrice=").append(orderStdPrice);
         sb.append(", requeststr=").append(requeststr);
@@ -290,12 +369,17 @@ public class PayCloudDfOrder implements Serializable {
         sb.append(", payeeacctattr=").append(payeeacctattr);
         sb.append(", phoneno=").append(phoneno);
         sb.append(", certno=").append(certno);
-        sb.append(", created=").append(created);
-        sb.append(", updated=").append(updated);
+        sb.append(", bankname=").append(bankname);
+        sb.append(", bankprovince=").append(bankprovince);
+        sb.append(", bankcity=").append(bankcity);
         sb.append(", tranno=").append(tranno);
         sb.append(", status=").append(status);
         sb.append(", dfstatus=").append(dfstatus);
         sb.append(", returncontent=").append(returncontent);
+        sb.append(", querycount=").append(querycount);
+        sb.append(", lastrespose=").append(lastrespose);
+        sb.append(", created=").append(created);
+        sb.append(", updated=").append(updated);
         sb.append("]");
         return sb.toString();
     }
@@ -321,6 +405,7 @@ public class PayCloudDfOrder implements Serializable {
             && (this.getBatchid() == null ? other.getBatchid() == null : this.getBatchid().equals(other.getBatchid()))
             && (this.getRequestBatchno() == null ? other.getRequestBatchno() == null : this.getRequestBatchno().equals(other.getRequestBatchno()))
             && (this.getRequestDfId() == null ? other.getRequestDfId() == null : this.getRequestDfId().equals(other.getRequestDfId()))
+            && (this.getRequestOrderid() == null ? other.getRequestOrderid() == null : this.getRequestOrderid().equals(other.getRequestOrderid()))
             && (this.getApplyamt() == null ? other.getApplyamt() == null : this.getApplyamt().equals(other.getApplyamt()))
             && (this.getOrderStdPrice() == null ? other.getOrderStdPrice() == null : this.getOrderStdPrice().equals(other.getOrderStdPrice()))
             && (this.getRequeststr() == null ? other.getRequeststr() == null : this.getRequeststr().equals(other.getRequeststr()))
@@ -330,12 +415,17 @@ public class PayCloudDfOrder implements Serializable {
             && (this.getPayeeacctattr() == null ? other.getPayeeacctattr() == null : this.getPayeeacctattr().equals(other.getPayeeacctattr()))
             && (this.getPhoneno() == null ? other.getPhoneno() == null : this.getPhoneno().equals(other.getPhoneno()))
             && (this.getCertno() == null ? other.getCertno() == null : this.getCertno().equals(other.getCertno()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
-            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()))
+            && (this.getBankname() == null ? other.getBankname() == null : this.getBankname().equals(other.getBankname()))
+            && (this.getBankprovince() == null ? other.getBankprovince() == null : this.getBankprovince().equals(other.getBankprovince()))
+            && (this.getBankcity() == null ? other.getBankcity() == null : this.getBankcity().equals(other.getBankcity()))
             && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getDfstatus() == null ? other.getDfstatus() == null : this.getDfstatus().equals(other.getDfstatus()))
-            && (this.getReturncontent() == null ? other.getReturncontent() == null : this.getReturncontent().equals(other.getReturncontent()));
+            && (this.getReturncontent() == null ? other.getReturncontent() == null : this.getReturncontent().equals(other.getReturncontent()))
+            && (this.getQuerycount() == null ? other.getQuerycount() == null : this.getQuerycount().equals(other.getQuerycount()))
+            && (this.getLastrespose() == null ? other.getLastrespose() == null : this.getLastrespose().equals(other.getLastrespose()))
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
     }
 
     /**
@@ -350,6 +440,7 @@ public class PayCloudDfOrder implements Serializable {
         result = prime * result + ((getBatchid() == null) ? 0 : getBatchid().hashCode());
         result = prime * result + ((getRequestBatchno() == null) ? 0 : getRequestBatchno().hashCode());
         result = prime * result + ((getRequestDfId() == null) ? 0 : getRequestDfId().hashCode());
+        result = prime * result + ((getRequestOrderid() == null) ? 0 : getRequestOrderid().hashCode());
         result = prime * result + ((getApplyamt() == null) ? 0 : getApplyamt().hashCode());
         result = prime * result + ((getOrderStdPrice() == null) ? 0 : getOrderStdPrice().hashCode());
         result = prime * result + ((getRequeststr() == null) ? 0 : getRequeststr().hashCode());
@@ -359,12 +450,17 @@ public class PayCloudDfOrder implements Serializable {
         result = prime * result + ((getPayeeacctattr() == null) ? 0 : getPayeeacctattr().hashCode());
         result = prime * result + ((getPhoneno() == null) ? 0 : getPhoneno().hashCode());
         result = prime * result + ((getCertno() == null) ? 0 : getCertno().hashCode());
-        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
-        result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
+        result = prime * result + ((getBankname() == null) ? 0 : getBankname().hashCode());
+        result = prime * result + ((getBankprovince() == null) ? 0 : getBankprovince().hashCode());
+        result = prime * result + ((getBankcity() == null) ? 0 : getBankcity().hashCode());
         result = prime * result + ((getTranno() == null) ? 0 : getTranno().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getDfstatus() == null) ? 0 : getDfstatus().hashCode());
         result = prime * result + ((getReturncontent() == null) ? 0 : getReturncontent().hashCode());
+        result = prime * result + ((getQuerycount() == null) ? 0 : getQuerycount().hashCode());
+        result = prime * result + ((getLastrespose() == null) ? 0 : getLastrespose().hashCode());
+        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
+        result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
         return result;
     }
 }

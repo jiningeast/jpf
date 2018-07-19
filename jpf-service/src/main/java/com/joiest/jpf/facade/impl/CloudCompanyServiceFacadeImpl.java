@@ -343,7 +343,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
                map.put("sign",selfSign);
 
-               String response = OkHttpUtils.postForm(ConfigUtil.getValue("MESSAGE_URL")+"sendSmsApi",map);
+               String response = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi",map);
 
                //json---转换代码---
                Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});

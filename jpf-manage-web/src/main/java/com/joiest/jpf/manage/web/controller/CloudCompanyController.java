@@ -114,7 +114,7 @@ public class CloudCompanyController {
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("path",allpath);
 //        String url = "http://10.10.18.16:8081/cloud-api/oss/upload";
-        String url = ConfigUtil.getValue("OSS_URL");
+        String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
         String response = OkHttpUtils.postForm(url,requestMap);
         response = StringUtils.strip(response,"\"");
         response = StringUtils.stripEnd(response,"\"");
