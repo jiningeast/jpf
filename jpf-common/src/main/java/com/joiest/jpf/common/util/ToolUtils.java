@@ -306,4 +306,26 @@ public class ToolUtils {
         }
         return ip;
     }
+
+    /**
+     * 生成固定长度字符串
+     * str 开始内容
+     * last 结尾内容
+     * lenNum 长度
+     */
+    public static String createDfOrderid(String str,String last,int lenNum){
+
+        String middle = "";//中间填充信息
+        String  pre = str + last;
+        if( pre.length() > lenNum ){
+            return pre;
+        }else{
+            for (int i = 0; i <lenNum-pre.length() ; i++) {
+                middle += "0";
+            }
+        }
+
+        return str+middle+last;
+    }
+
 }

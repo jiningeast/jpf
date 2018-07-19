@@ -529,7 +529,7 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setMontype(1);
             cloudDfMoneyInfo.setRemark(singlePerson.get("memo"));
             cloudDfMoneyInfo.setVid(1);      // 待修改
-            cloudDfMoneyInfo.setIsActive(1);
+            cloudDfMoneyInfo.setIsActive(0);
             cloudDfMoneyInfo.setContent("");    // 待修改
             cloudDfMoneyInfo.setOperastate(0);  // 待修改
             cloudDfMoneyInfo.setTranno("");

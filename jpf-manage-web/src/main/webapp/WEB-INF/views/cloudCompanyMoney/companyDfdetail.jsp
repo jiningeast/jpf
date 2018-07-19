@@ -77,8 +77,10 @@
            //selectOnCheck:true,
             url : '../dfDetail?companyMoneyId='+${companyMoneyId},
             columns : [[
-                {field:'id', title:'ID',width:'4%',checkbox:true},
-                //{field:'fid', title:'订单号',width:'12%'},
+                {field:'id', title:'ID',width:'4%',checkbox:true,},
+                {field:'dfid', title:'编号',width:'4%',formatter:function (value, row, index) {
+                        return row["id"];
+                    }},
                 {field:'banknickname', title:'收款人',width:'6%'},
                 {field:'bankno', title:'银行卡号',width:'15%'},
                 {field:'commoney', title:'打款金额(元)',width:'6%'},

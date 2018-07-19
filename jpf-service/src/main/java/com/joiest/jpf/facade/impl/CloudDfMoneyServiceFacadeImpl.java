@@ -190,7 +190,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
 
         int count = payCloudDfMoneyMapper.updateByExampleSelective(record,example);
-        if( count >= 0 ){
+        if( count <= 0 ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "代付操作失败");
         }
         return new JpfResponseDto();
@@ -265,8 +265,12 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
         PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
         PayCloudDfMoneyExample.Criteria c = example.createCriteria();
-
-        c.andCompanyMoneyIdEqualTo(request.getCompanyMoneyId());
+        if( request.getCompanyMoneyId() != null ){
+            c.andCompanyMoneyIdEqualTo(request.getCompanyMoneyId());
+        }
+        if( request.getIdsStr() != null ){
+            c.andIdIn(request.getIdsStr());
+        }
 
         List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);
         List<CloudDfMoneyInfo> infos = new ArrayList<>();
