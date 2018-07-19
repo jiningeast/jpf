@@ -16,6 +16,11 @@ public interface CloudDfOrderInterfaceServiceFacade {
     public int addOrder(String batchid, String dfid, List<CloudDfMoneyInterfaceInfo> list, String batchid_self);
 
     /**
+     *根据外来单号查询代付数据  request_orderid
+     * **/
+    public CloudDfMoneyInterfaceInfo getDfOrderByRequestOrderid(String request_orderid);
+
+    /*
      * 获取批次下的代付信息
      * @param batchid 批次号
      * @return
@@ -28,4 +33,5 @@ public interface CloudDfOrderInterfaceServiceFacade {
      * @return
      */
     public int updateDfOrderStatus(CloudDfOrderInterfaceInfo info);
+
 }

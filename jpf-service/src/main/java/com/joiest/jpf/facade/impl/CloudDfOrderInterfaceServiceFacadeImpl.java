@@ -110,4 +110,16 @@ public class CloudDfOrderInterfaceServiceFacadeImpl implements CloudDfOrderInter
 
         return res;
     }
+    /**
+     *根据外来单号查询代付数据  request_orderid
+     * **/
+    public CloudDfMoneyInterfaceInfo getDfOrderByRequestOrderid(String request_orderid){
+
+        PayCloudDfOrderExample example = new PayCloudDfOrderExample();
+        PayCloudDfOrderExample.Criteria c = example.createCriteria();
+        //c.
+
+
+        return null;
+    }
 }
