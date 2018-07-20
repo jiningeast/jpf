@@ -10,6 +10,7 @@ import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
+import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Controller
@@ -43,6 +45,8 @@ public class CloudDfMoneyController {
     @Autowired
     private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
 
+    @Autowired
+    private CloudCompanyServiceFacade cloudCompanyServiceFacade;
     /**
      * 代付开始打款
      * dfIds  代付明细主键ID串 例： 1,2
@@ -76,11 +80,26 @@ public class CloudDfMoneyController {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请选择代付信息");
         }
 
+
         if( companyMoneyInfo.getMontype() != 3 ) {
             PayCloudCompanyMoney comMoneyData = new PayCloudCompanyMoney();
             comMoneyData.setMontype((byte) 3);
             JpfResponseDto jpfcomMoneyDto = cloudCompanyMoneyServiceFacade.updateRecById(comMoneyData, companyMoneyId);
         }
+
+        //查询公司账号信息
+        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(companyMoneyInfo.getUid());
+        if( companyInfo == null ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到公司信息");
+        }
+        String companyId = companyInfo.getId(); //公司ID
+        BigDecimal cloudMoney = companyInfo.getCloudmoney(); //账户金额
+        String cloudcode = companyInfo.getCloudcode(); //金额校验码
+        Boolean checkMoneyVerify = cloudCompanyServiceFacade.checkCompanyMoneyVerify(companyId);
+        if( !checkMoneyVerify ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "金额校验失败");
+        }
+
 
         JpfResponseDto jpfResponseDto = new JpfResponseDto();
 
@@ -91,8 +110,10 @@ public class CloudDfMoneyController {
 
         Integer lenNum = 24;
         List<Long> limitData = new ArrayList<>(); //不能打款的订单数据
+        BigDecimal cloudRealPayMoney = new BigDecimal("0"); //实际发放金额
         for(CloudDfMoneyInfo onetimes:infos){
             Long dfMoneyId = onetimes.getId();
+            BigDecimal dfCommoney = onetimes.getCommoney(); //发放金额
             if( onetimes.getIsActive() != 1 || (onetimes.getMontype() !=1 && onetimes.getMontype() !=3) ){ //过滤已打款或 不能打款 代付信息
                 limitData.add(dfMoneyId);
             }
@@ -108,6 +129,8 @@ public class CloudDfMoneyController {
                 if( !jpfResponseDto.getRetCode().equals("0000") ){
                     throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单生成异常");
                 }
+                cloudRealPayMoney.add( dfCommoney ); //计算实际打款金额
+
             }else{//二次打款 新单号处理
                 PayCloudDfMoney retData = new PayCloudDfMoney();
                 String orderid = ToolUtils.createDfOrderid(String.valueOf(System.currentTimeMillis()),onetimes.getId().toString(),lenNum);
@@ -120,7 +143,7 @@ public class CloudDfMoneyController {
                 if( !jpfResponseDto.getRetCode().equals("0000") ){
                     throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单生成异常");
                 }
-
+                cloudRealPayMoney.add( dfCommoney ); //计算实际打款金额
             }
         }
 

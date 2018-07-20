@@ -61,7 +61,7 @@ public class CloudRechargeController {
     /*
      * 财务充值列表页
      * */
-    @RequestMapping("/caiwu/Index")
+    @RequestMapping("/caiwuIndex")
     public String caiwuIndex(){
         return "cloudRecharge/cloudCaiwuList";
     }
@@ -69,7 +69,7 @@ public class CloudRechargeController {
     /*
      * 财务充值列表页
      * */
-    @RequestMapping("/caiwu/list")
+    @RequestMapping("/caiwuList")
     @ResponseBody
     public Map<String, Object> caiwuList(CloudRechargeRequest cloudRechargeRequest){
 
