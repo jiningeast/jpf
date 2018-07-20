@@ -73,12 +73,12 @@ public class ToolCateController {
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
 
-        if(!selfSign.equals(sign)){
+        /*if(!selfSign.equals(sign)){
 
             json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
             json.put("info","签名有误");
             return json;
-        }
+        }*/
 
         JSONObject ocrRes = new IdentAuth().idCardOcr(request,side,imgInfo);
         return ocrRes;
@@ -532,7 +532,7 @@ public class ToolCateController {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息上传失败",null);
             }
         }else{
-            
+
             Map<String,Object> map = new HashMap<>();
             map.put("id",cloudIdcardInfo.getId());
 
