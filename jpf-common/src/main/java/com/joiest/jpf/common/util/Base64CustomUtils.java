@@ -115,7 +115,7 @@ public class Base64CustomUtils {
     /**
      * base64 encode 转换为图片最终版
      * */
-    public static Map<String,String> baseToImageFinal(HttpServletRequest request, String imgStr, String savePre){
+    public static Map<String,String> baseToImageFinal(String imgStr, String savePre){
 
         //图像Base数据为空
         if (imgStr == null)  return null;
@@ -131,6 +131,7 @@ public class Base64CustomUtils {
 
             suffix = matcher.group(1);
         };
+        System.out.println("图片前缀获取："+suffix);
         imgStr = imgStr.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
         BASE64Decoder decoder = new BASE64Decoder();
         try
@@ -164,9 +165,16 @@ public class Base64CustomUtils {
             File fileOne = new File(imgFilePath);
             String md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
 
-            imgInfo.put("actualUrl",imgFilePath);//服务器实际路径
-            imgInfo.put("filename",filename);//文件名
-            imgInfo.put("resourceUrl",md5key);//域名对应图片地址 如：http://xxx.com/图片存储地址
+            // 关闭OSSClient。
+            System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
+            System.out.println("服务器地址："+md5key);
+            System.out.println("实际路径："+imgFilePath);
+            System.out.println("文件名："+filename);
+
+
+            imgInfo.put("localUrl",imgFilePath);//服务器实际路径
+            imgInfo.put("fileName",filename);//文件名
+            imgInfo.put("serverUrl",md5key);//域名对应图片地址 如：http://xxx.com/图片存储地址
 
             return imgInfo;
         }catch (Exception e) {
