@@ -45,11 +45,18 @@ public class OssController {
 //            InputStream inputStream = new FileInputStream(fileOne);
             md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
             // 关闭OSSClient。
-            System.out.println(md5key);
-            System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
+          /*  System.out.println(md5key);
+            System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");*/
 
         }
-        return md5key;
+        String subMd5key="";
+        //截取去掉后缀时效
+        if(md5key != null && md5key.length() != 0){
+
+             subMd5key =md5key.substring(0,md5key.lastIndexOf("?"));
+
+        }
+        return subMd5key;
 
     }
 

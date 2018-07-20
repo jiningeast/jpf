@@ -16,8 +16,12 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyAgentMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanySalesMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudEmployeeMapper;
-import com.joiest.jpf.dto.*;
+import com.joiest.jpf.dto.GetCloudCompanyRequest;
+import com.joiest.jpf.dto.GetCloudCompanyResponse;
+import com.joiest.jpf.dto.GetCloudCompanysRequest;
+import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
+import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -279,7 +283,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         payCloudCompanyCustomMapper.updateByExampleSelective(Companyup,examplea);
          //更新当前人的金额校验值
         //条件判断插入代理还是业务公司
-
+        JpfResponseDto responseDto = new JpfResponseDto();
         if(request.getType().equals("1")){
             //插入代理公司表
             PayCloudCompanyAgent agent= new PayCloudCompanyAgent();
@@ -329,42 +333,15 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
 
            }else if(request.getTipstype() == (byte)2){
-               //发送短信
-               String mobile = request.getPhone();
-               String content ="尊敬的用户您的账号已经开通：账号为"+request.getLinkemail()+"密码为"+passlogin;
-               String dateTime = date.toString();
-               Map<String,Object> map = new HashMap<>();
-               map.put("mobile",mobile);
-               map.put("content",content);
-               map.put("dateTime",dateTime);
 
-               //排序转换
-               Map<String,Object> treeMap = new TreeMap<>();
-               treeMap.putAll(map);
-
-               String respos = ToolUtils.mapToUrl(treeMap);
-
-               //调用配置文件ConfigUtil.getValue("API_SECRET")
-
-               String selfSign = Md5Encrypt.md5(respos+ ConfigUtil.getValue("API_SECRET")).toUpperCase();
-
-               map.put("sign",selfSign);
-
-               String response = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi",map);
-
-               //json---转换代码---
-               Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
-               String result=responseMap.get("code");
                //返回值解密进行json转换
-               if(!result.equals("10000")){//返回值为0，代表成功5
 
-                   throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
 
-               }
+               responseDto.setRetCode("10002");//发送短信
+
            }
-
-
-            return  new JpfResponseDto();
+        responseDto.setRemark(passlogin);//密码
+            return  responseDto;
     }
 
     /**
@@ -608,6 +585,22 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         beanCopier.copy(payCloudCompanyCustom,cloudCompanyInfo,null);
 
         return cloudCompanyInfo;
+    }
+    /**
+     * 根据主键id 更新表字段信息
+     */
+    @Override
+    public int updateSetiveById(PayCloudCompany payCloudCompany){
+        if( payCloudCompany == null ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "未获取到公司信息");
+        }
+
+        int count = payCloudCompanyMapper.updateByPrimaryKeySelective(payCloudCompany);
+        if( count <= 0 ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "公司信息更新失败");
+        }
+
+        return count;
     }
 
     public CloudCompanyInfo getMerchInfoByMerchNo(String merchNo){

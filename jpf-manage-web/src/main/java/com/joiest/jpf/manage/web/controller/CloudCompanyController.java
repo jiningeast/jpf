@@ -1,16 +1,17 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.common.util.OkHttpUtils;
-import com.joiest.jpf.common.util.PhotoUtil;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
+import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
+import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class CloudCompanyController {
     @Autowired
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
+    @Autowired
+    private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
     @RequestMapping("/index")
     public String index() {
 
@@ -85,7 +88,50 @@ public class CloudCompanyController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
         int account = userInfo.getId();
         String ipAddress= ToolUtils.getIpAddr(serRequest);
-        return cloudCompanyServiceFacade.addCloudCompany(request, account,ipAddress);
+        Date date =new Date();
+        JpfResponseDto redDto =  cloudCompanyServiceFacade.addCloudCompany(request, account,ipAddress);
+        //发送短信
+        if(redDto.getRetCode().equals("10002")){
+            String passlogin =redDto.getRemark();//获取登录密码
+            String mobile = request.getPhone();
+            String content ="尊敬的用户您的账号已经开通：账号为"+request.getLinkemail()+"密码为"+passlogin;
+            String dateTime = date.toString();
+            Map<String,Object> map = new HashMap<>();
+            map.put("mobile",mobile);
+            map.put("content",content);
+            map.put("dateTime",dateTime);
+
+            //排序转换
+            Map<String,Object> treeMap = new TreeMap<>();
+            treeMap.putAll(map);
+
+            String respos = ToolUtils.mapToUrl(treeMap);
+
+            //调用配置文件ConfigUtil.getValue("API_SECRET")
+
+            String selfSign = Md5Encrypt.md5(respos+ com.joiest.jpf.common.util.ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+            map.put("sign",selfSign);
+
+            String response = OkHttpUtils.postForm(com.joiest.jpf.common.util.ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi",map);
+
+            //json---转换代码---
+            Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
+            String result=responseMap.get("code");
+
+            // 增加==短信接口流水==
+               CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+               cloudInterfaceStreamInfo.setType((byte)0);
+               cloudInterfaceStreamInfo.setRequestUrl(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi");
+               cloudInterfaceStreamInfo.setRequestContent(respos);
+               cloudInterfaceStreamInfo.setResponseContent(result);
+               cloudInterfaceStreamInfo.setAddtime(new Date());
+               cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+
+        }
+
+
+        return new JpfResponseDto();
     }
 
     /**

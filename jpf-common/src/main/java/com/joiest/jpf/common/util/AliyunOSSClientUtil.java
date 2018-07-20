@@ -9,10 +9,11 @@ import java.net.URL;
 import java.util.Date;
 
 import com.aliyun.oss.model.*;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.aliyun.oss.OSSClient;
-import org.springframework.util.StringUtils;
 
 /**
  * @class:AliyunOSSClientUtil
@@ -113,7 +114,29 @@ public class AliyunOSSClientUtil {
         ossClient.deleteObject(bucketName, folder + key);
         logger.info("删除" + bucketName + "下的文件" + folder + key + "成功");
     }
+    /**
+     * oss上传初步处理
+     * **/
+    public static JSONObject initUploadPath(String path){
 
+        OSSClient ossClient= getOSSClient();
+        File fileOne = new File(path);
+        String md5key  = uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
+
+        String imgUrl="";
+        //截取去掉后缀时效
+        if(md5key != null && md5key.length() != 0){
+
+            imgUrl =md5key.substring(0,md5key.lastIndexOf("?"));
+        }
+        if(StringUtils.isBlank(imgUrl) || StringUtils.isBlank(md5key)) return null;
+
+        JSONObject result = new JSONObject();
+        result.put("imgUrl",imgUrl);
+        result.put("expireUrl",md5key);
+
+        return result;
+    }
     /**
      * 上传图片至OSS
      * @param ossClient  oss连接

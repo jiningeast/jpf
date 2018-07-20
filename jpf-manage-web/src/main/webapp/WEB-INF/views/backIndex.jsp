@@ -112,7 +112,7 @@
                     "url" : "tdorder/index"
                 },{
                     "menuid" : "502",
-                    "menuname" : "云账户充值管理",
+                    "menuname" : "云账户充值列表",
                     "icon" : "icon-nav",
                     "url" : "cloudRecharge/index"
                 },{
@@ -134,7 +134,7 @@
                         "menuid" : "602",
                         "menuname" : "云账户充值管理",
                         "icon" : "icon-nav",
-                        "url" : "cloudRecharge/caiwu/Index"
+                        "url" : "cloudRecharge/caiwuIndex"
                     },{
                         "menuid" : "603",
                         "menuname" : "聚合通道订单管理",

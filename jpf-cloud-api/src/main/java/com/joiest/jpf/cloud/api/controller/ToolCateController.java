@@ -120,7 +120,6 @@ public class ToolCateController {
             json.put("info","签名有误");
             return json;
         }
-
         map.put("sign",sign);
         JSONObject idenAuth =idenAuthDataDeal(name,idCard,map);
         return idenAuth;
@@ -241,7 +240,6 @@ public class ToolCateController {
          JSONObject bankDeal =idenBankInfoDeal(bankFouePa);
          return bankDeal;
     }
-
     /**
      * 银行卡三要素鉴权
      * */
@@ -285,7 +283,6 @@ public class ToolCateController {
         return bankDeal;
     }
     /**
-
      * 银行要素数据处理
      * */
     @RequestMapping(value="bankInfoDeal",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
@@ -302,7 +299,6 @@ public class ToolCateController {
             String requestParam = null;
             JSONObject bankCheckInfo = null;
             Map<String,String> bankMap = new HashMap<>();
-
 
             if(bankCheck.get("type").equals("1")){
 
@@ -426,7 +422,48 @@ public class ToolCateController {
         }
         return json;
     }
+    /**
+     * 公共上传文件接口 文件流形式
+     * */
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    @ResponseBody
+    public String uploadFile(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws UnknownHostException {
 
+        JSONObject resposeData = new JSONObject();
+
+        String isOss = request.getParameter("isOss");//1上传至oss  2不上传
+        if(StringUtils.isBlank(isOss)) isOss = "1";
+
+        String savePre = ConfigUtil.getValue("ROOT_PATH");
+        String allpath = PhotoUtil.saveFile(file, savePre);
+        if(StringUtils.isBlank(allpath)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
+        }
+        //Oss阿里云上传
+        if(isOss.equals("1")){
+
+            OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
+            File fileOne = new File(allpath);
+            String md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
+
+            // 关闭OSSClient。
+            System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
+            System.out.println("服务器地址："+md5key);
+
+            if(StringUtils.isBlank(md5key)){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
+            }
+            resposeData.put("serverUrl",md5key);
+        }
+        String fileName = allpath.substring(allpath.lastIndexOf("/")+1);
+
+        resposeData.put("fileName",fileName);
+        resposeData.put("localUrl",allpath);
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
+    }
     /**
      * excel上传 获取excel表中数据
      * 普通form提交
@@ -461,7 +498,6 @@ public class ToolCateController {
         in.close();
         // 该处可调用service相应方法进行数据保存到数据库中，现只对数据输出
         return "result";
-
     }
     /**
      * excel上传 获取excel表中数据
@@ -478,10 +514,8 @@ public class ToolCateController {
         Map<Object,Object> rowoOb = new HashMap<>();
 
         rowoOb = new ExcelDealUtils().getImportExcel(file, files.getName());
-
         return null;
     }
-
     /**
      * 身份证分析入库
      * */
@@ -489,17 +523,22 @@ public class ToolCateController {
     @ResponseBody
     public String idCardAnaly(HttpServletRequest request) throws IOException {
 
-        String face = request.getParameter("face");
-        String back = request.getParameter("back");
+        String faceBase = request.getParameter("face");
+        String backBase = request.getParameter("back");
         String type = request.getParameter("type");
+        String isOss = request.getParameter("isSer");//1上传至oss  2不上传
+
+        if(StringUtils.isBlank(isOss)) isOss = "MQ==";
+
         //参数是否为空
-        if(face == null || face.isEmpty() || back == null || back.isEmpty()){
+        if(faceBase == null || faceBase.isEmpty() || backBase == null || backBase.isEmpty()){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error", null);
         }
-        String faceBase = Base64CustomUtils.base64Decoder(face);
-        String backBase = Base64CustomUtils.base64Decoder(back);
+        faceBase = Base64CustomUtils.base64Decoder(faceBase);
+        backBase = Base64CustomUtils.base64Decoder(backBase);
         type = Base64CustomUtils.base64Decoder(type);
+        isOss = Base64CustomUtils.base64Decoder(isOss);
 
         JSONObject faceResult = JSONObject.fromObject(faceBase);
         JSONObject backResult = JSONObject.fromObject(backBase);
@@ -509,17 +548,38 @@ public class ToolCateController {
         idAuth.put("num",faceResult.get("num").toString());
 
         //实名验证
-        //JSONObject cardAuth = new IdentAuth().idenAuth(faceResult.get("name").toString(),faceResult.get("num").toString());
         JSONObject cardAuth = idenAuthDataDeal(faceResult.get("name").toString(),faceResult.get("num").toString(),idAuth);
         if(cardAuth.get("code").equals("10008")){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), cardAuth.get("info").toString(),null);
         }
+        //获取身份证信息 pay_cloud_idcard
         CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardByCardNo(faceResult.get("num").toString());
 
-        YjResponseDto yjResponseDto= new YjResponseDto();
         if(cloudIdcardInfo == null){
 
+            //Oss阿里云上传
+            if(isOss.equals("1")){
+
+                //正面图片
+                if(StringUtils.isNotBlank(faceResult.get("localUrl").toString())){
+
+                    JSONObject imgRes = AliyunOSSClientUtil.initUploadPath(faceResult.get("localUrl").toString());
+                    if(imgRes != null){
+
+                        faceResult.put("serverUrl",imgRes.get("imgUrl"));
+                    }
+                }
+                //反面图片
+                if(StringUtils.isNotBlank(backResult.get("localUrl").toString())){
+
+                    JSONObject imgRes = AliyunOSSClientUtil.initUploadPath(backResult.get("localUrl").toString());
+                    if(imgRes != null){
+
+                        backResult.put("serverUrl",imgRes.get("imgUrl"));
+                    }
+                }
+            }
             int idCard= cloudIdcardServiceFacade.addCloudIdcard(faceResult,backResult,type);
             if(idCard > 0){
 
@@ -527,7 +587,6 @@ public class ToolCateController {
                 map.put("id",idCard);
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "身份证信息上传成功",map);
-
             }else{
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "身份证信息上传失败",null);
@@ -540,42 +599,6 @@ public class ToolCateController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "身份证信息上传成功",map);
         }
     }
-    /**
-     * 公共上传文件接口 文件流形式
-     * */
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    @ResponseBody
-    public String uploadFile(@RequestParam("file") MultipartFile file) throws UnknownHostException {
-
-        String savePre = ConfigUtil.getValue("ROOT_PATH");
-        String allpath = PhotoUtil.saveFile(file, savePre);
-        if(StringUtils.isBlank(allpath)){
-
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
-        }
-        OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
-        // 上传文件流
-        File fileOne = new File(allpath);
-        String md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
-
-        // 关闭OSSClient。
-        System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
-        System.out.println("服务器地址："+md5key);
-
-        String fileName = allpath.substring(allpath.lastIndexOf("/")+1);
-
-        if(StringUtils.isBlank(md5key)){
-
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
-        }
-        JSONObject resposeData = new JSONObject();
-
-        resposeData.put("fileName",fileName);
-        resposeData.put("localUrl",allpath);
-        resposeData.put("serverUrl",md5key);
-
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
-    }
 
     @ModelAttribute
     public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
@@ -585,7 +608,6 @@ public class ToolCateController {
         response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
         response.setHeader("Access-Control-Allow-Method", "POST");
         response.setHeader("Access-Control-Allow-Origin", originHeader);
-
     }
 
 }

@@ -16,6 +16,9 @@ public class DfApiInterfaceRequest {
     @NotBlank(message = "代付ID不能为空")
     private String dfid;
 
+    @NotBlank(message = "sign不能为空")
+    private String sign;
+
     public String getBatchid() {
         return batchid;
     }
@@ -30,5 +33,13 @@ public class DfApiInterfaceRequest {
 
     public void setDfid(String dfid) {
         this.dfid = dfid;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }
