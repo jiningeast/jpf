@@ -69,7 +69,7 @@ public class CloudRechargeController {
     /*
      * 财务充值列表页
      * */
-    @RequestMapping("/caiwuList")
+    @RequestMapping("/caiwu/list")
     @ResponseBody
     public Map<String, Object> caiwuList(CloudRechargeRequest cloudRechargeRequest){
 

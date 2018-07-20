@@ -625,4 +625,22 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
         return cloudCompanyInfo;
     }
+
+    /**
+     * 根据主键id 更新表字段信息
+     */
+    @Override
+    public int updateSetiveById(PayCloudCompany payCloudCompany){
+        if( payCloudCompany == null ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "未获取到公司信息");
+        }
+
+        int count = payCloudCompanyMapper.updateByPrimaryKeySelective(payCloudCompany);
+        if( count <= 0 ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "公司信息更新失败");
+        }
+
+        return count;
+    }
+
 }
