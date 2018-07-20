@@ -31,8 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -293,15 +292,19 @@ public class CloudTaskController {
     /**
      * 下载模板
      */
-    @RequestMapping("/download")
-    public ResponseEntity<byte[]> download(String fileName,String filePath) throws IOException {
-
+    @RequestMapping(value="/download")
+    public ResponseEntity<byte[]> download()throws Exception {
+        //下载文件路径
+        String filename=ConfigUtil.getValue("EXCEL_NAME");
+        String path=ConfigUtil.getValue("EXCEL_PATH");
+        File file = new File(path + File.separator + filename);
         HttpHeaders headers = new HttpHeaders();
-        File file = new File(filePath);
-
+        //下载显示的文件名，解决中文名称乱码问题
+        String downloadFielName = new String(filename.getBytes("UTF-8"),"iso-8859-1");
+        //通知浏览器以attachment（下载方式）打开图片
+        headers.setContentDispositionFormData("attachment", downloadFielName);
+        //application/octet-stream ： 二进制流数据（最常见的文件下载）。
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", fileName);
-
         return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
                 headers, HttpStatus.CREATED);
     }

@@ -10,7 +10,7 @@
         <h6>批量打款模板使用说明</h6>
         <p>1.单批次最大支持1000条订单</p>
         <p>2.文件名会作为批次号保存，文件名格式为[商户名称-日期-编号]，例如：XXX有限责任公司-20180509-01</p>
-        <p><a href="#" style="color: #0e90d2;">点击下载Excel模板</a></p>
+        <p><a href="../cloudTask/download" style="color: #0e90d2;">点击下载Excel模板</a></p>
     </div>
     <div class="easyui-panel" title="批量打款" data-options="footer:'#ft'">
         <form id="taskForm" method="post" enctype="multipart/form-data">
