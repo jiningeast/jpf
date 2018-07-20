@@ -142,7 +142,7 @@ public class IdentAuth {
         Map<String, String> imgUrl = Base64CustomUtils.baseToImageFinal(imgInfo,savePre);
 
         //域名访问路径
-        String resourceUrl = imgUrl.get("serverUrl");
+        //String resourceUrl = imgUrl.get("serverUrl");
         //获取图片实际路径
         String imgFile = imgUrl.get("localUrl");
         //根据图片地址获取base64
@@ -245,7 +245,7 @@ public class IdentAuth {
                         idCard.put("frequest_id",userInfo.get("request_id"));
                         idCard.put("sex",userInfo.get("sex"));
                         idCard.put("side",side);
-                        idCard.put("resourceUrl",resourceUrl);
+                        //idCard.put("resourceUrl",resourceUrl);
                         idCard.put("localUrl",imgFile);
                         idCard.put("filename", imgUrl.get("fileName"));
 
@@ -257,7 +257,7 @@ public class IdentAuth {
                         idCard.put("brequest_id",userInfo.get("request_id"));
                         idCard.put("end_date",userInfo.get("end_date"));
                         idCard.put("side",side);
-                        idCard.put("resourceUrl",resourceUrl);
+                        //idCard.put("resourceUrl",resourceUrl);
                         idCard.put("localUrl",imgFile);
                         idCard.put("filename", imgUrl.get("fileName"));
                     }

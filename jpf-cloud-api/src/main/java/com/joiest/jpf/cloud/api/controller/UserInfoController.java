@@ -376,6 +376,8 @@ public class UserInfoController {
         String imgInfo = request.getParameter("img");
         String token = request.getParameter("token");
 
+        side = Base64CustomUtils.base64Decoder(side);
+
         if(side == null || imgInfo==null || token==null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
