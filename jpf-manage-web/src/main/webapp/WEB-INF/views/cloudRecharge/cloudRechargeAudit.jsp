@@ -107,11 +107,8 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付凭证：</td>
                     <td colspan="3">
-                        <c:if test="${cloudRechargeInfo.imgurl=='' || cloudRechargeInfo.imgurl==null }">
-
-                        </c:if>
-                        <c:if test="${cloudRechargeInfo.imgurl}">
-                            <img width="200" height="200" src="${cloudRechargeInfo.imgurl}">
+                        <c:if test="${cloudRechargeInfo.imgurl!='' && cloudRechargeInfo.imgurl!=null }">
+                            <img width="200" height="200" src="${cloudRechargeInfo.imgurl}" />
                         </c:if>
                     </td>
                 </tr>
@@ -210,7 +207,12 @@
         // initData();
 
         $("#saveBtn_audit").linkbutton({
+
             onClick: function () {
+                var reqUrl = "audit/action";
+                if( ${auditPageType == 2 } ){
+                    reqUrl = "caiwu/audit/action";
+                }
                 var isValid = $("#auditForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
@@ -219,7 +221,7 @@
                 var postData = parsePostData(queryArray);
                 $.ajax({
                     type: 'post',
-                    url: 'audit/action',
+                    url: reqUrl ,
                     data: postData,
                     dataType: 'json',
                     success: function (msg) {

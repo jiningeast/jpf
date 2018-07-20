@@ -97,6 +97,7 @@ public class CloudRechargeController {
         CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecharge(id);
         cloudRechargeInfo.setStatus_cn(ManageConstants.STATUSLIST.get(cloudRechargeInfo.getStatus().toString()));
         modelMap.addAttribute("cloudRechargeInfo", cloudRechargeInfo);
+        modelMap.addAttribute("auditPageType", 2); //财务审核
 
         return new ModelAndView("cloudRecharge/cloudRechargeAudit",modelMap);
 
@@ -126,6 +127,7 @@ public class CloudRechargeController {
         CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecharge(id);
         cloudRechargeInfo.setStatus_cn(ManageConstants.STATUSLIST.get(cloudRechargeInfo.getStatus().toString()));
         modelMap.addAttribute("cloudRechargeInfo", cloudRechargeInfo);
+        modelMap.addAttribute("auditPageType", 1); //运营审核
 
         return new ModelAndView("cloudRecharge/cloudRechargeAudit",modelMap);
 
