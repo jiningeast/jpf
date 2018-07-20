@@ -50,8 +50,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
     @Autowired
     private PayCloudEmployeeMapper payCloudEmployeeMapper;
 
-    @Autowired
-    private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
+
 
     /**
      * 代理公司列表---后台
@@ -370,13 +369,13 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
                }
                // 增加==OSS接口流水==
-               CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+    /*           CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
                cloudInterfaceStreamInfo.setType((byte)0);
                cloudInterfaceStreamInfo.setRequestUrl(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi");
                cloudInterfaceStreamInfo.setRequestContent(respos);
                cloudInterfaceStreamInfo.setResponseContent(result);
                cloudInterfaceStreamInfo.setAddtime(new Date());
-               cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
+               cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);*/
            }
 
 
@@ -625,7 +624,6 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
         return cloudCompanyInfo;
     }
-
     /**
      * 根据主键id 更新表字段信息
      */
@@ -642,5 +640,4 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
         return count;
     }
-
 }
