@@ -34,7 +34,6 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -225,37 +224,37 @@ public class CloudTaskController {
             responseMap.put("code","10004");
             responseMap.put("info","批次号与文件名不一致请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(count !=samecount){
             responseMap.put("code","10004");
             responseMap.put("info","总笔数与实际笔数不符请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(count>1000){
             responseMap.put("code","10004");
             responseMap.put("info","最大支持1000条数据请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(companyMoney!=companyMoneySame){
             responseMap.put("code","10004");
             responseMap.put("info","总金额与实际金额不符请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( staffInfosFailed.size() > 0 ){
             responseMap.put("code","10001");
             responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( companyInfo.getCloudmoney().compareTo(new BigDecimal(companyMoney)) == -1 ){
             responseMap.put("code","10005");
             responseMap.put("info","该企业账户余额不足，剩余："+companyInfo.getCloudmoney());
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else{
             // OSS上传excel文件
@@ -284,7 +283,7 @@ public class CloudTaskController {
             responseMap.put("contractNo",contractNo);
             responseMap.put("data",staffInfosSuccess);
             responseMap.put("ossUrl",response);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
 
             return uuid.toString();
         }
@@ -317,7 +316,7 @@ public class CloudTaskController {
         up = StringUtils.strip(up,"\"");
         up = StringUtils.stripEnd(up,"\"");
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+up+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+up+".txt","UTF-8");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         String code=jsonMap.get("code");
         String info=jsonMap.get("info");
@@ -338,7 +337,7 @@ public class CloudTaskController {
     @ResponseBody
     public Map<String, Object> personsData(String data){
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","UTF-8");
         Map<String,List< LinkedHashMap<String,String> >> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > list = jsonMap.get("data");
 
@@ -358,7 +357,7 @@ public class CloudTaskController {
     public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) throws Exception {
 
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","UTF-8");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         String batchNo = jsonMap.get("batchNo");
         String persons = ""+jsonMap.get("persons");
@@ -653,7 +652,7 @@ public class CloudTaskController {
         // 获取任务详情
         CloudTaskInfo cloudTaskInfo = cloudTaskServiceFacade.getOneTask(taskId);
         String filePath = cloudTaskInfo.getFilePath();
-        String fileContent = ToolUtils.readFromFile(filePath,"GB2312");
+        String fileContent = ToolUtils.readFromFile(filePath,"UTF-8");
         Map<String,List< LinkedHashMap<String,String> >> jsonMapData = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > personsList = jsonMapData.get("data");
 
