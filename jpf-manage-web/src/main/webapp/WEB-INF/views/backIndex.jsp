@@ -144,7 +144,7 @@
                         "menuid" : "604",
                         "menuname" : "云账户代付管理",
                         "icon" : "icon-nav",
-                        "url" : "cloudCompanyMoney/caiwu/Index"
+                        "url" : "cloudCompanyMoney/caiwu/index"
                     }]
             }]
     	};

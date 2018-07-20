@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayCloudCompany;
 import com.joiest.jpf.common.po.PayCloudCompanyMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
+import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInfo;
@@ -147,12 +149,28 @@ public class CloudDfMoneyController {
             }
         }
 
+        //金额是否可够代付
+        if( cloudMoney.compareTo(new BigDecimal(0) ) == -1 || cloudMoney.compareTo(cloudRealPayMoney) == -1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "账户金额不足，请先充值");
+        }
+
         //不能打款数据
         if( !limitData.isEmpty() || limitData.size() > 0 ){
             String jsonData = JsonUtils.toJson(limitData);
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "交易编号："+jsonData);
         }
 
+        //开始扣除账户金额及校验码
+        BigDecimal afterloudMoney = cloudMoney.subtract(cloudRealPayMoney); //账户金额
+        String checkCode = Md5Encrypt.md5(companyId+afterloudMoney+"test","UTF-8");   //加密规则：  id+金额+key
+        PayCloudCompany payCloudCompany = new PayCloudCompany();
+        payCloudCompany.setCloudcode(checkCode);
+        payCloudCompany.setCloudmoney(afterloudMoney);
+        payCloudCompany.setId(companyId);
+        int upCompanyCount = cloudCompanyServiceFacade.updateSetiveById(payCloudCompany);
+        if( upCompanyCount <=0 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "公司账户信息更新失败");
+        }
 
         //调用代付接口
         Date date = new Date();
@@ -179,7 +197,7 @@ public class CloudDfMoneyController {
         if( responseMap.isEmpty() || responseMap == null ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "代付接口异常");
         }
-        String code=responseMap.get("code").toString();
+        String code = responseMap.get("code").toString();
 
 
         if( code.equals("10000") ){ //代付成功

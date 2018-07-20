@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayCloudCompany;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
@@ -56,4 +57,10 @@ public interface CloudCompanyServiceFacade {
      * 根据主键id获取单个公司的信息
      */
     public CloudCompanyInfo getRecById(String id);
+
+    /**
+     * 根据主键id 更新表字段信息
+     */
+    public int updateSetiveById(PayCloudCompany payCloudCompany);
+
 }
