@@ -208,12 +208,14 @@ public class CloudTaskController {
                         // 判断企业充值表中存不存在此合同编号
                         if ( StringUtils.isBlank(contractNo) ){
                             // 合同编号为空，请检查
-                            return "-1";
+                            String code = "-1";
+                            return code;
                         }
                         CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
                         if ( cloudRechargeInfo.getId() == null ){
                             // 充值表中不存在此合同编号
-                            return "-2";
+                            String code = "-2";
+                            return code;
                         }
                    }
                 }
@@ -246,6 +248,12 @@ public class CloudTaskController {
         }else if ( staffInfosFailed.size() > 0 ){
             responseMap.put("code","10001");
             responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
+            responseMap.put("data",staffInfosFailed);
+            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            return uuid.toString();
+        }else if ( companyInfo.getCloudmoney().compareTo(new BigDecimal(companyMoney)) == -1 ){
+            responseMap.put("code","10005");
+            responseMap.put("info","该企业账户余额不足，剩余："+companyInfo.getCloudmoney());
             responseMap.put("data",staffInfosFailed);
             LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();

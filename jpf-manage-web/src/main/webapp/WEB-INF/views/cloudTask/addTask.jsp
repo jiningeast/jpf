@@ -104,17 +104,23 @@
                 var data_obj = eval('(' +  data_str +')');
                 var base64 = new Base64();
                 var data = base64.encode(msg);*/
+                alert(msg);
+                console.log(msg);
+                if ( msg == '"-1"' ){
 
-                if ( msg == "-1" ){
+                    alert(-1);
                     $.messager.alert('提示','合同编号为空，请检查','info');
                     return false;
-                }else if ( msg == "-2" ){
+                }else if ( msg == '"-2"' ){
+                    alert(-2);
                     $.messager.alert('提示','未查找到此合同编号的充值记录，或该笔充值尚未审核成功','info');
                     return false;
+                }else{
+                    alert('else');
+                    // 打开新窗口显示数据
+                    $('#persons').window("open").window('refresh', '../cloudTask/persons?data='+msg).window('setTitle','确认人员信息');
                 }
 
-                // 打开新窗口显示数据
-                $('#persons').window("open").window('refresh', '../cloudTask/persons?data='+msg).window('setTitle','确认人员信息');
             }
         });
 

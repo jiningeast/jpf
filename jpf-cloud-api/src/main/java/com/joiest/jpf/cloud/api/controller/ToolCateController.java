@@ -16,6 +16,7 @@ import com.joiest.jpf.facade.CloudIdcardServiceFacade;
 import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -544,27 +545,36 @@ public class ToolCateController {
      * */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject uploadFile(@RequestParam("file") MultipartFile file) throws UnknownHostException {
+    public String uploadFile(@RequestParam("file") MultipartFile file) throws UnknownHostException {
 
         String savePre = ConfigUtil.getValue("ROOT_PATH");
         String allpath = PhotoUtil.saveFile(file, savePre);
+        if(StringUtils.isBlank(allpath)){
 
-        String md5key = "";
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
+        }
         OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
-
-        // 上传文件流。
+        // 上传文件流
         File fileOne = new File(allpath);
-        md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
+        String md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
 
         // 关闭OSSClient。
-        System.out.println(md5key);
         System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
+        System.out.println("服务器地址："+md5key);
 
+        String fileName = allpath.substring(allpath.lastIndexOf("/")+1);
+
+        if(StringUtils.isBlank(md5key)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
+        }
         JSONObject resposeData = new JSONObject();
+
+        resposeData.put("fileName",fileName);
         resposeData.put("localUrl",allpath);
         resposeData.put("serverUrl",md5key);
 
-        return resposeData;
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
     }
 
     @ModelAttribute
