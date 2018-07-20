@@ -7,13 +7,11 @@ import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.SHA1;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudEmployeeInfo;
 import com.joiest.jpf.entity.CloudFanSourceInfo;
 import com.joiest.jpf.entity.PcaInfo;
-import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
-import com.joiest.jpf.facade.CloudFanSourceServiceFacade;
-import com.joiest.jpf.facade.PcaServiceFacade;
-import com.joiest.jpf.facade.RedisCustomServiceFacade;
+import com.joiest.jpf.facade.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +43,9 @@ public class CompanyInfoController {
 
     @Autowired
     private PcaServiceFacade pcaServiceFacade;
+
+    @Autowired
+    private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
     private String uid;
     private CloudEmployeeInfo companyInfo;
@@ -189,6 +190,35 @@ public class CompanyInfoController {
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "原密码有误", null);
         }
+    }
+
+    /**
+     * 获取公司信息通过商户号
+     * */
+    @RequestMapping("getRecByMerchNo")
+    @ResponseBody
+    public String getRecByMerchNo(HttpServletRequest request){
+
+        String token = request.getParameter("token");
+
+        Map<String,String> loginResultMap = companyIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+
+        CloudCompanyInfo cloudCompanyInfo =cloudCompanyServiceFacade.getRecByMerchNo(companyInfo.getMerchNo());
+
+        if(cloudCompanyInfo != null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到企业信息", null);
+        }else{
+
+            Map<String,String> map = new HashMap<>();
+
+
+        }
+        return null;
     }
     /*
     * 获取地区
