@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.util;
 
+import com.aliyun.oss.OSSClient;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -11,6 +12,8 @@ import java.io.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Base64CustomUtils {
 
@@ -109,7 +112,68 @@ public class Base64CustomUtils {
             return null;
         }
     }
+    /**
+     * base64 encode 转换为图片最终版
+     * */
+    public static Map<String,String> baseToImageFinal(HttpServletRequest request, String imgStr, String savePre){
 
+        //图像Base数据为空
+        if (imgStr == null)  return null;
+        if(savePre == null || savePre.isEmpty()) return null;
+
+        Map<String,String> imgInfo = new HashMap<>();
+
+        //获取后缀
+        String reg_date = "\\/(\\w+);base64,";//"\\*;base64,";
+        Matcher matcher = Pattern.compile(reg_date).matcher(imgStr);
+        String suffix = "";
+        while (matcher.find()) {
+
+            suffix = matcher.group(1);
+        };
+        imgStr = imgStr.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
+        BASE64Decoder decoder = new BASE64Decoder();
+        try
+        {
+            //Base64解码
+            byte[] b = decoder.decodeBuffer(imgStr);
+            for(int i=0;i<b.length;++i){
+
+                if(b[i]<0){
+
+                    //调整异常数据
+                    b[i]+=256;
+                }
+            }
+            long timeStamp = new Date().getTime();
+
+            File fileDir = new File(savePre);
+            if (!fileDir.exists()){
+
+                fileDir.mkdirs();
+            }
+            String filename = timeStamp+"."+suffix;
+            String imgFilePath = savePre+filename;//本地服务器路径
+
+            OutputStream out = new FileOutputStream(imgFilePath);
+            out.write(b);
+            out.flush();
+            out.close();
+
+            OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
+            File fileOne = new File(imgFilePath);
+            String md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
+
+            imgInfo.put("actualUrl",imgFilePath);//服务器实际路径
+            imgInfo.put("filename",filename);//文件名
+            imgInfo.put("resourceUrl",md5key);//域名对应图片地址 如：http://xxx.com/图片存储地址
+
+            return imgInfo;
+        }catch (Exception e) {
+
+            return null;
+        }
+    }
     /**
      * 图片转换为base64
      * */
