@@ -34,6 +34,9 @@ public interface CloudDfMoneyServiceFacade {
     //更新代付状态
     public int updateDfMoneyActive(Map<String,String> dfMoney,Long id);
 
+    //根据主键ID更新数据库信息
+    public int updateDfMoneyActiveById(CloudDfMoneyRequest request,Long id);
+
     /**
      * 插入记录
      */

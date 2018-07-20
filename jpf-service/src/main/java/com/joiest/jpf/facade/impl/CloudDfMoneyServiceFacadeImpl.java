@@ -181,6 +181,19 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         return payCloudDfMoneyMapper.updateByPrimaryKeySelective(payCloudDfMoney);
     }
 
+    //更新代付状态
+    public int updateDfMoneyActiveById(CloudDfMoneyRequest request,Long id){
+
+        PayCloudDfMoney payCloudDfMoney = new PayCloudDfMoney();
+        if( request.getMontype() != null ){
+            payCloudDfMoney.setMontype(request.getMontype());
+        }
+        payCloudDfMoney.setUpdatetime(new Date());
+        payCloudDfMoney.setId(id);
+
+        return payCloudDfMoneyMapper.updateByPrimaryKeySelective(payCloudDfMoney);
+    }
+
     //根据主键字符串更新代付明细
     public JpfResponseDto updateDfRecordsByids(PayCloudDfMoney record, List<Long> ids){
 

@@ -556,7 +556,7 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setBankacctattr(Integer.parseInt(String.valueOf(singlePerson.get("type"))));
             cloudDfMoneyInfo.setAddtime(new Date());
             cloudDfMoneyInfo.setRealname(singlePerson.get("name"));
-            cloudDfMoneyInfo.setMontype(1);
+            cloudDfMoneyInfo.setMontype(0); //未申请
             cloudDfMoneyInfo.setRemark(singlePerson.get("memo"));
             cloudDfMoneyInfo.setVid(1);      // 待修改
             cloudDfMoneyInfo.setIsActive(0);
@@ -733,7 +733,7 @@ public class CloudTaskController {
 
         //循环发送短信
         for (int i = 0; i < dfMoneyInfoList.size() ; i++) {
-
+            Long dfMoneyId = dfMoneyInfoList.get(i).getId();//代付表主键ID
             String banknickname = dfMoneyInfoList.get(i).getBanknickname();//收款人
             String mobile = dfMoneyInfoList.get(i).getBankphone(); //手机号
             Long busstaffid = dfMoneyInfoList.get(i).getBusstaffid(); //员工ID
@@ -773,7 +773,17 @@ public class CloudTaskController {
 
                 //json---转换代码---
                 Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
-                //String result=responseMap.get("code");
+                if( responseMap.containsKey("code") ){
+                    String result=responseMap.get("code");
+                    if( result.equals("10000 ")){//短信签约成功 更新为代付款状态
+                        CloudDfMoneyRequest dfMoneyRequest = new CloudDfMoneyRequest();
+                        int count = cloudDfMoneyServiceFacade.updateDfMoneyActiveById(dfMoneyRequest,dfMoneyId);
+
+                    }
+                }else{
+
+                }
+
                 //返回值10000 代表成功
                 //短信发送是否成功  之后 如何处理 ？？？？？？？？
 
