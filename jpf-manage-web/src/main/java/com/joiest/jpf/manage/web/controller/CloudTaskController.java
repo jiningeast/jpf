@@ -203,17 +203,23 @@ public class CloudTaskController {
                         companyMoneySame=Double.parseDouble(companyMoney_Str);
                         contractNo = singlePerson.get(3);
 
-                        // 判断企业充值表中存不存在此合同编号
-                        if ( StringUtils.isBlank(contractNo) ){
-                            // 合同编号为空，请检查
-                            String code = "-1";
-                            return code;
-                        }
-                        CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
-                        if ( cloudRechargeInfo.getId() == null ){
-                            // 充值表中不存在此合同编号
-                            String code = "-2";
-                            return code;
+                        // 判断合同编号的合法性
+                        if ( j==3 ){
+                            // 判断企业充值表中存不存在此合同编号
+                            if ( StringUtils.isBlank(contractNo) ){
+                                // 合同编号为空，请检查
+                                String code = "-1";
+                                return code;
+                            }
+                            CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
+                            if ( cloudRechargeInfo.getMerchNo() == null ){
+                                return "-4";
+                            }
+                            if ( !cloudRechargeInfo.getMerchNo().equals(companyInfo.getMerchNo()) ){
+                                // 充值表中不存在此合同编号
+                                String code = "-2";
+                                return code;
+                            }
                         }
                    }
                 }
@@ -250,11 +256,8 @@ public class CloudTaskController {
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( companyInfo.getCloudmoney().compareTo(new BigDecimal(companyMoney)) == -1 ){
-            responseMap.put("code","10005");
-            responseMap.put("info","该企业账户余额不足，剩余："+companyInfo.getCloudmoney());
-            responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
-            return uuid.toString();
+            // "该企业账户余额不足，剩余："+companyInfo.getCloudmoney()
+            return "-3";
         }else{
             // OSS上传excel文件
             String savePre = ConfigUtil.getValue("EXCEL_PATH");
