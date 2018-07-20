@@ -224,7 +224,7 @@ public class UserInfoController {
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Error",null);
         }
-        idCard = Base64CustomUtils.base64Decoder(idCard);
+        idCard = Base64CustomUtils.base64Decoder(idCard).toUpperCase();
         verificate = Base64CustomUtils.base64Decoder(verificate);
 
         //获取员工信息
