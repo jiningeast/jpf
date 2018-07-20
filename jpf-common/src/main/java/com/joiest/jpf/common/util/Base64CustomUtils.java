@@ -3,6 +3,7 @@ package com.joiest.jpf.common.util;
 import com.aliyun.oss.OSSClient;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -44,94 +45,27 @@ public class Base64CustomUtils {
         }
         return result;
     }
-
-    public static void main(String[] args) {
-        String str = "eyJzaWRlIjoiZmFjZSIsImFkZHJlc3MiOiLljJfkuqzluILlu7bluobljr/lu7bluobplYfopb/ovpvluoTmnZExMzflj7cy6ZeoIiwibmF0aW9uYWxpdHkiOiLmsYkiLCJmcmVxdWVzdF9pZCI6IjIwMTgwNjI5MTAxNTA0XzJlMGU4ZDkwMzk2OGQ3OTk4YWJiY2U2NDI0Nzg5ZmYzIiwicmVzb3VyY2VVcmwiOiJodHRwOi8vMTAuMTAuMTguMTc6ODA4MC9jbG91ZC1hcGlcXHJlc291cmNlc1xcT0NSXFxPQ1IxNTMwMjM4NTAwMjk2LmpwZyIsIm51bSI6IjExMDIyOTE5ODcwOTIzMDAzNyIsInNleCI6IueUtyIsIm5hbWUiOiLlt6bmmajlhpsiLCJiaXJ0aCI6IjE5ODcwOTIzIn0=";
-        String abc = Base64CustomUtils.base64Decoder(str);
-        System.out.printf(abc);
-        System.out.printf(abc);
-    }
-
-    /**
-     * base64 encode 转换为图片
-     * */
-    public static Map<String,String> baseToImage(HttpServletRequest request, String imgStr, String perfix){
-
-        Map<String,String> imgInfo = new HashMap<>();
-
-        if(perfix == null || perfix.isEmpty()){
-            perfix = "Ocr";
-        }
-        //对字节数组字符串进行Base64解码并生成图片
-        if (imgStr == null) //图像数据为空
-            return null;
-
-        BASE64Decoder decoder = new BASE64Decoder();
-        try
-        {
-            //Base64解码
-            byte[] b = decoder.decodeBuffer(imgStr);
-            for(int i=0;i<b.length;++i)
-            {
-                if(b[i]<0)
-                {
-                    //调整异常数据
-                    b[i]+=256;
-                }
-            }
-            long timeStamp = new Date().getTime();
-
-            //生成jpeg图
-            String showUrl = request.getSession().getServletContext().getRealPath("/resources");
-
-            String resourcesUrl = "\\resources\\"+perfix+"\\";
-            String urlRepj = showUrl.replace("\\target\\jpf-cloud\\resources","\\src\\main\\webapp"+resourcesUrl);
-
-            File fileDir = new File(urlRepj);
-            if (!fileDir.exists()){
-
-                fileDir.mkdirs();
-            }
-            String filename = perfix+timeStamp+".jpg";
-            String imgFilePath = urlRepj+filename;//新生成的图片
-
-            OutputStream out = new FileOutputStream(imgFilePath);
-            out.write(b);
-            out.flush();
-            out.close();
-
-            //dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
-            String hostUrl = resourcesUrl+filename;
-            imgInfo.put("actualUrl",imgFilePath.replaceAll("\\\\", "/"));//服务器实际路径
-            imgInfo.put("filename",filename);//文件名
-            imgInfo.put("resourceUrl",hostUrl.replaceAll("\\\\", "/"));//域名对应图片地址 如：http://xxx.com/图片存储地址
-
-            return imgInfo;
-        }catch (Exception e) {
-
-            return null;
-        }
-    }
     /**
      * base64 encode 转换为图片最终版
      * */
     public static Map<String,String> baseToImageFinal(String imgStr, String savePre){
 
         //图像Base数据为空
-        if (imgStr == null)  return null;
+        if(imgStr == null)  return null;
         if(savePre == null || savePre.isEmpty()) return null;
 
         Map<String,String> imgInfo = new HashMap<>();
 
         //获取后缀
-        String reg_date = "\\/(\\w+);base64,";//"\\*;base64,";
-        Matcher matcher = Pattern.compile(reg_date).matcher(imgStr);
         String suffix = "";
+        String reg_date = "\\/(\\w+);base64,";
+        Matcher matcher = Pattern.compile(reg_date).matcher(imgStr);
         while (matcher.find()) {
 
             suffix = matcher.group(1);
-        };
-        System.out.println("图片前缀获取："+suffix);
+        }
+        if(StringUtils.isBlank(suffix)) return null;
+
         imgStr = imgStr.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
         BASE64Decoder decoder = new BASE64Decoder();
         try
@@ -161,21 +95,8 @@ public class Base64CustomUtils {
             out.flush();
             out.close();
 
-            OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
-            File fileOne = new File(imgFilePath);
-            String md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
-
-            // 关闭OSSClient。
-            System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
-            System.out.println("服务器地址："+md5key);
-            System.out.println("实际路径："+imgFilePath);
-            System.out.println("文件名："+filename);
-
-
             imgInfo.put("localUrl",imgFilePath);//服务器实际路径
             imgInfo.put("fileName",filename);//文件名
-            imgInfo.put("serverUrl",md5key);//域名对应图片地址 如：http://xxx.com/图片存储地址
-
             return imgInfo;
         }catch (Exception e) {
 
@@ -205,4 +126,12 @@ public class Base64CustomUtils {
         }
         return imgBase64;
     }
+
+    public static void main(String[] args) {
+        String str = "eyJzaWRlIjoiZmFjZSIsImFkZHJlc3MiOiLljJfkuqzluILlu7bluobljr/lu7bluobplYfopb/ovpvluoTmnZExMzflj7cy6ZeoIiwibmF0aW9uYWxpdHkiOiLmsYkiLCJmcmVxdWVzdF9pZCI6IjIwMTgwNjI5MTAxNTA0XzJlMGU4ZDkwMzk2OGQ3OTk4YWJiY2U2NDI0Nzg5ZmYzIiwicmVzb3VyY2VVcmwiOiJodHRwOi8vMTAuMTAuMTguMTc6ODA4MC9jbG91ZC1hcGlcXHJlc291cmNlc1xcT0NSXFxPQ1IxNTMwMjM4NTAwMjk2LmpwZyIsIm51bSI6IjExMDIyOTE5ODcwOTIzMDAzNyIsInNleCI6IueUtyIsIm5hbWUiOiLlt6bmmajlhpsiLCJiaXJ0aCI6IjE5ODcwOTIzIn0=";
+        String abc = Base64CustomUtils.base64Decoder(str);
+        System.out.printf(abc);
+        System.out.printf(abc);
+    }
+
 }

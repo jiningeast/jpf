@@ -3,17 +3,13 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayCloudFansource;
-import com.joiest.jpf.common.util.AESUtils;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.SHA1;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudEmployeeInfo;
 import com.joiest.jpf.entity.CloudFanSourceInfo;
 import com.joiest.jpf.entity.PcaInfo;
-import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
-import com.joiest.jpf.facade.CloudFanSourceServiceFacade;
-import com.joiest.jpf.facade.PcaServiceFacade;
-import com.joiest.jpf.facade.RedisCustomServiceFacade;
+import com.joiest.jpf.facade.*;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +42,9 @@ public class CompanyInfoController {
 
     @Autowired
     private PcaServiceFacade pcaServiceFacade;
+
+    @Autowired
+    private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
     private String uid;
     private CloudEmployeeInfo companyInfo;
@@ -188,6 +188,40 @@ public class CompanyInfoController {
         }else{
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "原密码有误", null);
+        }
+    }
+
+    /**
+     * 获取公司信息通过商户号
+     * */
+    @RequestMapping("getRecByMerchNo")
+    @ResponseBody
+    public String getRecByMerchNo(HttpServletRequest request){
+
+        String token = request.getParameter("token");
+
+        Map<String,String> loginResultMap = companyIsLogin(token);
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+
+        CloudCompanyInfo cloudCompanyInfo =cloudCompanyServiceFacade.getRecByMerchNo(companyInfo.getMerchNo());
+        JSONObject res = null;
+        if(cloudCompanyInfo != null){
+
+            SimpleDateFormat detailTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            Map<String,Object> map = ClassUtil.requestToMap(cloudCompanyInfo);
+            res = JSONObject.fromObject(map);
+
+            res.discard("updated");
+            res.put("created",detailTime.format(cloudCompanyInfo.getCreated()));
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "已获取", res);
+        }else{
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到企业信息", null);
         }
     }
     /*

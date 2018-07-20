@@ -36,21 +36,19 @@ public class CloudIdcardServiceFacadeImpl implements CloudIdcardServiceFacade {
         cloudId.setAddress(faceResult.get("address").toString());
         cloudId.setBirth(faceResult.get("birth").toString());
         cloudId.setSex(faceResult.get("sex").toString());
-        cloudId.setFaceimglocal(faceResult.get("resourceUrl").toString());
-        //cloudId.setFaceimgserver(faceResult.get("faceImgServer").toString());阿里云图片服务器地址
+        cloudId.setFaceimglocal(faceResult.get("localUrl").toString());//本地图片地址
+        cloudId.setFaceimgserver(faceResult.get("serverUrl").toString());//阿里云图片服务器地址
         cloudId.setFrequestId(faceResult.get("frequest_id").toString());
-
 
         //反面信息
         cloudId.setStartDate(backResult.get("start_date").toString());
         cloudId.setEndDate(backResult.get("end_date").toString());
         cloudId.setIssue(backResult.get("issue").toString());
         cloudId.setBrequestId(backResult.get("brequest_id").toString());
-        cloudId.setBackimglocal(backResult.get("resourceUrl").toString());
+        cloudId.setBackimglocal(backResult.get("localUrl").toString());
+        cloudId.setBackimgserver(backResult.get("serverUrl").toString());
 
         cloudId.setType(type);
-        //cloudId.setBackimgserver(backResult.get("resourceUrl").toString());
-
         cloudId.setAddtime(new Date());
 
         int res = payCloudIdcardCustomMapper.insertSelective(cloudId);

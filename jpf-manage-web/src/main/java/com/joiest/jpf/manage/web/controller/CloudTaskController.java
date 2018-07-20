@@ -31,8 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -204,17 +203,23 @@ public class CloudTaskController {
                         companyMoneySame=Double.parseDouble(companyMoney_Str);
                         contractNo = singlePerson.get(3);
 
-                        // 判断企业充值表中存不存在此合同编号
-                        if ( StringUtils.isBlank(contractNo) ){
-                            // 合同编号为空，请检查
-                            String code = "-1";
-                            return code;
-                        }
-                        CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
-                        if ( cloudRechargeInfo.getId() == null ){
-                            // 充值表中不存在此合同编号
-                            String code = "-2";
-                            return code;
+                        // 判断合同编号的合法性
+                        if ( j==3 ){
+                            // 判断企业充值表中存不存在此合同编号
+                            if ( StringUtils.isBlank(contractNo) ){
+                                // 合同编号为空，请检查
+                                String code = "-1";
+                                return code;
+                            }
+                            CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
+                            if ( cloudRechargeInfo.getMerchNo() == null ){
+                                return "-4";
+                            }
+                            if ( !cloudRechargeInfo.getMerchNo().equals(companyInfo.getMerchNo()) ){
+                                // 充值表中不存在此合同编号
+                                String code = "-2";
+                                return code;
+                            }
                         }
                    }
                 }
@@ -251,11 +256,8 @@ public class CloudTaskController {
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( companyInfo.getCloudmoney().compareTo(new BigDecimal(companyMoney)) == -1 ){
-            responseMap.put("code","10005");
-            responseMap.put("info","该企业账户余额不足，剩余："+companyInfo.getCloudmoney());
-            responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
-            return uuid.toString();
+            // "该企业账户余额不足，剩余："+companyInfo.getCloudmoney()
+            return "-3";
         }else{
             // OSS上传excel文件
             String savePre = ConfigUtil.getValue("EXCEL_PATH");
@@ -293,15 +295,19 @@ public class CloudTaskController {
     /**
      * 下载模板
      */
-    @RequestMapping("/download")
-    public ResponseEntity<byte[]> download(String fileName,String filePath) throws IOException {
-
+    @RequestMapping(value="/download")
+    public ResponseEntity<byte[]> download()throws Exception {
+        //下载文件路径
+        String filename=ConfigUtil.getValue("EXCEL_NAME");
+        String path=ConfigUtil.getValue("EXCEL_PATH");
+        File file = new File(path + File.separator + filename);
         HttpHeaders headers = new HttpHeaders();
-        File file = new File(filePath);
-
+        //下载显示的文件名，解决中文名称乱码问题
+        String downloadFielName = new String(filename.getBytes("UTF-8"),"iso-8859-1");
+        //通知浏览器以attachment（下载方式）打开图片
+        headers.setContentDispositionFormData("attachment", downloadFielName);
+        //application/octet-stream ： 二进制流数据（最常见的文件下载）。
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", fileName);
-
         return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
                 headers, HttpStatus.CREATED);
     }

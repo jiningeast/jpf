@@ -21,6 +21,7 @@ import com.joiest.jpf.dto.GetCloudCompanyResponse;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
+import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,7 +283,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         payCloudCompanyCustomMapper.updateByExampleSelective(Companyup,examplea);
          //更新当前人的金额校验值
         //条件判断插入代理还是业务公司
-
+        JpfResponseDto responseDto = new JpfResponseDto();
         if(request.getType().equals("1")){
             //插入代理公司表
             PayCloudCompanyAgent agent= new PayCloudCompanyAgent();
@@ -332,42 +333,15 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
 
            }else if(request.getTipstype() == (byte)2){
-               //发送短信
-               String mobile = request.getPhone();
-               String content ="尊敬的用户您的账号已经开通：账号为"+request.getLinkemail()+"密码为"+passlogin;
-               String dateTime = date.toString();
-               Map<String,Object> map = new HashMap<>();
-               map.put("mobile",mobile);
-               map.put("content",content);
-               map.put("dateTime",dateTime);
 
-               //排序转换
-               Map<String,Object> treeMap = new TreeMap<>();
-               treeMap.putAll(map);
-
-               String respos = ToolUtils.mapToUrl(treeMap);
-
-               //调用配置文件ConfigUtil.getValue("API_SECRET")
-
-               String selfSign = Md5Encrypt.md5(respos+ ConfigUtil.getValue("API_SECRET")).toUpperCase();
-
-               map.put("sign",selfSign);
-
-               String response = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi",map);
-
-               //json---转换代码---
-               Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
-               String result=responseMap.get("code");
                //返回值解密进行json转换
-               if(!result.equals("10000")){//返回值为0，代表成功5
 
-                   throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
 
-               }
+               responseDto.setRetCode("10002");//发送短信
+
            }
-
-
-            return  new JpfResponseDto();
+        responseDto.setRemark(passlogin);//密码
+            return  responseDto;
     }
 
     /**
@@ -612,7 +586,31 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
         return cloudCompanyInfo;
     }
+    /**
+     * 根据聚合商户号获取单个公司的信息
+     */
+    public CloudCompanyInfo getRecByMerchNo(String merchNo){
 
+        GetCloudCompanysResponse response = new GetCloudCompanysResponse();
+
+        PayCloudCompanyExample e = new PayCloudCompanyExample();
+        PayCloudCompanyExample.Criteria c = e.createCriteria();
+
+        c.andMerchNoEqualTo(merchNo);
+
+        List<PayCloudCompany> getPayCloudCompany = payCloudCompanyMapper.selectByExample(e);
+
+        if (getPayCloudCompany == null || getPayCloudCompany.isEmpty()) return null;
+
+        PayCloudCompany payCloudCompany = getPayCloudCompany.get(0);
+
+        CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class,CloudCompanyInfo.class,false);
+        beanCopier.copy(payCloudCompany,cloudCompanyInfo,null);
+
+        return cloudCompanyInfo;
+    }
     /**
      * 根据主键id 更新表字段信息
      */
@@ -630,4 +628,22 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         return count;
     }
 
+    public CloudCompanyInfo getMerchInfoByMerchNo(String merchNo){
+        PayCloudCompanyExample example= new PayCloudCompanyExample();
+        PayCloudCompanyExample.Criteria c = example.createCriteria();
+        c.andMerchNoEqualTo(merchNo);
+        List<PayCloudCompany> merchNoInfoList = payCloudCompanyMapper.selectByExample(example);
+        if(merchNoInfoList.size() != 1 || merchNoInfoList == null){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "无效商户号");
+        }
+
+        CloudCompanyInfo cloudCompanyRep = new CloudCompanyInfo();
+        for (PayCloudCompany one : merchNoInfoList)
+        {
+            BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class, CloudCompanyInfo.class, false);
+            beanCopier.copy(one, cloudCompanyRep, null);
+        }
+
+        return cloudCompanyRep;
+    }
 }
