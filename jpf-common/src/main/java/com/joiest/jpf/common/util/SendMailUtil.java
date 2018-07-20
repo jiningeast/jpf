@@ -36,7 +36,7 @@ public class SendMailUtil{
     private final static String PROTOCOL = "smtp";
 
     // SMTP邮件服务器
-    private final static String HOST = "smtp.163.com";
+    private final static String HOST = "smtp.qiye.163.com";
 
     // SMTP邮件服务器默认端口
     private final static String PORT = "465";
@@ -48,7 +48,7 @@ public class SendMailUtil{
     private final static String IS_ENABLED_DEBUG_MOD = "true";
 
     // 发件人
-    private static String from = "cai_register@163.com";
+    private static String from = "icloud@joiest.com";
 
     // 收件人
     private static String to = "11743555934@qq.com";
@@ -337,9 +337,9 @@ public class SendMailUtil{
      */
     static class MyAuthenticator extends Authenticator {
 
-        private String username = "cai_register";
+        private String username = "icloud@joiest.com";
 
-        private String password = "wangyp01";
+        private String password = "zUxkk3CG6EEkP2PK";
 
         public MyAuthenticator() {
             super();
