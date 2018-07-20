@@ -59,6 +59,11 @@ public interface CloudCompanyServiceFacade {
     public CloudCompanyInfo getRecById(String id);
 
     /**
+     * 根据聚合商户号获取单个公司的信息
+     */
+    public CloudCompanyInfo getRecByMerchNo(String merchNo);
+
+    /**
      * 根据主键id 更新表字段信息
      */
     public int updateSetiveById(PayCloudCompany payCloudCompany);
