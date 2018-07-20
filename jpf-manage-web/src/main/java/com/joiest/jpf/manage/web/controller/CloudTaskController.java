@@ -8,10 +8,15 @@ import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.joiest.jpf.manage.web.util.SmsUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -26,7 +31,10 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -123,19 +131,17 @@ public class CloudTaskController {
     public String submitTask(String company_id, String company_name, @RequestParam("uploadfile") MultipartFile uploadfile, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws Exception{
         CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(company_id);
 
-        // 保存excel文件
-
         // 判断excel数据正确完整性
-        //获取当前的文件名
+        // 获取当前的文件名
         String fileNameAll = uploadfile.getOriginalFilename();
         String fileName=fileNameAll.substring(0,fileNameAll.lastIndexOf("."));
+
         // 解析xml
         ExcelDealUtils excelDealUtils = new ExcelDealUtils();
-        //循环判断每一条数据
 
+        // 循环判断每一条数据
         Map<Object,Object> map = excelDealUtils.getImportExcel(uploadfile.getInputStream(), uploadfile.getOriginalFilename());
         List<Object> list = new ArrayList<>(map.values());
-
 
         // 组装自由职业者信息数组
         List<CloudRemitExcelInfo> staffInfosSuccess = new ArrayList<>();
@@ -144,7 +150,6 @@ public class CloudTaskController {
         UUID uuid = UUID.randomUUID();
         String Batchno = "";
         String companyMoney_Str;
-        String companyMoney_StrSame;
         double companyMoney = 0;
         double companyMoneySame = 0;
         int count=0;
@@ -191,16 +196,25 @@ public class CloudTaskController {
                 companyMoney_Str = new DecimalFormat("#.00").format(Double.parseDouble(singlePerson.get(8))) ;
                 companyMoney = BigDecimalCalculateUtils.add(companyMoney,Double.parseDouble(companyMoney_Str));
             }else{
-
                 Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
                 for (int j=0; j<singlePerson.size()-1; j++){
-
                     if(i==2){
                         Batchno=singlePerson.get(0);
                         samecount=Integer.parseInt(singlePerson.get(1));
                         companyMoney_Str = new DecimalFormat("#.00").format(Double.parseDouble(singlePerson.get(2))) ;
                         companyMoneySame=Double.parseDouble(companyMoney_Str);
                         contractNo = singlePerson.get(3);
+
+                        // 判断企业充值表中存不存在此合同编号
+                        if ( StringUtils.isBlank(contractNo) ){
+                            // 合同编号为空，请检查
+                            return "-1";
+                        }
+                        CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
+                        if ( cloudRechargeInfo.getId() == null ){
+                            // 充值表中不存在此合同编号
+                            return "-2";
+                        }
                    }
                 }
             }
@@ -233,13 +247,12 @@ public class CloudTaskController {
             responseMap.put("code","10001");
             responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
             responseMap.put("data",staffInfosFailed);
-
             LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else{
             // OSS上传excel文件
             String savePre = ConfigUtil.getValue("EXCEL_PATH");
-            String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);
+            String path = PhotoUtil.saveFile(uploadfile, savePre);
             Map<String,Object> requestMap = new HashMap<>();
             requestMap.put("path",path);
             String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
@@ -267,6 +280,23 @@ public class CloudTaskController {
 
             return uuid.toString();
         }
+    }
+
+
+    /**
+     * 下载模板
+     */
+    @RequestMapping("/download")
+    public ResponseEntity<byte[]> download(String fileName,String filePath) throws IOException {
+
+        HttpHeaders headers = new HttpHeaders();
+        File file = new File(filePath);
+
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", fileName);
+
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+                headers, HttpStatus.CREATED);
     }
 
     /**
@@ -316,8 +346,8 @@ public class CloudTaskController {
      */
     @RequestMapping(value = "/confirmPersons", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    @Transactional
-    public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) {
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+    public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) throws Exception {
 
         // 读取暂存文件
         String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
@@ -416,13 +446,13 @@ public class CloudTaskController {
         Double profit = (moneyDouble + feeMoney) - (supposePay + taxMoney + addedValueTaxAddtionMoney);
         cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit));      // 毛利金额
         // 判断有没有已经存在的合同编号
-        CloudCompanyMoneyInfo existCompanyMoneyInfo = CloudCompanyMoneyServiceFacade.getRecByFid(contractNo);
+        /*CloudCompanyMoneyInfo existCompanyMoneyInfo = CloudCompanyMoneyServiceFacade.getRecByFid(contractNo);
         if ( existCompanyMoneyInfo.getId() != null ){
             jpfResponseDto.setRetCode("10003");
             jpfResponseDto.setRetMsg("该合同编号已经存在，请修改后上传");
 
             return jpfResponseDto;
-        }
+        }*/
         int companyMoneyRes = CloudCompanyMoneyServiceFacade.addRec(cloudCompanyMoneyInfo);
         if ( companyMoneyRes <= 0 ){
             jpfResponseDto.setRetCode("10004");
@@ -529,7 +559,7 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setMontype(1);
             cloudDfMoneyInfo.setRemark(singlePerson.get("memo"));
             cloudDfMoneyInfo.setVid(1);      // 待修改
-            cloudDfMoneyInfo.setIsActive(1);
+            cloudDfMoneyInfo.setIsActive(0);
             cloudDfMoneyInfo.setContent("");    // 待修改
             cloudDfMoneyInfo.setOperastate(0);  // 待修改
             cloudDfMoneyInfo.setTranno("");
@@ -645,25 +675,22 @@ public class CloudTaskController {
         // 获取任务信息
         CloudTaskInfo cloudTaskInfo = cloudTaskServiceFacade.getOneTask(taskId);
 
-        // 更新任务为锁定
-        CloudTaskInfo upTaskInfo = new CloudTaskInfo();
-        upTaskInfo.setId(taskId);
-        upTaskInfo.setIsLock((byte)1);
-        int taskRes = cloudTaskServiceFacade.updateColumn(upTaskInfo);
+        // 判断此任务是否已经锁定
+        if ( cloudTaskInfo.getIsLock().equals("1") ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("0001");
+            jpfResponseDto.setRetMsg("该任务已经锁定，请不要重复锁定");
+
+            return jpfResponseDto;
+        }
 
         // 获取批次订单信息
         CloudCompanyMoneyInfo cloudCompanyMoneyInfo = CloudCompanyMoneyServiceFacade.getRecByBatchNo(cloudTaskInfo.getBatchno());
 
-        // 更新批次订单为已锁定
-        CloudCompanyMoneyInfo upCompanyMoneyInfo = new CloudCompanyMoneyInfo();
-        upCompanyMoneyInfo.setId(cloudCompanyMoneyInfo.getId());
-        upCompanyMoneyInfo.setMontype((byte)1);
-        int companyMoneyRes = CloudCompanyMoneyServiceFacade.updateColumn(upCompanyMoneyInfo);
-
         //查询用户是否实名签约
         String webName = "欣享科技";
-        String heTongUrl = "http://10.10.18.15:8080/#/Identityno";  //实名签约地址
-        String shiMingUrl = "http://10.10.18.15:8080/#/Idtesttwo";//合同签约地址
+        String heTongUrl = ConfigUtil.getValue("WEIXIN_URL") + "/#/Identityno";  //实名签约地址
+        String shiMingUrl = ConfigUtil.getValue("WEIXIN_URL") + "/#/Idtesttwo";//合同签约地址
 
         String company_money_id = cloudCompanyMoneyInfo.getId(); //关联批次订单表的id
         CloudDfMoneyRequest dfRequest = new CloudDfMoneyRequest();
@@ -673,6 +700,33 @@ public class CloudTaskController {
         //记录pay_cloud_interface_stream表操作记录
         CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
 
+        // 查询用户是否全部鉴权
+        for (int i = 0; i < dfMoneyInfoList.size() ; i++){
+            Long staffId = dfMoneyInfoList.get(i).getBusstaffid();
+            CloudStaffBanksInfo searchStaffBanksInfo = new CloudStaffBanksInfo();
+            searchStaffBanksInfo.setStaffid(staffId);
+            CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchStaffBanksInfo);
+            if ( !cloudStaffBanksInfo.getBankActive().equals("1") ){
+                // 如果有人鉴权状态不是通过就返回错误
+                JpfResponseDto jpfResponseDto = new JpfResponseDto();
+                jpfResponseDto.setRetCode("0001");
+                jpfResponseDto.setRetMsg("该批次中存在鉴权失败的记录，请修改后重新上传excel");
+
+                return jpfResponseDto;
+            }
+        }
+
+        // 更新任务为锁定
+        CloudTaskInfo upTaskInfo = new CloudTaskInfo();
+        upTaskInfo.setId(taskId);
+        upTaskInfo.setIsLock((byte)1);
+        int taskRes = cloudTaskServiceFacade.updateColumn(upTaskInfo);
+
+        // 更新批次订单为已锁定
+        CloudCompanyMoneyInfo upCompanyMoneyInfo = new CloudCompanyMoneyInfo();
+        upCompanyMoneyInfo.setId(cloudCompanyMoneyInfo.getId());
+        upCompanyMoneyInfo.setMontype((byte)1);
+        int companyMoneyRes = CloudCompanyMoneyServiceFacade.updateColumn(upCompanyMoneyInfo);
 
         Date date = new Date();
         String dateTime = date.toString();
@@ -695,7 +749,7 @@ public class CloudTaskController {
                 content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
                 content += "签约。点击： "+shiMingUrl;//短信内容
             }
-            if ( dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" && dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" ){ //未实名签约
+            if ( dfMoneyInfoList.get(i).getCompactStaffCompactActive() != "1" && dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" ){ //未实名签约
                 content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
                 content += "签约认证并完成合同签约。点击： "+shiMingUrl;//短信内容
             }
@@ -735,6 +789,7 @@ public class CloudTaskController {
      * 鉴权操作
      * 返回 1=已经鉴权过 2=流水创建失败 3=鉴权失败 4=鉴权成功
      */
+    @RequestMapping("/checkBanks")
     public int checkBanks(CheckBanksRequest checkBanksRequest){
         // 先查询这个银行卡号和手机号是否已鉴权过
         CloudStaffBanksInfo isCheckedInfo = new CloudStaffBanksInfo();
@@ -752,11 +807,15 @@ public class CloudTaskController {
         requestMap.put("mobile",checkBanksRequest.getMobile());
         requestMap.put("name",checkBanksRequest.getName());
         requestMap.put("dateTime",checkBanksRequest.getDateTime());
-        String sign = Md5Encrypt.md5(ToolUtils.mapToUrl(requestMap) + ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(requestMap);
+
+        String sign = Md5Encrypt.md5(ToolUtils.mapToUrl(treeMap) + ConfigUtil.getValue("API_SECRET")).toUpperCase();
         requestMap.put("sign",sign);
-        String requestUrl = ConfigUtil.getValue("CLOUD_API")+"/toolcate/bankFourCheck";
+        String requestUrl = ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/bankFourCheck";
         String response = OkHttpUtils.postForm(requestUrl,requestMap);
-        Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
+        Map<String,String> responseMap = JsonUtils.toObject(response, HashMap.class);
 
         // 添加流水记录
         CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
@@ -794,4 +853,38 @@ public class CloudTaskController {
 
         return 4;
     }
+
+    /**
+     * 测试鉴权接口
+     */
+    @RequestMapping(value = "/testCheckBanks")
+    @ResponseBody
+    public String testCheckBanks(){
+        /*Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("accountNo","6212260200132547676");
+        requestMap.put("idCard","410711198701161537");
+        requestMap.put("mobile","15810063151");
+        requestMap.put("name","李晓飞");
+        requestMap.put("dateTime","2018-07-19 13:43:00");
+
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(requestMap);
+
+        String sign = Md5Encrypt.md5(ToolUtils.mapToUrl(treeMap) + ConfigUtil.getValue("API_SECRET")).toUpperCase();
+        requestMap.put("sign",sign);
+        String requestUrl = ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/bankFourCheck";
+        String response = OkHttpUtils.postForm(requestUrl,requestMap);
+        Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>(){});
+
+        return JsonUtils.toJson(responseMap);*/
+
+        String response = "{\"code\":\"10000\",\"info\":\"验证通过\",\"data\":{\"idCard\":\"410711198701161537\",\"accountNo\":\"6212260200132547676\",\"bank\":\"中国工商银行\",\"cardName\":\"牡丹卡普卡\",\"cardType\":\"借记卡\",\"name\":\"李晓飞\",\"mobile\":\"15810063151\",\"sex\":\"男\",\"area\":\"河南省新乡市牧野区\",\"province\":\"河南省\",\"city\":\"新乡市\",\"prefecture\":\"牧野区\",\"birthday\":\"1987-01-16\",\"addrCode\":\"410711\",\"lastCode\":\"7\"}}";
+        /*response = response.replaceAll("\\\\","");
+        response = StringUtils.strip(response,"\"");
+        response = StringUtils.stripEnd(response,"\"");*/
+        Map<String,String> responseMap = JsonUtils.toObject(response, HashMap.class);
+
+        return "";
+    }
+
 }

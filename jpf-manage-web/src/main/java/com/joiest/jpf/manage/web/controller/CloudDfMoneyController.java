@@ -9,7 +9,9 @@ import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.common.util.ConfigUtil;
+import com.joiest.jpf.dto.CloudDfMoneyRequest;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
+import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.facade.CloudCompanyMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
@@ -74,9 +76,60 @@ public class CloudDfMoneyController {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请选择代付信息");
         }
 
-        PayCloudCompanyMoney comMoneyData = new PayCloudCompanyMoney();
-        comMoneyData.setMontype((byte)3);
-        JpfResponseDto jpfcomMoneyDto = cloudCompanyMoneyServiceFacade.updateRecById(comMoneyData,companyMoneyId);
+        if( companyMoneyInfo.getMontype() != 3 ) {
+            PayCloudCompanyMoney comMoneyData = new PayCloudCompanyMoney();
+            comMoneyData.setMontype((byte) 3);
+            JpfResponseDto jpfcomMoneyDto = cloudCompanyMoneyServiceFacade.updateRecById(comMoneyData, companyMoneyId);
+        }
+
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+
+        //根据 ids  查询代付明细列表
+        CloudDfMoneyRequest dfMoneyRequest= new CloudDfMoneyRequest();
+        dfMoneyRequest.setIdsStr(ids);
+        List<CloudDfMoneyInfo> infos = cloudDfMoneyServiceFacade.getAllBySective(dfMoneyRequest);
+
+        Integer lenNum = 24;
+        List<Long> limitData = new ArrayList<>(); //不能打款的订单数据
+        for(CloudDfMoneyInfo onetimes:infos){
+            Long dfMoneyId = onetimes.getId();
+            if( onetimes.getIsActive() != 1 || (onetimes.getMontype() !=1 && onetimes.getMontype() !=3) ){ //过滤已打款或 不能打款 代付信息
+                limitData.add(dfMoneyId);
+            }
+
+
+            if( onetimes.getOrderid().equals("") || onetimes.getOrderid() == null ) {//生成新代付订单号
+                PayCloudDfMoney retData = new PayCloudDfMoney();
+                String orderid = ToolUtils.createDfOrderid(String.valueOf(System.currentTimeMillis()),onetimes.getId().toString(),lenNum);
+                retData.setOrderid(orderid); //生成打款单号
+                List<Long> dfIdArr = new ArrayList<>();
+                dfIdArr.add(onetimes.getId());
+                jpfResponseDto = cloudDfMoneyServiceFacade.updateDfRecordsByids(retData,dfIdArr);
+                if( !jpfResponseDto.getRetCode().equals("0000") ){
+                    throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单生成异常");
+                }
+            }else{//二次打款 新单号处理
+                PayCloudDfMoney retData = new PayCloudDfMoney();
+                String orderid = ToolUtils.createDfOrderid(String.valueOf(System.currentTimeMillis()),onetimes.getId().toString(),lenNum);
+                retData.setOrderid(orderid); //生成新打款单号
+                String orderIds = onetimes.getOrderids() != null ? onetimes.getOrderids()+onetimes.getOrderid()+"," : onetimes.getOrderid()+",";
+                retData.setOrderids(orderIds); //记录之前打款单号
+                List<Long> dfIdArr = new ArrayList<>();
+                dfIdArr.add(onetimes.getId());
+                jpfResponseDto = cloudDfMoneyServiceFacade.updateDfRecordsByids(retData,dfIdArr);
+                if( !jpfResponseDto.getRetCode().equals("0000") ){
+                    throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单生成异常");
+                }
+
+            }
+        }
+
+        //不能打款数据
+        if( !limitData.isEmpty() || limitData.size() > 0 ){
+            String jsonData = JsonUtils.toJson(limitData);
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "交易编号："+jsonData);
+        }
+
 
         //调用代付接口
         Date date = new Date();
@@ -91,7 +144,8 @@ public class CloudDfMoneyController {
         Map<String,Object> treeMap = new TreeMap<>();
         treeMap.putAll(map);
         String respos = ToolUtils.mapToUrl(treeMap);
-        map.put("token",cloudWaitpayKeycode);
+        String sign = Md5Encrypt.md5(respos+cloudWaitpayKeycode);
+        map.put("sign",sign);
 
         String requestParam = ToolUtils.mapToUrl(map);//请求参数
         String response = OkHttpUtils.postForm(requestUrl,map);
@@ -104,7 +158,7 @@ public class CloudDfMoneyController {
         }
         String code=responseMap.get("code").toString();
 
-        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+
         if( code.equals("10000") ){ //代付成功
             //记录pay_cloud_interface_stream表操作记录
             CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();

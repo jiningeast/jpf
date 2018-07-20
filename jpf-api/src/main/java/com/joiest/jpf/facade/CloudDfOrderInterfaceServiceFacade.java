@@ -18,7 +18,7 @@ public interface CloudDfOrderInterfaceServiceFacade {
     /**
      *根据外来单号查询代付数据  request_orderid
      * **/
-    public CloudDfMoneyInterfaceInfo getDfOrderByRequestOrderid(String request_orderid);
+    public CloudDfOrderInterfaceInfo getDfOrderByRequestOrderid(String request_orderid);
 
     /*
      * 获取批次下的代付信息

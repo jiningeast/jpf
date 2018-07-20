@@ -96,6 +96,7 @@ public class CloudCompanyController {
         return new ModelAndView("cloudCompany/companyAdd");
     }
 
+
     /**
      * 上传文件
      */
@@ -104,23 +105,17 @@ public class CloudCompanyController {
     public String upload(@RequestParam("file") MultipartFile file
             , HttpServletRequest request) throws UnknownHostException {
 
-        String address = InetAddress.getLocalHost().getHostAddress().toString();
+        String savePre = ConfigUtil.getValue("ROOT_PATH");
+        String allpath = PhotoUtil.saveFile(file, savePre);
 
-        String savePre = ConfigUtil.getValue("ROOT_PATH");//"images/uploadFile/";
-        String allpath = PhotoUtil.saveFile(file, request, savePre);
-       /* String savePre = ConfigUtil.getValue("EXCEL_PATH");
-        String path = PhotoUtil.saveFile(uploadfile, httpRequest, savePre);*/
         // OSS上传excel文件
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("path",allpath);
-//        String url = "http://10.10.18.16:8081/cloud-api/oss/upload";
         String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
         String response = OkHttpUtils.postForm(url,requestMap);
         response = StringUtils.strip(response,"\"");
         response = StringUtils.stripEnd(response,"\"");
-    /*    String YOU = "1530514343788.jpg";
-        // String strBackUrl = "http://" + request.getServerName()+":"+request.getServerPort()+httpRequest.getContextPath()+"/resources/"+cc; //服务器地址
-        String strBackUrl = "http://" + address + ":" + request.getServerPort() + httpRequest.getContextPath() + "/resources/" + cc;*/
+
         return response;
     }
 

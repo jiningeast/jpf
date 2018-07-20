@@ -1,23 +1,23 @@
 package com.joiest.jpf.dao.repository.mapper.generate;
 
-import com.joiest.jpf.common.po.PayCloudDfMoney;
-import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
+import com.joiest.jpf.common.po.PayCloudDfQorderStream;
+import com.joiest.jpf.common.po.PayCloudDfQorderStreamExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface PayCloudDfMoneyMapper {
+public interface PayCloudDfQorderStreamMapper {
     /**
      * 根据条件计数
      *
      * @param example
      */
-    int countByExample(PayCloudDfMoneyExample example);
+    int countByExample(PayCloudDfQorderStreamExample example);
 
     /**
      *
      * @param example
      */
-    int deleteByExample(PayCloudDfMoneyExample example);
+    int deleteByExample(PayCloudDfQorderStreamExample example);
 
     /**
      * 根据主键删除数据库的记录
@@ -31,28 +31,28 @@ public interface PayCloudDfMoneyMapper {
      *
      * @param record
      */
-    int insert(PayCloudDfMoney record);
+    int insert(PayCloudDfQorderStream record);
 
     /**
      * 插入数据库记录
      *
      * @param record
      */
-    int insertSelective(PayCloudDfMoney record);
+    int insertSelective(PayCloudDfQorderStream record);
 
     /**
      * 根据条件查询列表
      *
      * @param example
      */
-    List<PayCloudDfMoney> selectByExample(PayCloudDfMoneyExample example);
+    List<PayCloudDfQorderStream> selectByExample(PayCloudDfQorderStreamExample example);
 
     /**
      * 根据主键获取一条数据库记录
      *
      * @param id
      */
-    PayCloudDfMoney selectByPrimaryKey(Long id);
+    PayCloudDfQorderStream selectByPrimaryKey(Long id);
 
     /**
      * 选择性更新数据库记录
@@ -60,7 +60,7 @@ public interface PayCloudDfMoneyMapper {
      * @param record
      * @param example
      */
-    int  updateByExampleSelective(@Param("record") PayCloudDfMoney record, @Param("example") PayCloudDfMoneyExample example);
+    int updateByExampleSelective(@Param("record") PayCloudDfQorderStream record, @Param("example") PayCloudDfQorderStreamExample example);
 
     /**
      * 选择性更新数据库记录
@@ -68,19 +68,19 @@ public interface PayCloudDfMoneyMapper {
      * @param record
      * @param example
      */
-    int updateByExample(@Param("record") PayCloudDfMoney record, @Param("example") PayCloudDfMoneyExample example);
+    int updateByExample(@Param("record") PayCloudDfQorderStream record, @Param("example") PayCloudDfQorderStreamExample example);
 
     /**
      * 根据主键来更新部分数据库记录
      *
      * @param record
      */
-    int updateByPrimaryKeySelective(PayCloudDfMoney record);
+    int updateByPrimaryKeySelective(PayCloudDfQorderStream record);
 
     /**
      * 根据主键来更新数据库记录
      *
      * @param record
      */
-    int updateByPrimaryKey(PayCloudDfMoney record);
+    int updateByPrimaryKey(PayCloudDfQorderStream record);
 }

@@ -11,6 +11,8 @@ import org.apache.http.HttpResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IdentAuth {
 
@@ -121,28 +123,24 @@ public class IdentAuth {
 
         return ocrResult;
     }
-
     /**
      *阿里云OCR 身份证识别
      * */
     public JSONObject idCardOcr(HttpServletRequest request, String side, String imgInfo){
 
-        String dealImgInfo = imgInfo.replaceAll("^(data:\\s*image\\/(\\w+);base64,)", "");
-
-        JSONObject lastRes = new JSONObject();
-        Boolean is_old_format = true; //如果文档的输入中含有inputs字段，设置为True， 否则设置为False
-
-        //请根据线上文档修改configure字段
         JSONObject configObj = new JSONObject();
         configObj.put("side", side);
         String config_str = configObj.toString();
 
-        //base64转换为图片
-        Map<String, String> imgUrl = Base64CustomUtils.baseToImage(request,dealImgInfo,"OCR");
-        //域名访问路径
-        String requestUrl = request.getRequestURL().toString();
-        String resourceUrl = requestUrl.replace("/toolcate/idCardOcr",imgUrl.get("resourceUrl"));
+        JSONObject lastRes = new JSONObject();
+        Boolean is_old_format = true; //如果文档的输入中含有inputs字段，设置为True， 否则设置为False
 
+        String savePre = ConfigUtil.getValue("OCR_PATH");
+        //base64转换为图片
+        Map<String, String> imgUrl = Base64CustomUtils.baseToImageFinal(request,imgInfo,savePre);
+
+        //域名访问路径
+        String resourceUrl = imgUrl.get("resourceUrl");
         //获取图片实际路径
         String imgFile = imgUrl.get("actualUrl");
         //根据图片地址获取base64
@@ -244,9 +242,10 @@ public class IdentAuth {
                         idCard.put("num",userInfo.get("num"));
                         idCard.put("frequest_id",userInfo.get("request_id"));
                         idCard.put("sex",userInfo.get("sex"));
-                        //idCard.put("numnum",userInfo.get("num"));
                         idCard.put("side",side);
                         idCard.put("resourceUrl",resourceUrl);
+                        idCard.put("localUrl",imgFile);
+                        idCard.put("filename", imgUrl.get("filename"));
 
                     }else{
 
@@ -257,6 +256,8 @@ public class IdentAuth {
                         idCard.put("end_date",userInfo.get("end_date"));
                         idCard.put("side",side);
                         idCard.put("resourceUrl",resourceUrl);
+                        idCard.put("localUrl",imgFile);
+                        idCard.put("filename", imgUrl.get("filename"));
 
                     }
                     Map<String,Object> map = new HashMap<>();

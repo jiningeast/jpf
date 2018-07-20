@@ -36,10 +36,10 @@ public class SendMailUtil{
     private final static String PROTOCOL = "smtp";
 
     // SMTP邮件服务器
-    private final static String HOST = "smtp.163.com";
+    private final static String HOST = "smtp.qiye.163.com";
 
     // SMTP邮件服务器默认端口
-    private final static String PORT = "25";
+    private final static String PORT = "465";
 
     // 是否要求身份认证
     private final static String IS_AUTH = "true";
@@ -48,7 +48,7 @@ public class SendMailUtil{
     private final static String IS_ENABLED_DEBUG_MOD = "true";
 
     // 发件人
-    private static String from = "cai_register@163.com";
+    private static String from = ConfigUtil.getValue("EMAIL_NAME");;
 
     // 收件人
     private static String to = "11743555934@qq.com";
@@ -62,6 +62,7 @@ public class SendMailUtil{
         props.setProperty("mail.smtp.host", HOST);
         props.setProperty("mail.smtp.port", PORT);
         props.setProperty("mail.smtp.auth", IS_AUTH);
+        props.setProperty("mail.smtp.ssl.enable", IS_AUTH);
         props.setProperty("mail.debug",IS_ENABLED_DEBUG_MOD);
     }
 
@@ -122,7 +123,7 @@ public class SendMailUtil{
         // 创建MimeMessage实例对象
         MimeMessage message = new MimeMessage(session1);
         // 设置邮件主题
-        message.setSubject("欣享科技结算系统帐号开通");
+        message.setSubject("欣享服务结算系统帐号开通");
         // 设置发送人
         message.setFrom(new InternetAddress(from));
         // 设置发送时间
@@ -135,7 +136,7 @@ public class SendMailUtil{
         //设置自定义发件人昵称
         String nick="";
         try {
-            nick=javax.mail.internet.MimeUtility.encodeText("欣享科技");
+            nick=javax.mail.internet.MimeUtility.encodeText("欣享服务");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -336,9 +337,9 @@ public class SendMailUtil{
      */
     static class MyAuthenticator extends Authenticator {
 
-        private String username = "cai_register";
+        private String username = ConfigUtil.getValue("EMAIL_NAME");
 
-        private String password = "wangyp01";
+        private String password = ConfigUtil.getValue("EMAIL_PASSWORD");
 
         public MyAuthenticator() {
             super();

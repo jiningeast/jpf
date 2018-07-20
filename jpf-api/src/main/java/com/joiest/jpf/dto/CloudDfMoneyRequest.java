@@ -2,6 +2,7 @@ package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class CloudDfMoneyRequest {
     /**
@@ -178,6 +179,8 @@ public class CloudDfMoneyRequest {
      * 企业充值合同编号
      */
     private String pactno;
+
+    private List<Long> idsStr;
 
     public Long getId() {
         return id;
@@ -457,5 +460,13 @@ public class CloudDfMoneyRequest {
 
     public void setPactno(String pactno) {
         this.pactno = pactno;
+    }
+
+    public List<Long> getIdsStr() {
+        return idsStr;
+    }
+
+    public void setIdsStr(List<Long> idsStr) {
+        this.idsStr = idsStr;
     }
 }

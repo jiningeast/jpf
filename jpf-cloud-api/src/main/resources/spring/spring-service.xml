@@ -21,6 +21,6 @@
 	<bean id="CloudEmployeeServiceFacade" class="com.joiest.jpf.facade.impl.CloudEmployeeServiceFacadeImpl"></bean>
 	<bean id="CloudFanSourceServiceFacade" class="com.joiest.jpf.facade.impl.CloudFanSourceServiceFacadeImpl"></bean>
 	<bean id="PcaServiceFacade" class="com.joiest.jpf.facade.impl.PcaServiceFacadeImpl"></bean>
-
+	<bean id="CloudDfFqwaterServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfFqwaterServiceFacadeImpl"></bean>
 
 </beans>
