@@ -837,4 +837,24 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         return new JpfResponseDto();
     }
 
+    /**
+     * 根据合同编号获取记录
+     */
+    @Override
+    public CloudRechargeInfo getRecByPactno(String pactno){
+        PayCloudRechargeExample e = new PayCloudRechargeExample();
+        PayCloudRechargeExample.Criteria c = e.createCriteria();
+        c.andPactnoEqualTo(pactno);
+        c.andStatusGreaterThanOrEqualTo((byte)4);
+
+        List<PayCloudRecharge> list = payCloudRechargeMapper.selectByExample(e);
+        CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
+
+        if ( !list.isEmpty() ){
+            BeanCopier beanCopier = BeanCopier.create(PayCloudRecharge.class, CloudRechargeInfo.class, false);
+            beanCopier.copy(list.get(0), cloudRechargeInfo, null);
+        }
+
+        return cloudRechargeInfo;
+    }
 }

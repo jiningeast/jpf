@@ -68,4 +68,9 @@ public interface CloudRechargeServiceFacade {
      */
     public JpfResponseDto rechargeNeedAffirm(String merchNo,String agentNo,String id,String fid);
 
+    /**
+     * 根据合同编号获取记录
+     */
+    public CloudRechargeInfo getRecByPactno(String pactno);
+
 }
