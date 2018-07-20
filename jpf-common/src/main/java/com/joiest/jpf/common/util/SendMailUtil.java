@@ -48,7 +48,7 @@ public class SendMailUtil{
     private final static String IS_ENABLED_DEBUG_MOD = "true";
 
     // 发件人
-    private static String from = "icloud@joiest.com";
+    private static String from = ConfigUtil.getValue("EMAIL_NAME");;
 
     // 收件人
     private static String to = "11743555934@qq.com";
@@ -123,7 +123,7 @@ public class SendMailUtil{
         // 创建MimeMessage实例对象
         MimeMessage message = new MimeMessage(session1);
         // 设置邮件主题
-        message.setSubject("欣享科技结算系统帐号开通");
+        message.setSubject("欣享服务结算系统帐号开通");
         // 设置发送人
         message.setFrom(new InternetAddress(from));
         // 设置发送时间
@@ -136,7 +136,7 @@ public class SendMailUtil{
         //设置自定义发件人昵称
         String nick="";
         try {
-            nick=javax.mail.internet.MimeUtility.encodeText("欣享科技");
+            nick=javax.mail.internet.MimeUtility.encodeText("欣享服务");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -337,9 +337,9 @@ public class SendMailUtil{
      */
     static class MyAuthenticator extends Authenticator {
 
-        private String username = "icloud@joiest.com";
+        private String username = ConfigUtil.getValue("EMAIL_NAME");
 
-        private String password = "zUxkk3CG6EEkP2PK";
+        private String password = ConfigUtil.getValue("EMAIL_PASSWORD");
 
         public MyAuthenticator() {
             super();
