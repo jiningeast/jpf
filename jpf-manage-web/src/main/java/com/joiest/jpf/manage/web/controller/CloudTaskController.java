@@ -31,10 +31,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -208,12 +206,14 @@ public class CloudTaskController {
                         // 判断企业充值表中存不存在此合同编号
                         if ( StringUtils.isBlank(contractNo) ){
                             // 合同编号为空，请检查
-                            return "-1";
+                            String code = "-1";
+                            return code;
                         }
                         CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
                         if ( cloudRechargeInfo.getId() == null ){
                             // 充值表中不存在此合同编号
-                            return "-2";
+                            String code = "-2";
+                            return code;
                         }
                    }
                 }
@@ -223,31 +223,37 @@ public class CloudTaskController {
             responseMap.put("code","10004");
             responseMap.put("info","批次号与文件名不一致请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(count !=samecount){
             responseMap.put("code","10004");
             responseMap.put("info","总笔数与实际笔数不符请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(count>1000){
             responseMap.put("code","10004");
             responseMap.put("info","最大支持1000条数据请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if(companyMoney!=companyMoneySame){
             responseMap.put("code","10004");
             responseMap.put("info","总金额与实际金额不符请修改后上传！");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( staffInfosFailed.size() > 0 ){
             responseMap.put("code","10001");
             responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
             responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            return uuid.toString();
+        }else if ( companyInfo.getCloudmoney().compareTo(new BigDecimal(companyMoney)) == -1 ){
+            responseMap.put("code","10005");
+            responseMap.put("info","该企业账户余额不足，剩余："+companyInfo.getCloudmoney());
+            responseMap.put("data",staffInfosFailed);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else{
             // OSS上传excel文件
@@ -276,7 +282,7 @@ public class CloudTaskController {
             responseMap.put("contractNo",contractNo);
             responseMap.put("data",staffInfosSuccess);
             responseMap.put("ossUrl",response);
-            LogsCustomUtils.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
 
             return uuid.toString();
         }
@@ -286,15 +292,19 @@ public class CloudTaskController {
     /**
      * 下载模板
      */
-    @RequestMapping("/download")
-    public ResponseEntity<byte[]> download(String fileName,String filePath) throws IOException {
-
+    @RequestMapping(value="/download")
+    public ResponseEntity<byte[]> download()throws Exception {
+        //下载文件路径
+        String filename=ConfigUtil.getValue("EXCEL_NAME");
+        String path=ConfigUtil.getValue("EXCEL_PATH");
+        File file = new File(path + File.separator + filename);
         HttpHeaders headers = new HttpHeaders();
-        File file = new File(filePath);
-
+        //下载显示的文件名，解决中文名称乱码问题
+        String downloadFielName = new String(filename.getBytes("UTF-8"),"iso-8859-1");
+        //通知浏览器以attachment（下载方式）打开图片
+        headers.setContentDispositionFormData("attachment", downloadFielName);
+        //application/octet-stream ： 二进制流数据（最常见的文件下载）。
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", fileName);
-
         return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
                 headers, HttpStatus.CREATED);
     }
@@ -309,7 +319,7 @@ public class CloudTaskController {
         up = StringUtils.strip(up,"\"");
         up = StringUtils.stripEnd(up,"\"");
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+up+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+up+".txt","UTF-8");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         String code=jsonMap.get("code");
         String info=jsonMap.get("info");
@@ -330,7 +340,7 @@ public class CloudTaskController {
     @ResponseBody
     public Map<String, Object> personsData(String data){
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","UTF-8");
         Map<String,List< LinkedHashMap<String,String> >> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > list = jsonMap.get("data");
 
@@ -350,7 +360,7 @@ public class CloudTaskController {
     public JpfResponseDto confirmPersons(String companyId, String data, HttpServletRequest httpRequest) throws Exception {
 
         // 读取暂存文件
-        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","GB2312");
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+data+".txt","UTF-8");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         String batchNo = jsonMap.get("batchNo");
         String persons = ""+jsonMap.get("persons");
@@ -556,7 +566,7 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setBankacctattr(Integer.parseInt(String.valueOf(singlePerson.get("type"))));
             cloudDfMoneyInfo.setAddtime(new Date());
             cloudDfMoneyInfo.setRealname(singlePerson.get("name"));
-            cloudDfMoneyInfo.setMontype(1);
+            cloudDfMoneyInfo.setMontype(0); //未申请
             cloudDfMoneyInfo.setRemark(singlePerson.get("memo"));
             cloudDfMoneyInfo.setVid(1);      // 待修改
             cloudDfMoneyInfo.setIsActive(0);
@@ -645,7 +655,7 @@ public class CloudTaskController {
         // 获取任务详情
         CloudTaskInfo cloudTaskInfo = cloudTaskServiceFacade.getOneTask(taskId);
         String filePath = cloudTaskInfo.getFilePath();
-        String fileContent = ToolUtils.readFromFile(filePath,"GB2312");
+        String fileContent = ToolUtils.readFromFile(filePath,"UTF-8");
         Map<String,List< LinkedHashMap<String,String> >> jsonMapData = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > personsList = jsonMapData.get("data");
 
@@ -733,7 +743,7 @@ public class CloudTaskController {
 
         //循环发送短信
         for (int i = 0; i < dfMoneyInfoList.size() ; i++) {
-
+            Long dfMoneyId = dfMoneyInfoList.get(i).getId();//代付表主键ID
             String banknickname = dfMoneyInfoList.get(i).getBanknickname();//收款人
             String mobile = dfMoneyInfoList.get(i).getBankphone(); //手机号
             Long busstaffid = dfMoneyInfoList.get(i).getBusstaffid(); //员工ID
@@ -773,7 +783,17 @@ public class CloudTaskController {
 
                 //json---转换代码---
                 Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
-                //String result=responseMap.get("code");
+                if( responseMap.containsKey("code") ){
+                    String result=responseMap.get("code");
+                    if( result.equals("10000 ")){//短信签约成功 更新为代付款状态
+                        CloudDfMoneyRequest dfMoneyRequest = new CloudDfMoneyRequest();
+                        int count = cloudDfMoneyServiceFacade.updateDfMoneyActiveById(dfMoneyRequest,dfMoneyId);
+
+                    }
+                }else{
+
+                }
+
                 //返回值10000 代表成功
                 //短信发送是否成功  之后 如何处理 ？？？？？？？？
 

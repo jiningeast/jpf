@@ -21,7 +21,9 @@ import com.joiest.jpf.dto.GetCloudCompanyResponse;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
+import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
+import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -47,6 +49,9 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
     @Autowired
     private PayCloudEmployeeMapper payCloudEmployeeMapper;
+
+    @Autowired
+    private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
 
     /**
      * 代理公司列表---后台
@@ -364,6 +369,14 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
                    throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
 
                }
+               // 增加==OSS接口流水==
+               CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+               cloudInterfaceStreamInfo.setType((byte)0);
+               cloudInterfaceStreamInfo.setRequestUrl(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi");
+               cloudInterfaceStreamInfo.setRequestContent(respos);
+               cloudInterfaceStreamInfo.setResponseContent(result);
+               cloudInterfaceStreamInfo.setAddtime(new Date());
+               cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
            }
 
 
@@ -612,4 +625,22 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
         return cloudCompanyInfo;
     }
+
+    /**
+     * 根据主键id 更新表字段信息
+     */
+    @Override
+    public int updateSetiveById(PayCloudCompany payCloudCompany){
+        if( payCloudCompany == null ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "未获取到公司信息");
+        }
+
+        int count = payCloudCompanyMapper.updateByPrimaryKeySelective(payCloudCompany);
+        if( count <= 0 ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "公司信息更新失败");
+        }
+
+        return count;
+    }
+
 }

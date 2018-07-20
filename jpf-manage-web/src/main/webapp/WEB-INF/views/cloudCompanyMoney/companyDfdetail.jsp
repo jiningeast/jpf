@@ -12,7 +12,7 @@
             <title>代付明细</title>
         </head>
 <body>
-<div name="contentDiv">
+<div name="contentDiv" style="padding: 15px;">
     <div id="dgDetail"></div>
 </div>
 <script>
