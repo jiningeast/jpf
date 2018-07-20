@@ -136,13 +136,15 @@ public class IdentAuth {
         Boolean is_old_format = true; //如果文档的输入中含有inputs字段，设置为True， 否则设置为False
 
         String savePre = ConfigUtil.getValue("OCR_PATH");
+
+        System.out.println("OCR服务器存放地址："+savePre);
         //base64转换为图片
-        Map<String, String> imgUrl = Base64CustomUtils.baseToImageFinal(request,imgInfo,savePre);
+        Map<String, String> imgUrl = Base64CustomUtils.baseToImageFinal(imgInfo,savePre);
 
         //域名访问路径
-        String resourceUrl = imgUrl.get("resourceUrl");
+        String resourceUrl = imgUrl.get("serverUrl");
         //获取图片实际路径
-        String imgFile = imgUrl.get("actualUrl");
+        String imgFile = imgUrl.get("localUrl");
         //根据图片地址获取base64
         String imgBase64  = Base64CustomUtils.imageToBase(imgFile);
 
@@ -245,7 +247,7 @@ public class IdentAuth {
                         idCard.put("side",side);
                         idCard.put("resourceUrl",resourceUrl);
                         idCard.put("localUrl",imgFile);
-                        idCard.put("filename", imgUrl.get("filename"));
+                        idCard.put("filename", imgUrl.get("fileName"));
 
                     }else{
 
@@ -257,8 +259,7 @@ public class IdentAuth {
                         idCard.put("side",side);
                         idCard.put("resourceUrl",resourceUrl);
                         idCard.put("localUrl",imgFile);
-                        idCard.put("filename", imgUrl.get("filename"));
-
+                        idCard.put("filename", imgUrl.get("fileName"));
                     }
                     Map<String,Object> map = new HashMap<>();
                     map.put("userifno",idCard);
