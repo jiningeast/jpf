@@ -524,6 +524,7 @@ public class UserInfoController {
             }
         }
     }
+
     //待签约合同列表
     @RequestMapping(value = "/userbesign", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
