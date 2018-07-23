@@ -43,9 +43,9 @@
                     {field:'bankActive',title:'状态',width:"15%",
                         formatter:function (value,row,index) {
                             if ( value == "0" ){
-                                return "<font style='color: #ff0b00'>未激活</font>";
+                                return "<font style='color: #ff0b00'>鉴权未通过</font>";
                             }else if ( value == "1" ){
-                                return "<font style='color: #0e90d2'>已激活</font>";
+                                return "<font style='color: #0e90d2'>鉴权通过</font>";
                             }
                         }},
                     {field:'bankacctattr',title:'类别',width:"15%",

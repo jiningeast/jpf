@@ -77,11 +77,11 @@
                             if ( value == 0 ){
                                 return "未处理";
                             }else if ( value == 1 ){
-                                return "处理中";
+                                return "部分失败";
                             }else if ( value == 2 ){
-                                return "完成";
+                                return "全部失败";
                             }else if ( value == 3 ){
-                                return "失败";
+                                return "全部成功";
                             }
                         }},
                     {field:'isLock',title:'锁定',width:"10%",
