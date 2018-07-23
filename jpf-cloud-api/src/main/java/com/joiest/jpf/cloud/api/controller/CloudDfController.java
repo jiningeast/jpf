@@ -113,9 +113,7 @@ public class CloudDfController {
         }
 
         //添加任务
-//        String batchid_self = ToolsUtils.createOrderid();
         AddCloudDfTaskRequest requestTask = new AddCloudDfTaskRequest();
-//        requestTask.setBatchid(batchid_self);
         requestTask.setRequestBatchno(request.getBatchid());
         Map<String, Object> requestMap = ClassUtil.requestToMap(request);
         String requestStr = ToolUtils.mapToUrl(requestMap);
@@ -157,7 +155,6 @@ public class CloudDfController {
         response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
         response.setHeader("Access-Control-Allow-Method", "POST");
         response.setHeader("Access-Control-Allow-Origin", originHeader);
-
     }
 
     /**
@@ -180,7 +177,7 @@ public class CloudDfController {
             dfDataUtils.setName("【线程:" + one.getBatchid() + "】");
             dfDataUtils.start();
         }
-        return "";
+        return "正在执行.....";
     }
     /**
      * 代付查询接口
@@ -203,7 +200,7 @@ public class CloudDfController {
         Map<String,String> apiInfo = new HashMap<>();
 
         apiInfo.put("tranNo",cloudDfOrderInterfaceInfo.getTranno());
-        apiInfo.put("outOrderNo",cloudDfOrderInterfaceInfo.getOrderid().toString());
+        apiInfo.put("outOrderNo",cloudDfOrderInterfaceInfo.getOrderid());
 
         int count = 0;
         if(cloudDfOrderInterfaceInfo.getQuerycount() == null || cloudDfOrderInterfaceInfo.getQuerycount().equals(0)){
@@ -229,7 +226,7 @@ public class CloudDfController {
 
         Map<String,String> map = new HashMap<>();
         map.put("request_orderid",orderId);
-        map.put("orderid",cloudDfOrderInterfaceInfo.getOrderid().toString());
+        map.put("orderid",cloudDfOrderInterfaceInfo.getOrderid());
         map.put("tranNo",cloudDfOrderInterfaceInfo.getTranno());
         map.put("tranAmt",cloudDfOrderInterfaceInfo.getApplyamt().toString());
         map.put("orderStatus",resJson.get("orderStatus").toString());

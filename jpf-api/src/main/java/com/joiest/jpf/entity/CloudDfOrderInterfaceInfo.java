@@ -13,7 +13,7 @@ public class CloudDfOrderInterfaceInfo {
     /**
      * 打款orderid
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 打款批次id
@@ -143,11 +143,11 @@ public class CloudDfOrderInterfaceInfo {
         this.id = id;
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
+    public void setOrderid(String orderid) {
         this.orderid = orderid;
     }
 

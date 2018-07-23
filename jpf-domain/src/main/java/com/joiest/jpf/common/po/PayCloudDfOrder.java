@@ -13,7 +13,7 @@ public class PayCloudDfOrder implements Serializable {
     /**
      * 打款orderid
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 打款批次id
@@ -145,12 +145,12 @@ public class PayCloudDfOrder implements Serializable {
         this.id = id;
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
-        this.orderid = orderid;
+    public void setOrderid(String orderid) {
+        this.orderid = orderid == null ? null : orderid.trim();
     }
 
     public String getBatchid() {
