@@ -246,52 +246,62 @@ public class PayCloudDfOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderidEqualTo(Long value) {
+        public Criteria andOrderidEqualTo(String value) {
             addCriterion("orderid =", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidNotEqualTo(Long value) {
+        public Criteria andOrderidNotEqualTo(String value) {
             addCriterion("orderid <>", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidGreaterThan(Long value) {
+        public Criteria andOrderidGreaterThan(String value) {
             addCriterion("orderid >", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidGreaterThanOrEqualTo(Long value) {
+        public Criteria andOrderidGreaterThanOrEqualTo(String value) {
             addCriterion("orderid >=", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidLessThan(Long value) {
+        public Criteria andOrderidLessThan(String value) {
             addCriterion("orderid <", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidLessThanOrEqualTo(Long value) {
+        public Criteria andOrderidLessThanOrEqualTo(String value) {
             addCriterion("orderid <=", value, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidIn(List<Long> values) {
+        public Criteria andOrderidLike(String value) {
+            addCriterion("orderid like", value, "orderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidNotLike(String value) {
+            addCriterion("orderid not like", value, "orderid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidIn(List<String> values) {
             addCriterion("orderid in", values, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidNotIn(List<Long> values) {
+        public Criteria andOrderidNotIn(List<String> values) {
             addCriterion("orderid not in", values, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidBetween(Long value1, Long value2) {
+        public Criteria andOrderidBetween(String value1, String value2) {
             addCriterion("orderid between", value1, value2, "orderid");
             return (Criteria) this;
         }
 
-        public Criteria andOrderidNotBetween(Long value1, Long value2) {
+        public Criteria andOrderidNotBetween(String value1, String value2) {
             addCriterion("orderid not between", value1, value2, "orderid");
             return (Criteria) this;
         }
@@ -1913,6 +1923,11 @@ public class PayCloudDfOrderExample {
 
         public Criteria andUpdatedNotBetween(Date value1, Date value2) {
             addCriterion("updated not between", value1, value2, "updated");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidLikeInsensitive(String value) {
+            addCriterion("upper(orderid) like", value.toUpperCase(), "orderid");
             return (Criteria) this;
         }
 

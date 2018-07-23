@@ -10,7 +10,6 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfTaskMapper;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.entity.CloudDfOrderInterfaceInfo;
 import com.joiest.jpf.facade.CloudDfOrderInterfaceServiceFacade;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +33,7 @@ public class CloudDfOrderInterfaceServiceFacadeImpl implements CloudDfOrderInter
         for ( CloudDfMoneyInterfaceInfo one :list )
         {
             PayCloudDfOrder payCloudDfOrder = new PayCloudDfOrder();
-            payCloudDfOrder.setOrderid(Long.parseLong(ToolUtils.createOrderid()));
+            payCloudDfOrder.setOrderid(ToolUtils.createOrderid());
             payCloudDfOrder.setBatchid(batchid_self);
             payCloudDfOrder.setRequestBatchno(batchid);
             payCloudDfOrder.setRequestDfId(String.valueOf(one.getId()));
