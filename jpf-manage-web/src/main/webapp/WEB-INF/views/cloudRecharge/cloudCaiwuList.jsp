@@ -41,15 +41,15 @@
                 columns : [[
                     {field:'id', title:'ID',width:'4%'},
                     {field:'fid', title:'充值单号',width:'10%'},
-                    {field:'agent_no', title:'代理聚合商户编号',width:'10%'},
-                    {field:'merch_no', title:'到账聚合商户编号',width:'10%'},
+                    {field:'agentNo', title:'代理聚合商户编号',width:'10%'},
+                    {field:'merchNo', title:'到账聚合商户编号',width:'10%'},
                     {field:'payway', title:'支付方式',width:'5%'},
                     {field:'pactno', title:'合同编号',width:'5%'},
                     {field:'money', title:'充值金额',width:'5%'},
                     {field:'realmoney', title:'实际到帐金额',width:'5%'},
                     {field:'feemoney', title:'手续费总额',width:'5%'},
-                    {field:'agent_feemoney', title:'代理手续费',width:'5%'},
-                    {field:'sales_feemoney', title:'服务平台手续费',width:'5%'},
+                    {field:'agentFeemoney', title:'代理手续费',width:'5%'},
+                    {field:'salesFeemoney', title:'服务平台手续费',width:'5%'},
                     {field:'status', title:'状态',width:'8%',
                         formatter:function (value, row, index) {
                             if ( value == 0 ){
@@ -63,11 +63,11 @@
                             }else if ( value == 4 ){
                                 return '<span style="color:green">已充值开票中</span>';
                             }else if ( value == 5 ){
-                                return '<span style="color:red">已充值已开票</span>';
+                                return '<span style="color:blue">已充值已开票</span>';
                             }else if ( value == 6 ){
-                                return '<span style="color:red">已发货</span>';
+                                return '<span style="color:blue">已发货</span>';
                             }else if ( value == 7 ){
-                                return '<span style="color:red">已完成</span>';
+                                return '<span style="color:green">已完成</span>';
                             }
                         }
                     },
@@ -134,14 +134,14 @@
                         <td>
                             <select id="status_s" name="status" class="easyui-combobox">
                                 <option value="">全部</option>
-                                <option value="0">已取消</option>
+                                <%--<option value="0">已取消</option>
                                 <option value="1">申请中</option>
-                                <option value="2">已审核</option>
+                                <option value="2">已审核</option>--%>
                                 <option value="3">已支付</option>
                                 <option value="4">已充值开票中</option>
                                 <option value="5">已充值已开票</option>
-                                <option value=6">已发货</option>
-                                <option value=7">已完成</option>
+                                <option value="6">已发货</option>
+                                <option value="7">已完成</option>
                             </select>
                         </td>
                         <td>添加起止时间:</td>
