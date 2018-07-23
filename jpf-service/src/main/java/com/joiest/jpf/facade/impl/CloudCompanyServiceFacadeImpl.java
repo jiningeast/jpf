@@ -49,8 +49,6 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
     @Autowired
     private PayCloudEmployeeMapper payCloudEmployeeMapper;
 
-
-
     /**
      * 代理公司列表---后台
      */
@@ -628,5 +626,24 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         }
 
         return count;
+    }
+
+    public CloudCompanyInfo getMerchInfoByMerchNo(String merchNo){
+        PayCloudCompanyExample example= new PayCloudCompanyExample();
+        PayCloudCompanyExample.Criteria c = example.createCriteria();
+        c.andMerchNoEqualTo(merchNo);
+        List<PayCloudCompany> merchNoInfoList = payCloudCompanyMapper.selectByExample(example);
+        if(merchNoInfoList.size() != 1 || merchNoInfoList == null){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "无效商户号");
+        }
+
+        CloudCompanyInfo cloudCompanyRep = new CloudCompanyInfo();
+        for (PayCloudCompany one : merchNoInfoList)
+        {
+            BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class, CloudCompanyInfo.class, false);
+            beanCopier.copy(one, cloudCompanyRep, null);
+        }
+
+        return cloudCompanyRep;
     }
 }

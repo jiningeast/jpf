@@ -74,7 +74,7 @@
             pagination:false,
             //singleSelect:true,
             multiselect:true,
-           //selectOnCheck:true,
+            selectOnCheck:false,
             url : '../dfDetail?companyMoneyId='+${companyMoneyId},
             columns : [[
                 {field:'id', title:'ID',width:'4%',checkbox:true},
@@ -132,7 +132,7 @@
                 {field:'updatetime', title:'修改时间',width:'10%',formatter: formatDateStr}
             ]],
             onLoadSuccess: function(data){//加载完毕后获取所有的checkbox遍历
-                if (data.rows.length > 0) {
+                /*if (data.rows.length > 0) {
                     //循环判断操作为新增的不能选择
                     for (var i = 0; i < data.rows.length; i++) {
                         //根据operate让某些行不可选
@@ -140,16 +140,16 @@
                             $("input[type='checkbox']")[i + 1].disabled = true;
                         }
                     }
-                }
+                }*/
             },
             onClickRow: function(rowIndex, rowData){
                 //加载完毕后获取所有的checkbox遍历
-                $("input[type='checkbox']").each(function(index, el){
+                /*$("input[type='checkbox']").each(function(index, el){
                     //如果当前的复选框不可选，则不让其选中
                     if (el.disabled == true) {
                         POSStockHeadTable.datagrid('unselectRow', index - 1);
                     }
-                })
+                })*/
             }
         });
 

@@ -68,4 +68,10 @@ public interface CloudCompanyServiceFacade {
      */
     public int updateSetiveById(PayCloudCompany payCloudCompany);
 
+    /**
+     * 商户后台
+     * 根据商户编号获取单个公司的信息
+     */
+    public CloudCompanyInfo getMerchInfoByMerchNo(String merchNo);
+
 }

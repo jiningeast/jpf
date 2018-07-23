@@ -71,7 +71,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
-                        <select id="attestation" name="attestation" data-options="required:true"
+                        <select id="attestation" name="attestation"data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
 
                             <option value="0" <c:if  test="${cloudCompanyInfo.attestation eq 0 }">selected</c:if>>未认证</option>
@@ -89,7 +89,7 @@
                 <tr>
                       <td style="text-align: right;background-color: #f1f1f1;">登录状态：</td>
                       <td>
-                          <select id="status" name="status" data-options="required:true"
+                          <select id="status" name="status" data-options="required:true" class="easyui-combobox"
                                   style="width:120px;">
 
                               <option value="1" <c:if  test="${cloudCompanyInfo.status eq 1 }">selected</c:if>>正常</option>
@@ -293,7 +293,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             $('#infoDiv').window('close');
                             $('#dg').datagrid('reload');
                         }
