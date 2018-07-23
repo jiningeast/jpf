@@ -76,7 +76,11 @@ public class CloudRechargeController {
         //定义财务角色对应的状态值
         List<Byte> statusArr=new ArrayList<Byte>();
         statusArr.add((byte)3);  //已支付(已上传凭证)
-        statusArr.add((byte)4); //已支付(已上传凭证)
+        statusArr.add((byte)5); //
+        statusArr.add((byte)6); //
+        statusArr.add((byte)7); //
+        statusArr.add((byte)8); //
+
         cloudRechargeRequest.setStatusArr(statusArr);
 
         CloudRechargeResponse cloudRechargeResponse = cloudRechargeServiceFacade.getCaiwuRecords(cloudRechargeRequest);
@@ -84,6 +88,7 @@ public class CloudRechargeController {
         Map<String, Object> map = new HashMap<>();
         map.put("total", cloudRechargeResponse.getCount());
         map.put("rows", cloudRechargeResponse.getList());
+        map.put("statusArr", statusArr);
 
         return map;
     }

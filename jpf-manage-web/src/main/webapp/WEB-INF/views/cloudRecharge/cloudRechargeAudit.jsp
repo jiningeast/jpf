@@ -149,14 +149,18 @@
                     <td colspan="4">
                         <select id="status_audit" name="status" class="easyui-combobox" style="width:120px;" data-options="">
                             <option value="">请选择</option>
-                            <option value="0">已取消</option>
-                            <option value="1">已申请</option>
-                            <option value="2">已审核(待上传付款凭证)</option>
-                            <option value="3">已支付(已上传凭证)</option>
-                            <option value="4">已充值开票中</option>
-                            <option value="5">已充值已开票</option>
-                            <option value="6">已发货</option>
-                            <option value="7">已完成</option>
+                            <c:if test="${auditPageType == 1 }">
+                                <option value="0">已取消</option>
+                                <option value="1">已申请</option>
+                                <option value="2">已审核(待上传付款凭证)</option>
+                            </c:if>
+                            <c:if test="${auditPageType == 2 }">
+                                <option value="3">已支付(已上传凭证)</option>
+                                <option value="4">已充值开票中</option>
+                                <option value="5">已充值已开票</option>
+                                <option value="6">已发货</option>
+                                <option value="7">已完成</option>
+                            </c:if>
                         </select>
                     </td>
                 </tr>

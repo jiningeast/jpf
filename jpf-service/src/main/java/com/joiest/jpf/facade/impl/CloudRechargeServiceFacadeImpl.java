@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -104,8 +105,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             addtimeEnd = DateUtils.getFdate( cloudRechargeRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
-        if( cloudRechargeRequest.getStatusArr() != null ){
-            c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+        //查询搜索条件数据
+        if( cloudRechargeRequest.getStatus() != null ){
+            c.andStatusEqualTo(cloudRechargeRequest.getStatus()); //查询搜索状态值数据
+        }else{
+            if( cloudRechargeRequest.getStatusArr() != null ){
+                c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+            }
         }
 
 
@@ -170,8 +176,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             addtimeEnd = DateUtils.getFdate( cloudRechargeRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
-        if( cloudRechargeRequest.getStatusArr() != null ){
-            c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+        //查询搜索条件数据
+        if( cloudRechargeRequest.getStatus() != null ){
+            c.andStatusEqualTo(cloudRechargeRequest.getStatus()); //查询搜索状态值数据
+        }else{
+            if( cloudRechargeRequest.getStatusArr() != null ){
+                c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+            }
         }
 
         //System.out.println(cloudRechargeRequest.getStatus());
@@ -368,7 +379,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
      * 审核充值记录状态
      * */
     @Override
-    //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getCaiwuAuditRecharge(CloudRechargeRequest request){
 
         Long infoId = request.getId();
