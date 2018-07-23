@@ -40,19 +40,19 @@
                     {field:'bankname',title:'银行',width:"15%"},
                     {field:'bankno',title:'卡号',width:"15%"},
                     {field:'bankphone',title:'手机号',width:"15%"},
-                    {field:'bank_active',title:'状态',width:"15%",
+                    {field:'bankActive',title:'状态',width:"15%",
                         formatter:function (value,row,index) {
                             if ( value == "0" ){
-                                return "未激活";
-                            }else{
-                                return "已激活";
+                                return "<font style='color: #ff0b00'>未激活</font>";
+                            }else if ( value == "1" ){
+                                return "<font style='color: #0e90d2'>已激活</font>";
                             }
                         }},
                     {field:'bankacctattr',title:'类别',width:"15%",
                         formatter:function (value,row,index) {
                             if ( value == "0" ){
                                 return "对私";
-                            }else{
+                            }else if ( value == "1" ){
                                 return "对公";
                             }
                         }},
