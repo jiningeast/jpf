@@ -105,8 +105,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             addtimeEnd = DateUtils.getFdate( cloudRechargeRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
-        if( cloudRechargeRequest.getStatusArr() != null ){
-            c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+        //查询搜索条件数据
+        if( cloudRechargeRequest.getStatus() != null ){
+            c.andStatusEqualTo(cloudRechargeRequest.getStatus()); //查询搜索状态值数据
+        }else{
+            if( cloudRechargeRequest.getStatusArr() != null ){
+                c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+            }
         }
 
 
@@ -171,8 +176,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             addtimeEnd = DateUtils.getFdate( cloudRechargeRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
-        if( cloudRechargeRequest.getStatusArr() != null ){
-            c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+        //查询搜索条件数据
+        if( cloudRechargeRequest.getStatus() != null ){
+            c.andStatusEqualTo(cloudRechargeRequest.getStatus()); //查询搜索状态值数据
+        }else{
+            if( cloudRechargeRequest.getStatusArr() != null ){
+                c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+            }
         }
 
         //System.out.println(cloudRechargeRequest.getStatus());
