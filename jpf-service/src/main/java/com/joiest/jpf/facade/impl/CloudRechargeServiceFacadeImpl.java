@@ -828,10 +828,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (payCloudRecharge.getPactstatus().equals(EnumConstants.RechargePactStatus.CONFIRMED.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "已验收，不需要重复验收");
         }
-        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.APPLYING.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.PAY.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.CANCEL.value())) {
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET_OPENING.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.DELIVERED.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "状态不匹配，不可以操作");
         }
         if (payCloudRecharge.getPacttime().getTime() > Calendar.getInstance().getTime().getTime()) {
