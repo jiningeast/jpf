@@ -67,7 +67,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
-                        <select id="attestation" name="attestation" data-options="required:true"
+                        <select id="attestation" name="attestation" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
 
                             <option value="0">未认证</option>
@@ -85,7 +85,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">登录状态：</td>
                     <td>
-                        <select id="status" name="status" data-options="required:true"
+                        <select id="status" name="status" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
 
                             <option value="1" selected="selected">正常</option>
@@ -124,7 +124,7 @@
                                   <input type="radio" name="tipsType" value="1" checked="checked">邮件</input>
                                 &lt;%&ndash;  <input type="radio" name="tipsType" value="2">短信</input>&ndash;%&gt;
                        </span>--%>
-                        <select id="tipstype" name="tipstype" data-options="required:true"
+                        <select id="tipstype" name="tipstype" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
 
                             <option value="1" selected="selected">邮件</option>
@@ -293,7 +293,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             $('#infoDiv').window('close');
                             $('#dg').datagrid('reload');
                         }
