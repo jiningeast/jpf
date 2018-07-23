@@ -40,7 +40,7 @@ public class merchInfoController {
     public String getMerchantInfo(HttpServletRequest request) {
 
         logger.info("token={}", request.getHeader("token"));
-        String token = request.getParameter("token");
+        String token = request.getHeader("token");
         CloudEmployeeInfo cloudEmployeeInfo = cloudEmployeeServiceFacade.companyIsLogin(token);
         String merchNo = cloudEmployeeInfo.getMerchNo();
         Map<String, String> merchInfo = new HashMap<String, String>();
