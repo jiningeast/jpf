@@ -21,6 +21,11 @@ public class PayCloudCompany implements Serializable {
     private String name;
 
     /**
+     * 商户别名
+     */
+    private String merchName;
+
+    /**
      * 联系人姓名
      */
     private String phonename;
@@ -164,6 +169,14 @@ public class PayCloudCompany implements Serializable {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName == null ? null : merchName.trim();
     }
 
     public String getPhonename() {
@@ -370,6 +383,7 @@ public class PayCloudCompany implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", merchNo=").append(merchNo);
         sb.append(", name=").append(name);
+        sb.append(", merchName=").append(merchName);
         sb.append(", phonename=").append(phonename);
         sb.append(", phone=").append(phone);
         sb.append(", bslicense=").append(bslicense);
@@ -417,6 +431,7 @@ public class PayCloudCompany implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getMerchName() == null ? other.getMerchName() == null : this.getMerchName().equals(other.getMerchName()))
             && (this.getPhonename() == null ? other.getPhonename() == null : this.getPhonename().equals(other.getPhonename()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getBslicense() == null ? other.getBslicense() == null : this.getBslicense().equals(other.getBslicense()))
@@ -453,6 +468,7 @@ public class PayCloudCompany implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getMerchName() == null) ? 0 : getMerchName().hashCode());
         result = prime * result + ((getPhonename() == null) ? 0 : getPhonename().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getBslicense() == null) ? 0 : getBslicense().hashCode());

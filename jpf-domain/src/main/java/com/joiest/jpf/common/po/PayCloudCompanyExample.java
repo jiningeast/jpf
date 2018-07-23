@@ -376,6 +376,76 @@ public class PayCloudCompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andMerchNameIsNull() {
+            addCriterion("merch_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameIsNotNull() {
+            addCriterion("merch_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameEqualTo(String value) {
+            addCriterion("merch_name =", value, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameNotEqualTo(String value) {
+            addCriterion("merch_name <>", value, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameGreaterThan(String value) {
+            addCriterion("merch_name >", value, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameGreaterThanOrEqualTo(String value) {
+            addCriterion("merch_name >=", value, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameLessThan(String value) {
+            addCriterion("merch_name <", value, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameLessThanOrEqualTo(String value) {
+            addCriterion("merch_name <=", value, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameLike(String value) {
+            addCriterion("merch_name like", value, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameNotLike(String value) {
+            addCriterion("merch_name not like", value, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameIn(List<String> values) {
+            addCriterion("merch_name in", values, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameNotIn(List<String> values) {
+            addCriterion("merch_name not in", values, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameBetween(String value1, String value2) {
+            addCriterion("merch_name between", value1, value2, "merchName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameNotBetween(String value1, String value2) {
+            addCriterion("merch_name not between", value1, value2, "merchName");
+            return (Criteria) this;
+        }
+
         public Criteria andPhonenameIsNull() {
             addCriterion("phonename is null");
             return (Criteria) this;
@@ -1973,6 +2043,11 @@ public class PayCloudCompanyExample {
 
         public Criteria andNameLikeInsensitive(String value) {
             addCriterion("upper(name) like", value.toUpperCase(), "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchNameLikeInsensitive(String value) {
+            addCriterion("upper(merch_name) like", value.toUpperCase(), "merchName");
             return (Criteria) this;
         }
 
