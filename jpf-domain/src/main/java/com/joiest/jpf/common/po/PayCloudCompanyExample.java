@@ -2036,6 +2036,76 @@ public class PayCloudCompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andAddressPersonIsNull() {
+            addCriterion("address_person is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonIsNotNull() {
+            addCriterion("address_person is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonEqualTo(String value) {
+            addCriterion("address_person =", value, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonNotEqualTo(String value) {
+            addCriterion("address_person <>", value, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonGreaterThan(String value) {
+            addCriterion("address_person >", value, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonGreaterThanOrEqualTo(String value) {
+            addCriterion("address_person >=", value, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonLessThan(String value) {
+            addCriterion("address_person <", value, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonLessThanOrEqualTo(String value) {
+            addCriterion("address_person <=", value, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonLike(String value) {
+            addCriterion("address_person like", value, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonNotLike(String value) {
+            addCriterion("address_person not like", value, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonIn(List<String> values) {
+            addCriterion("address_person in", values, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonNotIn(List<String> values) {
+            addCriterion("address_person not in", values, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonBetween(String value1, String value2) {
+            addCriterion("address_person between", value1, value2, "addressPerson");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonNotBetween(String value1, String value2) {
+            addCriterion("address_person not between", value1, value2, "addressPerson");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchNoLikeInsensitive(String value) {
             addCriterion("upper(merch_no) like", value.toUpperCase(), "merchNo");
             return (Criteria) this;
@@ -2123,6 +2193,11 @@ public class PayCloudCompanyExample {
 
         public Criteria andAddressLikeInsensitive(String value) {
             addCriterion("upper(address) like", value.toUpperCase(), "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressPersonLikeInsensitive(String value) {
+            addCriterion("upper(address_person) like", value.toUpperCase(), "addressPerson");
             return (Criteria) this;
         }
     }

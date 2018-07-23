@@ -145,6 +145,11 @@ public class PayCloudCompany implements Serializable {
      */
     private String address;
 
+    /**
+     * 联系人地址
+     */
+    private String addressPerson;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -371,6 +376,14 @@ public class PayCloudCompany implements Serializable {
         this.address = address == null ? null : address.trim();
     }
 
+    public String getAddressPerson() {
+        return addressPerson;
+    }
+
+    public void setAddressPerson(String addressPerson) {
+        this.addressPerson = addressPerson == null ? null : addressPerson.trim();
+    }
+
     /**
      *
      */
@@ -408,6 +421,7 @@ public class PayCloudCompany implements Serializable {
         sb.append(", taxpayertype=").append(taxpayertype);
         sb.append(", tin=").append(tin);
         sb.append(", address=").append(address);
+        sb.append(", addressPerson=").append(addressPerson);
         sb.append("]");
         return sb.toString();
     }
@@ -455,7 +469,8 @@ public class PayCloudCompany implements Serializable {
             && (this.getPhoneemail() == null ? other.getPhoneemail() == null : this.getPhoneemail().equals(other.getPhoneemail()))
             && (this.getTaxpayertype() == null ? other.getTaxpayertype() == null : this.getTaxpayertype().equals(other.getTaxpayertype()))
             && (this.getTin() == null ? other.getTin() == null : this.getTin().equals(other.getTin()))
-            && (this.getAddress() == null ? other.getAddress() == null : this.getAddress().equals(other.getAddress()));
+            && (this.getAddress() == null ? other.getAddress() == null : this.getAddress().equals(other.getAddress()))
+            && (this.getAddressPerson() == null ? other.getAddressPerson() == null : this.getAddressPerson().equals(other.getAddressPerson()));
     }
 
     /**
@@ -493,6 +508,7 @@ public class PayCloudCompany implements Serializable {
         result = prime * result + ((getTaxpayertype() == null) ? 0 : getTaxpayertype().hashCode());
         result = prime * result + ((getTin() == null) ? 0 : getTin().hashCode());
         result = prime * result + ((getAddress() == null) ? 0 : getAddress().hashCode());
+        result = prime * result + ((getAddressPerson() == null) ? 0 : getAddressPerson().hashCode());
         return result;
     }
 }
