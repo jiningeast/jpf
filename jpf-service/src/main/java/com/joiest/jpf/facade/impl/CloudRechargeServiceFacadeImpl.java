@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -368,7 +369,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
      * 审核充值记录状态
      * */
     @Override
-    //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getCaiwuAuditRecharge(CloudRechargeRequest request){
 
         Long infoId = request.getId();

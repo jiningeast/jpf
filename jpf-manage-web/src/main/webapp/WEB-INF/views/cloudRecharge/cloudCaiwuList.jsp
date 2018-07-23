@@ -63,11 +63,11 @@
                             }else if ( value == 4 ){
                                 return '<span style="color:green">已充值开票中</span>';
                             }else if ( value == 5 ){
-                                return '<span style="color:red">已充值已开票</span>';
+                                return '<span style="color:blue">已充值已开票</span>';
                             }else if ( value == 6 ){
-                                return '<span style="color:red">已发货</span>';
+                                return '<span style="color:blue">已发货</span>';
                             }else if ( value == 7 ){
-                                return '<span style="color:red">已完成</span>';
+                                return '<span style="color:green">已完成</span>';
                             }
                         }
                     },
@@ -134,9 +134,9 @@
                         <td>
                             <select id="status_s" name="status" class="easyui-combobox">
                                 <option value="">全部</option>
-                                <option value="0">已取消</option>
+                                <%--<option value="0">已取消</option>
                                 <option value="1">申请中</option>
-                                <option value="2">已审核</option>
+                                <option value="2">已审核</option>--%>
                                 <option value="3">已支付</option>
                                 <option value="4">已充值开票中</option>
                                 <option value="5">已充值已开票</option>
