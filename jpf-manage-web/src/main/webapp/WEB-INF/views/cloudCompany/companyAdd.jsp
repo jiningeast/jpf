@@ -78,7 +78,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">服务费：</td>
                     <td>
-                        <input id="salesRate" name="salesRate" type="text" style="width:150px"
+                        <input id="salesRate" name="salesRate" type="text" style="width:150px" class="easyui-numberbox" precision="3"
                                value="" data-options="required:true"/><span style="color: #FF2F2F"> 注：当为0.00时不收取服务费</span>
                     </td>
                 </tr>

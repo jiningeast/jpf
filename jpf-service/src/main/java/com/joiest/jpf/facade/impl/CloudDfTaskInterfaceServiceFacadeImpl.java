@@ -2,6 +2,7 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayCloudDfTask;
 import com.joiest.jpf.common.po.PayCloudDfTaskExample;
+import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfTaskInterfaceCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfTaskMapper;
 import com.joiest.jpf.dto.AddCloudDfTaskRequest;
 import com.joiest.jpf.dto.GetCloudDfTaskInterfaceResponse;
@@ -18,6 +19,8 @@ public class CloudDfTaskInterfaceServiceFacadeImpl implements CloudDfTaskInterfa
     @Autowired
     private PayCloudDfTaskMapper payCloudDfTaskMapper;
 
+    @Autowired
+    private PayCloudDfTaskInterfaceCustomMapper payCloudDfTaskInterfaceCustomMapper;
     /**
      * dfApi 添加任务
      * @param request
@@ -31,9 +34,9 @@ public class CloudDfTaskInterfaceServiceFacadeImpl implements CloudDfTaskInterfa
         PayCloudDfTask dfTask = new PayCloudDfTask();
         BeanCopier beanCopier = BeanCopier.create(AddCloudDfTaskRequest.class, PayCloudDfTask.class, false);
         beanCopier.copy(request, dfTask, null);
-        int res = payCloudDfTaskMapper.insertSelective(dfTask);
+        int res = payCloudDfTaskInterfaceCustomMapper.insertSelective(dfTask);
 
-        return res;
+        return dfTask.getId().intValue();
     }
 
     /**

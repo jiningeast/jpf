@@ -1,6 +1,7 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.DfDataUtils;
+import com.joiest.jpf.cloud.api.util.DfThread;
 import com.joiest.jpf.cloud.api.util.DfUtils;
 import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
@@ -9,7 +10,10 @@ import com.joiest.jpf.common.util.ClassUtil;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.common.util.ValidatorUtils;
-import com.joiest.jpf.dto.*;
+import com.joiest.jpf.dto.AddCloudDfTaskRequest;
+import com.joiest.jpf.dto.DfApiInterfaceRequest;
+import com.joiest.jpf.dto.GetCloudDfTaskInterfaceResponse;
+import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudDfOrderInterfaceInfo;
 import com.joiest.jpf.entity.CloudDfTaskInterfaceInfo;
 import com.joiest.jpf.facade.CloudDfFqwaterServiceFacade;
@@ -20,11 +24,17 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Controller
 @RequestMapping("/clouddf")
@@ -76,6 +86,19 @@ public class CloudDfController {
     {
         ValidatorUtils.validateInterface(request);
 
+        //sign验证
+        Map<String,Object> forginRequestMap = new HashMap<>();
+        forginRequestMap.put("batchid", request.getBatchid());
+        forginRequestMap.put("dfid", request.getDfid());
+        TreeMap<String, Object> signMap = new TreeMap<>();
+        signMap.putAll(forginRequestMap);
+        String sortUrlStr = ToolUtils.mapToUrl(signMap);
+        String signStr = Md5Encrypt.md5(sortUrlStr + ConfigUtil.getValue("DFAPI_KEY"));
+        if ( !signStr.equals(request.getSign()) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.DF_SIGN_ERROR.getCode(),JpfInterfaceErrorInfo.DF_SIGN_ERROR.getDesc());
+        }
+
         if ( StringUtils.isBlank(request.getBatchid()) )
         {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.DF_BATCHNO_NOTEMPTY.getCode(),JpfInterfaceErrorInfo.DF_BATCHNO_NOTEMPTY.getDesc());
@@ -90,18 +113,24 @@ public class CloudDfController {
         }
 
         //添加任务
-        String batchid_self = ToolsUtils.createOrderid();
         AddCloudDfTaskRequest requestTask = new AddCloudDfTaskRequest();
-        requestTask.setBatchid(batchid_self);
         requestTask.setRequestBatchno(request.getBatchid());
-        requestTask.setRequestStr("这是请求字符串");
+        Map<String, Object> requestMap = ClassUtil.requestToMap(request);
+        String requestStr = ToolUtils.mapToUrl(requestMap);
+        requestTask.setRequestStr(requestStr);
         requestTask.setRequestDfId(request.getDfid());
         requestTask.setOrderCount(response.getCount());
         requestTask.setOrderMoney(response.getMonthTotal());
         requestTask.setCreated(new Date());
-        cloudDfTaskInterfaceServiceFacade.addTask(requestTask);
+        int taskId = cloudDfTaskInterfaceServiceFacade.addTask(requestTask);
+        String batchid_self = ToolUtils.createDfOrderid(String.valueOf(System.currentTimeMillis()), String.valueOf(taskId), 24);
+        //添加任务批次号
+        CloudDfTaskInterfaceInfo upBatchTaskInfo = new CloudDfTaskInterfaceInfo();
+        upBatchTaskInfo.setId((long)taskId);
+        upBatchTaskInfo.setBatchid(batchid_self);
+        cloudDfTaskInterfaceServiceFacade.updateTask(upBatchTaskInfo);
 
-        Thread dfDataUtils = new DfDataUtils("131","0", response.getList(),batchid_self);
+        Thread dfDataUtils = new DfDataUtils(request.getBatchid(), request.getDfid(), response.getList(),batchid_self);
         dfDataUtils.setName("线程:" + request.getBatchid());
         dfDataUtils.start();
 
@@ -111,6 +140,7 @@ public class CloudDfController {
         JSONObject dataJson = new JSONObject();
         dataJson.put("count", response.getCount());
         dataJson.put("totalMoney", response.getMonthTotal());
+        dataJson.put("batchno", batchid_self);
         resultJson.put("data", dataJson);
 
         return resultJson;
@@ -125,24 +155,29 @@ public class CloudDfController {
         response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
         response.setHeader("Access-Control-Allow-Method", "POST");
         response.setHeader("Access-Control-Allow-Origin", originHeader);
-
     }
 
+    /**
+     * 执行代付任务
+     */
     @RequestMapping("/doDfApi")
     @ResponseBody
     public String doDfApi()
     {
         //获取信息
         GetCloudDfTaskInterfaceResponse taskResponse = cloudDfTaskInterfaceServiceFacade.getCanableTaskList();
-        if ( taskResponse == null )
+        if ( taskResponse == null || taskResponse.getList().isEmpty() || taskResponse.getCount() == 0 )
         {
-            System.exit(0);
+            return "无可执行任务";
         }
         for ( CloudDfTaskInterfaceInfo one : taskResponse.getList() )
         {
             //执行
+            Thread dfDataUtils = new DfThread(one.getBatchid(),one.getId());
+            dfDataUtils.setName("【线程:" + one.getBatchid() + "】");
+            dfDataUtils.start();
         }
-        return "";
+        return "正在执行.....";
     }
     /**
      * 代付查询接口
@@ -165,7 +200,7 @@ public class CloudDfController {
         Map<String,String> apiInfo = new HashMap<>();
 
         apiInfo.put("tranNo",cloudDfOrderInterfaceInfo.getTranno());
-        apiInfo.put("outOrderNo",cloudDfOrderInterfaceInfo.getOrderid().toString());
+        apiInfo.put("outOrderNo",cloudDfOrderInterfaceInfo.getOrderid());
 
         int count = 0;
         if(cloudDfOrderInterfaceInfo.getQuerycount() == null || cloudDfOrderInterfaceInfo.getQuerycount().equals(0)){
@@ -191,7 +226,7 @@ public class CloudDfController {
 
         Map<String,String> map = new HashMap<>();
         map.put("request_orderid",orderId);
-        map.put("orderid",cloudDfOrderInterfaceInfo.getOrderid().toString());
+        map.put("orderid",cloudDfOrderInterfaceInfo.getOrderid());
         map.put("tranNo",cloudDfOrderInterfaceInfo.getTranno());
         map.put("tranAmt",cloudDfOrderInterfaceInfo.getApplyamt().toString());
         map.put("orderStatus",resJson.get("orderStatus").toString());
