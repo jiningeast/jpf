@@ -277,7 +277,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         PayCloudCompanyExample examplea= new PayCloudCompanyExample();
         PayCloudCompanyExample.Criteria ca = examplea.createCriteria();
         ca.andIdEqualTo(sprimatkey);
-        Companyup.setCloudcode(Md5Encrypt.md5(res+accountReturn+"test","UTF-8"));
+        Companyup.setCloudcode(Md5Encrypt.md5(sprimatkey+accountReturn+"test","UTF-8"));
         Companyup.setId(sprimatkey);
 
         payCloudCompanyCustomMapper.updateByExampleSelective(Companyup,examplea);
@@ -314,7 +314,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
             Employee.setCloudloginpwd(companypass);
             int resEmploee=payCloudEmployeeMapper.insertSelective(Employee);
            //所有都插入成功执行发送短信或者发送邮件的代码
-        System.out.println(request.getTipstype());
+           // System.out.println(request.getTipstype());
            if(request.getTipstype() == (byte)1){
                //发送邮件
                String email=request.getLinkemail();
@@ -340,7 +340,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
                responseDto.setRetCode("10002");//发送短信
 
            }
-        responseDto.setRemark(passlogin);//密码
+            responseDto.setRemark(passlogin);//密码
             return  responseDto;
     }
 
