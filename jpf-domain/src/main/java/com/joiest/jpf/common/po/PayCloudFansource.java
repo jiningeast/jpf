@@ -7,7 +7,7 @@ public class PayCloudFansource implements Serializable {
     /**
      * 
      */
-    private Long id;
+    private String id;
 
     /**
      * 地区ID
@@ -42,16 +42,16 @@ public class PayCloudFansource implements Serializable {
     /**
      * 备注人ID
      */
-    private Long remarkuid;
+    private String remarkuid;
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public Integer getCatid() {
@@ -102,12 +102,12 @@ public class PayCloudFansource implements Serializable {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public Long getRemarkuid() {
+    public String getRemarkuid() {
         return remarkuid;
     }
 
-    public void setRemarkuid(Long remarkuid) {
-        this.remarkuid = remarkuid;
+    public void setRemarkuid(String remarkuid) {
+        this.remarkuid = remarkuid == null ? null : remarkuid.trim();
     }
 
     /**

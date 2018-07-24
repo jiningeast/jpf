@@ -12,14 +12,13 @@ import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.SHA1;
 import com.joiest.jpf.common.util.SendMailUtil;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudCompanyCustomMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyAgentMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanySalesMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudEmployeeMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
+import com.joiest.jpf.entity.BankCardInfo;
+import com.joiest.jpf.entity.BankInfo;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
@@ -37,6 +36,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
     @Autowired
     private PayCloudCompanyCustomMapper payCloudCompanyCustomMapper;
 
+
     @Autowired
     private PayCloudCompanyMapper payCloudCompanyMapper;
 
@@ -49,6 +49,8 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
     @Autowired
     private PayCloudEmployeeMapper payCloudEmployeeMapper;
 
+    @Autowired
+    private PayCloudCompanyBankMapper  payCloudCompanyBankMapper;
     /**
      * 代理公司列表---后台
      */
@@ -165,7 +167,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
      */
     @Override
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
-    public JpfResponseDto addCloudCompany(GetCloudCompanyRequest request,int account,String ipAddress) throws Exception {
+    public JpfResponseDto addCloudCompany(GetCloudCompanyRequest request,int account,String ipAddress, BankInfo bankInfo) throws Exception {
 
         if(StringUtils.isBlank(request.getName())){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "公司名称不能为空");
@@ -198,7 +200,9 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         if(StringUtils.isBlank(request.getAptitude())){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须上传企业资质");
         }
-
+        if(StringUtils.isBlank(request.getBankno())){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须填写对公账户过户");
+        }
         if(request.getSalesRate().equals("")){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须填写服务费");
         }
@@ -226,6 +230,8 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         }
        /* PayCloudCompany payCloudCompany = payCloudCompanyList.get(0);
         String mefefe=payCloudCompany.getName();*/
+
+       //====new===根据对公账户卡号获取卡所属信息
 
         //生成商户编号
         String MerchnoNew= "CY"+ ToolUtils.createID();
@@ -270,9 +276,39 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         if(!request.getServiclinkuser().isEmpty()){
             Company.setServiclinkuser(request.getServiclinkuser());
         }
+        //===new====
+        if(!request.getServiclinkuser().isEmpty()){
+            Company.setServiclinkuser(request.getServiclinkuser());
+        }
+
+        if(StringUtils.isNotBlank(request.getMerchName())){
+            Company.setMerchName(request.getMerchName());
+        }
         if(!request.getLinkphone().isEmpty()){
             Company.setLinkphone(request.getLinkphone());
         }
+
+        if( StringUtils.isNotBlank(request.getTin())){
+            Company.setTin(request.getTin());
+        }
+
+        if( StringUtils.isNotBlank(request.getAddressPerson())){
+            Company.setAddressPerson(request.getAddressPerson());
+        }
+        if(!request.getCertificate().isEmpty()){
+            Company.setCertificate(request.getCertificate());
+        }
+
+        if(  StringUtils.isNotBlank(request.getPhoneemail())){
+            Company.setPhoneemail(request.getPhoneemail());
+        }
+
+        if( StringUtils.isNotBlank(request.getAddress())){
+            Company.setAddress(request.getAddress());
+        }
+        Company.setTaxpayertype(request.getTaxpayertype());
+
+        //=====newend===
         //插入基本信息表
         int res = payCloudCompanyCustomMapper.insertSelective(Company);
         String sprimatkey = Company.getId();
@@ -285,6 +321,27 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         Companyup.setId(sprimatkey);
 
         payCloudCompanyCustomMapper.updateByExampleSelective(Companyup,examplea);
+
+        //===new插入对公账户表===
+        if ( bankInfo == null )
+        {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "银行信息不正确");
+        }
+         PayCloudCompanyBank companybank =new PayCloudCompanyBank();
+         companybank.setMerchNo(MerchnoNew);
+         companybank.setProvince(request.getBankProvince());
+         companybank.setCity(request.getBankCity());
+         companybank.setBankid(Long.parseLong(request.getBankid()));
+         companybank.setBankname(bankInfo.getPaybankname());
+         companybank.setBanktype(request.getBanktype());
+         companybank.setBankno(request.getBankno());
+         companybank.setBanksubname(request.getBanksubname());
+         companybank.setAccountName(request.getAccountName());
+         companybank.setMobile(request.getPhone());
+         companybank.setChinacode(bankInfo.getBankcode());
+         companybank.setCreated(date);
+         int payclodbank= payCloudCompanyBankMapper.insertSelective(companybank);
+       //  companybank.set
          //更新当前人的金额校验值
         //条件判断插入代理还是业务公司
         JpfResponseDto responseDto = new JpfResponseDto();
@@ -316,6 +373,10 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
             Employee.setRegip(ipAddress);
             Employee.setRegdate(new Date());
             Employee.setCloudloginpwd(companypass);
+            Employee.setLinkname(request.getPhonename());
+            Employee.setProvince(request.getBankProvince());
+            Employee.setCity(request.getBankCity());
+            Employee.setAddress(request.getAddressPerson());
             int resEmploee=payCloudEmployeeMapper.insertSelective(Employee);
            //所有都插入成功执行发送短信或者发送邮件的代码
            // System.out.println(request.getTipstype());
@@ -374,7 +435,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
      */
     @Override
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
-    public JpfResponseDto editCloudCompany(GetCloudCompanyRequest request,int account) throws Exception {
+    public JpfResponseDto editCloudCompany(GetCloudCompanyRequest request,int account,BankInfo bankInfo) throws Exception {
 
         if(StringUtils.isBlank(request.getName())){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "公司名称不能为空");
@@ -391,20 +452,15 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         if(isphone==false){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "联系电话不正确");
         }
-       /* if(StringUtils.isBlank(request.getLinkemail())){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "邮箱不能为空");
-        }*/
-      /*  String emailpattern="^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
-        boolean isemail = Pattern.matches(emailpattern, request.getLinkemail());*/
 
-       /* if(isemail==false){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "邮箱不正确");
-        }*/
         if(StringUtils.isBlank(request.getBslicense())){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须上传营业执照");
         }
         if(StringUtils.isBlank(request.getAptitude())){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须上传企业资质");
+        }
+        if(StringUtils.isBlank(request.getBankno())){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须填写对公账户过户");
         }
 
         if(request.getSalesRate().equals("")){
@@ -440,9 +496,38 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         if(!request.getServiclinkuser().isEmpty()){
             Company.setServiclinkuser(request.getServiclinkuser());
         }
+        //===new====
+        if(!request.getServiclinkuser().isEmpty()){
+            Company.setServiclinkuser(request.getServiclinkuser());
+        }
+
+        if(StringUtils.isNotBlank(request.getMerchName())){
+            Company.setMerchName(request.getMerchName());
+        }
         if(!request.getLinkphone().isEmpty()){
             Company.setLinkphone(request.getLinkphone());
         }
+
+        if( StringUtils.isNotBlank(request.getTin())){
+            Company.setTin(request.getTin());
+        }
+
+        if( StringUtils.isNotBlank(request.getAddressPerson())){
+            Company.setAddressPerson(request.getAddressPerson());
+        }
+        if(!request.getCertificate().isEmpty()){
+            Company.setCertificate(request.getCertificate());
+        }
+
+        if(  StringUtils.isNotBlank(request.getPhoneemail())){
+            Company.setPhoneemail(request.getPhoneemail());
+        }
+
+        if( StringUtils.isNotBlank(request.getAddress())){
+            Company.setAddress(request.getAddress());
+        }
+        Company.setTaxpayertype(request.getTaxpayertype());
+
         //修改基本信息表
         String sprimatkey = request.getId();
         PayCloudCompanyExample exampleup= new PayCloudCompanyExample();
@@ -472,6 +557,29 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
             payCloudCompanySalesMapper.updateByExampleSelective(SalesUp,ExampleSales);
 
         }
+        //
+
+        //===new插入对公账户表===
+        if ( bankInfo == null )
+        {
+            throw new JpfException(JpfErrorInfo.RECORD_NOT_FOUND, "银行信息不正确");
+        }
+        PayCloudCompanyBank companybank =new PayCloudCompanyBank();
+        companybank.setProvince(request.getBankProvince());
+        companybank.setCity(request.getBankCity());
+        companybank.setBankid(Long.parseLong(request.getBankid()));
+        companybank.setBankname(bankInfo.getPaybankname());
+        companybank.setBanktype(request.getBanktype());
+        companybank.setBankno(request.getBankno());
+        companybank.setBanksubname(request.getBanksubname());
+        companybank.setAccountName(request.getAccountName());
+        companybank.setMobile(request.getPhone());
+        companybank.setChinacode(bankInfo.getBankcode());
+        companybank.setUpdated(date);
+        PayCloudCompanyBankExample bankExample =new PayCloudCompanyBankExample();
+        PayCloudCompanyBankExample.Criteria bankc=bankExample.createCriteria();
+        bankc.andMerchNoEqualTo(MerchNo);
+        payCloudCompanyBankMapper.updateByExampleSelective(companybank,bankExample);
         //修改公司登录表
         PayCloudEmployee Employee= new PayCloudEmployee();
         Employee.setLinkphone(request.getPhone());

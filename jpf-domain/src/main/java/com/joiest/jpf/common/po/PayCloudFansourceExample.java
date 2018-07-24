@@ -185,52 +185,52 @@ public class PayCloudFansourceExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Long value) {
+        public Criteria andIdEqualTo(String value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Long value) {
+        public Criteria andIdNotEqualTo(String value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Long value) {
+        public Criteria andIdGreaterThan(String value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Long value) {
+        public Criteria andIdLessThan(String value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Long value) {
+        public Criteria andIdLessThanOrEqualTo(String value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Long> values) {
+        public Criteria andIdIn(List<String> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Long> values) {
+        public Criteria andIdNotIn(List<String> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Long value1, Long value2) {
+        public Criteria andIdBetween(String value1, String value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Long value1, Long value2) {
+        public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -645,52 +645,52 @@ public class PayCloudFansourceExample {
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidEqualTo(Long value) {
+        public Criteria andRemarkuidEqualTo(String value) {
             addCriterion("remarkuid =", value, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidNotEqualTo(Long value) {
+        public Criteria andRemarkuidNotEqualTo(String value) {
             addCriterion("remarkuid <>", value, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidGreaterThan(Long value) {
+        public Criteria andRemarkuidGreaterThan(String value) {
             addCriterion("remarkuid >", value, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidGreaterThanOrEqualTo(Long value) {
+        public Criteria andRemarkuidGreaterThanOrEqualTo(String value) {
             addCriterion("remarkuid >=", value, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidLessThan(Long value) {
+        public Criteria andRemarkuidLessThan(String value) {
             addCriterion("remarkuid <", value, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidLessThanOrEqualTo(Long value) {
+        public Criteria andRemarkuidLessThanOrEqualTo(String value) {
             addCriterion("remarkuid <=", value, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidIn(List<Long> values) {
+        public Criteria andRemarkuidIn(List<String> values) {
             addCriterion("remarkuid in", values, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidNotIn(List<Long> values) {
+        public Criteria andRemarkuidNotIn(List<String> values) {
             addCriterion("remarkuid not in", values, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidBetween(Long value1, Long value2) {
+        public Criteria andRemarkuidBetween(String value1, String value2) {
             addCriterion("remarkuid between", value1, value2, "remarkuid");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidNotBetween(Long value1, Long value2) {
+        public Criteria andRemarkuidNotBetween(String value1, String value2) {
             addCriterion("remarkuid not between", value1, value2, "remarkuid");
             return (Criteria) this;
         }
