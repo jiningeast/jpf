@@ -48,8 +48,8 @@
                     {field:'money', title:'充值金额',width:'5%'},
                     {field:'realmoney', title:'实际到帐金额',width:'5%'},
                     {field:'feemoney', title:'手续费总额',width:'5%'},
-                    {field:'agentFeemoney', title:'代理手续费',width:'5%'},
                     {field:'salesFeemoney', title:'服务平台手续费',width:'5%'},
+                    {field:'agentFeemoney', title:'代理手续费',width:'5%'},
                     {field:'status', title:'状态',width:'8%',
                         formatter:function (value, row, index) {
                             if ( value == 0 ){
@@ -68,6 +68,8 @@
                                 return '<span style="color:blue">已发货</span>';
                             }else if ( value == 7 ){
                                 return '<span style="color:green">已完成</span>';
+                            }else if ( value == 8 ){
+                                return '<span style="color:red">审核拒绝</span>';
                             }
                         }
                     },
@@ -142,6 +144,7 @@
                                 <option value="5">已充值已开票</option>
                                 <option value="6">已发货</option>
                                 <option value="7">已完成</option>
+                                <option value="8">审核拒绝</option>
                             </select>
                         </td>
                         <td>添加起止时间:</td>
