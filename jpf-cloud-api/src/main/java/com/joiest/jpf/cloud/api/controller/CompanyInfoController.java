@@ -104,7 +104,7 @@ public class CompanyInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此用户名",null);
         }
         //获取代理以及非代理
-        CloudCompanyAgentInfo cloudCompanyAgentInfo = cloudCompanyAgentServiceFacade.getAgentByAgentNo(companyInfo.getMerchNo());
+        CloudCompanyAgentInfo cloudCompanyAgentInfo = cloudCompanyAgentServiceFacade.getAgentByAgentNo(cloudEmployeeInfo.getMerchNo());
         if(cloudCompanyAgentInfo != null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请使用业务公司账号登录",null);
