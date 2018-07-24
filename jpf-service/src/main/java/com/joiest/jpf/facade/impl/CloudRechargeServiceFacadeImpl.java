@@ -790,13 +790,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (!payCloudRecharge.getMerchNo().equals(merchNo)) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[merchNo]企业商户号不一致");
         }
-        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())) {
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())&&!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT_REJECT.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "状态不匹配，不可以操作");
         }
         PayCloudRechargeExample payCloudRechargeExample = new PayCloudRechargeExample();
         PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
         payCloudRechargeExampleCriteria.andIdEqualTo(reqId);
-        payCloudRechargeExampleCriteria.andStatusEqualTo(EnumConstants.RechargeStatus.AUDIT.value());
+        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.AUDIT_REJECT.value()));
         PayCloudRecharge record = new PayCloudRecharge();
         record.setImgurl(imgurl);
         record.setStatus(EnumConstants.RechargeStatus.PAY.value());
