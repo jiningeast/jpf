@@ -25,6 +25,9 @@ public class CloudCompanyAgentServiceFacadeImpl implements CloudCompanyAgentServ
         CloudCompanyAgentInfo cloudCompanyAgentInfo = new CloudCompanyAgentInfo();
         List<PayCloudCompanyAgent> list = payCloudCompanyAgentMapper.selectByExample(e);
 
+        if(list.isEmpty()){
+            return null;
+        }
         BeanCopier beanCopier = BeanCopier.create( PayCloudCompanyAgent.class, CloudCompanyAgentInfo.class, false);
         beanCopier.copy(list.get(0), cloudCompanyAgentInfo, null);
 

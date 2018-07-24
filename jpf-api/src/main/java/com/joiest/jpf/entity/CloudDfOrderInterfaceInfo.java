@@ -36,6 +36,11 @@ public class CloudDfOrderInterfaceInfo {
     private String requestOrderid;
 
     /**
+     *
+     */
+    private Long busstaffid;
+
+    /**
      * 交易金额
      */
     private BigDecimal applyamt;
@@ -109,6 +114,11 @@ public class CloudDfOrderInterfaceInfo {
      * 代付状态 00提交申请 01审核通过 02申请被拒绝 03已打批次 04提交到渠道 05代付成功 06代付失败
      */
     private String dfstatus;
+
+    /**
+     * 支付时间
+     */
+    private Date paytime;
 
     /**
      * 同步返回信息
@@ -341,5 +351,21 @@ public class CloudDfOrderInterfaceInfo {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public Long getBusstaffid() {
+        return busstaffid;
+    }
+
+    public void setBusstaffid(Long busstaffid) {
+        this.busstaffid = busstaffid;
+    }
+
+    public Date getPaytime() {
+        return paytime;
+    }
+
+    public void setPaytime(Date paytime) {
+        this.paytime = paytime;
     }
 }

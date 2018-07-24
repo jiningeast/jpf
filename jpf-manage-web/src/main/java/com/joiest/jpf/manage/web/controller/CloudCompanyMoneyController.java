@@ -42,15 +42,6 @@ public class CloudCompanyMoneyController {
         return map;
     }
 
-    /**
-     * 查询公司页
-     */
-    @RequestMapping("/companys")
-    public ModelAndView companys(){
-        return new ModelAndView("cloudCompanyMoney/companys");
-    }
-
-
     /*
      * 财务审核订单列表
      * */

@@ -36,6 +36,11 @@ public class PayCloudDfOrder implements Serializable {
     private String requestOrderid;
 
     /**
+     * 
+     */
+    private Long busstaffid;
+
+    /**
      * 交易金额
      */
     private BigDecimal applyamt;
@@ -101,7 +106,7 @@ public class PayCloudDfOrder implements Serializable {
     private String tranno;
 
     /**
-     * 订单状态 0未处理 1处理中
+     * 订单状态 0未处理 1处理完成
      */
     private Integer status;
 
@@ -109,6 +114,11 @@ public class PayCloudDfOrder implements Serializable {
      * 代付状态 00提交申请 01审核通过 02申请被拒绝 03已打批次 04提交到渠道 05代付成功 06代付失败
      */
     private String dfstatus;
+
+    /**
+     * 支付时间
+     */
+    private Date paytime;
 
     /**
      * 同步返回信息
@@ -183,6 +193,14 @@ public class PayCloudDfOrder implements Serializable {
 
     public void setRequestOrderid(String requestOrderid) {
         this.requestOrderid = requestOrderid == null ? null : requestOrderid.trim();
+    }
+
+    public Long getBusstaffid() {
+        return busstaffid;
+    }
+
+    public void setBusstaffid(Long busstaffid) {
+        this.busstaffid = busstaffid;
     }
 
     public BigDecimal getApplyamt() {
@@ -305,6 +323,14 @@ public class PayCloudDfOrder implements Serializable {
         this.dfstatus = dfstatus == null ? null : dfstatus.trim();
     }
 
+    public Date getPaytime() {
+        return paytime;
+    }
+
+    public void setPaytime(Date paytime) {
+        this.paytime = paytime;
+    }
+
     public String getReturncontent() {
         return returncontent;
     }
@@ -360,6 +386,7 @@ public class PayCloudDfOrder implements Serializable {
         sb.append(", requestBatchno=").append(requestBatchno);
         sb.append(", requestDfId=").append(requestDfId);
         sb.append(", requestOrderid=").append(requestOrderid);
+        sb.append(", busstaffid=").append(busstaffid);
         sb.append(", applyamt=").append(applyamt);
         sb.append(", orderStdPrice=").append(orderStdPrice);
         sb.append(", requeststr=").append(requeststr);
@@ -375,6 +402,7 @@ public class PayCloudDfOrder implements Serializable {
         sb.append(", tranno=").append(tranno);
         sb.append(", status=").append(status);
         sb.append(", dfstatus=").append(dfstatus);
+        sb.append(", paytime=").append(paytime);
         sb.append(", returncontent=").append(returncontent);
         sb.append(", querycount=").append(querycount);
         sb.append(", lastrespose=").append(lastrespose);
@@ -406,6 +434,7 @@ public class PayCloudDfOrder implements Serializable {
             && (this.getRequestBatchno() == null ? other.getRequestBatchno() == null : this.getRequestBatchno().equals(other.getRequestBatchno()))
             && (this.getRequestDfId() == null ? other.getRequestDfId() == null : this.getRequestDfId().equals(other.getRequestDfId()))
             && (this.getRequestOrderid() == null ? other.getRequestOrderid() == null : this.getRequestOrderid().equals(other.getRequestOrderid()))
+            && (this.getBusstaffid() == null ? other.getBusstaffid() == null : this.getBusstaffid().equals(other.getBusstaffid()))
             && (this.getApplyamt() == null ? other.getApplyamt() == null : this.getApplyamt().equals(other.getApplyamt()))
             && (this.getOrderStdPrice() == null ? other.getOrderStdPrice() == null : this.getOrderStdPrice().equals(other.getOrderStdPrice()))
             && (this.getRequeststr() == null ? other.getRequeststr() == null : this.getRequeststr().equals(other.getRequeststr()))
@@ -421,6 +450,7 @@ public class PayCloudDfOrder implements Serializable {
             && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getDfstatus() == null ? other.getDfstatus() == null : this.getDfstatus().equals(other.getDfstatus()))
+            && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getReturncontent() == null ? other.getReturncontent() == null : this.getReturncontent().equals(other.getReturncontent()))
             && (this.getQuerycount() == null ? other.getQuerycount() == null : this.getQuerycount().equals(other.getQuerycount()))
             && (this.getLastrespose() == null ? other.getLastrespose() == null : this.getLastrespose().equals(other.getLastrespose()))
@@ -441,6 +471,7 @@ public class PayCloudDfOrder implements Serializable {
         result = prime * result + ((getRequestBatchno() == null) ? 0 : getRequestBatchno().hashCode());
         result = prime * result + ((getRequestDfId() == null) ? 0 : getRequestDfId().hashCode());
         result = prime * result + ((getRequestOrderid() == null) ? 0 : getRequestOrderid().hashCode());
+        result = prime * result + ((getBusstaffid() == null) ? 0 : getBusstaffid().hashCode());
         result = prime * result + ((getApplyamt() == null) ? 0 : getApplyamt().hashCode());
         result = prime * result + ((getOrderStdPrice() == null) ? 0 : getOrderStdPrice().hashCode());
         result = prime * result + ((getRequeststr() == null) ? 0 : getRequeststr().hashCode());
@@ -456,6 +487,7 @@ public class PayCloudDfOrder implements Serializable {
         result = prime * result + ((getTranno() == null) ? 0 : getTranno().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getDfstatus() == null) ? 0 : getDfstatus().hashCode());
+        result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getReturncontent() == null) ? 0 : getReturncontent().hashCode());
         result = prime * result + ((getQuerycount() == null) ? 0 : getQuerycount().hashCode());
         result = prime * result + ((getLastrespose() == null) ? 0 : getLastrespose().hashCode());

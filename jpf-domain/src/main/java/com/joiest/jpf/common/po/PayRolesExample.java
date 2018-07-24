@@ -10,7 +10,6 @@ public class PayRolesExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
-
     protected long pageNo;
 
     protected long pageSize;
@@ -103,7 +102,6 @@ public class PayRolesExample {
         orderByClause = null;
         distinct = false;
     }
-
     /**
      *
      * @param pageNo
@@ -492,16 +490,6 @@ public class PayRolesExample {
 
         public Criteria andCreatedNotBetween(Date value1, Date value2) {
             addCriterion("created not between", value1, value2, "created");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameLikeInsensitive(String value) {
-            addCriterion("upper(name) like", value.toUpperCase(), "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andIntroLikeInsensitive(String value) {
-            addCriterion("upper(intro) like", value.toUpperCase(), "intro");
             return (Criteria) this;
         }
     }

@@ -3,8 +3,10 @@ package com.joiest.jpf.cloud.api.handler;
 
 import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.cloud.api.util.ServletUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -28,7 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public YjResponseDto defaultErrorHandler(HttpServletRequest request, Exception ex) throws Exception {
+    public String defaultErrorHandler(HttpServletRequest request, Exception ex) throws Exception {
         YjResponseDto response = new YjResponseDto();
         if (ex instanceof BindException) {
             logger.error(ex.getMessage());
@@ -50,7 +52,8 @@ public class GlobalExceptionHandler {
         String requestParas = ServletUtils.getRequestParameter(request);
         logger.error("remoteHost:{}, requestUrl:{}, requestParas:{}, retCode:{} , retMsg:{}",
                 request.getRemoteHost(), requestUrl, requestParas, response.getCode(), response.getInfo());
-        return response;
+
+        return ToolUtils.toJsonBase64(response.getCode(), response.getInfo(), "");
     }
 
     private String getBindExceptionErrorMsg(BindException bindException) {
