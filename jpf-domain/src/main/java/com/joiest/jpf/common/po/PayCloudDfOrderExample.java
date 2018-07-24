@@ -586,6 +586,66 @@ public class PayCloudDfOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andBusstaffidIsNull() {
+            addCriterion("busstaffid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidIsNotNull() {
+            addCriterion("busstaffid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidEqualTo(Long value) {
+            addCriterion("busstaffid =", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidNotEqualTo(Long value) {
+            addCriterion("busstaffid <>", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidGreaterThan(Long value) {
+            addCriterion("busstaffid >", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidGreaterThanOrEqualTo(Long value) {
+            addCriterion("busstaffid >=", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidLessThan(Long value) {
+            addCriterion("busstaffid <", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidLessThanOrEqualTo(Long value) {
+            addCriterion("busstaffid <=", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidIn(List<Long> values) {
+            addCriterion("busstaffid in", values, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidNotIn(List<Long> values) {
+            addCriterion("busstaffid not in", values, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidBetween(Long value1, Long value2) {
+            addCriterion("busstaffid between", value1, value2, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidNotBetween(Long value1, Long value2) {
+            addCriterion("busstaffid not between", value1, value2, "busstaffid");
+            return (Criteria) this;
+        }
+
         public Criteria andApplyamtIsNull() {
             addCriterion("applyAmt is null");
             return (Criteria) this;

@@ -129,7 +129,7 @@ public class DfThread extends Thread{
                     int res_upTaskComplete = cloudDfTaskInterfaceServiceFacade.updateTask(taskCompleteInfo);
                 }
 
-                sbf.append("\n\nTime:" + myfmt.format(date) + " -数据写入 success:");
+                sbf.append("\n\nTime:" + myfmt.format(date) + " -代付 success:");
                 sbf.append("\n当前地址:" + "doDfApi");
                 sbf.append("\n任务批次号:" + batchno);
                 sbf.append("\n信息: success");

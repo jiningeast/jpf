@@ -124,12 +124,16 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         example.setOrderByClause("created DESC");
 
         PayCloudCompanyExample.Criteria c = example.createCriteria();
+        if ( StringUtils.isNotBlank(request.getId()) ){
+            c.andIdEqualTo(request.getId());
+        }
         if ( StringUtils.isNotBlank(request.getMerchNo()))
         {
             c.andMerchNoEqualTo(request.getMerchNo() );
         }
         if( StringUtils.isNotBlank(request.getName())){
-            c.andNameEqualTo(request.getName());
+            c.andNameLike('%'+request.getName()+'%');
+//            c.andNameEqualTo(request.getName());
         }
 
         // 添加时间搜索

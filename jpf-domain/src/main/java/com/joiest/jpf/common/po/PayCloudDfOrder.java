@@ -36,6 +36,11 @@ public class PayCloudDfOrder implements Serializable {
     private String requestOrderid;
 
     /**
+     * 
+     */
+    private Long busstaffid;
+
+    /**
      * 交易金额
      */
     private BigDecimal applyamt;
@@ -101,7 +106,7 @@ public class PayCloudDfOrder implements Serializable {
     private String tranno;
 
     /**
-     * 订单状态 0未处理 1处理中
+     * 订单状态 0未处理 1处理完成
      */
     private Integer status;
 
@@ -183,6 +188,14 @@ public class PayCloudDfOrder implements Serializable {
 
     public void setRequestOrderid(String requestOrderid) {
         this.requestOrderid = requestOrderid == null ? null : requestOrderid.trim();
+    }
+
+    public Long getBusstaffid() {
+        return busstaffid;
+    }
+
+    public void setBusstaffid(Long busstaffid) {
+        this.busstaffid = busstaffid;
     }
 
     public BigDecimal getApplyamt() {
@@ -360,6 +373,7 @@ public class PayCloudDfOrder implements Serializable {
         sb.append(", requestBatchno=").append(requestBatchno);
         sb.append(", requestDfId=").append(requestDfId);
         sb.append(", requestOrderid=").append(requestOrderid);
+        sb.append(", busstaffid=").append(busstaffid);
         sb.append(", applyamt=").append(applyamt);
         sb.append(", orderStdPrice=").append(orderStdPrice);
         sb.append(", requeststr=").append(requeststr);
@@ -406,6 +420,7 @@ public class PayCloudDfOrder implements Serializable {
             && (this.getRequestBatchno() == null ? other.getRequestBatchno() == null : this.getRequestBatchno().equals(other.getRequestBatchno()))
             && (this.getRequestDfId() == null ? other.getRequestDfId() == null : this.getRequestDfId().equals(other.getRequestDfId()))
             && (this.getRequestOrderid() == null ? other.getRequestOrderid() == null : this.getRequestOrderid().equals(other.getRequestOrderid()))
+            && (this.getBusstaffid() == null ? other.getBusstaffid() == null : this.getBusstaffid().equals(other.getBusstaffid()))
             && (this.getApplyamt() == null ? other.getApplyamt() == null : this.getApplyamt().equals(other.getApplyamt()))
             && (this.getOrderStdPrice() == null ? other.getOrderStdPrice() == null : this.getOrderStdPrice().equals(other.getOrderStdPrice()))
             && (this.getRequeststr() == null ? other.getRequeststr() == null : this.getRequeststr().equals(other.getRequeststr()))
@@ -441,6 +456,7 @@ public class PayCloudDfOrder implements Serializable {
         result = prime * result + ((getRequestBatchno() == null) ? 0 : getRequestBatchno().hashCode());
         result = prime * result + ((getRequestDfId() == null) ? 0 : getRequestDfId().hashCode());
         result = prime * result + ((getRequestOrderid() == null) ? 0 : getRequestOrderid().hashCode());
+        result = prime * result + ((getBusstaffid() == null) ? 0 : getBusstaffid().hashCode());
         result = prime * result + ((getApplyamt() == null) ? 0 : getApplyamt().hashCode());
         result = prime * result + ((getOrderStdPrice() == null) ? 0 : getOrderStdPrice().hashCode());
         result = prime * result + ((getRequeststr() == null) ? 0 : getRequeststr().hashCode());

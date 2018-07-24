@@ -13,7 +13,7 @@
             <table class="companys" cellpadding="5" width="100%">
                 <tr>
                     <td>商户ID:</td>
-                    <td><input id="merchId" name="mId" class="easyui-textbox" type="text" /></td>
+                    <td><input id="merchId" name="id" class="easyui-textbox" type="text" /></td>
                     <td>聚合商户号:</td>
                     <td><input id="merchNo" name="merchNo" class="easyui-textbox" type="text" /></td>
                     <td>企业名称:</td>
@@ -55,7 +55,7 @@
             multiselect:false,
             selectOnCheck:true,
             remoteSort: false, // 服务端排序
-            url:'../cloudCompany/getCompanys',
+            url:'../cloudCompany/listSale',
             columns:[[
                 {field:'id',title:'商户Id',width:"10%"},
                 {field:'merchNo',title:'聚合商户号',width:"20%"},

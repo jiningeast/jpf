@@ -357,7 +357,7 @@ public class UserInfoController {
         List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactListCustom(Long.parseLong(uid),compact_status);
         if ( getUserCompactList == null || getUserCompactList.isEmpty() )
         {
-            uinfo.put("compact", "1");
+            uinfo.put("compact", "1");//1
         } else
         {
             uinfo.put("compact", "2");

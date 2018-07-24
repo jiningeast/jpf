@@ -22,6 +22,12 @@
 	<bean id="CloudFanSourceServiceFacade" class="com.joiest.jpf.facade.impl.CloudFanSourceServiceFacadeImpl"></bean>
 	<bean id="PcaServiceFacade" class="com.joiest.jpf.facade.impl.PcaServiceFacadeImpl"></bean>
 	<bean id="CloudDfFqwaterServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfFqwaterServiceFacadeImpl"></bean>
+<<<<<<< HEAD
+	<bean id="CloudCompanyAgentServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyAgentServiceFacadeImpl"></bean>
+	<bean id="CloudCompanySalesServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanySalesServiceFacadeImpl"></bean>
+=======
 	<bean id="CloudCompanyBankServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyBankServiceFacadeImpl"></bean>
+	<bean id="CloudStaffMonthTotalServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffMonthTotalServiceFacadeImpl"></bean>
+>>>>>>> f3975cd64abd9020b49cf33f03dbb9d5dfd1995e
 
 </beans>
