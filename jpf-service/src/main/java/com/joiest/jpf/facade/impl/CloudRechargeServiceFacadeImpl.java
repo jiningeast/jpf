@@ -840,7 +840,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
         payCloudRechargeExampleCriteria.andIdEqualTo(reqId);
         payCloudRechargeExampleCriteria.andPactstatusEqualTo(EnumConstants.RechargePactStatus.UNCONFIRMED.value());
-        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.APPLYING.value(),EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.PAY.value(),EnumConstants.RechargeStatus.CANCEL.value()));
+        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET_OPENING.value(),EnumConstants.RechargeStatus.RECHARGE_AND_TICKET.value(),EnumConstants.RechargeStatus.DELIVERED.value()));
         PayCloudRecharge record = new PayCloudRecharge();
         record.setPactstatus(EnumConstants.RechargePactStatus.CONFIRMED.value());
         payCloudRechargeMapper.updateByExampleSelective(record, payCloudRechargeExample);
