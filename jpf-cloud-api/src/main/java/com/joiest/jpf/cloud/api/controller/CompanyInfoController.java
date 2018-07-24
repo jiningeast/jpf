@@ -4,10 +4,7 @@ import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayCloudFansource;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.entity.CloudCompanyInfo;
-import com.joiest.jpf.entity.CloudEmployeeInfo;
-import com.joiest.jpf.entity.CloudFanSourceInfo;
-import com.joiest.jpf.entity.PcaInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +30,6 @@ public class CompanyInfoController {
     @Autowired
     private CloudEmployeeServiceFacade cloudEmployeeServiceFacade;
 
-
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
 
@@ -46,9 +42,13 @@ public class CompanyInfoController {
     @Autowired
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
+    @Autowired
+    private  CloudCompanyAgentServiceFacade cloudCompanyAgentServiceFacade;
+
+    @Autowired
+    private CloudCompanySalesServiceFacade cloudCompanySalesServiceFacade;
     private String uid;
     private CloudEmployeeInfo companyInfo;
-
     //判断企业是否登录
     private Map<String,String> companyIsLogin(String token)
     {
@@ -99,6 +99,12 @@ public class CompanyInfoController {
         if(cloudEmployeeInfo == null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此用户名",null);
+        }
+        //获取代理以及非代理
+        CloudCompanyAgentInfo cloudCompanyAgentInfo = cloudCompanyAgentServiceFacade.getAgentByAgentNo(companyInfo.getMerchNo());
+        if(cloudCompanyAgentInfo != null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请使用业务公司账号登录",null);
         }
         if(cloudEmployeeInfo.getCloudloginpwd().equals(companypass)){
 
@@ -207,8 +213,11 @@ public class CompanyInfoController {
         }
 
         CloudCompanyInfo cloudCompanyInfo =cloudCompanyServiceFacade.getRecByMerchNo(companyInfo.getMerchNo());
+
         JSONObject res = null;
         if(cloudCompanyInfo != null){
+
+
 
             SimpleDateFormat detailTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -218,6 +227,15 @@ public class CompanyInfoController {
             res.discard("updated");
             res.put("created",detailTime.format(cloudCompanyInfo.getCreated()));
 
+            //获取代理以及非代理
+            CloudCompanyAgentInfo cloudCompanyAgentInfo = cloudCompanyAgentServiceFacade.getAgentByAgentNo(companyInfo.getMerchNo());
+            if(cloudCompanyAgentInfo == null){
+
+                CloudCompanySalesInfo cloudCompanySalesInfo = cloudCompanySalesServiceFacade.getSalesBySalesNo(companyInfo.getMerchNo());
+                res.put("rate",cloudCompanySalesInfo.getSalesRate());
+            }else{
+                res.put("rate",cloudCompanyAgentInfo.getAgentRate());
+            }
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "已获取", res);
         }else{
 
