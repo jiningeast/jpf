@@ -146,6 +146,16 @@
                         "icon" : "icon-nav",
                         "url" : "cloudCompanyMoney/caiwu/index"
                     }]
+            },{
+                "menuid" : "7",
+                "icon" : "icon-sys",
+                "menuname" : "客服管理",
+                "menus" : [{
+                    "menuid" : "701",
+                    "menuname" : "欣享前台加入列表",
+                    "icon" : "icon-nav",
+                    "url" : "orderCpsingle/index"
+                }]
             }]
     	};
 

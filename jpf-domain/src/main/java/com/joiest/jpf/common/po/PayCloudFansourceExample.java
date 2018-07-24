@@ -11,10 +11,6 @@ public class PayCloudFansourceExample {
 
     protected List<Criteria> oredCriteria;
 
-    protected long pageNo;
-
-    protected long pageSize;
-
     /**
      *
      */
@@ -102,36 +98,6 @@ public class PayCloudFansourceExample {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
-    }
-
-    /**
-     *
-     * @param pageNo
-     */
-    public void setPageNo(long pageNo) {
-        this.pageNo=pageNo;
-    }
-
-    /**
-     *
-     */
-    public long getPageNo() {
-        return pageNo;
-    }
-
-    /**
-     *
-     * @param pageSize
-     */
-    public void setPageSize(long pageSize) {
-        this.pageSize=pageSize;
-    }
-
-    /**
-     *
-     */
-    public long getPageSize() {
-        return pageSize;
     }
 
     protected abstract static class GeneratedCriteria {
@@ -692,26 +658,6 @@ public class PayCloudFansourceExample {
 
         public Criteria andRemarkuidNotBetween(Long value1, Long value2) {
             addCriterion("remarkuid not between", value1, value2, "remarkuid");
-            return (Criteria) this;
-        }
-
-        public Criteria andCatLikeInsensitive(String value) {
-            addCriterion("upper(cat) like", value.toUpperCase(), "cat");
-            return (Criteria) this;
-        }
-
-        public Criteria andMobileLikeInsensitive(String value) {
-            addCriterion("upper(mobile) like", value.toUpperCase(), "mobile");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameLikeInsensitive(String value) {
-            addCriterion("upper(name) like", value.toUpperCase(), "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLikeInsensitive(String value) {
-            addCriterion("upper(remark) like", value.toUpperCase(), "remark");
             return (Criteria) this;
         }
     }

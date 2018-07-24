@@ -6,6 +6,8 @@ import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
+import com.joiest.jpf.entity.BankCardInfo;
+import com.joiest.jpf.entity.BankInfo;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 
 
@@ -28,14 +30,14 @@ public interface CloudCompanyServiceFacade {
     /**
      * 添加公司
      */
-    public JpfResponseDto addCloudCompany(GetCloudCompanyRequest request,int account,String ipAddress) throws Exception;
+    public JpfResponseDto addCloudCompany(GetCloudCompanyRequest request,int account,String ipAddress, BankInfo bankInfo) throws Exception;
 
 
     /**
      * 修改公司
      */
 
-    public JpfResponseDto  editCloudCompany(GetCloudCompanyRequest request,int account) throws Exception;
+    public JpfResponseDto  editCloudCompany(GetCloudCompanyRequest request,int account,BankInfo bankInfo) throws Exception;
 
 
     /**
