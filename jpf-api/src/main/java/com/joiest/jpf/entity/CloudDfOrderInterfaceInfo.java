@@ -116,6 +116,11 @@ public class CloudDfOrderInterfaceInfo {
     private String dfstatus;
 
     /**
+     * 支付时间
+     */
+    private Date paytime;
+
+    /**
      * 同步返回信息
      */
     private String returncontent;
@@ -354,5 +359,13 @@ public class CloudDfOrderInterfaceInfo {
 
     public void setBusstaffid(Long busstaffid) {
         this.busstaffid = busstaffid;
+    }
+
+    public Date getPaytime() {
+        return paytime;
+    }
+
+    public void setPaytime(Date paytime) {
+        this.paytime = paytime;
     }
 }

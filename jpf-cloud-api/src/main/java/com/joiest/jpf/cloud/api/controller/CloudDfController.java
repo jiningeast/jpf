@@ -47,30 +47,6 @@ public class CloudDfController {
     @Autowired
     private CloudStaffMonthTotalServiceFacade cloudStaffMonthTotalServiceFacade;
 
-//    @RequestMapping(value = "/dfApi", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-//    @ResponseBody
-//    public JSONObject dfApi(CloudDfRequest request)
-//    {
-//        ValidatorUtils.validateInterface(request);
-//
-//        Map<String,Object> requestMap = ClassUtil.requestToMap(request);
-//        Map<String,Object> requestMapNew = new HashMap<String,Object>();
-//        requestMapNew.putAll(requestMap);
-//        String requestSign = requestMap.get("sign").toString();
-//        requestMap.remove("sign");
-//        Map<String,Object> treeMap = new TreeMap<>();
-//        treeMap.putAll(requestMap);
-//
-//        String requestUrl = ToolUtils.mapToUrl(treeMap);
-//        String selfSign = Md5Encrypt.md5(requestUrl + ConfigUtil.getValue("DF_KEY")).toUpperCase();
-//        if ( !selfSign.equals(requestMapNew.get("sign").toString()) )
-//        {
-//            throw new JpfInterfaceException(JpfInterfaceErrorInfo.DF_SIGN_ERROR.getCode(),JpfInterfaceErrorInfo.DF_SIGN_ERROR.getDesc());
-//        }
-//        JSONObject result = new DfUtils().applyAgentPay(requestMap);
-//        return result;
-//    }
-
     /**
      * 代付接口
      * @param request
@@ -78,7 +54,7 @@ public class CloudDfController {
      */
     @RequestMapping(value = "/dfApi", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public JSONObject dfApi(DfApiInterfaceRequest request)
+    public String dfApi(DfApiInterfaceRequest request)
     {
         ValidatorUtils.validateInterface(request);
 
@@ -135,52 +111,23 @@ public class CloudDfController {
                     filterMoney.put("dfid", x.getId());
                     filterMoney.put("commoney", x.getCommoney());
                     filterMonthTotalList.add(filterMoney);
+
+                    double total_old = response.getMonthTotal().doubleValue();
+                    double total_curr = x.getCommoney().doubleValue();
+                    double total = BigDecimalCalculateUtils.sub(total_old,total_curr);
+                    response.setMonthTotal(new BigDecimal(total+""));
+
                     //删除元素
                     it.remove();
+                    response.setCount(response.getCount() - 1);
                 }
             }
         }
-/*        for ( CloudDfMoneyInterfaceInfo one : response.getList() )
+
+        if ( response.getCount() == 0 || response.getList().isEmpty() )
         {
-            Calendar calstar = Calendar.getInstance();
-            String currdate = fmt.format(calstar.getTime());
-            //获取信息
-            CloudStaffMonthTotalInterfaceInfo monthTotalInfo = cloudStaffMonthTotalServiceFacade.getStaffMonthTotal(currdate, one.getBusstaffid());
-            //判断
-            double monthTotal_old = monthTotalInfo.getMonthTotal().doubleValue();
-            double monthTotal_request = one.getCommoney().doubleValue();
-            double montyTotal_sum = BigDecimalCalculateUtils.add(monthTotal_old, monthTotal_request);
-            BigDecimal monthTotal = new BigDecimal(montyTotal_sum+"");
-            BigDecimal max = new BigDecimal(ConfigUtil.getValue("DFAPI_MAX"));
-            if ( monthTotal.compareTo(max) == 1 )
-            {
-                Map<String,Object> filterMoney = new HashMap<>();
-                filterMoney.put("orderid", one.getOrderid());
-                filterMoney.put("busstaffid", one.getBusstaffid());
-                filterMoney.put("batchid", one.getCompanyMoneyId());
-                filterMoney.put("dfid", one.getId());
-                filterMoney.put("commoney", one.getCommoney());
-                filterMonthTotalList.add(filterMoney);
-                //删除元素
-            }*/
-//            if ( monthTotalInfo == null )
-//            {
-//                ModifyCloudStaffMonthTotalRequest staffMonth = new ModifyCloudStaffMonthTotalRequest();
-//                staffMonth.setBusstaffid(one.getBusstaffid());
-//                staffMonth.setMonth(currdate);
-//                staffMonth.setCreated(new Date());
-//            }else
-//            {
-//                //更新
-//                double monthTotal_old = monthTotalInfo.getMonthTotal().doubleValue();
-//                double monthTotal_curr = one.getCommoney().doubleValue();
-//                double montyTotal_new = BigDecimalCalculateUtils.add(monthTotal_old, monthTotal_curr);
-//                BigDecimal monthTotal = new BigDecimal(montyTotal_new+"");
-//                ModifyCloudStaffMonthTotalRequest staffMonth = new ModifyCloudStaffMonthTotalRequest();
-//                staffMonth.setMonthTotal(monthTotal);
-//                staffMonth.setUpdated(new Date());
-//            }
-//        }
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.DF_LISTFILTER_EMPTY.getCode(),JpfInterfaceErrorInfo.DF_LISTFILTER_EMPTY.getDesc());
+        }
 
         //添加任务
         AddCloudDfTaskRequest requestTask = new AddCloudDfTaskRequest();
@@ -199,6 +146,7 @@ public class CloudDfController {
         upBatchTaskInfo.setId((long)taskId);
         upBatchTaskInfo.setBatchid(batchid_self);
 
+        //返回数据
         JSONObject resultJson = new JSONObject();
         resultJson.put("code","10000");
         resultJson.put("info","SUCCESS");
@@ -222,7 +170,7 @@ public class CloudDfController {
         dfDataUtils.setName("线程:" + request.getBatchid());
         dfDataUtils.start();
 
-        return resultJson;
+        return ToolUtils.toBase64(resultJson.toString());
     }
 
     @ModelAttribute
@@ -262,7 +210,7 @@ public class CloudDfController {
      * */
     @RequestMapping(value = "/dfSelectApi",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public JSONObject dfSelectApi(HttpServletRequest request){
+    public String dfSelectApi(HttpServletRequest request){
 
         JSONObject responseDa = new JSONObject();
 
@@ -273,7 +221,7 @@ public class CloudDfController {
 
             responseDa.put("code","10088");
             responseDa.put("info","未获取到此单信息");
-            return responseDa;
+            return ToolUtils.toBase64(responseDa.toString());
         }
         Map<String,String> apiInfo = new HashMap<>();
 
@@ -313,6 +261,49 @@ public class CloudDfController {
 
         int isSuc = cloudDfFqwaterServiceFacade.addCloudDfFqwater(map);
 
+        //支付成功
+
+        if ( resJson.has("orderStatus") && resJson.get("orderStatus").equals("05") )
+        {
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM");
+            String currdate = fmt.format(cloudDfOrderInterfaceInfo.getCreated());
+            CloudStaffMonthTotalInterfaceInfo monthTotalInfo = cloudStaffMonthTotalServiceFacade.getStaffMonthTotal(currdate, cloudDfOrderInterfaceInfo.getBusstaffid());
+            ModifyCloudStaffMonthTotalRequest staffMonth = new ModifyCloudStaffMonthTotalRequest();
+            if ( monthTotalInfo == null )
+            {
+                staffMonth.setBusstaffid(cloudDfOrderInterfaceInfo.getBusstaffid());
+                staffMonth.setMonth(currdate);
+                staffMonth.setMonthTotal(cloudDfOrderInterfaceInfo.getApplyamt());
+                staffMonth.setCreated(new Date());
+                String orderids = cloudDfOrderInterfaceInfo.getOrderid() + ",";
+                staffMonth.setOrderids(orderids);
+                cloudStaffMonthTotalServiceFacade.addStaffMonthTotal(staffMonth);
+            }else
+            {
+                if ( monthTotalInfo.getOrderids() != null && !monthTotalInfo.getOrderids().contains(cloudDfOrderInterfaceInfo.getOrderid()) )
+                {
+                    //更新
+                    double monthTotal_old = monthTotalInfo.getMonthTotal().doubleValue();
+                    double monthTotal_curr = cloudDfOrderInterfaceInfo.getApplyamt().doubleValue();
+                    double montyTotal_new = BigDecimalCalculateUtils.add(monthTotal_old, monthTotal_curr);
+                    BigDecimal monthTotal = new BigDecimal(montyTotal_new+"");
+
+                    staffMonth.setId(monthTotalInfo.getId());
+                    staffMonth.setBusstaffid(cloudDfOrderInterfaceInfo.getBusstaffid());
+                    staffMonth.setMonth(currdate);
+                    staffMonth.setMonthTotal(monthTotal);
+                    staffMonth.setUpdated(new Date());
+                    BigDecimal max = new BigDecimal(ConfigUtil.getValue("DFAPI_MAX"));
+                    if ( monthTotal.compareTo(max) == 1 || monthTotal.compareTo(max) == 0 )
+                    {
+                        staffMonth.setStatus(1);
+                    }
+                    String orderids = monthTotalInfo.getOrderids() + cloudDfOrderInterfaceInfo.getOrderid() + ",";
+                    staffMonth.setOrderids(orderids);
+                    cloudStaffMonthTotalServiceFacade.updateStaffMonthTotal(staffMonth);
+                }
+            }
+        }
         //组装返回数据
         JSONObject actualData = new JSONObject();
         actualData.put("tranAmt",resJson.get("tranAmt"));
@@ -329,7 +320,7 @@ public class CloudDfController {
         }else{
             responseDa.put("code","10008");
         }
-        return responseDa;
+        return ToolUtils.toBase64(responseDa.toString());
     }
 
 }

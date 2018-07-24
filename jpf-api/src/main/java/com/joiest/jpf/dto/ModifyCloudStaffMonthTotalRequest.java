@@ -26,6 +26,11 @@ public class ModifyCloudStaffMonthTotalRequest {
     private BigDecimal monthTotal;
 
     /**
+     * orderid集合
+     */
+    private String orderids;
+
+    /**
      * 备注
      */
     private String remarks;
@@ -107,5 +112,13 @@ public class ModifyCloudStaffMonthTotalRequest {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public String getOrderids() {
+        return orderids;
+    }
+
+    public void setOrderids(String orderids) {
+        this.orderids = orderids;
     }
 }

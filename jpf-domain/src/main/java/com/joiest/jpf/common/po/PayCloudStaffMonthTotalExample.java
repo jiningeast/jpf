@@ -426,6 +426,76 @@ public class PayCloudStaffMonthTotalExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderidsIsNull() {
+            addCriterion("orderids is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsIsNotNull() {
+            addCriterion("orderids is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsEqualTo(String value) {
+            addCriterion("orderids =", value, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsNotEqualTo(String value) {
+            addCriterion("orderids <>", value, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsGreaterThan(String value) {
+            addCriterion("orderids >", value, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsGreaterThanOrEqualTo(String value) {
+            addCriterion("orderids >=", value, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsLessThan(String value) {
+            addCriterion("orderids <", value, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsLessThanOrEqualTo(String value) {
+            addCriterion("orderids <=", value, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsLike(String value) {
+            addCriterion("orderids like", value, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsNotLike(String value) {
+            addCriterion("orderids not like", value, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsIn(List<String> values) {
+            addCriterion("orderids in", values, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsNotIn(List<String> values) {
+            addCriterion("orderids not in", values, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsBetween(String value1, String value2) {
+            addCriterion("orderids between", value1, value2, "orderids");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsNotBetween(String value1, String value2) {
+            addCriterion("orderids not between", value1, value2, "orderids");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarksIsNull() {
             addCriterion("remarks is null");
             return (Criteria) this;
@@ -678,6 +748,11 @@ public class PayCloudStaffMonthTotalExample {
 
         public Criteria andMonthLikeInsensitive(String value) {
             addCriterion("upper(month) like", value.toUpperCase(), "month");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderidsLikeInsensitive(String value) {
+            addCriterion("upper(orderids) like", value.toUpperCase(), "orderids");
             return (Criteria) this;
         }
 

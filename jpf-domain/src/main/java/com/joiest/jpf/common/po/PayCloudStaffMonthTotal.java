@@ -26,6 +26,11 @@ public class PayCloudStaffMonthTotal implements Serializable {
     private BigDecimal monthTotal;
 
     /**
+     * orderid集合
+     */
+    private String orderids;
+
+    /**
      * 备注
      */
     private String remarks;
@@ -79,6 +84,14 @@ public class PayCloudStaffMonthTotal implements Serializable {
         this.monthTotal = monthTotal;
     }
 
+    public String getOrderids() {
+        return orderids;
+    }
+
+    public void setOrderids(String orderids) {
+        this.orderids = orderids == null ? null : orderids.trim();
+    }
+
     public String getRemarks() {
         return remarks;
     }
@@ -124,6 +137,7 @@ public class PayCloudStaffMonthTotal implements Serializable {
         sb.append(", busstaffid=").append(busstaffid);
         sb.append(", month=").append(month);
         sb.append(", monthTotal=").append(monthTotal);
+        sb.append(", orderids=").append(orderids);
         sb.append(", remarks=").append(remarks);
         sb.append(", status=").append(status);
         sb.append(", created=").append(created);
@@ -152,6 +166,7 @@ public class PayCloudStaffMonthTotal implements Serializable {
             && (this.getBusstaffid() == null ? other.getBusstaffid() == null : this.getBusstaffid().equals(other.getBusstaffid()))
             && (this.getMonth() == null ? other.getMonth() == null : this.getMonth().equals(other.getMonth()))
             && (this.getMonthTotal() == null ? other.getMonthTotal() == null : this.getMonthTotal().equals(other.getMonthTotal()))
+            && (this.getOrderids() == null ? other.getOrderids() == null : this.getOrderids().equals(other.getOrderids()))
             && (this.getRemarks() == null ? other.getRemarks() == null : this.getRemarks().equals(other.getRemarks()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
@@ -169,6 +184,7 @@ public class PayCloudStaffMonthTotal implements Serializable {
         result = prime * result + ((getBusstaffid() == null) ? 0 : getBusstaffid().hashCode());
         result = prime * result + ((getMonth() == null) ? 0 : getMonth().hashCode());
         result = prime * result + ((getMonthTotal() == null) ? 0 : getMonthTotal().hashCode());
+        result = prime * result + ((getOrderids() == null) ? 0 : getOrderids().hashCode());
         result = prime * result + ((getRemarks() == null) ? 0 : getRemarks().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());

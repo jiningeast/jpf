@@ -116,6 +116,11 @@ public class PayCloudDfOrder implements Serializable {
     private String dfstatus;
 
     /**
+     * 支付时间
+     */
+    private Date paytime;
+
+    /**
      * 同步返回信息
      */
     private String returncontent;
@@ -318,6 +323,14 @@ public class PayCloudDfOrder implements Serializable {
         this.dfstatus = dfstatus == null ? null : dfstatus.trim();
     }
 
+    public Date getPaytime() {
+        return paytime;
+    }
+
+    public void setPaytime(Date paytime) {
+        this.paytime = paytime;
+    }
+
     public String getReturncontent() {
         return returncontent;
     }
@@ -389,6 +402,7 @@ public class PayCloudDfOrder implements Serializable {
         sb.append(", tranno=").append(tranno);
         sb.append(", status=").append(status);
         sb.append(", dfstatus=").append(dfstatus);
+        sb.append(", paytime=").append(paytime);
         sb.append(", returncontent=").append(returncontent);
         sb.append(", querycount=").append(querycount);
         sb.append(", lastrespose=").append(lastrespose);
@@ -436,6 +450,7 @@ public class PayCloudDfOrder implements Serializable {
             && (this.getTranno() == null ? other.getTranno() == null : this.getTranno().equals(other.getTranno()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getDfstatus() == null ? other.getDfstatus() == null : this.getDfstatus().equals(other.getDfstatus()))
+            && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getReturncontent() == null ? other.getReturncontent() == null : this.getReturncontent().equals(other.getReturncontent()))
             && (this.getQuerycount() == null ? other.getQuerycount() == null : this.getQuerycount().equals(other.getQuerycount()))
             && (this.getLastrespose() == null ? other.getLastrespose() == null : this.getLastrespose().equals(other.getLastrespose()))
@@ -472,6 +487,7 @@ public class PayCloudDfOrder implements Serializable {
         result = prime * result + ((getTranno() == null) ? 0 : getTranno().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getDfstatus() == null) ? 0 : getDfstatus().hashCode());
+        result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getReturncontent() == null) ? 0 : getReturncontent().hashCode());
         result = prime * result + ((getQuerycount() == null) ? 0 : getQuerycount().hashCode());
         result = prime * result + ((getLastrespose() == null) ? 0 : getLastrespose().hashCode());

@@ -3,6 +3,7 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.po.PayCloudStaffMonthTotal;
 import com.joiest.jpf.common.po.PayCloudStaffMonthTotalExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudStaffMonthTotalMapper;
+import com.joiest.jpf.dto.ModifyCloudStaffMonthTotalRequest;
 import com.joiest.jpf.entity.CloudStaffMonthTotalInterfaceInfo;
 import com.joiest.jpf.facade.CloudStaffMonthTotalServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -36,12 +37,23 @@ public class CloudStaffMonthTotalServiceFacadeImpl implements CloudStaffMonthTot
     }
 
     @Override
-    public int updateStaffMonthTotal(Long id) {
-        return 0;
+    public int addStaffMonthTotal(ModifyCloudStaffMonthTotalRequest request) {
+        PayCloudStaffMonthTotal payCloudStaffMonthTotal = new PayCloudStaffMonthTotal();
+        BeanCopier beanCopier = BeanCopier.create(ModifyCloudStaffMonthTotalRequest.class, PayCloudStaffMonthTotal.class, false);
+        beanCopier.copy(request, payCloudStaffMonthTotal, null);
+
+        return payCloudStaffMonthTotalMapper.insertSelective(payCloudStaffMonthTotal);
     }
 
     @Override
-    public int addStaffMonthTotal(String month, Long busstaffid) {
-        return 0;
+    public int updateStaffMonthTotal(ModifyCloudStaffMonthTotalRequest request) {
+        PayCloudStaffMonthTotal payCloudStaffMonthTotal = new PayCloudStaffMonthTotal();
+        BeanCopier beanCopier = BeanCopier.create(ModifyCloudStaffMonthTotalRequest.class, PayCloudStaffMonthTotal.class, false);
+        beanCopier.copy(request, payCloudStaffMonthTotal, null);
+        PayCloudStaffMonthTotalExample example = new PayCloudStaffMonthTotalExample();
+        PayCloudStaffMonthTotalExample.Criteria c = example.createCriteria();
+        c.andIdEqualTo(request.getId());
+
+        return payCloudStaffMonthTotalMapper.updateByExampleSelective(payCloudStaffMonthTotal, example);
     }
 }
