@@ -50,6 +50,11 @@ public class PayCloudCompanyBank implements Serializable {
     private String banksubname;
 
     /**
+     * 开户名你
+     */
+    private String accountName;
+
+    /**
      * 联系电话
      */
     private String mobile;
@@ -143,6 +148,14 @@ public class PayCloudCompanyBank implements Serializable {
         this.banksubname = banksubname == null ? null : banksubname.trim();
     }
 
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName == null ? null : accountName.trim();
+    }
+
     public String getMobile() {
         return mobile;
     }
@@ -193,6 +206,7 @@ public class PayCloudCompanyBank implements Serializable {
         sb.append(", banktype=").append(banktype);
         sb.append(", bankno=").append(bankno);
         sb.append(", banksubname=").append(banksubname);
+        sb.append(", accountName=").append(accountName);
         sb.append(", mobile=").append(mobile);
         sb.append(", chinacode=").append(chinacode);
         sb.append(", created=").append(created);
@@ -226,6 +240,7 @@ public class PayCloudCompanyBank implements Serializable {
             && (this.getBanktype() == null ? other.getBanktype() == null : this.getBanktype().equals(other.getBanktype()))
             && (this.getBankno() == null ? other.getBankno() == null : this.getBankno().equals(other.getBankno()))
             && (this.getBanksubname() == null ? other.getBanksubname() == null : this.getBanksubname().equals(other.getBanksubname()))
+            && (this.getAccountName() == null ? other.getAccountName() == null : this.getAccountName().equals(other.getAccountName()))
             && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
             && (this.getChinacode() == null ? other.getChinacode() == null : this.getChinacode().equals(other.getChinacode()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
@@ -248,6 +263,7 @@ public class PayCloudCompanyBank implements Serializable {
         result = prime * result + ((getBanktype() == null) ? 0 : getBanktype().hashCode());
         result = prime * result + ((getBankno() == null) ? 0 : getBankno().hashCode());
         result = prime * result + ((getBanksubname() == null) ? 0 : getBanksubname().hashCode());
+        result = prime * result + ((getAccountName() == null) ? 0 : getAccountName().hashCode());
         result = prime * result + ((getMobile() == null) ? 0 : getMobile().hashCode());
         result = prime * result + ((getChinacode() == null) ? 0 : getChinacode().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());

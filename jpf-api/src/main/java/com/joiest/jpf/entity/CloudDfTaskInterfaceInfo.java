@@ -70,6 +70,11 @@ public class CloudDfTaskInterfaceInfo {
     private Integer status;
 
     /**
+     * 备注
+     */
+    private String remarks;
+
+    /**
      * 添加时间
      */
     private Date created;
@@ -197,5 +202,13 @@ public class CloudDfTaskInterfaceInfo {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

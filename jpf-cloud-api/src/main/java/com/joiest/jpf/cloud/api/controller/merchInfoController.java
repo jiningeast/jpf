@@ -38,9 +38,8 @@ public class merchInfoController {
     @RequestMapping(value = "/getMerchantInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getMerchantInfo(HttpServletRequest request) {
-
         logger.info("token={}", request.getHeader("token"));
-        String token = request.getParameter("token");
+        String token = request.getHeader("token");
         CloudEmployeeInfo cloudEmployeeInfo = cloudEmployeeServiceFacade.companyIsLogin(token);
         String merchNo = cloudEmployeeInfo.getMerchNo();
         Map<String, String> merchInfo = new HashMap<String, String>();

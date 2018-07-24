@@ -6,20 +6,13 @@ import com.joiest.jpf.cloud.api.util.DfUtils;
 import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
-import com.joiest.jpf.common.util.ClassUtil;
-import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.common.util.ValidatorUtils;
-import com.joiest.jpf.dto.AddCloudDfTaskRequest;
-import com.joiest.jpf.dto.DfApiInterfaceRequest;
-import com.joiest.jpf.dto.GetCloudDfTaskInterfaceResponse;
-import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
+import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.*;
+import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.entity.CloudDfOrderInterfaceInfo;
 import com.joiest.jpf.entity.CloudDfTaskInterfaceInfo;
-import com.joiest.jpf.facade.CloudDfFqwaterServiceFacade;
-import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
-import com.joiest.jpf.facade.CloudDfOrderInterfaceServiceFacade;
-import com.joiest.jpf.facade.CloudDfTaskInterfaceServiceFacade;
+import com.joiest.jpf.entity.CloudStaffMonthTotalInterfaceInfo;
+import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +24,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/clouddf")
@@ -51,6 +43,10 @@ public class CloudDfController {
 
     @Autowired
     private CloudDfFqwaterServiceFacade cloudDfFqwaterServiceFacade;
+
+    @Autowired
+    private CloudStaffMonthTotalServiceFacade cloudStaffMonthTotalServiceFacade;
+
 //    @RequestMapping(value = "/dfApi", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
 //    @ResponseBody
 //    public JSONObject dfApi(CloudDfRequest request)
@@ -111,6 +107,80 @@ public class CloudDfController {
         {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.DF_INFOLIST_EMPTY.getCode(),JpfInterfaceErrorInfo.DF_INFOLIST_EMPTY.getDesc());
         }
+        //金额过滤
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM");
+
+        List<Map<String,Object>> filterMonthTotalList = new ArrayList<>();
+        Iterator<CloudDfMoneyInterfaceInfo> it = response.getList().iterator();
+        while (it.hasNext()) {
+            CloudDfMoneyInterfaceInfo x = (CloudDfMoneyInterfaceInfo) it.next();
+            Calendar calstar = Calendar.getInstance();
+            String currdate = fmt.format(calstar.getTime());
+            //获取信息
+            CloudStaffMonthTotalInterfaceInfo monthTotalInfo = cloudStaffMonthTotalServiceFacade.getStaffMonthTotal(currdate, x.getBusstaffid());
+            if (monthTotalInfo != null)
+            {
+                //判断
+                double monthTotal_old = monthTotalInfo.getMonthTotal().doubleValue();
+                double monthTotal_request = x.getCommoney().doubleValue();
+                double montyTotal_sum = BigDecimalCalculateUtils.add(monthTotal_old, monthTotal_request);
+                BigDecimal monthTotal = new BigDecimal(montyTotal_sum+"");
+                BigDecimal max = new BigDecimal(ConfigUtil.getValue("DFAPI_MAX"));
+                if ( monthTotal.compareTo(max) == 1 )
+                {
+                    Map<String,Object> filterMoney = new HashMap<>();
+                    filterMoney.put("orderid", x.getOrderid());
+                    filterMoney.put("busstaffid", x.getBusstaffid());
+                    filterMoney.put("batchid", x.getCompanyMoneyId());
+                    filterMoney.put("dfid", x.getId());
+                    filterMoney.put("commoney", x.getCommoney());
+                    filterMonthTotalList.add(filterMoney);
+                    //删除元素
+                    it.remove();
+                }
+            }
+        }
+/*        for ( CloudDfMoneyInterfaceInfo one : response.getList() )
+        {
+            Calendar calstar = Calendar.getInstance();
+            String currdate = fmt.format(calstar.getTime());
+            //获取信息
+            CloudStaffMonthTotalInterfaceInfo monthTotalInfo = cloudStaffMonthTotalServiceFacade.getStaffMonthTotal(currdate, one.getBusstaffid());
+            //判断
+            double monthTotal_old = monthTotalInfo.getMonthTotal().doubleValue();
+            double monthTotal_request = one.getCommoney().doubleValue();
+            double montyTotal_sum = BigDecimalCalculateUtils.add(monthTotal_old, monthTotal_request);
+            BigDecimal monthTotal = new BigDecimal(montyTotal_sum+"");
+            BigDecimal max = new BigDecimal(ConfigUtil.getValue("DFAPI_MAX"));
+            if ( monthTotal.compareTo(max) == 1 )
+            {
+                Map<String,Object> filterMoney = new HashMap<>();
+                filterMoney.put("orderid", one.getOrderid());
+                filterMoney.put("busstaffid", one.getBusstaffid());
+                filterMoney.put("batchid", one.getCompanyMoneyId());
+                filterMoney.put("dfid", one.getId());
+                filterMoney.put("commoney", one.getCommoney());
+                filterMonthTotalList.add(filterMoney);
+                //删除元素
+            }*/
+//            if ( monthTotalInfo == null )
+//            {
+//                ModifyCloudStaffMonthTotalRequest staffMonth = new ModifyCloudStaffMonthTotalRequest();
+//                staffMonth.setBusstaffid(one.getBusstaffid());
+//                staffMonth.setMonth(currdate);
+//                staffMonth.setCreated(new Date());
+//            }else
+//            {
+//                //更新
+//                double monthTotal_old = monthTotalInfo.getMonthTotal().doubleValue();
+//                double monthTotal_curr = one.getCommoney().doubleValue();
+//                double montyTotal_new = BigDecimalCalculateUtils.add(monthTotal_old, monthTotal_curr);
+//                BigDecimal monthTotal = new BigDecimal(montyTotal_new+"");
+//                ModifyCloudStaffMonthTotalRequest staffMonth = new ModifyCloudStaffMonthTotalRequest();
+//                staffMonth.setMonthTotal(monthTotal);
+//                staffMonth.setUpdated(new Date());
+//            }
+//        }
 
         //添加任务
         AddCloudDfTaskRequest requestTask = new AddCloudDfTaskRequest();
@@ -128,11 +198,6 @@ public class CloudDfController {
         CloudDfTaskInterfaceInfo upBatchTaskInfo = new CloudDfTaskInterfaceInfo();
         upBatchTaskInfo.setId((long)taskId);
         upBatchTaskInfo.setBatchid(batchid_self);
-        cloudDfTaskInterfaceServiceFacade.updateTask(upBatchTaskInfo);
-
-        Thread dfDataUtils = new DfDataUtils(request.getBatchid(), request.getDfid(), response.getList(),batchid_self);
-        dfDataUtils.setName("线程:" + request.getBatchid());
-        dfDataUtils.start();
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("code","10000");
@@ -141,10 +206,23 @@ public class CloudDfController {
         dataJson.put("count", response.getCount());
         dataJson.put("totalMoney", response.getMonthTotal());
         dataJson.put("batchno", batchid_self);
+        if ( !filterMonthTotalList.isEmpty() )
+        {
+            JSONObject filterMonthTotalJson = new JSONObject();
+            filterMonthTotalJson.put("data", filterMonthTotalList);
+            filterMonthTotalJson.put("count", filterMonthTotalList.size());
+            dataJson.put("filterdata",filterMonthTotalJson);
+            upBatchTaskInfo.setRemarks(filterMonthTotalJson.toString());
+        }
         resultJson.put("data", dataJson);
 
-        return resultJson;
+        cloudDfTaskInterfaceServiceFacade.updateTask(upBatchTaskInfo);
 
+        Thread dfDataUtils = new DfDataUtils(request.getBatchid(), request.getDfid(), response.getList(),batchid_self);
+        dfDataUtils.setName("线程:" + request.getBatchid());
+        dfDataUtils.start();
+
+        return resultJson;
     }
 
     @ModelAttribute
@@ -193,7 +271,7 @@ public class CloudDfController {
         CloudDfOrderInterfaceInfo cloudDfOrderInterfaceInfo = cloudDfOrderInterfaceServiceFacade.getDfOrderByRequestOrderid(orderId);
         if(cloudDfOrderInterfaceInfo == null){
 
-            responseDa.put("code","10088");
+            responseDa.put("code","10008");
             responseDa.put("info","未获取到此单信息");
             return responseDa;
         }

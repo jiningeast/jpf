@@ -778,13 +778,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (!payCloudRecharge.getMerchNo().equals(merchNo)) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[merchNo]企业商户号不一致");
         }
-        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())) {
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())&&!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT_REJECT.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "状态不匹配，不可以操作");
         }
         PayCloudRechargeExample payCloudRechargeExample = new PayCloudRechargeExample();
         PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
         payCloudRechargeExampleCriteria.andIdEqualTo(reqId);
-        payCloudRechargeExampleCriteria.andStatusEqualTo(EnumConstants.RechargeStatus.AUDIT.value());
+        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.AUDIT_REJECT.value()));
         PayCloudRecharge record = new PayCloudRecharge();
         record.setImgurl(imgurl);
         record.setStatus(EnumConstants.RechargeStatus.PAY.value());
@@ -816,10 +816,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (payCloudRecharge.getPactstatus().equals(EnumConstants.RechargePactStatus.CONFIRMED.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "已验收，不需要重复验收");
         }
-        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.APPLYING.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.PAY.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.CANCEL.value())) {
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET_OPENING.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.DELIVERED.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "状态不匹配，不可以操作");
         }
         if (payCloudRecharge.getPacttime().getTime() > Calendar.getInstance().getTime().getTime()) {
@@ -829,7 +828,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
         payCloudRechargeExampleCriteria.andIdEqualTo(reqId);
         payCloudRechargeExampleCriteria.andPactstatusEqualTo(EnumConstants.RechargePactStatus.UNCONFIRMED.value());
-        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.APPLYING.value(),EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.PAY.value(),EnumConstants.RechargeStatus.CANCEL.value()));
+        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET_OPENING.value(),EnumConstants.RechargeStatus.RECHARGE_AND_TICKET.value(),EnumConstants.RechargeStatus.DELIVERED.value()));
         PayCloudRecharge record = new PayCloudRecharge();
         record.setPactstatus(EnumConstants.RechargePactStatus.CONFIRMED.value());
         payCloudRechargeMapper.updateByExampleSelective(record, payCloudRechargeExample);

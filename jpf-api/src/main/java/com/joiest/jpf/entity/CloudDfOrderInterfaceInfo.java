@@ -36,6 +36,11 @@ public class CloudDfOrderInterfaceInfo {
     private String requestOrderid;
 
     /**
+     *
+     */
+    private Long busstaffid;
+
+    /**
      * 交易金额
      */
     private BigDecimal applyamt;
@@ -341,5 +346,13 @@ public class CloudDfOrderInterfaceInfo {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public Long getBusstaffid() {
+        return busstaffid;
+    }
+
+    public void setBusstaffid(Long busstaffid) {
+        this.busstaffid = busstaffid;
     }
 }

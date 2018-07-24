@@ -24,7 +24,9 @@ public class CloudCompanySalesServiceFacadeImpl implements CloudCompanySalesServ
         c.andSalesNoEqualTo(salesNo);
         CloudCompanySalesInfo cloudCompanySalesInfo = new CloudCompanySalesInfo();
         List<PayCloudCompanySales> list = payCloudCompanySalesMapper.selectByExample(e);
-
+        if(list.isEmpty()){
+            return null;
+        }
         BeanCopier beanCopier = BeanCopier.create( PayCloudCompanySales.class, CloudCompanySalesInfo.class, false);
         beanCopier.copy(list.get(0), cloudCompanySalesInfo, null);
 

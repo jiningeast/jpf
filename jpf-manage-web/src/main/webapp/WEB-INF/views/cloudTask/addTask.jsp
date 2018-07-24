@@ -41,7 +41,7 @@
         // 选取公司按钮
         $("#searchCompany").linkbutton({
             onClick:function(){
-                $('#companys').window("open").window('refresh', '../cloudCompanyMoney/companys').window('setTitle','选取公司');
+                $('#companys').window("open").window('refresh', '../cloudTask/companys').window('setTitle','选取公司');
             }
         });
 
