@@ -1,12 +1,13 @@
 package com.joiest.jpf.common.po;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PayCloudFansource {
+public class PayCloudFansource implements Serializable {
     /**
      * 
      */
-    private Long id;
+    private String id;
 
     /**
      * 地区ID
@@ -41,14 +42,16 @@ public class PayCloudFansource {
     /**
      * 备注人ID
      */
-    private Long remarkuid;
+    private String remarkuid;
 
-    public Long getId() {
+    private static final long serialVersionUID = 1L;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public Integer getCatid() {
@@ -99,11 +102,76 @@ public class PayCloudFansource {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public Long getRemarkuid() {
+    public String getRemarkuid() {
         return remarkuid;
     }
 
-    public void setRemarkuid(Long remarkuid) {
-        this.remarkuid = remarkuid;
+    public void setRemarkuid(String remarkuid) {
+        this.remarkuid = remarkuid == null ? null : remarkuid.trim();
+    }
+
+    /**
+     *
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", catid=").append(catid);
+        sb.append(", cat=").append(cat);
+        sb.append(", mobile=").append(mobile);
+        sb.append(", name=").append(name);
+        sb.append(", created=").append(created);
+        sb.append(", remark=").append(remark);
+        sb.append(", remarkuid=").append(remarkuid);
+        sb.append("]");
+        return sb.toString();
+    }
+
+    /**
+     *
+     * @param that
+     */
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        }
+        if (that == null) {
+            return false;
+        }
+        if (getClass() != that.getClass()) {
+            return false;
+        }
+        PayCloudFansource other = (PayCloudFansource) that;
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getCatid() == null ? other.getCatid() == null : this.getCatid().equals(other.getCatid()))
+            && (this.getCat() == null ? other.getCat() == null : this.getCat().equals(other.getCat()))
+            && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
+            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+            && (this.getRemarkuid() == null ? other.getRemarkuid() == null : this.getRemarkuid().equals(other.getRemarkuid()));
+    }
+
+    /**
+     *
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getCatid() == null) ? 0 : getCatid().hashCode());
+        result = prime * result + ((getCat() == null) ? 0 : getCat().hashCode());
+        result = prime * result + ((getMobile() == null) ? 0 : getMobile().hashCode());
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getRemarkuid() == null) ? 0 : getRemarkuid().hashCode());
+        return result;
     }
 }

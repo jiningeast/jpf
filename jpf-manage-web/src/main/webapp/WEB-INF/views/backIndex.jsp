@@ -95,11 +95,6 @@
                     "menuname" : "旅游订单管理",
                     "icon" : "icon-nav",
                     "url" : "order/index"
-                },{
-                    "menuid" : "402",
-                    "menuname" : "云账户订单管理",
-                    "icon" : "icon-nav",
-                    "url" : "cloudCompanyMoney/index"
                 }]
             },{
                 "menuid" : "5",

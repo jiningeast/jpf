@@ -131,6 +131,9 @@ public class AliyunOSSClientUtil {
         }
         if(StringUtils.isBlank(imgUrl) || StringUtils.isBlank(md5key)) return null;
 
+        System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
+        System.out.println("服务器地址："+md5key);
+
         JSONObject result = new JSONObject();
         result.put("imgUrl",imgUrl);
         result.put("expireUrl",md5key);

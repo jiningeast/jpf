@@ -50,6 +50,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(start,DateUtils.DATEFORMATLONG));
         c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(end,DateUtils.DATEFORMATLONG));
         c.andBusstaffidEqualTo(Long.parseLong(uid));
+        c.andMontypeEqualTo(2);
 
         List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(e);
         List<CloudDfMoneyInterfaceInfo> listnew = new ArrayList<>();
@@ -83,6 +84,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
         PayCloudDfMoneyExample.Criteria c = e.createCriteria();
         c.andBusstaffidEqualTo(Long.parseLong(uid));
+        c.andMontypeEqualTo(2);
 
         List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(e);
         List<CloudDfMoneyInterfaceInfo> listnew = new ArrayList<>();
@@ -107,6 +109,8 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         example.setOrderByClause("addtime DESC");
         PayCloudDfMoneyExample.Criteria c = example.createCriteria();
         c.andBusstaffidEqualTo(uid);
+        c.andMontypeEqualTo(2);
+
         List<PayCloudDfMoneyInterfaceCustom> list = payCloudDfMoneyInterfaceCustomMapper.getUserMonthList(example);
 
         List<CloudDfMoneyInterfaceInfo> response = new ArrayList<>();
