@@ -52,7 +52,6 @@ public class CompanyInfoController {
     //判断企业是否登录
     private Map<String,String> companyIsLogin(String token)
     {
-
         Map<String,String> resultMap = new HashMap<>();
         String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_EMPLOY_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(uid_encrypt)) {
@@ -211,13 +210,9 @@ public class CompanyInfoController {
         {
             return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
         }
-
         CloudCompanyInfo cloudCompanyInfo =cloudCompanyServiceFacade.getRecByMerchNo(companyInfo.getMerchNo());
-
         JSONObject res = null;
         if(cloudCompanyInfo != null){
-
-
 
             SimpleDateFormat detailTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
