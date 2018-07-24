@@ -81,7 +81,8 @@ public abstract class EnumConstants {
         RECHARGE_AND_TICKET((byte)5,"已充值已开票"),
         DELIVERED((byte)6,"已发货"),
         COMPLETE((byte)7,"已完成(客户收到发票)"),
-        CANCEL((byte)0,"已取消")
+        CANCEL((byte)0,"已取消"),
+        AUDIT_REJECT((byte)8,"审核拒绝"),
         ;
 
         private Byte value;

@@ -429,11 +429,11 @@ public class CloudTaskController {
         // 新建一个待锁定的代付款批次订单
         CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
         String companyMoneyId;
-        cloudCompanyMoneyInfo.setAgentNo(agentNo);   // 待修改
+        cloudCompanyMoneyInfo.setAgentNo(agentNo);
         cloudCompanyMoneyInfo.setMerchNo(companyInfo.getMerchNo());
         cloudCompanyMoneyInfo.setCommoney(new BigDecimal(jsonMap.get("money")));
         cloudCompanyMoneyInfo.setAddtime(new Date());
-        cloudCompanyMoneyInfo.setUid(""+companyInfo.getId());   // 待修改
+        cloudCompanyMoneyInfo.setUid(""+companyInfo.getId());
         cloudCompanyMoneyInfo.setFid(contractNo);   // 合同编号
         cloudCompanyMoneyInfo.setVid((byte)8);
         cloudCompanyMoneyInfo.setIntro("");
@@ -654,7 +654,7 @@ public class CloudTaskController {
         }
 
         // 鉴权功能 线程
-        Thread thread = new Thread(new CheckBanksUtils(data));
+        Thread thread = new Thread(new CheckBanksUtils(data,taskRes));
         thread.start();
 
         return new JpfResponseDto();
@@ -709,10 +709,18 @@ public class CloudTaskController {
         CloudTaskInfo cloudTaskInfo = cloudTaskServiceFacade.getOneTask(taskId);
 
         // 判断此任务是否已经锁定
-        if ( cloudTaskInfo.getIsLock().equals("1") ){
-            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        if ( cloudTaskInfo.getIsLock() == 1 ){
             jpfResponseDto.setRetCode("0001");
             jpfResponseDto.setRetMsg("该任务已经锁定，请不要重复锁定");
+
+            return jpfResponseDto;
+        }
+
+        // 任务鉴权处理完成才能锁定
+        if ( cloudTaskInfo.getStatus() != 3 ){
+            jpfResponseDto.setRetCode("0002");
+            jpfResponseDto.setRetMsg("该任务所有的鉴权都通过后才能锁定");
 
             return jpfResponseDto;
         }
@@ -741,7 +749,6 @@ public class CloudTaskController {
             CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchStaffBanksInfo);
             if ( !cloudStaffBanksInfo.getBankActive().equals("1") ){
                 // 如果有人鉴权状态不是通过就返回错误
-                JpfResponseDto jpfResponseDto = new JpfResponseDto();
                 jpfResponseDto.setRetCode("0001");
                 jpfResponseDto.setRetMsg("该批次中存在鉴权失败的记录，请修改后重新上传excel");
 
@@ -825,7 +832,7 @@ public class CloudTaskController {
         }
 
 
-        return new JpfResponseDto();
+        return jpfResponseDto;
     }
 
     /**

@@ -7,8 +7,10 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.CheckBanksRequest;
 import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
+import com.joiest.jpf.entity.CloudTaskInfo;
 import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
 import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
+import com.joiest.jpf.facade.CloudTaskServiceFacade;
 import com.joiest.jpf.manage.web.controller.CloudTaskController;
 import com.joiest.jpf.manage.web.controller.ConfigUtil;
 import org.apache.logging.log4j.LogManager;
@@ -23,16 +25,22 @@ public class CheckBanksUtils implements Runnable {
 
     private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
 
+    private CloudTaskServiceFacade cloudTaskServiceFacade;
+
     private String cacheFileName;
+
+    private String taskId;
 
     private static final Logger logger = LogManager.getLogger(CloudTaskController.class);
 
-    public CheckBanksUtils(String cacheFileName){
+    public CheckBanksUtils(String cacheFileName, String taskId){
         this.cacheFileName = cacheFileName;
+        this.taskId = taskId;
 
         ApplicationContext beanFactory= SpringContextUtil.getApplicationContext();
         cloudStaffBanksServiceFacade = beanFactory.getBean(CloudStaffBanksServiceFacade.class);
         cloudInterfaceStreamServiceFacade = beanFactory.getBean(CloudInterfaceStreamServiceFacade.class);
+        cloudTaskServiceFacade = beanFactory.getBean(CloudTaskServiceFacade.class);
     }
 
     public void run(){
@@ -42,10 +50,10 @@ public class CheckBanksUtils implements Runnable {
 
         // 读取暂存文件
         String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+cacheFileName+".txt","UTF-8");
-        Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         Map<String,List<LinkedHashMap<String,String>>> jsonMapData = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > personsList = jsonMapData.get("data");
         CheckBanksRequest checkBanksRequest = new CheckBanksRequest();
+        int checkedCount = 0;     // 计算成功鉴权数量，如果和总数一样说明全部鉴权成功
         for ( LinkedHashMap<String,String> singlePerson:personsList ){
             checkBanksRequest.setAccountNo(singlePerson.get("bankNo"));
             checkBanksRequest.setIdCard(singlePerson.get("idno"));
@@ -59,6 +67,7 @@ public class CheckBanksUtils implements Runnable {
             isCheckedInfo.setBankphone(checkBanksRequest.getMobile());
             CloudStaffBanksInfo queryRecord = cloudStaffBanksServiceFacade.getStaffBankByInfo(isCheckedInfo);
             if ( queryRecord.getBankActive().equals("1") ){
+                checkedCount++;
                 logger.info( "[已鉴权][" + checkBanksRequest.getStaffId() + "][" + checkBanksRequest.getName() + "][" + checkBanksRequest.getMobile() + "]");
             }else {
                 // 拼接鉴权4要素参数并触发接口
@@ -103,6 +112,7 @@ public class CheckBanksUtils implements Runnable {
                     cloudStaffBanksInfo.setBankActive("1");
                     int staffBanksRes = cloudStaffBanksServiceFacade.updateColumn(cloudStaffBanksInfo);
                     if ( staffBanksRes > 0 ){
+                        checkedCount++;
                         logger.info("[鉴权成功][" + checkBanksRequest.getStaffId() + "][" + checkBanksRequest.getName() + "][" + checkBanksRequest.getMobile() + "]");
                     }
                 }else {
@@ -111,6 +121,22 @@ public class CheckBanksUtils implements Runnable {
                 }
             }
         }
+
+        // 判断鉴权成功了多少个人
+        CloudTaskInfo cloudTaskInfo = new CloudTaskInfo();
+        cloudTaskInfo.setId(taskId);
+        if ( checkedCount == personsList.size() ){
+            // 鉴权成功的数量和总人数一致，此订单鉴权完成
+            cloudTaskInfo.setStatus((byte)3);
+        }else if ( checkedCount < personsList.size() ){
+            // 鉴权成功的数量小于总人数，此订单鉴权部分失败
+            cloudTaskInfo.setStatus((byte)1);
+        }else if ( checkedCount == 0 ){
+            // 一个都没鉴权成功，此订单全部失败
+            cloudTaskInfo.setStatus((byte)2);
+        }
+        cloudTaskInfo.setFinishtime(new Date());
+        cloudTaskServiceFacade.updateColumn(cloudTaskInfo);
         logger.info("=================线程"+threadName+"处理结束=================");
     }
 }
