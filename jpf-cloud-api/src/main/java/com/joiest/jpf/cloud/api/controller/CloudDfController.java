@@ -86,7 +86,7 @@ public class CloudDfController {
         //金额过滤
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM");
 
-        List<Map<String,Object>> filterMonthTotalList = new ArrayList<>();
+        List<Map<String,String>> filterMonthTotalList = new ArrayList<>();
         Iterator<CloudDfMoneyInterfaceInfo> it = response.getList().iterator();
         while (it.hasNext()) {
             CloudDfMoneyInterfaceInfo x = (CloudDfMoneyInterfaceInfo) it.next();
@@ -104,12 +104,12 @@ public class CloudDfController {
                 BigDecimal max = new BigDecimal(ConfigUtil.getValue("DFAPI_MAX"));
                 if ( monthTotal.compareTo(max) == 1 )
                 {
-                    Map<String,Object> filterMoney = new HashMap<>();
+                    Map<String,String> filterMoney = new HashMap<>();
                     filterMoney.put("orderid", x.getOrderid());
-                    filterMoney.put("busstaffid", x.getBusstaffid());
+                    filterMoney.put("busstaffid", x.getBusstaffid().toString());
                     filterMoney.put("batchid", x.getCompanyMoneyId());
-                    filterMoney.put("dfid", x.getId());
-                    filterMoney.put("commoney", x.getCommoney());
+                    filterMoney.put("dfid", x.getId().toString());
+                    filterMoney.put("commoney", x.getCommoney().toString());
                     filterMonthTotalList.add(filterMoney);
 
                     double total_old = response.getMonthTotal().doubleValue();
@@ -262,7 +262,6 @@ public class CloudDfController {
         int isSuc = cloudDfFqwaterServiceFacade.addCloudDfFqwater(map);
 
         //支付成功
-
         if ( resJson.has("orderStatus") && resJson.get("orderStatus").equals("05") )
         {
             SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM");
