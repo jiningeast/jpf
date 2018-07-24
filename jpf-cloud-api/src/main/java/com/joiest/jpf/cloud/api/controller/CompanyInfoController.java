@@ -207,7 +207,8 @@ public class CompanyInfoController {
     @ResponseBody
     public String getRecByMerchNo(HttpServletRequest request){
 
-        String token = request.getParameter("token");
+        //String token = request.getParameter("token");
+        String token = request.getHeader("token");
 
         Map<String,String> loginResultMap = companyIsLogin(token);
         if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
