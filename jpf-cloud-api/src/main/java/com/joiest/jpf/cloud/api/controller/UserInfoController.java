@@ -354,7 +354,7 @@ public class UserInfoController {
 
         //用户待签合同
         byte compact_status = 0;
-        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactList(Long.parseLong(uid),compact_status);
+        List<CloudCompactStaffInterfaceCustomInfo> getUserCompactList = cloudCompactStaffServiceFacade.getUserCompactListCustom(Long.parseLong(uid),compact_status);
         if ( getUserCompactList == null || getUserCompactList.isEmpty() )
         {
             uinfo.put("compact", "1");

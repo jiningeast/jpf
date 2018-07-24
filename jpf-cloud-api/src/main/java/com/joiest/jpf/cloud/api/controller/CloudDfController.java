@@ -193,7 +193,7 @@ public class CloudDfController {
         CloudDfOrderInterfaceInfo cloudDfOrderInterfaceInfo = cloudDfOrderInterfaceServiceFacade.getDfOrderByRequestOrderid(orderId);
         if(cloudDfOrderInterfaceInfo == null){
 
-            responseDa.put("code","10088");
+            responseDa.put("code","10008");
             responseDa.put("info","未获取到此单信息");
             return responseDa;
         }
