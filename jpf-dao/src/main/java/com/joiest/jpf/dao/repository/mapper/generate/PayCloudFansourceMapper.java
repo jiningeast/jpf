@@ -24,7 +24,7 @@ public interface PayCloudFansourceMapper {
      *
      * @param id
      */
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(String id);
 
     /**
      * 插入数据库记录
@@ -52,7 +52,7 @@ public interface PayCloudFansourceMapper {
      *
      * @param id
      */
-    PayCloudFansource selectByPrimaryKey(Long id);
+    PayCloudFansource selectByPrimaryKey(String id);
 
     /**
      * 选择性更新数据库记录
