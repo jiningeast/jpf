@@ -572,7 +572,7 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setBankprovince(singlePerson.get("province"));
             cloudDfMoneyInfo.setBankcity(singlePerson.get("city"));
             cloudDfMoneyInfo.setBanktype(singlePerson.get("bankName"));         // 卡类型 例如：建行 工商
-            cloudDfMoneyInfo.setBankcode(bankCardInfo.getCode());
+            cloudDfMoneyInfo.setBankcode(bankCardInfo.getFindcode());
             cloudDfMoneyInfo.setBankacctattr(Integer.parseInt(String.valueOf(singlePerson.get("type"))));
             cloudDfMoneyInfo.setAddtime(new Date());
             cloudDfMoneyInfo.setRealname(singlePerson.get("name"));
@@ -744,9 +744,9 @@ public class CloudTaskController {
 
         // 查询用户是否全部鉴权
         for (int i = 0; i < dfMoneyInfoList.size() ; i++){
-            Long staffId = dfMoneyInfoList.get(i).getBusstaffid();
             CloudStaffBanksInfo searchStaffBanksInfo = new CloudStaffBanksInfo();
-            searchStaffBanksInfo.setStaffid(staffId);
+            searchStaffBanksInfo.setBankno(dfMoneyInfoList.get(i).getBankno());
+            searchStaffBanksInfo.setBankphone(dfMoneyInfoList.get(i).getBankphone());
             CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchStaffBanksInfo);
             if ( !cloudStaffBanksInfo.getBankActive().equals("1") ){
                 // 如果有人鉴权状态不是通过就返回错误

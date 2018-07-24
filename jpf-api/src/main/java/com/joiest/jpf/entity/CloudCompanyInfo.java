@@ -20,6 +20,11 @@ public class CloudCompanyInfo {
     private String name;
 
     /**
+     * 商户别名
+     */
+    private String merchName;
+
+    /**
      * 联系人姓名
      */
     private String phonename;
@@ -139,6 +144,10 @@ public class CloudCompanyInfo {
      */
     private String address;
 
+    /**
+     * 联系人地址
+     */
+    private String addressPerson;
     /**
      * 商户类型：0=业务商户 1=代理商户
      */
@@ -429,5 +438,21 @@ public class CloudCompanyInfo {
 
     public void setSalesNo(String salesNo) {
         this.salesNo = salesNo;
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
+    }
+
+    public String getAddressPerson() {
+        return addressPerson;
+    }
+
+    public void setAddressPerson(String addressPerson) {
+        this.addressPerson = addressPerson;
     }
 }
