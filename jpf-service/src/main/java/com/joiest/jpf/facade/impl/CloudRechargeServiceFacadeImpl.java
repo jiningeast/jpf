@@ -284,6 +284,8 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
                 if( infoStatus == 2 || infoStatus == 0){ //更新为已审核通过 或取消申请
                     recordData.setKfremarks(infoKfremarks);
                     recordData.setStatus(infoStatus);
+                    recordData.setShenhetime(curretDate); //审核时间
+
                     if( infoStatus == 2 ){//审核通过添加合同编号
                         recordData.setPactno(infoPactno);
                         if( StringUtils.isBlank(infoPactno) || infoPactno==null ){
@@ -409,28 +411,14 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         //添加实物
         int res = 0;
         switch (cloudRechargeInfo.getStatus()){
-            case 1:
-                /*if( infoStatus == 2 || infoStatus == 0){ //更新为已审核通过 或取消申请
+            case 3:
+                if( infoStatus == 8 ){ //审核拒绝
                     recordData.setKfremarks(infoKfremarks);
                     recordData.setStatus(infoStatus);
+                    recordData.setChargetime(curretDate);
                     res = payCloudRechargeMapper.updateByPrimaryKeySelective(recordData); //指定字段更新
 
-                }*/
-                break;
-            case 2:
-
-                /*if( infoStatus == 3){ //更新为已支付
-                    if( StringUtils.isBlank(cloudRechargeInfo.getImgurl()) || cloudRechargeInfo.getImgurl() ==null ){
-                        throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "请先上传付款凭证");
-                    }
-                    recordData.setKfremarks(infoKfremarks);
-                    recordData.setStatus(infoStatus);
-                    res = payCloudRechargeMapper.updateByPrimaryKeySelective(recordData); //指定字段更新//
-
-                }*/
-                break;
-            case 3:
-                if( infoStatus == 4){ //更新为已充值开票中
+                }else if( infoStatus == 4 ){ //更新为已充值开票中
 
                     recordData.setKfremarks(infoKfremarks);
                     recordData.setStatus(infoStatus);
@@ -465,18 +453,18 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
                 }
                 break;
             case 5:
-                /*if( infoStatus == 6){ //更新为已发货
+                if( infoStatus == 6){ //更新为已发货
                     recordData.setKfremarks(infoKfremarks);
                     recordData.setStatus(infoStatus);
                     res = payCloudRechargeMapper.updateByPrimaryKeySelective(recordData); //指定字段更新
 
                 }else{
                     throw new JpfException(JpfErrorInfo.DAL_ERROR, "不能更新状态为："+request.getStatus_cn());
-                }*/
+                }
                 break;
             case 6:
 
-                /*if( infoStatus == 7){ //更新为已完成
+                if( infoStatus == 7){ //更新为已完成
 
                     recordData.setKfremarks(infoKfremarks);
                     recordData.setStatus(infoStatus);
@@ -484,7 +472,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
                 }else{
                     throw new JpfException(JpfErrorInfo.DAL_ERROR, "不能更新状态为："+request.getStatus_cn());
-                }*/
+                }
                 break;
             default:
                 //throw new JpfException(JpfErrorInfo.DAL_ERROR, "不能更新状态为："+cloudRechargeInfo.getStatus()+"=="+infoStatus);
@@ -541,7 +529,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             BigDecimal cloudMoney = cloudCompanyInfo.getCloudmoney();
             BigDecimal rechargeMoney = cloudRechargeInfo.getMoney();
             BigDecimal afterRechargeMoney = cloudMoney.add(rechargeMoney); //充值后金额
-            String code = Md5Encrypt.md5(comId+cloudMoney+"test","UTF-8");   //加密规则：  id+金额+key
+            String code = Md5Encrypt.md5(comId+afterRechargeMoney+"test","UTF-8");   //加密规则：  id+金额+key
             Date updated = new Date();
 
             PayCloudCompany payCloudCompany_insert = new PayCloudCompany();
@@ -790,13 +778,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (!payCloudRecharge.getMerchNo().equals(merchNo)) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[merchNo]企业商户号不一致");
         }
-        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())) {
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())&&!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT_REJECT.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "状态不匹配，不可以操作");
         }
         PayCloudRechargeExample payCloudRechargeExample = new PayCloudRechargeExample();
         PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
         payCloudRechargeExampleCriteria.andIdEqualTo(reqId);
-        payCloudRechargeExampleCriteria.andStatusEqualTo(EnumConstants.RechargeStatus.AUDIT.value());
+        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.AUDIT_REJECT.value()));
         PayCloudRecharge record = new PayCloudRecharge();
         record.setImgurl(imgurl);
         record.setStatus(EnumConstants.RechargeStatus.PAY.value());
@@ -840,7 +828,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
         payCloudRechargeExampleCriteria.andIdEqualTo(reqId);
         payCloudRechargeExampleCriteria.andPactstatusEqualTo(EnumConstants.RechargePactStatus.UNCONFIRMED.value());
-        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.APPLYING.value(),EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.PAY.value(),EnumConstants.RechargeStatus.CANCEL.value()));
+        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET_OPENING.value(),EnumConstants.RechargeStatus.RECHARGE_AND_TICKET.value(),EnumConstants.RechargeStatus.DELIVERED.value()));
         PayCloudRecharge record = new PayCloudRecharge();
         record.setPactstatus(EnumConstants.RechargePactStatus.CONFIRMED.value());
         payCloudRechargeMapper.updateByExampleSelective(record, payCloudRechargeExample);

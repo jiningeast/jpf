@@ -49,7 +49,9 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付方式：</td>
                     <td>
-                        ${cloudRechargeInfo.payway}
+                    <c:if test="${cloudRechargeInfo.payway == 1 }">
+                        线下支付
+                    </c:if>
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">操作人ID：</td>
                     <td>
@@ -84,6 +86,16 @@
 
                 </tr>
                 <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">代理平台费率0.00:不收取费率：</td>
+                    <td >
+                        ${cloudRechargeInfo.agentRate}
+                    </td>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务平台费费率：</td>
+                    <td >
+                        ${cloudRechargeInfo.salesRate}
+                    </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">代理手续费：</td>
                     <td >
                         ${cloudRechargeInfo.agentFeemoney}
@@ -94,21 +106,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">代理平台费率0.00:不收取费率：</td>
-                    <td >
-                        ${cloudRechargeInfo.agentRate}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">服务平台费费率：</td>
-                    <td >
-                        ${cloudRechargeInfo.salesRate}
-                    </td>
-                </tr>
-
-                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付凭证：</td>
                     <td colspan="3">
                         <c:if test="${cloudRechargeInfo.imgurl!='' && cloudRechargeInfo.imgurl!=null }">
                             <img width="200" height="200" src="${cloudRechargeInfo.imgurl}" />
+                        </c:if>
+                        <c:if test="${cloudRechargeInfo.imgurl =='' || cloudRechargeInfo.imgurl ==null }">
+                            未上传付款凭证
                         </c:if>
                     </td>
                 </tr>
@@ -129,7 +133,7 @@
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">充值时间：</td>
                     <td>
-                        ${cloudRechargeInfo.chargetime}
+                        <fmt:formatDate value="${cloudRechargeInfo.chargetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                     </td>
                 </tr>
                 <tr>
@@ -137,9 +141,9 @@
                     <td >
                         ${cloudRechargeInfo.status_cn}
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">需求确认时间：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">期望完成时间：</td>
                     <td >
-                        ${cloudRechargeInfo.pacttime}
+                        <fmt:formatDate value="${cloudRechargeInfo.pacttime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                     </td>
                 </tr>
             </table>
@@ -155,6 +159,7 @@
                                 <option value="2">已审核(待上传付款凭证)</option>
                             </c:if>
                             <c:if test="${auditPageType == 2 }">
+                                <option value="8">审核拒绝</option>
                                 <option value="3">已支付(已上传凭证)</option>
                                 <option value="4">已充值开票中</option>
                                 <option value="5">已充值已开票</option>
@@ -223,24 +228,49 @@
                 }
                 var queryArray = $('#auditForm').serializeArray();
                 var postData = parsePostData(queryArray);
-                $.ajax({
-                    type: 'post',
-                    url: reqUrl ,
-                    data: postData,
-                    dataType: 'json',
-                    success: function (msg) {
-                        if (msg.retCode != '0000') {
-                            $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-                        } else {
-                            $.messager.alert('消息提示', msg.retMsg, 'error');
-                            $('#infoDiv').window('close');
-                            $('#dg').datagrid('reload');
+                if( postData.status==4 ){
+                    $.messager.confirm('Confirm','充值前请确保充值金额与上传付款凭证金额一致',function(r){
+                        if (r){
+                            $.ajax({
+                                type: 'post',
+                                url: reqUrl ,
+                                data: postData,
+                                dataType: 'json',
+                                success: function (msg) {
+                                    if (msg.retCode != '0000') {
+                                        $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
+                                    } else {
+                                        $.messager.alert('消息提示', msg.retMsg, 'error');
+                                        $('#infoDiv').window('close');
+                                        $('#dg').datagrid('reload');
+                                    }
+                                },
+                                error: function () {
+                                    $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+                                }
+                            });
                         }
-                    },
-                    error: function () {
-                        $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                    }
-                });
+                    });
+                }else{
+                    $.ajax({
+                        type: 'post',
+                        url: reqUrl ,
+                        data: postData,
+                        dataType: 'json',
+                        success: function (msg) {
+                            if (msg.retCode != '0000') {
+                                $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
+                            } else {
+                                $.messager.alert('消息提示', msg.retMsg, 'error');
+                                $('#infoDiv').window('close');
+                                $('#dg').datagrid('reload');
+                            }
+                        },
+                        error: function () {
+                            $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+                        }
+                    });
+                }
             }
         });
 

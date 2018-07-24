@@ -586,6 +586,66 @@ public class PayCloudDfOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andBusstaffidIsNull() {
+            addCriterion("busstaffid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidIsNotNull() {
+            addCriterion("busstaffid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidEqualTo(Long value) {
+            addCriterion("busstaffid =", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidNotEqualTo(Long value) {
+            addCriterion("busstaffid <>", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidGreaterThan(Long value) {
+            addCriterion("busstaffid >", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidGreaterThanOrEqualTo(Long value) {
+            addCriterion("busstaffid >=", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidLessThan(Long value) {
+            addCriterion("busstaffid <", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidLessThanOrEqualTo(Long value) {
+            addCriterion("busstaffid <=", value, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidIn(List<Long> values) {
+            addCriterion("busstaffid in", values, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidNotIn(List<Long> values) {
+            addCriterion("busstaffid not in", values, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidBetween(Long value1, Long value2) {
+            addCriterion("busstaffid between", value1, value2, "busstaffid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusstaffidNotBetween(Long value1, Long value2) {
+            addCriterion("busstaffid not between", value1, value2, "busstaffid");
+            return (Criteria) this;
+        }
+
         public Criteria andApplyamtIsNull() {
             addCriterion("applyAmt is null");
             return (Criteria) this;
@@ -1603,6 +1663,66 @@ public class PayCloudDfOrderExample {
 
         public Criteria andDfstatusNotBetween(String value1, String value2) {
             addCriterion("dfStatus not between", value1, value2, "dfstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeIsNull() {
+            addCriterion("paytime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeIsNotNull() {
+            addCriterion("paytime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeEqualTo(Date value) {
+            addCriterion("paytime =", value, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeNotEqualTo(Date value) {
+            addCriterion("paytime <>", value, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeGreaterThan(Date value) {
+            addCriterion("paytime >", value, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("paytime >=", value, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeLessThan(Date value) {
+            addCriterion("paytime <", value, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeLessThanOrEqualTo(Date value) {
+            addCriterion("paytime <=", value, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeIn(List<Date> values) {
+            addCriterion("paytime in", values, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeNotIn(List<Date> values) {
+            addCriterion("paytime not in", values, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeBetween(Date value1, Date value2) {
+            addCriterion("paytime between", value1, value2, "paytime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaytimeNotBetween(Date value1, Date value2) {
+            addCriterion("paytime not between", value1, value2, "paytime");
             return (Criteria) this;
         }
 

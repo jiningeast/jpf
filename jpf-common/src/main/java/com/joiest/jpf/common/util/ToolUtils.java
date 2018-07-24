@@ -38,6 +38,19 @@ public class ToolUtils {
     }
 
     /**
+     * base64编码&返回
+     * @param jsonStr
+     * @return
+     */
+    public static String toBase64(String jsonStr)
+    {
+        String base64Str = Base64CustomUtils.base64Encoder(jsonStr);
+        base64Str = base64Str.replaceAll("\r","");
+        base64Str = base64Str.replaceAll("\n","");
+        return base64Str;
+    }
+
+    /**
      * 将url中的参数转换成map
      * 场景：aaa=AAA&bbb=BBB&ccc=CCC 这样的请求参数转换成Map
      * @param urlparam 带分隔的url参数

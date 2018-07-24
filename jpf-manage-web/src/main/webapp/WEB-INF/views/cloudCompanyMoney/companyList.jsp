@@ -37,8 +37,8 @@
                 columns : [[
                     {field:'id', title:'ID',width:'4%'},
                     {field:'fid', title:'批次定单号',width:'10%'},
-                    {field:'agent_no', title:'代理聚合商户编号',width:'8%'},
-                    {field:'merch_no', title:'到账聚合商户编号',width:'8%'},
+                    {field:'agentNo', title:'代理聚合商户编号',width:'8%'},
+                    {field:'merchNo', title:'到账聚合商户编号',width:'8%'},
                     {field:'commoney', title:'发放总金额',width:'5%'},
                     {field:'uid', title:'企业添加人',width:'5%'},
                     {field:'batchno', title:'用户批次号',width:'5%'},

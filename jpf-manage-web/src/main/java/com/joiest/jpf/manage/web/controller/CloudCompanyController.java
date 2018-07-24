@@ -2,16 +2,15 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
-import com.joiest.jpf.entity.CloudCompanyInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
-import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
-import com.joiest.jpf.entity.UserInfo;
-import com.joiest.jpf.facade.CloudCompanyServiceFacade;
-import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,13 @@ public class CloudCompanyController {
 
     @Autowired
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
+
+    @Autowired
+    private BankCardServiceFacade bankCardServiceFacade;
+    @Autowired
+    private CloudCompanyBankServiceFacade cloudCompanyBankServiceFacade;
+    @Autowired
+    private BankServiceFacade bankServiceFacade;
 
     @Autowired
     private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
@@ -88,8 +94,17 @@ public class CloudCompanyController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
         int account = userInfo.getId();
         String ipAddress= ToolUtils.getIpAddr(serRequest);
+        // 根据卡号查询银行编码
+        //获取银行信息
+        BankInfo bankInfos = bankServiceFacade.getBankInfo(request.getBankid());
+
+
         Date date =new Date();
-        JpfResponseDto redDto =  cloudCompanyServiceFacade.addCloudCompany(request, account,ipAddress);
+        JpfResponseDto redDto =  cloudCompanyServiceFacade.addCloudCompany(request, account,ipAddress,bankInfos);
+        //根据卡号获取银行卡所属信息
+
+
+
         //发送短信
         if(redDto.getRetCode().equals("10002")){
             String passlogin =redDto.getRemark();//获取登录密码
@@ -177,7 +192,11 @@ public class CloudCompanyController {
         } else {
             cloudCompanyInfo.setType((byte)0);
         }
+        String Merchno=cloudCompanyInfo.getMerchNo();
+        //商户对公帐户信息
+        CloudCompanyBankInfo cloudCompanyBankInfo = cloudCompanyBankServiceFacade.getCompanyBankInfoByMerchNo(Merchno);
         modelMap.addAttribute("cloudCompanyInfo", cloudCompanyInfo);
+        modelMap.addAttribute("cloudCompanyBankInfo", cloudCompanyBankInfo);
         return new ModelAndView("cloudCompany/companyEdit", modelMap);
     }
 
@@ -204,7 +223,11 @@ public class CloudCompanyController {
 
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
         int account = userInfo.getId();
-        return cloudCompanyServiceFacade.editCloudCompany(request, account);
+        // 根据卡号查询银行编码
+        //获取银行信息
+        BankInfo bankInfos = bankServiceFacade.getBankInfo(request.getBankid());
+
+        return cloudCompanyServiceFacade.editCloudCompany(request, account,bankInfos);
     }
 
     /**

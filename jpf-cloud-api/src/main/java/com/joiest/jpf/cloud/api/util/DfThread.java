@@ -65,6 +65,7 @@ public class DfThread extends Thread{
             try {
                 int listCount = list.size();
 
+                SimpleDateFormat myfmt_api = new SimpleDateFormat("yyyyMMddHHmmss");
                 //更新任务状态
                 CloudDfTaskInterfaceInfo taskBeginInfo = new CloudDfTaskInterfaceInfo();
                 taskBeginInfo.setId(this.taskId);
@@ -77,7 +78,7 @@ public class DfThread extends Thread{
                     //拼装数据
                     Map<String,Object> requestMap = new HashMap<>();
                     requestMap.put("outOrderNo",one.getOrderid());
-                    requestMap.put("orderTime",myfmt.format(new Date()));   //yyyyMMddHHmmss
+                    requestMap.put("orderTime",myfmt_api.format(new Date()));   //yyyyMMddHHmmss
                     requestMap.put("finaCode",one.getFinacode());
                     requestMap.put("payeeAcct",one.getPayeeacct());
                     requestMap.put("payeeName",one.getPayeename());
@@ -115,6 +116,7 @@ public class DfThread extends Thread{
                     info.setReturncontent(resJson.get("resultStr").toString());
                     info.setDfstatus(orderStatus);
                     info.setTranno(tranNo);
+                    info.setPaytime(new Date());
                     int res_up = cloudDfOrderInterfaceServiceFacade.updateDfOrderStatus(info);
                 }
 
@@ -129,7 +131,7 @@ public class DfThread extends Thread{
                     int res_upTaskComplete = cloudDfTaskInterfaceServiceFacade.updateTask(taskCompleteInfo);
                 }
 
-                sbf.append("\n\nTime:" + myfmt.format(date) + " -数据写入 success:");
+                sbf.append("\n\nTime:" + myfmt.format(date) + " -代付 success:");
                 sbf.append("\n当前地址:" + "doDfApi");
                 sbf.append("\n任务批次号:" + batchno);
                 sbf.append("\n信息: success");

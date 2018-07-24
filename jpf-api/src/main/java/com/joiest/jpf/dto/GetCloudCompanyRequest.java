@@ -10,6 +10,10 @@ public class GetCloudCompanyRequest {
     private String id;
 
     /**
+     * 银行名称
+     */
+    private String bankid;
+    /**
      * 聚合商户编号
      */
     private String merchNo;
@@ -19,7 +23,10 @@ public class GetCloudCompanyRequest {
      */
     private String name;
 
-
+    /**
+     * 商户别名
+     */
+    private String merchName;
 
     /**
      * 公司类别
@@ -155,6 +162,70 @@ public class GetCloudCompanyRequest {
 
     private String addtimeEnd;
 
+    /**
+     * 联系人地址
+     */
+    private String addressPerson;
+
+    /**
+     * 纳税人类型：01:一般纳税人 02:小规模纳税人
+     */
+    private String taxpayertype;
+
+
+
+    /**
+     * 纳税人识别号
+     */
+    private String tin;
+
+    /**
+     * 单位注册地址
+     */
+    private String address;
+
+    /**
+     * 联系人邮箱
+     */
+    private String phoneemail;
+
+
+    /**
+     * 省份
+     */
+    private Long bankProvince;
+
+    /**
+     * 城市
+     */
+    private Long bankCity;
+
+
+    /**
+     * 企业对公账户
+     */
+    private String bankno;
+
+    /**
+     * 开户行全称
+     */
+    private String banksubname;
+
+    /**
+     * 开户银行类型
+     */
+    private Long banktype;
+
+
+    /**
+     * 开户名你
+     */
+    private String accountName;
+
+    /**
+     * 银行名称
+     */
+    private String bankname;
 
     public String getId() {
         return id;
@@ -402,5 +473,117 @@ public class GetCloudCompanyRequest {
 
     public void setAddtimeEnd(String addtimeEnd) {
         this.addtimeEnd = addtimeEnd;
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
+    }
+
+    public String getAddressPerson() {
+        return addressPerson;
+    }
+
+    public void setAddressPerson(String addressPerson) {
+        this.addressPerson = addressPerson;
+    }
+
+    public String getTaxpayertype() {
+        return taxpayertype;
+    }
+
+    public void setTaxpayertype(String taxpayertype) {
+        this.taxpayertype = taxpayertype;
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Long getBankProvince() {
+        return bankProvince;
+    }
+
+    public void setBankProvince(Long bankProvince) {
+        this.bankProvince = bankProvince;
+    }
+
+    public Long getBankCity() {
+        return bankCity;
+    }
+
+    public void setBankCity(Long bankCity) {
+        this.bankCity = bankCity;
+    }
+
+    public String getBankno() {
+        return bankno;
+    }
+
+    public void setBankno(String bankno) {
+        this.bankno = bankno;
+    }
+
+    public String getBanksubname() {
+        return banksubname;
+    }
+
+    public void setBanksubname(String banksubname) {
+        this.banksubname = banksubname;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getBankname() {
+        return bankname;
+    }
+
+    public void setBankname(String bankname) {
+        this.bankname = bankname;
+    }
+
+    public String getPhoneemail() {
+        return phoneemail;
+    }
+
+    public void setPhoneemail(String phoneemail) {
+        this.phoneemail = phoneemail;
+    }
+
+    public String getBankid() {
+        return bankid;
+    }
+
+    public void setBankid(String bankid) {
+        this.bankid = bankid;
+    }
+
+    public Long getBanktype() {
+        return banktype;
+    }
+
+    public void setBanktype(Long banktype) {
+        this.banktype = banktype;
     }
 }

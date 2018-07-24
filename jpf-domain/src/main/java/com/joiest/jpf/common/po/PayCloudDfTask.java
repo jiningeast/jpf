@@ -71,6 +71,11 @@ public class PayCloudDfTask implements Serializable {
     private Integer status;
 
     /**
+     * 备注
+     */
+    private String remarks;
+
+    /**
      * 添加时间
      */
     private Date created;
@@ -186,6 +191,14 @@ public class PayCloudDfTask implements Serializable {
         this.status = status;
     }
 
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks == null ? null : remarks.trim();
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -224,6 +237,7 @@ public class PayCloudDfTask implements Serializable {
         sb.append(", failMoney=").append(failMoney);
         sb.append(", insertStatus=").append(insertStatus);
         sb.append(", status=").append(status);
+        sb.append(", remarks=").append(remarks);
         sb.append(", created=").append(created);
         sb.append(", updated=").append(updated);
         sb.append("]");
@@ -259,6 +273,7 @@ public class PayCloudDfTask implements Serializable {
             && (this.getFailMoney() == null ? other.getFailMoney() == null : this.getFailMoney().equals(other.getFailMoney()))
             && (this.getInsertStatus() == null ? other.getInsertStatus() == null : this.getInsertStatus().equals(other.getInsertStatus()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getRemarks() == null ? other.getRemarks() == null : this.getRemarks().equals(other.getRemarks()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
     }
@@ -283,6 +298,7 @@ public class PayCloudDfTask implements Serializable {
         result = prime * result + ((getFailMoney() == null) ? 0 : getFailMoney().hashCode());
         result = prime * result + ((getInsertStatus() == null) ? 0 : getInsertStatus().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getRemarks() == null) ? 0 : getRemarks().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
         return result;

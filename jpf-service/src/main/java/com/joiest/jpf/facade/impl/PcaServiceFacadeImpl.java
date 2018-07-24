@@ -84,6 +84,28 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         }
         return pcaInfos;
     }
+
+
+    /**
+     * 获取地区通过catid
+     * @param catid
+     * @return
+     */
+    @Override
+    public PcaInfo getPcaByCatid(Integer catid){
+
+        PayPca payPca = payPcaMapper.selectByPrimaryKey(catid);
+        if(payPca == null){
+
+            return null;
+        }
+        PcaInfo pcaInfo = new PcaInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayPca.class,PcaInfo.class,false);
+        beanCopier.copy(payPca,pcaInfo,null);
+        return pcaInfo;
+    }
+
     @Override
     public List<PcaInfo> getPca(long page, long pageSize) {
         PayPcaExample example = new PayPcaExample();

@@ -49,6 +49,10 @@ public class CloudCompanyBankInfo {
     private String banksubname;
 
     /**
+     * 开户名你
+     */
+    private String accountName;
+    /**
      * 联系电话
      */
     private String mobile;
@@ -170,5 +174,13 @@ public class CloudCompanyBankInfo {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 }

@@ -76,6 +76,7 @@ public class CloudRechargeController {
         //定义财务角色对应的状态值
         List<Byte> statusArr=new ArrayList<Byte>();
         statusArr.add((byte)3);  //已支付(已上传凭证)
+        statusArr.add((byte)4);  //已充值(已上传凭证)
         statusArr.add((byte)5); //
         statusArr.add((byte)6); //
         statusArr.add((byte)7); //

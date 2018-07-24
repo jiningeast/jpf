@@ -27,6 +27,13 @@
                     </td>
                 </tr>
                 <tr>
+                    <td  style="text-align: right;width:40%" bgcolor="#f1f1f1">商户别名：</td>
+                    <td>
+                        <input id="merchName" name="merchName" type="text" style="width:150px" class="easyui-textbox"
+                               required="true" value=""/>
+                    </td>
+                </tr>
+                <tr>
                     <td  style="text-align: right;width:30%" bgcolor="#f1f1f1">联系人姓名：</td>
                     <td>
                         <input id="phonename" name="phonename" type="text" style="width:150px" class="easyui-textbox"
@@ -38,6 +45,13 @@
                     <td>
                         <input id="phone" name="phone" type="text" style="width:150px" class="easyui-textbox"
                                value="" data-options="required:true,validType:'phoneRex'"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">联系人地址：</td>
+                    <td>
+                        <input id="addressPerson" data-options="required:true"  name="addressPerson" type="text" style="width:150px" class="easyui-textbox"
+                               value="" />
                     </td>
                 </tr>
                  <tr>
@@ -64,6 +78,24 @@
                         </select>
                     </td>
                         </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">纳税人类型：</td>
+                    <td>
+                        <select id="taxpayertype" name="taxpayertype" data-options="required:true" class="easyui-combobox"
+                                style="width:120px;">
+
+                            <option value="01">一般纳税人</option>
+                            <option value="02">小规模纳税人</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">纳税人识别号：</td>
+                    <td>
+                        <input id="tin" name="tin" type="text" style="width:150px" class="easyui-textbox"
+                               value="" data-options="required:true"/>
+                    </td>
+                </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
@@ -104,6 +136,13 @@
                                required="true" value=""/>
                     </td>
                     </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">营业执照编号：</td>
+                    <td>
+                        <input id="certificate" name="certificate" type="text" style="width:150px" class="easyui-textbox"
+                               value="" data-options="required:true"/>
+                    </td>
+                </tr>
                     <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业资质：</td>
                     <td>
@@ -134,31 +173,12 @@
 
                     </td>
                         </tr>
+            </table>
+                <table cellpadding=3 class="table table-bordered" align="center">
+                    <h2 align="center">客户支持</h2>
                 <tr>
 
-                    <%--     <td style="text-align:right;">短信发送：</td>
-                         <td style="text-align:left">
-                                 <span class="radioSpan">
-                                     <input type="radio" name="issms" value="0">不发送</input>
-                                     <input type="radio" name="issms" value="2">发送</input>
-                                 </span>
-                         </td>--%>
-                    <%--  <td style="text-align: right;background-color: #f1f1f1;">开户名称：</td>
-                      <td>
-                          <input id="bankname" name="bankname" type="text" style="width:150px" class="easyui-textbox"
-                                  value=""/>
-                      </td>
-                      <td style="text-align: right;background-color: #f1f1f1;">对公账户：</td>
-                      <td>
-                          <input id="bankno" name="bankno" type="text" style="width:150px" class="easyui-textbox"
-                                  value=""/>
-                      </td>
-                      <td style="text-align: right;background-color: #f1f1f1;">开户银行：</td>
-                      <td>
-                          <input id="banktype" name="banktype" type="text" style="width:150px" class="easyui-textbox"
-                                  value=""/>
-                      </td>--%>
-                    <td style="text-align: right;background-color: #f1f1f1;">客户经理：</td>
+                    <td style="text-align: right;width:40%" bgcolor="#f1f1f1">客户经理：</td>
                     <td>
                         <input id="serviclinkuser" name="serviclinkuser" type="text" style="width:150px"
                                class="easyui-textbox" value=""/>
@@ -167,21 +187,86 @@
                  <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">手机号：</td>
                     <td>
-                        <input id="linkphone" name="linkphone" type="text" style="width:150px" class="easyui-textbox"
+                        <input id="linkphone" data-options="validType:'phoneRex'" name="linkphone" type="text" style="width:150px" class="easyui-textbox"
                                value=""/>
                     </td>
                      </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">联系人邮箱：</td>
+                    <td>
+                        <input id="phoneemail" name="phoneemail" data-options="validType:'email'" type="text" style="width:150px" class="easyui-textbox"
+                               value=""/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1; width: 7%">单位注册地址：</td>
+                    <td>
+                        <input id="address" name="address" type="text" style="width:150px" class="easyui-textbox"
+                               value="" />
+                    </td>
+                </tr>
+            </table>
+            <table cellpadding=3 class="table table-bordered" align="center">
+                <h2 align="center">对公账户</h2>
 
+
+                <tr>
+
+                    <td style="text-align: right;width:40%" bgcolor="#f1f1f1">对公账户：</td>
+                    <td>
+                        <input class="easyui-numberbox" data-options="required:true"  id="bankno" name="bankno" type="text" style="width:150px"
+                               class="easyui-textbox" value=""/>
+                    </td>
+                </tr>
+
+                <tr>
+
+                    <td style="text-align: right;width:40%" bgcolor="#f1f1f1">开户名称：</td>
+                    <td>
+                        <input id="accountName" data-options="required:true"  name="accountName" type="text" style="width:150px"
+                               class="easyui-textbox" value=""/>
+                    </td>
+                </tr>
+                <td style="text-align: right;background-color: #f1f1f1;">开户银行类型：</td>
+                <td>
+                    <select id="banktype_m" name="banktype" data-options="required:true"  class="easyui-combobox" data-options="required:true" style="width:100px;">
+                    </select>
+                </td>
+
+
+                <tr>
+
+                    <td style="text-align: right;width:40%" bgcolor="#f1f1f1">开户行全称：</td>
+                    <td>
+                        <input id="banksubname" name="banksubname" data-options="required:true"  type="text" style="width:150px"
+                               class="easyui-textbox" value=""/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">银行开户名称：</td>
+                    <td>
+                        <input id="bankid" name="bankid" data-options="required:true"  type="text" class="easyui-textbox" style="width:175px;" value="${merchantBankInfo.bankname}" data-options="required:true">
+                    </td>
+                </tr>
+                <tr>
+
+                    <td style="text-align: right;background-color: #f1f1f1;">省份：</td>
+                    <td>
+                        <select id="bankProvince_m" name="bankProvince" class="easyui-combobox" style="width:100px;" data-options="required:true">
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td style="text-align: right;background-color: #f1f1f1;">城市：</td>
+                    <td>
+                        <select id="bankCity_m" name="bankCity" class="easyui-combobox" style="width:100px;" data-options="required:true">
+                        </select>
+                    </td>
+                </tr>
             </table>
         </form>
-        <!--上传图片、文件的代码-->
-        <%--   <form action="${pageContext.request.contextPath}/cloudCompany/upload" method="post" enctype="multipart/form-data" >
-               <input type="file" name="file">
-               <input type="text" name="filesss" value="${pageContext.request.contextPath}/uploads">
-               <input type="submit">
-           </form>
-           <!--接收-->
-           <img src="${pageContext.request.contextPath}/${img}"/>--%>
+
     </div>
     <div region="south" border="false"
          style="text-align: right; height: 30px; line-height: 30px;">
@@ -225,6 +310,7 @@
     function initData() {
         $('#status_p').combobox('select', '${rolesInfo.status}');
         <%--$('#paytype').combobox('select', '${rolesInfo.zftype}');--%>
+
     }
     function doUploadY() {
         var formData = new FormData();
@@ -275,6 +361,46 @@
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
         setTimeout("initData()", 500);
         // initData();
+        $("#bankid").combobox({
+            url : '../param/getBankAll',
+            valueField : 'id',
+            textField : 'paybankname',
+            onLoadSuccess : function () {
+                $('#bankid').combobox('setValue', '${merchantBankInfo.bankid}');
+            }
+        });
+        $('#editForm #province_m').combobox({
+            url:'../param/getPca',
+            valueField:'catid',
+            textField:'cat',
+            onSelect: function(record){
+                $('#editForm #city_m').combobox({
+                    url:'../param/getPca?pid=' + record.catid,
+                    valueField:'catid',
+                    textField:'cat'
+                });
+            }
+        });
+
+        $('#editForm #bankProvince_m').combobox({
+            url:'../param/getPca',
+            valueField:'catid',
+            textField:'cat',
+            onSelect: function(record){
+                $('#editForm #bankCity_m').combobox({
+                    url:'../param/getPca?pid=' + record.catid,
+                    valueField:'catid',
+                    textField:'cat'
+                });
+            }
+        });
+
+        $('#editForm #banktype_m').combobox({
+            url:'../param/getType?pid=17',
+            valueField:'catid',
+            textField:'cat'
+        });
+
 
         $("#saveBtn_m").linkbutton({
             onClick: function () {

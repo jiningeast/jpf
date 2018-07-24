@@ -20,6 +20,10 @@ public class PayCloudCompanyCustom {
     private String name;
 
     /**
+     * 商户别名
+     */
+    private String merchName;
+    /**
      * 联系人姓名
      */
     private String phonename;
@@ -119,6 +123,32 @@ public class PayCloudCompanyCustom {
      */
     private String certificate;
 
+
+    /**
+     * 联系人邮箱
+     */
+    private String phoneemail;
+
+    /**
+     * 纳税人类型：01:一般纳税人 02:小规模纳税人
+     */
+    private String taxpayertype;
+
+    /**
+     * 纳税人识别号
+     */
+    private String tin;
+
+    /**
+     * 单位注册地址
+     */
+    private String address;
+
+    /**
+     * 联系人地址
+     */
+    private String addressPerson;
+
     /**
      * 代理平台费率，0.00:不收取费率
      */
@@ -147,6 +177,8 @@ public class PayCloudCompanyCustom {
      * 业务商户号
      */
     private String salesNo;
+
+
 
     public String getId() {
         return id;
@@ -378,5 +410,53 @@ public class PayCloudCompanyCustom {
 
     public void setSalesNo(String salesNo) {
         this.salesNo = salesNo;
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
+    }
+
+    public String getAddressPerson() {
+        return addressPerson;
+    }
+
+    public void setAddressPerson(String addressPerson) {
+        this.addressPerson = addressPerson;
+    }
+
+    public String getPhoneemail() {
+        return phoneemail;
+    }
+
+    public void setPhoneemail(String phoneemail) {
+        this.phoneemail = phoneemail;
+    }
+
+    public String getTaxpayertype() {
+        return taxpayertype;
+    }
+
+    public void setTaxpayertype(String taxpayertype) {
+        this.taxpayertype = taxpayertype;
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

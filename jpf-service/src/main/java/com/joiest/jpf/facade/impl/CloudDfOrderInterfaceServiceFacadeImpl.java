@@ -52,6 +52,7 @@ public class CloudDfOrderInterfaceServiceFacadeImpl implements CloudDfOrderInter
             payCloudDfOrder.setBankcity(one.getBankcity());
             payCloudDfOrder.setCreated(new Date());
             payCloudDfOrder.setStatus(0);
+            payCloudDfOrder.setBusstaffid(one.getBusstaffid());
 
             res =  payCloudDfOrderMapper.insertSelective(payCloudDfOrder);
             if ( res != 1 )
