@@ -47,6 +47,10 @@ public class CompanyInfoController {
 
     @Autowired
     private CloudCompanySalesServiceFacade cloudCompanySalesServiceFacade;
+
+    @Autowired
+    private CloudCompanyBankServiceFacade cloudCompanyBankServiceFacade;
+
     private String uid;
     private CloudEmployeeInfo companyInfo;
     //判断企业是否登录
@@ -210,28 +214,55 @@ public class CompanyInfoController {
         {
             return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
         }
-        CloudCompanyInfo cloudCompanyInfo =cloudCompanyServiceFacade.getRecByMerchNo(companyInfo.getMerchNo());
-        JSONObject res = null;
+        CloudCompanyInfo cloudCompanyInfo = cloudCompanyServiceFacade.getRecByMerchNo(companyInfo.getMerchNo());
+        Map<String, String> merchInfo = new HashMap<String, String>();
         if(cloudCompanyInfo != null){
 
+            merchInfo.put("merchNo", cloudCompanyInfo.getMerchNo());//商户平台ID
+            merchInfo.put("name", cloudCompanyInfo.getName());//企业名称
+            merchInfo.put("certificate", cloudCompanyInfo.getCertificate());//营业执照注册号
+            merchInfo.put("bslicense", cloudCompanyInfo.getBslicense());//营业执照影印件
+            merchInfo.put("taxpayertype", cloudCompanyInfo.getTaxpayertype());//纳税人类型
+            merchInfo.put("tin", cloudCompanyInfo.getTin());//纳税人识别号
+            merchInfo.put("address", cloudCompanyInfo.getAddress());//单位注册地址
+            merchInfo.put("serviclinkuser", cloudCompanyInfo.getServiclinkuser());//客户经理
+            merchInfo.put("phone", cloudCompanyInfo.getLinkphone());//手机号
+            merchInfo.put("email", cloudCompanyInfo.getLinkemail());//邮箱
+            merchInfo.put("merch_name", cloudCompanyInfo.getMerchName());//别名
+
+            merchInfo.put("linkname", companyInfo.getLinkname());//联系人姓名
+            merchInfo.put("linkphone", companyInfo.getLinkphone());//联系人手机号
+            merchInfo.put("linkemail", companyInfo.getLinkemail());//联系人邮箱
+            /*联系地址 = 省份 + 城市 + 地址详情*/
+            merchInfo.put("province", companyInfo.getProvince().toString());//省份
+            merchInfo.put("city", companyInfo.getCity().toString());//城市
+            merchInfo.put("linkaddress", companyInfo.getAddress());//联系地址详情
+
+            PcaInfo pcaProInfo = pcaServiceFacade.getPcaByCatid(new Integer(companyInfo.getProvince().toString()));
+            PcaInfo pcaCityInfo = pcaServiceFacade.getPcaByCatid(new Integer(companyInfo.getCity().toString()));
+
+            merchInfo.put("province_cn", pcaProInfo.getCat());//省份
+            merchInfo.put("city_cn", pcaCityInfo.getCat());//地区
+
+            CloudCompanyBankInfo companyBankInfo = cloudCompanyBankServiceFacade.getCompanyBankInfoByMerchNo(companyInfo.getMerchNo());
+            merchInfo.put("bankname", companyBankInfo.getBankname());//开户名称
+            merchInfo.put("bankno", companyBankInfo.getBankno());//对公账户
+            merchInfo.put("banksubname", companyBankInfo.getBanksubname());//开户银行
+
             SimpleDateFormat detailTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            Map<String,Object> map = ClassUtil.requestToMap(cloudCompanyInfo);
-            res = JSONObject.fromObject(map);
-
-            res.discard("updated");
-            res.put("created",detailTime.format(cloudCompanyInfo.getCreated()));
+            merchInfo.put("created",detailTime.format(cloudCompanyInfo.getCreated()));
 
             //获取代理以及非代理
             CloudCompanyAgentInfo cloudCompanyAgentInfo = cloudCompanyAgentServiceFacade.getAgentByAgentNo(companyInfo.getMerchNo());
             if(cloudCompanyAgentInfo == null){
 
                 CloudCompanySalesInfo cloudCompanySalesInfo = cloudCompanySalesServiceFacade.getSalesBySalesNo(companyInfo.getMerchNo());
-                res.put("rate",cloudCompanySalesInfo.getSalesRate());
+                merchInfo.put("rate",cloudCompanySalesInfo.getSalesRate().toString());
             }else{
-                res.put("rate",cloudCompanyAgentInfo.getAgentRate());
+                merchInfo.put("rate",cloudCompanyAgentInfo.getAgentRate().toString());
             }
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "已获取", res);
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "已获取", merchInfo);
         }else{
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到企业信息", null);

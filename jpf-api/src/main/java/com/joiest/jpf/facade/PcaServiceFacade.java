@@ -22,6 +22,15 @@ public interface PcaServiceFacade {
      * @return
      */
     public List<PcaInfo> getPcasInner(String pid);
+
+    /**
+     * 获取地区通过catid
+     * @param catid
+     * @return
+     */
+    public PcaInfo getPcaByCatid(Integer catid);
+
+
     /**
      * 分页获取地区信息
      * @param page
