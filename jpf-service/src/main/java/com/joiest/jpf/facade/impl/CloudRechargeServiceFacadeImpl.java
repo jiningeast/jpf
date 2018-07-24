@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -104,8 +105,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             addtimeEnd = DateUtils.getFdate( cloudRechargeRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
-        if( cloudRechargeRequest.getStatusArr() != null ){
-            c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+        //查询搜索条件数据
+        if( cloudRechargeRequest.getStatus() != null ){
+            c.andStatusEqualTo(cloudRechargeRequest.getStatus()); //查询搜索状态值数据
+        }else{
+            if( cloudRechargeRequest.getStatusArr() != null ){
+                c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+            }
         }
 
 
@@ -170,8 +176,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             addtimeEnd = DateUtils.getFdate( cloudRechargeRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
             c.andAddtimeLessThan( addtimeEnd );
         }
-        if( cloudRechargeRequest.getStatusArr() != null ){
-            c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+        //查询搜索条件数据
+        if( cloudRechargeRequest.getStatus() != null ){
+            c.andStatusEqualTo(cloudRechargeRequest.getStatus()); //查询搜索状态值数据
+        }else{
+            if( cloudRechargeRequest.getStatusArr() != null ){
+                c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
+            }
         }
 
         //System.out.println(cloudRechargeRequest.getStatus());
@@ -368,7 +379,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
      * 审核充值记录状态
      * */
     @Override
-    //@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto getCaiwuAuditRecharge(CloudRechargeRequest request){
 
         Long infoId = request.getId();
@@ -817,10 +828,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (payCloudRecharge.getPactstatus().equals(EnumConstants.RechargePactStatus.CONFIRMED.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "已验收，不需要重复验收");
         }
-        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.APPLYING.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.AUDIT.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.PAY.value())&&
-                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.CANCEL.value())) {
+        if (!payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET_OPENING.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET.value())&&
+                !payCloudRecharge.getStatus().equals(EnumConstants.RechargeStatus.DELIVERED.value())) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "状态不匹配，不可以操作");
         }
         if (payCloudRecharge.getPacttime().getTime() > Calendar.getInstance().getTime().getTime()) {
@@ -830,7 +840,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
         payCloudRechargeExampleCriteria.andIdEqualTo(reqId);
         payCloudRechargeExampleCriteria.andPactstatusEqualTo(EnumConstants.RechargePactStatus.UNCONFIRMED.value());
-        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.APPLYING.value(),EnumConstants.RechargeStatus.AUDIT.value(),EnumConstants.RechargeStatus.PAY.value(),EnumConstants.RechargeStatus.CANCEL.value()));
+        payCloudRechargeExampleCriteria.andStatusIn(Arrays.asList(EnumConstants.RechargeStatus.RECHARGE_AND_TICKET_OPENING.value(),EnumConstants.RechargeStatus.RECHARGE_AND_TICKET.value(),EnumConstants.RechargeStatus.DELIVERED.value()));
         PayCloudRecharge record = new PayCloudRecharge();
         record.setPactstatus(EnumConstants.RechargePactStatus.CONFIRMED.value());
         payCloudRechargeMapper.updateByExampleSelective(record, payCloudRechargeExample);

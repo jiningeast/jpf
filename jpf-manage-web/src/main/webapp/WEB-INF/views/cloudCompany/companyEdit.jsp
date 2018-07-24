@@ -71,7 +71,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">企业认证：</td>
                     <td>
-                        <select id="attestation" name="attestation" data-options="required:true"
+                        <select id="attestation" name="attestation"data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
 
                             <option value="0" <c:if  test="${cloudCompanyInfo.attestation eq 0 }">selected</c:if>>未认证</option>
@@ -82,14 +82,14 @@
                 <tr>
                       <td style="text-align: right;background-color: #f1f1f1;">服务费：</td>
                       <td>
-                          <input  id="salesRate" name="salesRate" type="text" style="width:150px" class="easyui-numberbox"
+                          <input  id="salesRate" name="salesRate" type="text" style="width:150px" class="easyui-numberbox" precision="3"
                                  value="<c:if  test="${cloudCompanyInfo.type == 1 }">${cloudCompanyInfo.agentRate}</c:if><c:if  test="${cloudCompanyInfo.type == 0 }">${cloudCompanyInfo.salesRate}</c:if>" data-options="required:true" precision="2"/><span style="color: #FF2F2F"> 注：当为0.00时不收取服务费</span>
                       </td>
                 </tr>
                 <tr>
                       <td style="text-align: right;background-color: #f1f1f1;">登录状态：</td>
                       <td>
-                          <select id="status" name="status" data-options="required:true"
+                          <select id="status" name="status" data-options="required:true" class="easyui-combobox"
                                   style="width:120px;">
 
                               <option value="1" <c:if  test="${cloudCompanyInfo.status eq 1 }">selected</c:if>>正常</option>
@@ -293,7 +293,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             $('#infoDiv').window('close');
                             $('#dg').datagrid('reload');
                         }

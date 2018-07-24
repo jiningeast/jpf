@@ -13,7 +13,7 @@ public class CloudDfOrderInterfaceInfo {
     /**
      * 打款orderid
      */
-    private Long orderid;
+    private String orderid;
 
     /**
      * 打款批次id
@@ -34,6 +34,11 @@ public class CloudDfOrderInterfaceInfo {
      * 外来orderid
      */
     private String requestOrderid;
+
+    /**
+     *
+     */
+    private Long busstaffid;
 
     /**
      * 交易金额
@@ -143,11 +148,11 @@ public class CloudDfOrderInterfaceInfo {
         this.id = id;
     }
 
-    public Long getOrderid() {
+    public String getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Long orderid) {
+    public void setOrderid(String orderid) {
         this.orderid = orderid;
     }
 
@@ -341,5 +346,13 @@ public class CloudDfOrderInterfaceInfo {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public Long getBusstaffid() {
+        return busstaffid;
+    }
+
+    public void setBusstaffid(Long busstaffid) {
+        this.busstaffid = busstaffid;
     }
 }

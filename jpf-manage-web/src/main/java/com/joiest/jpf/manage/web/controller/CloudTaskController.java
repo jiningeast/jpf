@@ -7,6 +7,7 @@ import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import com.joiest.jpf.manage.web.util.CheckBanksUtils;
 import com.joiest.jpf.manage.web.util.SmsUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -203,17 +204,23 @@ public class CloudTaskController {
                         companyMoneySame=Double.parseDouble(companyMoney_Str);
                         contractNo = singlePerson.get(3);
 
-                        // 判断企业充值表中存不存在此合同编号
-                        if ( StringUtils.isBlank(contractNo) ){
-                            // 合同编号为空，请检查
-                            String code = "-1";
-                            return code;
-                        }
-                        CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
-                        if ( cloudRechargeInfo.getId() == null ){
-                            // 充值表中不存在此合同编号
-                            String code = "-2";
-                            return code;
+                        // 判断合同编号的合法性
+                        if ( j==3 ){
+                            // 判断企业充值表中存不存在此合同编号
+                            if ( StringUtils.isBlank(contractNo) ){
+                                // 合同编号为空，请检查
+                                String code = "-1";
+                                return code;
+                            }
+                            CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
+                            if ( cloudRechargeInfo.getMerchNo() == null ){
+                                return "-4";
+                            }
+                            if ( !cloudRechargeInfo.getMerchNo().equals(companyInfo.getMerchNo()) ){
+                                // 充值表中不存在此合同编号
+                                String code = "-2";
+                                return code;
+                            }
                         }
                    }
                 }
@@ -250,11 +257,8 @@ public class CloudTaskController {
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( companyInfo.getCloudmoney().compareTo(new BigDecimal(companyMoney)) == -1 ){
-            responseMap.put("code","10005");
-            responseMap.put("info","该企业账户余额不足，剩余："+companyInfo.getCloudmoney());
-            responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
-            return uuid.toString();
+            // "该企业账户余额不足，剩余："+companyInfo.getCloudmoney()
+            return "-3";
         }else{
             // OSS上传excel文件
             String savePre = ConfigUtil.getValue("EXCEL_PATH");
@@ -288,6 +292,13 @@ public class CloudTaskController {
         }
     }
 
+    /**
+     * 查询公司页
+     */
+    @RequestMapping("/companys")
+    public ModelAndView companys(){
+        return new ModelAndView("cloudTask/companys");
+    }
 
     /**
      * 下载模板
@@ -418,11 +429,11 @@ public class CloudTaskController {
         // 新建一个待锁定的代付款批次订单
         CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
         String companyMoneyId;
-        cloudCompanyMoneyInfo.setAgentNo(agentNo);   // 待修改
+        cloudCompanyMoneyInfo.setAgentNo(agentNo);
         cloudCompanyMoneyInfo.setMerchNo(companyInfo.getMerchNo());
         cloudCompanyMoneyInfo.setCommoney(new BigDecimal(jsonMap.get("money")));
         cloudCompanyMoneyInfo.setAddtime(new Date());
-        cloudCompanyMoneyInfo.setUid(""+companyInfo.getId());   // 待修改
+        cloudCompanyMoneyInfo.setUid(""+companyInfo.getId());
         cloudCompanyMoneyInfo.setFid(contractNo);   // 合同编号
         cloudCompanyMoneyInfo.setVid((byte)8);
         cloudCompanyMoneyInfo.setIntro("");
@@ -515,7 +526,6 @@ public class CloudTaskController {
             searchBank.setStaffid(Long.parseLong(""+staffId));
             searchBank.setBankno(singlePerson.get("bankNo"));
             searchBank.setBankphone(singlePerson.get("phone"));
-            searchBank.setBankActive("1");
             CloudStaffBanksInfo existBank = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchBank);
             if ( existBank.getId() == null ){
                 // 插入员工银行卡信息
@@ -595,7 +605,16 @@ public class CloudTaskController {
 
             // 新增个人合同记录
             CloudCompactStaffInfo cloudCompactStaffInfo = new CloudCompactStaffInfo();
-            String compactNo = StringUtils.substring(singlePerson.get("idno").toUpperCase(),-6) + new Date().getTime();    // 自由职业者合同编号：身份证后六位+时间戳
+            String compactNoPre;
+            // 个人合同编号前缀
+            if ( httpRequest.getRequestURI().indexOf("xinxiangfuwu.com") > 0 ){
+                compactNoPre = "XX";
+            }else{
+                compactNoPre = "ZX";
+            }
+            // 企业号后6位
+            String last6 = StringUtils.substring(companyInfo.getMerchNo(),companyInfo.getMerchNo().length()-6,-1);
+            String compactNo = compactNoPre + last6 + System.currentTimeMillis() + ToolUtils.getRandomInt(100000000,999999999);
             cloudCompactStaffInfo.setCompactNo(compactNo);
             cloudCompactStaffInfo.setStaffid(Long.parseLong(""+staffId));
             cloudCompactStaffInfo.setDfid(dfMoneyRes);
@@ -610,7 +629,8 @@ public class CloudTaskController {
             cloudRechargeRequest.setPactno(contractNo);
             CloudRechargeResponse cloudRechargeResponse = cloudRechargeServiceFacade.getRecords(cloudRechargeRequest);
             CloudRechargeInfo cloudRechargeInfo = cloudRechargeResponse.getList().get(0);
-            List<MerchantTypeInfo> typesList = merTypeServiceFacade.getTypesByCatpath(cloudRechargeInfo.getNeedcatpath());
+            String needPathes[] = cloudRechargeInfo.getNeedcatpath().split(",");
+            List<MerchantTypeInfo> typesList = merTypeServiceFacade.getTypesByCatpath(needPathes[0]);
             cloudCompactStaffInfo.setTicketid(typesList.get(1).getCatid());
             cloudCompactStaffInfo.setTicketcontent(typesList.get(1).getCat());
             cloudCompactStaffInfo.setEntryid(""+typesList.get(2).getCatid());
@@ -623,15 +643,19 @@ public class CloudTaskController {
                 logger.info(singlePerson.get("name")+"个人合同记录插入失败");
             }
 
-            // 鉴权功能
-            CheckBanksRequest checkBanksRequest = new CheckBanksRequest();
+            // 鉴权功能 非线程
+            /*CheckBanksRequest checkBanksRequest = new CheckBanksRequest();
             checkBanksRequest.setAccountNo(singlePerson.get("bankNo"));
             checkBanksRequest.setIdCard(singlePerson.get("idno").toUpperCase());
             checkBanksRequest.setMobile(singlePerson.get("phone"));
             checkBanksRequest.setName(singlePerson.get("name"));
             checkBanksRequest.setDateTime(new Date());
-            checkBanks(checkBanksRequest);
+            checkBanks(checkBanksRequest);*/
         }
+
+        // 鉴权功能 线程
+        Thread thread = new Thread(new CheckBanksUtils(data,taskRes));
+        thread.start();
 
         return new JpfResponseDto();
     }
@@ -663,7 +687,6 @@ public class CloudTaskController {
         for ( LinkedHashMap<String,String> singlePerson:personsList ){
             CloudStaffBanksInfo searchInfo = new CloudStaffBanksInfo();
             searchInfo.setBankno(singlePerson.get("bankNo"));
-            searchInfo.setBankActive("1");
             searchInfo.setBankphone(singlePerson.get("phone"));
             CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchInfo);
             list.add(cloudStaffBanksInfo);
@@ -686,10 +709,18 @@ public class CloudTaskController {
         CloudTaskInfo cloudTaskInfo = cloudTaskServiceFacade.getOneTask(taskId);
 
         // 判断此任务是否已经锁定
-        if ( cloudTaskInfo.getIsLock().equals("1") ){
-            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        if ( cloudTaskInfo.getIsLock() == 1 ){
             jpfResponseDto.setRetCode("0001");
             jpfResponseDto.setRetMsg("该任务已经锁定，请不要重复锁定");
+
+            return jpfResponseDto;
+        }
+
+        // 任务鉴权处理完成才能锁定
+        if ( cloudTaskInfo.getStatus() != 3 ){
+            jpfResponseDto.setRetCode("0002");
+            jpfResponseDto.setRetMsg("该任务所有的鉴权都通过后才能锁定");
 
             return jpfResponseDto;
         }
@@ -718,7 +749,6 @@ public class CloudTaskController {
             CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchStaffBanksInfo);
             if ( !cloudStaffBanksInfo.getBankActive().equals("1") ){
                 // 如果有人鉴权状态不是通过就返回错误
-                JpfResponseDto jpfResponseDto = new JpfResponseDto();
                 jpfResponseDto.setRetCode("0001");
                 jpfResponseDto.setRetMsg("该批次中存在鉴权失败的记录，请修改后重新上传excel");
 
@@ -802,7 +832,7 @@ public class CloudTaskController {
         }
 
 
-        return new JpfResponseDto();
+        return jpfResponseDto;
     }
 
     /**

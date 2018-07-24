@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
-import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayCloudEmployee;
 import com.joiest.jpf.common.po.PayCloudEmployeeExample;
 import com.joiest.jpf.common.util.AESUtils;
@@ -26,6 +27,25 @@ public class CloudEmployeeServiceFacadeImpl implements CloudEmployeeServiceFacad
 
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
+
+    public CloudEmployeeInfo getEmployeeInfoByMerchNo(String merchNo){
+        PayCloudEmployeeExample example= new PayCloudEmployeeExample();
+        PayCloudEmployeeExample.Criteria c = example.createCriteria();
+        c.andMerchNoEqualTo(merchNo);
+        List<PayCloudEmployee> employeeInfoList = payCloudEmployeeMapper.selectByExample(example);
+        if(employeeInfoList.size() != 1 || employeeInfoList == null){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "无效商户号");
+        }
+
+        CloudEmployeeInfo cloudEmployeeRep = new CloudEmployeeInfo();
+        for (PayCloudEmployee one : employeeInfoList)
+        {
+            BeanCopier beanCopier = BeanCopier.create(PayCloudEmployee.class, CloudEmployeeInfo.class, false);
+            beanCopier.copy(one, cloudEmployeeRep, null);
+        }
+
+        return cloudEmployeeRep;
+    }
 
     /**
      * 获取公司登录信息通过邮箱

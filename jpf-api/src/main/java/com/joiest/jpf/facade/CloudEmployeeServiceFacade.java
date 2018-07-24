@@ -7,6 +7,12 @@ import java.util.Map;
 public interface CloudEmployeeServiceFacade {
 
     /**
+     * 商户后台
+     * 根据商户编号获取企业登陆表的信息
+     */
+    public CloudEmployeeInfo getEmployeeInfoByMerchNo(String merchNo);
+
+    /**
      * 获取公司登录信息通过邮箱
      **/
     public CloudEmployeeInfo getCompayLoginInfoByEmail(String email);

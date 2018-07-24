@@ -107,11 +107,8 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付凭证：</td>
                     <td colspan="3">
-                        <c:if test="${cloudRechargeInfo.imgurl=='' || cloudRechargeInfo.imgurl==null }">
-
-                        </c:if>
-                        <c:if test="${cloudRechargeInfo.imgurl}">
-                            <img width="200" height="200" src="${cloudRechargeInfo.imgurl}">
+                        <c:if test="${cloudRechargeInfo.imgurl!='' && cloudRechargeInfo.imgurl!=null }">
+                            <img width="200" height="200" src="${cloudRechargeInfo.imgurl}" />
                         </c:if>
                     </td>
                 </tr>
@@ -152,14 +149,18 @@
                     <td colspan="4">
                         <select id="status_audit" name="status" class="easyui-combobox" style="width:120px;" data-options="">
                             <option value="">请选择</option>
-                            <option value="0">已取消</option>
-                            <option value="1">已申请</option>
-                            <option value="2">已审核(待上传付款凭证)</option>
-                            <option value="3">已支付(已上传凭证)</option>
-                            <option value="4">已充值开票中</option>
-                            <option value="5">已充值已开票</option>
-                            <option value="6">已发货</option>
-                            <option value="7">已完成</option>
+                            <c:if test="${auditPageType == 1 }">
+                                <option value="0">已取消</option>
+                                <option value="1">已申请</option>
+                                <option value="2">已审核(待上传付款凭证)</option>
+                            </c:if>
+                            <c:if test="${auditPageType == 2 }">
+                                <option value="3">已支付(已上传凭证)</option>
+                                <option value="4">已充值开票中</option>
+                                <option value="5">已充值已开票</option>
+                                <option value="6">已发货</option>
+                                <option value="7">已完成</option>
+                            </c:if>
                         </select>
                     </td>
                 </tr>
@@ -210,7 +211,12 @@
         // initData();
 
         $("#saveBtn_audit").linkbutton({
+
             onClick: function () {
+                var reqUrl = "audit/action";
+                if( ${auditPageType == 2 } ){
+                    reqUrl = "caiwu/audit/action";
+                }
                 var isValid = $("#auditForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
@@ -219,7 +225,7 @@
                 var postData = parsePostData(queryArray);
                 $.ajax({
                     type: 'post',
-                    url: 'audit/action',
+                    url: reqUrl ,
                     data: postData,
                     dataType: 'json',
                     success: function (msg) {

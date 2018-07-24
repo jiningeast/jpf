@@ -81,7 +81,7 @@ public class RechargeNeedController {
     }
 
     /**
-     * 确认验收接口 pacttime时间到了、pactstatus=1、status=0或1或2或3时可以有此操作
+     * 确认验收接口 pacttime时间到了、pactstatus=1、status=4或5或6时可以有此操作
      */
     @RequestMapping(value = "/affirm", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody

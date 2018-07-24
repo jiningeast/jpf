@@ -22,7 +22,9 @@
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 	<!-- 扫描注解组件并且自动的注入 -->
-	<context:component-scan base-package="com.joiest.jpf" />
+	<context:component-scan base-package="com.joiest.jpf" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
     <context:annotation-config />
     
    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
@@ -126,4 +128,6 @@
 		<property name="keySerializer" ref="stringRedisSerializer"/>
 		<property name="hashKeySerializer" ref="stringRedisSerializer"/>
 	</bean>
+
+	<bean id="springContextUtil" class="com.joiest.jpf.manage.web.util.SpringContextUtil"  />
 </beans>
