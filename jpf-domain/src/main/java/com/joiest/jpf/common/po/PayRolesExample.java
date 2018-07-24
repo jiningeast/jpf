@@ -10,6 +10,9 @@ public class PayRolesExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
+    protected long pageNo;
+
+    protected long pageSize;
 
     /**
      *
@@ -98,6 +101,35 @@ public class PayRolesExample {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
+    }
+    /**
+     *
+     * @param pageNo
+     */
+    public void setPageNo(long pageNo) {
+        this.pageNo=pageNo;
+    }
+
+    /**
+     *
+     */
+    public long getPageNo() {
+        return pageNo;
+    }
+
+    /**
+     *
+     * @param pageSize
+     */
+    public void setPageSize(long pageSize) {
+        this.pageSize=pageSize;
+    }
+
+    /**
+     *
+     */
+    public long getPageSize() {
+        return pageSize;
     }
 
     protected abstract static class GeneratedCriteria {
