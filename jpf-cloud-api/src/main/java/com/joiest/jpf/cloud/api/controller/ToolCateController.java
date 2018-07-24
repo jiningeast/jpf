@@ -443,19 +443,14 @@ public class ToolCateController {
         //Oss阿里云上传
         if(isOss.equals("1")){
 
-            OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
-            File fileOne = new File(allpath);
-            String md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
-
-            // 关闭OSSClient。
-            System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
-            System.out.println("服务器地址："+md5key);
-
-            if(StringUtils.isBlank(md5key)){
+            //调用oss上传
+            JSONObject imgRes = AliyunOSSClientUtil.initUploadPath(allpath);
+            if(imgRes.isEmpty()){
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
             }
-            resposeData.put("serverUrl",md5key);
+            resposeData.put("serverUrl",imgRes.get("imgUrl"));
+            resposeData.put("serverExpireUrl",imgRes.get("expireUrl"));
         }
         String fileName = allpath.substring(allpath.lastIndexOf("/")+1);
 
