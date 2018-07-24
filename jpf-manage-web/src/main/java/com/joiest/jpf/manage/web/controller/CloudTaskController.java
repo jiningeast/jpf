@@ -572,7 +572,7 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setBankprovince(singlePerson.get("province"));
             cloudDfMoneyInfo.setBankcity(singlePerson.get("city"));
             cloudDfMoneyInfo.setBanktype(singlePerson.get("bankName"));         // 卡类型 例如：建行 工商
-            cloudDfMoneyInfo.setBankcode(bankCardInfo.getCode());
+            cloudDfMoneyInfo.setBankcode(bankCardInfo.getFindcode());
             cloudDfMoneyInfo.setBankacctattr(Integer.parseInt(String.valueOf(singlePerson.get("type"))));
             cloudDfMoneyInfo.setAddtime(new Date());
             cloudDfMoneyInfo.setRealname(singlePerson.get("name"));
@@ -730,6 +730,7 @@ public class CloudTaskController {
 
         //查询用户是否实名签约
         String webName = "欣享科技";
+        String hotLine = "010-59477624";
         String heTongUrl = ConfigUtil.getValue("WEIXIN_URL") + "/#/Identityno";  //实名签约地址
         String shiMingUrl = ConfigUtil.getValue("WEIXIN_URL") + "/#/Idtesttwo";//合同签约地址
 
@@ -743,9 +744,9 @@ public class CloudTaskController {
 
         // 查询用户是否全部鉴权
         for (int i = 0; i < dfMoneyInfoList.size() ; i++){
-            Long staffId = dfMoneyInfoList.get(i).getBusstaffid();
             CloudStaffBanksInfo searchStaffBanksInfo = new CloudStaffBanksInfo();
-            searchStaffBanksInfo.setStaffid(staffId);
+            searchStaffBanksInfo.setBankno(dfMoneyInfoList.get(i).getBankno());
+            searchStaffBanksInfo.setBankphone(dfMoneyInfoList.get(i).getBankphone());
             CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByInfo(searchStaffBanksInfo);
             if ( !cloudStaffBanksInfo.getBankActive().equals("1") ){
                 // 如果有人鉴权状态不是通过就返回错误
@@ -781,18 +782,23 @@ public class CloudTaskController {
             //短信发送
             String content = "";
 
-            if ( dfMoneyInfoList.get(i).getCompactStaffCompactActive() != "1" ){ //未签合同
-                content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
-                content += "签约合同。点击： "+heTongUrl;//短信内容
+            if ( !dfMoneyInfoList.get(i).getCompactStaffCompactActive().equals("1") ){ //未签合同
+                /*content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
+                content += "签约合同。点击： "+heTongUrl;//短信内容*/
+                content = "尊敬的"+banknickname+",您有一份新的合同需要签约，请前往欣享服务微信公众号进行签约。";//短信内容
             }
-            if ( dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" ){ //未实名签约
-                content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
-                content += "签约。点击： "+shiMingUrl;//短信内容
+            if ( !dfMoneyInfoList.get(i).getCompanyStaffIsActice().equals("1") ){ //未实名签约
+                /*content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
+                content += "签约认证。点击： "+shiMingUrl;//短信内容*/
+                content = "尊敬的"+banknickname+",欢迎加入欣享服务共享经济服务平台，请在微信搜索公众号“欣享服务”进行认证签约";//短信内容
+                content += ".(请使用您的身份证号进行登录，客服热线："+hotLine+")";//短信内容
             }
-            if ( dfMoneyInfoList.get(i).getCompactStaffCompactActive() != "1" && dfMoneyInfoList.get(i).getCompanyStaffIsActice() != "1" ){ //未实名签约
+            /*if ( !dfMoneyInfoList.get(i).getCompactStaffCompactActive().equals("1") && !dfMoneyInfoList.get(i).getCompanyStaffIsActice().equals("1") ){ //未实名签约
                 content = "尊敬的"+banknickname+",委托"+webName+"为您进行结算服务,需要您在["+webName+"]平台";//短信内容
                 content += "签约认证并完成合同签约。点击： "+shiMingUrl;//短信内容
-            }
+                content = "尊敬的"+banknickname+",欢迎加入欣享服务共享经济服务平台，请在微信搜索公众号“欣享服务”进行认证签约";//短信内容
+                content += ".(请使用您的身份证号进行登录，客服热线："+hotLine+")";//短信内容
+            }*/
             if( content != "" ){
                 //发送短信
                 Map<String,String> retsult = SmsUtils.send(mobile,content);
