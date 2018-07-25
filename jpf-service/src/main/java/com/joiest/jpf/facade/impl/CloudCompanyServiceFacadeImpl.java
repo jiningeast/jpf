@@ -218,7 +218,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "邮箱已经存在");
         }
-        //查询公司名称是否存在
+        //查询公司名称是否company存在
         PayCloudCompanyExample examplename= new PayCloudCompanyExample();
         PayCloudCompanyExample.Criteria cname = examplename.createCriteria();
         cname.andNameEqualTo(request.getName());
@@ -232,7 +232,15 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         String mefefe=payCloudCompany.getName();*/
 
        //====new===根据对公账户卡号获取卡所属信息
+       //查询是否存在于登录表
+        PayCloudEmployeeExample employee = new PayCloudEmployeeExample();
+        PayCloudEmployeeExample.Criteria ploee=employee.createCriteria();
+        ploee.andLinkemailEqualTo(request.getLinkemail());
+        List<PayCloudEmployee> payCloudEmployeeEmail=payCloudEmployeeMapper.selectByExample(employee);
+        if(payCloudEmployeeEmail != null && !payCloudEmployeeEmail.isEmpty()){
 
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "邮箱已经存在");
+        }
         //生成商户编号
         String MerchnoNew= "CY"+ ToolUtils.createID();
         //查询商户号是否已经存在
@@ -477,6 +485,8 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
 
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "公司名称重复");
         }
+        //验证当前邮箱是否存在登录表
+
         //获取商户编号
         String MerchNo=request.getMerchNo();
         //验证通过执行插表操作

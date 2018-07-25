@@ -1,11 +1,11 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.common.custom;
 
 import com.joiest.jpf.common.po.PayCloudFansource;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
-public class CloudFanSourceInfo {
-
+public class PayCloudFansourceCustom {
     /**
      *
      */
@@ -176,5 +176,4 @@ public class CloudFanSourceInfo {
         result = prime * result + ((getRemarkuid() == null) ? 0 : getRemarkuid().hashCode());
         return result;
     }
-
 }
