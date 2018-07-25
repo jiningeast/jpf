@@ -1,11 +1,12 @@
-package com.joiest.jpf.dao.repository.mapper.generate;
+package com.joiest.jpf.dao.repository.mapper.custom;
 
+import com.joiest.jpf.common.custom.PayCloudFansourceCustom;
 import com.joiest.jpf.common.po.PayCloudFansource;
 import com.joiest.jpf.common.po.PayCloudFansourceExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface PayCloudFansourceMapper {
+public interface PayCloudFansourceCustomMapper {
     /**
      * 根据条件计数
      *
@@ -46,13 +47,18 @@ public interface PayCloudFansourceMapper {
      * @param example
      */
     List<PayCloudFansource> selectByExample(PayCloudFansourceExample example);
-
+    /**
+     * 根据条件查询列表连表
+     *
+     * @param example
+     */
+    List<PayCloudFansourceCustom> selectFansourceList(PayCloudFansourceExample example);
     /**
      * 根据主键获取一条数据库记录
      *
      * @param id
      */
-    PayCloudFansource selectByPrimaryKey(String id);
+    PayCloudFansourceCustom selectByPrimaryKey(String id);
 
     /**
      * 选择性更新数据库记录

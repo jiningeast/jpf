@@ -308,17 +308,40 @@ public class CloudTaskController {
         //下载文件路径
         String filename=ConfigUtil.getValue("EXCEL_NAME");
         String path=ConfigUtil.getValue("EXCEL_PATH");
-        File file = new File(path + File.separator + filename);
+        String filename2 = null;
+        try {
+            //解决找到文件问题:
+            // URLEonder把中文用UTF-8编码,然而,tomcat用iso-8859-1解码
+            //,我们需要用iso-8859-1编码,再重新用utf-8解码才能匹配到硬盘文件的名字
+            filename2 = new String(filename.getBytes("ISO-8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
+        File file = new File(path + filename2);
         HttpHeaders headers = new HttpHeaders();
-        //下载显示的文件名，解决中文名称乱码问题
-        String downloadFielName = new String(filename.getBytes("UTF-8"),"iso-8859-1");
-        //通知浏览器以attachment（下载方式）打开图片
-        headers.setContentDispositionFormData("attachment", downloadFielName);
-        //application/octet-stream ： 二进制流数据（最常见的文件下载）。
+
+
+        String filename3 = null;
+        try {
+            //解决提示下载框的中文问题:
+            // 所有浏览器都会使用本地编码，即中文操作系统使用GBK
+            // 浏览器收到这个文件名后，会使用iso-8859-1来解码
+            //编码流程:把中文用GBK编码为字节数组,再用ISO-8859-1编码,浏览器先用ISO-8859-1解码为字节数组,在用GBK解码为中文
+            filename3 = new String(filename2.getBytes("GBK"), "ISO-8859-1");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
+
+        headers.setContentDispositionFormData("attachment", filename3);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
-                headers, HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 
     /**
      * 列出解析成功或失败的自由职业者信息

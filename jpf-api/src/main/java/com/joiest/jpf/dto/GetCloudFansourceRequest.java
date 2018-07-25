@@ -1,11 +1,13 @@
-package com.joiest.jpf.common.po;
+package com.joiest.jpf.dto;
 
-import java.io.Serializable;
+import com.joiest.jpf.common.po.PayCloudFansource;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
-public class PayCloudFansource implements Serializable {
+public class GetCloudFansourceRequest {
     /**
-     * 
+     *
      */
     private String id;
 
@@ -43,6 +45,24 @@ public class PayCloudFansource implements Serializable {
      * 备注人ID
      */
     private String remarkuid;
+
+    /**
+     * 页码
+     */
+    private Integer page;
+
+    /**
+     * 条数
+     */
+    private Integer rows;
+
+    /**
+     * 注册时间
+     */
+    private String addtimeStart;
+
+    private String addtimeEnd;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -148,13 +168,13 @@ public class PayCloudFansource implements Serializable {
         }
         PayCloudFansource other = (PayCloudFansource) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getCatid() == null ? other.getCatid() == null : this.getCatid().equals(other.getCatid()))
-            && (this.getCat() == null ? other.getCat() == null : this.getCat().equals(other.getCat()))
-            && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
-            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getRemarkuid() == null ? other.getRemarkuid() == null : this.getRemarkuid().equals(other.getRemarkuid()));
+                && (this.getCatid() == null ? other.getCatid() == null : this.getCatid().equals(other.getCatid()))
+                && (this.getCat() == null ? other.getCat() == null : this.getCat().equals(other.getCat()))
+                && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
+                && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+                && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+                && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+                && (this.getRemarkuid() == null ? other.getRemarkuid() == null : this.getRemarkuid().equals(other.getRemarkuid()));
     }
 
     /**
@@ -173,5 +193,41 @@ public class PayCloudFansource implements Serializable {
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getRemarkuid() == null) ? 0 : getRemarkuid().hashCode());
         return result;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getRows() {
+        return rows;
+    }
+
+    public void setRows(Integer rows) {
+        this.rows = rows;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getAddtimeStart() {
+        return addtimeStart;
+    }
+
+    public void setAddtimeStart(String addtimeStart) {
+        this.addtimeStart = addtimeStart;
+    }
+
+    public String getAddtimeEnd() {
+        return addtimeEnd;
+    }
+
+    public void setAddtimeEnd(String addtimeEnd) {
+        this.addtimeEnd = addtimeEnd;
     }
 }

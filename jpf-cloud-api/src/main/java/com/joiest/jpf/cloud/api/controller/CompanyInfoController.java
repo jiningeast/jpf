@@ -84,7 +84,7 @@ public class CompanyInfoController {
         }
     }
     /**
-     * 公司登陆
+     * 公司登录
      * */
     @RequestMapping(value = "/companyLogin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -102,6 +102,10 @@ public class CompanyInfoController {
         if(cloudEmployeeInfo == null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此用户名",null);
+        }
+        if(cloudEmployeeInfo.getStatus().equals((byte)-1)){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "此账户已锁定",null);
         }
         //获取代理以及非代理
         CloudCompanyAgentInfo cloudCompanyAgentInfo = cloudCompanyAgentServiceFacade.getAgentByAgentNo(cloudEmployeeInfo.getMerchNo());
@@ -343,9 +347,13 @@ public class CompanyInfoController {
     {
         // 跨域
         String originHeader = httpRequest.getHeader("Origin");
-        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
-        response.setHeader("Access-Control-Allow-Method", "POST");
-        response.setHeader("Access-Control-Allow-Origin", originHeader);
+        //response.setHeader("Access-Control-Allow-Origin", "*");
+        //response.setHeader("Access-Control-Allow-Origin", originHeader);
+        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, accept, content-type, token,X-Auth-Token");
+        response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        //response.setHeader("Access-Control-Allow-Method", "POST,OPTIONS");
+        //response.setHeader("token", originHeader);
 
     }
 

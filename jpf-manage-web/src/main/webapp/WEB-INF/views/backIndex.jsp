@@ -147,9 +147,9 @@
                 "menuname" : "客服管理",
                 "menus" : [{
                     "menuid" : "701",
-                    "menuname" : "欣享前台加入列表",
+                    "menuname" : "官网登记列表",
                     "icon" : "icon-nav",
-                    "url" : "orderCpsingle/index"
+                    "url" : "cloudFansource/index"
                 }]
             }]
     	};

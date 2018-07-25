@@ -227,7 +227,7 @@
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">开户名称：</td>
                     <td>
                         <input id="accountName" data-options="required:true"  name="accountName" type="text" style="width:150px"
-                               class="easyui-textbox" value="${cloudCompanyBankInfo.banksubname}"/>
+                               class="easyui-textbox" value="${cloudCompanyBankInfo.accountName}"/>
                     </td>
                 </tr>
                 <td style="text-align: right;background-color: #f1f1f1;">开户银行类型：</td>
