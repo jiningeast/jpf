@@ -132,10 +132,10 @@ public class CloudFanSourceServiceFacadeImpl implements CloudFanSourceServiceFac
         {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
-        PayCloudFansource payCloudFansource = payCloudFansourceMapper.selectByPrimaryKey(id);
+        PayCloudFansourceCustom payCloudFansourceCustom = payCloudFansourceCustomMapper.selectByPrimaryKey(id);
         CloudFanSourceInfo cloudFanSourceInfo = new CloudFanSourceInfo();
-        BeanCopier beanCopier = BeanCopier.create(PayCloudFansource.class, CloudFanSourceInfo.class, false);
-        beanCopier.copy(payCloudFansource, cloudFanSourceInfo, null);
+        BeanCopier beanCopier = BeanCopier.create(PayCloudFansourceCustom.class, CloudFanSourceInfo.class, false);
+        beanCopier.copy(payCloudFansourceCustom, cloudFanSourceInfo, null);
 
         return cloudFanSourceInfo;
     }

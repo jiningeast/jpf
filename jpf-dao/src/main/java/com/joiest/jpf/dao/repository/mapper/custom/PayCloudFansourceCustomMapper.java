@@ -58,7 +58,7 @@ public interface PayCloudFansourceCustomMapper {
      *
      * @param id
      */
-    PayCloudFansource selectByPrimaryKey(String id);
+    PayCloudFansourceCustom selectByPrimaryKey(String id);
 
     /**
      * 选择性更新数据库记录
