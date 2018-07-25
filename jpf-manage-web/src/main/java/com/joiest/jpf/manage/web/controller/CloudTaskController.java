@@ -730,7 +730,7 @@ public class CloudTaskController {
 
         //查询用户是否实名签约
         String webName = "欣享科技";
-        String hotLine = "010-59477624";
+        String hotLine = "010-67077608";
         String heTongUrl = ConfigUtil.getValue("WEIXIN_URL") + "/#/Identityno";  //实名签约地址
         String shiMingUrl = ConfigUtil.getValue("WEIXIN_URL") + "/#/Idtesttwo";//合同签约地址
 

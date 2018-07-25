@@ -722,7 +722,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         record.setAddtime(Calendar.getInstance().getTime());
         record.setPacttime(DateUtils.getFdate(request.getPacttime(),DateUtils.DATEFORMATLONG));
         record.setPactstatus(EnumConstants.RechargePactStatus.UNCONFIRMED.value());
-        record.setKfremarks("发布需求");
+        record.setKfremarks("["+ Calendar.getInstance().getTime() + "]发布需求");
         payCloudRechargeMapper.insertSelective(record);
         return new JpfResponseDto();
     }
