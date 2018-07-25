@@ -700,7 +700,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "该" + request.getMerchNo() + "企业不存在");
         }
         PayCloudCompanySales payCloudCompanySales = payCloudCompanySalesList.get(0);
-        BigDecimal feemoney = reqMoney.multiply(payCloudCompanySales.getSalesRate()).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_DOWN).divide(new BigDecimal(100));//计算手续费
+        BigDecimal feemoney = reqMoney.multiply(payCloudCompanySales.getSalesRate()).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_UP).divide(new BigDecimal(100));//计算手续费
         BigDecimal realmoney = feemoney.add(reqMoney);//计算实际汇款金额
 
         //校验与前端的手续费或者实际汇款金额是否一致
