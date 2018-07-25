@@ -191,7 +191,7 @@ public class CloudDfMoneyController {
         map.put("dfid",dfIds);
         String cloudWaitpayKeycode = ManageConstants.ClOUD_WAITPAY_KEYCODE; //校验码keycode
         //String requestUrl = ManageConstants.ClOUD_WAITPAY_URl; //请求地址
-        String requestUrl = ConfigUtil.getValue("DFPAY_URL")+"/clouddf/dfApi";//请求地址
+        String requestUrl = ConfigUtil.getValue("CLOUD_API_URL")+"/clouddf/dfApi";//请求地址
 
         //排序转换
         Map<String,Object> treeMap = new TreeMap<>();
