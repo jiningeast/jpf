@@ -56,7 +56,8 @@ public interface CloudDfMoneyServiceFacade {
     //查询代付明细信息
     public List<CloudDfMoneyInfo> getAllBySective(CloudDfMoneyRequest request);
 
-
+    // 更新某批次订单号的id相关联的打款信息为可代付
+    public int updateDfMontype(String companyMoneyId);
 }
 
 

@@ -314,4 +314,16 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
     }
 
+    // 更新某批次订单号的id相关联的打款信息为可代付
+    @Override
+    public int updateDfMontype(String companyMoneyId){
+        PayCloudDfMoneyExample e = new PayCloudDfMoneyExample();
+        PayCloudDfMoneyExample.Criteria c = e.createCriteria();
+        c.andCompanyMoneyIdEqualTo(companyMoneyId);
+
+        PayCloudDfMoney payCloudDfMoney = new PayCloudDfMoney();
+        payCloudDfMoney.setMontype(1);
+        return payCloudDfMoneyMapper.updateByExample(payCloudDfMoney,e);
+    }
+
 }
