@@ -155,27 +155,29 @@ public class CloudTaskController {
         int samecount=0;
         String contractNo = "";
         Map<String,Object> responseMap = new HashMap<>();
+        // 最大支持N条数据
+        int maxDfAmount = Integer.parseInt(ConfigUtil.getValue("MAX_DF_AMOUNT"));
+        maxDfAmount = maxDfAmount + 4;  // 加上表头的四行
+        if ( list.size() > maxDfAmount){
+            // 已超过最大打款数量限制
+            return "-5";
+        }
+        if ( list.size() < 5 ){
+            responseMap.put("code","10004");
+            responseMap.put("info","批次号与文件名不一致请修改后上传！");
+            responseMap.put("data",staffInfosFailed);
+        }
         for ( int i=0; i<list.size(); i++){
             // 外循环为一行excel记录
             if(i >= 4){
                 CloudRemitExcelInfo staffInfo = new CloudRemitExcelInfo();
                 Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
-                staffInfo.setType(Byte.parseByte(singlePerson.get(0)));
-                staffInfo.setBankName(singlePerson.get(1));
-                staffInfo.setProvince(singlePerson.get(2));
-                staffInfo.setCity(singlePerson.get(3));
-                staffInfo.setBankNo(singlePerson.get(4));
-                staffInfo.setName(singlePerson.get(5));
-                staffInfo.setIDNo(singlePerson.get(6));
-                staffInfo.setPhone(singlePerson.get(7));
-                staffInfo.setMoney(new BigDecimal(singlePerson.get(8)));
-                staffInfo.setMemo(singlePerson.get(9));
+                // 内循环为该记录的列值
                 byte flag = 1;
+                // 检查列数据的正确性
                 for ( int j=0; j<singlePerson.size()-1; j++){
-                    // 内循环为该记录的列值
-                    // 检查列数据的正确性
                     // 第一列类型必须是0或者1
-                    if ( !singlePerson.get(0).equals("0") && !singlePerson.get(0).equals("1") ){
+                    if (  singlePerson.get(0) != null && !singlePerson.get(0).equals("0") && !singlePerson.get(0).equals("1") ){
                         flag = 0;
                     }else{
                         // 前9列数据必填
@@ -183,6 +185,39 @@ public class CloudTaskController {
                             flag = 0;
                         }
                     }
+                }
+                // 如果行数据全为空
+                if ( singlePerson.size() == 0 ){
+                    continue;
+                }else{
+                    if ( StringUtils.isNotBlank(singlePerson.get(0)) ){
+                        staffInfo.setType(Byte.parseByte(singlePerson.get(0)));
+                    }
+                    if ( StringUtils.isNotBlank(singlePerson.get(1)) ){
+                        staffInfo.setBankName(singlePerson.get(1));
+                    }
+                    if ( StringUtils.isNotBlank(singlePerson.get(2)) ){
+                        staffInfo.setProvince(singlePerson.get(2));
+                    }
+                    if ( StringUtils.isNotBlank(singlePerson.get(3)) ){
+                        staffInfo.setCity(singlePerson.get(3));
+                    }
+                    if ( StringUtils.isNotBlank(singlePerson.get(4)) ){
+                        staffInfo.setBankNo(singlePerson.get(4));
+                    }
+                    if ( StringUtils.isNotBlank(singlePerson.get(5)) ){
+                        staffInfo.setName(singlePerson.get(5));
+                    }
+                    if ( StringUtils.isNotBlank(singlePerson.get(6)) ){
+                        staffInfo.setIDNo(singlePerson.get(6));
+                    }
+                    if ( StringUtils.isNotBlank(singlePerson.get(7)) ){
+                        staffInfo.setPhone(singlePerson.get(7));
+                    }
+                    if ( StringUtils.isNotBlank(singlePerson.get(8)) ){
+                        staffInfo.setMoney(new BigDecimal(singlePerson.get(8)));
+                    }
+                    staffInfo.setMemo(singlePerson.get(9));
                 }
                 if ( flag == 0 ){
                     staffInfosFailed.add(staffInfo);
@@ -192,8 +227,10 @@ public class CloudTaskController {
                 //总数
                 count++;
                 //总钱数==获取decimal方式
-                companyMoney_Str = new DecimalFormat("#.00").format(Double.parseDouble(singlePerson.get(8))) ;
-                companyMoney = BigDecimalCalculateUtils.add(companyMoney,Double.parseDouble(companyMoney_Str));
+                if ( StringUtils.isNotBlank(singlePerson.get(8)) ){
+                    companyMoney_Str = new DecimalFormat("#.00").format(Double.parseDouble(singlePerson.get(8))) ;
+                    companyMoney = BigDecimalCalculateUtils.add(companyMoney,Double.parseDouble(companyMoney_Str));
+                }
             }else{
                 Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
                 for (int j=0; j<singlePerson.size()-1; j++){
@@ -209,8 +246,7 @@ public class CloudTaskController {
                             // 判断企业充值表中存不存在此合同编号
                             if ( StringUtils.isBlank(contractNo) ){
                                 // 合同编号为空，请检查
-                                String code = "-1";
-                                return code;
+                                return "-1";
                             }
                             CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
                             if ( cloudRechargeInfo.getMerchNo() == null ){
@@ -218,8 +254,7 @@ public class CloudTaskController {
                             }
                             if ( !cloudRechargeInfo.getMerchNo().equals(companyInfo.getMerchNo()) ){
                                 // 充值表中不存在此合同编号
-                                String code = "-2";
-                                return code;
+                                return "-2";
                             }
                         }
                    }
@@ -235,12 +270,6 @@ public class CloudTaskController {
         }else if(count !=samecount){
             responseMap.put("code","10004");
             responseMap.put("info","总笔数与实际笔数不符请修改后上传！");
-            responseMap.put("data",staffInfosFailed);
-            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
-            return uuid.toString();
-        }else if(count>1000){
-            responseMap.put("code","10004");
-            responseMap.put("info","最大支持1000条数据请修改后上传！");
             responseMap.put("data",staffInfosFailed);
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
@@ -341,7 +370,6 @@ public class CloudTaskController {
         }
         return null;
     }
-
 
     /**
      * 列出解析成功或失败的自由职业者信息
@@ -475,19 +503,23 @@ public class CloudTaskController {
         Double totalRate = Double.parseDouble(agentInfo.getAgentRate().toString()) + Double.parseDouble(salesInfo.getSalesRate().toString());
         Double moneyDouble = new Double(money);
         Double feeMoney = totalRate * moneyDouble;
+        feeMoney = Math.ceil(feeMoney*100) / 100;
         cloudCompanyMoneyInfo.setFeemoney(new BigDecimal(feeMoney));   // 服务费金额：实发金额*服务费率
         // 增值税金额
         Double addedValueTax = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX"));
         Double taxMoney = ( moneyDouble + feeMoney ) / ( 1 + addedValueTax ) * addedValueTax;
+        taxMoney = Math.ceil(taxMoney*100) / 100;
         cloudCompanyMoneyInfo.setTaxmoney(new BigDecimal(taxMoney));
         // 增值税附加金额
         Double addedValueTaxAddtion = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX_ADDITION"));
         Double addedValueTaxAddtionMoney = taxMoney*addedValueTaxAddtion;
+        addedValueTaxAddtionMoney = Math.ceil(addedValueTaxAddtionMoney*100) / 100;
         cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal(addedValueTaxAddtionMoney));
         // 毛利金额
         Double individualTax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
         Double supposePay = moneyDouble / (1-individualTax);   // 应发金额
         Double profit = (moneyDouble + feeMoney) - (supposePay + taxMoney + addedValueTaxAddtionMoney);
+        profit = Math.ceil(profit*100) / 100;
         cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit));      // 毛利金额
         // 判断有没有已经存在的合同编号
         /*CloudCompanyMoneyInfo existCompanyMoneyInfo = CloudCompanyMoneyServiceFacade.getRecByFid(contractNo);
@@ -825,6 +857,12 @@ public class CloudTaskController {
             if( content != "" ){
                 //发送短信
                 Map<String,String> retsult = SmsUtils.send(mobile,content);
+                if ( retsult == null ){
+                    jpfResponseDto.setRetCode("0010");
+                    jpfResponseDto.setRetMsg("触发短信接口失败，请检查");
+
+                    return jpfResponseDto;
+                }
                 String requestUrl = retsult.get("requestUrl"); //请求Url
                 String requestParam = retsult.get("requestParam");//请求参数
                 String response =  retsult.get("response");//返回结果json字符串

@@ -8,7 +8,7 @@
 <div class="contentDiv">
     <div class="notice">
         <h6>批量打款模板使用说明</h6>
-        <p>1.单批次最大支持1000条订单</p>
+        <p>1.单批次最大支持10000条订单</p>
         <p>2.文件名会作为批次号保存，文件名格式为[商户名称-日期-编号]，例如：XXX有限责任公司-20180509-01</p>
         <p><a href="../cloudTask/download" style="color: #0e90d2;">点击下载Excel模板</a></p>
     </div>
@@ -117,6 +117,8 @@
                 }else if ( msg == '"-4"' ){
                     $.messager.alert('提示','未查找到此合同编号的充值记录，或该笔充值尚未审核成功','info');
                     return false;
+                }else if ( msg == '"-5"' ){
+                    $.messager.alert('提示','已超过单次最大支持的打款数量，请修改后上传','info')
                 }
                 else{
                     // 打开新窗口显示数据
