@@ -343,9 +343,12 @@ public class CompanyInfoController {
     {
         // 跨域
         String originHeader = httpRequest.getHeader("Origin");
-        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
-        response.setHeader("Access-Control-Allow-Method", "POST");
+        response.setHeader("Access-Control-Allow-Headers", "accept, content-type,token");
+        response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
         response.setHeader("Access-Control-Allow-Origin", originHeader);
+
+        //response.setHeader("Access-Control-Allow-Method", "POST,OPTIONS");
+        //response.setHeader("token", originHeader);
 
     }
 
