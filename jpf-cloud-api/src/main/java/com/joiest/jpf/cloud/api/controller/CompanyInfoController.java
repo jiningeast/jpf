@@ -348,7 +348,7 @@ public class CompanyInfoController {
         // 跨域
         String originHeader = httpRequest.getHeader("Origin");
         //response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Origin", originHeader);
+        //response.setHeader("Access-Control-Allow-Origin", originHeader);
         response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, accept, content-type, token,X-Auth-Token");
         response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
         response.setHeader("Access-Control-Allow-Credentials", "true");
