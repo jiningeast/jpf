@@ -1,5 +1,8 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.dto.GetCloudFansourceRequest;
+import com.joiest.jpf.dto.GetCloudFansourceResponse;
 import com.joiest.jpf.entity.CloudFanSourceInfo;
 
 import java.util.Map;
@@ -16,5 +19,21 @@ public interface CloudFanSourceServiceFacade {
      * */
     public CloudFanSourceInfo getFanSourceByMobile(String mobile);
 
+    /**
+     * 代理列表---后台
+     */
+    public GetCloudFansourceResponse getFansourceList(GetCloudFansourceRequest request);
 
+
+    /**
+     * 获取公司单条信息
+     */
+
+    public CloudFanSourceInfo getFansource(String id);
+
+    /**
+     * 获取公司单条信息
+     */
+
+    public JpfResponseDto editPass(GetCloudFansourceRequest request,String id)throws Exception;
 }

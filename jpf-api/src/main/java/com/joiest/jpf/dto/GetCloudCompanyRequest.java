@@ -227,6 +227,7 @@ public class GetCloudCompanyRequest {
      */
     private String bankname;
 
+
     public String getId() {
         return id;
     }
