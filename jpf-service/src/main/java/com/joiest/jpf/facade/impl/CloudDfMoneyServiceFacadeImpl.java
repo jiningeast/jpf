@@ -323,7 +323,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
         PayCloudDfMoney payCloudDfMoney = new PayCloudDfMoney();
         payCloudDfMoney.setMontype(1);
-        return payCloudDfMoneyMapper.updateByExample(payCloudDfMoney,e);
+        return payCloudDfMoneyMapper.updateByExampleSelective(payCloudDfMoney,e);
     }
 
 }
