@@ -1,5 +1,6 @@
 package com.joiest.jpf.cloud.api.util;
 
+import com.joiest.jpf.cloud.api.controller.ConfigUtil;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.OkHttpUtils;
@@ -13,13 +14,23 @@ import java.util.TreeMap;
 
 public class DfUtils {
 
-    private String DFPAY_URL = "http://vip2.7shengqian.com/trade/api/";
-    private String SERVICE = "applyAgentPay";
-    private String SELECT_SERVICE = "queryAgentPay";
+    private String DFPAY_URL;
+    private String SERVICE;
+    private String SELECT_SERVICE;
     private String signType = "MD5";
     private String inputCharset = "UTF-8";
-    private String sysMerchNo = "152018052300555";
-    private String DF_KEY = "cbc4de5f150b39d0cd703dfbe08a331b";
+    private String sysMerchNo;
+    private String DF_KEY;
+
+    public DfUtils() {
+        this.DFPAY_URL = ConfigUtil.getValue("DFPAY_URL");
+        this.SERVICE = ConfigUtil.getValue("SERVICE");
+        this.SELECT_SERVICE = ConfigUtil.getValue("SELECT_SERVICE");
+        this.sysMerchNo = ConfigUtil.getValue("sysMerchNo");
+        this.DF_KEY = ConfigUtil.getValue("DF_KEY");
+        System.out.println(this.DF_KEY);
+        System.out.println(this.DFPAY_URL);
+    }
 
     public JSONObject applyAgentPay(Map<String, Object> requestMap)
     {
@@ -37,8 +48,8 @@ public class DfUtils {
         String requestParam = ToolUtils.mapToUrl(treeMap);
         String requestUrl = this.DFPAY_URL + this.SERVICE;
 
-//        String result = OkHttpUtils.postForm(requestUrl, treeMap);
-        String result = "{\"retCode\":\"0000\",\"retMsg\":\"操作完成\",\"sign\":\"f2fa8dbf11100461e876d177b4a47284\",\"tranNo\":\"20180601154919050110009043\",\"tranAmt\":0.01,\"outOrderNo\":\"152783935800000000000046\",\"orderStatus\":\"00\"}";
+        String result = OkHttpUtils.postForm(requestUrl, treeMap);
+//        String result = "{\"retCode\":\"0000\",\"retMsg\":\"操作完成\",\"sign\":\"f2fa8dbf11100461e876d177b4a47284\",\"tranNo\":\"20180601154919050110009043\",\"tranAmt\":0.01,\"outOrderNo\":\"152783935800000000000046\",\"orderStatus\":\"00\"}";
 
         JSONObject resultJosn = new JSONObject();
         resultJosn.put("resultStr", result);
