@@ -95,11 +95,11 @@ public class RechargeNeedController {
     public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
     {
         // 跨域
-        String originHeader = httpRequest.getHeader("Origin");
+        /*String originHeader = httpRequest.getHeader("Origin");
         response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
         response.setHeader("Access-Control-Allow-Method", "POST");
         response.setHeader("Access-Control-Allow-Origin", originHeader);
-
+*/
     }
 
 }
