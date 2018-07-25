@@ -460,6 +460,41 @@ public class ToolCateController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
     }
     /**
+     * 公共上传文件接口 base64格式
+     * */
+    @RequestMapping(value = "/uploadFileByBase", method = RequestMethod.POST)
+    @ResponseBody
+    public String uploadFileByBase(HttpServletRequest request) throws UnknownHostException {
+
+        JSONObject resposeData = new JSONObject();
+
+        String isOss = request.getParameter("isOss");//1上传至oss  2不上传
+        if(StringUtils.isBlank(isOss)) isOss = "1";
+
+        //Base64CustomUtils.baseToImageFinal();
+
+        String allpath = "";
+
+        //Oss阿里云上传
+        if(isOss.equals("1")){
+
+            //调用oss上传
+            JSONObject imgRes = AliyunOSSClientUtil.initUploadPath(allpath);
+            if(imgRes.isEmpty()){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
+            }
+            resposeData.put("serverUrl",imgRes.get("imgUrl"));
+            resposeData.put("serverExpireUrl",imgRes.get("expireUrl"));
+        }
+        String fileName = allpath.substring(allpath.lastIndexOf("/")+1);
+
+        resposeData.put("fileName",fileName);
+        resposeData.put("localUrl",allpath);
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
+    }
+    /**
      * excel上传 获取excel表中数据
      * 普通form提交
      * */
@@ -600,9 +635,10 @@ public class ToolCateController {
     {
         // 跨域
         String originHeader = httpRequest.getHeader("Origin");
-        response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
+       /* response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
         response.setHeader("Access-Control-Allow-Method", "POST");
         response.setHeader("Access-Control-Allow-Origin", originHeader);
+    */
     }
 
 }
