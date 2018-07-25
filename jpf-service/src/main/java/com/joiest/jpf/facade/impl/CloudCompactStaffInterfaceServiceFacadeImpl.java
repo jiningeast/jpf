@@ -67,7 +67,7 @@ public class CloudCompactStaffInterfaceServiceFacadeImpl implements CloudCompact
             example.setOrderByClause("updated DESC");
         } else if ( compactActive == 0 )
         {
-            example.setOrderByClause("created ASC");
+            example.setOrderByClause("created DESC");
         }
 
         PayCloudCompactStaffExample.Criteria c = example.createCriteria();
