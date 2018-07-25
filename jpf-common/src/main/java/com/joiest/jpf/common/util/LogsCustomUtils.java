@@ -127,7 +127,7 @@ public class LogsCustomUtils {
             filePath = "/logs/jpf-yinjia-api/log/" + fileName  + ext;
         } else
         {
-            filePath = StringUtils.stripEnd(path, "/") + "/" + fileName + ".txt";
+            filePath = StringUtils.stripEnd(path, "/") + "/" + fileName + ext;
         }
 
         //如有则将"\\"转为"/",没有则不产生任何变化
