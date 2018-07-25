@@ -825,7 +825,8 @@ public class CloudTaskController {
         int companyMoneyRes = CloudCompanyMoneyServiceFacade.updateColumn(upCompanyMoneyInfo);
 
         // 更新代付状态为可支付
-        cloudDfMoneyServiceFacade.updateDfMontype(cloudCompanyMoneyInfo.getId());
+        // cloudDfMoneyServiceFacade.updateDfMontype(cloudCompanyMoneyInfo.getId());
+        // 改为前台企业确认需求时更改为可支付
 
         Date date = new Date();
         String dateTime = date.toString();
