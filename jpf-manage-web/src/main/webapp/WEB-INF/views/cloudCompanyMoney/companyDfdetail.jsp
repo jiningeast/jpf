@@ -124,6 +124,8 @@
                             return '打款失败';
                         }else if ( value == 4 ){
                             return '打款中';
+                        }else if ( value == 5 ){
+                            return '打款限额';
                         }
 
                     }

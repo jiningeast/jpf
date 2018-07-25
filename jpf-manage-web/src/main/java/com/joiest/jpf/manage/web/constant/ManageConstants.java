@@ -32,7 +32,7 @@ public class ManageConstants {
 
     //代付接口秘钥
     public static final String ClOUD_WAITPAY_KEYCODE =  "2298367955ECDEF6F96A8EF4B36CA49E";
-    public static final String ClOUD_WAITPAY_URl =  "http://10.10.18.12:8088/cloud-api/clouddf/dfApi";
+
 
     public static final Map<String,String> USER_OPERATE_STATUS = new HashMap<String,String>(){
         {
