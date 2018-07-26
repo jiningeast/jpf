@@ -3,7 +3,6 @@ package com.joiest.jpf.cloud.api.controller;
 import com.joiest.jpf.cloud.api.util.DfDataUtils;
 import com.joiest.jpf.cloud.api.util.DfThread;
 import com.joiest.jpf.cloud.api.util.DfUtils;
-import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.*;
@@ -89,7 +88,7 @@ public class CloudDfController {
         List<Map<String,String>> filterMonthTotalList = new ArrayList<>();
         Iterator<CloudDfMoneyInterfaceInfo> it = response.getList().iterator();
         while (it.hasNext()) {
-            CloudDfMoneyInterfaceInfo x = (CloudDfMoneyInterfaceInfo) it.next();
+            CloudDfMoneyInterfaceInfo x = it.next();
             Calendar calstar = Calendar.getInstance();
             String currdate = fmt.format(calstar.getTime());
             //获取信息
@@ -215,6 +214,26 @@ public class CloudDfController {
         JSONObject responseDa = new JSONObject();
 
         String orderId = request.getParameter("orderId");
+        String sign = request.getParameter("sign");
+        if ( StringUtils.isBlank(orderId) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(),JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+        }
+        if ( StringUtils.isBlank(orderId) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.NO_SIGN.getCode(),JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+        }
+        //sign验证
+        Map<String,Object> forginRequestMap = new HashMap<>();
+        forginRequestMap.put("orderId", orderId);
+        TreeMap<String, Object> signMap = new TreeMap<>();
+        signMap.putAll(forginRequestMap);
+        String sortUrlStr = ToolUtils.mapToUrl(signMap);
+        String signStr = Md5Encrypt.md5(sortUrlStr + ConfigUtil.getValue("DFAPI_KEY"));
+        if ( !signStr.equals(sign) )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.DF_SIGN_ERROR.getCode(),JpfInterfaceErrorInfo.DF_SIGN_ERROR.getDesc());
+        }
 
         CloudDfOrderInterfaceInfo cloudDfOrderInterfaceInfo = cloudDfOrderInterfaceServiceFacade.getDfOrderByRequestOrderid(orderId);
         if(cloudDfOrderInterfaceInfo == null){

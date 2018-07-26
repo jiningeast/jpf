@@ -106,7 +106,8 @@ public class DfUtils {
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：" + res);
         String fileName = "queryAgentPayLog";
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"", fileName, true);
+        String path = "/logs/jpf-cloud-api/log/";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
         return result;
     }

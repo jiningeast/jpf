@@ -8,9 +8,7 @@ import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.entity.CloudBankcheckInfo;
-import com.joiest.jpf.entity.CloudIdcardInfo;
-import com.joiest.jpf.entity.CloudIdenauthInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.CloudBankcheckServiceFacade;
 import com.joiest.jpf.facade.CloudIdcardServiceFacade;
 import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
@@ -367,7 +365,7 @@ public class ToolCateController {
         return bankAuth;
     }
     /**
-     * 短信发送接口
+     * 短信发送接口 不同手机相同内容
      * */
     @RequestMapping(value = "/sendSmsApi", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -405,6 +403,75 @@ public class ToolCateController {
         try{
             
             int result = new MwSmsUtils().sendSms(mobile, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            if(result==0){//返回值为0，代表成功
+
+                json.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+                json.put("info","短信发送成功");
+
+            }else{//返回值为非0，代表失败
+
+                json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+                json.put("info","短信发送失败");
+            }
+            return json;
+        }catch (Exception e) {
+
+            e.printStackTrace();//异常处理
+        }
+        return json;
+    }
+    /**
+     * 短信发送接口(不同手机，不同内容)
+     * */
+    @RequestMapping(value = "/sendMultixSms", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public JSONObject sendMultixSms(HttpServletRequest request){
+
+        String smsInfo = request.getParameter("smsInfo");
+        String dateTime = request.getParameter("dateTime");
+        String sign = request.getParameter("sign");
+
+        JSONObject json = new JSONObject();
+        if(smsInfo == null || dateTime==null || sign ==null){
+
+            json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+            json.put("info","Error");
+            return json;
+        }
+        Map<String,String> map = new HashMap<>();
+        map.put("smsInfo",smsInfo);
+        map.put("dateTime",dateTime);
+
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(map);
+
+        String respos = ToolUtils.mapToUrl(treeMap);
+        String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+        if(!selfSign.equals(sign)){
+
+            json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+            json.put("info","签名有误");
+            return json;
+        }
+        JSONArray jsonArray = JSONArray.fromObject(smsInfo);
+        List<MwmultSmsInfo> multixMts = new ArrayList<MwmultSmsInfo>();
+        try{
+
+            if(jsonArray.size()>0) {
+
+                for (int i = 0; i < jsonArray.size(); i++) {
+
+                    MwmultSmsInfo param = new MwmultSmsInfo();
+                    JSONObject job = jsonArray.getJSONObject(i);
+
+                    param.setStrMobile(job.get("mobile").toString());//手机号码
+                    param.setStrBase64Msg(job.get("msg").toString());//短信内容，内容长度不大于350个汉字
+                    param.setStrSpNumber("*");//通道号，不需要请填*
+                    param.setStrUserMsgId(String.valueOf(ToolUtils.getRandomInt(1000,9999))+job.get("mobile")+ToolUtils.getRandomInt(1000,9999));//用户自定义流水号，不带请输入0（流水号范围-（2^63）……2^63-1）
+                    multixMts.add(param);//添加一条短信
+                }
+            }
+            int result= new MwSmsUtils().SendMultixSms(multixMts);
             if(result==0){//返回值为0，代表成功
 
                 json.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
@@ -472,6 +539,7 @@ public class ToolCateController {
         if(StringUtils.isBlank(isOss)) isOss = "1";
 
         //Base64CustomUtils.baseToImageFinal();
+
 
         String allpath = "";
 

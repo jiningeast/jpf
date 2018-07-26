@@ -7,6 +7,8 @@ import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 
+import java.util.Map;
+
 
 public interface CloudCompanyMoneyServiceFacade {
 
@@ -19,7 +21,10 @@ public interface CloudCompanyMoneyServiceFacade {
      * 批次列表
      * */
     public CloudCompanyMoneyResponse getRecords(CloudCompanyMoneyRequest cloudCompanyMoneyRequest);
-
+    /*
+     * 获取统计信息
+     * */
+    public Map<String, Object> getStatistics(CloudCompanyMoneyRequest cloudCompanyMoneyRequest);
     /*
      * 财务审核列表
      * */

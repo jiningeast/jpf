@@ -7,6 +7,7 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayCloudCompanyMoneyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMoneyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyMapper;
@@ -21,15 +22,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 
 public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServiceFacade {
 
     @Autowired
     private PayCloudCompanyMoneyMapper payCloudCompanyMoneyMapper;
+
+
+    @Autowired
+    private PayCloudCompanyMoneyCustomMapper payCloudCompanyMoneyCustomMapper;
 
     @Autowired
     private PayCloudDfMoneyMapper payCloudDfMoneyMapper;
@@ -103,12 +107,64 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
 
         return cloudCompanyMoneyResponse;
     }
+    // 获取统计数据
+    @Override
+    public Map<String, Object> getStatistics(CloudCompanyMoneyRequest cloudCompanyMoneyRequest){
 
+        PayCloudCompanyMoneyExample example = new PayCloudCompanyMoneyExample();
+
+        PayCloudCompanyMoneyExample.Criteria c = example.createCriteria();
+        // 构建查询example
+        if ( StringUtils.isNotBlank(cloudCompanyMoneyRequest.getAgentNo()) ){
+            c.andAgentNoEqualTo(cloudCompanyMoneyRequest.getAgentNo());
+        }
+        if ( StringUtils.isNotBlank(cloudCompanyMoneyRequest.getFid())  ){
+            c.andFidEqualTo(cloudCompanyMoneyRequest.getFid());
+        }
+
+        if ( cloudCompanyMoneyRequest.getMontype() !=null  && cloudCompanyMoneyRequest.getMontype().toString() !="" ){
+            c.andMontypeEqualTo(cloudCompanyMoneyRequest.getMontype());
+        }
+
+        // 添加时间搜索
+        Date addtimeStart = new Date();
+        if ( StringUtils.isNotBlank(cloudCompanyMoneyRequest.getAddtimeStart()) ){
+            addtimeStart = DateUtils.getFdate( cloudCompanyMoneyRequest.getAddtimeStart(), DateUtils.DATEFORMATLONG );
+            c.andAddtimeGreaterThan( addtimeStart );
+        }
+        Date addtimeEnd = new Date();
+        if ( StringUtils.isNotBlank(cloudCompanyMoneyRequest.getAddtimeEnd()) ){
+            addtimeEnd = DateUtils.getFdate( cloudCompanyMoneyRequest.getAddtimeEnd(), DateUtils.DATEFORMATLONG );
+            c.andAddtimeLessThan( addtimeEnd );
+        }
+        // 汇总统计
+        Map<String, Object> map = new HashMap<>();
+        map.put("allCount", (long)payCloudCompanyMoneyMapper.countByExample(example));
+        BigDecimal allMoney = payCloudCompanyMoneyCustomMapper.allMoney(example);
+        allMoney = allMoney == null ? new BigDecimal(0) : allMoney;
+        map.put("allMoney", allMoney);
+        BigDecimal allServiceMoney = payCloudCompanyMoneyCustomMapper.allServiceMoney(example);
+        allServiceMoney = allServiceMoney == null ? new BigDecimal(0) : allServiceMoney;
+        map.put("allServiceMoney", allServiceMoney);
+        BigDecimal addedMoney = payCloudCompanyMoneyCustomMapper.addedMoney(example);
+        addedMoney = addedMoney == null ? new BigDecimal(0) : addedMoney;
+        map.put("addedMoney", addedMoney);
+        BigDecimal addedMoneyPay = payCloudCompanyMoneyCustomMapper.addedMoneyPay(example);
+        addedMoneyPay = addedMoneyPay == null ? new BigDecimal(0) : addedMoneyPay;
+        map.put("addedMoneyPay", addedMoneyPay);
+        BigDecimal totalGross = payCloudCompanyMoneyCustomMapper.totalGross(example);
+        totalGross = totalGross == null ? new BigDecimal(0) : totalGross;
+        map.put("totalGross", totalGross);
+        return map;
+
+
+    }
     /*
      * 财务订单审核列表页
      * */
     @Override
     public CloudCompanyMoneyResponse getCaiwuRecords(CloudCompanyMoneyRequest cloudCompanyMoneyRequest){
+
         CloudCompanyMoneyResponse cloudCompanyMoneyResponse = new CloudCompanyMoneyResponse();
 
         PayCloudCompanyMoneyExample example = new PayCloudCompanyMoneyExample();
@@ -154,6 +210,15 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         cloudCompanyMoneyResponse.setList(infos);
         cloudCompanyMoneyResponse.setCount(payCloudCompanyMoneyMapper.countByExample(example));
 
+
+        // 给统计赋值
+        Map<String, Object> map = this.getStatistics(cloudCompanyMoneyRequest);
+        cloudCompanyMoneyResponse.setAllCount((long)map.get("allCount"));
+        cloudCompanyMoneyResponse.setAllMoney((BigDecimal)map.get("allMoney"));
+        cloudCompanyMoneyResponse.setAllServiceMoney((BigDecimal)map.get("allServiceMoney"));
+        cloudCompanyMoneyResponse.setAddedMoney((BigDecimal)map.get("addedMoney"));
+        cloudCompanyMoneyResponse.setAddedMoneyPay((BigDecimal)map.get("addedMoneyPay"));
+        cloudCompanyMoneyResponse.setTotalGross((BigDecimal)map.get("totalGross"));
 
         return cloudCompanyMoneyResponse;
     }

@@ -14,6 +14,12 @@ public class CloudTaskRequest {
      */
     private String operatorName;
 
+
+    /**
+     * 商户名称
+     */
+    private String companyName;
+
     /**
      * 企业名称
      */
@@ -47,22 +53,22 @@ public class CloudTaskRequest {
     /**
      * 创建时间开始
      */
-    private Date addtimeStart;
+    private String addtimeStart;
 
     /**
      * 创建时间结束
      */
-    private Date addtimeEnd;
+    private String addtimeEnd;
 
     /**
      * 完成时间开始
      */
-    private Date finishStart;
+    private String finishStart;
 
     /**
      * 完成时间结束
      */
-    private Date finishEnd;
+    private String finishEnd;
 
     private int page;
 
@@ -132,38 +138,6 @@ public class CloudTaskRequest {
         this.isLock = isLock;
     }
 
-    public Date getAddtimeStart() {
-        return addtimeStart;
-    }
-
-    public void setAddtimeStart(Date addtimeStart) {
-        this.addtimeStart = addtimeStart;
-    }
-
-    public Date getAddtimeEnd() {
-        return addtimeEnd;
-    }
-
-    public void setAddtimeEnd(Date addtimeEnd) {
-        this.addtimeEnd = addtimeEnd;
-    }
-
-    public Date getFinishStart() {
-        return finishStart;
-    }
-
-    public void setFinishStart(Date finishStart) {
-        this.finishStart = finishStart;
-    }
-
-    public Date getFinishEnd() {
-        return finishEnd;
-    }
-
-    public void setFinishEnd(Date finishEnd) {
-        this.finishEnd = finishEnd;
-    }
-
     public int getPage() {
         return page;
     }
@@ -178,5 +152,45 @@ public class CloudTaskRequest {
 
     public void setRows(int rows) {
         this.rows = rows;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getAddtimeStart() {
+        return addtimeStart;
+    }
+
+    public void setAddtimeStart(String addtimeStart) {
+        this.addtimeStart = addtimeStart;
+    }
+
+    public String getAddtimeEnd() {
+        return addtimeEnd;
+    }
+
+    public void setAddtimeEnd(String addtimeEnd) {
+        this.addtimeEnd = addtimeEnd;
+    }
+
+    public String getFinishStart() {
+        return finishStart;
+    }
+
+    public void setFinishStart(String finishStart) {
+        this.finishStart = finishStart;
+    }
+
+    public String getFinishEnd() {
+        return finishEnd;
+    }
+
+    public void setFinishEnd(String finishEnd) {
+        this.finishEnd = finishEnd;
     }
 }

@@ -4,13 +4,14 @@ import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.entity.MwSmsInfo;
+import com.joiest.jpf.entity.MwmultSmsInfo;
 import net.sf.json.JSONObject;
+import org.apache.commons.codec.binary.Base64;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,9 +29,8 @@ public class MwSmsUtils {
     private String  MwPassword = "426210";
     //梦网短信发送公共参数====end
     */
-
     /**
-     * 短信息发送接口（相同内容群发，可自定义流水号）
+     * 短信息发送接口
      * @param strMobiles 手机号
      * @param strMessage 短信内容
      * @return 0:成功 非0:返回webservice接口返回的错误代码
@@ -57,10 +57,10 @@ public class MwSmsUtils {
             param.setPszSubPort(strSubPort);//设置扩展子号
             param.setMsgId(strUserMsgId);//设置流水号
 
-            Message = OkHttpUtils.executePost(param, ConfigUtil.getValue("MW_MONGATESENDSUBMITURL"));//调用底层POST方法提交
+            Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("MW_MONGATESENDSUBMITURL"));//调用底层POST方法提交
             //请求返回值不为空，则解析返回值
-            if(Message != null&& Message != "")
-            {
+            if(Message != null&& Message != "") {
+
                 Document doc= DocumentHelper.parseText(Message);
                 Element el = doc.getRootElement();
                 result = el.getText();//解析返回值
@@ -94,44 +94,58 @@ public class MwSmsUtils {
 
         return returnInt;//返回值返回
     }
-
-
     /**
-     * 短信息发送接口（不同内容群发，可自定义不同流水号，自定义不同扩展号）
-     * @param ip IP地址
-     * @param port 端口
-     * @param strUserId 账号
-     * @param strPwd 密码
+     * 短信息发送接口
+     * @return 0:成功 非0:返回webservice接口返回的错误代码
      */
-    /*public static void SendMultixSms(String ip,String port,String strUserId,String strPwd){
+    public int SendMultixSms(List<MwmultSmsInfo> MultixMt)
+    {
+        int returnInt=-200;
+        try {
+            String result = null;
+            StringBuffer multixmt =new StringBuffer();//批量请求包字符串
 
-        MwSmsInfo param = new MwSmsInfo();
-        try{
-            List<MwSmsInfo> multixMts = new ArrayList<MwSmsInfo>();
-            param.setStrMobile("138XXXXXXXX");//手机号码
-            param.setStrBase64Msg("短信测试");//短信内容，内容长度不大于350个汉字
-            param.setStrSpNumber("*");//通道号，不需要请填*
-            param.setStrUserMsgId("0");//用户自定义流水号，不带请输入0（流水号范围-（2^63）……2^63-1）
-            param.add(multixMt1);//添加一条短信
+            MwSmsInfo param = new MwSmsInfo();
+            param.setUserId(ConfigUtil.getValue("MW_USERID"));//设置账号
+            param.setPassword(ConfigUtil.getValue("MW_PASSWORD"));//设置密码
 
-            MULTIX_MT  multixMt2= new MULTIX_MT();
-            multixMt2.setStrMobile("159XXXXXXXX");//手机号码
-            multixMt2.setStrBase64Msg("短信测试");//短信内容，内容长度不大于350个汉字
-            multixMt2.setStrSpNumber("*");//通道号，不需要请填*
-            multixMt2.setStrUserMsgId("0");//用户自定义流水号，不带请输入0（流水号范围-（2^63）……2^63-1）
-            multixMts.add(multixMt2);//添加一条短信
-            CHttpPost sms=new CHttpPost();//短信请求业务类
-            StringBuffer strPtMsgId=new StringBuffer("");//如果成功，存流水号。失败，存错误码。
-            int result= sms.SendMultixSms(strPtMsgId, ip,port,strUserId, strPwd, multixMts);
-            //短信息发送接口（不同内容群发，可自定义不同流水号，自定义不同扩展号）POST请求。
-            if(result==0){//返回0，则提交成功
-                System.out.println("发送成功："+strPtMsgId.toString());//打印流水号
-            }else{//返回非0，则提交失败
-                System.out.println("发送失败："+strPtMsgId.toString());//打印错误码
+            for(int j=0;j<MultixMt.size();j++)
+            {
+                //循环组装批量请求包
+                MwmultSmsInfo multixMt = MultixMt.get(j);
+                multixmt.append(multixMt.getStrUserMsgId()).append("|");//设置流水号
+                multixmt.append(multixMt.getStrSpNumber()).append("|");//设置通道号
+                multixmt.append(multixMt.getStrMobile()).append("|");//设置手机号码
+                String strBase64Msg = new String(Base64.encodeBase64(multixMt.getStrBase64Msg().getBytes("GBK")));//设置短信内容
+                multixmt.append(strBase64Msg).append(",");
             }
-        }catch (Exception e) {
+            String Multixmt = multixmt.substring(0,multixmt.length()-1);//截取最后一个逗号
+            param.setMultixmt(Multixmt);//设置批量请求包
+
+            String Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("MW_MONGATEMULTIXSENDURL"));//调用底层POST方法提交
+            //请求返回值不为空，则解析返回值
+            if(Message != null&& Message != "")
+            {
+                Document doc= DocumentHelper.parseText(Message);
+                Element el = doc.getRootElement();
+                result = el.getText();//解析返回值
+            }
+            //处理返回结果
+            if(result != null && !"".equals(result) && result.length()>10){
+
+                //解析后的返回值不为空且长度大于10，则是提交成功
+                returnInt=0;
+            }else if(result==null||"".equals(result)){//解析后的返回值为空，则提交失败
+
+            }else{//解析后的返回值不为空且长度不大于10，则提交失败，返回错误码
+
+                returnInt=Integer.parseInt(result);
+            }
+        } catch (Exception e) {
+
+            returnInt=-200;
             e.printStackTrace();//异常处理
         }
-
-    }*/
+        return returnInt;//返回返回值
+    }
 }

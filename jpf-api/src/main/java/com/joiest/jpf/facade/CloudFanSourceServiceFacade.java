@@ -17,7 +17,7 @@ public interface CloudFanSourceServiceFacade {
     /**
      * 获取粉丝信息通过手机号
      * */
-    public CloudFanSourceInfo getFanSourceByMobile(String mobile);
+    public CloudFanSourceInfo getFanSourceByMobile(String mobile,Byte type);
 
     /**
      * 代理列表---后台

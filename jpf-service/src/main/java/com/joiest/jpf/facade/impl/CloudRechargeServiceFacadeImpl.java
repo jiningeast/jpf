@@ -11,10 +11,7 @@ import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ValidatorUtils;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyAgentMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanySalesMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudRechargeMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudRechargeInfo;
@@ -22,6 +19,7 @@ import com.joiest.jpf.entity.RechargeNeedInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudRechargeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +50,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
     @Autowired
     private PayCloudCompanyAgentMapper payCloudCompanyAgentMapper;
+
+    @Autowired
+    private PayCloudDfMoneyMapper payCloudDfMoneyMapper;
     /*
     * 统计充值总笔数
     * */
@@ -737,7 +738,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         }
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(reqId);
         if (payCloudRecharge == null) {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[id]不能不存在");
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[id]不存在");
         }
         if (!payCloudRecharge.getFid().equals(fid)) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[fid]订单号不一致");
@@ -767,7 +768,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         }
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(reqId);
         if (payCloudRecharge == null) {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[id]不能不存在");
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[id]不存在");
         }
         if (!payCloudRecharge.getFid().equals(fid)) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[fid]订单号不一致");
@@ -792,6 +793,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         return new JpfResponseDto();
     }
 
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     @Override
     public JpfResponseDto rechargeNeedAffirm(String merchNo,String agentNo,String id,String fid) {
         //参数转换
@@ -802,7 +804,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         }
         PayCloudRecharge payCloudRecharge = payCloudRechargeMapper.selectByPrimaryKey(reqId);
         if (payCloudRecharge == null) {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[id]不能不存在");
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[id]不存在");
         }
         if (!payCloudRecharge.getFid().equals(fid)) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "操作记录[fid]订单号不一致");
@@ -824,6 +826,10 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (payCloudRecharge.getPacttime().getTime() > Calendar.getInstance().getTime().getTime()) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "未到验收时间，不可以操作");
         }
+        if (StringUtils.isBlank(payCloudRecharge.getPactno())) {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "合同编号不存在，不可以操作");
+        }
+
         PayCloudRechargeExample payCloudRechargeExample = new PayCloudRechargeExample();
         PayCloudRechargeExample.Criteria payCloudRechargeExampleCriteria = payCloudRechargeExample.createCriteria();
         payCloudRechargeExampleCriteria.andIdEqualTo(reqId);
@@ -832,6 +838,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         PayCloudRecharge record = new PayCloudRecharge();
         record.setPactstatus(EnumConstants.RechargePactStatus.CONFIRMED.value());
         payCloudRechargeMapper.updateByExampleSelective(record, payCloudRechargeExample);
+
+        PayCloudDfMoneyExample cloudDfMoneyExample = new PayCloudDfMoneyExample();
+        PayCloudDfMoneyExample.Criteria cloudDfMoneyExampleCriteria = cloudDfMoneyExample.createCriteria();
+        cloudDfMoneyExampleCriteria.andPactnoEqualTo(payCloudRecharge.getPactno());
+        PayCloudDfMoney cloudDfMoneyRecord = new PayCloudDfMoney();
+        cloudDfMoneyRecord.setMontype(1);
+        payCloudDfMoneyMapper.updateByExampleSelective(cloudDfMoneyRecord,cloudDfMoneyExample);
         return new JpfResponseDto();
     }
 
