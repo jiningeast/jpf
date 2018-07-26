@@ -65,4 +65,12 @@ public interface PcaServiceFacade {
      * 更新商户订单回调信息
      */
     public int modifyPayMerMessage(ModifyPayOrderPayMerRequest request);
+
+    /**
+     * 商户后台
+     * 获取省市区
+     * @param catid
+     * @return
+     */
+    public PcaInfo getCats(String catid);
 }
