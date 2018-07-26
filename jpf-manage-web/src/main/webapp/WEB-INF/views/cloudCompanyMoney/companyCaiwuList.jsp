@@ -12,8 +12,14 @@
         <%@ include file="/WEB-INF/views/common/header.jsp" %>
         <!DOCTYPE html>
         <head>
+
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
             <title>银行管理</title>
+            <style>
+
+                .statistics td:nth-child(odd) { background-color: rgb(241,241,241); text-align: right;}
+                .statistics td:nth-child(even) { text-align: left; }
+            </style>
             <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
             <script>
                 $(function(){
@@ -81,7 +87,16 @@
                             },
                             {field:'addtime', title:'创建时间',width:'8%',formatter: formatDateStr},
                             {field:'updatetime', title:'修改时间',width:'8%',formatter: formatDateStr}
-                        ]]
+                        ]],
+                        onLoadSuccess: function (msg) {
+
+                            $("#allCount").text(msg.allCount);
+                            $("#allMoney").text(msg.allMoney);
+                            $("#allServiceMoney").text(msg.allServiceMoney);
+                            $("#addedMoney").text(msg.addedMoney);
+                            $("#addedMoneyPay").text(msg.addedMoneyPay);
+                            $("#totalGross").text(msg.totalGross);
+                        }
                     });
 
                     $('#searchBtn').linkbutton({
@@ -117,7 +132,7 @@
             <form id="searchForm" method="post">
                 <table cellpadding="5" width="75%">
                     <tr>
-                        <td>批次定单号:</td>
+                        <td>合同编号:</td>
                         <td><input id="fid" name="fid" class="easyui-textbox" type="text" /></td>
                         <td>代理聚合商户编号:</td>
                         <td><input id="agent_no" name="agent_no" class="easyui-textbox" type="text" /></td>
@@ -155,6 +170,25 @@
     <div id="ft" style="padding:5px;">
         <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
         <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+    </div>
+    <br/>
+    <div class="easyui-panel statistics" title="汇总统计">
+        <table width="100%" cellpadding="5%">
+            <tr>
+                <td width="4%">总笔数：</td>
+                <td width="4%" id="allCount"></td>
+                <td width="4%">总金额：</td>
+                <td width="4%" id="allMoney"></td>
+                <td width="4%">总服务费：</td>
+                <td width="4%" id="allServiceMoney"></td>
+                <td width="4%">总增值税：</td>
+                <td width="4%" id="addedMoney"></td>
+                <td width="4%">总增值税附加：</td>
+                <td width="4%" id="addedMoneyPay"></td>
+                <td width="4%">总毛利：</td>
+                <td width="4%" id="totalGross"></td>
+            </tr>
+        </table>
     </div>
     <br/>
     <table id="dg"></table>

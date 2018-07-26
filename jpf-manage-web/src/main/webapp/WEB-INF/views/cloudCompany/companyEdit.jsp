@@ -23,21 +23,21 @@
                 <tr>
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">公司名称：</td>
                     <td>
-                        <input id="name" name="name" type="text" style="width:150px" class="easyui-textbox"
+                        <input id="name" name="name" data-options="required:true,validType:'chinese'" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value="${cloudCompanyInfo.name}"/>
                     </td>
                 </tr>
                 <tr>
                     <td  style="text-align: right;width:40%" bgcolor="#f1f1f1">商户别名：</td>
                     <td>
-                        <input id="merchName" name="merchName" type="text" style="width:150px" class="easyui-textbox"
+                        <input id="merchName" name="merchName" data-options="required:true" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value="${cloudCompanyInfo.merchName}"/>
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">联系人姓名：</td>
                     <td>
-                        <input id="phonename" name="phonename" type="text" style="width:150px" class="easyui-textbox"
+                        <input id="phonename" data-options="required:true,validType:'chinese'" name="phonename" type="text" style="width:150px" class="easyui-textbox"
                                required="true" value="${cloudCompanyInfo.phonename}"/>
                     </td>
                     </tr>
@@ -51,7 +51,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1; width: 7%">联系人地址：</td>
                     <td>
-                        <input id="addressPerson" data-options="required:true"  name="addressPerson" type="text" style="width:150px" class="easyui-textbox"
+                        <input id="addressPerson" data-options="required:true" data-options="required:true,validType:'chinese'"  name="addressPerson" type="text" style="width:150px" class="easyui-textbox"
                                value="${cloudCompanyInfo.addressPerson}" />
                     </td>
                 </tr>
@@ -183,7 +183,7 @@
 
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">客户经理：</td>
                     <td>
-                        <input id="serviclinkuser" name="serviclinkuser" type="text" style="width:150px"
+                        <input id="serviclinkuser" data-options="validType:'chinese'" name="serviclinkuser" type="text" style="width:150px"
                                class="easyui-textbox" value="${cloudCompanyInfo.serviclinkuser}"/>
                     </td>
                 </tr>
@@ -217,7 +217,7 @@
 
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">对公账户：</td>
                     <td>
-                        <input class="easyui-numberbox" data-options="required:true"  id="bankno" name="bankno" type="text" style="width:150px"
+                        <input  data-options="required:true,validType:'intOrFloat '" id="bankno" name="bankno" type="text" style="width:150px"
                                class="easyui-textbox" value="${cloudCompanyBankInfo.bankno}"/>
                     </td>
                 </tr>
@@ -226,7 +226,7 @@
 
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">开户名称：</td>
                     <td>
-                        <input id="accountName" data-options="required:true"  name="accountName" type="text" style="width:150px"
+                        <input id="accountName" data-options="required:true,validType:'chinese'"   data-options="required:true,validType:'chinese'" name="accountName" type="text" style="width:150px"
                                class="easyui-textbox" value="${cloudCompanyBankInfo.accountName}"/>
                     </td>
                 </tr>
@@ -241,14 +241,14 @@
 
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">开户行全称：</td>
                     <td>
-                        <input id="banksubname" name="banksubname" data-options="required:true"  type="text" style="width:150px"
+                        <input id="banksubname" name="banksubname" data-options="required:true,validType:'chinese'" data-options="required:true"  type="text" style="width:150px"
                                class="easyui-textbox" value="${cloudCompanyBankInfo.banksubname}"/>
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">银行开户名称：</td>
                     <td>
-                        <input id="bankid" name="bankid" data-options="required:true"  type="text" class="easyui-textbox" style="width:175px;" value="${cloudCompanyBankInfo.bankname}" data-options="required:true">
+                        <input id="bankid" name="bankid" data-options="required:true,validType:'chinese'" data-options="required:true"  type="text" class="easyui-textbox" style="width:175px;" value="${cloudCompanyBankInfo.bankname}" data-options="required:true">
                     </td>
                 </tr>
                 <tr>
@@ -314,7 +314,27 @@
 
             },
             message: '请输入正确电话或手机格式'
-        }
+        },
+        intOrFloat : {// 验证整数或小数
+            validator : function(value) {
+                return /^\d+(\.\d+)?$/i.test(value);
+            },
+            message : '请输入数字，并确保格式正确'
+        },
+        chinese : {// 验证中文
+            validator : function(value) {
+                return /^[\u0391-\uFFE5]+$/i.test(value);
+            },
+            message : '请输入中文'
+        },engOrChineseAndLength : {// 可以是中文或英文
+            validator : function(value) {
+                var len = $.trim(value).length;
+                if (len >= param[0] && len <= param[1]) {
+                    return /^[\u0391-\uFFE5]+$/i.test(value) | /^\w+[\w\s]+\w+$/i.test(value);
+                }
+            },
+            message : '请输入中文或英文'
+        },
     });
 
     function initData() {

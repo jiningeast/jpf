@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,7 +63,23 @@ public class CloudCompanyMoneyController {
         Map<String, Object> map = new HashMap<>();
         map.put("total", cloudCompanyMoneyResponse.getCount());
         map.put("rows", cloudCompanyMoneyResponse.getList());
-
+        // 统计汇总
+        map.put("allCount", cloudCompanyMoneyResponse.getAllCount());
+        BigDecimal allMoney = cloudCompanyMoneyResponse.getAllMoney();
+        allMoney = allMoney == null ? new BigDecimal(0) : allMoney;
+        map.put("allMoney", allMoney);
+        BigDecimal allServiceMoney = cloudCompanyMoneyResponse.getAllServiceMoney();
+        allServiceMoney = allServiceMoney == null ? new BigDecimal(0) : allServiceMoney;
+        map.put("allServiceMoney", allServiceMoney);
+        BigDecimal addedMoney = cloudCompanyMoneyResponse.getAddedMoney();
+        addedMoney = addedMoney == null ? new BigDecimal(0) : addedMoney;
+        map.put("addedMoney", addedMoney);
+        BigDecimal addedMoneyPay = cloudCompanyMoneyResponse.getAddedMoneyPay();
+        addedMoneyPay = addedMoneyPay == null ? new BigDecimal(0) : addedMoneyPay;
+        map.put("addedMoneyPay", addedMoneyPay);
+        BigDecimal totalGross = cloudCompanyMoneyResponse.getTotalGross();
+        totalGross = totalGross == null ? new BigDecimal(0) : totalGross;
+        map.put("totalGross", totalGross);
         return map;
     }
 

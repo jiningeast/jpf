@@ -96,6 +96,19 @@
                     {field:'finishtime',title:'完成时间',width:"10%",formatter: formatDateStr}
                 ]]
             });
+            $('#searchBtn').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serializeArray();
+                    var postData = parsePostData(queryArray);
+                    $('#taskDataGrid').datagrid('reload', postData);
+                }
+            });
+
+            $('#searchRestBtn').linkbutton({
+                onClick: function(){
+                    $('#searchForm').form('reset');
+                }
+            });
         })
     </script>
 </head>
@@ -124,8 +137,8 @@
                     <td>鉴权状态:</td>
                     <td>
                         <select id="status" name="status" class="easyui-combobox">
-                            <option value="">全部</option>
-                            <option value="0">未处理</option>
+                            <option value="7" selected="selected">全部</option>
+                            <option value="4">未处理</option>
                             <option value="1">部分失败</option>
                             <option value="2">全部失败</option>
                             <option value="3">全部成功</option>
@@ -133,9 +146,9 @@
                     </td>
                     <td>锁定状态:</td>
                     <td>
-                        <select id="isLock" name="status" class="easyui-combobox">
-                            <option value="">全部</option>
-                            <option value="0">未锁定</option>
+                        <select id="isLock" name="isLock" class="easyui-combobox">
+                            <option value="7" selected="selected">全部</option>
+                            <option value="4">未锁定</option>
                             <option value="1">已锁定</option>
                         </select>
                     </td>
@@ -167,10 +180,12 @@
             </table>
         </form>
     </div>
+
     <div id="tasks_ft" style="padding:5px;">
         <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
         <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
     </div>
+    <br/>
     <div id="taskDataGrid"></div>
     <div id="addWindow" style="padding: 10px;"></div>
     <div id="detailWindow" style="padding: 10px;"></div>
