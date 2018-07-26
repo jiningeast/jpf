@@ -1,5 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.dao.repository.mapper.custom.PayOrderPayMerMessageCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayOrderPayMessageCustomMapper;
@@ -208,5 +210,23 @@ public class PcaServiceFacadeImpl implements PcaServiceFacade {
         PayOrderPayMerMessageExample.Criteria c = example.createCriteria();
         c.andIdEqualTo(request.getId());
         return payOrderPayMerMessageCustomMapper.updateByExampleSelective(payOrderPayMerMessage,example);
+    }
+
+    public PcaInfo getCats(String catid){
+        PayPcaExample example = new PayPcaExample();
+        PayPcaExample.Criteria criteria = example.createCriteria();
+        criteria.andCatidEqualTo(Integer.valueOf(catid));
+        List<PayPca> pcas = payPcaMapper.selectByExample(example);
+        if(pcas.size() <= 0 || pcas == null){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "无效catid");
+        }
+
+        PcaInfo pcaInfo = new PcaInfo();
+        for (PayPca one : pcas)
+        {
+            BeanCopier beanCopier = BeanCopier.create(PayPca.class, PcaInfo.class, false);
+            beanCopier.copy(one, pcaInfo, null);
+        }
+        return pcaInfo;
     }
 }
