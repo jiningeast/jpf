@@ -425,7 +425,7 @@ public class OkHttpUtils {
      * @return 请求网关的返回值
      * @throws Exception
      */
-    public static String executePost(Object obj, String httpUrl) throws Exception {
+    public static String executeMwPost(Object obj, String httpUrl) throws Exception {
 
         String result = "";
         Class cls = obj.getClass();
@@ -437,6 +437,7 @@ public class OkHttpUtils {
         java.lang.reflect.Method getMethod = null;
         String value = null;
         for (int i = 0; i < fields.length; i++)   {//循环设置请求参数
+
             fieldName = fields[i].getName();
             fieldNameUpper = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
             getMethod = cls.getMethod("get" + fieldNameUpper);//通过反射获取get方法

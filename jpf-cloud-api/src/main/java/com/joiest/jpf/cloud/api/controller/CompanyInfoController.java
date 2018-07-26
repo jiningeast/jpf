@@ -301,16 +301,20 @@ public class CompanyInfoController {
     @RequestMapping("sourceAdd")
     @ResponseBody
     public String sourceAdd(HttpServletRequest request){
-
+        
         String catId = request.getParameter("catId");
         String cat = request.getParameter("cat");
         String mobile = request.getParameter("mobile");
         String name = request.getParameter("name");
+        String type = request.getParameter("type");
+
+        if(StringUtils.isBlank(type)) type="MQ==";
 
         catId = Base64CustomUtils.base64Decoder(catId);
         cat = Base64CustomUtils.base64Decoder(cat);
         mobile = Base64CustomUtils.base64Decoder(mobile);
         name = Base64CustomUtils.base64Decoder(name);
+        type = Base64CustomUtils.base64Decoder(type);
 
         String reg = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[8|9])|(16[6]))\\d{8}$";
         Boolean mobile_IsTrue = Pattern.compile(reg).matcher(mobile).matches();
@@ -318,8 +322,7 @@ public class CompanyInfoController {
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请输入正确的手机号", null);
         }
-
-        CloudFanSourceInfo cloudFanSourceInfo = cloudFanSourceServiceFacade.getFanSourceByMobile(mobile);
+        CloudFanSourceInfo cloudFanSourceInfo = cloudFanSourceServiceFacade.getFanSourceByMobile(mobile,Byte.valueOf(type));
         if(cloudFanSourceInfo != null){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您的信息我们已经收到，请勿重复操作", null);
@@ -330,6 +333,7 @@ public class CompanyInfoController {
         map.put("cat",cat);
         map.put("mobile",mobile);
         map.put("name",name);
+        map.put("type",type);
 
         int res = cloudFanSourceServiceFacade.addFanSource(map);
 

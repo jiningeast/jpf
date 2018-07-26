@@ -1,6 +1,5 @@
 package com.joiest.jpf.facade.impl;
 
-import com.joiest.jpf.common.custom.PayCloudCompanyCustom;
 import com.joiest.jpf.common.custom.PayCloudFansourceCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
@@ -12,7 +11,6 @@ import com.joiest.jpf.dao.repository.mapper.custom.PayCloudFansourceCustomMapper
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudFansourceMapper;
 import com.joiest.jpf.dto.GetCloudFansourceRequest;
 import com.joiest.jpf.dto.GetCloudFansourceResponse;
-import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudFanSourceInfo;
 import com.joiest.jpf.facade.CloudFanSourceServiceFacade;
 import org.apache.commons.lang.StringUtils;
@@ -43,6 +41,7 @@ public class CloudFanSourceServiceFacadeImpl implements CloudFanSourceServiceFac
         payCloudFansource.setCat(map.get("cat"));
         payCloudFansource.setMobile(map.get("mobile"));
         payCloudFansource.setName(map.get("name"));
+        payCloudFansource.setType(Byte.valueOf(map.get("type")));
         payCloudFansource.setCreated(new Date());
 
         return payCloudFansourceMapper.insertSelective(payCloudFansource);
@@ -52,12 +51,14 @@ public class CloudFanSourceServiceFacadeImpl implements CloudFanSourceServiceFac
     /**
      * 获取粉丝信息通过手机号
      * */
-    public CloudFanSourceInfo getFanSourceByMobile(String mobile){
+    public CloudFanSourceInfo getFanSourceByMobile(String mobile,Byte type){
 
         PayCloudFansourceExample example = new PayCloudFansourceExample();
         PayCloudFansourceExample.Criteria c= example.createCriteria();
         c.andMobileEqualTo(mobile);
-
+        if(StringUtils.isNotBlank(String.valueOf(type))){
+            c.andTypeEqualTo(type);
+        }
         List<PayCloudFansource> getPayCloudFansources = payCloudFansourceMapper.selectByExample(example);
         if(getPayCloudFansources == null || getPayCloudFansources.isEmpty()) return null;
 
@@ -150,7 +151,7 @@ public class CloudFanSourceServiceFacadeImpl implements CloudFanSourceServiceFac
 
         PayCloudFansourceExample e = new PayCloudFansourceExample();
         PayCloudFansourceExample.Criteria c = e.createCriteria();
-        c.andIdEqualTo(request.getId());
+        c.andIdEqualTo(new Long(request.getId()));
 
         List<PayCloudFansource> getPayCloudFansource = payCloudFansourceMapper.selectByExample(e);
         if(getPayCloudFansource==null || getPayCloudFansource.isEmpty()){
@@ -162,7 +163,7 @@ public class CloudFanSourceServiceFacadeImpl implements CloudFanSourceServiceFac
         //根据数据更新备注
         PayCloudFansource payCloudFansource =new PayCloudFansource();
         payCloudFansource.setRemark(request.getRemark());
-        payCloudFansource.setRemarkuid(id);
+        payCloudFansource.setRemarkuid(Long.valueOf(id));
 
        int res= payCloudFansourceMapper.updateByExampleSelective(payCloudFansource,e);
        if(res!=1){

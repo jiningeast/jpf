@@ -7,7 +7,7 @@ public class PayCloudFansource implements Serializable {
     /**
      * 
      */
-    private String id;
+    private Long id;
 
     /**
      * 地区ID
@@ -30,9 +30,14 @@ public class PayCloudFansource implements Serializable {
     private String name;
 
     /**
-     * 创建时间
+     * 1 首页录入   2 行业解决方案录入
      */
-    private Date created;
+    private Byte type;
+
+    /**
+     * 备注人ID
+     */
+    private Long remarkuid;
 
     /**
      * 备注
@@ -40,18 +45,18 @@ public class PayCloudFansource implements Serializable {
     private String remark;
 
     /**
-     * 备注人ID
+     * 创建时间
      */
-    private String remarkuid;
+    private Date created;
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getCatid() {
@@ -86,12 +91,20 @@ public class PayCloudFansource implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public Date getCreated() {
-        return created;
+    public Byte getType() {
+        return type;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public Long getRemarkuid() {
+        return remarkuid;
+    }
+
+    public void setRemarkuid(Long remarkuid) {
+        this.remarkuid = remarkuid;
     }
 
     public String getRemark() {
@@ -102,12 +115,12 @@ public class PayCloudFansource implements Serializable {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public String getRemarkuid() {
-        return remarkuid;
+    public Date getCreated() {
+        return created;
     }
 
-    public void setRemarkuid(String remarkuid) {
-        this.remarkuid = remarkuid == null ? null : remarkuid.trim();
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     /**
@@ -124,9 +137,10 @@ public class PayCloudFansource implements Serializable {
         sb.append(", cat=").append(cat);
         sb.append(", mobile=").append(mobile);
         sb.append(", name=").append(name);
-        sb.append(", created=").append(created);
-        sb.append(", remark=").append(remark);
+        sb.append(", type=").append(type);
         sb.append(", remarkuid=").append(remarkuid);
+        sb.append(", remark=").append(remark);
+        sb.append(", created=").append(created);
         sb.append("]");
         return sb.toString();
     }
@@ -152,9 +166,10 @@ public class PayCloudFansource implements Serializable {
             && (this.getCat() == null ? other.getCat() == null : this.getCat().equals(other.getCat()))
             && (this.getMobile() == null ? other.getMobile() == null : this.getMobile().equals(other.getMobile()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getRemarkuid() == null ? other.getRemarkuid() == null : this.getRemarkuid().equals(other.getRemarkuid()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getRemarkuid() == null ? other.getRemarkuid() == null : this.getRemarkuid().equals(other.getRemarkuid()));
+            && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()));
     }
 
     /**
@@ -169,9 +184,10 @@ public class PayCloudFansource implements Serializable {
         result = prime * result + ((getCat() == null) ? 0 : getCat().hashCode());
         result = prime * result + ((getMobile() == null) ? 0 : getMobile().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getRemarkuid() == null) ? 0 : getRemarkuid().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         return result;
     }
 }

@@ -185,52 +185,52 @@ public class PayCloudFansourceExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(String value) {
+        public Criteria andIdEqualTo(Long value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(String value) {
+        public Criteria andIdNotEqualTo(Long value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(String value) {
+        public Criteria andIdGreaterThan(Long value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
+        public Criteria andIdGreaterThanOrEqualTo(Long value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(String value) {
+        public Criteria andIdLessThan(Long value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(String value) {
+        public Criteria andIdLessThanOrEqualTo(Long value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<String> values) {
+        public Criteria andIdIn(List<Long> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<String> values) {
+        public Criteria andIdNotIn(List<Long> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(String value1, String value2) {
+        public Criteria andIdBetween(Long value1, Long value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(String value1, String value2) {
+        public Criteria andIdNotBetween(Long value1, Long value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -505,63 +505,123 @@ public class PayCloudFansourceExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreatedIsNull() {
-            addCriterion("created is null");
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedIsNotNull() {
-            addCriterion("created is not null");
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedEqualTo(Date value) {
-            addCriterion("created =", value, "created");
+        public Criteria andTypeEqualTo(Byte value) {
+            addCriterion("type =", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedNotEqualTo(Date value) {
-            addCriterion("created <>", value, "created");
+        public Criteria andTypeNotEqualTo(Byte value) {
+            addCriterion("type <>", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedGreaterThan(Date value) {
-            addCriterion("created >", value, "created");
+        public Criteria andTypeGreaterThan(Byte value) {
+            addCriterion("type >", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedGreaterThanOrEqualTo(Date value) {
-            addCriterion("created >=", value, "created");
+        public Criteria andTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("type >=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedLessThan(Date value) {
-            addCriterion("created <", value, "created");
+        public Criteria andTypeLessThan(Byte value) {
+            addCriterion("type <", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedLessThanOrEqualTo(Date value) {
-            addCriterion("created <=", value, "created");
+        public Criteria andTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("type <=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedIn(List<Date> values) {
-            addCriterion("created in", values, "created");
+        public Criteria andTypeIn(List<Byte> values) {
+            addCriterion("type in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedNotIn(List<Date> values) {
-            addCriterion("created not in", values, "created");
+        public Criteria andTypeNotIn(List<Byte> values) {
+            addCriterion("type not in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedBetween(Date value1, Date value2) {
-            addCriterion("created between", value1, value2, "created");
+        public Criteria andTypeBetween(Byte value1, Byte value2) {
+            addCriterion("type between", value1, value2, "type");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedNotBetween(Date value1, Date value2) {
-            addCriterion("created not between", value1, value2, "created");
+        public Criteria andTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("type not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidIsNull() {
+            addCriterion("remarkuid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidIsNotNull() {
+            addCriterion("remarkuid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidEqualTo(Long value) {
+            addCriterion("remarkuid =", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidNotEqualTo(Long value) {
+            addCriterion("remarkuid <>", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidGreaterThan(Long value) {
+            addCriterion("remarkuid >", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidGreaterThanOrEqualTo(Long value) {
+            addCriterion("remarkuid >=", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidLessThan(Long value) {
+            addCriterion("remarkuid <", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidLessThanOrEqualTo(Long value) {
+            addCriterion("remarkuid <=", value, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidIn(List<Long> values) {
+            addCriterion("remarkuid in", values, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidNotIn(List<Long> values) {
+            addCriterion("remarkuid not in", values, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidBetween(Long value1, Long value2) {
+            addCriterion("remarkuid between", value1, value2, "remarkuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkuidNotBetween(Long value1, Long value2) {
+            addCriterion("remarkuid not between", value1, value2, "remarkuid");
             return (Criteria) this;
         }
 
@@ -635,63 +695,63 @@ public class PayCloudFansourceExample {
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidIsNull() {
-            addCriterion("remarkuid is null");
+        public Criteria andCreatedIsNull() {
+            addCriterion("created is null");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidIsNotNull() {
-            addCriterion("remarkuid is not null");
+        public Criteria andCreatedIsNotNull() {
+            addCriterion("created is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidEqualTo(String value) {
-            addCriterion("remarkuid =", value, "remarkuid");
+        public Criteria andCreatedEqualTo(Date value) {
+            addCriterion("created =", value, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidNotEqualTo(String value) {
-            addCriterion("remarkuid <>", value, "remarkuid");
+        public Criteria andCreatedNotEqualTo(Date value) {
+            addCriterion("created <>", value, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidGreaterThan(String value) {
-            addCriterion("remarkuid >", value, "remarkuid");
+        public Criteria andCreatedGreaterThan(Date value) {
+            addCriterion("created >", value, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidGreaterThanOrEqualTo(String value) {
-            addCriterion("remarkuid >=", value, "remarkuid");
+        public Criteria andCreatedGreaterThanOrEqualTo(Date value) {
+            addCriterion("created >=", value, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidLessThan(String value) {
-            addCriterion("remarkuid <", value, "remarkuid");
+        public Criteria andCreatedLessThan(Date value) {
+            addCriterion("created <", value, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidLessThanOrEqualTo(String value) {
-            addCriterion("remarkuid <=", value, "remarkuid");
+        public Criteria andCreatedLessThanOrEqualTo(Date value) {
+            addCriterion("created <=", value, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidIn(List<String> values) {
-            addCriterion("remarkuid in", values, "remarkuid");
+        public Criteria andCreatedIn(List<Date> values) {
+            addCriterion("created in", values, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidNotIn(List<String> values) {
-            addCriterion("remarkuid not in", values, "remarkuid");
+        public Criteria andCreatedNotIn(List<Date> values) {
+            addCriterion("created not in", values, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidBetween(String value1, String value2) {
-            addCriterion("remarkuid between", value1, value2, "remarkuid");
+        public Criteria andCreatedBetween(Date value1, Date value2) {
+            addCriterion("created between", value1, value2, "created");
             return (Criteria) this;
         }
 
-        public Criteria andRemarkuidNotBetween(String value1, String value2) {
-            addCriterion("remarkuid not between", value1, value2, "remarkuid");
+        public Criteria andCreatedNotBetween(Date value1, Date value2) {
+            addCriterion("created not between", value1, value2, "created");
             return (Criteria) this;
         }
 
