@@ -240,7 +240,7 @@
                                     if (msg.retCode != '0000') {
                                         $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                                     } else {
-                                        $.messager.alert('消息提示', msg.retMsg, 'error');
+                                        $.messager.alert('消息提示', msg.retMsg, 'info');
                                         $('#infoDiv').window('close');
                                         $('#dg').datagrid('reload');
                                     }
@@ -261,7 +261,7 @@
                             if (msg.retCode != '0000') {
                                 $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                             } else {
-                                $.messager.alert('消息提示', msg.retMsg, 'error');
+                                $.messager.alert('消息提示', msg.retMsg, 'info');
                                 $('#infoDiv').window('close');
                                 $('#dg').datagrid('reload');
                             }
