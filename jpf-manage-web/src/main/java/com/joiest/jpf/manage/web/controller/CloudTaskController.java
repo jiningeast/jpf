@@ -825,8 +825,7 @@ public class CloudTaskController {
         int companyMoneyRes = CloudCompanyMoneyServiceFacade.updateColumn(upCompanyMoneyInfo);
 
         // 更新代付状态为可支付
-        // cloudDfMoneyServiceFacade.updateDfMontype(cloudCompanyMoneyInfo.getId());
-        // 改为前台企业确认需求时更改为可支付
+        cloudDfMoneyServiceFacade.updateDfMontype(cloudCompanyMoneyInfo.getId());
 
         Date date = new Date();
         String dateTime = date.toString();
@@ -835,6 +834,7 @@ public class CloudTaskController {
         for (int i = 0; i < dfMoneyInfoList.size() ; i++) {
             Long dfMoneyId = dfMoneyInfoList.get(i).getId();//代付表主键ID
             String banknickname = dfMoneyInfoList.get(i).getBanknickname();//收款人
+
             String mobile = dfMoneyInfoList.get(i).getBankphone(); //手机号
             Long busstaffid = dfMoneyInfoList.get(i).getBusstaffid(); //员工ID
 
