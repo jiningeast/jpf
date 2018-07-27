@@ -392,11 +392,11 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
                //发送邮件
                String email=request.getLinkemail();
                String html="<div style='width: 600px;margin: 0 auto'><h3 style='color:#003E64; text-align:center; '>欣享服务结算系统帐号开通</h3><p style=''>尊敬的用户您好：</p><p style='text-indent: 2em'>感谢您使用欣享服务结算系统，您的登录帐号已经开通,帐号信息如下：</p><p style='text-indent: 2em'>用户名："+email+"</p><p style='text-indent: 2em'>登录密码："+passlogin+"</p>\n" +
-                       "<p style='text-indent: 2em'>您可以使用帐号登录欣享结算系统:<a style=\"color:#1b99cc;font-size: 20px;\">https://yun.xinxiangfuwu.com</a></p>\n" +
+                       "<p style='text-indent: 2em'>您可以使用帐号登录欣享结算系统:<a style=\"color:#1b99cc;font-size: 20px;\" href=\"https://yun.xinxiangfuwu.com\" >https://yun.xinxiangfuwu.com</a></p>\n" +
                        "<p style='text-indent: 2em'><span style=\"color:#ec0e2b \">用户名，密码均为重要信息，请妥善保管，不得泄漏给他人。若出现信息泄漏等情况，请及时联系我们。</span></p>\n" +
                        "<p style='text-align: right;  font-size: 20px;'>欣享服务团队</p>\n" +
                        "\n" +
-                       "<p style='text-align: center;  font-size: 20px;'><a style=\"color:#1b99cc\">https://yun.xinxiangfuwu.com</a></p>\n" +
+                       "<p style='text-align: center;  font-size: 20px;'><a style=\"color:#1b99cc\" href=\"https://yun.xinxiangfuwu.com\">https://yun.xinxiangfuwu.com</a></p>\n" +
                        "\n" +
                        "</div>";
                Boolean eamilres=SendMailUtil.sendHtmlEmail(email,html );
