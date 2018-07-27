@@ -16,11 +16,13 @@
         <result column="commoney" jdbcType="DECIMAL" property="commoney" />
         <result column="bankno" jdbcType="VARCHAR" property="bankno" />
         <result column="banknickname" jdbcType="VARCHAR" property="banknickname" />
+        <result column="idno" jdbcType="VARCHAR" property="idno" />
         <result column="bankphone" jdbcType="VARCHAR" property="bankphone" />
         <result column="bankname" jdbcType="VARCHAR" property="bankname" />
         <result column="bankprovince" jdbcType="VARCHAR" property="bankprovince" />
         <result column="bankcity" jdbcType="VARCHAR" property="bankcity" />
         <result column="banktype" jdbcType="VARCHAR" property="banktype" />
+        <result column="bankcode" jdbcType="VARCHAR" property="bankcode" />
         <result column="bankAcctAttr" jdbcType="TINYINT" property="bankacctattr" />
         <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
         <result column="realname" jdbcType="VARCHAR" property="realname" />
@@ -33,7 +35,7 @@
         <result column="operastate" jdbcType="TINYINT" property="operastate" />
         <result column="tranNo" jdbcType="VARCHAR" property="tranno" />
         <result column="orderid" jdbcType="VARCHAR" property="orderid" />
-        <result column="ordernewid" jdbcType="VARCHAR" property="ordernewid" />
+        <result column="orderids" jdbcType="VARCHAR" property="orderids" />
         <result column="payablemoney" jdbcType="DECIMAL" property="payablemoney" />
         <result column="withholdmoney" jdbcType="DECIMAL" property="withholdmoney" />
         <result column="invostatus" jdbcType="TINYINT" property="invostatus" />
@@ -117,7 +119,7 @@
         id, agent_no, merch_no, uid, fid, busstaffid, username, commoney, bankno, banknickname,
         bankphone, bankname, bankprovince, bankcity, banktype, bankAcctAttr, addtime, realname,
         montype, remark, vid, is_active, content, updatetime, operastate, tranNo, orderid,
-        ordernewid, payablemoney, withholdmoney, invostatus
+        orderids, payablemoney, withholdmoney, invostatus
     </sql>
     <select id="selectJoinCompanyStaff" parameterType="com.joiest.jpf.common.po.PayCloudDfMoneyExample" resultMap="BaseResultMap">
         <!--

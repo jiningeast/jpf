@@ -230,6 +230,7 @@ public class CloudDfController {
         signMap.putAll(forginRequestMap);
         String sortUrlStr = ToolUtils.mapToUrl(signMap);
         String signStr = Md5Encrypt.md5(sortUrlStr + ConfigUtil.getValue("DFAPI_KEY"));
+        //签名错误
         if ( !signStr.equals(sign) )
         {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.DF_SIGN_ERROR.getCode(),JpfInterfaceErrorInfo.DF_SIGN_ERROR.getDesc());
@@ -247,6 +248,7 @@ public class CloudDfController {
         apiInfo.put("tranNo",cloudDfOrderInterfaceInfo.getTranno());
         apiInfo.put("outOrderNo",cloudDfOrderInterfaceInfo.getOrderid());
 
+        //获取此单查询次数
         int count = 0;
         if(cloudDfOrderInterfaceInfo.getQuerycount() == null || cloudDfOrderInterfaceInfo.getQuerycount().equals(0)){
 
@@ -259,25 +261,29 @@ public class CloudDfController {
 
         JSONObject resJson = JSONObject.fromObject(postApi.get("responseParam"));
 
+        //代付查询流水
+        Map<String,String> map = new HashMap<>();
         //更新代付订单表信息
         CloudDfOrderInterfaceInfo cloudDfOrderInterfaceInfo1 = new CloudDfOrderInterfaceInfo();
         cloudDfOrderInterfaceInfo1.setId(cloudDfOrderInterfaceInfo.getId());
         cloudDfOrderInterfaceInfo1.setLastrespose(resJson.toString());
         cloudDfOrderInterfaceInfo1.setQuerycount(count);
-        cloudDfOrderInterfaceInfo1.setDfstatus(resJson.get("orderStatus").toString());
         cloudDfOrderInterfaceInfo1.setUpdated(new Date());
 
-        int isStatus = cloudDfOrderInterfaceServiceFacade.updateDfOrderStatus(cloudDfOrderInterfaceInfo1);
+        if(resJson.has("retCode") && resJson.get("retCode").equals("0000")){
 
-        Map<String,String> map = new HashMap<>();
+            cloudDfOrderInterfaceInfo1.setDfstatus(resJson.get("orderStatus").toString());
+            map.put("orderStatus",resJson.get("orderStatus").toString());
+        }
+
         map.put("request_orderid",orderId);
         map.put("orderid",cloudDfOrderInterfaceInfo.getOrderid());
         map.put("tranNo",cloudDfOrderInterfaceInfo.getTranno());
         map.put("tranAmt",cloudDfOrderInterfaceInfo.getApplyamt().toString());
-        map.put("orderStatus",resJson.get("orderStatus").toString());
         map.put("requestParam",postApi.get("requestParam").toString());
         map.put("responseParam",resJson.toString());
 
+        int isStatus = cloudDfOrderInterfaceServiceFacade.updateDfOrderStatus(cloudDfOrderInterfaceInfo1);
         int isSuc = cloudDfFqwaterServiceFacade.addCloudDfFqwater(map);
 
         //支付成功
