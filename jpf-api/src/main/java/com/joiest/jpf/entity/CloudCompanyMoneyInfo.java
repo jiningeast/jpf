@@ -120,6 +120,12 @@ public class CloudCompanyMoneyInfo {
      */
     private BigDecimal profitmoney;
 
+    /**
+     * 公司名称
+     */
+    private String name;
+
+
     public String getId() {
         return id;
     }
@@ -302,5 +308,13 @@ public class CloudCompanyMoneyInfo {
 
     public void setProfitmoney(BigDecimal profitmoney) {
         this.profitmoney = profitmoney;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

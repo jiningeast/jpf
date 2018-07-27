@@ -117,6 +117,13 @@ public class PayCloudCompanyMoneyCustom {
     /**
      * 毛利金额
      */
+
+    /**
+     * 公司名称
+     */
+    private String name;
+
+
     private BigDecimal profitmoney;
 
     public String getId() {
@@ -301,5 +308,13 @@ public class PayCloudCompanyMoneyCustom {
 
     public void setProfitmoney(BigDecimal profitmoney) {
         this.profitmoney = profitmoney;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

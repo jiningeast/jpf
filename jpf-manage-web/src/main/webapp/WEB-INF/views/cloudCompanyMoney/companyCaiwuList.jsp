@@ -60,7 +60,7 @@
                             {field:'batchno', title:'批次号',width:'10%'},
                             {field:'agentNo', title:'代理商户号',width:'8%'},
                             {field:'merchNo', title:'企业商户号',width:'8%'},
-                            {field:'uid', title:'企业名称',width:'5%'},
+                            {field:'name', title:'企业名称',width:'5%'},
                             // {field:'commoney', title:'发放总金额',width:'5%'},
                             {field:'batchallmoney', title:'总金额',width:'5%'},
                             {field:'batchitems', title:'总笔数',width:'5%'},
@@ -117,6 +117,21 @@
                             $('#searchForm').form('reset');
                         }
                     });
+                    //导出excel
+                    $('#importExcelCaiwu').linkbutton({
+                        onClick: function(){
+
+                            /*ar remarkHasDialog = dialog({
+                                content: '正在导出，请稍等。。。',
+                                width:140,
+                                //drag:true,
+                            });//.show();*/
+
+                            var queryArray = $('#searchForm').serialize();
+                            var importExcelCaiwu = "../importExcelCaiwu?"+queryArray;
+                            window.location.href = importExcelCaiwu;
+                        }
+                    });
                 })
 
             </script>
@@ -169,7 +184,8 @@
     </div>
     <div id="ft" style="padding:5px;">
         <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
-        <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+        <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>&nbsp;&nbsp;
+        <a id="importExcelCaiwu" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-download'">导出</a>
     </div>
     <br/>
     <div class="easyui-panel statistics" title="汇总统计">
@@ -183,7 +199,7 @@
                 <td width="4%" id="allServiceMoney"></td>
                 <td width="4%">总增值税：</td>
                 <td width="4%" id="addedMoney"></td>
-                <td width="4%">总增值税附加：</td>
+                <td width="6%">总增值税附加：</td>
                 <td width="4%" id="addedMoneyPay"></td>
                 <td width="4%">总毛利：</td>
                 <td width="4%" id="totalGross"></td>
