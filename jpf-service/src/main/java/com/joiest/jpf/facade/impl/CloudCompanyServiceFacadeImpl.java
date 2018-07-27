@@ -666,10 +666,12 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         if ( StringUtils.isNotBlank(request.getMerchNo()) ){
             c.andMerchNoEqualTo(request.getMerchNo());
         }
+
         // 商户id
         if ( StringUtils.isNotBlank(request.getmId()) ){
             c.andIdEqualTo(request.getmId());
         }
+
         // 商户名称
         if ( StringUtils.isNotBlank(request.getName()) ){
             c.andNameLike("%"+request.getName()+"%");
