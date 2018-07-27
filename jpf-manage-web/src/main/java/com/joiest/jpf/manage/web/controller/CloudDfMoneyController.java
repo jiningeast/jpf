@@ -21,6 +21,7 @@ import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import com.joiest.jpf.manage.web.util.ServicePayUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import netscape.javascript.JSObject;
@@ -59,7 +60,6 @@ public class CloudDfMoneyController {
      */
     @RequestMapping(value = "/batchMoney", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public JpfResponseDto batchMoney(HttpServletRequest request){
 
         String companyMoneyId = request.getParameter("companyMoneyId");//订单表ID
@@ -183,141 +183,14 @@ public class CloudDfMoneyController {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "公司账户信息更新失败");
         }*/
 
-        //调用代付接口
-        Date date = new Date();
-        String dateTime = date.toString();
-        Map<String,Object> map = new HashMap<>();
-        map.put("batchid",companyMoneyId);
-        map.put("dfid",dfIds);
-        String cloudWaitpayKeycode = ManageConstants.ClOUD_WAITPAY_KEYCODE; //校验码keycode
-        //String requestUrl = ManageConstants.ClOUD_WAITPAY_URl; //请求地址
-        String requestUrl = ConfigUtil.getValue("CLOUD_API_URL")+"/clouddf/dfApi";//请求地址
 
-        //排序转换
-        Map<String,Object> treeMap = new TreeMap<>();
-        treeMap.putAll(map);
-        String respos = ToolUtils.mapToUrl(treeMap);
-        String sign = Md5Encrypt.md5(respos+cloudWaitpayKeycode);
-        map.put("sign",sign);
-
-        String requestParam = ToolUtils.mapToUrl(map);//请求参数
-        //请求接口
-        String response = OkHttpUtils.postForm(requestUrl,map); //base64加密数据
-        response = response.replace("\"","");
-        response = Base64CustomUtils.base64Decoder(response);//解密后json串
-        //json---转换代码---
-        //Map<String,Object> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, Object>>() {});
-        JSONObject responseMap = JSONObject.fromObject(response);
-        if( responseMap.isEmpty() || responseMap == null ){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "代付接口异常");
-        }
-        String code = responseMap.get("code").toString();
-
-        //存储日志记录
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        StringBuilder logContent = new StringBuilder();
-        String logPath = "/logs/jpf-manage-web/log/";
-        String fileName = "dfRecord";
-        logContent.append("\n\nTime:" + myfmt.format(date));
-        logContent.append("\n接口返回信息:" + response);
-
-        if( code.equals("10000") || code.equals("30004") ){ //10000=代付成功  30004=无代付请求数据（支付限额）
-
-            //记录pay_cloud_interface_stream表操作记录
-            CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
-            //存取短信接口调用记录
-            cloudInterfaceStreamInfo.setRequestUrl(requestUrl);
-            cloudInterfaceStreamInfo.setRequestContent(requestParam);
-            cloudInterfaceStreamInfo.setType((byte)2);
-            cloudInterfaceStreamInfo.setResponseContent(response);
-            cloudInterfaceStreamInfo.setCompanyMoneyId(companyMoneyId);
-            cloudInterfaceStreamInfo.setTaskId("0");
-            cloudInterfaceStreamInfo.setStaffId("0");
-            cloudInterfaceStreamInfo.setAddtime(date);
-            cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
-
-            BigDecimal applyFailMoney = new BigDecimal("0");
-            //是否存在data变量
-            if( responseMap.has("data") && StringUtils.isNotBlank(responseMap.get("data").toString()) ){
-                JSONObject data = JSONObject.fromObject(responseMap.getString("data"));
-                if( data.has("filterdata") ){ //接口返回 代付限额明细数据
-                    JSONObject  filterdata = JSONObject.fromObject(data.getString("filterdata"));
-                    JSONArray  finalData = JSONArray.fromObject(filterdata.getString("data"));
-                    Long filterDfId = new Long(0);//json数组里的id值
-                    if( finalData.size() > 0 ) {
-                        for (int i = 0; i < finalData.size(); i++) {
-                            JSONObject job = finalData.getJSONObject(i);//把每一个对象转成json对象
-                            filterDfId = Long.parseLong(job.get("dfid").toString());
-                            if(  realPayMapData.containsKey(filterDfId)  ){//存在限制代付ID 删除
-                                CloudDfMoneyInfo cloudInfos = realPayMapData.get(filterDfId);
-                                applyFailMoney.add(cloudInfos.getCommoney());
-                                realPayMapData.remove(filterDfId);
-                                logContent.append("\n支付限额：代付明细ID:"+filterDfId+"\t收款人："+cloudInfos.getBanknickname()+"\t金额："+cloudInfos.getCommoney());
-                            }
-
-                            //更新订单下对应的代付明细状态为：打款中
-                            PayCloudDfMoney recordData = new PayCloudDfMoney();
-                            List<Long> filterDfIdArr = new ArrayList<>();
-                            filterDfIdArr.add(filterDfId);
-                            recordData.setMontype(5); //更新为支付限制
-
-                            jpfResponseDto = cloudDfMoneyServiceFacade.updateDfRecordsByids(recordData,filterDfIdArr);
-
-                        }
-                    }
-                }
-
-                BigDecimal afterloudMoney = cloudMoney; //用户账户当前金额
-                for (Long key : realPayMapData.keySet()) {
-                    CloudDfMoneyInfo cloudRets = realPayMapData.get(key);
-
-                    //开始扣除账户金额及校验码
-                    afterloudMoney = afterloudMoney.subtract(cloudRets.getCommoney()); //账户金额
-                    String checkCode = Md5Encrypt.md5(companyId+afterloudMoney+"test","UTF-8");   //加密规则：  id+金额+key
-                    PayCloudCompany payCloudCompany = new PayCloudCompany();
-                    payCloudCompany.setCloudcode(checkCode);
-                    payCloudCompany.setCloudmoney(afterloudMoney);
-                    payCloudCompany.setId(companyId);
-                    int upCompanyCount = cloudCompanyServiceFacade.updateSetiveById(payCloudCompany);
-                    if( upCompanyCount <=0 ){
-                        throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "公司账户信息更新失败");
-                    }
-                    logContent.append("\n打款金额：代付明细ID:"+cloudRets.getId()+"\t收款人："+cloudRets.getBanknickname()+"\t金额："+cloudRets.getCommoney());
-
-                    //更新订单下对应的代付明细状态为：打款中
-                    PayCloudDfMoney recordData = new PayCloudDfMoney();
-                    recordData.setMontype(4); //更新为打款中
-                    List<Long> currDfIdArr = new ArrayList<>();
-                    currDfIdArr.add(key);
-
-                    jpfResponseDto = cloudDfMoneyServiceFacade.updateDfRecordsByids(recordData,currDfIdArr);
-
-                }
-
-
-
-            }else{
-                // 30004 提交单条数据到接口由于支付限制 接口无返回data参数
-                if(code.equals("30004")){
-                    //更新订单下对应的代付明细状态为：打款中
-                    PayCloudDfMoney recordData = new PayCloudDfMoney();
-                    recordData.setMontype(5); //更新为支付限制
-
-                    jpfResponseDto = cloudDfMoneyServiceFacade.updateDfRecordsByids(recordData,ids);
-                }
-            }
-
-
-
-
-
+        //调用打款接口
+        Map<String,String> responseParam = ServicePayUtils.waitPay(companyMoneyId,dfIds);
+        if(responseParam.size()>0){
+            jpfResponseDto = cloudDfMoneyServiceFacade.dfMoneyApplyWaitPay(responseParam,companyInfo,realPayMapData,companyId,dfIds);
         }else{
-
-                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "代付请求失败,状态码:"+code);
-
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接口请求异常");
         }
-
-        LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
 
 
         return jpfResponseDto;

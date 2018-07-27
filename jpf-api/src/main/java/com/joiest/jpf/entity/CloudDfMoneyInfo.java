@@ -484,4 +484,5 @@ public class CloudDfMoneyInfo {
     public void setCompactStaffCompactActive(String compactStaffCompactActive) {
         this.compactStaffCompactActive = compactStaffCompactActive;
     }
+
 }
