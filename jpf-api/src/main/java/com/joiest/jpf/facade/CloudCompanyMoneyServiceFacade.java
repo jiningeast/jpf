@@ -6,6 +6,9 @@ import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
+import com.joiest.jpf.entity.CloudDfMoneyInfo;
+
+import java.util.List;
 
 import java.util.Map;
 
@@ -64,4 +67,10 @@ public interface CloudCompanyMoneyServiceFacade {
      * 根据合同编号获取记录
      */
     public CloudCompanyMoneyInfo getRecByFid(String fid);
+
+    /**
+     * 查询批次记录表 更新代付明细数据
+     */
+    public List<CloudCompanyMoneyInfo> searchCompanyMoneyAll(CloudCompanyMoneyRequest cloudCompanyMoneyRequest);
+
 }

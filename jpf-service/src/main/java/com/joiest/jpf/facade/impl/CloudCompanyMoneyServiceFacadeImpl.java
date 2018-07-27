@@ -16,6 +16,7 @@ import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
+import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.facade.CloudCompanyMoneyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -175,7 +176,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
             c.andAgentNoEqualTo(cloudCompanyMoneyRequest.getAgentNo());
         }
         if ( StringUtils.isNotBlank(cloudCompanyMoneyRequest.getFid())  ){
-            c.andFidEqualTo(cloudCompanyMoneyRequest.getFid());
+            c.andFidLike("%"+cloudCompanyMoneyRequest.getFid()+"%");
         }
 
         if ( cloudCompanyMoneyRequest.getMontype() !=null  && cloudCompanyMoneyRequest.getMontype().toString() !="" ){
@@ -380,4 +381,40 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
 
         return cloudCompanyMoneyInfo;
     }
+
+    /**
+     * 查询批次记录表 更新代付明细数据
+     */
+    public List<CloudCompanyMoneyInfo> searchCompanyMoneyAll(CloudCompanyMoneyRequest cloudCompanyMoneyRequest){
+
+        PayCloudCompanyMoneyExample e = new PayCloudCompanyMoneyExample();
+        PayCloudCompanyMoneyExample.Criteria c = e.createCriteria();
+        if(cloudCompanyMoneyRequest.getMontype() != null){
+            c.andMontypeEqualTo(cloudCompanyMoneyRequest.getMontype()); //处理中
+        }
+        if( cloudCompanyMoneyRequest.getId() != null ){
+            c.andIdEqualTo(cloudCompanyMoneyRequest.getId()); //主键
+        }
+
+        List<PayCloudCompanyMoney> list = payCloudCompanyMoneyMapper.selectByExample(e);
+
+        List<CloudCompanyMoneyInfo> infos = new ArrayList<>();
+
+        if ( !list.isEmpty() ){
+
+            //取出所有代付申请的批次订单记录
+            for(PayCloudCompanyMoney payCloudCompanyMoney:list){
+                CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
+                BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyMoney.class,CloudCompanyMoneyInfo.class,false);
+                beanCopier.copy(payCloudCompanyMoney,cloudCompanyMoneyInfo,null);
+                infos.add(cloudCompanyMoneyInfo);
+            }
+
+        }else{ //未匹配到数据
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到相关数据");
+        }
+
+        return infos;
+    }
+
 }

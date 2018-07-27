@@ -4,6 +4,7 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
+import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 
@@ -55,6 +56,10 @@ public interface CloudDfMoneyServiceFacade {
 
     //查询代付明细信息
     public List<CloudDfMoneyInfo> getAllBySective(CloudDfMoneyRequest request);
+
+
+    //发起申请代付请求
+    public JpfResponseDto dfMoneyApplyWaitPay(Map<String,String> responseParam,CloudCompanyInfo companyInfo,Map<Long,CloudDfMoneyInfo> realPayMapData, String companyMoneyId, String dfIds);
 
     // 更新某批次订单号的id相关联的打款信息为可代付
     public int updateDfMontype(String companyMoneyId);
