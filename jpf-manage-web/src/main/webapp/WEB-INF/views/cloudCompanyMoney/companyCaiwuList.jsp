@@ -143,7 +143,6 @@
                         <td>
                             <select id="status_s" name="montype" class="easyui-combobox">
                                 <option value="">全部</option>
-
                                 <option value="0">待锁定</option>
                                 <option value="1">待打款</option>
                                 <option value="2">处理完成</option>
