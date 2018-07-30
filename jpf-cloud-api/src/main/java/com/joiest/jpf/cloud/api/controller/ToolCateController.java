@@ -28,6 +28,8 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("toolcate")
@@ -531,17 +533,60 @@ public class ToolCateController {
      * */
     @RequestMapping(value = "/uploadFileByBase", method = RequestMethod.POST)
     @ResponseBody
-    public String uploadFileByBase(HttpServletRequest request) throws UnknownHostException {
+    public JSONObject uploadFileByBase(HttpServletRequest request) throws UnknownHostException {
 
-        JSONObject resposeData = new JSONObject();
+        JSONObject result = new JSONObject();
+        JSONObject json = new JSONObject();
 
+        String source = request.getParameter("source");//来源 1 web  2 api
         String isOss = request.getParameter("isOss");//1上传至oss  2不上传
-        if(StringUtils.isBlank(isOss)) isOss = "1";
 
-        //Base64CustomUtils.baseToImageFinal();
+        String baseInfo = request.getParameter("baseInfo");//base64数据
+        String savePre = request.getParameter("savePre");//上传路径
+        String dateTime = request.getParameter("dateTime");//访问时间
+        String sign = request.getParameter("sign");//签名
 
+        if (source.isEmpty() || StringUtils.isBlank(baseInfo) || StringUtils.isBlank(isOss)){
+            json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+            json.put("info","Error");
+            return json;
+        }
+        if(StringUtils.isBlank(savePre)) savePre = ConfigUtil.getValue("ROOT_PATH");
 
-        String allpath = "";
+        Pattern pattern = Pattern.compile("^\\d");
+        Matcher matcher = pattern.matcher(source);
+        //存在为接口调用
+        if ( matcher.find() ){
+
+            //数据判断
+            Map<String ,String> imgPa = new HashMap<>();
+            imgPa.put("source", source);
+            imgPa.put("isOss", isOss);
+            imgPa.put("baseInfo", baseInfo);
+            imgPa.put("dateTime", dateTime);
+            if(StringUtils.isNotBlank(savePre)){
+
+                imgPa.put("savePre", savePre);
+            }
+            Map<String,Object> treeMap = new TreeMap<>();
+            treeMap.putAll(imgPa);
+
+            String respos = ToolUtils.mapToUrl(treeMap);
+            String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+            if(!selfSign.equals(sign)){
+
+                json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+                json.put("info","签名有误");
+                return json;
+            }
+        }else{
+            isOss = Base64CustomUtils.base64Decoder(isOss);
+        }
+        if(StringUtils.isBlank(savePre)) savePre = ConfigUtil.getValue("ROOT_PATH");
+
+        //base64数据处理
+        Map<String,String> imgInfo = Base64CustomUtils.baseToImageFinal(baseInfo,savePre);
+        String allpath = imgInfo.get("localUrl");
 
         //Oss阿里云上传
         if(isOss.equals("1")){
@@ -550,17 +595,21 @@ public class ToolCateController {
             JSONObject imgRes = AliyunOSSClientUtil.initUploadPath(allpath);
             if(imgRes.isEmpty()){
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件上传失败",null);
+                json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+                json.put("info","OSS文件上传失败");
+                return json;
             }
-            resposeData.put("serverUrl",imgRes.get("imgUrl"));
-            resposeData.put("serverExpireUrl",imgRes.get("expireUrl"));
+            json.put("serverUrl",imgRes.get("imgUrl"));
+            json.put("serverExpireUrl",imgRes.get("expireUrl"));
         }
         String fileName = allpath.substring(allpath.lastIndexOf("/")+1);
+        json.put("fileName",fileName);
+        json.put("localUrl",allpath);
 
-        resposeData.put("fileName",fileName);
-        resposeData.put("localUrl",allpath);
-
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
+        result.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+        result.put("info","上传成功");
+        result.put("data",json);
+        return result;//ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
     }
     /**
      * excel上传 获取excel表中数据
