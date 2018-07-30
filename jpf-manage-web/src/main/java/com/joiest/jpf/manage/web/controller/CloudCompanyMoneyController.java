@@ -147,7 +147,7 @@ public class CloudCompanyMoneyController {
         //查询所有打款申请中的批次订单 Montype = 3
         CloudCompanyMoneyRequest companyMoneyRequest = new CloudCompanyMoneyRequest();
         companyMoneyRequest.setMontype((byte)3); //打款申请中
-        companyMoneyRequest.setId("205");
+//        companyMoneyRequest.setId("205");
         if(comMoneyId != null ){
             companyMoneyRequest.setId(comMoneyId); //指定批次主键
         }
