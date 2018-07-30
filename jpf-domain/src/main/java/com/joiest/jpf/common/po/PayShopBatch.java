@@ -2,7 +2,6 @@ package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.Double;
 import java.util.Date;
 
 public class PayShopBatch implements Serializable {
