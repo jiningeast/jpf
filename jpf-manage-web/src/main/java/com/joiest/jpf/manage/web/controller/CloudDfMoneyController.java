@@ -136,7 +136,7 @@ public class CloudDfMoneyController {
                 if( !jpfResponseDto.getRetCode().equals("0000") ){
                     throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单生成异常");
                 }
-                cloudRealPayMoney.add( dfCommoney ); //计算实际打款金额
+                cloudRealPayMoney = cloudRealPayMoney.add( dfCommoney ); //计算实际打款金额
                 realPayMapData.put(dfMoneyId,onetimes); //可打款的订单数据
             }else{//二次打款 新单号处理
                 PayCloudDfMoney retData = new PayCloudDfMoney();
@@ -150,7 +150,7 @@ public class CloudDfMoneyController {
                 if( !jpfResponseDto.getRetCode().equals("0000") ){
                     throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单生成异常");
                 }
-                cloudRealPayMoney.add( dfCommoney ); //计算实际打款金额
+                cloudRealPayMoney = cloudRealPayMoney.add( dfCommoney ); //计算实际打款金额
                 realPayMapData.put(dfMoneyId,onetimes); //可打款的订单数据
             }
         }

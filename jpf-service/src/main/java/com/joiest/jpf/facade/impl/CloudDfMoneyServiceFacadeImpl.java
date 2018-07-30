@@ -307,6 +307,10 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         if( request.getIdsStr() != null ){
             c.andIdIn(request.getIdsStr());
         }
+        //状态
+        if( request.getMontype() != null ){
+            c.andMontypeEqualTo(request.getMontype());
+        }
 
         List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);
         List<CloudDfMoneyInfo> infos = new ArrayList<>();
