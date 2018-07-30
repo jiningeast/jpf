@@ -44,7 +44,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		logger.info("userName:{}---------访问主机地址:{}------------------访问功能链接地址:{}------------------",userInfo==null?"":userInfo.getUserName(),request.getRemoteHost(),accessLink);
 		String uri = request.getRequestURI();
 		logger.info("request path : {}",uri);
-		if (uri.indexOf("index") > -1 || uri.indexOf("login") > -1 || uri.indexOf("unionPayRefundReturn") > -1 || uri.indexOf("cloudTask/testCheckBanks") > -1 ) { // 不需要过滤的地址
+		if (uri.indexOf("index") > -1 || uri.indexOf("login") > -1 || uri.indexOf("unionPayRefundReturn") > -1 || uri.indexOf("cloudTask/testCheckBanks") > -1 || uri.indexOf("cloudCompanyMoney/searchWaitPay") > -1 ) { // 不需要过滤的地址
             super.preHandle(request, response, handler);
 		} else if (session != null && userInfo != null) {
             super.preHandle(request, response, handler);
