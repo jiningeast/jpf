@@ -401,7 +401,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
 
         List<CloudCompanyMoneyInfo> infos = new ArrayList<>();
 
-        if ( !list.isEmpty() ){
+        if ( list.size() > 0  ){
 
             //取出所有代付申请的批次订单记录
             for(PayCloudCompanyMoney payCloudCompanyMoney:list){

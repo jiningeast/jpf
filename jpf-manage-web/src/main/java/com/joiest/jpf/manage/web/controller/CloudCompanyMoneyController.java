@@ -272,23 +272,29 @@ public class CloudCompanyMoneyController {
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         StringBuilder logContent = new StringBuilder();
+
         String logPath = "/logs/jpf-manage-web/log/";
         String fileName = "dfMoneySearch";
         logContent.append("\n\nTime:" + myfmt.format(date));
 
+        //StringBuilder logContent = new StringBuilder();
 
         //查询所有打款申请中的批次订单 Montype = 3
         CloudCompanyMoneyRequest companyMoneyRequest = new CloudCompanyMoneyRequest();
         companyMoneyRequest.setMontype((byte)3); //打款申请中
-        companyMoneyRequest.setId("185");
+        companyMoneyRequest.setId("205");
         if(comMoneyId != null ){
             companyMoneyRequest.setId(comMoneyId); //指定批次主键
         }
 
+        //BigDecimal batchDealMoney ;//代付成功总金额
+        //BigDecimal batchFailMoney;//代付失败总金额
+
+
         List<CloudCompanyMoneyInfo> companyMoneyInfoList = cloudCompanyMoneyServiceFacade.searchCompanyMoneyAll(companyMoneyRequest);
         if( companyMoneyInfoList.size() > 0 ){
 
-            logContent.append("\n\n ================================发起批次请求========================");
+            logContent.append("\n================================发起批次请求========================");
             LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
 
             for (int i = 0; i < companyMoneyInfoList.size() ; i++) {
@@ -317,6 +323,9 @@ public class CloudCompanyMoneyController {
                 if( dfRets.size() > 0 ){
 
                     for (int m = 0; m < dfRets.size() ; m++) {
+
+                        logContent = new StringBuilder(); //初始化日志变量
+
                         CloudDfMoneyInfo dfMoneyInfo = dfRets.get(m);
                         String orderid = dfMoneyInfo.getOrderid(); //代付单号
                         Long dfId = dfMoneyInfo.getId();
@@ -338,11 +347,11 @@ public class CloudCompanyMoneyController {
                             String requestUrl = responseParam.get("requestUrl");  //请求接口连接
                             String requestParam = responseParam.get("requestParam");  //请求参数
 
-                            logContent.append("\n接口返回信息:" + response);
+                            logContent.append("\n 申请单号："+orderid+" \t 接口返回信息:" + response);
                             //解析返回参数
                             JSONObject responseMap = JSONObject.fromObject(response);
                             if( responseMap.isEmpty() || responseMap == null ){//调取接口失败
-                                logContent.append("\n接口返回异常:");
+                                logContent.append("接口返回异常");
                                 LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
                                 continue;
                             }else{//成功
@@ -366,13 +375,13 @@ public class CloudCompanyMoneyController {
                                         //代付成功
                                         if( orderStatus.equals("05") ){
                                             afterMoneyType = 2;//更新后状态
-                                            batchDealMoney.add(dfComMoney);
+                                            batchDealMoney = batchDealMoney.add(dfComMoney);
                                             batchDealItems++;
                                         }
                                         //代付失败
                                         if( orderStatus.equals("02") || orderStatus.equals("06")  ){//
                                             afterMoneyType = 3;//更新后状态
-                                            batchFailMoney.add(dfComMoney);
+                                            batchFailMoney = batchFailMoney.add(dfComMoney);
                                             batchFailItems++;
                                         }
                                         logContent.append("\n代付原数据：代付明细ID:"+dfId+"\t代付单号"+orderid+"\t收款人："+dfBankNiceName+"\t金额："+dfComMoney+"\t更新前状态："+dfMoneyType);
@@ -389,7 +398,7 @@ public class CloudCompanyMoneyController {
                                             logContent.append("\t 更新后状态："+afterMoneyType+"\t 数据更新失败");
                                         }
 
-                                        //判断批次订单表 pay_cloud_company_money 是否支付成功
+                                        /*//判断批次订单表 pay_cloud_company_money 是否支付成功
                                         if( batchAllItems == (batchDealItems) || batchAllItems == (batchFailItems) ){ //代付批次全部成功
                                             byte afterCompanyMoneyType = 4; //处理失败
                                             if( batchAllItems == (batchDealItems) ){
@@ -407,7 +416,7 @@ public class CloudCompanyMoneyController {
                                                 logContent.append("\t 更新后状态："+afterCompanyMoneyType+"\t 数据更新失败");
                                             }
 
-                                        }
+                                        }*/
 
                                     }else{
                                         logContent.append("\n接口返回异常，状态码："+code+"\t 未接收到data数据" );
@@ -416,7 +425,7 @@ public class CloudCompanyMoneyController {
 
                                 }else{
                                     logContent.append("\n接口返回异常，状态码："+code );
-                                    LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+
                                 }
 
 
@@ -425,6 +434,39 @@ public class CloudCompanyMoneyController {
 
                         }else{ //接口异常
 
+                        }
+                        LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+
+                    }
+                    //判断批次订单表 pay_cloud_company_money 是否支付成功
+                    if( dfRets.size() > 0 && (batchFailItems >0 || batchDealItems>0) ){ //代付批次全部成功
+                        byte afterCompanyMoneyType = 3; //处理失败
+                        //处理失败
+                        if(batchAllItems == (batchFailItems)){
+                            afterCompanyMoneyType = 4;
+                        }
+                        //处理成功
+                        if( batchAllItems == (batchDealItems) ){
+                            afterCompanyMoneyType = 2;
+                        }
+                        logContent.append("\n批次订单：主键ID:"+companyMoneyId+"\t更新前状态："+companyMoneyType);
+                        CloudCompanyMoneyInfo companyMoneyInfo = new CloudCompanyMoneyInfo();
+                        companyMoneyInfo.setMontype(afterCompanyMoneyType);
+                        companyMoneyInfo.setUpdatetime(date); //更新时间
+                        companyMoneyInfo.setId(companyMoneyId);
+                        if(batchFailItems > 0){
+                            companyMoneyInfo.setBatchfailitems(Integer.toString(batchFailItems));
+                            companyMoneyInfo.setBatchfailmoney(batchFailMoney);
+                        }
+                        if(batchDealItems > 0){
+                            companyMoneyInfo.setBatchdealitems(Integer.toString(batchDealItems));
+                            companyMoneyInfo.setBatchdealmoney(batchDealMoney);
+                        }
+                        int CompaynUpCount = cloudCompanyMoneyServiceFacade.updateColumn(companyMoneyInfo);
+                        if( CompaynUpCount != 0 ){
+                            logContent.append("\t 更新后状态："+afterCompanyMoneyType+"\t 数据更新成功");
+                        }else{
+                            logContent.append("\t 更新后状态："+afterCompanyMoneyType+"\t 数据更新失败");
                         }
 
                     }
