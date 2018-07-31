@@ -233,11 +233,11 @@ public class UserInfoController {
         idCard = Base64CustomUtils.base64Decoder(idCard).toUpperCase();
         verificate = Base64CustomUtils.base64Decoder(verificate);
 
-        //获取员工信息
+        //获取个人信息
         CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffByIdcard(idCard);
         if(cloudCompanyStaffInfo==null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应员工账号信息",null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应个人账号信息",null);
         }
         String check= redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_SENDSMS") + cloudCompanyStaffInfo.getMobile() );
         if(verificate.equals(check)){
@@ -268,11 +268,11 @@ public class UserInfoController {
         String idCard = request.getParameter("idCard");
         idCard = Base64CustomUtils.base64Decoder(idCard);
 
-        //获取员工信息
+        //获取个人信息
         CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffByIdcard(idCard);
         if(cloudCompanyStaffInfo == null || idCard ==null || idCard.isEmpty()){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应员工账号信息",null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到对应个人账号信息",null);
         }
         try{
 
@@ -312,17 +312,17 @@ public class UserInfoController {
         }
         String id = uid;
 
-        //获取员工信息
+        //获取个人信息
         CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(id);
         if(cloudCompanyStaffInfo == null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工信息不存在",null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "个人信息不存在",null);
         }
-        //获取员工银行卡信息
+        //获取个人银行卡信息
         CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankBySidPhone(id, cloudCompanyStaffInfo.getMobile());
         if(cloudStaffBanksInfo==null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工对应银行卡信息不存在",null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "个人对应银行卡信息不存在",null);
         }
         //身份证信息
         CloudIdcardInfo cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(String.valueOf(cloudCompanyStaffInfo.getUcardid()));
@@ -495,13 +495,13 @@ public class UserInfoController {
             //身份证信息
             cloudIdcardInfo=cloudIdcardServiceFacade.getCloudIdcardById(cardId);
 
-            //员工信息
+            //个人信息
             cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffByIdcard(cloudIdcardInfo.getNum());
             if(cloudCompanyStaffInfo==null){
 
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户员工信息不存在", null);
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "当前认证用户个人信息不存在", null);
             }
-            //员工银行卡信息
+            //个人银行卡信息
             cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(bankNum, new BigInteger(cloudCompanyStaffInfo.getId()));
             if(cloudIdcardInfo == null){
 
@@ -510,7 +510,7 @@ public class UserInfoController {
             String test = cloudStaffBanksInfo.getBankphone();
             if(cloudStaffBanksInfo.getBankphone().equals(mobile)){
 
-                //操作员工状态
+                //操作个人状态
                 Map<String,String> map = new HashMap<String,String>();
 
                 map.put("is_active","1");
@@ -650,13 +650,13 @@ public class UserInfoController {
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未获取到此合同", null);
         }
-        //获取员工信息
+        //获取个人信息
         CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(cloudCompactStaffInterfaceCustomInfo.getStaffid().toString());
         if(cloudCompanyStaffInfo == null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工信息不存在",null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "个人信息不存在",null);
         }
-        //获取员工代付信息pay_cloud_df_money
+        //获取个人代付信息pay_cloud_df_money
         CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = cloudDfMoneyServiceFacade.getDfMoneyById(cloudCompactStaffInterfaceCustomInfo.getDfid());
         if(cloudDfMoneyInterfaceInfo == null){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
@@ -743,24 +743,24 @@ public class UserInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "此份合同已签",null);
         }
 
-        //获取员工信息
+        //获取个人信息
         CloudCompanyStaffInfo cloudCompanyStaffInfo = cloudCompanyStaffServiceFacade.getCloudCompanyStaffById(cloudCompactStaffInterfaceCustomInfo.getStaffid().toString());
         if(cloudCompanyStaffInfo == null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工信息有误",null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "个人信息有误",null);
         }
         if(!cloudCompanyStaffInfo.getIsActive().equals((byte)1)){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "员工尚未签约",null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "个人尚未签约",null);
         }
 
-        //获取员工代付信息pay_cloud_df_money
+        //获取个人代付信息pay_cloud_df_money
         CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = cloudDfMoneyServiceFacade.getDfMoneyById(cloudCompactStaffInterfaceCustomInfo.getDfid());
         if(cloudDfMoneyInterfaceInfo == null){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "充值记录信息有误",null);
         }
 
-        //员工银行卡信息
+        //个人银行卡信息
         CloudStaffBanksInfo cloudStaffBanksInfo = cloudStaffBanksServiceFacade.getStaffBankByNumSid(cloudDfMoneyInterfaceInfo.getBankno(), new BigInteger(cloudCompanyStaffInfo.getId()));
         if(cloudStaffBanksInfo == null){
 

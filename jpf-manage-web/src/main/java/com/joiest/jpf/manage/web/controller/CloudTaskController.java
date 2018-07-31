@@ -34,7 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 @Controller
@@ -503,23 +505,27 @@ public class CloudTaskController {
         Double totalRate = Double.parseDouble(agentInfo.getAgentRate().toString()) + Double.parseDouble(salesInfo.getSalesRate().toString());
         Double moneyDouble = new Double(money);
         Double feeMoney = totalRate * moneyDouble;
-        feeMoney = Math.ceil(feeMoney*100) / 100;
+//        feeMoney = Math.ceil(feeMoney*100) / 100;
+        feeMoney = ToolUtils.halfUpDouble(feeMoney,2);
         cloudCompanyMoneyInfo.setFeemoney(new BigDecimal(feeMoney));   // 服务费金额：实发金额*服务费率
         // 增值税金额
         Double addedValueTax = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX"));
         Double taxMoney = ( moneyDouble + feeMoney ) / ( 1 + addedValueTax ) * addedValueTax;
-        taxMoney = Math.ceil(taxMoney*100) / 100;
+//        taxMoney = Math.ceil(taxMoney*100) / 100;
+        taxMoney = ToolUtils.halfUpDouble(taxMoney,2);
         cloudCompanyMoneyInfo.setTaxmoney(new BigDecimal(taxMoney));
         // 增值税附加金额
         Double addedValueTaxAddtion = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX_ADDITION"));
         Double addedValueTaxAddtionMoney = taxMoney*addedValueTaxAddtion;
-        addedValueTaxAddtionMoney = Math.ceil(addedValueTaxAddtionMoney*100) / 100;
+//        addedValueTaxAddtionMoney = Math.ceil(addedValueTaxAddtionMoney*100) / 100;
+        addedValueTaxAddtionMoney = ToolUtils.halfUpDouble(addedValueTaxAddtionMoney,2);
         cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal(addedValueTaxAddtionMoney));
         // 毛利金额
         Double individualTax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
         Double supposePay = moneyDouble / (1-individualTax);   // 应发金额
         Double profit = (moneyDouble + feeMoney) - (supposePay + taxMoney + addedValueTaxAddtionMoney);
-        profit = Math.ceil(profit*100) / 100;
+//        profit = Math.ceil(profit*100) / 100;
+        profit = ToolUtils.halfUpDouble(profit,2);
         cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit));      // 毛利金额
         // 判断有没有已经存在的合同编号
         /*CloudCompanyMoneyInfo existCompanyMoneyInfo = CloudCompanyMoneyServiceFacade.getRecByFid(contractNo);
@@ -618,7 +624,16 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setFid(companyInfo.getId());   // 企业id
             cloudDfMoneyInfo.setBusstaffid(Long.parseLong(""+staffId));
             cloudDfMoneyInfo.setUsername(singlePerson.get("phone"));
-            cloudDfMoneyInfo.setCommoney(new BigDecimal(String.valueOf(singlePerson.get("money"))));
+            // 7月31日新增 实发金额减去个人所得税 start
+            BigDecimal preMoney = new BigDecimal(String.valueOf(singlePerson.get("money")));    // 预发放金额，即excel表上填的金额
+            Double preMoneyDouble = new Double(String.valueOf(singlePerson.get("money")));
+            Double tax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));     // 个人所得税税点
+            Double commoneyDouble = preMoneyDouble * ( 1 - tax );       // 计算实发金额
+            BigDecimal commoney = new BigDecimal(ToolUtils.halfUpDouble(commoneyDouble, 2));    // 实发金额四舍五入
+            // 7月31日新增 实发金额减去个人所得税 end
+            cloudDfMoneyInfo.setPreMoney(preMoney);
+            cloudDfMoneyInfo.setIncomeRate(BigDecimal.valueOf(tax));
+            cloudDfMoneyInfo.setCommoney(commoney);
             cloudDfMoneyInfo.setBankno(singlePerson.get("bankNo"));
             cloudDfMoneyInfo.setBanknickname(singlePerson.get("name"));
             cloudDfMoneyInfo.setIdno(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
@@ -641,7 +656,6 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setOrderid("");
             cloudDfMoneyInfo.setOrderids("");
             // 计算应发金额（税前）
-            Double tax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
             Double num1 = new Double(String.valueOf(singlePerson.get("money")));
             Double num2 = new Double("1")-tax;
             Double beforeTaxMoney = num1 / num2;
