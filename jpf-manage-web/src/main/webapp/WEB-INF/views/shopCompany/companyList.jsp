@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>业务公司管理</title>
+    <title>代理公司管理</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script>
         $(function() {
@@ -20,7 +20,7 @@
                     text : '新增',
                     iconCls : 'icon-add',
                     handler : function(){
-                        $("#infoDiv").window("open").window('refresh', 'add/page').window('setTitle','新增');
+                        $("#infoDiv").window("open").window('refresh', 'addCompany/page').window('setTitle','新增');
                     }
                 },
                 {
@@ -32,11 +32,11 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#infoDiv').window("open").window('refresh', 'edit/page?id='+rows[0].id+"&merchNo="+rows[0].merchNo+"&type=0").window('setTitle','编辑');
+                        $('#infoDiv').window("open").window('refresh', 'edit/page?id='+rows[0].id).window('setTitle','编辑');
                     }
                 },
                 {
-                    text : '锁定',
+                    text : '停用',
                     iconCls:'icon-no',
                     handler : function () {
                         var rows = $("#dg").datagrid('getSelections');
@@ -44,11 +44,11 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return false;
                         }
-                        $.messager.confirm('锁定','确认锁定操作？',function(r){
+                        $.messager.confirm('停用','确认停用操作？',function(r){
                             if (r){
                                 $.ajax({
                                     type : 'get',
-                                    url :'delCompany?merchNo='+rows[0].merchNo+'&type=2',
+                                    url :'delCompanyShop?merchNo='+rows[0].merchNo+'&type=2',
                                     dataType:"json",
                                     contentType:"application/json",
                                     success : function(msg){
@@ -68,7 +68,7 @@
                     }
                 },
                 {
-                    text : '恢复',
+                    text : '启用',
                     iconCls:'icon-ok',
                     handler : function () {
                         var rows = $("#dg").datagrid('getSelections');
@@ -76,11 +76,11 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return false;
                         }
-                        $.messager.confirm('恢复','确认恢复操作？',function(r){
+                        $.messager.confirm('启用','确认启用操作？',function(r){
                             if (r){
                                 $.ajax({
                                     type : 'get',
-                                    url :'delCompany?merchNo='+rows[0].merchNo+'&type=1',
+                                    url :'delCompanyShop?merchNo='+rows[0].merchNo+'&type=1',
                                     dataType:"json",
                                     contentType:"application/json",
                                     success : function(msg){
@@ -102,7 +102,7 @@
             ];
 
             $('#dg').datagrid({
-                title:'业务商户信息',
+                title:'代理商户信息',
                 toolbar:toolbar,
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
@@ -112,29 +112,23 @@
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
                 // width:500,
-                url:'listSale',
+                url:'list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'merchNo',title:'商户编号',width:'10%'},
-                    // {field:'merchName',title:'商户名称',width:'13%'},
-                    {field:'name',title:'公司名称',width:'8%'},
-                    {field:'phonename',title:'联系人姓名',width:'10%'},
-                    {field:'phone',title:'联系电话',width:'15%'},
-                    {field:'linkemail',title:'邮箱',width:'8%'},
-                    {field:'salesRate',title:'代理平台费率',width:'10%'},
-                    {field:'userName',title:'录入管理员',width:'10%'},
-                    {field:'attestation',title:'状态',width:'8%',
-                        formatter : function(value,row,index){
-                            if(value=='0'){return '未认证'}
-                            else if(value=='1'){return '已认证'}
-                        },styler: function (value, row, index) {
-                            return 'color:red';
-                        }
-                    },{field:'created',title:'添加时间',width:'10%',formatter: formatDateStr},
+                    {field:'companyName',title:'公司名称',width:'8%'},
+                    {field:'contactName',title:'联系人姓名',width:'10%'},
+                    {field:'contactPhone',title:'联系电话',width:'15%'},
+                    {field:'receiveName',title:'接收人姓名',width:'15%'},
+                    {field:'receivePhone',title:'接收人电话',width:'10%'},
+                    {field:'receiveEmail',title:'接收人邮箱',width:'10%'},
+                    {field:'saleName',title:'所属销售名字',width:'10%'},
+                    {field:'salePhone',title:'所属销售电话',width:'10%'},
+                    {field:'addtime',title:'添加时间',width:'10%',formatter: formatDateStr},
                     {field:'status',title:'登录状态',width:'8%',
                         formatter : function(value,row,index){
-                            if(value=='1'){return '正常'}
-                            else if(value=='-1'){return '禁闭'}
+                            if(value=='1'){return '启用中'}
+                            else{return '已停用'}
                         },styler: function (value, row, index) {
                             return 'color:red';
                         }
@@ -196,7 +190,11 @@
                         <td>商户编号:</td>
                         <td><input id="merchNo" name="merchNo" class="easyui-textbox" type="text" /></td>
                         <td>公司名称:</td>
-                        <td><input id="name" name="name" class="easyui-textbox" type="text" /></td>
+                        <td><input id="companyName" name="companyName" class="easyui-textbox" type="text" /></td>
+                        </tr>
+                    <tr>
+                        <td>所属销售姓名:</td>
+                        <td><input id="saleName" name="saleName" class="easyui-textbox" type="text" /></td>
                         <td>添加起止时间:</td>
                         <td>
                             <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
@@ -206,7 +204,6 @@
                             <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
                                    name="addtimeEnd"
                                    onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                        </td>
                         </td>
                     </tr>
                 </table>

@@ -75,6 +75,11 @@
                     "menuname" : "云账户业务商户管理",
                     "icon" : "icon-nav",
                     "url" : "cloudCompany/indexSale"
+                },{
+                    "menuid" : "205",
+                    "menuname" : "欣豆市场商户管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopCompany/index"
                 }]
     		},{
                 "menuid" : "3",
