@@ -55,6 +55,11 @@ public class PayShopCompany implements Serializable {
     private String salePhone;
 
     /**
+     * 商户状态 0=停用 1=启用
+     */
+    private Byte status;
+
+    /**
      * 
      */
     private Date addtime;
@@ -141,6 +146,14 @@ public class PayShopCompany implements Serializable {
         this.salePhone = salePhone == null ? null : salePhone.trim();
     }
 
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -168,6 +181,7 @@ public class PayShopCompany implements Serializable {
         sb.append(", receiveEmail=").append(receiveEmail);
         sb.append(", saleName=").append(saleName);
         sb.append(", salePhone=").append(salePhone);
+        sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
         return sb.toString();
@@ -199,6 +213,7 @@ public class PayShopCompany implements Serializable {
             && (this.getReceiveEmail() == null ? other.getReceiveEmail() == null : this.getReceiveEmail().equals(other.getReceiveEmail()))
             && (this.getSaleName() == null ? other.getSaleName() == null : this.getSaleName().equals(other.getSaleName()))
             && (this.getSalePhone() == null ? other.getSalePhone() == null : this.getSalePhone().equals(other.getSalePhone()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
 
@@ -219,6 +234,7 @@ public class PayShopCompany implements Serializable {
         result = prime * result + ((getReceiveEmail() == null) ? 0 : getReceiveEmail().hashCode());
         result = prime * result + ((getSaleName() == null) ? 0 : getSaleName().hashCode());
         result = prime * result + ((getSalePhone() == null) ? 0 : getSalePhone().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
     }
