@@ -50,6 +50,16 @@ public class CloudDfMoneyInfo {
     private String username;
 
     /**
+     * 预发金额
+     */
+    private BigDecimal preMoney;
+
+    /**
+     * 个人所得税费率
+     */
+    private BigDecimal incomeRate;
+
+    /**
      * 发放金额
      */
     private BigDecimal commoney;
@@ -243,6 +253,22 @@ public class CloudDfMoneyInfo {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public BigDecimal getPreMoney() {
+        return preMoney;
+    }
+
+    public void setPreMoney(BigDecimal preMoney) {
+        this.preMoney = preMoney;
+    }
+
+    public BigDecimal getIncomeRate() {
+        return incomeRate;
+    }
+
+    public void setIncomeRate(BigDecimal incomeRate) {
+        this.incomeRate = incomeRate;
     }
 
     public BigDecimal getCommoney() {

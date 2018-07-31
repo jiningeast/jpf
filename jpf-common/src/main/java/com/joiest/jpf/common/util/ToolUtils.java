@@ -2,7 +2,11 @@ package com.joiest.jpf.common.util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.URLEncoder;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -341,4 +345,16 @@ public class ToolUtils {
         return str+middle+last;
     }
 
+    /**
+     * 保留小数点后N位小数，第n+1位四舍五入
+     */
+    public static Double halfUpDouble(Double num, int n){
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setRoundingMode(RoundingMode.HALF_UP);   //设置四舍五入
+        nf.setMinimumFractionDigits(n); //设置最小保留几位小数
+        nf.setMaximumFractionDigits(n); //设置最大保留几位小数
+        nf.setGroupingUsed(false);
+
+        return Double.parseDouble(nf.format(num));
+    }
 }

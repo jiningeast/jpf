@@ -636,6 +636,126 @@ public class PayCloudDfMoneyExample {
             return (Criteria) this;
         }
 
+        public Criteria andPreMoneyIsNull() {
+            addCriterion("pre_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyIsNotNull() {
+            addCriterion("pre_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyEqualTo(BigDecimal value) {
+            addCriterion("pre_money =", value, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("pre_money <>", value, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyGreaterThan(BigDecimal value) {
+            addCriterion("pre_money >", value, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("pre_money >=", value, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyLessThan(BigDecimal value) {
+            addCriterion("pre_money <", value, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("pre_money <=", value, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyIn(List<BigDecimal> values) {
+            addCriterion("pre_money in", values, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("pre_money not in", values, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pre_money between", value1, value2, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pre_money not between", value1, value2, "preMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateIsNull() {
+            addCriterion("income_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateIsNotNull() {
+            addCriterion("income_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateEqualTo(BigDecimal value) {
+            addCriterion("income_rate =", value, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateNotEqualTo(BigDecimal value) {
+            addCriterion("income_rate <>", value, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateGreaterThan(BigDecimal value) {
+            addCriterion("income_rate >", value, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("income_rate >=", value, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateLessThan(BigDecimal value) {
+            addCriterion("income_rate <", value, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("income_rate <=", value, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateIn(List<BigDecimal> values) {
+            addCriterion("income_rate in", values, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateNotIn(List<BigDecimal> values) {
+            addCriterion("income_rate not in", values, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("income_rate between", value1, value2, "incomeRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("income_rate not between", value1, value2, "incomeRate");
+            return (Criteria) this;
+        }
+
         public Criteria andCommoneyIsNull() {
             addCriterion("commoney is null");
             return (Criteria) this;

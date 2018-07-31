@@ -34,7 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 @Controller
@@ -618,7 +620,16 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setFid(companyInfo.getId());   // 企业id
             cloudDfMoneyInfo.setBusstaffid(Long.parseLong(""+staffId));
             cloudDfMoneyInfo.setUsername(singlePerson.get("phone"));
-            cloudDfMoneyInfo.setCommoney(new BigDecimal(String.valueOf(singlePerson.get("money"))));
+            // 7月31日新增 实发金额减去个人所得税 start
+            BigDecimal preMoney = new BigDecimal(String.valueOf(singlePerson.get("money")));    // 预发放金额，即excel表上填的金额
+            Double preMoneyDouble = new Double(String.valueOf(singlePerson.get("money")));
+            Double tax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));     // 个人所得税税点
+            Double commoneyDouble = preMoneyDouble * ( 1 - tax );       // 计算实发金额
+            BigDecimal commoney = new BigDecimal(ToolUtils.halfUpDouble(commoneyDouble, 2));    // 实发金额四舍五入
+            // 7月31日新增 实发金额减去个人所得税 end
+            cloudDfMoneyInfo.setPreMoney(preMoney);
+            cloudDfMoneyInfo.setIncomeRate(BigDecimal.valueOf(tax));
+            cloudDfMoneyInfo.setCommoney(commoney);
             cloudDfMoneyInfo.setBankno(singlePerson.get("bankNo"));
             cloudDfMoneyInfo.setBanknickname(singlePerson.get("name"));
             cloudDfMoneyInfo.setIdno(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
@@ -641,7 +652,6 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setOrderid("");
             cloudDfMoneyInfo.setOrderids("");
             // 计算应发金额（税前）
-            Double tax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
             Double num1 = new Double(String.valueOf(singlePerson.get("money")));
             Double num2 = new Double("1")-tax;
             Double beforeTaxMoney = num1 / num2;
