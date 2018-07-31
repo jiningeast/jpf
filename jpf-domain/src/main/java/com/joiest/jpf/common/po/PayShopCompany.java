@@ -45,6 +45,16 @@ public class PayShopCompany implements Serializable {
     private String receiveEmail;
 
     /**
+     * 销售姓名
+     */
+    private String saleName;
+
+    /**
+     * 销售电话
+     */
+    private String salePhone;
+
+    /**
      * 
      */
     private Date addtime;
@@ -115,6 +125,22 @@ public class PayShopCompany implements Serializable {
         this.receiveEmail = receiveEmail == null ? null : receiveEmail.trim();
     }
 
+    public String getSaleName() {
+        return saleName;
+    }
+
+    public void setSaleName(String saleName) {
+        this.saleName = saleName == null ? null : saleName.trim();
+    }
+
+    public String getSalePhone() {
+        return salePhone;
+    }
+
+    public void setSalePhone(String salePhone) {
+        this.salePhone = salePhone == null ? null : salePhone.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -140,6 +166,8 @@ public class PayShopCompany implements Serializable {
         sb.append(", receiveName=").append(receiveName);
         sb.append(", receivePhone=").append(receivePhone);
         sb.append(", receiveEmail=").append(receiveEmail);
+        sb.append(", saleName=").append(saleName);
+        sb.append(", salePhone=").append(salePhone);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
         return sb.toString();
@@ -169,6 +197,8 @@ public class PayShopCompany implements Serializable {
             && (this.getReceiveName() == null ? other.getReceiveName() == null : this.getReceiveName().equals(other.getReceiveName()))
             && (this.getReceivePhone() == null ? other.getReceivePhone() == null : this.getReceivePhone().equals(other.getReceivePhone()))
             && (this.getReceiveEmail() == null ? other.getReceiveEmail() == null : this.getReceiveEmail().equals(other.getReceiveEmail()))
+            && (this.getSaleName() == null ? other.getSaleName() == null : this.getSaleName().equals(other.getSaleName()))
+            && (this.getSalePhone() == null ? other.getSalePhone() == null : this.getSalePhone().equals(other.getSalePhone()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
 
@@ -187,6 +217,8 @@ public class PayShopCompany implements Serializable {
         result = prime * result + ((getReceiveName() == null) ? 0 : getReceiveName().hashCode());
         result = prime * result + ((getReceivePhone() == null) ? 0 : getReceivePhone().hashCode());
         result = prime * result + ((getReceiveEmail() == null) ? 0 : getReceiveEmail().hashCode());
+        result = prime * result + ((getSaleName() == null) ? 0 : getSaleName().hashCode());
+        result = prime * result + ((getSalePhone() == null) ? 0 : getSalePhone().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
     }

@@ -725,6 +725,146 @@ public class PayShopCompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andSaleNameIsNull() {
+            addCriterion("sale_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameIsNotNull() {
+            addCriterion("sale_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameEqualTo(String value) {
+            addCriterion("sale_name =", value, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameNotEqualTo(String value) {
+            addCriterion("sale_name <>", value, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameGreaterThan(String value) {
+            addCriterion("sale_name >", value, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameGreaterThanOrEqualTo(String value) {
+            addCriterion("sale_name >=", value, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameLessThan(String value) {
+            addCriterion("sale_name <", value, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameLessThanOrEqualTo(String value) {
+            addCriterion("sale_name <=", value, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameLike(String value) {
+            addCriterion("sale_name like", value, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameNotLike(String value) {
+            addCriterion("sale_name not like", value, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameIn(List<String> values) {
+            addCriterion("sale_name in", values, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameNotIn(List<String> values) {
+            addCriterion("sale_name not in", values, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameBetween(String value1, String value2) {
+            addCriterion("sale_name between", value1, value2, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameNotBetween(String value1, String value2) {
+            addCriterion("sale_name not between", value1, value2, "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneIsNull() {
+            addCriterion("sale_phone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneIsNotNull() {
+            addCriterion("sale_phone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneEqualTo(String value) {
+            addCriterion("sale_phone =", value, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneNotEqualTo(String value) {
+            addCriterion("sale_phone <>", value, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneGreaterThan(String value) {
+            addCriterion("sale_phone >", value, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("sale_phone >=", value, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneLessThan(String value) {
+            addCriterion("sale_phone <", value, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneLessThanOrEqualTo(String value) {
+            addCriterion("sale_phone <=", value, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneLike(String value) {
+            addCriterion("sale_phone like", value, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneNotLike(String value) {
+            addCriterion("sale_phone not like", value, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneIn(List<String> values) {
+            addCriterion("sale_phone in", values, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneNotIn(List<String> values) {
+            addCriterion("sale_phone not in", values, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneBetween(String value1, String value2) {
+            addCriterion("sale_phone between", value1, value2, "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneNotBetween(String value1, String value2) {
+            addCriterion("sale_phone not between", value1, value2, "salePhone");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
@@ -817,6 +957,16 @@ public class PayShopCompanyExample {
 
         public Criteria andReceiveEmailLikeInsensitive(String value) {
             addCriterion("upper(receive_email) like", value.toUpperCase(), "receiveEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleNameLikeInsensitive(String value) {
+            addCriterion("upper(sale_name) like", value.toUpperCase(), "saleName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalePhoneLikeInsensitive(String value) {
+            addCriterion("upper(sale_phone) like", value.toUpperCase(), "salePhone");
             return (Criteria) this;
         }
     }
