@@ -692,6 +692,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         if (cloudCompanyAgentList == null || cloudCompanyAgentList.isEmpty()) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "该"+request.getAgentNo()+"代理企业不存在");
         }
+        PayCloudCompanyAgent payCloudCompanyAgent = cloudCompanyAgentList.get(0);
         //业务公司校验
         PayCloudCompanySalesExample payCloudCompanySalesExample = new PayCloudCompanySalesExample();
         PayCloudCompanySalesExample.Criteria c = payCloudCompanySalesExample.createCriteria();
@@ -701,11 +702,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "该" + request.getMerchNo() + "企业不存在");
         }
         PayCloudCompanySales payCloudCompanySales = payCloudCompanySalesList.get(0);
-        BigDecimal feemoney = reqMoney.multiply(payCloudCompanySales.getSalesRate()).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_UP).divide(new BigDecimal(100));//计算手续费
-        BigDecimal realmoney = feemoney.add(reqMoney);//计算实际汇款金额
+        BigDecimal agentFeemoney = reqMoney.multiply(payCloudCompanyAgent.getAgentRate()).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_UP).divide(new BigDecimal(100));//计算手续费
+        BigDecimal salesFeemoney = reqMoney.multiply(payCloudCompanySales.getSalesRate()).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_UP).divide(new BigDecimal(100));//计算手续费
+        BigDecimal realFeemonty = agentFeemoney.add(salesFeemoney);
+        BigDecimal realmoney = realFeemonty.add(reqMoney);//计算实际汇款金额
 
         //校验与前端的手续费或者实际汇款金额是否一致
-        if (feemoney.compareTo(reqFeemoney)!=0||realmoney.compareTo(reqRealmoney)!=0) {
+        if (realFeemonty.compareTo(reqFeemoney)!=0||realmoney.compareTo(reqRealmoney)!=0) {
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "企业手续费或实际汇款金额不一致");
         }
         PayCloudRecharge record = new PayCloudRecharge();
@@ -720,6 +723,9 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         record.setRealmoney(reqRealmoney);
         record.setFeemoney(reqFeemoney);
         record.setSalesRate(payCloudCompanySales.getSalesRate());
+        record.setSalesFeemoney(salesFeemoney);
+        record.setAgentRate(payCloudCompanyAgent.getAgentRate());
+        record.setAgentFeemoney(agentFeemoney);
         record.setAddtime(Calendar.getInstance().getTime());
         record.setPacttime(DateUtils.getFdate(request.getPacttime(),DateUtils.DATEFORMATLONG));
         record.setPactstatus(EnumConstants.RechargePactStatus.UNCONFIRMED.value());
