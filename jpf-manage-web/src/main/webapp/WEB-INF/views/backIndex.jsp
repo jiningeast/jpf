@@ -120,6 +120,11 @@
                     "menuname" : "代付任务管理",
                     "icon" : "icon-nav",
                     "url" : "cloudTask/index"
+                },{
+                    "menuid" : "504",
+                    "menuname" : "欣券管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopBatch/index"
                 }]
             },{
                     "menuid" : "6",
