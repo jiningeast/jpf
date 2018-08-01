@@ -60,7 +60,7 @@ public interface PayCloudDfMoneyMapper {
      * @param record
      * @param example
      */
-    int  updateByExampleSelective(@Param("record") PayCloudDfMoney record, @Param("example") PayCloudDfMoneyExample example);
+    int updateByExampleSelective(@Param("record") PayCloudDfMoney record, @Param("example") PayCloudDfMoneyExample example);
 
     /**
      * 选择性更新数据库记录

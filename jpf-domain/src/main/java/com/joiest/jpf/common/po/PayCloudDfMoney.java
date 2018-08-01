@@ -21,7 +21,7 @@ public class PayCloudDfMoney implements Serializable {
     private String merchNo;
 
     /**
-     * 企业添加人ID
+     * 操作人ID
      */
     private Long uid;
 
@@ -41,7 +41,17 @@ public class PayCloudDfMoney implements Serializable {
     private String username;
 
     /**
-     * 发放金额
+     * 预发金额
+     */
+    private BigDecimal preMoney;
+
+    /**
+     * 个人所得税费率
+     */
+    private BigDecimal incomeRate;
+
+    /**
+     * 实发金额=预发金额*（1 - 个人所得税费率）
      */
     private BigDecimal commoney;
 
@@ -106,7 +116,7 @@ public class PayCloudDfMoney implements Serializable {
     private String realname;
 
     /**
-     * 打款状态0:未申请打款 1:待打款，2=打款成功 3=打款失败，4=打款中
+     * 打款状态0:未申请打款 1:待打款，2=打款成功 3=打款失败，4=打款中 5=支付限额
      */
     private Integer montype;
 
@@ -236,6 +246,22 @@ public class PayCloudDfMoney implements Serializable {
 
     public void setUsername(String username) {
         this.username = username == null ? null : username.trim();
+    }
+
+    public BigDecimal getPreMoney() {
+        return preMoney;
+    }
+
+    public void setPreMoney(BigDecimal preMoney) {
+        this.preMoney = preMoney;
+    }
+
+    public BigDecimal getIncomeRate() {
+        return incomeRate;
+    }
+
+    public void setIncomeRate(BigDecimal incomeRate) {
+        this.incomeRate = incomeRate;
     }
 
     public BigDecimal getCommoney() {
@@ -478,6 +504,8 @@ public class PayCloudDfMoney implements Serializable {
         sb.append(", fid=").append(fid);
         sb.append(", busstaffid=").append(busstaffid);
         sb.append(", username=").append(username);
+        sb.append(", preMoney=").append(preMoney);
+        sb.append(", incomeRate=").append(incomeRate);
         sb.append(", commoney=").append(commoney);
         sb.append(", bankno=").append(bankno);
         sb.append(", banknickname=").append(banknickname);
@@ -533,6 +561,8 @@ public class PayCloudDfMoney implements Serializable {
             && (this.getFid() == null ? other.getFid() == null : this.getFid().equals(other.getFid()))
             && (this.getBusstaffid() == null ? other.getBusstaffid() == null : this.getBusstaffid().equals(other.getBusstaffid()))
             && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
+            && (this.getPreMoney() == null ? other.getPreMoney() == null : this.getPreMoney().equals(other.getPreMoney()))
+            && (this.getIncomeRate() == null ? other.getIncomeRate() == null : this.getIncomeRate().equals(other.getIncomeRate()))
             && (this.getCommoney() == null ? other.getCommoney() == null : this.getCommoney().equals(other.getCommoney()))
             && (this.getBankno() == null ? other.getBankno() == null : this.getBankno().equals(other.getBankno()))
             && (this.getBanknickname() == null ? other.getBanknickname() == null : this.getBanknickname().equals(other.getBanknickname()))
@@ -577,6 +607,8 @@ public class PayCloudDfMoney implements Serializable {
         result = prime * result + ((getFid() == null) ? 0 : getFid().hashCode());
         result = prime * result + ((getBusstaffid() == null) ? 0 : getBusstaffid().hashCode());
         result = prime * result + ((getUsername() == null) ? 0 : getUsername().hashCode());
+        result = prime * result + ((getPreMoney() == null) ? 0 : getPreMoney().hashCode());
+        result = prime * result + ((getIncomeRate() == null) ? 0 : getIncomeRate().hashCode());
         result = prime * result + ((getCommoney() == null) ? 0 : getCommoney().hashCode());
         result = prime * result + ((getBankno() == null) ? 0 : getBankno().hashCode());
         result = prime * result + ((getBanknickname() == null) ? 0 : getBanknickname().hashCode());

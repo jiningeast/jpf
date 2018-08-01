@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 
+import com.joiest.jpf.common.custom.PayCloudCompanyMoneyCustom;
 import com.joiest.jpf.common.custom.PayCloudDfMoneyCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
@@ -198,11 +199,11 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         example.setPageSize(cloudCompanyMoneyRequest.getRows());
         example.setOrderByClause("id DESC");
 
-        List<PayCloudCompanyMoney> list = payCloudCompanyMoneyMapper.selectByExample(example);
+        List<PayCloudCompanyMoneyCustom> list = payCloudCompanyMoneyCustomMapper.selectByExampleandCompany(example);
         List<CloudCompanyMoneyInfo> infos = new ArrayList<>();
-        for (PayCloudCompanyMoney payCloudCompanyMoney : list) {
+        for (PayCloudCompanyMoneyCustom payCloudCompanyMoney : list) {
             CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyMoney.class, CloudCompanyMoneyInfo.class, false);
+            BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyMoneyCustom.class, CloudCompanyMoneyInfo.class, false);
             beanCopier.copy(payCloudCompanyMoney, cloudCompanyMoneyInfo, null);
 
             infos.add(cloudCompanyMoneyInfo);

@@ -53,6 +53,16 @@ public class PayCloudDfMoneyCustom {
     private String username;
 
     /**
+     * 预发金额
+     */
+    private BigDecimal preMoney;
+
+    /**
+     * 个人所得税费率
+     */
+    private BigDecimal incomeRate;
+
+    /**
      * 员工表用户签约状态
      */
     private String companyStaffIsActice;
@@ -63,7 +73,7 @@ public class PayCloudDfMoneyCustom {
     private String compactStaffCompactActive;
 
     /**
-     * 发放金额
+     * 实发金额=预发金额*（1 - 个人所得税费率）
      */
     private BigDecimal commoney;
 
@@ -248,6 +258,22 @@ public class PayCloudDfMoneyCustom {
 
     public void setUsername(String username) {
         this.username = username == null ? null : username.trim();
+    }
+
+    public BigDecimal getPreMoney() {
+        return preMoney;
+    }
+
+    public void setPreMoney(BigDecimal preMoney) {
+        this.preMoney = preMoney;
+    }
+
+    public BigDecimal getIncomeRate() {
+        return incomeRate;
+    }
+
+    public void setIncomeRate(BigDecimal incomeRate) {
+        this.incomeRate = incomeRate;
     }
 
     public BigDecimal getCommoney() {

@@ -29,6 +29,9 @@
     <result column="taxmoney" property="taxmoney" jdbcType="DECIMAL" />
     <result column="taxmoremoney" property="taxmoremoney" jdbcType="DECIMAL" />
     <result column="profitmoney" property="profitmoney" jdbcType="DECIMAL" />
+
+    <!--公司名称-->
+    <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -126,6 +129,23 @@
       limit ${(pageNo-1) * pageSize}, ${pageSize}
     </if>
   </select>
+
+  <!--构建连表查询企业名称-->
+
+
+  <select id="selectByExampleandCompany" parameterType="com.joiest.jpf.common.po.PayCloudCompanyMoneyExample" resultMap="BaseResultMap">
+    select
+    a.*,b.name
+    FROM pay_cloud_company_money a LEFT JOIN pay_cloud_company b on a.uid=b.id
+
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <!--==end===-->
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--
       @mbggenerated
@@ -165,7 +185,7 @@
       batchstatus, batchno, batchitems, 
       batchallmoney, batchdealitems, batchdealmoney, 
       batchfailitems, batchfailmoney, updatetime, 
-      feemoney, taxmoney, taxmoremoney, 
+      feemoney, taxmoney, taxmoremoney,name
       profitmoney)
     values (#{id,jdbcType=BIGINT}, #{agentNo,jdbcType=VARCHAR}, #{merchNo,jdbcType=VARCHAR}, 
       #{commoney,jdbcType=DECIMAL}, #{addtime,jdbcType=TIMESTAMP}, #{uid,jdbcType=BIGINT}, 

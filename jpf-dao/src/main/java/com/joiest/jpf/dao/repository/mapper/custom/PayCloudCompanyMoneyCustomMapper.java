@@ -1,5 +1,6 @@
 package com.joiest.jpf.dao.repository.mapper.custom;
 
+import com.joiest.jpf.common.custom.PayCloudCompanyMoneyCustom;
 import com.joiest.jpf.common.po.PayCloudCompanyMoney;
 import com.joiest.jpf.common.po.PayCloudCompanyMoneyExample;
 import com.joiest.jpf.common.po.PayOrderExample;
@@ -49,6 +50,15 @@ public interface PayCloudCompanyMoneyCustomMapper {
      * @param example
      */
     List<PayCloudCompanyMoney> selectByExample(PayCloudCompanyMoneyExample example);
+
+
+
+    /**
+     * 根据条件连表查询公司信息
+     *
+     * @param example
+     */
+    List<PayCloudCompanyMoneyCustom> selectByExampleandCompany(PayCloudCompanyMoneyExample example);
 
     /**
      * 根据主键获取一条数据库记录
@@ -107,5 +117,7 @@ public interface PayCloudCompanyMoneyCustomMapper {
      * 查询订单总毛利
      */
     BigDecimal totalGross(PayCloudCompanyMoneyExample example);
+
+
 
 }
