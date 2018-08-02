@@ -926,6 +926,76 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andChargeNoIsNull() {
+            addCriterion("charge_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoIsNotNull() {
+            addCriterion("charge_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoEqualTo(String value) {
+            addCriterion("charge_no =", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoNotEqualTo(String value) {
+            addCriterion("charge_no <>", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoGreaterThan(String value) {
+            addCriterion("charge_no >", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoGreaterThanOrEqualTo(String value) {
+            addCriterion("charge_no >=", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoLessThan(String value) {
+            addCriterion("charge_no <", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoLessThanOrEqualTo(String value) {
+            addCriterion("charge_no <=", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoLike(String value) {
+            addCriterion("charge_no like", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoNotLike(String value) {
+            addCriterion("charge_no not like", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoIn(List<String> values) {
+            addCriterion("charge_no in", values, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoNotIn(List<String> values) {
+            addCriterion("charge_no not in", values, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoBetween(String value1, String value2) {
+            addCriterion("charge_no between", value1, value2, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoNotBetween(String value1, String value2) {
+            addCriterion("charge_no not between", value1, value2, "chargeNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCouponDetailIsNull() {
             addCriterion("coupon_detail is null");
             return (Criteria) this;
@@ -1248,6 +1318,11 @@ public class PayShopOrderExample {
 
         public Criteria andProductNameLikeInsensitive(String value) {
             addCriterion("upper(product_name) like", value.toUpperCase(), "productName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoLikeInsensitive(String value) {
+            addCriterion("upper(charge_no) like", value.toUpperCase(), "chargeNo");
             return (Criteria) this;
         }
 

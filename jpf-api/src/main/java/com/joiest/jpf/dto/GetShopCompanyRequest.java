@@ -60,12 +60,10 @@ public class GetShopCompanyRequest {
      */
     private Date addtime;
 
-
     /**
      * 商户状态 0=停用 1=启用
      */
     private Byte status;
-
 
     /**
      * 添加时间
@@ -77,10 +75,6 @@ public class GetShopCompanyRequest {
     private long rows;
 
     private long page;
-
-
-
-    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;

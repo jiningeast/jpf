@@ -66,6 +66,11 @@ public class PayShopOrder implements Serializable {
     private Byte payWay;
 
     /**
+     * 充值号，可以是手机号或油卡卡号
+     */
+    private String chargeNo;
+
+    /**
      * 券消费详情，json存激活id，豆数量
      */
     private String couponDetail;
@@ -188,6 +193,14 @@ public class PayShopOrder implements Serializable {
         this.payWay = payWay;
     }
 
+    public String getChargeNo() {
+        return chargeNo;
+    }
+
+    public void setChargeNo(String chargeNo) {
+        this.chargeNo = chargeNo == null ? null : chargeNo.trim();
+    }
+
     public String getCouponDetail() {
         return couponDetail;
     }
@@ -249,6 +262,7 @@ public class PayShopOrder implements Serializable {
         sb.append(", totalMoney=").append(totalMoney);
         sb.append(", totalDou=").append(totalDou);
         sb.append(", payWay=").append(payWay);
+        sb.append(", chargeNo=").append(chargeNo);
         sb.append(", couponDetail=").append(couponDetail);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
@@ -286,6 +300,7 @@ public class PayShopOrder implements Serializable {
             && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
             && (this.getTotalDou() == null ? other.getTotalDou() == null : this.getTotalDou().equals(other.getTotalDou()))
             && (this.getPayWay() == null ? other.getPayWay() == null : this.getPayWay().equals(other.getPayWay()))
+            && (this.getChargeNo() == null ? other.getChargeNo() == null : this.getChargeNo().equals(other.getChargeNo()))
             && (this.getCouponDetail() == null ? other.getCouponDetail() == null : this.getCouponDetail().equals(other.getCouponDetail()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
@@ -312,6 +327,7 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
         result = prime * result + ((getTotalDou() == null) ? 0 : getTotalDou().hashCode());
         result = prime * result + ((getPayWay() == null) ? 0 : getPayWay().hashCode());
+        result = prime * result + ((getChargeNo() == null) ? 0 : getChargeNo().hashCode());
         result = prime * result + ((getCouponDetail() == null) ? 0 : getCouponDetail().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());

@@ -76,14 +76,12 @@ public class YinjiaCreateOrderRequest {
      * 返回地址
      */
     @NotBlank(message = "返回地址不能为空")
-    @URL( message = "返回地址格式错误")
     private String returnUrl;
 
     /**
      * 异步通知地址
      */
     @NotBlank(message = "异步通知地址不能为空")
-    @URL( message = "异步通知地址格式错误")
     private String notifyUrl;
 
     /**

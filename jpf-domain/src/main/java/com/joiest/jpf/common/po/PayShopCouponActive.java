@@ -51,6 +51,11 @@ public class PayShopCouponActive implements Serializable {
     private String activeCode;
 
     /**
+     * 支付方式 0=欣豆 1=微信
+     */
+    private Byte payWay;
+
+    /**
      * 面值
      */
     private BigDecimal money;
@@ -59,6 +64,16 @@ public class PayShopCouponActive implements Serializable {
      * 豆数量
      */
     private Integer dou;
+
+    /**
+     * 根据行为不同显示的内容不同
+     */
+    private String content;
+
+    /**
+     * 行为 0=激活 1=消费 2=退豆 3=过期
+     */
+    private String type;
 
     /**
      * 到期时间
@@ -149,6 +164,14 @@ public class PayShopCouponActive implements Serializable {
         this.activeCode = activeCode == null ? null : activeCode.trim();
     }
 
+    public Byte getPayWay() {
+        return payWay;
+    }
+
+    public void setPayWay(Byte payWay) {
+        this.payWay = payWay;
+    }
+
     public BigDecimal getMoney() {
         return money;
     }
@@ -163,6 +186,22 @@ public class PayShopCouponActive implements Serializable {
 
     public void setDou(Integer dou) {
         this.dou = dou;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
     }
 
     public Date getExpireTime() {
@@ -207,8 +246,11 @@ public class PayShopCouponActive implements Serializable {
         sb.append(", batchNo=").append(batchNo);
         sb.append(", couponNo=").append(couponNo);
         sb.append(", activeCode=").append(activeCode);
+        sb.append(", payWay=").append(payWay);
         sb.append(", money=").append(money);
         sb.append(", dou=").append(dou);
+        sb.append(", content=").append(content);
+        sb.append(", type=").append(type);
         sb.append(", expireTime=").append(expireTime);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
@@ -241,8 +283,11 @@ public class PayShopCouponActive implements Serializable {
             && (this.getBatchNo() == null ? other.getBatchNo() == null : this.getBatchNo().equals(other.getBatchNo()))
             && (this.getCouponNo() == null ? other.getCouponNo() == null : this.getCouponNo().equals(other.getCouponNo()))
             && (this.getActiveCode() == null ? other.getActiveCode() == null : this.getActiveCode().equals(other.getActiveCode()))
+            && (this.getPayWay() == null ? other.getPayWay() == null : this.getPayWay().equals(other.getPayWay()))
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
+            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -264,8 +309,11 @@ public class PayShopCouponActive implements Serializable {
         result = prime * result + ((getBatchNo() == null) ? 0 : getBatchNo().hashCode());
         result = prime * result + ((getCouponNo() == null) ? 0 : getCouponNo().hashCode());
         result = prime * result + ((getActiveCode() == null) ? 0 : getActiveCode().hashCode());
+        result = prime * result + ((getPayWay() == null) ? 0 : getPayWay().hashCode());
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
+        result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
