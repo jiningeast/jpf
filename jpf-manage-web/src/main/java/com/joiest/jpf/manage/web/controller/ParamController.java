@@ -1,10 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.entity.*;
-import com.joiest.jpf.facade.BankServiceFacade;
-import com.joiest.jpf.facade.MerAgentServiceFacade;
-import com.joiest.jpf.facade.MerTypeServiceFacade;
-import com.joiest.jpf.facade.PcaServiceFacade;
+import com.joiest.jpf.facade.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +29,23 @@ public class ParamController {
 
     @Autowired
     private BankServiceFacade bankServiceFacade;
+
+    /**
+     * shop_product_type
+     */
+    @Autowired
+    private ShopProductTypeServiceFacade shopProductTypeServiceFacade;
+
+    /**
+     * shop_supplier
+     */
+    @Autowired
+    private ShopSupplierServiceFacade shopSupplierServiceFacade;
+    /**
+     * shop_brand
+     */
+    @Autowired
+    private ShopBrandServiceFacade shopBrandServiceFacade;
 
     private List<PcaInfo> pcaInfoList;
 
@@ -80,5 +94,32 @@ public class ParamController {
     @ResponseBody
     public List<BankInfo> getBankAll(){
         return bankServiceFacade.getBankAll();
+    }
+
+    /**
+     * 获取所有shop_product_type 商品类型列表
+     */
+    @RequestMapping("/getShopProductType")
+    @ResponseBody
+    public List<ShopProductTypeInfo> getAllShopProductTypeList()
+    {
+        return shopProductTypeServiceFacade.getAllShopProductTypeList();
+    }
+
+    /**
+     * 获取所有shop_product_brand  品牌列表
+     */
+    @RequestMapping("/getShopBrandList")
+    @ResponseBody
+    public List<ShopBrandInfo> getAllShopBrandList()
+    {
+        return shopBrandServiceFacade.getShopBrandAllList();
+    }
+
+    @RequestMapping("/getShopSuppliers")
+    @ResponseBody
+    public List<ShopSupplierInfo> getAllShopSupplierList()
+    {
+        return shopSupplierServiceFacade.getShopSupplierList();
     }
 }

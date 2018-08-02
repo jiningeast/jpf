@@ -4,11 +4,18 @@
 	   xmlns:aop="http://www.springframework.org/schema/aop"
 	   xmlns:tx="http://www.springframework.org/schema/tx"
 	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:task="http://www.springframework.org/schema/task"
 	   xsi:schemaLocation="
           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		  http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<!--<task:scheduled-tasks>-->
+		<!--<task:scheduled ref="quartzTestBean" method="cronTest" cron="*/5 * * * * ?" />-->
+	<!--</task:scheduled-tasks>-->
+	<!--<bean id="quartzTestBean" class="com.joiest.jpf.facade.impl.CronTestServiceFacadeImpl"/>-->
 	<!-- 激活spring的注解. -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

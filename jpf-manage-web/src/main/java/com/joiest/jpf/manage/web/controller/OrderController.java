@@ -241,7 +241,7 @@ public class OrderController {
             output = response.getOutputStream();
 
             String filename = "旅游分期订单";
-            response.setHeader("Content-disposition", "attachment;filename="+new String(filename.getBytes("gbk"), "iso8859-1")+".xls");
+            response.setHeader("Content-disposition", "attachment;filename="+new String(filename.getBytes("utf-8"), "iso8859-1")+".xls");
             //response.setHeader("Content-disposition", "attachment; filename=旅游分期订单.xls");
             response.setContentType("application/vnd.ms-excel");
             workbook.write(output);
@@ -250,10 +250,9 @@ public class OrderController {
 
             e.printStackTrace();
         }
-        return null;
-        /*
+//        return null;
             //创建excel文件
-            File file=new File("E://test.xlsx");
+            File file=new File("E://1234abc.xlsx");
             try {
                 file.createNewFile();
                 //将excel写入
@@ -263,7 +262,7 @@ public class OrderController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        */
+            return null;
     }
     /**
      * 获取订单支付的银行卡信息

@@ -39,8 +39,15 @@
     <!-- 静态资源的处理 -->
     <mvc:resources location="/resources/" mapping="/resources/**"/>
 
-	<mvc:interceptors>	
+	<mvc:interceptors>
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+		<!--<mvc:interceptor>-->
+			<!--<mvc:mapping path="/**"/>-->
+			<!--&lt;!&ndash; 过滤掉resources静态资源目录 &ndash;&gt;-->
+			<!--<mvc:exclude-mapping path="/resources/**"/>-->
+			<!--<bean class="com.joiest.jpf.cloud.api.interceptor.LoginInterceptor">-->
+			<!--</bean>-->
+		<!--</mvc:interceptor>-->
 	</mvc:interceptors> 
 
 	<!-- 国际化消息 -->
