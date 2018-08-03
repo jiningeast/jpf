@@ -57,6 +57,9 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         if( StringUtils.isNotBlank(request.getSaleName())){
             c.andSaleNameEqualTo(request.getSaleName());
         }
+        if(request.getStatus()!=null && request.getStatus().toString()!=""){
+            c.andStatusEqualTo(request.getStatus());
+        }
         // 添加时间搜索
         if (StringUtils.isNotBlank(request.getAddtimeStart()))
         {
