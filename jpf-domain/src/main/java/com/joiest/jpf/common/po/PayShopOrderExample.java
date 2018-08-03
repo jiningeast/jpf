@@ -1126,6 +1126,66 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andCouponActiveIdIsNull() {
+            addCriterion("coupon_active_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdIsNotNull() {
+            addCriterion("coupon_active_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdEqualTo(String value) {
+            addCriterion("coupon_active_id =", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdNotEqualTo(String value) {
+            addCriterion("coupon_active_id <>", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdGreaterThan(String value) {
+            addCriterion("coupon_active_id >", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdGreaterThanOrEqualTo(String value) {
+            addCriterion("coupon_active_id >=", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdLessThan(String value) {
+            addCriterion("coupon_active_id <", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdLessThanOrEqualTo(String value) {
+            addCriterion("coupon_active_id <=", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdIn(List<String> values) {
+            addCriterion("coupon_active_id in", values, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdNotIn(List<String> values) {
+            addCriterion("coupon_active_id not in", values, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdBetween(String value1, String value2) {
+            addCriterion("coupon_active_id between", value1, value2, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdNotBetween(String value1, String value2) {
+            addCriterion("coupon_active_id not between", value1, value2, "couponActiveId");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;

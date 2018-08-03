@@ -212,9 +212,10 @@ public class SendMailUtil{
     }
 
     /**
-     * 发送带内嵌图片、附件、多收件人(显示邮箱姓名)、邮件优先级、阅读回执的完整的HTML邮件
+     * 发送带内嵌图片、附件、多收件人(显示邮箱姓名)、邮件优先级、阅读回执的完整的HTML邮件老版本
      */
-    public static void sendMultipleEmail() throws Exception {
+    //未封装参数版本
+/*    public static void sendMultipleEmail() throws Exception {
         String charset = "utf-8";   // 指定中文编码格式
         // 创建Session实例对象
         Session session = Session.getInstance(props,new MyAuthenticator());
@@ -302,12 +303,140 @@ public class SendMailUtil{
         // 保存邮件内容修改
         message.saveChanges();
 
-        /*File eml = buildEmlFile(message);
-        sendMailForEml(eml);*/
+        *//*File eml = buildEmlFile(message);
+        sendMailForEml(eml);*//*
 
         // 发送邮件
         Transport.send(message);
+    }*/
+//    已经封装参数版本
+    /**
+     * 发送带内嵌图片、附件、多收件人(显示邮箱姓名)、邮件优先级、阅读回执的完整的HTML邮件
+     */
+    //注：参数介绍
+//    Subject:'主题';sendNAME:"发送人名称";Recipients：接收邮箱地址;RecipienName:"接收人姓名";FilePath："发送附件地址全路径";fileName："文件名字携带文件格式的如a.xls;";html:"发送的html内容"
+    public static boolean sendMultipleEmail(String Subject,String sendName,String Recipients,String RecipienName,String FilePath,String fileName,String html) throws Exception {
+
+        String charset = "utf-8";   // 指定中文编码格式
+        // 创建Session实例对象
+        Session session = Session.getInstance(props,new MyAuthenticator());
+
+        // 创建MimeMessage实例对象
+        MimeMessage message = new MimeMessage(session);
+        // 设置主题
+        message.setSubject(Subject);
+        // 设置发送人
+        message.setFrom(new InternetAddress(from,sendName,charset));
+        // 设置收件人
+        message.setRecipients(RecipientType.TO,
+                new Address[] {
+                        // 参数1：邮箱地址，参数2：姓名（在客户端收件只显示姓名，而不显示邮件地址），参数3：姓名中文字符串编码
+                        new InternetAddress(Recipients, RecipienName, charset),
+                        // new InternetAddress("xyang0917@163.com", "李四_163", charset),
+                }
+        );
+        // 设置抄送
+        // message.setRecipient(RecipientType.CC, new InternetAddress("xyang0917@gmail.com","王五_gmail",charset));
+        // 设置密送
+        //message.setRecipient(RecipientType.BCC, new InternetAddress("xyang0917@qq.com", "赵六_QQ", charset));
+        // 设置发送时间
+        message.setSentDate(new Date());
+        // 设置回复人(收件人回复此邮件时,默认收件人)
+        //message.setReplyTo(InternetAddress.parse("\"" + MimeUtility.encodeText("田七") + "\" <417067629@qq.com>"));
+        // 设置优先级(1:紧急   3:普通    5:低)
+        message.setHeader("X-Priority", "1");
+        // 要求阅读回执(收件人阅读邮件时会提示回复发件人,表明邮件已收到,并已阅读)
+        message.setHeader("Disposition-Notification-To", from);
+
+        // 创建一个MIME子类型为"mixed"的MimeMultipart对象，表示这是一封混合组合类型的邮件
+        MimeMultipart mailContent = new MimeMultipart("mixed");
+        message.setContent(mailContent);
+
+        // 附件
+        MimeBodyPart attach1 = new MimeBodyPart();
+//        MimeBodyPart attach2 = new MimeBodyPart();
+        // 内容
+        MimeBodyPart mailBody = new MimeBodyPart();
+
+        // 将附件和内容添加到邮件当中
+        mailContent.addBodyPart(attach1);
+//        mailContent.addBodyPart(attach2);
+        mailContent.addBodyPart(mailBody);
+
+        // 附件1(利用jaf框架读取数据源生成邮件体)
+        DataSource ds1 = new FileDataSource(FilePath);
+        DataHandler dh1 = new DataHandler(ds1);
+        attach1.setFileName(MimeUtility.encodeText(fileName));
+        attach1.setDataHandler(dh1);
+
+        // 附件2
+  /*      DataSource ds2 = new FileDataSource("resource/如何学好C语言.txt");
+        DataHandler dh2 = new DataHandler(ds2);
+        attach2.setDataHandler(dh2);
+        attach2.setFileName(MimeUtility.encodeText("如何学好C语言.txt"));*/
+
+        // 邮件正文(内嵌图片+html文本)
+        MimeMultipart body = new MimeMultipart("related");  //邮件正文也是一个组合体,需要指明组合关系
+        mailBody.setContent(body);
+
+        // 邮件正文由html和图片构成
+//        MimeBodyPart imgPart = new MimeBodyPart();
+        MimeBodyPart htmlPart = new MimeBodyPart();
+//        body.addBodyPart(imgPart);
+        body.addBodyPart(htmlPart);
+
+        // 正文图片
+      /*  DataSource ds3 = new FileDataSource("resource/firefoxlogo.png");
+        DataHandler dh3 = new DataHandler(ds3);
+        imgPart.setDataHandler(dh3);
+        imgPart.setContentID("firefoxlogo.png");*/
+
+        // html邮件内容
+        MimeMultipart htmlMultipart = new MimeMultipart("alternative");
+        htmlPart.setContent(htmlMultipart);
+        MimeBodyPart htmlContent = new MimeBodyPart();
+        htmlContent.setContent(
+                html, "text/html;charset=gbk");
+
+        //老版本
+/*        htmlContent.setContent(
+                "<span style='color:red'>这是我自己用java mail发送的邮件哦！" +
+                        "<img src='cid:firefoxlogo.png' /></span>"
+                , "text/html;charset=gbk");*/
+        //=====
+        htmlMultipart.addBodyPart(htmlContent);
+
+        // 保存邮件内容修改
+        message.saveChanges();
+
+        /*File eml = buildEmlFile(message);
+        sendMailForEml(eml);*/
+        // 发送邮件
+        Transport.send(message);
+        try {
+            Transport.send(message);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
+    //调用发送的范例
+   /* public  String sendFujian() throws  Exception{
+        //执行发送邮件
+        //发送邮件
+        String Subject="测试主题";
+        String sendName="欣享服务";
+        String Recipients="1174355934@qq.com";
+        String RecipientsName="蔡磊";
+        String Filepath="/home/images/excel/1531962634202.xlsx";//全路径
+        String Filename="1531962634202.xlsx";//携带文件类型。xlsx
+        String html="这是我发布的测试内容";//可以使用标签拼装
+        Boolean a=  SendMailUtil.sendMultipleEmail(Subject,sendName,Recipients,RecipientsName,Filepath,Filename,html);
+        return "dsadsad";
+    }*/
+
 
     /**
      * 将邮件内容生成eml文件

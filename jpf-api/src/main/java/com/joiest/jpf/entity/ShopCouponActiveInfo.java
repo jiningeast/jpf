@@ -1,12 +1,12 @@
-package com.joiest.jpf.common.po;
+package com.joiest.jpf.entity;
 
-import java.io.Serializable;
+import com.joiest.jpf.common.po.PayShopCouponActive;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PayShopCouponActive implements Serializable {
+public class ShopCouponActiveInfo {
     /**
-     * 
+     *
      */
     private String id;
 
@@ -81,17 +81,12 @@ public class PayShopCouponActive implements Serializable {
     private Date expireTime;
 
     /**
-     * 消费时对应订单表的id
-     */
-    private String orderId;
-
-    /**
-     * 
+     *
      */
     private Date addtime;
 
     /**
-     * 
+     *
      */
     private Date updatetime;
 
@@ -217,14 +212,6 @@ public class PayShopCouponActive implements Serializable {
         this.expireTime = expireTime;
     }
 
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
-    }
-
     public Date getAddtime() {
         return addtime;
     }
@@ -265,7 +252,6 @@ public class PayShopCouponActive implements Serializable {
         sb.append(", content=").append(content);
         sb.append(", type=").append(type);
         sb.append(", expireTime=").append(expireTime);
-        sb.append(", orderId=").append(orderId);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -289,23 +275,22 @@ public class PayShopCouponActive implements Serializable {
         }
         PayShopCouponActive other = (PayShopCouponActive) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
-            && (this.getCustomerName() == null ? other.getCustomerName() == null : this.getCustomerName().equals(other.getCustomerName()))
-            && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
-            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
-            && (this.getBatchId() == null ? other.getBatchId() == null : this.getBatchId().equals(other.getBatchId()))
-            && (this.getBatchNo() == null ? other.getBatchNo() == null : this.getBatchNo().equals(other.getBatchNo()))
-            && (this.getCouponNo() == null ? other.getCouponNo() == null : this.getCouponNo().equals(other.getCouponNo()))
-            && (this.getActiveCode() == null ? other.getActiveCode() == null : this.getActiveCode().equals(other.getActiveCode()))
-            && (this.getPayWay() == null ? other.getPayWay() == null : this.getPayWay().equals(other.getPayWay()))
-            && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
-            && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
-            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
-            && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
-            && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+                && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
+                && (this.getCustomerName() == null ? other.getCustomerName() == null : this.getCustomerName().equals(other.getCustomerName()))
+                && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
+                && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
+                && (this.getBatchId() == null ? other.getBatchId() == null : this.getBatchId().equals(other.getBatchId()))
+                && (this.getBatchNo() == null ? other.getBatchNo() == null : this.getBatchNo().equals(other.getBatchNo()))
+                && (this.getCouponNo() == null ? other.getCouponNo() == null : this.getCouponNo().equals(other.getCouponNo()))
+                && (this.getActiveCode() == null ? other.getActiveCode() == null : this.getActiveCode().equals(other.getActiveCode()))
+                && (this.getPayWay() == null ? other.getPayWay() == null : this.getPayWay().equals(other.getPayWay()))
+                && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
+                && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
+                && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
+                && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+                && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
+                && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+                && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
 
     /**
@@ -330,7 +315,6 @@ public class PayShopCouponActive implements Serializable {
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
-        result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;

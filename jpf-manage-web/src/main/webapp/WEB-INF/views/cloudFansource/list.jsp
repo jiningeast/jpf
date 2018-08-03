@@ -38,7 +38,7 @@
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
                 // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
-                // singleSelect:true,
+                singleSelect:true,
                 multiselect:true,
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
