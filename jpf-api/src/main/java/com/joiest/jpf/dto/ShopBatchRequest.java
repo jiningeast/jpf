@@ -51,7 +51,7 @@ public class ShopBatchRequest {
     /**
      * 券详情
      */
-    private String rows;
+    private String coupons;
 
     /**
      * 操作人id
@@ -62,6 +62,10 @@ public class ShopBatchRequest {
      * 操作人姓名
      */
     private String operatorName;
+
+    private int page;
+
+    private int rows;
 
     public String getId() {
         return id;
@@ -135,12 +139,12 @@ public class ShopBatchRequest {
         this.total = total;
     }
 
-    public String getRows() {
-        return rows;
+    public String getCoupons() {
+        return coupons;
     }
 
-    public void setRows(String rows) {
-        this.rows = rows;
+    public void setCoupons(String coupons) {
+        this.coupons = coupons;
     }
 
     public String getOperatorId() {
@@ -157,5 +161,21 @@ public class ShopBatchRequest {
 
     public void setOperatorName(String operatorName) {
         this.operatorName = operatorName;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
     }
 }
