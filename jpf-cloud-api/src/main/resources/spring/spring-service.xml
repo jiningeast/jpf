@@ -26,5 +26,6 @@
 	<bean id="CloudCompanySalesServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanySalesServiceFacadeImpl"></bean>
 	<bean id="CloudCompanyBankServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyBankServiceFacadeImpl"></bean>
 	<bean id="CloudStaffMonthTotalServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffMonthTotalServiceFacadeImpl"></bean>
+	<bean id="OrderServiceFacade" class="com.joiest.jpf.facade.impl.OrderServiceFacadeImpl"></bean>
 
 </beans>
