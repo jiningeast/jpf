@@ -44,4 +44,5 @@
 	<bean id="CloudCompanyBankServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyBankServiceFacadeImpl"></bean>
 	<bean id="CloudFanSourceServiceFacade" class="com.joiest.jpf.facade.impl.CloudFanSourceServiceFacadeImpl"></bean>
 	<bean id="ShopCompanyServiceFacade" class="com.joiest.jpf.facade.impl.ShopCompanyServiceFacadeImpl"></bean>
+	<bean id="ShopBatchServiceFacade" class="com.joiest.jpf.facade.impl.ShopBatchServiceFacadeImpl"></bean>
 </beans>
