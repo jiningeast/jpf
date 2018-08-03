@@ -84,7 +84,7 @@ public class CloudCompanyMoneyController {
      * */
     @RequestMapping("/caiwu/list")
     @ResponseBody
-    public Map<String, Object> caiwuList(CloudCompanyMoneyRequest cloudCompanyMoneyRequest){
+    public Map<String, Object> caiwuList(CloudCompanyMoneyRequest cloudCompanyMoneyRequest) {
 
         CloudCompanyMoneyResponse cloudCompanyMoneyResponse = cloudCompanyMoneyServiceFacade.getCaiwuRecords(cloudCompanyMoneyRequest);
 
