@@ -100,7 +100,13 @@
                     "menuname" : "旅游订单管理",
                     "icon" : "icon-nav",
                     "url" : "order/index"
-                }]
+                },{
+                    "menuid" : "402",
+                    "menuname" : "欣豆市场订单列表",
+                    "icon" : "icon-nav",
+                    "url" : "shopOrder/index"
+                },
+                ]
             },{
                 "menuid" : "5",
                 "icon" : "icon-sys",

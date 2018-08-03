@@ -144,6 +144,9 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="pageNo &gt; 0 and pageSize &gt; 0">
+      limit ${(pageNo-1) * pageSize}, ${pageSize}
+    </if>
   </select>
   <!--==end===-->
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
