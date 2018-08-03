@@ -46,6 +46,11 @@ public class PayShopOrder implements Serializable {
     private Integer productDou;
 
     /**
+     * 商品基础信息id
+     */
+    private Integer productInfoId;
+
+    /**
      * 商品数量
      */
     private Integer amount;
@@ -166,6 +171,14 @@ public class PayShopOrder implements Serializable {
         this.productDou = productDou;
     }
 
+    public Integer getProductInfoId() {
+        return productInfoId;
+    }
+
+    public void setProductInfoId(Integer productInfoId) {
+        this.productInfoId = productInfoId;
+    }
+
     public Integer getAmount() {
         return amount;
     }
@@ -271,6 +284,7 @@ public class PayShopOrder implements Serializable {
         sb.append(", productName=").append(productName);
         sb.append(", productMoney=").append(productMoney);
         sb.append(", productDou=").append(productDou);
+        sb.append(", productInfoId=").append(productInfoId);
         sb.append(", amount=").append(amount);
         sb.append(", totalMoney=").append(totalMoney);
         sb.append(", totalDou=").append(totalDou);
@@ -310,6 +324,7 @@ public class PayShopOrder implements Serializable {
             && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
             && (this.getProductMoney() == null ? other.getProductMoney() == null : this.getProductMoney().equals(other.getProductMoney()))
             && (this.getProductDou() == null ? other.getProductDou() == null : this.getProductDou().equals(other.getProductDou()))
+            && (this.getProductInfoId() == null ? other.getProductInfoId() == null : this.getProductInfoId().equals(other.getProductInfoId()))
             && (this.getAmount() == null ? other.getAmount() == null : this.getAmount().equals(other.getAmount()))
             && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
             && (this.getTotalDou() == null ? other.getTotalDou() == null : this.getTotalDou().equals(other.getTotalDou()))
@@ -338,6 +353,7 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
         result = prime * result + ((getProductMoney() == null) ? 0 : getProductMoney().hashCode());
         result = prime * result + ((getProductDou() == null) ? 0 : getProductDou().hashCode());
+        result = prime * result + ((getProductInfoId() == null) ? 0 : getProductInfoId().hashCode());
         result = prime * result + ((getAmount() == null) ? 0 : getAmount().hashCode());
         result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
         result = prime * result + ((getTotalDou() == null) ? 0 : getTotalDou().hashCode());
