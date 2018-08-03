@@ -686,6 +686,66 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductInfoIdIsNull() {
+            addCriterion("product_info_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdIsNotNull() {
+            addCriterion("product_info_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdEqualTo(Integer value) {
+            addCriterion("product_info_id =", value, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdNotEqualTo(Integer value) {
+            addCriterion("product_info_id <>", value, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdGreaterThan(Integer value) {
+            addCriterion("product_info_id >", value, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("product_info_id >=", value, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdLessThan(Integer value) {
+            addCriterion("product_info_id <", value, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdLessThanOrEqualTo(Integer value) {
+            addCriterion("product_info_id <=", value, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdIn(List<Integer> values) {
+            addCriterion("product_info_id in", values, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdNotIn(List<Integer> values) {
+            addCriterion("product_info_id not in", values, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdBetween(Integer value1, Integer value2) {
+            addCriterion("product_info_id between", value1, value2, "productInfoId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductInfoIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("product_info_id not between", value1, value2, "productInfoId");
+            return (Criteria) this;
+        }
+
         public Criteria andAmountIsNull() {
             addCriterion("amount is null");
             return (Criteria) this;
@@ -926,6 +986,76 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andChargeNoIsNull() {
+            addCriterion("charge_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoIsNotNull() {
+            addCriterion("charge_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoEqualTo(String value) {
+            addCriterion("charge_no =", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoNotEqualTo(String value) {
+            addCriterion("charge_no <>", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoGreaterThan(String value) {
+            addCriterion("charge_no >", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoGreaterThanOrEqualTo(String value) {
+            addCriterion("charge_no >=", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoLessThan(String value) {
+            addCriterion("charge_no <", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoLessThanOrEqualTo(String value) {
+            addCriterion("charge_no <=", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoLike(String value) {
+            addCriterion("charge_no like", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoNotLike(String value) {
+            addCriterion("charge_no not like", value, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoIn(List<String> values) {
+            addCriterion("charge_no in", values, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoNotIn(List<String> values) {
+            addCriterion("charge_no not in", values, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoBetween(String value1, String value2) {
+            addCriterion("charge_no between", value1, value2, "chargeNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoNotBetween(String value1, String value2) {
+            addCriterion("charge_no not between", value1, value2, "chargeNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCouponDetailIsNull() {
             addCriterion("coupon_detail is null");
             return (Criteria) this;
@@ -1053,6 +1183,66 @@ public class PayShopOrderExample {
 
         public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdIsNull() {
+            addCriterion("coupon_active_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdIsNotNull() {
+            addCriterion("coupon_active_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdEqualTo(String value) {
+            addCriterion("coupon_active_id =", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdNotEqualTo(String value) {
+            addCriterion("coupon_active_id <>", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdGreaterThan(String value) {
+            addCriterion("coupon_active_id >", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdGreaterThanOrEqualTo(String value) {
+            addCriterion("coupon_active_id >=", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdLessThan(String value) {
+            addCriterion("coupon_active_id <", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdLessThanOrEqualTo(String value) {
+            addCriterion("coupon_active_id <=", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdIn(List<String> values) {
+            addCriterion("coupon_active_id in", values, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdNotIn(List<String> values) {
+            addCriterion("coupon_active_id not in", values, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdBetween(String value1, String value2) {
+            addCriterion("coupon_active_id between", value1, value2, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdNotBetween(String value1, String value2) {
+            addCriterion("coupon_active_id not between", value1, value2, "couponActiveId");
             return (Criteria) this;
         }
 
@@ -1248,6 +1438,11 @@ public class PayShopOrderExample {
 
         public Criteria andProductNameLikeInsensitive(String value) {
             addCriterion("upper(product_name) like", value.toUpperCase(), "productName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeNoLikeInsensitive(String value) {
+            addCriterion("upper(charge_no) like", value.toUpperCase(), "chargeNo");
             return (Criteria) this;
         }
 

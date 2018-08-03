@@ -126,6 +126,11 @@
                     "menuname" : "代付任务管理",
                     "icon" : "icon-nav",
                     "url" : "cloudTask/index"
+                },{
+                    "menuid" : "504",
+                    "menuname" : "欣券管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopBatch/index"
                 }]
             },{
                     "menuid" : "6",
@@ -161,6 +166,16 @@
                     "menuname" : "官网登记列表",
                     "icon" : "icon-nav",
                     "url" : "cloudFansource/index"
+                }]
+            },{
+                "menuid" : "8",
+                "icon" : "icon-sys",
+                "menuname" : "客户管理",
+                "menus" : [{
+                    "menuid" : "801",
+                    "menuname" : "客户列表",
+                    "icon" : "icon-nav",
+                    "url" : "shopCustomer/index"
                 }]
             }]
     	};

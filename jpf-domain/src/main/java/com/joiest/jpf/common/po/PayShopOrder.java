@@ -46,6 +46,11 @@ public class PayShopOrder implements Serializable {
     private Integer productDou;
 
     /**
+     * 商品基础信息id
+     */
+    private Integer productInfoId;
+
+    /**
      * 商品数量
      */
     private Integer amount;
@@ -66,6 +71,11 @@ public class PayShopOrder implements Serializable {
     private Byte payWay;
 
     /**
+     * 充值号，可以是手机号或油卡卡号
+     */
+    private String chargeNo;
+
+    /**
      * 券消费详情，json存激活id，豆数量
      */
     private String couponDetail;
@@ -74,6 +84,11 @@ public class PayShopOrder implements Serializable {
      * 订单状态 0=待支付 1=已支付 2=支付失败 3=已取消
      */
     private Byte status;
+
+    /**
+     * 消费时关联券使用记录表的id
+     */
+    private String couponActiveId;
 
     /**
      * 下单时间
@@ -156,6 +171,14 @@ public class PayShopOrder implements Serializable {
         this.productDou = productDou;
     }
 
+    public Integer getProductInfoId() {
+        return productInfoId;
+    }
+
+    public void setProductInfoId(Integer productInfoId) {
+        this.productInfoId = productInfoId;
+    }
+
     public Integer getAmount() {
         return amount;
     }
@@ -188,6 +211,14 @@ public class PayShopOrder implements Serializable {
         this.payWay = payWay;
     }
 
+    public String getChargeNo() {
+        return chargeNo;
+    }
+
+    public void setChargeNo(String chargeNo) {
+        this.chargeNo = chargeNo == null ? null : chargeNo.trim();
+    }
+
     public String getCouponDetail() {
         return couponDetail;
     }
@@ -202,6 +233,14 @@ public class PayShopOrder implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getCouponActiveId() {
+        return couponActiveId;
+    }
+
+    public void setCouponActiveId(String couponActiveId) {
+        this.couponActiveId = couponActiveId == null ? null : couponActiveId.trim();
     }
 
     public Date getAddtime() {
@@ -245,12 +284,15 @@ public class PayShopOrder implements Serializable {
         sb.append(", productName=").append(productName);
         sb.append(", productMoney=").append(productMoney);
         sb.append(", productDou=").append(productDou);
+        sb.append(", productInfoId=").append(productInfoId);
         sb.append(", amount=").append(amount);
         sb.append(", totalMoney=").append(totalMoney);
         sb.append(", totalDou=").append(totalDou);
         sb.append(", payWay=").append(payWay);
+        sb.append(", chargeNo=").append(chargeNo);
         sb.append(", couponDetail=").append(couponDetail);
         sb.append(", status=").append(status);
+        sb.append(", couponActiveId=").append(couponActiveId);
         sb.append(", addtime=").append(addtime);
         sb.append(", paytime=").append(paytime);
         sb.append(", updatetime=").append(updatetime);
@@ -282,12 +324,15 @@ public class PayShopOrder implements Serializable {
             && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
             && (this.getProductMoney() == null ? other.getProductMoney() == null : this.getProductMoney().equals(other.getProductMoney()))
             && (this.getProductDou() == null ? other.getProductDou() == null : this.getProductDou().equals(other.getProductDou()))
+            && (this.getProductInfoId() == null ? other.getProductInfoId() == null : this.getProductInfoId().equals(other.getProductInfoId()))
             && (this.getAmount() == null ? other.getAmount() == null : this.getAmount().equals(other.getAmount()))
             && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
             && (this.getTotalDou() == null ? other.getTotalDou() == null : this.getTotalDou().equals(other.getTotalDou()))
             && (this.getPayWay() == null ? other.getPayWay() == null : this.getPayWay().equals(other.getPayWay()))
+            && (this.getChargeNo() == null ? other.getChargeNo() == null : this.getChargeNo().equals(other.getChargeNo()))
             && (this.getCouponDetail() == null ? other.getCouponDetail() == null : this.getCouponDetail().equals(other.getCouponDetail()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getCouponActiveId() == null ? other.getCouponActiveId() == null : this.getCouponActiveId().equals(other.getCouponActiveId()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -308,12 +353,15 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
         result = prime * result + ((getProductMoney() == null) ? 0 : getProductMoney().hashCode());
         result = prime * result + ((getProductDou() == null) ? 0 : getProductDou().hashCode());
+        result = prime * result + ((getProductInfoId() == null) ? 0 : getProductInfoId().hashCode());
         result = prime * result + ((getAmount() == null) ? 0 : getAmount().hashCode());
         result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
         result = prime * result + ((getTotalDou() == null) ? 0 : getTotalDou().hashCode());
         result = prime * result + ((getPayWay() == null) ? 0 : getPayWay().hashCode());
+        result = prime * result + ((getChargeNo() == null) ? 0 : getChargeNo().hashCode());
         result = prime * result + ((getCouponDetail() == null) ? 0 : getCouponDetail().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getCouponActiveId() == null) ? 0 : getCouponActiveId().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());

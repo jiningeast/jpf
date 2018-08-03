@@ -44,15 +44,21 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         example.setOrderByClause("addtime DESC");
 
         PayShopCompanyExample.Criteria c = example.createCriteria();
+        if ( StringUtils.isNotBlank(request.getId()) ){
+            c.andIdEqualTo(request.getId());
+        }
         if ( StringUtils.isNotBlank(request.getMerchNo()))
         {
             c.andMerchNoEqualTo(request.getMerchNo() );
         }
         if( StringUtils.isNotBlank(request.getCompanyName())){
-            c.andCompanyNameEqualTo(request.getCompanyName());
+            c.andCompanyNameLike("%"+ request.getCompanyName() +"%");
         }
         if( StringUtils.isNotBlank(request.getSaleName())){
             c.andSaleNameEqualTo(request.getSaleName());
+        }
+        if(request.getStatus()!=null && request.getStatus().toString()!=""){
+            c.andStatusEqualTo(request.getStatus());
         }
         // 添加时间搜索
         if (StringUtils.isNotBlank(request.getAddtimeStart()))

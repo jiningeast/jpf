@@ -8,11 +8,15 @@ import com.joiest.jpf.cloud.api.util.MwSmsUtils;
 import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.OrderRequest;
+import com.joiest.jpf.dto.OrderResponse;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.CloudBankcheckServiceFacade;
 import com.joiest.jpf.facade.CloudIdcardServiceFacade;
 import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
+import com.joiest.jpf.facade.OrderServiceFacade;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONString;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,12 +78,12 @@ public class ToolCateController {
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
 
-        /*if(!selfSign.equals(sign)){
+        if(!selfSign.equals(sign)){
 
             json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
             json.put("info","签名有误");
             return json;
-        }*/
+        }
 
         JSONObject ocrRes = new IdentAuth().idCardOcr(request,side,imgInfo);
         return ocrRes;
@@ -524,6 +528,8 @@ public class ToolCateController {
         String fileName = allpath.substring(allpath.lastIndexOf("/")+1);
 
         resposeData.put("fileName",fileName);
+
+
         resposeData.put("localUrl",allpath);
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
@@ -612,58 +618,6 @@ public class ToolCateController {
         return result;//ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "文件上传成功",resposeData);
     }
     /**
-     * excel上传 获取excel表中数据
-     * 普通form提交
-     * */
-    @RequestMapping(value = "/uploadEcelByForm", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String uploadEcelByForm(HttpServletRequest request,@RequestParam("file") MultipartFile file) throws Exception {
-
-        JSONObject jsonRes = new JSONObject();
-        InputStream in = null;
-        Map<Object,Object> rowoOb = new HashMap<>();
-
-        if (file.isEmpty()) {
-
-            jsonRes.put("code","10008");
-            jsonRes.put("info","请选择文件");
-        }
-        in = file.getInputStream();
-        rowoOb = new ExcelDealUtils().getImportExcel(in, file.getOriginalFilename());
-        //循环行
-        for (Map.Entry<Object, Object> hang : rowoOb.entrySet()) {
-
-            //循环行中具体的列
-            Map<Object,Object> cellOb = (Map<Object,Object>)hang.getValue();
-            for (Map.Entry<Object, Object> lie : cellOb.entrySet()) {
-
-                //此处执行具体的逻辑操作（如：入库）
-                System.out.println(lie.getKey());
-                System.out.println(lie.getValue());
-            }
-        }
-        in.close();
-        // 该处可调用service相应方法进行数据保存到数据库中，现只对数据输出
-        return "result";
-    }
-    /**
-     * excel上传 获取excel表中数据
-     * 普通form提交 阿加西
-     * */
-    @RequestMapping(value = "/uploadEcelByFile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String uploadEcelByFile(HttpServletRequest request) throws Exception {
-
-        File files=new File("C:\\Users\\admin\\Desktop\\test.xls");
-        String aa = files.getName();
-        FileInputStream file = new FileInputStream("C:\\Users\\admin\\Desktop\\test.xls");
-
-        Map<Object,Object> rowoOb = new HashMap<>();
-
-        rowoOb = new ExcelDealUtils().getImportExcel(file, files.getName());
-        return null;
-    }
-    /**
      * 身份证分析入库
      * */
     @RequestMapping(value = "/idCardAnaly", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
@@ -746,16 +700,11 @@ public class ToolCateController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "身份证信息上传成功",map);
         }
     }
-
     @ModelAttribute
     public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
     {
-        // 跨域
-        String originHeader = httpRequest.getHeader("Origin");
-       /* response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
-        response.setHeader("Access-Control-Allow-Method", "POST");
-        response.setHeader("Access-Control-Allow-Origin", originHeader);
-    */
+
+
     }
 
 }
