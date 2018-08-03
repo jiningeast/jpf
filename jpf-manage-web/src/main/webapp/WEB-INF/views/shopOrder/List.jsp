@@ -180,7 +180,7 @@
             return new Date().getTime();
         }
         function goActiveOrder(orderNo) {
-            $('#infoDiv').window("open").window('refresh', 'orderInfo?orderNo='+orderNo).window('setTitle','欣豆详情');
+            $('#infoDiv').window("open").window('refresh', 'orderInfo?orderNo='+orderNo).window('setTitle','订单详情');
         }
 
     </script>

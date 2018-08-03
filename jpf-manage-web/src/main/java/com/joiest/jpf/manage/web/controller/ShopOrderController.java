@@ -47,7 +47,7 @@ public class ShopOrderController {
      */
     @RequestMapping("/orderInfo")
     @ResponseBody
-    public ModelAndView info(String orderNo,ModelMap modelMap){
+    public ModelAndView orderInfo(String orderNo,ModelMap modelMap){
         modelMap.addAttribute("orderNo", orderNo);
         return new ModelAndView("shopCustomer/customerInfoList", modelMap);
     }
