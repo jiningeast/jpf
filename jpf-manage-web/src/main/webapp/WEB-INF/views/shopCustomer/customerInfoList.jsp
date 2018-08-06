@@ -15,13 +15,20 @@
 </head>
 
 <body>
-<div class="easyui-panel"style="width:1418px"><p style="text-align: left;"><span><h3>客户信息</h3></span></p><p style="text-align: right;font-size:30px;color:#333333;"><span >${phone}</span>&nbsp;&nbsp;&nbsp;<span style="color: #ff4114">当前欣豆 ${dou}个</span></p></div>
-<div name="contentDiv" style="width:1418px">
+
+<div name="contentDiv">
+    <div >
+        <p><span><h3>客户信息</h3></span></p>
+        <p style="text-align: right;font-size:30px;color:#333333;">
+            <span >${phone}</span>&nbsp;&nbsp;&nbsp;
+            <span style="color: #ff4114">当前欣豆 ${dou}个</span>
+        </p>
+    </div>
     <div id="formDiv2" class="easyui-panel" title="搜索条件" data-options="footer:'#ft2'">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm1" method="post">
                 <input id="customerId" type="hidden" name="customerId"  value="${id}"/>
-                <table cellpadding="5" width="75%">
+                <table cellpadding="5" >
                     <tr>
                         <td>内容:</td>
                         <td><input id="content" name="content" class="easyui-textbox" type="text" /></td>
