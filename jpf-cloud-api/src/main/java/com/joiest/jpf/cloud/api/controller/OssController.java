@@ -34,7 +34,7 @@ public class OssController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String upload(String path) {
-        String files  = path;
+        String files  = "D:/pc-320-220-mi8.png,D:/pc-320-220-mi8.png";
         String[] filex = files.split(",");
         String md5key = "";
 
