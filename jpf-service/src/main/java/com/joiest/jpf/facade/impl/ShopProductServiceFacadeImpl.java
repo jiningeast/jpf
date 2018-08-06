@@ -1,7 +1,6 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.constant.EnumConstants;
-import com.joiest.jpf.common.custom.PayShopProductCustomer;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
@@ -9,8 +8,6 @@ import com.joiest.jpf.common.po.PayShopProduct;
 import com.joiest.jpf.common.po.PayShopProductExample;
 import com.joiest.jpf.common.po.PayShopProductInfo;
 import com.joiest.jpf.common.po.PayShopProductInfoExample;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.dao.repository.mapper.custom.PayShopProductCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductInfoMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductMapper;
 import com.joiest.jpf.dto.GetShopProductRequest;
@@ -25,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
@@ -34,61 +30,46 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
     private PayShopProductMapper payShopProductMapper;
 
     @Autowired
-    private PayShopProductCustomMapper payShopProductCustomMapper;
-
-    @Autowired
     private PayShopProductInfoMapper payShopProductInfoMapper;
 
     @Override
     public GetShopProductResponse getProductList(GetShopProductRequest request) {
-        Map<String,Object> map = new HashMap<>();
-        long pageNo;
-        long pageSize;
-        if ( request.getPage() <= 0 )
-        {
-            pageNo = 1;
-            request.setPage(pageNo);
-        }
-        if ( request.getRows() <=0 )
-        {
-            pageSize = 10;
-            request.setRows(pageSize);
-        }
 
-        map.put("pageNo",request.getPage());
-        map.put("pageSize", request.getRows());
-        if (StringUtils.isNotBlank(request.getName()))
-        {
-            map.put("name",request.getName().trim());
+        if (request.getPage() <= 0) {
+            request.setPage(1);
         }
-        if ( StringUtils.isNotBlank(request.getBrandId()) )
-        {
-            map.put("brandId", request.getBrandId());
+        if (request.getRows()<=0) {
+            request.setRows(20);
         }
-        if ( StringUtils.isNotBlank(request.getPtype()) )
+        PayShopProductExample example = new PayShopProductExample();
+        example.setPageNo(request.getPage());
+        example.setPageSize(request.getRows());
+        example.setOrderByClause("addtime DESC");
+        PayShopProductExample.Criteria c = example.createCriteria();
+        if ( StringUtils.isNotBlank(request.getName()) )
         {
-            map.put("ptypeId", request.getPtype());
+            c.andNameLike("%" + request.getName().trim()+ "%");
         }
         if ( request.getStatus() != null )
         {
-            map.put("status", request.getStatus());
+            c.andStatusEqualTo(request.getStatus());
         }
 
-        List<PayShopProductCustomer> list = payShopProductCustomMapper.getProductListCustom(map);
-
-        Map<String, Long> countMap = payShopProductCustomMapper.getProductCountCustom(map);
+        List<PayShopProduct> list = payShopProductMapper.selectByExample(example);
+        int count = payShopProductMapper.countByExample(example);
 
         GetShopProductResponse response = new GetShopProductResponse();
-        response.setCount(countMap.get("count"));
+        response.setCount(count);
         List<ShopProductInfo> resultList = new ArrayList<>();
-        for (PayShopProductCustomer one : list)
+        for (PayShopProduct one : list)
         {
             ShopProductInfo info = new ShopProductInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayShopProductCustomer.class, ShopProductInfo.class, false);
+            BeanCopier beanCopier = BeanCopier.create(PayShopProduct.class, ShopProductInfo.class, false);
             beanCopier.copy(one, info, null);
             resultList.add(info);
         }
         response.setList(resultList);
+
         return response;
     }
 

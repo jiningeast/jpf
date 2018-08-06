@@ -209,15 +209,8 @@
             <form id="searchForm" method="post">
                 <table cellpadding="5" width="75%">
                     <tr>
-                        <td>商品类型:</td>
-                        <td>
-                            <select id="product_type" name="ptype" class="easyui-combobox" style="width:120px;" ></select>
-                        </td>
-                        <td>品牌:</td>
-                        <td>
-                            <select id="product_brand" name="brandId" class="easyui-combobox" style="width:120px;" ></select>
-                        </td>
-                        <td>状态:</td>
+                        <td>商品名称:</td>
+                        <td><input id="product_name" name="name" class="easyui-textbox" type="text" /></td>
                         <td>
                             <select id="status_s" name="status" class="easyui-combobox" style="width:120px;">
                                 <option value="">全部</option>
@@ -225,10 +218,6 @@
                                 <option value="0">下架</option>
                             </select>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>商品名称:</td>
-                        <td><input id="product_name" name="name" class="easyui-textbox" type="text" /></td>
                     </tr>
                 </table>
             </form>

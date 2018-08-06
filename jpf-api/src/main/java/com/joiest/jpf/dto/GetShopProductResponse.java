@@ -8,7 +8,7 @@ public class GetShopProductResponse {
 
     List<ShopProductInfo> list;
 
-    Long count;
+    int count;
 
     public List<ShopProductInfo> getList() {
         return list;
@@ -18,11 +18,11 @@ public class GetShopProductResponse {
         this.list = list;
     }
 
-    public Long getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(Long count) {
+    public void setCount(int count) {
         this.count = count;
     }
 }
