@@ -1,11 +1,10 @@
-package com.joiest.jpf.cloud.api.handler;
+package com.joiest.jpf.market.api.handler;
 
 
+import com.joiest.jpf.market.api.util.ServletUtils;
 import com.joiest.jpf.common.dto.YjResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
-import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
-import com.joiest.jpf.cloud.api.util.ServletUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * 统一异常处理
  */
-@ControllerAdvice(basePackages = {"com.joiest.jpf.cloud.api"})
+@ControllerAdvice(basePackages = {"com.joiest.jpf.market.api"})
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
