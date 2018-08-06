@@ -12,7 +12,7 @@
     <div id="formDiv"  class="easyui-panel" title="添加欣券" data-options="footer:'#batch_ft'" style="padding: 10px;">
         <form id="addBatchForm">
             <input type="hidden" id="total" name="total">
-            <input type="hidden" id="rows" name="rows">
+            <input type="hidden" id="coupons" name="coupons">
             <input type="hidden" id="companyName" name="companyName">
             <table id="addCoupons" cellpadding="5" width="100%">
                 <tr>
@@ -134,7 +134,6 @@
             data:data,
             dataType:"json",
             contentType:"application/json",
-            // enctype:"multipart/form-data",
             onSubmit:function(){
                 // 判断选择公司
                 if ( $("#mid").val() == "" ){
@@ -152,6 +151,15 @@
             },
             success:function (msg) {
                 ajaxLoadEnd();
+                msg = JSON.parse(msg);
+                if (msg.retCode != "0000") {
+                    $.messager.alert('消息提示','新增失败[' + msg.retMsg + ']!','error');
+                } else {
+                    $.messager.alert('消息提示','新增成功','info');
+                }
+            },
+            error:function() {
+                $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
             }
         })
 
@@ -159,7 +167,7 @@
         $("#confirmBatch").linkbutton({
             onClick : function () {
                 $("#total").val( $("#couponDG").datagrid("getData").total );
-                $("#rows").val( JSON.stringify($("#couponDG").datagrid("getData").rows) );
+                $("#coupons").val( JSON.stringify($("#couponDG").datagrid("getData").rows) );
                 $("#companyName").val( $("#name").textbox("getValue") );
 
                 $("#addBatchForm").submit();
@@ -179,12 +187,10 @@
 
     // 计算小计
     function getCalMoney() {
-        console.log("ready")
         var money = parseInt( $("#money").val() );
         var amount = parseInt( $("#amount").val() );
         if ( !isNaN(money) && !isNaN(amount) ){
             var calculate = money * amount;
-            console.log(calculate);
             $("#calMoney").textbox("setValue", calculate.toFixed(2))
         }
     }
