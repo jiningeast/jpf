@@ -171,6 +171,9 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="pageNo &gt; 0 and pageSize &gt; 0">
+      limit ${(pageNo-1) * pageSize}, ${pageSize}
+    </if>
   </select>
 
   <select id="selectCompanyAgent" parameterType="com.joiest.jpf.common.po.PayCloudCompanyExample" resultMap="BaseResultMap">
@@ -184,6 +187,9 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="pageNo &gt; 0 and pageSize &gt; 0">
+      limit ${(pageNo-1) * pageSize}, ${pageSize}
+    </if>
   </select>
 
   <select id="selectCompanySales" parameterType="com.joiest.jpf.common.po.PayCloudCompanyExample" resultMap="BaseResultMap">
@@ -196,6 +202,9 @@
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
+    </if>
+    <if test="pageNo &gt; 0 and pageSize &gt; 0">
+      limit ${(pageNo-1) * pageSize}, ${pageSize}
     </if>
   </select>
 

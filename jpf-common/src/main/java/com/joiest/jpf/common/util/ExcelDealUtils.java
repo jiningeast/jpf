@@ -1,19 +1,22 @@
 package com.joiest.jpf.common.util;
 
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -162,5 +165,99 @@ public class ExcelDealUtils {
         }
         return value;
     }
+    /**
+     * 导出excel
+     * @response 响应头
+     * @param titles excel表头信息
+     * @param filds 表头所对应的字段同时对应数据中的字段名
+     *@param data 数据
+     *@param type 1 下载  2 生成文件
+     * */
+    public JSONObject exportExcel(HttpServletResponse response, String titles, String filds, List data, int type, String path){
 
+        if(titles.isEmpty() || filds.isEmpty() || data.isEmpty()) return null;
+        if(type<1) type = 1;
+        //组装数据
+        JSONArray excelData  = JSONArray.fromObject(data);
+        //定义字段类型
+        JSONArray fild =  JSONArray.fromObject(filds);
+        //定义表头
+        JSONArray title=JSONArray.fromObject(titles);
+
+        if(fild.isEmpty() || title.isEmpty() || excelData.isEmpty()) return null;
+        if(fild.size()!=title.size()) return null;
+
+        //定义返回信息
+        JSONObject res = new JSONObject();
+        res.put("code","10000");
+        res.put("info","SUCCESS");
+
+        //创建excel工作簿
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        //创建工作表sheet
+        HSSFSheet sheet=workbook.createSheet();
+        //创建第一行
+        HSSFRow row=sheet.createRow(0);
+        HSSFCell cell=null;
+        //插入第一行数据的表头
+        for(int i=0;i<title.size();i++){
+            cell=row.createCell(i);
+            cell.setCellValue(title.get(i).toString());
+        }
+        int j=1;
+        //循环数据
+        for(int i=0;i<excelData.size();i++){
+
+            HSSFRow nrow=sheet.createRow(j);//创建行
+            JSONObject job = excelData.getJSONObject(i);//获取数据
+            //循环整体列
+            for (int m=0;m<title.size();m++){
+
+                if(!job.containsKey(fild.get(m))) return null;
+
+                //创建具体的列
+                HSSFCell ncell=nrow.createCell(m);
+                ncell.setCellValue(job.get(fild.get(m)).toString());
+            }
+            j++;
+        }
+        OutputStream output= null;
+        try {
+            String fileName = System.currentTimeMillis()+".xls";
+            if(type == 1){
+
+                response.reset();
+                output = response.getOutputStream();
+
+                response.setHeader("Content-disposition", "attachment;filename="+new String(fileName.getBytes("gbk"), "iso8859-1"));
+                response.setContentType("application/vnd.ms-excel");
+                workbook.write(output);
+                output.close();
+            }else{
+
+                File fileDir = new File(path);
+                if (!fileDir.exists()) {
+
+                    fileDir.mkdirs();
+                }
+                String actual = path+fileName;
+                File file = new File(actual);
+                file.createNewFile();
+                //将excel写入
+                FileOutputStream stream= FileUtils.openOutputStream(file);
+                workbook.write(stream);
+                stream.close();
+
+                JSONObject fileInfo = new JSONObject();
+                fileInfo.put("localUrl",actual);//服务器实际路径
+                fileInfo.put("fileName",fileName);//文件名
+
+                res.put("data",fileInfo);
+            }
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return res;
+    }
 }

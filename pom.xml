@@ -364,6 +364,7 @@
                 <version>${HttpClient_version}</version>
             </dependency>
 
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
