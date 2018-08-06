@@ -139,6 +139,27 @@ public class ShopOrderInfo {
      */
     private String contactEmail;
 
+    /**
+     * 客户手机号
+     */
+    private String phone;
+
+    /**
+     * 商品进价
+     */
+    private BigDecimal bid;
+
+
+    /**
+     * 库存数量
+     */
+    private Integer stored;
+
+    /**
+     * 商品图片
+     */
+    private String image;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -348,6 +369,39 @@ public class ShopOrderInfo {
 
     public void setContactEmail(String contactEmail) {
         this.contactEmail = contactEmail;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+
+    public BigDecimal getBid() {
+        return bid;
+    }
+
+    public void setBid(BigDecimal bid) {
+        this.bid = bid;
+    }
+
+    public Integer getStored() {
+        return stored;
+    }
+
+    public void setStored(Integer stored) {
+        this.stored = stored;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     /**

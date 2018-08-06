@@ -1,6 +1,9 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayShopOrderCustom;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayShopOrder;
 import com.joiest.jpf.common.po.PayShopOrderExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopOrderCustomMapper;
@@ -21,7 +24,7 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
     private PayShopOrderCustomMapper payShopOrderCustomMapper;
 
     /**
-     * 公司列表---后台
+     * 订单列表---后台
      */
     public GetShopOrderResponse getList(GetShopOrderRequest request)
     {
@@ -90,6 +93,30 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         int count = payShopOrderCustomMapper.countByExample(example);
         response.setCount(count);
         return response;
+    }
+
+
+    /**
+     * 订单详情---后台
+     */
+    @Override
+    public ShopOrderInfo getOne(String orderNo)
+    {
+        if ( StringUtils.isBlank(orderNo))
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单编号不能为空");
+        }
+        PayShopOrderCustom payShopOrderCustom = payShopOrderCustomMapper.selectOrderAll(orderNo);
+
+        if(payShopOrderCustom==null){
+
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "此条记录不存在");
+        }
+        ShopOrderInfo shopOrderInfo = new ShopOrderInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayShopOrderCustom.class, ShopOrderInfo.class, false);
+        beanCopier.copy(payShopOrderCustom,shopOrderInfo,null);
+
+        return shopOrderInfo;
     }
 
 

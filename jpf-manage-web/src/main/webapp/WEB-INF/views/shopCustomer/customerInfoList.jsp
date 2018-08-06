@@ -15,7 +15,7 @@
 </head>
 
 <body>
-<div style="width:100%;"><p style="text-align: left;"><span><h3>客户信息</h3></span></p><p style="text-align: right;font-size:30px;color:#333333;"><span >${phone}</span>&nbsp;&nbsp;&nbsp;<span style="color: #ff4114">当前欣豆 ${dou}个</span></p></div>
+<div class="easyui-panel"style="width:1418px"><p style="text-align: left;"><span><h3>客户信息</h3></span></p><p style="text-align: right;font-size:30px;color:#333333;"><span >${phone}</span>&nbsp;&nbsp;&nbsp;<span style="color: #ff4114">当前欣豆 ${dou}个</span></p></div>
 <div name="contentDiv" style="width:1418px">
     <div id="formDiv2" class="easyui-panel" title="搜索条件" data-options="footer:'#ft2'">
         <div style="padding:10px 60px 20px 60px">
