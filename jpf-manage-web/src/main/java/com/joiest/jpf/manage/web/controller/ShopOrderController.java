@@ -4,6 +4,7 @@ import com.joiest.jpf.dto.GetShopCompanyRequest;
 import com.joiest.jpf.dto.GetShopCompanyResponse;
 import com.joiest.jpf.dto.GetShopOrderRequest;
 import com.joiest.jpf.dto.GetShopOrderResponse;
+import com.joiest.jpf.entity.ShopOrderInfo;
 import com.joiest.jpf.facade.ShopCompanyServiceFacade;
 import com.joiest.jpf.facade.ShopOrderServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,11 @@ public class ShopOrderController {
     @RequestMapping("/orderInfo")
     @ResponseBody
     public ModelAndView orderInfo(String orderNo,ModelMap modelMap){
-        modelMap.addAttribute("orderNo", orderNo);
-        return new ModelAndView("shopCustomer/customerInfoList", modelMap);
+      //根据订单号查出订单详细信息
+        ShopOrderInfo  shopOrderInfo= shopOrderServiceFacade.getOne(orderNo);
+        modelMap.addAttribute("shopOrderInfo", shopOrderInfo);
+        return new ModelAndView("shopOrder/orderDetail", modelMap);
+
     }
 
 

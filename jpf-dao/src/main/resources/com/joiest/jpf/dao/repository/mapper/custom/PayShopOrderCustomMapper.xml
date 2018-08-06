@@ -26,13 +26,19 @@
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="paytime" jdbcType="TIMESTAMP" property="paytime" />
     <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
-
+<!--商品基础信息-->
     <result column="type_name" property="typeName" jdbcType="VARCHAR" />
     <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
     <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
     <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
     <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
     <result column="contact_email" property="contactEmail" jdbcType="VARCHAR" />
+<!--客户信息-->
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <!--商品信息-->
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="bid" jdbcType="DECIMAL" property="bid" />
+    <result column="stored" jdbcType="INTEGER" property="stored" />
   </resultMap>
 
   <sql id="Example_Where_Clause_Custom">
@@ -183,6 +189,17 @@
     <if test="pageNo &gt; 0 and pageSize &gt; 0">
       limit ${(pageNo-1) * pageSize}, ${pageSize}
     </if>
+  </select>
+
+  <!--自定义连表查询 单条业务  -->
+  <select id="selectOrderAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+  select a.*,b.type_name,b.supplier_name,b.brand_name,b.contact_name,b.contact_phone,b.contact_email,c.phone,d.image,d.bid,d.stored from pay_shop_order a
+    LEFT JOIN  pay_shop_product_info b ON  a.product_info_id=b.id
+    LEFT  JOIN   pay_shop_customer c ON a.customer_id=c.id
+    LEFT JOIN pay_shop_product d ON  a.product_id=d.id
+    where a.order_no=#{orderNo,jdbcType=VARCHAR}
+
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--

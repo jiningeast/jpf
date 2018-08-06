@@ -94,4 +94,11 @@ public interface PayShopOrderCustomMapper {
      */
     List<PayShopOrderCustom> selectByExampleJoin(PayShopOrderExample example);
 
+    /**
+     *
+     *获取业务公司连表信息
+
+     */
+    PayShopOrderCustom selectOrderAll(String orderNo);
+
 }
