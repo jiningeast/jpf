@@ -39,7 +39,7 @@
     <!-- 静态资源的处理 -->
     <mvc:resources location="/resources/" mapping="/resources/**"/>
 
-	<mvc:interceptors>	
+	<mvc:interceptors>
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
 	</mvc:interceptors> 
 

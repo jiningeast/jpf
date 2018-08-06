@@ -17,6 +17,7 @@
         <module>jpf-manage-web</module>
         <module>jpf-yinjia-api</module>
         <module>jpf-cloud-api</module>
+        <module>jpf-market-api</module>
     </modules>
     <packaging>pom</packaging>
 

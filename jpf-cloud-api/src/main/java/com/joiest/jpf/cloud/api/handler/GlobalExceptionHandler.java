@@ -21,7 +21,6 @@ import java.util.List;
 
 /**
  * 统一异常处理
- * Created by zjf1650 on 09/08/2017.
  */
 @ControllerAdvice(basePackages = {"com.joiest.jpf.cloud.api"})
 public class GlobalExceptionHandler {

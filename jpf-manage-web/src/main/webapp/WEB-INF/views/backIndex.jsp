@@ -90,7 +90,13 @@
                     "menuname" : "旅游产品管理",
                     "icon" : "icon-nav",
                     "url" : "product/index"
-                }]
+                },{
+                    "menuid" : "302",
+                    "menuname" : "云市场产品管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopproduct/index"
+                }
+                ]
             },{
                 "menuid" : "4",
                 "icon" : "icon-sys",

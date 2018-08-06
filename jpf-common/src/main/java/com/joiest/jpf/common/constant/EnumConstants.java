@@ -131,6 +131,15 @@ public abstract class EnumConstants {
 
     }
 
+    public enum ShopProductStatus{
+        normal((byte)1),forbid((byte)0);
 
+        private Byte value;
+
+        ShopProductStatus(Byte value) {
+            this.value = value;
+        }
+        public final Byte value(){return value;}
+    }
 
 }

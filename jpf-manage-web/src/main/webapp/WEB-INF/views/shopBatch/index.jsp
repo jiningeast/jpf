@@ -8,6 +8,8 @@
     <style>
         #addCoupons tr td:nth-child(odd) { text-align: right; }
         #addCoupons tr td:nth-child(even) { text-align: left; }
+        .datagrid-mask { z-index: 9998; }
+        .datagrid-mask-msg { z-index: 9999; }
     </style>
     <script>
         $(function () {
@@ -19,11 +21,30 @@
                 modal:true
             });
 
+            // 券批次详情弹窗大小
+            $('#detailWindow').window({
+                width:'1024px',
+                height:'500px',
+                closed:true,
+                modal:true
+            });
+
             var toolbar = [{
                 text:'新增',
                 iconCls:'icon-add',
                 handler:function(){
                     $("#addWindow").window("open").window('refresh','../shopBatch/addBatch').window('setTitle','新增欣券批次');
+                }
+            },{
+                text:'查看详情',
+                iconCls:'icon-view-detail',
+                handler:function(){
+                    var rows = $('#batchDG').datagrid('getSelections');
+                    if (rows.length != 1) {
+                        $.messager.alert('消息提示','请选择一条数据！','info');
+                        return false;
+                    }
+                    $("#detailWindow").window("open").window('refresh','../shopBatch/detail?batchId='+rows[0].id).window('setTitle','欣券批次详情');
                 }
             }];
 
@@ -38,7 +59,24 @@
                 remoteSort: false, // 服务端排序
                 url:'list',
                 columns:[[
-                    {field:'id',title:'批次id',width:"10%"}
+                    {field:'id',title:'批次id',width:"10%"},
+                    {field:'companyName',title:'商户名称',width:"10%"},
+                    {field:'batchNo',title:'批次号',width:"10%"},
+                    {field:'money',title:'金额',width:"10%"},
+                    {field:'count',title:'券数量',width:"10%"},
+                    {field:'activetedNum',title:'已激活',width:"10%"},
+                    {field:'expireMonth',title:'有效期',width:"10%"},
+                    {field:'status',title:'状态',width:"10%",formatter:function (value,row,index) {
+                            if ( value == 0 ){
+                                return "券生成中";
+                            }else if ( value == 1 ){
+                                return "券已生成，待发送";
+                            }else if ( value == 2 ){
+                                return "券已发送";
+                            }else if ( value == 3 ){
+                                return "已取消";
+                            }
+                        }}
                 ]]
             });
         })
@@ -48,5 +86,6 @@
 <div name="contentDiv">
     <div id="batchDG"></div>
     <div id="addWindow" style="padding: 5px;"></div>
+    <div id="detailWindow" style="padding: 5px;"></div>
 </div>
 </body>

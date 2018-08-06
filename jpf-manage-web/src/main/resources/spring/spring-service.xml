@@ -45,7 +45,12 @@
 	<bean id="CloudFanSourceServiceFacade" class="com.joiest.jpf.facade.impl.CloudFanSourceServiceFacadeImpl"></bean>
 	<bean id="ShopCompanyServiceFacade" class="com.joiest.jpf.facade.impl.ShopCompanyServiceFacadeImpl"></bean>
 	<bean id="ShopOrderServiceFacade" class="com.joiest.jpf.facade.impl.ShopOrderServiceFacadeImpl"></bean>
+	<bean id="ShopProductServiceFacade" class="com.joiest.jpf.facade.impl.ShopProductServiceFacadeImpl"></bean>
+	<bean id="ShopProductTypeServiceFacade" class="com.joiest.jpf.facade.impl.ShopProductTypeServiceFacadeImpl"></bean>
+	<bean id="ShopBrandServiceFacade" class="com.joiest.jpf.facade.impl.ShopBrandServiceFacadeImpl"></bean>
+	<bean id="ShopSupplierServiceFacade" class="com.joiest.jpf.facade.impl.ShopSupplierServiceFacadeImpl"></bean>
 	<bean id="ShopCustomerServiceFacade" class="com.joiest.jpf.facade.impl.ShopCustomerServiceFacadeImpl"></bean>
 	<bean id="ShopCouponActiveServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponActiveServiceFacadeImpl"></bean>
 	<bean id="ShopBatchServiceFacade" class="com.joiest.jpf.facade.impl.ShopBatchServiceFacadeImpl"></bean>
+	<bean id="ShopBatchCouponServiceFacade" class="com.joiest.jpf.facade.impl.ShopBatchCouponServiceFacadeImpl"></bean>
 </beans>
