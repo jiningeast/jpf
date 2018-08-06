@@ -124,7 +124,7 @@
         if( isEmpty(z_check_value) || z_check_value.length != 11 ){
             return false;
         }
-        var reg_mobile = /^(13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|19[8|9]|16[6]\d{8}$/;
+        var reg_mobile = /^(13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0-9])|19[1|8|9]|16[6]\d{8}$/;
         return reg_mobile.test($.trim(z_check_value));
     }
 

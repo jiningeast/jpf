@@ -79,15 +79,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">图片地址：</td>
+                        <td style="text-align: right;background-color: #f1f1f1;">商品图片：</td>
                         <td colspan="3">
-                            <%--<input id="uploadfile" class="easyui-filebox" name="uploadfile" style="width: 238px;" data-options="required:true">--%>
                             <p>
                                 上传文件： <input type="file" name="file" id="uploadfile">
                                 <input type="button" value="上传" onclick="doUploadImg()"/>
                             </p>
+                            <!--保存图片OSS地址-->
                             <input id="imgurl" name="image" type="hidden" style="width:150px" data-options="required:true" value=""/>
-                                <%--https://yifuka.oss-cn-beijing.aliyuncs.com/clouds/1533103063417.jpg--%>
+                            <!--图片展示-->
                             <div id="imgDiv"></div>
                         </td>
                     </tr>
