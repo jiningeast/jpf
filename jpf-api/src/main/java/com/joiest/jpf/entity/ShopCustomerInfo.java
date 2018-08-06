@@ -188,6 +188,7 @@ public class ShopCustomerInfo {
         this.updatetime = updatetime;
     }
 
+
     /**
      *
      */
