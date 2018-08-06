@@ -44,7 +44,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         PayShopProductExample example = new PayShopProductExample();
         example.setPageNo(request.getPage());
         example.setPageSize(request.getRows());
-        example.setOrderByClause("p.addtime DESC");
+        example.setOrderByClause("addtime DESC");
         PayShopProductExample.Criteria c = example.createCriteria();
         if ( StringUtils.isNotBlank(request.getName()) )
         {
