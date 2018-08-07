@@ -142,4 +142,35 @@ public abstract class EnumConstants {
         public final Byte value(){return value;}
     }
 
+    /**
+     * 商城订单状态
+     */
+    public enum ShopOrderStatus{
+        APPLYING((byte)0,"待支付"),
+        APPLYSUCCESS((byte)1,"已支付"),
+        APPLYFAILED((byte)2,"支付失败"),
+        CANCEL((byte)3,"已取消"),
+        DEALING((byte)4,"处理中"),
+        APPLYREFUND((byte)5,"申请退款"),
+        REFUNDED((byte)6,"已退款"),
+        ;
+
+        private Byte value;
+        private String desc;
+
+        ShopOrderStatus(Byte value,String desc){
+            this.value = value;
+            this.desc = desc;
+        }
+
+        public final Byte value() {
+            return value;
+        }
+
+        public final String desc() {
+            return desc;
+        }
+
+    }
+
 }

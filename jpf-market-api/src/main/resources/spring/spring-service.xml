@@ -5,5 +5,7 @@
 
 	<bean id="ShopProductInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopProductInterfaceServiceFacadeImpl"></bean>
 
+	<!--<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>-->
+	<bean id="ShopOrderInfoInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopOrderInfoInterfaceServiceFacadeImpl"></bean>
 
 </beans>

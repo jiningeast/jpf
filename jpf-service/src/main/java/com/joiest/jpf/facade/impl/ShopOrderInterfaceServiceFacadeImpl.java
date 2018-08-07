@@ -13,7 +13,7 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
     @Autowired
     private PayShopOrderMapper payShopOrderMapper;
 
-    @Override
+    /*@Override
     public int addOrder(ShopProductInterfaceInfo info) {
 
         PayShopOrder order = new PayShopOrder();
@@ -24,5 +24,5 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
 
         return payShopOrderMapper.insertSelective(order);
 
-    }
+    }*/
 }

@@ -95,6 +95,13 @@ public interface PayShopOrderCustomMapper {
     List<PayShopOrderCustom> selectByExampleJoin(PayShopOrderExample example);
 
     /**
+     * 订单列表接口查询
+     *
+     * @param example
+     */
+    List<PayShopOrderCustom> selectByExampleInterfaceJoin(PayShopOrderExample example);
+
+    /**
      *
      *获取业务公司连表信息
 
