@@ -4,6 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="ShopProductInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopProductInterfaceServiceFacadeImpl"></bean>
+	<bean id="ShopOrderInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopOrderInterfaceServiceFacadeImpl"></bean>
+	<bean id="ShopCouponActiveInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponActiveInterfaceServiceFacadeImpl"></bean>
 
 	<!--<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>-->
 	<bean id="ShopOrderInfoInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopOrderInfoInterfaceServiceFacadeImpl"></bean>

@@ -38,7 +38,7 @@ public class ShopCouponActiveInfo {
     /**
      * 批次号
      */
-    private Integer batchNo;
+    private String batchNo;
 
     /**
      * 券号
@@ -79,6 +79,11 @@ public class ShopCouponActiveInfo {
      * 到期时间
      */
     private Date expireTime;
+
+    /**
+     * 消费时对应订单表的id
+     */
+    private String orderId;
 
     /**
      *
@@ -140,12 +145,12 @@ public class ShopCouponActiveInfo {
         this.batchId = batchId;
     }
 
-    public Integer getBatchNo() {
+    public String getBatchNo() {
         return batchNo;
     }
 
-    public void setBatchNo(Integer batchNo) {
-        this.batchNo = batchNo;
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo == null ? null : batchNo.trim();
     }
 
     public String getCouponNo() {
@@ -212,6 +217,14 @@ public class ShopCouponActiveInfo {
         this.expireTime = expireTime;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -252,6 +265,7 @@ public class ShopCouponActiveInfo {
         sb.append(", content=").append(content);
         sb.append(", type=").append(type);
         sb.append(", expireTime=").append(expireTime);
+        sb.append(", orderId=").append(orderId);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -289,6 +303,7 @@ public class ShopCouponActiveInfo {
                 && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
                 && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
                 && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
+                && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
                 && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
                 && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -315,8 +330,10 @@ public class ShopCouponActiveInfo {
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
+        result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
+
     }
 }

@@ -38,7 +38,7 @@ public class PayShopCouponActive implements Serializable {
     /**
      * 批次号
      */
-    private Integer batchNo;
+    private String batchNo;
 
     /**
      * 券号
@@ -145,12 +145,12 @@ public class PayShopCouponActive implements Serializable {
         this.batchId = batchId;
     }
 
-    public Integer getBatchNo() {
+    public String getBatchNo() {
         return batchNo;
     }
 
-    public void setBatchNo(Integer batchNo) {
-        this.batchNo = batchNo;
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo == null ? null : batchNo.trim();
     }
 
     public String getCouponNo() {
