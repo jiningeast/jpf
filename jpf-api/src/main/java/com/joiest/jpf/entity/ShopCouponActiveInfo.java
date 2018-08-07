@@ -334,5 +334,6 @@ public class ShopCouponActiveInfo {
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
+
     }
 }
