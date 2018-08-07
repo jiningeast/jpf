@@ -75,9 +75,12 @@ public class Base64CustomUtils {
             for(int i=0;i<b.length;++i){
 
                 if(b[i]<0){
-
+                    System.out.println("相加前："+b[i]);
                     //调整异常数据
                     b[i]+=256;
+
+                    System.out.println("相加后："+b[i]);
+
                 }
             }
             long timeStamp = new Date().getTime();
