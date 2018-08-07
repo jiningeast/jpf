@@ -53,4 +53,5 @@
 	<bean id="ShopCouponActiveServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponActiveServiceFacadeImpl"></bean>
 	<bean id="ShopBatchServiceFacade" class="com.joiest.jpf.facade.impl.ShopBatchServiceFacadeImpl"></bean>
 	<bean id="ShopBatchCouponServiceFacade" class="com.joiest.jpf.facade.impl.ShopBatchCouponServiceFacadeImpl"></bean>
+	<bean id="ShopInterfaceStreamServiceFacade" class="com.joiest.jpf.facade.impl.ShopInterfaceStreamServiceFacadeImpl"></bean>
 </beans>

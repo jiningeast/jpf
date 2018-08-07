@@ -32,5 +32,5 @@ public interface ShopBatchServiceFacade {
     /**
      * 发送邮件和短信
      */
-    public JpfResponseDto sendEmailSms(String batchId) throws Exception;
+    public int sendEmail(String batchId) throws Exception;
 }

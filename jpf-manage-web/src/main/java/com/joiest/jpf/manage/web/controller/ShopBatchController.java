@@ -1,19 +1,25 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.common.util.SendMailUtil;
+import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
-import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopBatchInfo;
+import com.joiest.jpf.entity.ShopCompanyInfo;
+import com.joiest.jpf.entity.ShopInterfaceStreamInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.ShopBatchCouponServiceFacade;
 import com.joiest.jpf.facade.ShopBatchServiceFacade;
+import com.joiest.jpf.facade.ShopCompanyServiceFacade;
+import com.joiest.jpf.facade.ShopInterfaceStreamServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import com.joiest.jpf.manage.web.util.SmsUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,8 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -35,6 +41,12 @@ public class ShopBatchController {
 
     @Autowired
     private ShopBatchCouponServiceFacade shopBatchCouponServiceFacade;
+
+    @Autowired
+    private ShopCompanyServiceFacade shopCompanyServiceFacade;
+
+    @Autowired
+    private ShopInterfaceStreamServiceFacade shopInterfaceStreamServiceFacade;
 
     @RequestMapping("/index")
     public ModelAndView index(){
@@ -118,6 +130,7 @@ public class ShopBatchController {
      */
     @RequestMapping("/sendZip")
     @ResponseBody
+    @Transactional
     public JpfResponseDto sendZip(String batchId) throws Exception{
         JpfResponseDto jpfResponseDto = new JpfResponseDto();
         if (StringUtils.isBlank(batchId) ){
@@ -128,19 +141,69 @@ public class ShopBatchController {
         }
 
         ShopBatchInfo shopBatchInfo = shopBatchServiceFacade.getBatchById(batchId);
-        if ( StringUtils.isBlank(shopBatchInfo.getReceiveEmail()) ) {
+        ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(shopBatchInfo.getCompanyId());
+        if ( shopCompanyInfo.getStatus() != 1 ){
             jpfResponseDto.setRetCode("10002");
+            jpfResponseDto.setRetMsg("商户已停用，无法继续操作");
+
+            return jpfResponseDto;
+        }
+        if ( shopBatchInfo.getEmailStatus() == 1 && shopBatchInfo.getSmsStatus() == 1 ){
+            jpfResponseDto.setRetCode("10002");
+            jpfResponseDto.setRetMsg("EMAIL已发送过，无法再次发送");
+
+            return jpfResponseDto;
+        }
+        if ( StringUtils.isBlank(shopCompanyInfo.getReceiveEmail()) ) {
+            jpfResponseDto.setRetCode("10003");
             jpfResponseDto.setRetMsg("该企业尚未设置接收邮箱");
 
             return jpfResponseDto;
         }
-        if ( StringUtils.isBlank(shopBatchInfo.getReceivePhone()) ) {
-            jpfResponseDto.setRetCode("10003");
+        if ( StringUtils.isBlank(shopCompanyInfo.getReceivePhone()) ) {
+            jpfResponseDto.setRetCode("10004");
             jpfResponseDto.setRetMsg("该企业尚未设置接收手机");
 
             return jpfResponseDto;
         }
 
-        return shopBatchServiceFacade.sendEmailSms(batchId);
+        // 发送email
+        int emailRes = shopBatchServiceFacade.sendEmail(batchId);
+        if ( emailRes == 1 ){
+            // email发送成功则发送短信
+            String mobile = shopCompanyInfo.getReceivePhone();
+            String content = "已将批次号为" + shopBatchInfo.getBatchNo() + "的欣券激活码发送至您的邮箱，附件压缩包的密码是：" + shopBatchInfo.getZipPassword();
+            Map<String,String> smsResMap = SmsUtils.send(mobile,content);
+            Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
+            if ( responseMap.get("code").equals("10000") ){
+                // 短信发送成功更新批次表的状态为短信发送成功
+                ShopBatchInfo shopBatchInfoUpdate = new ShopBatchInfo();
+                shopBatchInfoUpdate.setId(batchId);
+                shopBatchInfoUpdate.setReceivePhone(mobile);
+                shopBatchInfoUpdate.setSmsContent(content);
+                shopBatchInfoUpdate.setSmsStatus((byte)1);
+                shopBatchInfoUpdate.setSmsTime(new Date());
+                shopBatchInfoUpdate.setStatus((byte)2);
+
+                shopBatchServiceFacade.updateColumnById(shopBatchInfoUpdate);
+
+                // 添加短信流水
+                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+                shopInterfaceStreamInfo.setType((byte)1);
+                shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+                shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+                shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+                shopInterfaceStreamInfo.setBatchId(batchId);
+                shopInterfaceStreamInfo.setAddtime(new Date());
+                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+            }
+        }else if ( emailRes == -1 ){
+            jpfResponseDto.setRetCode("10005");
+            jpfResponseDto.setRetMsg("发送邮件失败");
+
+            return jpfResponseDto;
+        }
+
+        return jpfResponseDto;
     }
 }

@@ -6,8 +6,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>客户列表</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
-
-
     <style>
         #searchForm1 table tr td:nth-child(odd) { text-align: right; }
         #searchForm1 table tr td:nth-child(even) { text-align: left; }
@@ -16,14 +14,14 @@
 
 <body>
 
-<div name="contentDiv">
-    <div >
-        <p><span><h3>客户信息</h3></span></p>
-        <p style="text-align: right;font-size:30px;color:#333333;">
-            <span >${phone}</span>&nbsp;&nbsp;&nbsp;
+<div name="contentDiv" style="padding: 10px;">
+    <%--<div >
+        <h3>客户信息</h3>
+        <p style="text-align: left;font-size:30px;color:#333333; margin: 5px 0;">
+            <span >${phone}&nbsp;&nbsp;&nbsp;
             <span style="color: #ff4114">当前欣豆 ${dou}个</span>
         </p>
-    </div>
+    </div>--%>
     <div id="formDiv2" class="easyui-panel" title="搜索条件" data-options="footer:'#ft2'">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm1" method="post">
@@ -53,7 +51,7 @@
                                 <option value="3">过期</option>
                             </select>
                         </td>
-
+                        <td colspan="2"></td>
                     </tr>
                 </table>
             </form>

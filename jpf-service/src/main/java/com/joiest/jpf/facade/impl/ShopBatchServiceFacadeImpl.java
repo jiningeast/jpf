@@ -177,7 +177,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         titles.add("激活码");
         titles.add("面值");
         titles.add("欣豆");
-        titles.add("有效期");
+        titles.add("有效期（月）");
         titles.add("生成时间");
 
         JSONArray fields = new JSONArray();
@@ -242,78 +242,44 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         PayShopBatch payShopBatch = new PayShopBatch();
         BeanCopier beanCopier = BeanCopier.create(ShopBatchInfo.class, PayShopBatch.class, false);
         beanCopier.copy(shopBatchInfo, payShopBatch, null);
-        return payShopBatchMapper.updateByPrimaryKey(payShopBatch);
+
+        return payShopBatchMapper.updateByPrimaryKeySelective(payShopBatch);
     }
 
     /**
      * 发送邮件和短信
      */
     @Override
-    public JpfResponseDto sendEmailSms(String batchId) throws Exception{
+    public int sendEmail(String batchId) throws Exception{
         PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(batchId);
         PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(payShopBatch.getCompanyId());
 
         // 发送邮件
         String subject = "欣豆市场批量欣券";
         String sendName = "欣享服务";
-        String recipients = payShopBatch.getReceiveEmail();
-        String recipientsName = payShopBatch.getReceiveName();
+        String recipients = payShopCompany.getReceiveEmail();
+        String recipientsName = payShopCompany.getReceiveName();
         String filepath = payShopBatch.getOssUrl();
         String filepathArr[] = StringUtils.split(filepath,'/');
-        String Filename = filepathArr[filepathArr.length-1];    //携带文件类型.xlsx
+        String filename = filepathArr[filepathArr.length-1];    // 文件名.xlsx
+        filepath = ConfigUtil.getValue("EXCEL_PATH") + filename;
         String html = "附件中的压缩包包含为您生成的批量激活码，该压缩包为加密压缩包，密码已发送至贵公司在我平台注册的企业联系人的手机号中，请注意查收";//可以使用标签拼装
-        Boolean sendStatus =  SendMailUtil.sendMultipleEmail(subject,sendName,recipients,recipientsName,filepath,Filename,html);
+        Boolean sendStatus =  SendMailUtil.sendMultipleEmail(subject,sendName,recipients,recipientsName,filepath,filename,html);
         if ( !sendStatus ){
-            JpfResponseDto jpfResponseDto = new JpfResponseDto();
-            jpfResponseDto.setRetCode("10004");
-            jpfResponseDto.setRetMsg("发送邮件失败");
-
-            return jpfResponseDto;
+            // 邮件发送失败
+            return -1;
         }
 
-        // 发送短信
-        String mobile = payShopCompany.getReceivePhone();
-        String content = "已将批量欣券发送至您的邮箱，附件压缩包的密码是：" + payShopBatch.getZipPassword();
-        String dateTime = new Date().toString();
-        Map<String,Object> map = new HashMap<>();
-        map.put("mobile",mobile);
-        map.put("content",content);
-        map.put("dateTime",dateTime);
-
-        /*//排序转换
-        Map<String,Object> treeMap = new TreeMap<>();
-        treeMap.putAll(map);
-
-        String respos = ToolUtils.mapToUrl(treeMap);
-
-        //调用配置文件ConfigUtil.getValue("API_SECRET")
-
-        String selfSign = Md5Encrypt.md5(respos+ com.joiest.jpf.common.util.ConfigUtil.getValue("API_SECRET")).toUpperCase();
-
-        map.put("sign",selfSign);
-
-        String response = OkHttpUtils.postForm(com.joiest.jpf.common.util.ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi",map);
-
-        //json---转换代码---
-        Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
-        String result=responseMap.get("code");
-
-        // 增加==短信接口流水==
-        CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
-        cloudInterfaceStreamInfo.setType((byte)0);
-        cloudInterfaceStreamInfo.setRequestUrl(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi");
-        cloudInterfaceStreamInfo.setRequestContent(respos);
-        cloudInterfaceStreamInfo.setResponseContent(result);
-        cloudInterfaceStreamInfo.setAddtime(new Date());
-        cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
-
-        // 更新批次状态
+        // 更新email内容字段
         ShopBatchInfo shopBatchInfoUpdate = new ShopBatchInfo();
         shopBatchInfoUpdate.setId(batchId);
-        shopBatchInfoUpdate.setStatus((byte)2);     // 把状态改为已发券
-        updateColumnById(shopBatchInfoUpdate);*/
+        shopBatchInfoUpdate.setReceiveEmail(recipients);
+        shopBatchInfoUpdate.setReceiveName(payShopCompany.getReceiveName());
+        shopBatchInfoUpdate.setEmailContent(html);
+        shopBatchInfoUpdate.setEmailStatus((byte)1);
+        shopBatchInfoUpdate.setEmailTime(new Date());
 
-        return new JpfResponseDto();
+        return updateColumnById(shopBatchInfoUpdate);
     }
 
     /**

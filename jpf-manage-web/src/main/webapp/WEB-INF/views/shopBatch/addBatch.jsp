@@ -159,6 +159,7 @@
                 } else {
                     $.messager.alert('消息提示','新增成功','info');
                 }
+                $("#batchDG").datagrid('reload');
                 $("#addWindow").window("close");
             },
             error:function() {

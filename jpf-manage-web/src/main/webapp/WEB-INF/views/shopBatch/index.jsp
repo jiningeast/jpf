@@ -55,11 +55,27 @@
                         $.messager.alert('消息提示','请选择一条数据！','info');
                         return false;
                     }
-                    $.messager.confirm('确定发送含有压缩包的EMAIL吗？',function (r) {
+                    $.messager.confirm('发送EMAIL','确定发送含有压缩包的EMAIL吗？',function (r) {
                         if (r){
+                            ajaxLoading();
                             $.ajax({
                                 type : 'get',
-                                url : '',
+                                url : 'sendZip?batchId='+rows[0].id,
+                                dataType:"json",
+                                contentType:"application/json",
+                                success : function(msg){
+                                    ajaxLoadEnd();
+                                    if (msg.retCode != '0000') {
+                                        $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
+                                    } else {
+                                        $.messager.alert('消息提示','操作成功!','info');
+                                        $('#dg').datagrid('reload');
+                                    }
+                                },
+                                error : function () {
+                                    ajaxLoadEnd();
+                                    $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
+                                }
                             })
                         }
                     })
@@ -101,6 +117,16 @@
                 ]]
             });
         })
+
+        //采用jquery easyui loading css效果
+        function ajaxLoading(){
+            $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:"100%",height:$(window).height()}).appendTo("body");
+            $("<div class=\"datagrid-mask-msg\"></div>").html("正在处理，请稍候。。。").appendTo("body").css({display:"block",left:($(document.body).outerWidth(true) - 190) / 2,top:($(window).height() - 45) / 2});
+        }
+        function ajaxLoadEnd(){
+            $(".datagrid-mask").remove();
+            $(".datagrid-mask-msg").remove();
+        }
     </script>
 </head>
 <body>
