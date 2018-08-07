@@ -1,6 +1,7 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.CompressUtil;
+import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ExcelDealUtils;
 import com.joiest.jpf.dto.GetValueRequest;
 import com.joiest.jpf.dto.GetValueResponse;
@@ -170,6 +171,18 @@ public class DemoController {
 		} catch (ZipException e) {
 			e.printStackTrace();
 		}*/
+        return null;
+    }
+
+    /**
+     *
+     * */
+    @RequestMapping(value="test",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String test(){
+
+        String fileName = "E:\\Chrysanthemum.jpg";
+        String base =  Base64CustomUtils.imageToBase(fileName);
         return null;
     }
 }
