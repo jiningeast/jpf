@@ -6,8 +6,11 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
+import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
 import com.joiest.jpf.entity.PayShopOrderInterfaceInfo;
 import com.joiest.jpf.entity.ShopProductInterfaceInfo;
+import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
+import com.joiest.jpf.facade.ShopOrderInterfaceServiceFacade;
 import com.joiest.jpf.facade.ShopProductInterfaceServiceFacade;
 import com.joiest.jpf.market.api.util.ToolsUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +33,15 @@ public class OrdersController {
      */
     @Autowired
     ShopProductInterfaceServiceFacade shopProductInterfaceServiceFacade;
+
+    /**
+     * 订单
+     */
+    @Autowired
+    ShopOrderInterfaceServiceFacade shopOrderInterfaceServiceFacade;
+
+    @Autowired
+    ShopCouponActiveInterfaceServiceFacade shopCouponActiveInterfaceServiceFacade;
 
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -63,7 +75,7 @@ public class OrdersController {
         } else if ( request.getOtype().equals("3") )
         {
             //话费充值
-            String reg_phone = "^^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\\\d{8}$$";
+            String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
             Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(request.getPhone()).matches();
             if ( !phoneIsTrue )
             {
@@ -84,10 +96,15 @@ public class OrdersController {
 
         ValidatorUtils.validateInterface(request);
         //获取商品信息
-        ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(request.getPhone());
+        ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(request.getPid());
         if ( productInfo == null )
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getCode(), JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getDesc());
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getCode(), JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getDesc(), "");
+        }
+
+        if ( !request.getMoney().equals(request.getPaymoney()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDERMONEY_DIFF.getCode(), JpfInterfaceErrorInfo.MK_ORDERMONEY_DIFF.getDesc(), "");
         }
 
         //创建订单
@@ -95,7 +112,7 @@ public class OrdersController {
         PayShopOrderInterfaceInfo info = new PayShopOrderInterfaceInfo();
 
         info.setOrderNo(orderno);
-        info.setCustomerId("2");
+        info.setCustomerId("2");    //TODO 获取用户信息
         info.setCustomerName("测试客户");
         info.setProductId(productInfo.getId());
         info.setProductName(productInfo.getName());
@@ -107,9 +124,38 @@ public class OrdersController {
         info.setTotalDou(productInfo.getDou());
         info.setChargeNo(chargeNo);
         info.setAddtime(new Date());
+        int res = shopOrderInterfaceServiceFacade.addOrder(info);
+        if ( res >= 0 )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), orderno);
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
+    }
+
+    /**
+     * 支付
+     * @param data
+     * @return
+     */
+    @RequestMapping("/pay")
+    @ResponseBody
+    public String dopay(String data)
+    {
+        //1.金额校验 2.订单用户校验 3.用户券列表 4.扣除相应的券 5.更新code
 
 
         return "";
     }
 
+    @RequestMapping("blance")
+    @ResponseBody
+    public String getUserBlance(String data)
+    {
+        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList("1");
+        if ( response == null )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), "");
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response.getDouTotal());
+    }
 }

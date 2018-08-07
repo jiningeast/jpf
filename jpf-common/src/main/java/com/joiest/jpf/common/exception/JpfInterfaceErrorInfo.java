@@ -105,7 +105,9 @@ public enum JpfInterfaceErrorInfo {
     DF_LISTFILTER_EMPTY("30004","待打款列表过滤后为空"),
 
     //云市场 begin
-    MK_PRODUCT_NOFOUND("40001", "商品不存在");
+    //下单
+    MK_PRODUCT_NOFOUND("40001", "商品不存在"),
+    MK_ORDERMONEY_DIFF("40001", "商品金额不一致");
 
     private final String desc;
 

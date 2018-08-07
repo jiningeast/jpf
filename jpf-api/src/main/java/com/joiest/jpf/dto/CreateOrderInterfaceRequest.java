@@ -32,13 +32,13 @@ public class CreateOrderInterfaceRequest {
      * 充值金额
      */
     @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2}){1}$", message = "充值金额错误")
-    private BigDecimal money;
+    private String money;
 
     /**
      * 实付金额
      */
     @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2}){1}$", message = "交易金额格式错误")
-    private BigDecimal paymoney;
+    private String paymoney;
 
     /**
      * 1中石化充值 2中石油充值 3话费充值
@@ -84,19 +84,19 @@ public class CreateOrderInterfaceRequest {
         this.mobile = mobile;
     }
 
-    public BigDecimal getMoney() {
+    public String getMoney() {
         return money;
     }
 
-    public void setMoney(BigDecimal money) {
+    public void setMoney(String money) {
         this.money = money;
     }
 
-    public BigDecimal getPaymoney() {
+    public String getPaymoney() {
         return paymoney;
     }
 
-    public void setPaymoney(BigDecimal paymoney) {
+    public void setPaymoney(String paymoney) {
         this.paymoney = paymoney;
     }
 
