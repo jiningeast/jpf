@@ -357,4 +357,22 @@ public class ToolUtils {
 
         return Double.parseDouble(nf.format(num));
     }
+    /**
+     * 金额校验
+     */
+    public static Boolean ValidateCode(String code,String uid,String dou){
+
+        String newCode = Md5Encrypt.md5(uid+dou+"test","UTF-8");   //加密规则：  id+金额+key
+        Boolean res = code.equals(newCode); //校验加密是否一致
+
+        return res;
+    }
+    /**
+     * 加密code
+     */
+    public static String ValidateCode(String dou,String uid){
+
+        return Md5Encrypt.md5(uid+dou+"test","UTF-8");
+
+    }
 }
