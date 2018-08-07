@@ -12,7 +12,6 @@ public class ToolsUtils {
         int pre = getRandomInt(100,999);
         int last = getRandomInt(100,999);
         String middle = String.valueOf(System.currentTimeMillis());
-        middle = middle.substring(3,middle.length());
 
         return ""+pre+middle+last;
     }

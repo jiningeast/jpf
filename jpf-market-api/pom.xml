@@ -159,7 +159,7 @@
     </dependencies>
 
     <build>
-        <finalName>jpf-cloud</finalName>
+        <finalName>jpf-market</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources/</directory>
@@ -179,7 +179,7 @@
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <configuration>
-                    <path>/cloud</path>
+                    <path>/market</path>
                     <port>8089</port>
                     <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
                 </configuration>

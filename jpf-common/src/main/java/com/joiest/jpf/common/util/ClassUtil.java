@@ -1,5 +1,8 @@
 package com.joiest.jpf.common.util;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -37,7 +40,25 @@ public class ClassUtil {
         } catch (Exception e) {
             return null;
         }
+    }
 
+    public static Object mapToObject(Map<String, Object> map, Class<?> beanClass) throws Exception {
+        if (map == null)
+            return null;
+
+        Object obj = beanClass.newInstance();
+
+        BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+        for (PropertyDescriptor property : propertyDescriptors) {
+            Method setter = property.getWriteMethod();
+            if (setter != null) {
+                String name = property.getName();
+                Object abc = map.get(property.getName());
+                setter.invoke(obj, map.get(property.getName()));
+            }
+        }
+        return obj;
     }
 
 }
