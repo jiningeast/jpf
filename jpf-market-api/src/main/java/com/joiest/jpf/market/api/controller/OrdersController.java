@@ -6,13 +6,10 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
-import com.joiest.jpf.dto.CreateOrderOilInterfaceRequest;
-import com.joiest.jpf.dto.CreateOrderTelRefillInterfaceRequest;
 import com.joiest.jpf.entity.PayShopOrderInterfaceInfo;
 import com.joiest.jpf.entity.ShopProductInterfaceInfo;
 import com.joiest.jpf.facade.ShopProductInterfaceServiceFacade;
 import com.joiest.jpf.market.api.util.ToolsUtils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -51,6 +49,7 @@ public class OrdersController {
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未登录", null);
         }
+        String chargeNo = "";
         //油卡充值
         if ( request.getOtype().equals("1") || request.getOtype().equals("2") )
         {
@@ -59,6 +58,8 @@ public class OrdersController {
                 throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "油卡卡号不一致");
             }
             //TODO 油卡卡号校验
+
+            chargeNo = request.getCardNo();
         } else if ( request.getOtype().equals("3") )
         {
             //话费充值
@@ -77,6 +78,8 @@ public class OrdersController {
             {
                 throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码不一致");
             }
+
+            chargeNo = request.getPhone();
         }
 
         ValidatorUtils.validateInterface(request);
@@ -92,6 +95,18 @@ public class OrdersController {
         PayShopOrderInterfaceInfo info = new PayShopOrderInterfaceInfo();
 
         info.setOrderNo(orderno);
+        info.setCustomerId("2");
+        info.setCustomerName("测试客户");
+        info.setProductId(productInfo.getId());
+        info.setProductName(productInfo.getName());
+        info.setProductMoney(productInfo.getMoney());
+        info.setProductDou(productInfo.getDou());
+        info.setProductInfoId(productInfo.getProductInfoId());
+        info.setAmount(1);
+        info.setTotalMoney(productInfo.getMoney());
+        info.setTotalDou(productInfo.getDou());
+        info.setChargeNo(chargeNo);
+        info.setAddtime(new Date());
 
 
         return "";
