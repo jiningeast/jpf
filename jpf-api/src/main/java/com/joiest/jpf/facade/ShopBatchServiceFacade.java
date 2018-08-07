@@ -23,4 +23,14 @@ public interface ShopBatchServiceFacade {
      * 根据主键id获取批次
      */
     public ShopBatchInfo getBatchById(String id);
+
+    /**
+     * 根据主键id更新状态
+     */
+    public int updateColumnById(ShopBatchInfo shopBatchInfo);
+
+    /**
+     * 发送邮件和短信
+     */
+    public JpfResponseDto sendEmailSms(String batchId) throws Exception;
 }

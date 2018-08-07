@@ -46,7 +46,7 @@
                     }
                     $("#detailWindow").window("open").window('refresh','../shopBatch/detail?batchId='+rows[0].id).window('setTitle','欣券批次详情');
                 }
-            }/*,{
+            },{
                 text:'发送EMAIL',
                 iconCls:'icon-redo',
                 handler:function(){
@@ -64,7 +64,7 @@
                         }
                     })
                 }
-            }*/];
+            }];
 
             // 欣券数据
             $('#batchDG').datagrid({

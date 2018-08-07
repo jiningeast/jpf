@@ -107,12 +107,20 @@ public class ShopBatchController {
 
     /**
      * 发送含有excel的压缩包
+     * @Params
+     * Subject : 主题
+     * sendNAME : 发送人名称
+     * Recipients : 接收邮箱地址
+     * RecipienName : 接收人姓名
+     * FilePath : 发送附件地址全路径
+     * fileName : 文件名字携带文件格式的如a.xls;
+     * html : 发送的html内容
      */
     @RequestMapping("/sendZip")
     @ResponseBody
-    public JpfResponseDto sendZip(String batchId){
+    public JpfResponseDto sendZip(String batchId) throws Exception{
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
         if (StringUtils.isBlank(batchId) ){
-            JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("10001");
             jpfResponseDto.setRetMsg("未传入批次id");
 
@@ -120,17 +128,19 @@ public class ShopBatchController {
         }
 
         ShopBatchInfo shopBatchInfo = shopBatchServiceFacade.getBatchById(batchId);
+        if ( StringUtils.isBlank(shopBatchInfo.getReceiveEmail()) ) {
+            jpfResponseDto.setRetCode("10002");
+            jpfResponseDto.setRetMsg("该企业尚未设置接收邮箱");
 
-        //发送邮件
-        String Subject="测试主题";
-        String sendName="欣享服务";
-        String Recipients="1174355934@qq.com";
-        String RecipientsName="蔡磊";
-        String Filepath="/home/images/excel/1531962634202.xlsx";//全路径
-        String Filename="1531962634202.xlsx";//携带文件类型。xlsx
-        String html="这是我发布的测试内容";//可以使用标签拼装
-//        Boolean a=  SendMailUtil.sendMultipleEmail(Subject,sendName,Recipients,RecipientsName,Filepath,Filename,html);
+            return jpfResponseDto;
+        }
+        if ( StringUtils.isBlank(shopBatchInfo.getReceivePhone()) ) {
+            jpfResponseDto.setRetCode("10003");
+            jpfResponseDto.setRetMsg("该企业尚未设置接收手机");
 
-        return new JpfResponseDto();
+            return jpfResponseDto;
+        }
+
+        return shopBatchServiceFacade.sendEmailSms(batchId);
     }
 }
