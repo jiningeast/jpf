@@ -1,6 +1,7 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.alibaba.druid.sql.visitor.functions.Char;
+import com.joiest.jpf.cloud.api.util.MessageUtil;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.SHA1;
 import com.joiest.jpf.entity.WeixinMapInfo;
@@ -22,10 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("weixin")
@@ -42,12 +40,14 @@ public class WeixinController {
         String signature = request.getParameter("signature");
         String content=request.getQueryString();
 
+        Map<String, String> requestMap = MessageUtil.parseXml(request);
+
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sbf.append("\n\nTime:" + myfmt.format(date));
         sbf.append("\n请求类型：事件操作");
-        sbf.append("\n请求参数："+content);
+        sbf.append("\n请求参数："+requestMap.toString());
         sbf.append("\nechostr："+echostr);
         sbf.append("\nsignature："+signature);
         String fileName = "Weixinlog";
