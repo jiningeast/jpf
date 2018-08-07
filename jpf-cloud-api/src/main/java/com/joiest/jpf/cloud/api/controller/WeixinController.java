@@ -32,7 +32,7 @@ public class WeixinController {
     @Autowired
     private WeixinMapServiceFacade weixinMapServiceFacade;
 
-    @RequestMapping(value = "/weiIndex", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/weiIndex", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String weiIndex(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -75,7 +75,7 @@ public class WeixinController {
         return null;
     }
 
-    @RequestMapping(value = "/responseMsg", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/responseMsg", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String responseMsg(HttpServletRequest request,HttpServletResponse response){
 
