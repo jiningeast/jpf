@@ -370,7 +370,7 @@ public class ToolUtils {
     /**
      * 加密code
      */
-    public static String ValidateCode(String dou,String uid){
+    public static String CreateCode(String dou,String uid){
 
         return Md5Encrypt.md5(uid+dou+"test","UTF-8");
 
