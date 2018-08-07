@@ -566,52 +566,62 @@ public class PayShopCouponActiveExample {
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoEqualTo(Integer value) {
+        public Criteria andBatchNoEqualTo(String value) {
             addCriterion("batch_no =", value, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoNotEqualTo(Integer value) {
+        public Criteria andBatchNoNotEqualTo(String value) {
             addCriterion("batch_no <>", value, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoGreaterThan(Integer value) {
+        public Criteria andBatchNoGreaterThan(String value) {
             addCriterion("batch_no >", value, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoGreaterThanOrEqualTo(Integer value) {
+        public Criteria andBatchNoGreaterThanOrEqualTo(String value) {
             addCriterion("batch_no >=", value, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoLessThan(Integer value) {
+        public Criteria andBatchNoLessThan(String value) {
             addCriterion("batch_no <", value, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoLessThanOrEqualTo(Integer value) {
+        public Criteria andBatchNoLessThanOrEqualTo(String value) {
             addCriterion("batch_no <=", value, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoIn(List<Integer> values) {
+        public Criteria andBatchNoLike(String value) {
+            addCriterion("batch_no like", value, "batchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNoNotLike(String value) {
+            addCriterion("batch_no not like", value, "batchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNoIn(List<String> values) {
             addCriterion("batch_no in", values, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoNotIn(List<Integer> values) {
+        public Criteria andBatchNoNotIn(List<String> values) {
             addCriterion("batch_no not in", values, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoBetween(Integer value1, Integer value2) {
+        public Criteria andBatchNoBetween(String value1, String value2) {
             addCriterion("batch_no between", value1, value2, "batchNo");
             return (Criteria) this;
         }
 
-        public Criteria andBatchNoNotBetween(Integer value1, Integer value2) {
+        public Criteria andBatchNoNotBetween(String value1, String value2) {
             addCriterion("batch_no not between", value1, value2, "batchNo");
             return (Criteria) this;
         }
@@ -1323,6 +1333,11 @@ public class PayShopCouponActiveExample {
 
         public Criteria andCompanyNameLikeInsensitive(String value) {
             addCriterion("upper(company_name) like", value.toUpperCase(), "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNoLikeInsensitive(String value) {
+            addCriterion("upper(batch_no) like", value.toUpperCase(), "batchNo");
             return (Criteria) this;
         }
 
