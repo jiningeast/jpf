@@ -85,9 +85,14 @@ public class ShopBatchInfo {
     private String receivePhone;
 
     /**
-     *
+     * 压缩包阿里云文件服务器地址
      */
     private String ossUrl;
+
+    /**
+     * 压缩包密码
+     */
+    private String zipPassword;
 
     /**
      * 邮件内容
@@ -273,6 +278,14 @@ public class ShopBatchInfo {
 
     public void setOssUrl(String ossUrl) {
         this.ossUrl = ossUrl;
+    }
+
+    public String getZipPassword() {
+        return zipPassword;
+    }
+
+    public void setZipPassword(String zipPassword) {
+        this.zipPassword = zipPassword;
     }
 
     public String getEmailContent() {

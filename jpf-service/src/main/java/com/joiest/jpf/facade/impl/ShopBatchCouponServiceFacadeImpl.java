@@ -3,6 +3,7 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.po.PayShopBatchCoupon;
 import com.joiest.jpf.common.po.PayShopBatchCouponExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchCouponMapper;
+import com.joiest.jpf.dto.ShopBatchCouponResponse;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.facade.ShopBatchCouponServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,15 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
      * 根据批次号获取券
      */
     @Override
-    public List<ShopBatchCouponInfo> getCouponByBatchId(String batchId){
+    public ShopBatchCouponResponse getCouponByBatchId(String batchId, int page, int rows){
+        ShopBatchCouponResponse response = new ShopBatchCouponResponse();
+
         PayShopBatchCouponExample e = new PayShopBatchCouponExample();
         PayShopBatchCouponExample.Criteria c = e.createCriteria();
+        int count = payShopBatchCouponMapper.countByExample(e);
         c.andBatchIdEqualTo(batchId);
+        e.setPageNo(page);
+        e.setPageSize(rows);
 
         List<PayShopBatchCoupon> list = payShopBatchCouponMapper.selectByExample(e);
         List<ShopBatchCouponInfo> infos = new ArrayList<>();
@@ -36,7 +42,9 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
                 infos.add(shopBatchCouponInfo);
             }
         }
+        response.setList(infos);
+        response.setCount(count);
 
-        return infos;
+        return response;
     }
 }

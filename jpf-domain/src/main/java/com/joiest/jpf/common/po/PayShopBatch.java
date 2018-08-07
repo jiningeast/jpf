@@ -21,7 +21,7 @@ public class PayShopBatch implements Serializable {
     private String companyName;
 
     /**
-     * 批次号
+     * 批次号：BA+MD5(UUID)
      */
     private String batchNo;
 
@@ -86,9 +86,14 @@ public class PayShopBatch implements Serializable {
     private String receivePhone;
 
     /**
-     * 
+     * 压缩包阿里云文件服务器地址
      */
     private String ossUrl;
+
+    /**
+     * 压缩包密码
+     */
+    private String zipPassword;
 
     /**
      * 邮件内容
@@ -278,6 +283,14 @@ public class PayShopBatch implements Serializable {
         this.ossUrl = ossUrl == null ? null : ossUrl.trim();
     }
 
+    public String getZipPassword() {
+        return zipPassword;
+    }
+
+    public void setZipPassword(String zipPassword) {
+        this.zipPassword = zipPassword == null ? null : zipPassword.trim();
+    }
+
     public String getEmailContent() {
         return emailContent;
     }
@@ -384,6 +397,7 @@ public class PayShopBatch implements Serializable {
         sb.append(", receiveEmail=").append(receiveEmail);
         sb.append(", receivePhone=").append(receivePhone);
         sb.append(", ossUrl=").append(ossUrl);
+        sb.append(", zipPassword=").append(zipPassword);
         sb.append(", emailContent=").append(emailContent);
         sb.append(", emailTime=").append(emailTime);
         sb.append(", emailStatus=").append(emailStatus);
@@ -431,6 +445,7 @@ public class PayShopBatch implements Serializable {
             && (this.getReceiveEmail() == null ? other.getReceiveEmail() == null : this.getReceiveEmail().equals(other.getReceiveEmail()))
             && (this.getReceivePhone() == null ? other.getReceivePhone() == null : this.getReceivePhone().equals(other.getReceivePhone()))
             && (this.getOssUrl() == null ? other.getOssUrl() == null : this.getOssUrl().equals(other.getOssUrl()))
+            && (this.getZipPassword() == null ? other.getZipPassword() == null : this.getZipPassword().equals(other.getZipPassword()))
             && (this.getEmailContent() == null ? other.getEmailContent() == null : this.getEmailContent().equals(other.getEmailContent()))
             && (this.getEmailTime() == null ? other.getEmailTime() == null : this.getEmailTime().equals(other.getEmailTime()))
             && (this.getEmailStatus() == null ? other.getEmailStatus() == null : this.getEmailStatus().equals(other.getEmailStatus()))
@@ -467,6 +482,7 @@ public class PayShopBatch implements Serializable {
         result = prime * result + ((getReceiveEmail() == null) ? 0 : getReceiveEmail().hashCode());
         result = prime * result + ((getReceivePhone() == null) ? 0 : getReceivePhone().hashCode());
         result = prime * result + ((getOssUrl() == null) ? 0 : getOssUrl().hashCode());
+        result = prime * result + ((getZipPassword() == null) ? 0 : getZipPassword().hashCode());
         result = prime * result + ((getEmailContent() == null) ? 0 : getEmailContent().hashCode());
         result = prime * result + ((getEmailTime() == null) ? 0 : getEmailTime().hashCode());
         result = prime * result + ((getEmailStatus() == null) ? 0 : getEmailStatus().hashCode());

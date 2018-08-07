@@ -1,22 +1,27 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.*;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBatchCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchCouponMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
+import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopBatchInfo;
 import com.joiest.jpf.facade.ShopBatchServiceFacade;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
@@ -56,6 +61,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         }
         e.setPageSize(shopBatchRequest.getRows());
         e.setPageNo(shopBatchRequest.getPage());
+        e.setOrderByClause("id DESC");
 
         List<PayShopBatch> list = payShopBatchMapper.selectByExample(e);
         shopBatchResponse.setCount(payShopBatchMapper.countByExample(e));
@@ -80,9 +86,14 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
      */
     @Override
     @Transactional
-    public int addBatchCoupon(ShopBatchRequest shopBatchRequest){
+    public JpfResponseDto addBatchCoupon(ShopBatchRequest shopBatchRequest, HttpServletResponse httpResponse){
         // 查询商户信息
         PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(shopBatchRequest.getCompanyId());
+        if ( payShopCompany.getStatus() != 1 ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("商户已停用，无法继续操作");
+        }
 
         PayShopBatch payShopBatch = new PayShopBatch();
         payShopBatch.setCompanyId(shopBatchRequest.getCompanyId());
@@ -119,9 +130,10 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         String batchId = payShopBatch.getId();
 
         // 添加券
-        PayShopBatchCoupon payShopBatchCoupon = new PayShopBatchCoupon();
+        List<PayShopBatchCoupon> payShopBatchCouponsList = new ArrayList<>();
         for ( Map<String,String> single:list ){
             for ( int i=0; i<Integer.parseInt(single.get("amount")); i++){
+                PayShopBatchCoupon payShopBatchCoupon = new PayShopBatchCoupon();
                 payShopBatchCoupon.setBatchId(batchId);
                 payShopBatchCoupon.setCompanyId(shopBatchRequest.getCompanyId());
                 payShopBatchCoupon.setCompanyName(shopBatchRequest.getCompanyName());
@@ -139,12 +151,84 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
                 payShopBatchCoupon.setIsActive((byte)0);
                 payShopBatchCoupon.setExpireMonth(shopBatchRequest.getExpireMonth());
                 payShopBatchCoupon.setAddtime(new Date());
+                payShopBatchCouponsList.add(payShopBatchCoupon);
 
                 payShopBatchCouponMapper.insert(payShopBatchCoupon);
             }
         }
 
-        return 1;
+        List<ShopBatchCouponInfo> infoList = new ArrayList<>();
+        for ( PayShopBatchCoupon payCoupon:payShopBatchCouponsList ){
+            ShopBatchCouponInfo info = new ShopBatchCouponInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopBatchCoupon.class, ShopBatchCouponInfo.class, false);
+            beanCopier.copy(payCoupon, info, null);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            info.setAddtimeFormat(sdf.format(info.getAddtime()));
+            infoList.add(info);
+        }
+
+        // 生成excel文件
+        ExcelDealUtils excelUtils = new ExcelDealUtils();
+
+        JSONArray titles = new JSONArray();
+        titles.add("激活码");
+        titles.add("面值");
+        titles.add("欣豆");
+        titles.add("有效期");
+        titles.add("生成时间");
+
+        JSONArray fields = new JSONArray();
+        fields.add("activeCode");
+        fields.add("money");
+        fields.add("dou");
+        fields.add("expireMonth");
+        fields.add("addtimeFormat");
+
+        String excelPath = ConfigUtil.getValue("EXCEL_PATH");
+        JSONObject exExcelResponse = excelUtils.exportExcel(httpResponse,titles.toString(),fields.toString(),infoList,2,excelPath);
+        JSONObject data = JSONObject.fromObject( exExcelResponse.get("data"));
+        String uploadPath = data.get("localUrl").toString();    // excel文件的本地地址
+
+        // 生成带密码的压缩包
+        String password = getRandomString(6);
+        String zipPath = new CompressUtil().zip(uploadPath, password);
+        if ( zipPath == null ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10002");
+            jpfResponseDto.setRetMsg("生成压缩包失败");
+
+            return jpfResponseDto;
+        }
+
+        // oss上传压缩包文件
+        Map<String,Object> ossRequestMap = new HashMap<>();
+        ossRequestMap.put("path",zipPath);
+
+        String url = ConfigUtil.getValue("MANAGE_WEB_URL")+"/oss/upload";
+        String ossResponse = OkHttpUtils.postForm(url,ossRequestMap);
+        ossResponse = StringUtils.strip(ossResponse,"\"");
+        ossResponse = StringUtils.stripEnd(ossResponse,"\"");
+
+        PayShopBatch payShopBatchUpdate = new PayShopBatch();
+        payShopBatchUpdate.setId(batchId);
+        payShopBatchUpdate.setOssUrl(ossResponse);
+        payShopBatchUpdate.setZipPassword(password);
+        payShopBatchMapper.updateByPrimaryKeySelective(payShopBatchUpdate);
+
+        return new JpfResponseDto();
+    }
+
+    /**
+     * 根据主键id获取批次
+     */
+    public ShopBatchInfo getBatchById(String id){
+        PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(id);
+        ShopBatchInfo shopBatchInfo = new ShopBatchInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayShopBatch.class, ShopBatchInfo.class, false);
+        beanCopier.copy(payShopBatch, shopBatchInfo, null);
+
+        return shopBatchInfo;
     }
 
     /**

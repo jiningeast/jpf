@@ -1,13 +1,11 @@
 package com.joiest.jpf.facade;
 
-import com.joiest.jpf.entity.ShopBatchCouponInfo;
-
-import java.util.List;
+import com.joiest.jpf.dto.ShopBatchCouponResponse;
 
 public interface ShopBatchCouponServiceFacade {
 
     /**
      * 根据批次号获取券
      */
-    public List<ShopBatchCouponInfo> getCouponByBatchId(String batchId);
+    public ShopBatchCouponResponse getCouponByBatchId(String batchId, int page, int rows);
 }

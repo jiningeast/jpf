@@ -3,9 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="multipart/form-data;charset=utf-8" />
     <title>新增打款任务</title>
-    <style>
-
-    </style>
 </head>
 <body>
 <div class="contentDiv" style="padding: 10px;">
@@ -30,12 +27,12 @@
                     <td colspan="8" style="text-align: left"><b>申请欣券：</b></td>
                 </tr>
                 <tr>
-                    <td width="100">面值</td>
-                    <td width="190"><input id="money" name="money" type="text" class="easyui-textbox" data-options="onChange:getCalMoney"><span style="color: #c6c6c6">只支持整数</span></td>
-                    <td width="100">数量</td>
-                    <td width="190"><input id="amount" name="amount" type="text" class="easyui-textbox" data-options="onChange:getCalMoney"></td>
-                    <td width="100">小计</td>
-                    <td width="190"><input id="calMoney" type="text" class="easyui-textbox" disabled="disabled"></td>
+                    <td width="100" valign="top">面值</td>
+                    <td width="190"><input id="money" name="money" type="text" class="easyui-textbox" data-options="onChange:getCalMoney"><br><span style="color: #c6c6c6">只支持整数</span></td>
+                    <td width="100" valign="top">数量</td>
+                    <td width="190"><input id="amount" name="amount" type="text" class="easyui-textbox" data-options="onChange:getCalMoney"><br><span style="color: #c6c6c6">只支持整数</span></td>
+                    <td width="100" valign="top">小计</td>
+                    <td width="190"><input id="calMoney" type="text" class="easyui-textbox" disabled="disabled"><br>&nbsp;</td>
                     <td width="100"><a id="addCoupon" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a></td>
                     <td width="190"></td>
                 </tr>
@@ -55,7 +52,10 @@
                             <option value="36">36个月</option>
                         </select>
                     </td>
-                    <td colspan="6"></td>
+                    <td width="260" colspan="2"></td>
+                    <td width="70" align="right" style="color: red">总计：</td>
+                    <td width="190" id="totalMoney" style="color: red">0</td>
+                    <td width="260" colspan="2"></td>
                 </tr>
             </table>
         </form>
@@ -116,6 +116,8 @@
                 $("#money").textbox("setValue","");
                 $("#amount").textbox("setValue","");
                 $("#calMoney").textbox("setValue","");
+
+                getTotalMoney();
             }
         })
 
@@ -157,8 +159,10 @@
                 } else {
                     $.messager.alert('消息提示','新增成功','info');
                 }
+                $("#addWindow").window("close");
             },
             error:function() {
+                ajaxLoadEnd();
                 $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
             }
         })
@@ -194,5 +198,21 @@
             $("#calMoney").textbox("setValue", calculate.toFixed(2))
         }
     }
+
+    // 计算总计
+    function getTotalMoney() {
+        var totalMoney = 0;
+        var arr = $("#couponDG").datagrid("getData").rows;
+        $.each(arr,function (i,n) {
+            $.each(this,function (i2,n2) {
+                // alert(i2+"="+n2);
+                if ( i2 == 'calculate' ){
+                    totalMoney += parseFloat(n2);
+                }
+            })
+        })
+        $("#totalMoney").text(totalMoney.toFixed(2));
+    }
+
 </script>
 </body>

@@ -74,6 +74,11 @@ public class ShopBatchCouponInfo {
      */
     private Date updatetime;
 
+    /**
+     * 添加时间格式化
+     */
+    private String addtimeFormat;
+
     public String getId() {
         return id;
     }
@@ -184,5 +189,13 @@ public class ShopBatchCouponInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getAddtimeFormat() {
+        return addtimeFormat;
+    }
+
+    public void setAddtimeFormat(String addtimeFormat) {
+        this.addtimeFormat = addtimeFormat;
     }
 }

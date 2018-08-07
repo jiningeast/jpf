@@ -1276,6 +1276,76 @@ public class PayShopBatchExample {
             return (Criteria) this;
         }
 
+        public Criteria andZipPasswordIsNull() {
+            addCriterion("zip_password is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordIsNotNull() {
+            addCriterion("zip_password is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordEqualTo(String value) {
+            addCriterion("zip_password =", value, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordNotEqualTo(String value) {
+            addCriterion("zip_password <>", value, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordGreaterThan(String value) {
+            addCriterion("zip_password >", value, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordGreaterThanOrEqualTo(String value) {
+            addCriterion("zip_password >=", value, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordLessThan(String value) {
+            addCriterion("zip_password <", value, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordLessThanOrEqualTo(String value) {
+            addCriterion("zip_password <=", value, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordLike(String value) {
+            addCriterion("zip_password like", value, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordNotLike(String value) {
+            addCriterion("zip_password not like", value, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordIn(List<String> values) {
+            addCriterion("zip_password in", values, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordNotIn(List<String> values) {
+            addCriterion("zip_password not in", values, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordBetween(String value1, String value2) {
+            addCriterion("zip_password between", value1, value2, "zipPassword");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordNotBetween(String value1, String value2) {
+            addCriterion("zip_password not between", value1, value2, "zipPassword");
+            return (Criteria) this;
+        }
+
         public Criteria andEmailContentIsNull() {
             addCriterion("email_content is null");
             return (Criteria) this;
@@ -1873,6 +1943,11 @@ public class PayShopBatchExample {
 
         public Criteria andOssUrlLikeInsensitive(String value) {
             addCriterion("upper(oss_url) like", value.toUpperCase(), "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andZipPasswordLikeInsensitive(String value) {
+            addCriterion("upper(zip_password) like", value.toUpperCase(), "zipPassword");
             return (Criteria) this;
         }
 

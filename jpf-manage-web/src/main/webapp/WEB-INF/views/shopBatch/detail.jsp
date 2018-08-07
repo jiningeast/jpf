@@ -20,8 +20,8 @@
             remoteSort: false, // 服务端排序
             url:'detailData?batchId='+${requestScope.batchId},
             columns:[[
-                {field:'id',title:'券id',width:"10%"},
-                {field:'activeCode',title:'激活码',width:"10%"},
+                {field:'id',title:'券id',width:"5%"},
+                {field:'activeCode',title:'激活码',width:"20%"},
                 {field:'money',title:'面值',width:"10%"},
                 {field:'dou',title:'欣豆',width:"10%"},
                 {field:'isActive',title:'是否激活',width:"10%",formatter:function (value,row,index) {
@@ -36,7 +36,7 @@
                     }},
                 {field:'activeTime',title:'激活时间',width:"10%",formatter:formatDateStr},
                 {field:'expireTime',title:'过期时间',width:"10%",formatter:formatDateStr},
-                {field:'addtime',title:'添加时间',width:"10%",formatter:formatDateStr}
+                {field:'addtime',title:'添加时间',width:"15%",formatter:formatDateStr}
             ]]
         });
     })

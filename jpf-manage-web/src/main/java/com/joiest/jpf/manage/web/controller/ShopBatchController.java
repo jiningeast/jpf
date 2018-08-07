@@ -1,13 +1,17 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.util.SendMailUtil;
+import com.joiest.jpf.dto.ShopBatchCouponResponse;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
+import com.joiest.jpf.entity.ShopBatchInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.ShopBatchCouponServiceFacade;
 import com.joiest.jpf.facade.ShopBatchServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -66,16 +71,15 @@ public class ShopBatchController {
      */
     @RequestMapping("/submitBatch")
     @ResponseBody
-    public JpfResponseDto submitBatch(ShopBatchRequest request, HttpServletRequest httpRequest){
+    public JpfResponseDto submitBatch(ShopBatchRequest request, HttpServletRequest httpRequest, HttpServletResponse httpResponse){
         // 查询操作人id和姓名
         HttpSession session = httpRequest.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
         request.setOperatorId(userInfo.getId().toString());
         request.setOperatorName(userInfo.getUserName());
-        shopBatchServiceFacade.addBatchCoupon(request);
 
-        return new JpfResponseDto();
+        return shopBatchServiceFacade.addBatchCoupon(request,httpResponse);
     }
 
     /**
@@ -92,12 +96,41 @@ public class ShopBatchController {
      */
     @RequestMapping("/detailData")
     @ResponseBody
-    public Map<String,Object> detailData(String batchId){
-        List<ShopBatchCouponInfo> list =  shopBatchCouponServiceFacade.getCouponByBatchId(batchId);
+    public Map<String,Object> detailData(String batchId, int page, int rows){
+        ShopBatchCouponResponse response =  shopBatchCouponServiceFacade.getCouponByBatchId(batchId, page, rows);
         Map<String,Object> map = new HashMap<>();
-        map.put("total",list.size());
-        map.put("rows",list);
+        map.put("total",response.getCount());
+        map.put("rows",response.getList());
 
         return map;
+    }
+
+    /**
+     * 发送含有excel的压缩包
+     */
+    @RequestMapping("/sendZip")
+    @ResponseBody
+    public JpfResponseDto sendZip(String batchId){
+        if (StringUtils.isBlank(batchId) ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("未传入批次id");
+
+            return jpfResponseDto;
+        }
+
+        ShopBatchInfo shopBatchInfo = shopBatchServiceFacade.getBatchById(batchId);
+
+        //发送邮件
+        String Subject="测试主题";
+        String sendName="欣享服务";
+        String Recipients="1174355934@qq.com";
+        String RecipientsName="蔡磊";
+        String Filepath="/home/images/excel/1531962634202.xlsx";//全路径
+        String Filename="1531962634202.xlsx";//携带文件类型。xlsx
+        String html="这是我发布的测试内容";//可以使用标签拼装
+//        Boolean a=  SendMailUtil.sendMultipleEmail(Subject,sendName,Recipients,RecipientsName,Filepath,Filename,html);
+
+        return new JpfResponseDto();
     }
 }
