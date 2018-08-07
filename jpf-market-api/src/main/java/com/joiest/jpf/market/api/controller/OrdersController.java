@@ -7,19 +7,21 @@ import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
-import com.joiest.jpf.entity.PayShopOrderInterfaceInfo;
+import com.joiest.jpf.entity.ShopCouponActiveInterfaceInfo;
+import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
+import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
 import com.joiest.jpf.entity.ShopProductInterfaceInfo;
-import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopOrderInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopProductInterfaceServiceFacade;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.util.ToolsUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -28,6 +30,9 @@ import java.util.regex.Pattern;
 @RequestMapping("orders")
 public class OrdersController {
 
+    private String uid;
+
+    private ShopCustomerInterfaceInfo userInfo;
     /**
      * 商品
      */
@@ -40,8 +45,17 @@ public class OrdersController {
     @Autowired
     ShopOrderInterfaceServiceFacade shopOrderInterfaceServiceFacade;
 
+    /**
+     * 用户可用券列表
+     */
     @Autowired
     ShopCouponActiveInterfaceServiceFacade shopCouponActiveInterfaceServiceFacade;
+
+    @Autowired
+    private RedisCustomServiceFacade redisCustomServiceFacade;
+
+    @Autowired
+    private ShopCustomerInterfaceServiceFacade shopCustomerInterfaceServiceFacade;
 
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -109,7 +123,7 @@ public class OrdersController {
 
         //创建订单
         String orderno = ToolsUtils.createOrderid();
-        PayShopOrderInterfaceInfo info = new PayShopOrderInterfaceInfo();
+        ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
 
         info.setOrderNo(orderno);
         info.setCustomerId("2");    //TODO 获取用户信息
@@ -134,16 +148,39 @@ public class OrdersController {
 
     /**
      * 支付
-     * @param data
-     * @return
+     * 0:欣豆支付 1:微信支付
      */
     @RequestMapping("/pay")
     @ResponseBody
     public String dopay(String data)
     {
         //1.金额校验 2.订单用户校验 3.用户券列表 4.扣除相应的券 5.更新code
+        //订单信息+用户 TODO 用户信息
+        String orderNo = "7781533611264464114";
+        String uid = "2";
+        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderOne(orderNo,uid);
+        if ( orderInfo == null )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getCode(), JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getDesc(), "");
+        }
+        //用户可用券列表   TODO 用户信息
+        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList("1");
+        if ( response == null || response.getCount() == 0)
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
+        }
+        //校验码验证
+        Boolean codeIsTrue = ToolUtils.ValidateCode(userInfo.getCode(), uid, userInfo.getDou().toString());
+        if ( !codeIsTrue )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getCode(), JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getDesc(), "");
+        }
+
+        for ( ShopCouponActiveInterfaceInfo one : response.getList())
+        {
 
 
+        }
         return "";
     }
 
@@ -151,11 +188,29 @@ public class OrdersController {
     @ResponseBody
     public String getUserBlance(String data)
     {
-        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList("1");
-        if ( response == null )
+        //TODO 用户信息
+//        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList("1");
+        if ( userInfo == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), "");
         }
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response.getDouTotal());
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo.getDou());
     }
+
+    @ModelAttribute
+    public void beforAction(HttpServletRequest request)
+    {
+        //获取用户信息
+        String token = request.getHeader("token");
+        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token);
+        if (StringUtils.isNotBlank(uid_encrypt))
+        {
+            uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY_MARKET"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomer(uid);
+        }
+    }
+
+
+
+
 }

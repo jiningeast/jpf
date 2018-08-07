@@ -106,8 +106,12 @@ public enum JpfInterfaceErrorInfo {
 
     //云市场 begin
     //下单
-    MK_PRODUCT_NOFOUND("40001", "商品不存在"),
-    MK_ORDERMONEY_DIFF("40001", "商品金额不一致");
+    MK_PRODUCT_NOFOUND("50001", "商品不存在"),
+    MK_ORDERMONEY_DIFF("50002", "商品金额不一致"),
+    MK_ORDER_NOT_EXIST("50003", "订单不存在"),
+    CURR_DOU_TOTAL_ZERO("50004", "无可用欣豆"),
+    USER_DOU_CODE_ERROR("50005", "当前余额异常");
+
 
     private final String desc;
 
