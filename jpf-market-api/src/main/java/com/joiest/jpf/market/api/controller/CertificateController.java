@@ -47,6 +47,10 @@ public class CertificateController {
    public String activation(String data)
    {
 
+       //判断当前用户是否锁定
+       if(userInfo.getStatus()==0){
+           return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您已经被冻结请联系客服", null);
+       }
 
        if ( StringUtils.isBlank(data) || data==null  )
        {
@@ -102,6 +106,7 @@ public class CertificateController {
     @RequestMapping(value = "/couponlist",method=RequestMethod.POST,produces = "application/json;charset=utf8")
     @ResponseBody
     public String couponlist(String data){
+
 
         if ( StringUtils.isBlank(data) || data==null  )
         {
