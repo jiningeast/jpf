@@ -82,8 +82,8 @@
             url:'listCouponList?id='+${id},
             columns:[[
                 {field:'id',title:'ID',width:'3%'},
-                {field:'customerName',title:'顾客姓名',width:'10%'},
-                {field:'companyName',title:'企业名称',width:'10%'},
+                {field:'customerName',title:'顾客姓名',width:'5%'},
+                {field:'companyName',title:'企业名称',width:'8%'},
                 {field:'batchNo',title:'批次号',width:'8%'},
                 {field:'couponNo',title:'券号',width:'10%'},
                 {field:'money',title:'面值',width:'10%'},
@@ -116,7 +116,7 @@
                     }
                 },
                 {field:'addtime',title:'添加时间',width:'10%',formatter: formatDateStr},
-                {field:'updatetime',title:'到期时间',width:'10%',formatter: formatDateStr},
+                {field:'expireTime',title:'到期时间',width:'10%',formatter: formatDateStr},
 
             ]]
         });
