@@ -47,6 +47,10 @@ public class CertificateController {
    public String activation(String data)
    {
 
+       //判断当前用户是否锁定
+       if(userInfo.getStatus()==0){
+           return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您已经被冻结请联系客服", null);
+       }
 
        if ( StringUtils.isBlank(data) || data==null  )
        {
@@ -103,6 +107,7 @@ public class CertificateController {
     @ResponseBody
     public String couponlist(String data){
 
+
         if ( StringUtils.isBlank(data) || data==null  )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
@@ -119,7 +124,7 @@ public class CertificateController {
 
         if(response==null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请求数据失败", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), "请求数据失败", null);
 
         }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "请求数据成功", response.getList());
