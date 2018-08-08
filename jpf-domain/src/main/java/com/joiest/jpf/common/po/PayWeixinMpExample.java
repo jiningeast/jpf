@@ -305,6 +305,146 @@ public class PayWeixinMpExample {
             return (Criteria) this;
         }
 
+        public Criteria andNameIsNull() {
+            addCriterion("name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameIsNotNull() {
+            addCriterion("name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameEqualTo(String value) {
+            addCriterion("name =", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotEqualTo(String value) {
+            addCriterion("name <>", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameGreaterThan(String value) {
+            addCriterion("name >", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameGreaterThanOrEqualTo(String value) {
+            addCriterion("name >=", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLessThan(String value) {
+            addCriterion("name <", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLessThanOrEqualTo(String value) {
+            addCriterion("name <=", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLike(String value) {
+            addCriterion("name like", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotLike(String value) {
+            addCriterion("name not like", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameIn(List<String> values) {
+            addCriterion("name in", values, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotIn(List<String> values) {
+            addCriterion("name not in", values, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameBetween(String value1, String value2) {
+            addCriterion("name between", value1, value2, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotBetween(String value1, String value2) {
+            addCriterion("name not between", value1, value2, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrIsNull() {
+            addCriterion("followQr is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrIsNotNull() {
+            addCriterion("followQr is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrEqualTo(String value) {
+            addCriterion("followQr =", value, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrNotEqualTo(String value) {
+            addCriterion("followQr <>", value, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrGreaterThan(String value) {
+            addCriterion("followQr >", value, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrGreaterThanOrEqualTo(String value) {
+            addCriterion("followQr >=", value, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrLessThan(String value) {
+            addCriterion("followQr <", value, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrLessThanOrEqualTo(String value) {
+            addCriterion("followQr <=", value, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrLike(String value) {
+            addCriterion("followQr like", value, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrNotLike(String value) {
+            addCriterion("followQr not like", value, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrIn(List<String> values) {
+            addCriterion("followQr in", values, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrNotIn(List<String> values) {
+            addCriterion("followQr not in", values, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrBetween(String value1, String value2) {
+            addCriterion("followQr between", value1, value2, "followqr");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrNotBetween(String value1, String value2) {
+            addCriterion("followQr not between", value1, value2, "followqr");
+            return (Criteria) this;
+        }
+
         public Criteria andAppidIsNull() {
             addCriterion("appid is null");
             return (Criteria) this;
@@ -977,6 +1117,16 @@ public class PayWeixinMpExample {
 
         public Criteria andEncryptLikeInsensitive(String value) {
             addCriterion("upper(encrypt) like", value.toUpperCase(), "encrypt");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLikeInsensitive(String value) {
+            addCriterion("upper(name) like", value.toUpperCase(), "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowqrLikeInsensitive(String value) {
+            addCriterion("upper(followQr) like", value.toUpperCase(), "followqr");
             return (Criteria) this;
         }
 
