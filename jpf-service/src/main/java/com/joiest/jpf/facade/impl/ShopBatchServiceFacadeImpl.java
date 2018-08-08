@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
@@ -9,6 +10,7 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
+import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopBatchInfo;
 import com.joiest.jpf.facade.ShopBatchServiceFacade;
@@ -175,7 +177,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         titles.add("激活码");
         titles.add("面值");
         titles.add("欣豆");
-        titles.add("有效期");
+        titles.add("有效期（月）");
         titles.add("生成时间");
 
         JSONArray fields = new JSONArray();
@@ -222,6 +224,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
     /**
      * 根据主键id获取批次
      */
+    @Override
     public ShopBatchInfo getBatchById(String id){
         PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(id);
         ShopBatchInfo shopBatchInfo = new ShopBatchInfo();
@@ -229,6 +232,54 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         beanCopier.copy(payShopBatch, shopBatchInfo, null);
 
         return shopBatchInfo;
+    }
+
+    /**
+     * 根据主键id更新状态
+     */
+    @Override
+    public int updateColumnById(ShopBatchInfo shopBatchInfo){
+        PayShopBatch payShopBatch = new PayShopBatch();
+        BeanCopier beanCopier = BeanCopier.create(ShopBatchInfo.class, PayShopBatch.class, false);
+        beanCopier.copy(shopBatchInfo, payShopBatch, null);
+
+        return payShopBatchMapper.updateByPrimaryKeySelective(payShopBatch);
+    }
+
+    /**
+     * 发送邮件和短信
+     */
+    @Override
+    public int sendEmail(String batchId) throws Exception{
+        PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(batchId);
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(payShopBatch.getCompanyId());
+
+        // 发送邮件
+        String subject = "欣豆市场批量欣券";
+        String sendName = "欣享服务";
+        String recipients = payShopCompany.getReceiveEmail();
+        String recipientsName = payShopCompany.getReceiveName();
+        String filepath = payShopBatch.getOssUrl();
+        String filepathArr[] = StringUtils.split(filepath,'/');
+        String filename = filepathArr[filepathArr.length-1];    // 文件名.xlsx
+        filepath = ConfigUtil.getValue("EXCEL_PATH") + filename;
+        String html = "附件中的压缩包包含为您生成的批量激活码，该压缩包为加密压缩包，密码已发送至贵公司在我平台注册的企业联系人的手机号中，请注意查收";//可以使用标签拼装
+        Boolean sendStatus =  SendMailUtil.sendMultipleEmail(subject,sendName,recipients,recipientsName,filepath,filename,html);
+        if ( !sendStatus ){
+            // 邮件发送失败
+            return -1;
+        }
+
+        // 更新email内容字段
+        ShopBatchInfo shopBatchInfoUpdate = new ShopBatchInfo();
+        shopBatchInfoUpdate.setId(batchId);
+        shopBatchInfoUpdate.setReceiveEmail(recipients);
+        shopBatchInfoUpdate.setReceiveName(payShopCompany.getReceiveName());
+        shopBatchInfoUpdate.setEmailContent(html);
+        shopBatchInfoUpdate.setEmailStatus((byte)1);
+        shopBatchInfoUpdate.setEmailTime(new Date());
+
+        return updateColumnById(shopBatchInfoUpdate);
     }
 
     /**

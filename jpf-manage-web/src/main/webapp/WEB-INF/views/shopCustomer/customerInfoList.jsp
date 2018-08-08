@@ -6,8 +6,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>客户列表</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
-
-
     <style>
         #searchForm1 table tr td:nth-child(odd) { text-align: right; }
         #searchForm1 table tr td:nth-child(even) { text-align: left; }
@@ -16,14 +14,25 @@
 
 <body>
 
-<div name="contentDiv">
-    <div >
-        <p><span><h3>客户信息</h3></span></p>
-        <p style="text-align: right;font-size:30px;color:#333333;">
-            <span >${phone}</span>&nbsp;&nbsp;&nbsp;
+<div name="contentDiv" style="padding: 10px;">
+    <table cellpadding=3 class="table table-bordered" align="center">
+        <tr>
+            <td  style="text-align: right;width:20%" bgcolor="#f1f1f1">客户信息：</td>
+            <td  style="text-align:right ">
+                <p style="font-size:30px;color:#333333; margin: 5px 0;">
+                <span >${phone}&nbsp;&nbsp;&nbsp;
+                <span style="color: #ff4114">当前欣豆 ${dou}个</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <%--<div >
+        <h3>客户信息</h3>
+        <p style="text-align: left;font-size:30px;color:#333333; margin: 5px 0;">
+            <span >${phone}&nbsp;&nbsp;&nbsp;
             <span style="color: #ff4114">当前欣豆 ${dou}个</span>
         </p>
-    </div>
+    </div>--%>
     <div id="formDiv2" class="easyui-panel" title="搜索条件" data-options="footer:'#ft2'">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm1" method="post">
@@ -53,7 +62,7 @@
                                 <option value="3">过期</option>
                             </select>
                         </td>
-
+                        <td colspan="2"></td>
                     </tr>
                 </table>
             </form>
@@ -82,8 +91,8 @@
             url:'listCouponList?id='+${id},
             columns:[[
                 {field:'id',title:'ID',width:'3%'},
-                {field:'customerName',title:'顾客姓名',width:'10%'},
-                {field:'companyName',title:'企业名称',width:'10%'},
+                {field:'customerName',title:'顾客姓名',width:'5%'},
+                {field:'companyName',title:'企业名称',width:'8%'},
                 {field:'batchNo',title:'批次号',width:'8%'},
                 {field:'couponNo',title:'券号',width:'10%'},
                 {field:'money',title:'面值',width:'10%'},
@@ -116,7 +125,7 @@
                     }
                 },
                 {field:'addtime',title:'添加时间',width:'10%',formatter: formatDateStr},
-                {field:'updatetime',title:'到期时间',width:'10%',formatter: formatDateStr},
+                {field:'expireTime',title:'到期时间',width:'10%',formatter: formatDateStr},
 
             ]]
         });
