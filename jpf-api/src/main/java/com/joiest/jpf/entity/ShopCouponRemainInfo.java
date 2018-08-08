@@ -1,6 +1,5 @@
 package com.joiest.jpf.entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ShopCouponRemainInfo {
@@ -30,17 +29,17 @@ public class ShopCouponRemainInfo {
     private String customerId;
 
     /**
-     * 券面值
+     * 券本身值多少个豆
      */
-    private BigDecimal couponMoney;
+    private Integer couponDou;
 
     /**
-     * 券余额
+     * 券豆余额
      */
-    private BigDecimal couponMoneyLeft;
+    private Integer couponDouLeft;
 
     /**
-     * 此券是否已用完 0=没用完 1=已用完
+     * 此券是否已用完 0=没用完 1=消费用完 2=过期清零
      */
     private Byte status;
 
@@ -59,14 +58,12 @@ public class ShopCouponRemainInfo {
      */
     private Date updatetime;
 
-    private static final long serialVersionUID = 1L;
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getCouponId() {
@@ -74,7 +71,7 @@ public class ShopCouponRemainInfo {
     }
 
     public void setCouponId(String couponId) {
-        this.couponId = couponId == null ? null : couponId.trim();
+        this.couponId = couponId;
     }
 
     public String getCouponNo() {
@@ -82,7 +79,7 @@ public class ShopCouponRemainInfo {
     }
 
     public void setCouponNo(String couponNo) {
-        this.couponNo = couponNo == null ? null : couponNo.trim();
+        this.couponNo = couponNo;
     }
 
     public String getCouponActiveCode() {
@@ -90,7 +87,7 @@ public class ShopCouponRemainInfo {
     }
 
     public void setCouponActiveCode(String couponActiveCode) {
-        this.couponActiveCode = couponActiveCode == null ? null : couponActiveCode.trim();
+        this.couponActiveCode = couponActiveCode;
     }
 
     public String getCustomerId() {
@@ -98,23 +95,23 @@ public class ShopCouponRemainInfo {
     }
 
     public void setCustomerId(String customerId) {
-        this.customerId = customerId == null ? null : customerId.trim();
+        this.customerId = customerId;
     }
 
-    public BigDecimal getCouponMoney() {
-        return couponMoney;
+    public Integer getCouponDou() {
+        return couponDou;
     }
 
-    public void setCouponMoney(BigDecimal couponMoney) {
-        this.couponMoney = couponMoney;
+    public void setCouponDou(Integer couponDou) {
+        this.couponDou = couponDou;
     }
 
-    public BigDecimal getCouponMoneyLeft() {
-        return couponMoneyLeft;
+    public Integer getCouponDouLeft() {
+        return couponDouLeft;
     }
 
-    public void setCouponMoneyLeft(BigDecimal couponMoneyLeft) {
-        this.couponMoneyLeft = couponMoneyLeft;
+    public void setCouponDouLeft(Integer couponDouLeft) {
+        this.couponDouLeft = couponDouLeft;
     }
 
     public Byte getStatus() {
