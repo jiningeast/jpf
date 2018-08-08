@@ -2,23 +2,20 @@ package com.joiest.jpf.cloud.api.controller;
 
 
 import com.aliyun.oss.OSSClient;
-
-import com.aliyun.oss.model.GeneratePresignedUrlRequest;
 import com.joiest.jpf.common.util.AliyunOSSClientUtil;
 import com.joiest.jpf.common.util.OSSClientConstants;
-
+import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dto.GetCloudCompanyRequest;
+import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 import java.io.File;
-import java.net.URL;
-import java.util.Date;
 
 
 @Controller
@@ -60,6 +57,41 @@ public class OssController {
 
     }
 
+    @RequestMapping(value = "/PassMessage", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+
+    public  String PassMessage( @Validated GetCloudCompanyRequest request){
 
 
+       String linkemail =request.getLinkemail();
+     return linkemail;
+    }
+
+   //测试接口控制器
+    @RequestMapping(value = "/resetApi",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String resetApi(){
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("code","10000");
+        resultJson.put("info","SUCCESS");
+        return ToolUtils.toBase64(resultJson.toString());
+    }
+
+
+    //测试接口发送附件给用户
+   /* @RequestMapping(value = "/sendFujian",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public  String sendFujian() throws  Exception{
+        //执行发送邮件
+        //发送邮件
+        String Subject="测试主题";
+        String sendName="欣享服务";
+        String Recipients="1174355934@qq.com";
+        String RecipientsName="蔡磊";
+        String Filepath="/home/images/excel/1531962634202.xlsx";//全路径
+        String Filename="1531962634202.xlsx";//携带文件类型。xlsx
+        String html="这是我发布的测试内容";//可以使用标签拼装
+        Boolean a=  SendMailUtil.sendMultipleEmail(Subject,sendName,Recipients,RecipientsName,Filepath,Filename,html);
+        return "dsadsad";
+    }*/
 }

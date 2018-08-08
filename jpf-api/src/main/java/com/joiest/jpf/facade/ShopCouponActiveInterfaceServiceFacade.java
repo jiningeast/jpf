@@ -12,4 +12,11 @@ public interface ShopCouponActiveInterfaceServiceFacade {
      */
     GetUserCouponActiveInterfaceResponse getUserCouponList(String uid);
 
+    /**
+     * 获取用户激活券记录 list翻页
+     * @param uid
+     * @return
+     */
+    GetUserCouponActiveInterfaceResponse getUserCouponListAndPage(String uid,String pageNo,String pageSize);
+
 }

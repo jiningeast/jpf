@@ -3,7 +3,6 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.po.PayShopOrder;
 import com.joiest.jpf.common.po.PayShopOrderExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopOrderMapper;
-import com.joiest.jpf.entity.ShopOrderInfo;
 import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
 import com.joiest.jpf.facade.ShopOrderInterfaceServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
 
     @Autowired
     private PayShopOrderMapper payShopOrderMapper;
-
     @Override
     public int addOrder(ShopOrderInterfaceInfo info) {
 

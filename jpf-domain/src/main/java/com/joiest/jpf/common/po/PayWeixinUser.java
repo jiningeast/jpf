@@ -15,12 +15,12 @@ public class PayWeixinUser implements Serializable {
     private Long mpid;
 
     /**
-     * 
+     * 公众号唯一标识
      */
     private String openid;
 
     /**
-     * 
+     * 昵称
      */
     private String nickname;
 
@@ -40,27 +40,32 @@ public class PayWeixinUser implements Serializable {
     private String language;
 
     /**
-     * 
+     * 市区
      */
     private String city;
 
     /**
-     * 
+     * 省份
      */
     private String province;
 
     /**
-     * 
+     * 地区
      */
     private String country;
 
     /**
-     * 
+     * 微信头像
      */
     private String headimgurl;
 
     /**
-     * 
+     * oss头像地址
+     */
+    private String serverheadimg;
+
+    /**
+     * 关注时间
      */
     private Date subscribetime;
 
@@ -199,6 +204,14 @@ public class PayWeixinUser implements Serializable {
         this.headimgurl = headimgurl == null ? null : headimgurl.trim();
     }
 
+    public String getServerheadimg() {
+        return serverheadimg;
+    }
+
+    public void setServerheadimg(String serverheadimg) {
+        this.serverheadimg = serverheadimg == null ? null : serverheadimg.trim();
+    }
+
     public Date getSubscribetime() {
         return subscribetime;
     }
@@ -299,6 +312,7 @@ public class PayWeixinUser implements Serializable {
         sb.append(", province=").append(province);
         sb.append(", country=").append(country);
         sb.append(", headimgurl=").append(headimgurl);
+        sb.append(", serverheadimg=").append(serverheadimg);
         sb.append(", subscribetime=").append(subscribetime);
         sb.append(", unionid=").append(unionid);
         sb.append(", remark=").append(remark);
@@ -340,6 +354,7 @@ public class PayWeixinUser implements Serializable {
             && (this.getProvince() == null ? other.getProvince() == null : this.getProvince().equals(other.getProvince()))
             && (this.getCountry() == null ? other.getCountry() == null : this.getCountry().equals(other.getCountry()))
             && (this.getHeadimgurl() == null ? other.getHeadimgurl() == null : this.getHeadimgurl().equals(other.getHeadimgurl()))
+            && (this.getServerheadimg() == null ? other.getServerheadimg() == null : this.getServerheadimg().equals(other.getServerheadimg()))
             && (this.getSubscribetime() == null ? other.getSubscribetime() == null : this.getSubscribetime().equals(other.getSubscribetime()))
             && (this.getUnionid() == null ? other.getUnionid() == null : this.getUnionid().equals(other.getUnionid()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
@@ -370,6 +385,7 @@ public class PayWeixinUser implements Serializable {
         result = prime * result + ((getProvince() == null) ? 0 : getProvince().hashCode());
         result = prime * result + ((getCountry() == null) ? 0 : getCountry().hashCode());
         result = prime * result + ((getHeadimgurl() == null) ? 0 : getHeadimgurl().hashCode());
+        result = prime * result + ((getServerheadimg() == null) ? 0 : getServerheadimg().hashCode());
         result = prime * result + ((getSubscribetime() == null) ? 0 : getSubscribetime().hashCode());
         result = prime * result + ((getUnionid() == null) ? 0 : getUnionid().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
