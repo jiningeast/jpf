@@ -15,6 +15,16 @@ public class PayWeixinMp implements Serializable {
     private String encrypt;
 
     /**
+     * 公众号名称
+     */
+    private String name;
+
+    /**
+     * 公众号关注二维码
+     */
+    private String followqr;
+
+    /**
      * 开发者ID(AppID)
      */
     private String appid;
@@ -80,6 +90,22 @@ public class PayWeixinMp implements Serializable {
 
     public void setEncrypt(String encrypt) {
         this.encrypt = encrypt == null ? null : encrypt.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getFollowqr() {
+        return followqr;
+    }
+
+    public void setFollowqr(String followqr) {
+        this.followqr = followqr == null ? null : followqr.trim();
     }
 
     public String getAppid() {
@@ -173,6 +199,8 @@ public class PayWeixinMp implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", encrypt=").append(encrypt);
+        sb.append(", name=").append(name);
+        sb.append(", followqr=").append(followqr);
         sb.append(", appid=").append(appid);
         sb.append(", appsecret=").append(appsecret);
         sb.append(", token=").append(token);
@@ -205,6 +233,8 @@ public class PayWeixinMp implements Serializable {
         PayWeixinMp other = (PayWeixinMp) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getEncrypt() == null ? other.getEncrypt() == null : this.getEncrypt().equals(other.getEncrypt()))
+            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getFollowqr() == null ? other.getFollowqr() == null : this.getFollowqr().equals(other.getFollowqr()))
             && (this.getAppid() == null ? other.getAppid() == null : this.getAppid().equals(other.getAppid()))
             && (this.getAppsecret() == null ? other.getAppsecret() == null : this.getAppsecret().equals(other.getAppsecret()))
             && (this.getToken() == null ? other.getToken() == null : this.getToken().equals(other.getToken()))
@@ -226,6 +256,8 @@ public class PayWeixinMp implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getEncrypt() == null) ? 0 : getEncrypt().hashCode());
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getFollowqr() == null) ? 0 : getFollowqr().hashCode());
         result = prime * result + ((getAppid() == null) ? 0 : getAppid().hashCode());
         result = prime * result + ((getAppsecret() == null) ? 0 : getAppsecret().hashCode());
         result = prime * result + ((getToken() == null) ? 0 : getToken().hashCode());

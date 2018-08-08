@@ -2,8 +2,7 @@ package com.joiest.jpf.entity;
 
 import java.util.Date;
 
-public class WeixinMapInfo {
-
+public class WeixinMpInfo {
     /**
      *
      */
@@ -38,6 +37,11 @@ public class WeixinMapInfo {
      * token有效期截止
      */
     private Date tokenexpires;
+
+    /**
+     * 关注回复
+     */
+    private String followreply;
 
     /**
      * 商户号，微信商户平台
@@ -117,6 +121,14 @@ public class WeixinMapInfo {
         this.tokenexpires = tokenexpires;
     }
 
+    public String getFollowreply() {
+        return followreply;
+    }
+
+    public void setFollowreply(String followreply) {
+        this.followreply = followreply == null ? null : followreply.trim();
+    }
+
     public String getMerchant() {
         return merchant;
     }
@@ -148,5 +160,4 @@ public class WeixinMapInfo {
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
-
 }

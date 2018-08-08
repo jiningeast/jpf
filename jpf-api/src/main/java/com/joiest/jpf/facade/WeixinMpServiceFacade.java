@@ -1,15 +1,15 @@
 package com.joiest.jpf.facade;
 
-import com.joiest.jpf.entity.WeixinMapInfo;
+import com.joiest.jpf.entity.WeixinMpInfo;
 
 import java.util.Map;
 
-public interface WeixinMapServiceFacade {
+public interface WeixinMpServiceFacade {
 
     /*
      * 公众号信息
      * */
-    public WeixinMapInfo getWeixinMpByEncrypt(String encrypt);
+    public WeixinMpInfo getWeixinMpByEncrypt(String encrypt);
 
     /*
     * 更新公众号信息
@@ -20,5 +20,5 @@ public interface WeixinMapServiceFacade {
      * 获取access_token
      * @param weixinMapInfo 公众号信息
      * */
-    public String getAccessToken(WeixinMapInfo weixinMapInfo);
+    public String getAccessToken(WeixinMpInfo weixinMapInfo);
 }
