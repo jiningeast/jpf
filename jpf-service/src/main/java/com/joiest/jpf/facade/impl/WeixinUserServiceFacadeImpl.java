@@ -117,4 +117,17 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
 
         return payWeixinUserMapper.updateByPrimaryKeySelective(payWeixinUser);
     }
+    /**
+     *更新微信用户基本信息通过 openid mpid
+     * */
+    public int upWeixinUserPartById(Map<String ,String> wei,Long id){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        PayWeixinUser payWeixinUser = new PayWeixinUser();
+        payWeixinUser.setId(id);
+        payWeixinUser.setSubscribe(new Byte(wei.get("subscribe")));
+
+        return payWeixinUserMapper.updateByPrimaryKeySelective(payWeixinUser);
+    }
 }

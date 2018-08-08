@@ -139,43 +139,51 @@ public class WeixinController {
 
         userData.put("mpid",weixinMpInfo.getId().toString());
         userData.put("openid",userInfo.get("openid").toString());
-        userData.put("nickname",userInfo.get("nickname").toString());
-        String nickname = null;
-        try {
-            nickname = URLEncoder.encode(userInfo.get("nickname").toString(), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        userData.put("nicknameEncode",nickname);
-        userData.put("sex",userInfo.get("sex").toString());
-        userData.put("language",userInfo.get("language").toString());
-        userData.put("city",userInfo.get("city").toString());
-        userData.put("province",userInfo.get("province").toString());
-        userData.put("country",userInfo.get("country").toString());
-        userData.put("headimgurl",userInfo.get("headimgurl").toString());
+        userData.put("subscribe",userInfo.get("subscribe").toString());
 
-        String subTime = DateUtils.stampToDate(userInfo.get("subscribe_time").toString());
+        if(userInfo.get("subscribe").toString().equals("1")){
 
-        userData.put("subscribeTime",subTime);
+            userData.put("nickname",userInfo.get("nickname").toString());
+            String nickname = null;
+            try {
+                nickname = URLEncoder.encode(userInfo.get("nickname").toString(), "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            userData.put("nicknameEncode",nickname);
+            userData.put("sex",userInfo.get("sex").toString());
+            userData.put("language",userInfo.get("language").toString());
+            userData.put("city",userInfo.get("city").toString());
+            userData.put("province",userInfo.get("province").toString());
+            userData.put("country",userInfo.get("country").toString());
+            userData.put("headimgurl",userInfo.get("headimgurl").toString());
 
-        if(userInfo.containsKey("unionid"))
-            userData.put("unionid",userInfo.get("unionid").toString());
-        else
-            userData.put("unionid","");
+            String subTime = DateUtils.stampToDate(userInfo.get("subscribe_time").toString());
 
-        userData.put("remark",userInfo.get("remark").toString());
-        userData.put("groupid",userInfo.get("groupid").toString());
-        userData.put("tagid_list",userInfo.get("tagid_list").toString());
-        userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
-        userData.put("qr_scene",userInfo.get("qr_scene").toString());
-        userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+            userData.put("subscribeTime",subTime);
 
-        if(weixinUserInfo!=null){
+            if(userInfo.containsKey("unionid"))
+                userData.put("unionid",userInfo.get("unionid").toString());
+            else
+                userData.put("unionid","");
 
-            weixinUserServiceFacade.upWeixinUserById(userData,weixinUserInfo.getId());
+            userData.put("remark",userInfo.get("remark").toString());
+            userData.put("groupid",userInfo.get("groupid").toString());
+            userData.put("tagid_list",userInfo.get("tagid_list").toString());
+            userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
+            userData.put("qr_scene",userInfo.get("qr_scene").toString());
+            userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+
+            if(weixinUserInfo!=null){
+
+                weixinUserServiceFacade.upWeixinUserById(userData,weixinUserInfo.getId());
+            }else{
+
+                weixinUserServiceFacade.addWeixinUser(userData);
+            }
         }else{
 
-            weixinUserServiceFacade.addWeixinUser(userData);
+            weixinUserServiceFacade.upWeixinUserPartById(userData,weixinUserInfo.getId());
         }
         return userData;
     }

@@ -21,5 +21,9 @@ public interface WeixinUserServiceFacade {
      * */
     public int upWeixinUserById(Map<String ,String> wei,Long mpid);
 
+    /**
+     *更新微信用户部分基本信息通过 openid mpid
+     * */
+    public int upWeixinUserPartById(Map<String ,String> wei,Long id);
 
 }
