@@ -46,6 +46,11 @@ public class PayShopCouponRemain implements Serializable {
     private Byte status;
 
     /**
+     * 到期时间
+     */
+    private Date expireTime;
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -121,6 +126,14 @@ public class PayShopCouponRemain implements Serializable {
         this.status = status;
     }
 
+    public Date getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Date expireTime) {
+        this.expireTime = expireTime;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -154,6 +167,7 @@ public class PayShopCouponRemain implements Serializable {
         sb.append(", couponMoney=").append(couponMoney);
         sb.append(", couponMoneyLeft=").append(couponMoneyLeft);
         sb.append(", status=").append(status);
+        sb.append(", expireTime=").append(expireTime);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -184,6 +198,7 @@ public class PayShopCouponRemain implements Serializable {
             && (this.getCouponMoney() == null ? other.getCouponMoney() == null : this.getCouponMoney().equals(other.getCouponMoney()))
             && (this.getCouponMoneyLeft() == null ? other.getCouponMoneyLeft() == null : this.getCouponMoneyLeft().equals(other.getCouponMoneyLeft()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -203,6 +218,7 @@ public class PayShopCouponRemain implements Serializable {
         result = prime * result + ((getCouponMoney() == null) ? 0 : getCouponMoney().hashCode());
         result = prime * result + ((getCouponMoneyLeft() == null) ? 0 : getCouponMoneyLeft().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
