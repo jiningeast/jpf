@@ -8,14 +8,12 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 import com.joiest.jpf.common.util.OkHttpUtils;
-import com.joiest.jpf.facade.WeixinMapServiceFacade;
 
 import net.sf.json.JSONObject;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class MessageUtil {
 

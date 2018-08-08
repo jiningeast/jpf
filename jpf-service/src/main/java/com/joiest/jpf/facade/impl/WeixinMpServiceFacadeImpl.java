@@ -4,8 +4,8 @@ import com.joiest.jpf.common.po.PayWeixinMp;
 import com.joiest.jpf.common.po.PayWeixinMpExample;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayWeixinMpMapper;
-import com.joiest.jpf.entity.WeixinMapInfo;
-import com.joiest.jpf.facade.WeixinMapServiceFacade;
+import com.joiest.jpf.entity.WeixinMpInfo;
+import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -14,7 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class WeixinMapServiceFacadeImpl implements WeixinMapServiceFacade {
+public class WeixinMpServiceFacadeImpl implements WeixinMpServiceFacade {
 
     @Autowired
     private PayWeixinMpMapper payWeixinMpMapper;
@@ -26,7 +26,7 @@ public class WeixinMapServiceFacadeImpl implements WeixinMapServiceFacade {
 
     public String curTime = null;
     public Date dateTime = null;
-    public WeixinMapServiceFacadeImpl(){
+    public WeixinMpServiceFacadeImpl(){
 
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -37,7 +37,7 @@ public class WeixinMapServiceFacadeImpl implements WeixinMapServiceFacade {
     /*
      * 公众号信息
      * */
-    public WeixinMapInfo getWeixinMpByEncrypt(String encrypt){
+    public WeixinMpInfo getWeixinMpByEncrypt(String encrypt){
 
         PayWeixinMpExample example = new PayWeixinMpExample();
         PayWeixinMpExample.Criteria c = example.createCriteria();
@@ -49,9 +49,9 @@ public class WeixinMapServiceFacadeImpl implements WeixinMapServiceFacade {
 
         PayWeixinMp payWeixinMp = getPayWeixinMap.get(0);
 
-        WeixinMapInfo weixinMapInfo = new WeixinMapInfo();
+        WeixinMpInfo weixinMapInfo = new WeixinMpInfo();
 
-        BeanCopier beanCopier = BeanCopier.create(PayWeixinMp.class,WeixinMapInfo.class,false);
+        BeanCopier beanCopier = BeanCopier.create(PayWeixinMp.class,WeixinMpInfo.class,false);
 
         beanCopier.copy(payWeixinMp,weixinMapInfo,null);
 
@@ -90,7 +90,7 @@ public class WeixinMapServiceFacadeImpl implements WeixinMapServiceFacade {
      * 获取access_token
      * @param weixinMapInfo 公众号信息
      * */
-    public String getAccessToken(WeixinMapInfo weixinMapInfo){
+    public String getAccessToken(WeixinMpInfo weixinMapInfo){
 
         String token = null;
         JSONObject res = new JSONObject();
