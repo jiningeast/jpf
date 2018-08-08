@@ -62,8 +62,8 @@ public class WeixinController {
             os.close();
         } else if (StringUtils.isNotBlank(signature)) {
 
-            //Map<String, String> requestMap = MessageUtil.parseXml(request);
-            Map<String, String> requestMap = new HashMap<>();
+            Map<String, String> requestMap = MessageUtil.parseXml(request);
+            /*Map<String, String> requestMap = new HashMap<>();
             requestMap.put("CreateTime",request.getParameter("CreateTime"));
             requestMap.put("EventKey",request.getParameter("EventKey"));
             requestMap.put("Event",request.getParameter("Event"));
@@ -71,7 +71,7 @@ public class WeixinController {
             requestMap.put("FromUserName",request.getParameter("FromUserName"));
             requestMap.put("MsgType",request.getParameter("MsgType"));
             requestMap.put("signature",request.getParameter("signature"));
-
+*/
             StringBuilder sbf = new StringBuilder();
             Date date = new Date();
             SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -118,7 +118,7 @@ public class WeixinController {
 
 
         if(requestMap.get("Event").toString().contains("subscribe")){
-            
+
             //获取是否有当前微信用户信息
             WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinUserByOpenid(requestMap.get("FromUserName").toString(),weixinMpInfo.getId());
             //获取access_token
