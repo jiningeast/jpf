@@ -40,6 +40,11 @@ public class PayWeixinMp implements Serializable {
     private Date tokenexpires;
 
     /**
+     * 关注回复
+     */
+    private String followreply;
+
+    /**
      * 商户号，微信商户平台
      */
     private String merchant;
@@ -117,6 +122,14 @@ public class PayWeixinMp implements Serializable {
         this.tokenexpires = tokenexpires;
     }
 
+    public String getFollowreply() {
+        return followreply;
+    }
+
+    public void setFollowreply(String followreply) {
+        this.followreply = followreply == null ? null : followreply.trim();
+    }
+
     public String getMerchant() {
         return merchant;
     }
@@ -165,6 +178,7 @@ public class PayWeixinMp implements Serializable {
         sb.append(", token=").append(token);
         sb.append(", accesstoken=").append(accesstoken);
         sb.append(", tokenexpires=").append(tokenexpires);
+        sb.append(", followreply=").append(followreply);
         sb.append(", merchant=").append(merchant);
         sb.append(", merkey=").append(merkey);
         sb.append(", created=").append(created);
@@ -196,6 +210,7 @@ public class PayWeixinMp implements Serializable {
             && (this.getToken() == null ? other.getToken() == null : this.getToken().equals(other.getToken()))
             && (this.getAccesstoken() == null ? other.getAccesstoken() == null : this.getAccesstoken().equals(other.getAccesstoken()))
             && (this.getTokenexpires() == null ? other.getTokenexpires() == null : this.getTokenexpires().equals(other.getTokenexpires()))
+            && (this.getFollowreply() == null ? other.getFollowreply() == null : this.getFollowreply().equals(other.getFollowreply()))
             && (this.getMerchant() == null ? other.getMerchant() == null : this.getMerchant().equals(other.getMerchant()))
             && (this.getMerkey() == null ? other.getMerkey() == null : this.getMerkey().equals(other.getMerkey()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
@@ -216,6 +231,7 @@ public class PayWeixinMp implements Serializable {
         result = prime * result + ((getToken() == null) ? 0 : getToken().hashCode());
         result = prime * result + ((getAccesstoken() == null) ? 0 : getAccesstoken().hashCode());
         result = prime * result + ((getTokenexpires() == null) ? 0 : getTokenexpires().hashCode());
+        result = prime * result + ((getFollowreply() == null) ? 0 : getFollowreply().hashCode());
         result = prime * result + ((getMerchant() == null) ? 0 : getMerchant().hashCode());
         result = prime * result + ((getMerkey() == null) ? 0 : getMerkey().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
