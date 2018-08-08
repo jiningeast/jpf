@@ -645,6 +645,76 @@ public class PayWeixinMpExample {
             return (Criteria) this;
         }
 
+        public Criteria andFollowreplyIsNull() {
+            addCriterion("followReply is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyIsNotNull() {
+            addCriterion("followReply is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyEqualTo(String value) {
+            addCriterion("followReply =", value, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyNotEqualTo(String value) {
+            addCriterion("followReply <>", value, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyGreaterThan(String value) {
+            addCriterion("followReply >", value, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyGreaterThanOrEqualTo(String value) {
+            addCriterion("followReply >=", value, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyLessThan(String value) {
+            addCriterion("followReply <", value, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyLessThanOrEqualTo(String value) {
+            addCriterion("followReply <=", value, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyLike(String value) {
+            addCriterion("followReply like", value, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyNotLike(String value) {
+            addCriterion("followReply not like", value, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyIn(List<String> values) {
+            addCriterion("followReply in", values, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyNotIn(List<String> values) {
+            addCriterion("followReply not in", values, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyBetween(String value1, String value2) {
+            addCriterion("followReply between", value1, value2, "followreply");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyNotBetween(String value1, String value2) {
+            addCriterion("followReply not between", value1, value2, "followreply");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchantIsNull() {
             addCriterion("merchant is null");
             return (Criteria) this;
@@ -927,6 +997,11 @@ public class PayWeixinMpExample {
 
         public Criteria andAccesstokenLikeInsensitive(String value) {
             addCriterion("upper(accessToken) like", value.toUpperCase(), "accesstoken");
+            return (Criteria) this;
+        }
+
+        public Criteria andFollowreplyLikeInsensitive(String value) {
+            addCriterion("upper(followReply) like", value.toUpperCase(), "followreply");
             return (Criteria) this;
         }
 

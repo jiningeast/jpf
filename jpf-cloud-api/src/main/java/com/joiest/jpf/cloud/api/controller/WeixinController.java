@@ -29,6 +29,8 @@ import java.util.*;
 @RequestMapping("weixin")
 public class WeixinController {
 
+    private WeixinMapInfo weixinMapInfo;
+
     @Autowired
     private WeixinMapServiceFacade weixinMapServiceFacade;
 
@@ -38,25 +40,15 @@ public class WeixinController {
 
         String echostr = request.getParameter("echostr");
         String signature = request.getParameter("signature");
-        String content=request.getQueryString();
+        String encrypt = request.getParameter("encrypt");
 
-        Map<String, String> requestMap = MessageUtil.parseXml(request);
-
-        StringBuilder sbf = new StringBuilder();
-        Date date = new Date();
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sbf.append("\n\nTime:" + myfmt.format(date));
-        sbf.append("\n请求类型：事件操作");
-        sbf.append("\n请求参数："+requestMap.toString());
-        sbf.append("\nechostr："+echostr);
-        sbf.append("\nsignature："+signature);
-        String fileName = "Weixinlog";
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
-
+        //获取对应公众号信息
+        weixinMapInfo = weixinMapServiceFacade.getWeixinMpByEncrypt(encrypt);
+        if(weixinMapInfo == null) return null;
 
         if (StringUtils.isNotBlank(echostr)) {
 
-            String isSuc = checkSignature(request);
+            String isSuc = checkSignature(request,weixinMapInfo);
 
             //返回echostr给微信服务器
             ServletOutputStream os=response.getOutputStream();
@@ -65,48 +57,91 @@ public class WeixinController {
             os.close();
         } else if (StringUtils.isNotBlank(signature)) {
 
-            String res = responseMsg(request,response);
+            //Map<String, String> requestMap = MessageUtil.parseXml(request);
+            Map<String, String> requestMap = new HashMap<>();
+            requestMap.put("CreateTime",request.getParameter("CreateTime"));
+            requestMap.put("EventKey",request.getParameter("EventKey"));
+            requestMap.put("Event",request.getParameter("Event"));
+            requestMap.put("ToUserName",request.getParameter("ToUserName"));
+            requestMap.put("FromUserName",request.getParameter("FromUserName"));
+            requestMap.put("MsgType",request.getParameter("MsgType"));
+            requestMap.put("signature",request.getParameter("signature"));
+
+            StringBuilder sbf = new StringBuilder();
+            Date date = new Date();
+            SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sbf.append("\n\nTime:" + myfmt.format(date));
+            sbf.append("\n请求参数："+request.getQueryString());
+            sbf.append("\n事件参数："+requestMap.toString());
+            sbf.append("\nsignature："+signature);
+            String fileName = "WeixinLog";
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
+
+            String res = responseMsg(request,response,requestMap);
+        }else{
+        }
+        return null;
+    }
+    @RequestMapping(value = "/responseMsg", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String responseMsg(HttpServletRequest request,HttpServletResponse response,Map requestMap){
+
+        String msgType = requestMap.get("MsgType").toString();
+        switch (msgType){
+
+            case MessageUtil.REQ_MESSAGE_TYPE_EVENT:
+
+                reqMessageTypeEvent(request,requestMap);
+                break;
+            case MessageUtil.REQ_MESSAGE_TYPE_TEXT:
+
+
+                break;
+            default:
+
+                break;
+        }
+        return null;
+    }
+
+    /**
+     * 请求类型 -》事件 event
+     * */
+    @RequestMapping(value = "/reqMessageTypeEvent", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String reqMessageTypeEvent(HttpServletRequest request,Map requestMap){
+
+        //关注事件处理
+        if(requestMap.get("Event").equals("subscribe")){
+
+            //获取access_token
+            String access_token = weixinMapServiceFacade.getAccessToken(weixinMapInfo);
+            //获取用户信息
+            JSONObject userInfo = new MessageUtil().getUserInfo(access_token,requestMap.get("FromUserName").toString());
+
+        }else if(requestMap.get("Event").equals("unsubscribe")){//取消关注事件处理
+
+
         }else{
 
         }
-
-
-
         return null;
     }
-
-    @RequestMapping(value = "/responseMsg", produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String responseMsg(HttpServletRequest request,HttpServletResponse response){
-
-        String content=request.getQueryString();
-
-        StringBuilder sbf = new StringBuilder();
-        Date date = new Date();
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sbf.append("\n\nTime:" + myfmt.format(date));
-        sbf.append("\n请求类型：事件操作");
-        sbf.append("\n请求参数："+content);
-        String fileName = "WeixinEventlog";
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
-
-        return null;
-    }
+    /**
+     * 开发者认证
+     * @param request
+     * @param weixinMapInfo 公众号信息
+     * */
     @RequestMapping(value = "/checkSignature", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String checkSignature(HttpServletRequest request){
+    public String checkSignature(HttpServletRequest request,WeixinMapInfo weixinMapInfo){
 
-        String encrypt = request.getParameter("encrypt");
-        String type = request.getParameter("type");
         String echostr = request.getParameter("echostr");
         String signature = request.getParameter("signature");
         String nonce = request.getParameter("nonce");
         String timestamp = request.getParameter("timestamp");
         String content=request.getQueryString();
-
-        //获取对应公众号信息
-        WeixinMapInfo weixinMapInfo = weixinMapServiceFacade.getWeixinMpByEncrypt(encrypt);
-        if(weixinMapInfo == null) return null;
 
         List<String> list = new ArrayList<>();
         list.add(weixinMapInfo.getToken());
