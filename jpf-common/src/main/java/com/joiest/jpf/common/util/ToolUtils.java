@@ -360,7 +360,7 @@ public class ToolUtils {
     /**
      * 金额校验
      */
-    public static Boolean ValidateCode(String code,String uid,String dou){
+        public static Boolean ValidateCode(String code,String uid,String dou){
 
         String newCode = Md5Encrypt.md5(uid+dou+"test","UTF-8");   //加密规则：  id+金额+key
         Boolean res = code.equals(newCode); //校验加密是否一致

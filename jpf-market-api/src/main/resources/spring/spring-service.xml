@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean id="ShopBatchCouponInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopBatchCouponInterfaceServiceFacadeImpl"></bean>
 	<bean id="ShopProductInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopProductInterfaceServiceFacadeImpl"></bean>
 	<bean id="ShopOrderInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopOrderInterfaceServiceFacadeImpl"></bean>
 	<bean id="ShopCouponActiveInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponActiveInterfaceServiceFacadeImpl"></bean>

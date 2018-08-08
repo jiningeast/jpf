@@ -2,18 +2,20 @@ package com.joiest.jpf.cloud.api.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.joiest.jpf.common.util.OkHttpUtils;
+import com.joiest.jpf.facade.WeixinMapServiceFacade;
+
+import net.sf.json.JSONObject;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class MessageUtil {
 
@@ -84,11 +86,24 @@ public class MessageUtil {
     public static final String EVENT_TYPE_UNSUBSCRIBE = "unsubscribe";
 
     /**
+     * 固定地址
+     * */
+    public static final String HTTPS_URL = "https://api.weixin.qq.com/";
+
+    /**
      * CLICK
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";
 
+    public String curTime = null;
+    public Date dateTime = null;
+    public MessageUtil(){
 
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        curTime = myfmt.format(date);
+        dateTime = date;
+    }
 
     public static Map<String,String> parseXml(HttpServletRequest request){
 
@@ -129,5 +144,13 @@ public class MessageUtil {
         return messageMap;
     }
 
+    public JSONObject getUserInfo(String access_token,String openid){
 
+        Map<String, Object> map = new HashMap<>();
+        String getUserInfoUrl = HTTPS_URL+"cgi-bin/user/info?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
+
+        JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(getUserInfoUrl,map));
+
+        return res;
+    }
 }
