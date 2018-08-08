@@ -1,7 +1,6 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopCouponRemain implements Serializable {
@@ -31,17 +30,17 @@ public class PayShopCouponRemain implements Serializable {
     private String customerId;
 
     /**
-     * 券面值
+     * 券本身值多少个豆
      */
-    private BigDecimal couponMoney;
+    private Integer couponDou;
 
     /**
-     * 券余额
+     * 券豆余额
      */
-    private BigDecimal couponMoneyLeft;
+    private Integer couponDouLeft;
 
     /**
-     * 此券是否已用完 0=没用完 1=已用完
+     * 此券是否已用完 0=没用完 1=消费用完 2=过期清零
      */
     private Byte status;
 
@@ -102,20 +101,20 @@ public class PayShopCouponRemain implements Serializable {
         this.customerId = customerId == null ? null : customerId.trim();
     }
 
-    public BigDecimal getCouponMoney() {
-        return couponMoney;
+    public Integer getCouponDou() {
+        return couponDou;
     }
 
-    public void setCouponMoney(BigDecimal couponMoney) {
-        this.couponMoney = couponMoney;
+    public void setCouponDou(Integer couponDou) {
+        this.couponDou = couponDou;
     }
 
-    public BigDecimal getCouponMoneyLeft() {
-        return couponMoneyLeft;
+    public Integer getCouponDouLeft() {
+        return couponDouLeft;
     }
 
-    public void setCouponMoneyLeft(BigDecimal couponMoneyLeft) {
-        this.couponMoneyLeft = couponMoneyLeft;
+    public void setCouponDouLeft(Integer couponDouLeft) {
+        this.couponDouLeft = couponDouLeft;
     }
 
     public Byte getStatus() {
@@ -164,8 +163,8 @@ public class PayShopCouponRemain implements Serializable {
         sb.append(", couponNo=").append(couponNo);
         sb.append(", couponActiveCode=").append(couponActiveCode);
         sb.append(", customerId=").append(customerId);
-        sb.append(", couponMoney=").append(couponMoney);
-        sb.append(", couponMoneyLeft=").append(couponMoneyLeft);
+        sb.append(", couponDou=").append(couponDou);
+        sb.append(", couponDouLeft=").append(couponDouLeft);
         sb.append(", status=").append(status);
         sb.append(", expireTime=").append(expireTime);
         sb.append(", addtime=").append(addtime);
@@ -195,8 +194,8 @@ public class PayShopCouponRemain implements Serializable {
             && (this.getCouponNo() == null ? other.getCouponNo() == null : this.getCouponNo().equals(other.getCouponNo()))
             && (this.getCouponActiveCode() == null ? other.getCouponActiveCode() == null : this.getCouponActiveCode().equals(other.getCouponActiveCode()))
             && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
-            && (this.getCouponMoney() == null ? other.getCouponMoney() == null : this.getCouponMoney().equals(other.getCouponMoney()))
-            && (this.getCouponMoneyLeft() == null ? other.getCouponMoneyLeft() == null : this.getCouponMoneyLeft().equals(other.getCouponMoneyLeft()))
+            && (this.getCouponDou() == null ? other.getCouponDou() == null : this.getCouponDou().equals(other.getCouponDou()))
+            && (this.getCouponDouLeft() == null ? other.getCouponDouLeft() == null : this.getCouponDouLeft().equals(other.getCouponDouLeft()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
@@ -215,8 +214,8 @@ public class PayShopCouponRemain implements Serializable {
         result = prime * result + ((getCouponNo() == null) ? 0 : getCouponNo().hashCode());
         result = prime * result + ((getCouponActiveCode() == null) ? 0 : getCouponActiveCode().hashCode());
         result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());
-        result = prime * result + ((getCouponMoney() == null) ? 0 : getCouponMoney().hashCode());
-        result = prime * result + ((getCouponMoneyLeft() == null) ? 0 : getCouponMoneyLeft().hashCode());
+        result = prime * result + ((getCouponDou() == null) ? 0 : getCouponDou().hashCode());
+        result = prime * result + ((getCouponDouLeft() == null) ? 0 : getCouponDouLeft().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());

@@ -149,8 +149,8 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         remain.setCouponNo(list.get(0).getCouponNo());
         remain.setCouponActiveCode(couponNo);
         remain.setCustomerId(uid);
-        remain.setCouponMoney(newMoney);
-        remain.setCouponMoneyLeft(newMoney);
+        remain.setCouponDou(list.get(0).getDou());
+        remain.setCouponDouLeft(list.get(0).getDou());
         remain.setStatus((byte)0);
         remain.setExpireTime(dateAddMonth);
         remain.setAddtime(dNow);
