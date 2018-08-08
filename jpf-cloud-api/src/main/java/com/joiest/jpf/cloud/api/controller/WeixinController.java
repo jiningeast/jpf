@@ -1,6 +1,7 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.MessageUtil;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.entity.WeixinMpInfo;
 import com.joiest.jpf.entity.WeixinUserInfo;
@@ -20,6 +21,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -106,7 +109,6 @@ public class WeixinController {
         }
         return null;
     }
-
     /**
      * 请求类型 -》事件 event
      * */
@@ -114,22 +116,68 @@ public class WeixinController {
     @ResponseBody
     public String reqMessageTypeEvent(HttpServletRequest request,Map requestMap){
 
-        //关注事件处理
-        if(requestMap.get("Event").equals("subscribe")){
 
-           // WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinMapByOpenid(requestMap.get("FromUserName").toString());
+        if(requestMap.get("Event").toString().contains("subscribe")){
+            
+            //获取是否有当前微信用户信息
+            WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinUserByOpenid(requestMap.get("FromUserName").toString(),weixinMpInfo.getId());
             //获取access_token
             String access_token = weixinMpServiceFacade.getAccessToken(weixinMpInfo);
             //获取用户信息
             JSONObject userInfo = new MessageUtil().getUserInfo(access_token,requestMap.get("FromUserName").toString());
+            //关注取消事件处理
+            Map<String,String> userData = dealUserInfo(weixinMpInfo,weixinUserInfo,userInfo);
+        }
+       return null;
+    }
+    /*
+    * 微信用户信息处理
+    * */
+    public Map<String,String> dealUserInfo(WeixinMpInfo weixinMpInfo,WeixinUserInfo weixinUserInfo,JSONObject userInfo){
 
-        }else if(requestMap.get("Event").equals("unsubscribe")){//取消关注事件处理
+        Map<String ,String> userData = new HashMap<>();
 
+        userData.put("mpid",weixinMpInfo.getId().toString());
+        userData.put("openid",userInfo.get("openid").toString());
+        userData.put("nickname",userInfo.get("nickname").toString());
+        String nickname = null;
+        try {
+            nickname = URLEncoder.encode(userInfo.get("nickname").toString(), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        userData.put("nicknameEncode",nickname);
+        userData.put("sex",userInfo.get("sex").toString());
+        userData.put("language",userInfo.get("language").toString());
+        userData.put("city",userInfo.get("city").toString());
+        userData.put("province",userInfo.get("province").toString());
+        userData.put("country",userInfo.get("country").toString());
+        userData.put("headimgurl",userInfo.get("headimgurl").toString());
 
+        String subTime = DateUtils.stampToDate(userInfo.get("subscribe_time").toString());
+
+        userData.put("subscribeTime",subTime);
+
+        if(userInfo.containsKey("unionid"))
+            userData.put("unionid",userInfo.get("unionid").toString());
+        else
+            userData.put("unionid","");
+
+        userData.put("remark",userInfo.get("remark").toString());
+        userData.put("groupid",userInfo.get("groupid").toString());
+        userData.put("tagid_list",userInfo.get("tagid_list").toString());
+        userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
+        userData.put("qr_scene",userInfo.get("qr_scene").toString());
+        userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+
+        if(weixinUserInfo!=null){
+
+            weixinUserServiceFacade.upWeixinUserById(userData,weixinUserInfo.getId());
         }else{
 
+            weixinUserServiceFacade.addWeixinUser(userData);
         }
-        return null;
+        return userData;
     }
     /**
      * 开发者认证

@@ -2,10 +2,12 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayWeixinMp;
 import com.joiest.jpf.common.po.PayWeixinMpExample;
+import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayWeixinMpMapper;
 import com.joiest.jpf.entity.WeixinMpInfo;
 import com.joiest.jpf.facade.WeixinMpServiceFacade;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -64,7 +66,6 @@ public class WeixinMpServiceFacadeImpl implements WeixinMpServiceFacade {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
         PayWeixinMpExample example = new PayWeixinMpExample();
         PayWeixinMpExample.Criteria c =  example.createCriteria();
         c.andEncryptEqualTo(encrypt);
@@ -106,7 +107,7 @@ public class WeixinMpServiceFacadeImpl implements WeixinMpServiceFacade {
             Date date = new Date();
             SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-            //计算失效时间时间
+            //计算失效时间
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.SECOND, new Integer(res.get("expires_in").toString()));
@@ -114,6 +115,16 @@ public class WeixinMpServiceFacadeImpl implements WeixinMpServiceFacade {
 
             weixinMp.put("accessToken",token);
             weixinMp.put("tokenExpires",myfmt.format(expiresTime));
+
+            StringBuilder sbf = new StringBuilder();
+            sbf.append("\n\nTime:" + curTime);
+            sbf.append("\n请求类型：微信公众号获取access_token");
+            sbf.append("\n请求地址："+url);
+            sbf.append("\n公众号参数："+JSONObject.fromObject(weixinMapInfo)).toString();
+            sbf.append("\n获取access_token接口参数："+res);
+            String fileName = "WeixinAccessTokenLog";
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
 
             //更新对应公众号信息
             upWeixinMpByEncrypt(weixinMapInfo.getEncrypt(),weixinMp);

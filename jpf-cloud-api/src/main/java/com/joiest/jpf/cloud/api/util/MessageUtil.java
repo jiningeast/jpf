@@ -7,6 +7,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.OkHttpUtils;
 
 import net.sf.json.JSONObject;
@@ -148,6 +149,15 @@ public class MessageUtil {
         String getUserInfoUrl = HTTPS_URL+"cgi-bin/user/info?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
 
         JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(getUserInfoUrl,map));
+
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + curTime);
+        sbf.append("\n请求类型：微信公众号获取用户基本信息");
+        sbf.append("\n请求地址："+getUserInfoUrl);
+        sbf.append("\n获取用户信息接口参数："+res);
+        String fileName = "WeixinUserInfoLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
 
         return res;
     }
