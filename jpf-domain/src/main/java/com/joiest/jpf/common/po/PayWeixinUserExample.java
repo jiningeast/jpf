@@ -915,6 +915,76 @@ public class PayWeixinUserExample {
             return (Criteria) this;
         }
 
+        public Criteria andServerheadimgIsNull() {
+            addCriterion("serverheadimg is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgIsNotNull() {
+            addCriterion("serverheadimg is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgEqualTo(String value) {
+            addCriterion("serverheadimg =", value, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgNotEqualTo(String value) {
+            addCriterion("serverheadimg <>", value, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgGreaterThan(String value) {
+            addCriterion("serverheadimg >", value, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgGreaterThanOrEqualTo(String value) {
+            addCriterion("serverheadimg >=", value, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgLessThan(String value) {
+            addCriterion("serverheadimg <", value, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgLessThanOrEqualTo(String value) {
+            addCriterion("serverheadimg <=", value, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgLike(String value) {
+            addCriterion("serverheadimg like", value, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgNotLike(String value) {
+            addCriterion("serverheadimg not like", value, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgIn(List<String> values) {
+            addCriterion("serverheadimg in", values, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgNotIn(List<String> values) {
+            addCriterion("serverheadimg not in", values, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgBetween(String value1, String value2) {
+            addCriterion("serverheadimg between", value1, value2, "serverheadimg");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgNotBetween(String value1, String value2) {
+            addCriterion("serverheadimg not between", value1, value2, "serverheadimg");
+            return (Criteria) this;
+        }
+
         public Criteria andSubscribetimeIsNull() {
             addCriterion("subscribeTime is null");
             return (Criteria) this;
@@ -1612,6 +1682,11 @@ public class PayWeixinUserExample {
 
         public Criteria andHeadimgurlLikeInsensitive(String value) {
             addCriterion("upper(headimgurl) like", value.toUpperCase(), "headimgurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerheadimgLikeInsensitive(String value) {
+            addCriterion("upper(serverheadimg) like", value.toUpperCase(), "serverheadimg");
             return (Criteria) this;
         }
 
