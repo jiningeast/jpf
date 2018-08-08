@@ -117,13 +117,11 @@ public class WeixinController {
         //关注事件处理
         if(requestMap.get("Event").equals("subscribe")){
 
-
-            WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinMapByOpenid(requestMap.get("FromUserName").toString());
+           // WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinMapByOpenid(requestMap.get("FromUserName").toString());
             //获取access_token
             String access_token = weixinMpServiceFacade.getAccessToken(weixinMpInfo);
             //获取用户信息
             JSONObject userInfo = new MessageUtil().getUserInfo(access_token,requestMap.get("FromUserName").toString());
-
 
         }else if(requestMap.get("Event").equals("unsubscribe")){//取消关注事件处理
 

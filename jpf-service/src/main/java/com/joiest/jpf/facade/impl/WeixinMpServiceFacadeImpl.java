@@ -70,22 +70,16 @@ public class WeixinMpServiceFacadeImpl implements WeixinMpServiceFacade {
         c.andEncryptEqualTo(encrypt);
 
 
-        System.out.println("失效更新时间："+res.get("tokenExpires"));
-
         PayWeixinMp payWeixinMp = new PayWeixinMp();
         payWeixinMp.setAccesstoken(res.get("accessToken"));
         try {
-            new Date("2018-08-08 13:15:26");
-            payWeixinMp.setTokenexpires(sdf.parse(res.get("tokenExpires")));
-            System.out.println("失效更新时间格式："+sdf.parse(res.get("tokenExpires")));
 
+            payWeixinMp.setTokenexpires(sdf.parse(res.get("tokenExpires")));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return payWeixinMpMapper.updateByExampleSelective(payWeixinMp,example);
     }
-
     /**
      * 获取access_token
      * @param weixinMapInfo 公众号信息
@@ -112,17 +106,11 @@ public class WeixinMpServiceFacadeImpl implements WeixinMpServiceFacade {
             Date date = new Date();
             SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
-            System.out.println("获取到的有效秒数："+res.get("expires_in"));
-            System.out.println("当前时间："+myfmt.format(date));
-
             //计算失效时间时间
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.SECOND, new Integer(res.get("expires_in").toString()));
             Date expiresTime = calendar.getTime();
-
-            System.out.println("失效时间："+myfmt.format(expiresTime));
 
             weixinMp.put("accessToken",token);
             weixinMp.put("tokenExpires",myfmt.format(expiresTime));
