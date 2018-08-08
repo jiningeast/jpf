@@ -15,6 +15,17 @@
 <body>
 
 <div name="contentDiv" style="padding: 10px;">
+    <table cellpadding=3 class="table table-bordered" align="center">
+        <tr>
+            <td  style="text-align: right;width:20%" bgcolor="#f1f1f1">客户信息：</td>
+            <td  style="text-align:right ">
+                <p style="font-size:30px;color:#333333; margin: 5px 0;">
+                <span >${phone}&nbsp;&nbsp;&nbsp;
+                <span style="color: #ff4114">当前欣豆 ${dou}个</span>
+                </p>
+            </td>
+        </tr>
+    </table>
     <%--<div >
         <h3>客户信息</h3>
         <p style="text-align: left;font-size:30px;color:#333333; margin: 5px 0;">
@@ -80,8 +91,8 @@
             url:'listCouponList?id='+${id},
             columns:[[
                 {field:'id',title:'ID',width:'3%'},
-                {field:'customerName',title:'顾客姓名',width:'10%'},
-                {field:'companyName',title:'企业名称',width:'10%'},
+                {field:'customerName',title:'顾客姓名',width:'5%'},
+                {field:'companyName',title:'企业名称',width:'8%'},
                 {field:'batchNo',title:'批次号',width:'8%'},
                 {field:'couponNo',title:'券号',width:'10%'},
                 {field:'money',title:'面值',width:'10%'},
@@ -114,7 +125,7 @@
                     }
                 },
                 {field:'addtime',title:'添加时间',width:'10%',formatter: formatDateStr},
-                {field:'updatetime',title:'到期时间',width:'10%',formatter: formatDateStr},
+                {field:'expireTime',title:'到期时间',width:'10%',formatter: formatDateStr},
 
             ]]
         });
