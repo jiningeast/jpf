@@ -15,6 +15,17 @@
 <body>
 
 <div name="contentDiv" style="padding: 10px;">
+    <table cellpadding=3 class="table table-bordered" align="center">
+        <tr>
+            <td  style="text-align: right;width:20%" bgcolor="#f1f1f1">客户信息：</td>
+            <td  style="text-align:right ">
+                <p style="font-size:30px;color:#333333; margin: 5px 0;">
+                <span >${phone}&nbsp;&nbsp;&nbsp;
+                <span style="color: #ff4114">当前欣豆 ${dou}个</span>
+                </p>
+            </td>
+        </tr>
+    </table>
     <%--<div >
         <h3>客户信息</h3>
         <p style="text-align: left;font-size:30px;color:#333333; margin: 5px 0;">
