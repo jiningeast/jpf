@@ -58,12 +58,14 @@ public class ShopCouponRemainInfo {
      */
     private Date updatetime;
 
+    private static final long serialVersionUID = 1L;
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     public String getCouponId() {
@@ -71,7 +73,7 @@ public class ShopCouponRemainInfo {
     }
 
     public void setCouponId(String couponId) {
-        this.couponId = couponId;
+        this.couponId = couponId == null ? null : couponId.trim();
     }
 
     public String getCouponNo() {
@@ -79,7 +81,7 @@ public class ShopCouponRemainInfo {
     }
 
     public void setCouponNo(String couponNo) {
-        this.couponNo = couponNo;
+        this.couponNo = couponNo == null ? null : couponNo.trim();
     }
 
     public String getCouponActiveCode() {
@@ -87,7 +89,7 @@ public class ShopCouponRemainInfo {
     }
 
     public void setCouponActiveCode(String couponActiveCode) {
-        this.couponActiveCode = couponActiveCode;
+        this.couponActiveCode = couponActiveCode == null ? null : couponActiveCode.trim();
     }
 
     public String getCustomerId() {
@@ -95,7 +97,7 @@ public class ShopCouponRemainInfo {
     }
 
     public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+        this.customerId = customerId == null ? null : customerId.trim();
     }
 
     public Integer getCouponDou() {
@@ -145,4 +147,5 @@ public class ShopCouponRemainInfo {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
 }
