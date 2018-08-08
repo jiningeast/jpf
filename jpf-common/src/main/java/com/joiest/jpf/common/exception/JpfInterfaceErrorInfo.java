@@ -110,7 +110,9 @@ public enum JpfInterfaceErrorInfo {
     MK_ORDERMONEY_DIFF("50002", "商品金额不一致"),
     MK_ORDER_NOT_EXIST("50003", "订单不存在"),
     CURR_DOU_TOTAL_ZERO("50004", "无可用欣豆"),
-    USER_DOU_CODE_ERROR("50005", "当前余额异常");
+    USER_DOU_CODE_ERROR("50005", "当前余额异常"),
+    GOODLIST_IS_EMPTY("50006", "无对应商品信息"),
+    BRANDLIST_IS_EMPTY("50006", "无对应商品信息");
 
 
     private final String desc;
