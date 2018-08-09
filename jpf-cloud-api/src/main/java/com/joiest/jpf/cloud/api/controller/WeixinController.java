@@ -244,6 +244,19 @@ public class WeixinController {
             String encrypt = request.getParameter("encrypt");
             String responseurl = request.getParameter("responseurl");
 
+
+            StringBuilder sbf = new StringBuilder();
+            Date date = new Date();
+            SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sbf.append("\n\nTime:" + myfmt.format(date));
+            sbf.append("\n请求类型：微信公众号开发者认证");
+            sbf.append("\n请求参数："+ request.getQueryString());
+            String fileName = "test";
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/", fileName,true);
+
+
+
+
             System.out.println("请求参数:"+request.getQueryString());
             System.out.println("responseurl Base64:"+responseurl);
             //获取公众号信息
