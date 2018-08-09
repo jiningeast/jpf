@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.OkHttpUtils;
 
+import com.joiest.jpf.entity.WeixinMpInfo;
 import net.sf.json.JSONObject;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -160,5 +161,28 @@ public class MessageUtil {
         LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
 
         return res;
+    }
+    public String getOpenid(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
+
+        Map<String, Object> map = new HashMap<>();
+
+        String code = request.getParameter("code");
+        String url = HTTPS_URL+"/sns/oauth2/access_token?appid="+weixinMpInfo.getAppid()+"&secret="+weixinMpInfo.getAppsecret()+"&code="+code+"&grant_type=authorization_code";
+
+        JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(url,map));
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + curTime);
+        sbf.append("\n请求类型：微信公众号通过code换取网页授权access_token");
+        sbf.append("\n请求地址："+url);
+        sbf.append("\n获取接口参数："+res);
+        String fileName = "WeixinWebAccessTokenLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
+        if(res.containsKey("openid")){
+
+            return res.get("openid").toString();
+        }
+        return null;
     }
 }

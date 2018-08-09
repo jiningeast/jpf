@@ -31,6 +31,11 @@ public class ShopProductInfo {
     private BigDecimal money;
 
     /**
+     * 充值面额
+     */
+    private Integer rechargeMoney;
+
+    /**
      * 商品进价
      */
     private BigDecimal bid;
@@ -123,6 +128,14 @@ public class ShopProductInfo {
 
     public void setMoney(BigDecimal money) {
         this.money = money;
+    }
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
     }
 
     public BigDecimal getBid() {
