@@ -242,17 +242,21 @@ public class WeixinController {
         if(StringUtils.isNotBlank(state)){
 
             String encrypt = request.getParameter("encrypt");
-            String vueUrl = request.getParameter("vueurl");
+            String responseurl = request.getParameter("responseurl");
 
+            System.out.println("请求参数:"+request.getQueryString());
+            System.out.println("responseurl Base64:"+responseurl);
             //获取公众号信息
             weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
             String openid = new MessageUtil().getOpenid(request,weixinMpInfo);
 
-            vueUrl = Base64CustomUtils.base64Decoder(vueUrl)+"&openid="+openid;
+            //String openid = "sdfwer";
+            responseurl = Base64CustomUtils.base64Decoder(responseurl)+"&openid="+openid;
 
+            System.out.println("responseurl:"+responseurl);
 
             response.setStatus(302);
-            response.setHeader("location",vueUrl);
+            response.setHeader("location",responseurl);
         }
 
     }
