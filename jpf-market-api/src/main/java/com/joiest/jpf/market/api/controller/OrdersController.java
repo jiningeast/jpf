@@ -6,7 +6,7 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
-import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
+import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.util.ToolsUtils;
@@ -49,6 +49,8 @@ public class OrdersController {
     @Autowired
     ShopCouponActiveInterfaceServiceFacade shopCouponActiveInterfaceServiceFacade;
 
+    @Autowired
+    ShopCouponRemainServiceFacade shopCouponRemainServiceFacade;
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
 
@@ -179,6 +181,7 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "支付方式不能为空", "");
         }
 
+        //是否冻结
         if ( userInfo.getStatus() != 1 )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_IS_FREEZE.getCode(), JpfInterfaceErrorInfo.USER_IS_FREEZE.getDesc(), "");
@@ -197,22 +200,29 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getCode(), JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getDesc(), "");
         }
 
+        //过期券处理
+        shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
+
         //用户可用券列表
-        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList("1");
-        if ( response == null || response.getCount() == 0)
+        GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(uid);
+        if ( userCouponList == null || userCouponList.getCount() == 0)
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
         }
         int orderDou = orderInfo.getTotalDou();
-
-
-
-
-        for ( ShopCouponActiveInterfaceInfo one : response.getList())
+        if ( orderDou < userInfo.getDou() )
         {
-            if ( orderDou < one.getDou() )
-            {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(), JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(), "");
+        }
 
+        for ( ShopCouponRemainInfo one : userCouponList.getList())
+        {
+            //1单张券满足 2.需要多张券
+            if ( orderDou < one.getCouponDouLeft() )
+            {
+                //1.remain减去金额 2.active log 3.customer减去金额 4.code生成
+
+                break;
             }
 
         }
@@ -277,7 +287,9 @@ public class OrdersController {
         {
             JSONObject oneJson = new JSONObject();
             oneJson.put("id", one.getId());
-            oneJson.put("money", one.getDou());
+            oneJson.put("name", one.getName());
+            oneJson.put("faceValue", one.getRechargeMoney());   //面值
+            oneJson.put("dou", one.getDou());
             dataJson.add(oneJson);
         }
 
@@ -313,7 +325,6 @@ public class OrdersController {
             resultMap.put("code", JpfInterfaceErrorInfo.FAIL.getCode());
             resultMap.put("info", "信息不能为空");
             return resultMap;
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
         }
         String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
         String requestStr = Base64CustomUtils.base64Decoder(dataStr);

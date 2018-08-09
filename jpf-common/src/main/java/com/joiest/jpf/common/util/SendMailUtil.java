@@ -1,30 +1,13 @@
 package com.joiest.jpf.common.util;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.Properties;
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.Address;
-import javax.mail.Authenticator;
-import javax.mail.Message;
+import javax.mail.*;
 import javax.mail.Message.RecipientType;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
+import javax.mail.internet.*;
+import java.io.*;
+import java.util.Date;
+import java.util.Properties;
 
 /**
  * 使用SMTP协议发送电子邮件
@@ -412,7 +395,7 @@ public class SendMailUtil{
         /*File eml = buildEmlFile(message);
         sendMailForEml(eml);*/
         // 发送邮件
-        Transport.send(message);
+//        Transport.send(message);
         try {
             Transport.send(message);
             return true;

@@ -31,6 +31,11 @@ public class PayShopProductInterfaceCustom implements Serializable {
     private BigDecimal money;
 
     /**
+     * 充值面额
+     */
+    private Integer rechargeMoney;
+
+    /**
      * 商品进价
      */
     private BigDecimal bid;
@@ -84,6 +89,14 @@ public class PayShopProductInterfaceCustom implements Serializable {
      * 
      */
     private Date updatetime;
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
+    }
 
     //================ 自定义字段 begin ================
     /**

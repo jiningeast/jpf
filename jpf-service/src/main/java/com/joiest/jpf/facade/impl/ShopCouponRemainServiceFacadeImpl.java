@@ -3,11 +3,15 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
+import com.joiest.jpf.dto.GetCouponRemainResponse;
+import com.joiest.jpf.entity.ShopCouponRemainInfo;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -123,4 +127,36 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
         return count;
     }
+
+    @Override
+    public GetCouponRemainResponse getCouponRemainByUidForInterface(String uid) {
+
+        PayShopCouponRemainExample example = new PayShopCouponRemainExample();
+        example.setOrderByClause("id ASC");
+        PayShopCouponRemainExample.Criteria c = example.createCriteria();
+        c.andCustomerIdEqualTo(uid);
+        c.andStatusEqualTo((byte)1);
+        List<PayShopCouponRemain> list = payShopCouponRemainMapper.selectByExample(example);
+        if ( list.isEmpty() || list == null )
+        {
+            return null;
+        }
+        List<ShopCouponRemainInfo> resultList = new ArrayList<>();
+        int douTotal = 0;
+        for ( PayShopCouponRemain one : list)
+        {
+            ShopCouponRemainInfo info = new ShopCouponRemainInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopCouponRemain.class, ShopCouponRemainInfo.class, false);
+            beanCopier.copy(one, info, null);
+            resultList.add(info);
+            douTotal += one.getCouponDouLeft();
+        }
+        GetCouponRemainResponse response = new GetCouponRemainResponse();
+        response.setList(resultList);
+        response.setCount(list.size());
+        response.setDouTotal(douTotal);
+
+        return response;
+    }
+
 }

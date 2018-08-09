@@ -1,5 +1,7 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.dto.GetCouponRemainResponse;
+
 public interface ShopCouponRemainServiceFacade {
 
     /**
@@ -11,4 +13,9 @@ public interface ShopCouponRemainServiceFacade {
      * 处理个人的过期的券
      */
     public int dealCustomerExpiredCoupon(String customerId);
+
+    /**
+     * 获取个人可用券列表
+     */
+    public GetCouponRemainResponse getCouponRemainByUidForInterface(String uid);
 }

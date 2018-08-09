@@ -243,7 +243,7 @@ public class WeixinController {
 
             String encrypt = request.getParameter("encrypt");
             String vueUrl = request.getParameter("vueurl");
-            
+
             //获取公众号信息
             weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
             String openid = new MessageUtil().getOpenid(request,weixinMpInfo);
