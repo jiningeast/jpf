@@ -295,6 +295,66 @@ public class PayWeixinUserExample {
             return (Criteria) this;
         }
 
+        public Criteria andSubscribeIsNull() {
+            addCriterion("subscribe is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeIsNotNull() {
+            addCriterion("subscribe is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeEqualTo(Byte value) {
+            addCriterion("subscribe =", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeNotEqualTo(Byte value) {
+            addCriterion("subscribe <>", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeGreaterThan(Byte value) {
+            addCriterion("subscribe >", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("subscribe >=", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeLessThan(Byte value) {
+            addCriterion("subscribe <", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeLessThanOrEqualTo(Byte value) {
+            addCriterion("subscribe <=", value, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeIn(List<Byte> values) {
+            addCriterion("subscribe in", values, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeNotIn(List<Byte> values) {
+            addCriterion("subscribe not in", values, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeBetween(Byte value1, Byte value2) {
+            addCriterion("subscribe between", value1, value2, "subscribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeNotBetween(Byte value1, Byte value2) {
+            addCriterion("subscribe not between", value1, value2, "subscribe");
+            return (Criteria) this;
+        }
+
         public Criteria andOpenidIsNull() {
             addCriterion("openid is null");
             return (Criteria) this;

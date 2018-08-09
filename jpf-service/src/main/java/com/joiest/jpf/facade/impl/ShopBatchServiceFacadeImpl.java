@@ -1,6 +1,5 @@
 package com.joiest.jpf.facade.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
@@ -8,9 +7,9 @@ import com.joiest.jpf.dao.repository.mapper.custom.PayShopBatchCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchCouponMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopInterfaceStreamMapper;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
-import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopBatchInfo;
 import com.joiest.jpf.facade.ShopBatchServiceFacade;
@@ -39,6 +38,9 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
 
     @Autowired
     private PayShopBatchCouponMapper payShopBatchCouponMapper;
+
+    @Autowired
+    private PayShopInterfaceStreamMapper payShopInterfaceStreamMapper;
 
     @Override
     public ShopBatchResponse getBatches(ShopBatchRequest shopBatchRequest){
@@ -217,6 +219,15 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         payShopBatchUpdate.setOssUrl(ossResponse);
         payShopBatchUpdate.setZipPassword(password);
         payShopBatchMapper.updateByPrimaryKeySelective(payShopBatchUpdate);
+
+        // oss接口流水
+        PayShopInterfaceStream payShopInterfaceStream = new PayShopInterfaceStream();
+        payShopInterfaceStream.setType((byte)0);
+        payShopInterfaceStream.setRequestUrl(url);
+        payShopInterfaceStream.setRequestContent(ToolUtils.mapToUrl(ossRequestMap));
+        payShopInterfaceStream.setResponseContent(ossResponse);
+        payShopInterfaceStream.setBatchId(batchId);
+        payShopInterfaceStreamMapper.insertSelective(payShopInterfaceStream);
 
         return new JpfResponseDto();
     }

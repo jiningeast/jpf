@@ -7,12 +7,11 @@ import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
-import com.joiest.jpf.entity.ShopCouponActiveInterfaceInfo;
-import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
-import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
-import com.joiest.jpf.entity.ShopProductInterfaceInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.util.ToolsUtils;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,8 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Controller
@@ -57,17 +55,27 @@ public class OrdersController {
     @Autowired
     private ShopCustomerInterfaceServiceFacade shopCustomerInterfaceServiceFacade;
 
+    @Autowired
+    private ShopBrandServiceFacade shopBrandServiceFacade;
+
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String createOrder(String data)
     {
-        if ( StringUtils.isBlank(data) )
+        /*if ( StringUtils.isBlank(data) )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
         }
         String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
         String requestStr = Base64CustomUtils.base64Decoder(dataStr);
-        Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+        Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});*/
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap = _filter(data);
+        if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
+        }
+
         CreateOrderInterfaceRequest request = new CreateOrderInterfaceRequest();
         try{
             request =  (CreateOrderInterfaceRequest) ClassUtil.mapToObject(requestMap, request.getClass());
@@ -150,25 +158,38 @@ public class OrdersController {
      * 支付
      * 0:欣豆支付 1:微信支付
      */
-    @RequestMapping("/pay")
+    @RequestMapping(value = "/pay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String dopay(String data)
     {
         //1.金额校验 2.订单用户校验 3.用户券列表 4.扣除相应的券 5.更新code
         //订单信息+用户 TODO 用户信息
-        String orderNo = "7781533611264464114";
-        String uid = "2";
-        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderOne(orderNo,uid);
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap = _filter(data);
+        if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
+        }
+        if ( StringUtils.isBlank(requestMap.get("orderNo").toString()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "订单号不能为空", "");
+        }
+        if ( StringUtils.isBlank(requestMap.get("payway").toString()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "支付方式不能为空", "");
+        }
+
+        if ( userInfo.getStatus() != 1 )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_IS_FREEZE.getCode(), JpfInterfaceErrorInfo.USER_IS_FREEZE.getDesc(), "");
+        }
+
+        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderOne(requestMap.get("orderNo").toString(),uid);
         if ( orderInfo == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getCode(), JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getDesc(), "");
         }
-        //用户可用券列表   TODO 用户信息
-        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList("1");
-        if ( response == null || response.getCount() == 0)
-        {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
-        }
+
         //校验码验证
         Boolean codeIsTrue = ToolUtils.ValidateCode(userInfo.getCode(), uid, userInfo.getDou().toString());
         if ( !codeIsTrue )
@@ -176,20 +197,32 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getCode(), JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getDesc(), "");
         }
 
+        //用户可用券列表
+        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList("1");
+        if ( response == null || response.getCount() == 0)
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
+        }
+        int orderDou = orderInfo.getTotalDou();
+
+
+
+
         for ( ShopCouponActiveInterfaceInfo one : response.getList())
         {
+            if ( orderDou < one.getDou() )
+            {
 
+            }
 
         }
         return "";
     }
 
-    @RequestMapping("blance")
+    @RequestMapping(value = "blance", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String getUserBlance(String data)
+    public String getUserBlance()
     {
-        //TODO 用户信息
-//        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList("1");
         if ( userInfo == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), "");
@@ -200,8 +233,14 @@ public class OrdersController {
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
+//        String uid = "1";
+//        int random = ToolUtils.getRandomInt(10000,99999);
+//        String token1 = AESUtils.encrypt(uid + random,ConfigUtil.getValue("AES_KEY_MARKET"));
+//        String uid_encrypt1 = AESUtils.encrypt(uid, ConfigUtil.getValue("AES_KEY_MARKET"));
+//        redisCustomServiceFacade.set(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token1, uid_encrypt1, Long.parseLong(ConfigUtil.getValue("MARKET_USER_LOGIN_EXPIRE_7")) );
+
         //获取用户信息
-        String token = request.getHeader("token");
+        String token = request.getHeader("Token");
         String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(uid_encrypt))
         {
@@ -210,7 +249,77 @@ public class OrdersController {
         }
     }
 
+    /**
+     * 获取商品列表
+     */
+    @RequestMapping(value = "/getgoods", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String goodsList(String data)
+    {
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap = _filter(data);
+        if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
+        }
+        if ( StringUtils.isBlank(requestMap.get("bid").toString()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), "");
+        }
+        List<ShopProductInterfaceInfo> list = shopProductInterfaceServiceFacade.getShopProductByBrandId(requestMap.get("bid").toString());
+        if ( list.isEmpty() || list == null )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.GOODLIST_IS_EMPTY.getCode(), JpfInterfaceErrorInfo.GOODLIST_IS_EMPTY.getDesc(), "");
+        }
 
+        JSONArray dataJson = new JSONArray();
+        for ( ShopProductInterfaceInfo one: list )
+        {
+            JSONObject oneJson = new JSONObject();
+            oneJson.put("id", one.getId());
+            oneJson.put("money", one.getDou());
+            dataJson.add(oneJson);
+        }
 
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), dataJson);
+    }
+
+    @RequestMapping(value = "getbrand", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String getBrand()
+    {
+        List<ShopBrandInfo> list = shopBrandServiceFacade.getShopBrandAllList();
+        if ( list.isEmpty() || list == null )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.BRANDLIST_IS_EMPTY.getCode(), JpfInterfaceErrorInfo.BRANDLIST_IS_EMPTY.getDesc(), "");
+        }
+        List<Map<String,String>> resultList = new ArrayList<>();
+        for ( ShopBrandInfo one : list )
+        {
+            Map<String,String> map = new HashMap<>();
+            map.put("id", one.getId().toString());
+            map.put("brandName", one.getBrandName());
+            resultList.add(map);
+        }
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), resultList);
+    }
+
+    private Map<String,Object> _filter(String data)
+    {
+        Map<String,Object> resultMap = new HashMap<>();
+        if ( StringUtils.isBlank(data) )
+        {
+            resultMap.put("code", JpfInterfaceErrorInfo.FAIL.getCode());
+            resultMap.put("info", "信息不能为空");
+            return resultMap;
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
+        }
+        String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+        String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+        resultMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+        resultMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+        return resultMap;
+    }
 
 }

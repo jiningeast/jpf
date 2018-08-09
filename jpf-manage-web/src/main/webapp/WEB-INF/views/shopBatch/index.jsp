@@ -66,14 +66,16 @@
                                 success : function(msg){
                                     ajaxLoadEnd();
                                     if (msg.retCode != '0000') {
+                                        $('#dg').datagrid('reload');
                                         $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
                                     } else {
-                                        $.messager.alert('消息提示','操作成功!','info');
                                         $('#dg').datagrid('reload');
+                                        $.messager.alert('消息提示','操作成功!','info');
                                     }
                                 },
                                 error : function () {
                                     ajaxLoadEnd();
+                                    $('#dg').datagrid('reload');
                                     $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
                                 }
                             })

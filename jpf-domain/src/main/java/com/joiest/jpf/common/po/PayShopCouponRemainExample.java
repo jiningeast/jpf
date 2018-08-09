@@ -1,6 +1,5 @@
 package com.joiest.jpf.common.po;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -496,123 +495,123 @@ public class PayShopCouponRemainExample {
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyIsNull() {
-            addCriterion("coupon_money is null");
+        public Criteria andCouponDouIsNull() {
+            addCriterion("coupon_dou is null");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyIsNotNull() {
-            addCriterion("coupon_money is not null");
+        public Criteria andCouponDouIsNotNull() {
+            addCriterion("coupon_dou is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyEqualTo(BigDecimal value) {
-            addCriterion("coupon_money =", value, "couponMoney");
+        public Criteria andCouponDouEqualTo(Integer value) {
+            addCriterion("coupon_dou =", value, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyNotEqualTo(BigDecimal value) {
-            addCriterion("coupon_money <>", value, "couponMoney");
+        public Criteria andCouponDouNotEqualTo(Integer value) {
+            addCriterion("coupon_dou <>", value, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyGreaterThan(BigDecimal value) {
-            addCriterion("coupon_money >", value, "couponMoney");
+        public Criteria andCouponDouGreaterThan(Integer value) {
+            addCriterion("coupon_dou >", value, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("coupon_money >=", value, "couponMoney");
+        public Criteria andCouponDouGreaterThanOrEqualTo(Integer value) {
+            addCriterion("coupon_dou >=", value, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLessThan(BigDecimal value) {
-            addCriterion("coupon_money <", value, "couponMoney");
+        public Criteria andCouponDouLessThan(Integer value) {
+            addCriterion("coupon_dou <", value, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("coupon_money <=", value, "couponMoney");
+        public Criteria andCouponDouLessThanOrEqualTo(Integer value) {
+            addCriterion("coupon_dou <=", value, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyIn(List<BigDecimal> values) {
-            addCriterion("coupon_money in", values, "couponMoney");
+        public Criteria andCouponDouIn(List<Integer> values) {
+            addCriterion("coupon_dou in", values, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyNotIn(List<BigDecimal> values) {
-            addCriterion("coupon_money not in", values, "couponMoney");
+        public Criteria andCouponDouNotIn(List<Integer> values) {
+            addCriterion("coupon_dou not in", values, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("coupon_money between", value1, value2, "couponMoney");
+        public Criteria andCouponDouBetween(Integer value1, Integer value2) {
+            addCriterion("coupon_dou between", value1, value2, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("coupon_money not between", value1, value2, "couponMoney");
+        public Criteria andCouponDouNotBetween(Integer value1, Integer value2) {
+            addCriterion("coupon_dou not between", value1, value2, "couponDou");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftIsNull() {
-            addCriterion("coupon_money_left is null");
+        public Criteria andCouponDouLeftIsNull() {
+            addCriterion("coupon_dou_left is null");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftIsNotNull() {
-            addCriterion("coupon_money_left is not null");
+        public Criteria andCouponDouLeftIsNotNull() {
+            addCriterion("coupon_dou_left is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftEqualTo(BigDecimal value) {
-            addCriterion("coupon_money_left =", value, "couponMoneyLeft");
+        public Criteria andCouponDouLeftEqualTo(Integer value) {
+            addCriterion("coupon_dou_left =", value, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftNotEqualTo(BigDecimal value) {
-            addCriterion("coupon_money_left <>", value, "couponMoneyLeft");
+        public Criteria andCouponDouLeftNotEqualTo(Integer value) {
+            addCriterion("coupon_dou_left <>", value, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftGreaterThan(BigDecimal value) {
-            addCriterion("coupon_money_left >", value, "couponMoneyLeft");
+        public Criteria andCouponDouLeftGreaterThan(Integer value) {
+            addCriterion("coupon_dou_left >", value, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("coupon_money_left >=", value, "couponMoneyLeft");
+        public Criteria andCouponDouLeftGreaterThanOrEqualTo(Integer value) {
+            addCriterion("coupon_dou_left >=", value, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftLessThan(BigDecimal value) {
-            addCriterion("coupon_money_left <", value, "couponMoneyLeft");
+        public Criteria andCouponDouLeftLessThan(Integer value) {
+            addCriterion("coupon_dou_left <", value, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("coupon_money_left <=", value, "couponMoneyLeft");
+        public Criteria andCouponDouLeftLessThanOrEqualTo(Integer value) {
+            addCriterion("coupon_dou_left <=", value, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftIn(List<BigDecimal> values) {
-            addCriterion("coupon_money_left in", values, "couponMoneyLeft");
+        public Criteria andCouponDouLeftIn(List<Integer> values) {
+            addCriterion("coupon_dou_left in", values, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftNotIn(List<BigDecimal> values) {
-            addCriterion("coupon_money_left not in", values, "couponMoneyLeft");
+        public Criteria andCouponDouLeftNotIn(List<Integer> values) {
+            addCriterion("coupon_dou_left not in", values, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("coupon_money_left between", value1, value2, "couponMoneyLeft");
+        public Criteria andCouponDouLeftBetween(Integer value1, Integer value2) {
+            addCriterion("coupon_dou_left between", value1, value2, "couponDouLeft");
             return (Criteria) this;
         }
 
-        public Criteria andCouponMoneyLeftNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("coupon_money_left not between", value1, value2, "couponMoneyLeft");
+        public Criteria andCouponDouLeftNotBetween(Integer value1, Integer value2) {
+            addCriterion("coupon_dou_left not between", value1, value2, "couponDouLeft");
             return (Criteria) this;
         }
 

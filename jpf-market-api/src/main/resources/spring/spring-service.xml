@@ -9,6 +9,7 @@
 	<bean id="ShopCouponActiveInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponActiveInterfaceServiceFacadeImpl"></bean>
 	<bean id="RedisCustomServiceFacade" class="com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl"></bean>
 	<bean id="ShopCustomerInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopCustomerInterfaceServiceFacadeImpl"></bean>
+	<bean id="ShopBrandServiceFacade" class="com.joiest.jpf.facade.impl.ShopBrandServiceFacadeImpl"></bean>
 
 	<!--<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>-->
 	<bean id="ShopOrderInfoInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopOrderInfoInterfaceServiceFacadeImpl"></bean>

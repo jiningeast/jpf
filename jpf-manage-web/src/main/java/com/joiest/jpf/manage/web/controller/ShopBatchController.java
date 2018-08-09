@@ -10,13 +10,12 @@ import com.joiest.jpf.entity.ShopBatchInfo;
 import com.joiest.jpf.entity.ShopCompanyInfo;
 import com.joiest.jpf.entity.ShopInterfaceStreamInfo;
 import com.joiest.jpf.entity.UserInfo;
-import com.joiest.jpf.facade.ShopBatchCouponServiceFacade;
-import com.joiest.jpf.facade.ShopBatchServiceFacade;
-import com.joiest.jpf.facade.ShopCompanyServiceFacade;
-import com.joiest.jpf.facade.ShopInterfaceStreamServiceFacade;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.joiest.jpf.manage.web.util.SmsUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +46,11 @@ public class ShopBatchController {
 
     @Autowired
     private ShopInterfaceStreamServiceFacade shopInterfaceStreamServiceFacade;
+
+    @Autowired
+    private ShopCouponRemainServiceFacade shopCouponRemainServiceFacade;
+
+    private static final Logger logger = LogManager.getLogger(ShopBatchController.class);
 
     @RequestMapping("/index")
     public ModelAndView index(){
@@ -205,5 +209,14 @@ public class ShopBatchController {
         }
 
         return jpfResponseDto;
+    }
+
+    @RequestMapping("/checkExpire")
+    @ResponseBody
+    public int checkExpireCoupon(){
+        int count = shopCouponRemainServiceFacade.dealAllExpiredCoupon();
+        logger.info("处理了"+count+"个过期的券");
+
+        return count;
     }
 }
