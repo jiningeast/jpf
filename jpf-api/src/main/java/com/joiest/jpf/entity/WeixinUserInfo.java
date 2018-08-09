@@ -14,6 +14,11 @@ public class WeixinUserInfo {
     private Long mpid;
 
     /**
+     * 用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。
+     */
+    private Byte subscribe;
+
+    /**
      * 公众号唯一标识
      */
     private String openid;
@@ -94,12 +99,12 @@ public class WeixinUserInfo {
     private String subscribeScene;
 
     /**
-     *
+     * 二维码扫码场景
      */
     private String qrScene;
 
     /**
-     *
+     * 二维码扫码场景描述
      */
     private String qrSceneStr;
 
@@ -129,6 +134,14 @@ public class WeixinUserInfo {
 
     public void setMpid(Long mpid) {
         this.mpid = mpid;
+    }
+
+    public Byte getSubscribe() {
+        return subscribe;
+    }
+
+    public void setSubscribe(Byte subscribe) {
+        this.subscribe = subscribe;
     }
 
     public String getOpenid() {
@@ -290,4 +303,5 @@ public class WeixinUserInfo {
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
+
 }

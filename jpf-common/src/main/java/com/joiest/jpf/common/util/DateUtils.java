@@ -399,7 +399,28 @@ public class DateUtils {
 		return fDate;
 	}
 
+	/*
+	 * 将时间戳转换为时间
+	 */
+	public static String stampToDate(String seconds){
 
+		SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMATLONG);
+		return sdf.format(new Date(Long.valueOf(seconds+"000")));
+	}
+	/*
+	 * 将时间转换为时间戳
+	 */
+	public static String dateToStamp(String date_str) throws ParseException{
+
+		try {
+
+			SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMATLONG);
+			return String.valueOf(sdf.parse(date_str).getTime()/1000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public static void main(String[] args) {
 //		System.out.println(DateUtils.getString2YmdDate("20120101").getTime());

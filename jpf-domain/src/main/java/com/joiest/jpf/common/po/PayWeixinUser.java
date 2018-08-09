@@ -15,6 +15,11 @@ public class PayWeixinUser implements Serializable {
     private Long mpid;
 
     /**
+     * 用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。
+     */
+    private Byte subscribe;
+
+    /**
      * 公众号唯一标识
      */
     private String openid;
@@ -95,12 +100,12 @@ public class PayWeixinUser implements Serializable {
     private String subscribeScene;
 
     /**
-     * 
+     * 二维码扫码场景
      */
     private String qrScene;
 
     /**
-     * 
+     * 二维码扫码场景描述
      */
     private String qrSceneStr;
 
@@ -130,6 +135,14 @@ public class PayWeixinUser implements Serializable {
 
     public void setMpid(Long mpid) {
         this.mpid = mpid;
+    }
+
+    public Byte getSubscribe() {
+        return subscribe;
+    }
+
+    public void setSubscribe(Byte subscribe) {
+        this.subscribe = subscribe;
     }
 
     public String getOpenid() {
@@ -303,6 +316,7 @@ public class PayWeixinUser implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", mpid=").append(mpid);
+        sb.append(", subscribe=").append(subscribe);
         sb.append(", openid=").append(openid);
         sb.append(", nickname=").append(nickname);
         sb.append(", nicknameencode=").append(nicknameencode);
@@ -345,6 +359,7 @@ public class PayWeixinUser implements Serializable {
         PayWeixinUser other = (PayWeixinUser) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()))
+            && (this.getSubscribe() == null ? other.getSubscribe() == null : this.getSubscribe().equals(other.getSubscribe()))
             && (this.getOpenid() == null ? other.getOpenid() == null : this.getOpenid().equals(other.getOpenid()))
             && (this.getNickname() == null ? other.getNickname() == null : this.getNickname().equals(other.getNickname()))
             && (this.getNicknameencode() == null ? other.getNicknameencode() == null : this.getNicknameencode().equals(other.getNicknameencode()))
@@ -376,6 +391,7 @@ public class PayWeixinUser implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getMpid() == null) ? 0 : getMpid().hashCode());
+        result = prime * result + ((getSubscribe() == null) ? 0 : getSubscribe().hashCode());
         result = prime * result + ((getOpenid() == null) ? 0 : getOpenid().hashCode());
         result = prime * result + ((getNickname() == null) ? 0 : getNickname().hashCode());
         result = prime * result + ((getNicknameencode() == null) ? 0 : getNicknameencode().hashCode());
