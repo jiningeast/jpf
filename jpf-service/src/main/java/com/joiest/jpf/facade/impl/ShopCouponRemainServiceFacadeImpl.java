@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,6 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
      * 处理过期的券
      */
     @Override
-    @Transactional
     public int dealAllExpiredCoupon(){
         PayShopCouponRemainExample e = new PayShopCouponRemainExample();
         PayShopCouponRemainExample.Criteria c = e.createCriteria();
@@ -65,6 +65,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
     /**
      * 处理过期的券
      */
+    @Transactional
     public int dealExpiredCoupon(List<PayShopCouponRemain> list){
         int count = 0;
         if ( !list.isEmpty() ){
@@ -110,8 +111,10 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
                 // 客户总豆数量减去一部分pay_shop_customer
                 PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
                 int dou = payShopCustomer.getDou() - douLeft;
+                String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
                 payShopCustomerUpdate.setId(payShopCouponRemain.getCustomerId());
                 payShopCustomerUpdate.setDou(dou);
+                payShopCustomerUpdate.setCode(code);
                 payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
 
                 count++;
