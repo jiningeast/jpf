@@ -55,7 +55,11 @@ public class ClassUtil {
             if (setter != null) {
                 String name = property.getName();
                 Object abc = map.get(property.getName());
-                setter.invoke(obj, map.get(property.getName()));
+//                setter.invoke(obj, map.get(property.getName()));
+                if ( abc != null )
+                {
+                    setter.invoke(obj, map.get(property.getName()).toString());
+                }
             }
         }
         return obj;

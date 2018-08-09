@@ -5,7 +5,10 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.entity.ShopCouponRemainInfo;
+import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
+import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,7 +138,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         example.setOrderByClause("id ASC");
         PayShopCouponRemainExample.Criteria c = example.createCriteria();
         c.andCustomerIdEqualTo(uid);
-        c.andStatusEqualTo((byte)1);
+        c.andStatusEqualTo((byte)0);
         List<PayShopCouponRemain> list = payShopCouponRemainMapper.selectByExample(example);
         if ( list.isEmpty() || list == null )
         {
@@ -157,6 +160,66 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         response.setDouTotal(douTotal);
 
         return response;
+    }
+
+    public Boolean CouponHandler(List<ShopCouponRemainInfo> list, ShopOrderInterfaceInfo orderInfo, ShopCustomerInterfaceInfo userInfo)
+    {
+        int orderDou = orderInfo.getTotalDou();
+        int orderBlance = orderInfo.getTotalDou();  //订单总额
+
+        //1单张券满足 2.需要多张券
+        if ( orderDou == list.get(0).getCouponDouLeft() )
+        {
+            return doCoupon(list.get(0),"1", orderDou);
+        }
+
+        if ( orderDou < list.get(0).getCouponDouLeft() )
+        {
+            return doCoupon(list.get(0),"0", list.get(0).getCouponDouLeft());
+        }
+
+        //1:用完  0未用完
+        if ( orderDou > list.get(0).getCouponDouLeft() )
+        {
+            for ( ShopCouponRemainInfo one : list)
+            {
+                //1.remain减去金额 2.active log 3.customer减去金额 4.code生成
+
+                if ( orderBlance > one.getCouponDouLeft() )
+                {
+                    orderBlance = orderBlance - one.getCouponDouLeft();
+                }
+                if ( orderBlance > 0 )
+                {
+                    Boolean isTrue = doCoupon(one,"1", one.getCouponDouLeft());
+                }
+                if ( orderBlance < 0 )
+                {
+                    Boolean isTrue = doCoupon(one,"0", orderBlance); //未用完
+                    return isTrue;
+                }
+
+            }
+        }
+
+
+        //1.remain减去金额 2.active log 3.customer减去金额 4.code生成
+//        // 更新批次余额表pay_shop_coupon_remain
+//        PayShopCouponRemain payShopCouponRemain = new PayShopCouponRemain();
+//        BeanCopier beanCopier = BeanCopier.create(ShopCouponRemainInfo.class, PayShopCouponRemain.class, false);
+//        beanCopier.copy(remainInfo, payShopCouponRemain, null);
+//
+//        payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
+
+
+        return true;
+    }
+
+    public Boolean doCoupon(ShopCouponRemainInfo remainInfo, String type, int money)
+    {
+        System.out.println("type:" + type);
+        System.out.println("money:" + money);
+        return true;
     }
 
 }
