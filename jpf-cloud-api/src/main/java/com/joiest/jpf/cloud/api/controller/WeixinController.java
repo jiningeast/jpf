@@ -1,6 +1,7 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.MessageUtil;
+import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.entity.WeixinMpInfo;
@@ -9,6 +10,7 @@ import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
+import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -227,5 +228,32 @@ public class WeixinController {
             return echostr;
         }
         return null;
+    }
+    /**
+     * 获取openid
+     * @param request
+     * */
+    @RequestMapping(value = "/userUnionId",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public void userUnionId(HttpServletRequest request,HttpServletResponse response){
+
+        String state = request.getParameter("state");
+
+        if(StringUtils.isNotBlank(state)){
+
+            String encrypt = request.getParameter("encrypt");
+            String vueUrl = request.getParameter("vueurl");
+            
+            //获取公众号信息
+            weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
+            String openid = new MessageUtil().getOpenid(request,weixinMpInfo);
+
+            vueUrl = Base64CustomUtils.base64Decoder(vueUrl)+"&openid="+openid;
+
+
+            response.setStatus(302);
+            response.setHeader("location",vueUrl);
+        }
+
     }
 }
