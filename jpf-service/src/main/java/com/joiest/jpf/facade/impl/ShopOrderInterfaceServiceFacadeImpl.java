@@ -44,4 +44,17 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
 
         return info;
     }
+
+    /**
+     * 获取用户订单数量，已取消的不统计
+     */
+    @Override
+    public int getOrdersCount(String customerId){
+        PayShopOrderExample e = new PayShopOrderExample();
+        PayShopOrderExample.Criteria c = e.createCriteria();
+        c.andCustomerIdEqualTo(customerId);
+        c.andStatusNotEqualTo((byte)3);
+
+        return payShopOrderMapper.countByExample(e);
+    }
 }
