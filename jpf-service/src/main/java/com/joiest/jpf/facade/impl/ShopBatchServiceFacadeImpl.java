@@ -99,6 +99,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             jpfResponseDto.setRetMsg("商户已停用，无法继续操作");
         }
 
+        // 添加批次
         PayShopBatch payShopBatch = new PayShopBatch();
         payShopBatch.setCompanyId(shopBatchRequest.getCompanyId());
         payShopBatch.setCompanyName(shopBatchRequest.getCompanyName());
@@ -118,7 +119,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         payShopBatch.setScale(1.00);
         payShopBatch.setCount(totalCount);
         payShopBatch.setExpireMonth(shopBatchRequest.getExpireMonth());
-        payShopBatch.setStatus((byte)1);
+        payShopBatch.setStatus((byte)0);
         payShopBatch.setActivetedNum(0);
         payShopBatch.setSalesName(payShopCompany.getSaleName());
         payShopBatch.setReceiveName(payShopBatch.getReceiveName());
@@ -218,6 +219,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         payShopBatchUpdate.setId(batchId);
         payShopBatchUpdate.setOssUrl(ossResponse);
         payShopBatchUpdate.setZipPassword(password);
+        payShopBatchUpdate.setStatus((byte)1);
         payShopBatchMapper.updateByPrimaryKeySelective(payShopBatchUpdate);
 
         // oss接口流水
@@ -228,6 +230,8 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         payShopInterfaceStream.setResponseContent(ossResponse);
         payShopInterfaceStream.setBatchId(batchId);
         payShopInterfaceStreamMapper.insertSelective(payShopInterfaceStream);
+
+        // 批次及券生成完毕，更新批次状态为“1：生成完毕，待发券”
 
         return new JpfResponseDto();
     }
@@ -258,7 +262,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
     }
 
     /**
-     * 发送邮件和短信
+     * 发送邮件
      */
     @Override
     public int sendEmail(String batchId) throws Exception{

@@ -12,6 +12,7 @@ import com.joiest.jpf.entity.ShopInterfaceStreamInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import com.joiest.jpf.manage.web.thread.AddBatchThread;
 import com.joiest.jpf.manage.web.util.SmsUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -95,7 +96,14 @@ public class ShopBatchController {
         request.setOperatorId(userInfo.getId().toString());
         request.setOperatorName(userInfo.getUserName());
 
-        return shopBatchServiceFacade.addBatchCoupon(request,httpResponse);
+        // 未使用线程
+        // return shopBatchServiceFacade.addBatchCoupon(request,httpResponse);
+
+        // 使用线程
+        Thread thread = new Thread(new AddBatchThread(request,httpResponse));
+        thread.start();
+
+        return new JpfResponseDto();
     }
 
     /**
@@ -152,7 +160,7 @@ public class ShopBatchController {
 
             return jpfResponseDto;
         }
-        if ( shopBatchInfo.getEmailStatus() == 1 && shopBatchInfo.getSmsStatus() == 1 ){
+        if ( shopBatchInfo.getEmailStatus() == 1 || shopBatchInfo.getSmsStatus() == 1 || shopBatchInfo.getStatus() == 2 ){
             jpfResponseDto.setRetCode("10002");
             jpfResponseDto.setRetMsg("EMAIL已发送过，无法再次发送");
 
