@@ -90,6 +90,7 @@ public class MessageUtil {
      * */
     public static final String HTTPS_URL = "https://api.weixin.qq.com/";
 
+    public static final String HTTPS_API_URL = " https://api.weixin.qq.com/";
     /**
      * CLICK
      */
@@ -167,7 +168,7 @@ public class MessageUtil {
         Map<String, Object> map = new HashMap<>();
 
         String code = request.getParameter("code");
-        String url = HTTPS_URL+"/sns/oauth2/access_token?appid="+weixinMpInfo.getAppid()+"&secret="+weixinMpInfo.getAppsecret()+"&code="+code+"&grant_type=authorization_code";
+        String url = HTTPS_API_URL+"sns/oauth2/access_token?appid="+weixinMpInfo.getAppid()+"&secret="+weixinMpInfo.getAppsecret()+"&code="+code+"&grant_type=authorization_code";
 
         JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(url,map));
 
