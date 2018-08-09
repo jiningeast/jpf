@@ -39,9 +39,9 @@
                         <td>
                             <input id="product_name" name="name" type="text" style="width:220px" class="easyui-textbox" value="${productOne.name}" data-options="required:true"/>
                         </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">欣豆：</td>
+                        <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
                         <td>
-                            <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.dou}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                            <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.rechargeMoney}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
                         <%--<td style="text-align: right;background-color: #f1f1f1;">接口形式：</td>--%>
                         <%--<td>--%>
@@ -51,27 +51,32 @@
                             <%--</select>--%>
                         <%--</td>--%>
                     </tr>
-                    <%--<tr>
-                        </td>
+                    <tr>
+<%--                        </td>
                         <td style="text-align: right;background-color: #f1f1f1;">标准进价：</td>
                         <td>
                             <input id="bid" name="bid" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />
-                        </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">商品售价：</td>
+                        </td>--%>
+                        <td style="text-align: right;background-color: #f1f1f1;">欣豆：</td>
                         <td>
-                            <input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />
+                            <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.dou}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
-
-                    </tr>--%>
+                        <%--<td style="text-align: right;background-color: #f1f1f1;">商品售价：</td>--%>
+                        <%--<td>--%>
+                            <%--<input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />--%>
+                        <%--</td>--%>
+                        <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
+                        <td>
+                            <input id="stored_safe" name="storedSafe" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.storedSafe}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                        </td>
+                    </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">当前库存：</td>
                         <td>
                             <input id="stored" name="stored" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.stored}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
-                        <td>
-                            <input id="stored_safe" name="storedSafe" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.storedSafe}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
-                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;"></td>
+                        <td> </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品描述：</td>

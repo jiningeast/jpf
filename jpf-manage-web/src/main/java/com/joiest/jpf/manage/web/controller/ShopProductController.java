@@ -107,7 +107,7 @@ public class ShopProductController {
     @ResponseBody
     public JpfResponseDto addAction(ModifyShopProductRequest request,HttpServletRequest httprequest )
     {
-        ValidatorUtils.validate(request);
+//        ValidatorUtils.validate(request);
 
         HttpSession session = httprequest.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);

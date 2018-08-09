@@ -97,6 +97,11 @@ public class ModifyShopProductRequest {
      */
     private Date updatetime;
 
+    /**
+     * 充值面额
+     */
+    @Digits(integer=5,fraction=0, message = "充值面额只能为整数")
+    private String rechargeMoney;
 
     public String getId() {
         return id;
@@ -200,5 +205,13 @@ public class ModifyShopProductRequest {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(String rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
     }
 }

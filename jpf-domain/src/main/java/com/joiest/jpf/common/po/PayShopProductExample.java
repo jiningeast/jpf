@@ -496,6 +496,66 @@ public class PayShopProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andRechargeMoneyIsNull() {
+            addCriterion("recharge_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyIsNotNull() {
+            addCriterion("recharge_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyEqualTo(Integer value) {
+            addCriterion("recharge_money =", value, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyNotEqualTo(Integer value) {
+            addCriterion("recharge_money <>", value, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyGreaterThan(Integer value) {
+            addCriterion("recharge_money >", value, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("recharge_money >=", value, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyLessThan(Integer value) {
+            addCriterion("recharge_money <", value, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyLessThanOrEqualTo(Integer value) {
+            addCriterion("recharge_money <=", value, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyIn(List<Integer> values) {
+            addCriterion("recharge_money in", values, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyNotIn(List<Integer> values) {
+            addCriterion("recharge_money not in", values, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyBetween(Integer value1, Integer value2) {
+            addCriterion("recharge_money between", value1, value2, "rechargeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeMoneyNotBetween(Integer value1, Integer value2) {
+            addCriterion("recharge_money not between", value1, value2, "rechargeMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andBidIsNull() {
             addCriterion("bid is null");
             return (Criteria) this;

@@ -125,9 +125,12 @@
                 columns:[[
                     {field:'id',title:'商品ID',width:80},
                     {field:'name',title:'商品名称',width:200},
-                    {field:'money',title:'商品价格',width:150,formatter:formatPrice},
+                    {field:'rechargeMoney',title:'充值面额(元)',width:150},
+                    {field:'dou',title:'所需豆',width:150},
                     {field:'brandName',title:'商品品牌',width:200},
-                    {field:'stored',title:'库存',width:200},
+                    {field:'supplierName',title:'供应商',width:200},
+                    {field:'typeName',title:'商品分类',width:200},
+                    {field:'stored',title:'当前库存',width:200},
                     // {field:'pdpicture',title:'产品图片',width:150,
                     //     formatter:function(value,row,index){return '<img style="height:80px;width:100px;" src="'+ value +'" />';}
                     // },
