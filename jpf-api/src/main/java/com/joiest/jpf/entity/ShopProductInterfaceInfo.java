@@ -31,6 +31,11 @@ public class ShopProductInterfaceInfo {
     private BigDecimal money;
 
     /**
+     * 充值面额
+     */
+    private Integer rechargeMoney;
+
+    /**
      * 商品进价
      */
     private BigDecimal bid;
@@ -211,6 +216,14 @@ public class ShopProductInterfaceInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
     }
 
     //================ 自定义字段 begin ================

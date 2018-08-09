@@ -11,6 +11,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="recharge_money" jdbcType="INTEGER" property="rechargeMoney" />
     <result column="bid" jdbcType="DECIMAL" property="bid" />
     <result column="dou" jdbcType="INTEGER" property="dou" />
     <result column="intro" jdbcType="VARCHAR" property="intro" />
