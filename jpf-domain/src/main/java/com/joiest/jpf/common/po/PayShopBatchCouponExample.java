@@ -925,6 +925,66 @@ public class PayShopBatchCouponExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsExpiredIsNull() {
+            addCriterion("is_expired is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredIsNotNull() {
+            addCriterion("is_expired is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredEqualTo(Byte value) {
+            addCriterion("is_expired =", value, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredNotEqualTo(Byte value) {
+            addCriterion("is_expired <>", value, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredGreaterThan(Byte value) {
+            addCriterion("is_expired >", value, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_expired >=", value, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredLessThan(Byte value) {
+            addCriterion("is_expired <", value, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredLessThanOrEqualTo(Byte value) {
+            addCriterion("is_expired <=", value, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredIn(List<Byte> values) {
+            addCriterion("is_expired in", values, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredNotIn(List<Byte> values) {
+            addCriterion("is_expired not in", values, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredBetween(Byte value1, Byte value2) {
+            addCriterion("is_expired between", value1, value2, "isExpired");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpiredNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_expired not between", value1, value2, "isExpired");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
