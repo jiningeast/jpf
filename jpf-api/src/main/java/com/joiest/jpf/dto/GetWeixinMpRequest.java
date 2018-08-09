@@ -1,11 +1,15 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-public class WeixinMpInfo {
+public class GetWeixinMpRequest {
     /**
      *
      */
+
     private Long id;
 
     /**
@@ -16,26 +20,31 @@ public class WeixinMpInfo {
     /**
      * 公众号名称
      */
+    @NotBlank(message = "公众号名称不能为空")
     private String name;
 
     /**
      * 公众号关注二维码
      */
+    @NotBlank(message = "二维码不能为空")
     private String followqr;
 
     /**
      * 开发者ID(AppID)
      */
+    @NotBlank(message = "开发者ID不能为空")
     private String appid;
 
     /**
      * 开发者密码(AppSecret)
      */
+    @NotBlank(message = "开发者密码不能为空")
     private String appsecret;
 
     /**
      * 服务器配置令牌token
      */
+    @NotBlank(message = "令牌token不能为空")
     private String token;
 
     /**
@@ -72,6 +81,18 @@ public class WeixinMpInfo {
      *
      */
     private Date updated;
+
+    private long rows;
+
+    private long page;
+
+    /**
+     * 注册时间
+     */
+    private String addtimeStart;
+
+    private String addtimeEnd;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -171,6 +192,22 @@ public class WeixinMpInfo {
         this.updated = updated;
     }
 
+    public long getRows() {
+        return rows;
+    }
+
+    public void setRows(long rows) {
+        this.rows = rows;
+    }
+
+    public long getPage() {
+        return page;
+    }
+
+    public void setPage(long page) {
+        this.page = page;
+    }
+
     public String getName() {
         return name;
     }
@@ -185,5 +222,21 @@ public class WeixinMpInfo {
 
     public void setFollowqr(String followqr) {
         this.followqr = followqr;
+    }
+
+    public String getAddtimeStart() {
+        return addtimeStart;
+    }
+
+    public void setAddtimeStart(String addtimeStart) {
+        this.addtimeStart = addtimeStart;
+    }
+
+    public String getAddtimeEnd() {
+        return addtimeEnd;
+    }
+
+    public void setAddtimeEnd(String addtimeEnd) {
+        this.addtimeEnd = addtimeEnd;
     }
 }
