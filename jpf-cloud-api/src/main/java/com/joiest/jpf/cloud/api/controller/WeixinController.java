@@ -243,6 +243,7 @@ public class WeixinController {
 
             String encrypt = request.getParameter("encrypt");
             String responseurl = request.getParameter("responseurl");
+            responseurl = Base64CustomUtils.base64Decoder(responseurl);
 
 
             StringBuilder sbf = new StringBuilder();
@@ -255,21 +256,24 @@ public class WeixinController {
             LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/", fileName,true);
 
 
-
-
             System.out.println("请求参数:"+request.getQueryString());
             System.out.println("responseurl Base64:"+responseurl);
             //获取公众号信息
             weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
-            String openid = new MessageUtil().getOpenid(request,weixinMpInfo);
+            JSONObject webAccessToken = new MessageUtil().getWebAccessToken(request,weixinMpInfo);
 
-            //String openid = "sdfwer";
-            responseurl = Base64CustomUtils.base64Decoder(responseurl)+"&openid="+openid;
+            if(webAccessToken.isEmpty()){
 
-            System.out.println("responseurl:"+responseurl);
+                response.setStatus(302);
+                response.setHeader("location",responseurl+"#openid=");
+            }else{
 
-            response.setStatus(302);
-            response.setHeader("location",responseurl);
+                //授权获取用户基本信息
+                JSONObject snsapiUserinfo = new MessageUtil().snsapiUserinfo(webAccessToken.get("access_token").toString(),webAccessToken.get("openid").toString());
+
+                response.setStatus(302);
+                response.setHeader("location",responseurl+"#openid="+webAccessToken.get("openid").toString());
+            }
         }
 
     }

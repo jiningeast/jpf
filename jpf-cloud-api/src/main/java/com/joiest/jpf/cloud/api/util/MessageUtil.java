@@ -163,7 +163,7 @@ public class MessageUtil {
 
         return res;
     }
-    public String getOpenid(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
+    public JSONObject getWebAccessToken(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
 
         Map<String, Object> map = new HashMap<>();
 
@@ -182,7 +182,31 @@ public class MessageUtil {
 
         if(res.containsKey("openid")){
 
-            return res.get("openid").toString();
+            return res;
+        }
+        return null;
+    }
+
+    public JSONObject snsapiUserinfo(String accessToken,String openid){
+
+        Map<String, Object> map = new HashMap<>();
+
+        String userInfoUrl = HTTPS_API_URL+"sns/userinfo?access_token="+accessToken+"&openid="+openid+"&lang=zh_CN";
+
+        JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(userInfoUrl,map));
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + curTime);
+        sbf.append("\n请求类型：微信公众号授权获取用户信息snsapi_serinfo");
+        sbf.append("\n请求地址："+userInfoUrl);
+        sbf.append("\n获取接口参数："+res);
+        String fileName = "WeixinSnsapiUserinfoLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
+
+        if(res.containsKey("openid")){
+
+            return res;
         }
         return null;
     }
