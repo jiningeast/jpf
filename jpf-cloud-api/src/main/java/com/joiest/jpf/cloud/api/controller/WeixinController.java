@@ -280,6 +280,8 @@ public class WeixinController {
                 response.setHeader("location",responseurl+"#openid=");
             }
             String openid = webAccessToken.get("openid").toString();
+            logger.info("openid",openid);
+
             if(state.equals("userinfo")){
 
                 //获取是否有当前微信用户信息
@@ -300,7 +302,6 @@ public class WeixinController {
             redisCustomServiceFacade.set(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token, openidEn, Long.parseLong(ConfigUtil.getValue("WEIXIN_LOGIN_EXPIRE_30")) );
 
             logger.info("token",token);
-            logger.info("openid",openid);
             logger.info("加密openid",openidEn);
 
             response.setStatus(302);
