@@ -1,17 +1,20 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.MessageUtil;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.LogsCustomUtils;
+import com.joiest.jpf.cloud.api.util.ToolsUtils;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.entity.WeixinMpInfo;
 import com.joiest.jpf.entity.WeixinUserInfo;
+import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
 import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +35,8 @@ import java.util.*;
 @RequestMapping("weixin")
 public class WeixinController {
 
+    private static final Logger logger = LogManager.getLogger(merchInfoController.class);
+
     private WeixinMpInfo weixinMpInfo;
 
     @Autowired
@@ -39,6 +44,9 @@ public class WeixinController {
 
     @Autowired
     private WeixinUserServiceFacade weixinUserServiceFacade;
+
+    @Autowired
+    private RedisCustomServiceFacade redisCustomServiceFacade;
 
     @RequestMapping(value = "/weiIndex", produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -271,6 +279,7 @@ public class WeixinController {
                 response.setStatus(302);
                 response.setHeader("location",responseurl+"#openid=");
             }
+            String openid = webAccessToken.get("openid").toString();
             if(state.equals("userinfo")){
 
                 //获取是否有当前微信用户信息
@@ -286,9 +295,50 @@ public class WeixinController {
                     dealUserInfo(weixinMpInfo,weixinUserInfo,snsapiUserinfo);
                 }
             }
-            response.setStatus(302);
-            response.setHeader("location",responseurl+"#openid="+webAccessToken.get("openid").toString());
-        }
+            String token = AESUtils.encrypt(weixinMpInfo.getAppid()+openid,ConfigUtil.getValue("AES_KEY"));
+            String openidEn = AESUtils.encrypt(openid, ConfigUtil.getValue("AES_KEY"));
+            redisCustomServiceFacade.set(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token, openidEn, Long.parseLong(ConfigUtil.getValue("WEIXIN_LOGIN_EXPIRE_30")) );
 
+            logger.info("token",token);
+            logger.info("openid",openid);
+            logger.info("加密openid",openidEn);
+
+            response.setStatus(302);
+            response.setHeader("location",responseurl+"#"+openidEn);
+        }
     }
+    /**
+     * 获取公众号信息
+     * */
+    @RequestMapping(value = "/mpFoundate", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String mpFoundate(HttpServletRequest request){
+
+        String encrypt = request.getParameter("encrypt");
+
+        weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
+        if(weixinMpInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "ERROR", null);
+        }
+        String redirectUri = ConfigUtil.getValue("BASE_API_URL")+"weixin/userUnionId?encrypt="+encrypt+"&responseurl=locationurl";
+        try {
+
+            redirectUri = URLEncoder.encode(redirectUri, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+
+            e.printStackTrace();
+        }
+        String BASE_GRANT_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+weixinMpInfo.getAppid()+"&redirect_uri="+redirectUri+"&response_type=code&scope=snsapi_base&state=base#wechat_redirect";
+        String USER_GRANT_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+weixinMpInfo.getAppid()+"&redirect_uri="+redirectUri+"&response_type=code&scope=snsapi_userinfo&state=base#wechat_redirect";
+
+        JSONObject res = new JSONObject();
+        res.put("encrypt",encrypt);
+        res.put("appid",weixinMpInfo.getAppid());
+        res.put("basegranturl",BASE_GRANT_URL);
+        res.put("usergranturl",USER_GRANT_URL);
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "SUCCESS", res);
+    }
+
 }
