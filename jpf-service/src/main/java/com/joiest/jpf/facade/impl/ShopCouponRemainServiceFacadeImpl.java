@@ -164,6 +164,10 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         return response;
     }
 
+    /**
+     * 个人支付操作
+     */
+    @Transactional
     public int CouponHandler(List<ShopCouponRemainInfo> list, ShopOrderInterfaceInfo orderInfo, ShopCustomerInterfaceInfo userInfo)
     {
         int orderBlance = orderInfo.getTotalDou();  //订单总额
@@ -223,7 +227,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
      * @param remainInfo
      * @param deduct    需要扣除的豆
      */
-    @Transactional
+//    @Transactional
     public Boolean doCoupon(ShopCouponRemainInfo remainInfo, int deduct, ShopOrderInterfaceInfo orderInfo)
     {
         //1.remain减去金额 2.active log 3.customer减去金额 & code生成
@@ -240,8 +244,8 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         int remain = payShopCouponRemain.getCouponDouLeft() - deduct;
         payShopCouponRemain.setCouponDouLeft(remain);
         payShopCouponRemain.setUpdatetime(new Date());
-        int rescouponRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
-
+        int res_couponRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
+//        throw new Exception("99999", "");
         // 新增日志表一条记录pay_shop_coupon_active
         PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
         payShopCouponActive.setCustomerId(orderInfo.getCustomerId());
@@ -255,7 +259,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         payShopCouponActive.setPayWay(orderInfo.getPayWay());
         payShopCouponActive.setMoney(new BigDecimal("0"));
         payShopCouponActive.setDou(deduct);     //消费豆数量
-        payShopCouponActive.setContent("行为:消费;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getName() + ";豆数量:" + deduct + ";orderId:" + orderInfo.getId() );
+        payShopCouponActive.setContent("行为:消费;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getName() + ";豆消费:" + deduct + ";orderId:" + orderInfo.getId() + ";剩余豆:" + remain);
         payShopCouponActive.setType("1");
         payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
         payShopCouponActive.setAddtime(new Date());

@@ -33,8 +33,9 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
         PayShopOrderExample.Criteria c = example.createCriteria();
         c.andOrderNoEqualTo(orderNo);
         c.andCustomerIdEqualTo(uid);
+        c.andStatusEqualTo((byte)0);
         List<PayShopOrder> list = payShopOrderMapper.selectByExample(example);
-        if ( list == null )
+        if ( list == null || list.isEmpty() )
         {
             return null;
         }
