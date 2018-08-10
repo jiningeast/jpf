@@ -142,7 +142,7 @@ public class WeixinController {
         userData.put("openid",userInfo.get("openid").toString());
         userData.put("subscribe",userInfo.get("subscribe").toString());
 
-        if(userInfo.get("subscribe").toString().equals("1")){
+        if(userInfo.get("subscribe").toString().equals("1") || userInfo.get("subscribe").toString().equals("2")){
 
             userData.put("nickname",userInfo.get("nickname").toString());
             String nickname = null;
@@ -168,13 +168,17 @@ public class WeixinController {
             else
                 userData.put("unionid","");
 
-            userData.put("remark",userInfo.get("remark").toString());
-            userData.put("groupid",userInfo.get("groupid").toString());
-            userData.put("tagid_list",userInfo.get("tagid_list").toString());
-            userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
-            userData.put("qr_scene",userInfo.get("qr_scene").toString());
-            userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+            if(userInfo.get("subscribe").toString().equals("2")){
 
+                userData.put("privilege",userInfo.get("privilege").toString());
+            }else{
+                userData.put("remark",userInfo.get("remark").toString());
+                userData.put("groupid",userInfo.get("groupid").toString());
+                userData.put("tagid_list",userInfo.get("tagid_list").toString());
+                userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
+                userData.put("qr_scene",userInfo.get("qr_scene").toString());
+                userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+            }
             if(weixinUserInfo!=null){
 
                 weixinUserServiceFacade.upWeixinUserById(userData,weixinUserInfo.getId());
@@ -245,7 +249,6 @@ public class WeixinController {
             String responseurl = request.getParameter("responseurl");
             responseurl = Base64CustomUtils.base64Decoder(responseurl);
 
-
             StringBuilder sbf = new StringBuilder();
             Date date = new Date();
             SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -255,9 +258,6 @@ public class WeixinController {
             String fileName = "test";
             LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/", fileName,true);
 
-
-            System.out.println("请求参数:"+request.getQueryString());
-            System.out.println("responseurl Base64:"+responseurl);
             //获取公众号信息
             weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
             JSONObject webAccessToken = new MessageUtil().getWebAccessToken(request,weixinMpInfo);
@@ -266,14 +266,24 @@ public class WeixinController {
 
                 response.setStatus(302);
                 response.setHeader("location",responseurl+"#openid=");
-            }else{
-
-                //授权获取用户基本信息
-                JSONObject snsapiUserinfo = new MessageUtil().snsapiUserinfo(webAccessToken.get("access_token").toString(),webAccessToken.get("openid").toString());
-
-                response.setStatus(302);
-                response.setHeader("location",responseurl+"#openid="+webAccessToken.get("openid").toString());
             }
+            if(state.equals("userinfo")){
+
+                //获取是否有当前微信用户信息
+                WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinUserByOpenid(webAccessToken.get("openid").toString(),weixinMpInfo.getId());
+                if(weixinUserInfo == null){
+
+                    //授权获取用户基本信息
+                    JSONObject snsapiUserinfo = new MessageUtil().snsapiUserinfo(webAccessToken.get("access_token").toString(),webAccessToken.get("openid").toString());
+                    //snsapiUserinfo.put("mpid",weixinMpInfo.getId());
+                    snsapiUserinfo.put("subscribe","2");
+                    snsapiUserinfo.put("subscribe_time",System.currentTimeMillis()/1000);
+
+                    dealUserInfo(weixinMpInfo,weixinUserInfo,snsapiUserinfo);
+                }
+            }
+            response.setStatus(302);
+            response.setHeader("location",responseurl+"#openid="+webAccessToken.get("openid").toString());
         }
 
     }

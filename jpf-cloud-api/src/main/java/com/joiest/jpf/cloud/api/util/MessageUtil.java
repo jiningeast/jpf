@@ -144,7 +144,9 @@ public class MessageUtil {
 
         return messageMap;
     }
-
+    /**
+     * 基础接口获取用户信息
+     * */
     public JSONObject getUserInfo(String access_token,String openid){
 
         Map<String, Object> map = new HashMap<>();
@@ -163,6 +165,9 @@ public class MessageUtil {
 
         return res;
     }
+    /**
+     * 获取网页授权access_token
+     * */
     public JSONObject getWebAccessToken(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
 
         Map<String, Object> map = new HashMap<>();
@@ -186,7 +191,9 @@ public class MessageUtil {
         }
         return null;
     }
-
+    /**
+     * 网页授权获取用户信息
+     * */
     public JSONObject snsapiUserinfo(String accessToken,String openid){
 
         Map<String, Object> map = new HashMap<>();
