@@ -27,6 +27,6 @@ public interface ShopCouponRemainServiceFacade {
     /**
      * 支付消费
      */
-    public Boolean CouponHandler(List<ShopCouponRemainInfo> list, ShopOrderInterfaceInfo orderInfo, ShopCustomerInterfaceInfo userInfo);
+    public int CouponHandler(List<ShopCouponRemainInfo> list, ShopOrderInterfaceInfo orderInfo, ShopCustomerInterfaceInfo userInfo);
 
 }

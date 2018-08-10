@@ -218,16 +218,6 @@ public class OrdersController {
 
         shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
 
-        for ( ShopCouponRemainInfo one : userCouponList.getList())
-        {
-            //1单张券满足 2.需要多张券
-            //1.remain减去金额 2.active log 3.customer减去金额 4.code生成
-            if ( orderDou <= one.getCouponDouLeft() )
-            {
-
-            }
-
-        }
         return "";
     }
 
