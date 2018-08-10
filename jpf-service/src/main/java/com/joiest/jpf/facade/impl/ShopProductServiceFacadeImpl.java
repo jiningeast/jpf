@@ -66,6 +66,10 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
             ShopProductInfo info = new ShopProductInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopProduct.class, ShopProductInfo.class, false);
             beanCopier.copy(one, info, null);
+            //商品基础信息
+            PayShopProductInfo pInfo = payShopProductInfoMapper.selectByPrimaryKey(one.getProductInfoId());
+            BeanCopier beanCopier_pInfo = BeanCopier.create(PayShopProductInfo.class, ShopProductInfo.class, false);
+            beanCopier_pInfo.copy(pInfo, info, null);
             resultList.add(info);
         }
         response.setList(resultList);
@@ -145,6 +149,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setAddtime(new Date());
         payShopProduct.setOperatorId(request.getOperatorId());
         payShopProduct.setOperatorName(request.getOperatorName());
+        payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
         int res = payShopProductMapper.insertSelective(payShopProduct);
         return new JpfResponseDto();
     }
@@ -186,6 +191,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setOperatorName(request.getOperatorName());
         payShopProduct.setStatus(request.getStatus());
         payShopProduct.setUpdatetime(new Date());
+        payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
         int res = payShopProductMapper.updateByPrimaryKeySelective(payShopProduct);
         return new JpfResponseDto();
     }

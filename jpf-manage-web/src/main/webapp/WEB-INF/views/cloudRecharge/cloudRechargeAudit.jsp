@@ -229,7 +229,7 @@
                 var queryArray = $('#auditForm').serializeArray();
                 var postData = parsePostData(queryArray);
                 if( postData.status==4 ){
-                    $.messager.confirm('Confirm','充值前请确保充值金额与上传付款凭证金额一致',function(r){
+                    $.messager.confirm('确认','充值前请确保实际到账金额与付款凭证金额一致',function(r){
                         if (r){
                             $.ajax({
                                 type: 'post',

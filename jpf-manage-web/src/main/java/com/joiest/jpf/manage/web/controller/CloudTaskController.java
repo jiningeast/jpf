@@ -263,6 +263,9 @@ public class CloudTaskController {
                 }
             }
         }
+        // 把excel表的金额统计保留两位小数
+        BigDecimal companyMoneyBigDecimal = new BigDecimal(companyMoney);
+        companyMoneyBigDecimal = companyMoneyBigDecimal.setScale(2,RoundingMode.HALF_UP);
         if(!fileName.equals(Batchno)){
             responseMap.put("code","10004");
             responseMap.put("info","批次号与文件名不一致请修改后上传！");
@@ -287,7 +290,7 @@ public class CloudTaskController {
             responseMap.put("data",staffInfosFailed);
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
-        }else if ( companyInfo.getCloudmoney().compareTo(new BigDecimal(companyMoney)) == -1 ){
+        }else if ( companyInfo.getCloudmoney().compareTo(companyMoneyBigDecimal) == -1 ){
             // "该企业账户余额不足，剩余："+companyInfo.getCloudmoney()
             return "-3";
         }else{

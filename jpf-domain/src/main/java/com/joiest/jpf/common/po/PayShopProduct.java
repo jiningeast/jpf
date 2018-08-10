@@ -26,9 +26,14 @@ public class PayShopProduct implements Serializable {
     private String image;
 
     /**
-     * 金额
+     * 商品售价
      */
     private BigDecimal money;
+
+    /**
+     * 充值面额
+     */
+    private Integer rechargeMoney;
 
     /**
      * 商品进价
@@ -125,6 +130,14 @@ public class PayShopProduct implements Serializable {
 
     public void setMoney(BigDecimal money) {
         this.money = money;
+    }
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
     }
 
     public BigDecimal getBid() {
@@ -229,6 +242,7 @@ public class PayShopProduct implements Serializable {
         sb.append(", name=").append(name);
         sb.append(", image=").append(image);
         sb.append(", money=").append(money);
+        sb.append(", rechargeMoney=").append(rechargeMoney);
         sb.append(", bid=").append(bid);
         sb.append(", dou=").append(dou);
         sb.append(", intro=").append(intro);
@@ -265,6 +279,7 @@ public class PayShopProduct implements Serializable {
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getImage() == null ? other.getImage() == null : this.getImage().equals(other.getImage()))
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
+            && (this.getRechargeMoney() == null ? other.getRechargeMoney() == null : this.getRechargeMoney().equals(other.getRechargeMoney()))
             && (this.getBid() == null ? other.getBid() == null : this.getBid().equals(other.getBid()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
             && (this.getIntro() == null ? other.getIntro() == null : this.getIntro().equals(other.getIntro()))
@@ -290,6 +305,7 @@ public class PayShopProduct implements Serializable {
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getImage() == null) ? 0 : getImage().hashCode());
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
+        result = prime * result + ((getRechargeMoney() == null) ? 0 : getRechargeMoney().hashCode());
         result = prime * result + ((getBid() == null) ? 0 : getBid().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
         result = prime * result + ((getIntro() == null) ? 0 : getIntro().hashCode());

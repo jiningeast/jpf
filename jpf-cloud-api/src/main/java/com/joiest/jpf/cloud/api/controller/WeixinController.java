@@ -1,6 +1,7 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.MessageUtil;
+import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.entity.WeixinMpInfo;
@@ -9,6 +10,7 @@ import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
+import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -227,5 +228,53 @@ public class WeixinController {
             return echostr;
         }
         return null;
+    }
+    /**
+     * 获取openid
+     * @param request
+     * */
+    @RequestMapping(value = "/userUnionId",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public void userUnionId(HttpServletRequest request,HttpServletResponse response){
+
+        String state = request.getParameter("state");
+
+        if(StringUtils.isNotBlank(state)){
+
+            String encrypt = request.getParameter("encrypt");
+            String responseurl = request.getParameter("responseurl");
+            responseurl = Base64CustomUtils.base64Decoder(responseurl);
+
+
+            StringBuilder sbf = new StringBuilder();
+            Date date = new Date();
+            SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sbf.append("\n\nTime:" + myfmt.format(date));
+            sbf.append("\n请求类型：微信公众号开发者认证");
+            sbf.append("\n请求参数："+ request.getQueryString());
+            String fileName = "test";
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/", fileName,true);
+
+
+            System.out.println("请求参数:"+request.getQueryString());
+            System.out.println("responseurl Base64:"+responseurl);
+            //获取公众号信息
+            weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
+            JSONObject webAccessToken = new MessageUtil().getWebAccessToken(request,weixinMpInfo);
+
+            if(webAccessToken.isEmpty()){
+
+                response.setStatus(302);
+                response.setHeader("location",responseurl+"#openid=");
+            }else{
+
+                //授权获取用户基本信息
+                JSONObject snsapiUserinfo = new MessageUtil().snsapiUserinfo(webAccessToken.get("access_token").toString(),webAccessToken.get("openid").toString());
+
+                response.setStatus(302);
+                response.setHeader("location",responseurl+"#openid="+webAccessToken.get("openid").toString());
+            }
+        }
+
     }
 }

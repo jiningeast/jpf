@@ -43,7 +43,6 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
 
         return weixinUserInfo;
     }
-
     /**
      *添加微信用户基本信息
      * */
