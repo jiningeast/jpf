@@ -142,7 +142,7 @@ public class WeixinController {
         userData.put("openid",userInfo.get("openid").toString());
         userData.put("subscribe",userInfo.get("subscribe").toString());
 
-        if(userInfo.get("subscribe").toString().equals("1")){
+        if(userInfo.get("subscribe").toString().equals("1") || userInfo.get("subscribe").toString().equals("2")){
 
             userData.put("nickname",userInfo.get("nickname").toString());
             String nickname = null;
@@ -168,13 +168,17 @@ public class WeixinController {
             else
                 userData.put("unionid","");
 
-            userData.put("remark",userInfo.get("remark").toString());
-            userData.put("groupid",userInfo.get("groupid").toString());
-            userData.put("tagid_list",userInfo.get("tagid_list").toString());
-            userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
-            userData.put("qr_scene",userInfo.get("qr_scene").toString());
-            userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+            if(userInfo.get("subscribe").toString().equals("2")){
 
+                userData.put("privilege",userInfo.get("privilege").toString());
+            }else{
+                userData.put("remark",userInfo.get("remark").toString());
+                userData.put("groupid",userInfo.get("groupid").toString());
+                userData.put("tagid_list",userInfo.get("tagid_list").toString());
+                userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
+                userData.put("qr_scene",userInfo.get("qr_scene").toString());
+                userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+            }
             if(weixinUserInfo!=null){
 
                 weixinUserServiceFacade.upWeixinUserById(userData,weixinUserInfo.getId());
@@ -242,17 +246,44 @@ public class WeixinController {
         if(StringUtils.isNotBlank(state)){
 
             String encrypt = request.getParameter("encrypt");
-            String vueUrl = request.getParameter("vueurl");
+            String responseurl = request.getParameter("responseurl");
+            responseurl = Base64CustomUtils.base64Decoder(responseurl);
+
+            StringBuilder sbf = new StringBuilder();
+            Date date = new Date();
+            SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sbf.append("\n\nTime:" + myfmt.format(date));
+            sbf.append("\n请求类型：微信公众号开发者认证");
+            sbf.append("\n请求参数："+ request.getQueryString());
+            String fileName = "test";
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/", fileName,true);
 
             //获取公众号信息
             weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
-            String openid = new MessageUtil().getOpenid(request,weixinMpInfo);
+            JSONObject webAccessToken = new MessageUtil().getWebAccessToken(request,weixinMpInfo);
 
-            vueUrl = Base64CustomUtils.base64Decoder(vueUrl)+"&openid="+openid;
+            if(webAccessToken.isEmpty()){
 
+                response.setStatus(302);
+                response.setHeader("location",responseurl+"#openid=");
+            }
+            if(state.equals("userinfo")){
 
+                //获取是否有当前微信用户信息
+                WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinUserByOpenid(webAccessToken.get("openid").toString(),weixinMpInfo.getId());
+                if(weixinUserInfo == null){
+
+                    //授权获取用户基本信息
+                    JSONObject snsapiUserinfo = new MessageUtil().snsapiUserinfo(webAccessToken.get("access_token").toString(),webAccessToken.get("openid").toString());
+                    //snsapiUserinfo.put("mpid",weixinMpInfo.getId());
+                    snsapiUserinfo.put("subscribe","2");
+                    snsapiUserinfo.put("subscribe_time",System.currentTimeMillis()/1000);
+
+                    dealUserInfo(weixinMpInfo,weixinUserInfo,snsapiUserinfo);
+                }
+            }
             response.setStatus(302);
-            response.setHeader("location",vueUrl);
+            response.setHeader("location",responseurl+"#openid="+webAccessToken.get("openid").toString());
         }
 
     }
