@@ -30,9 +30,11 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
      */
     public ShopOrderInfoInterfaceResponse getList(ShopOrderInfoInterfaceRequest request)
     {
-        if ( request.getPageSize() ==null || Long.parseLong(request.getPageSize()) <= 0 )
+        if ( request.getPageSize() ==null || Long.parseLong(request.getPageSize()) <= 0 || Long.parseLong(request.getPageSize()) > 10 )
         {
             request.setPageSize("10");
+        }else{
+            request.setPageSize(request.getPageSize());
         }
 
         if ( request.getPage() ==null || Long.parseLong(request.getPage()) <= 0 )
@@ -46,13 +48,12 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         example.setOrderByClause("addtime DESC");
 
         PayShopOrderExample.Criteria c =example.createCriteria();
-
+        c.andCustomerIdEqualTo(request.getUid());
         //目前只支持订单号搜索
         if ( StringUtils.isNotBlank(request.getKeyword()))
         {
             c.andOrderNoEqualTo( request.getKeyword()  );
         }
-
 
         List<PayShopOrderCustom> list = payShopOrderCustomMapper.selectByExampleInterfaceJoin(example);
         if( list.size() <=0 || list == null){
@@ -85,7 +86,11 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单编号不能为空");
         }
-        PayShopOrderCustom payShopOrderCustom = payShopOrderCustomMapper.selectOrderAll(request.getOrderNo());
+        PayShopOrderExample example = new PayShopOrderExample();
+        PayShopOrderExample.Criteria c = example.createCriteria();
+        c.andCustomerIdEqualTo(request.getUid());
+        c.andOrderNoEqualTo(request.getOrderNo());
+        PayShopOrderCustom payShopOrderCustom = payShopOrderCustomMapper.selectOrderInterfaceAll(example);
 
         if(payShopOrderCustom==null){
             return null;
