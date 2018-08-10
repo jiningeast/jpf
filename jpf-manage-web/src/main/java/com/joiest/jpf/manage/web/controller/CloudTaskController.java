@@ -629,14 +629,14 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setUsername(singlePerson.get("phone"));
             // 7月31日新增 实发金额减去个人所得税 start
             BigDecimal preMoney = new BigDecimal(String.valueOf(singlePerson.get("money")));    // 预发放金额，即excel表上填的金额
-            Double preMoneyDouble = new Double(String.valueOf(singlePerson.get("money")));
+//            Double preMoneyDouble = new Double(String.valueOf(singlePerson.get("money")));
             Double tax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));     // 个人所得税税点
-            Double commoneyDouble = preMoneyDouble * ( 1 - tax );       // 计算实发金额
-            BigDecimal commoney = new BigDecimal(ToolUtils.halfUpDouble(commoneyDouble, 2));    // 实发金额四舍五入
+//            Double commoneyDouble = preMoneyDouble * ( 1 - tax );       // 计算实发金额
+//            BigDecimal commoney = new BigDecimal(ToolUtils.halfUpDouble(commoneyDouble, 2));    // 实发金额四舍五入
             // 7月31日新增 实发金额减去个人所得税 end
             cloudDfMoneyInfo.setPreMoney(preMoney);
             cloudDfMoneyInfo.setIncomeRate(BigDecimal.valueOf(tax));
-            cloudDfMoneyInfo.setCommoney(commoney);
+            cloudDfMoneyInfo.setCommoney(preMoney);
             cloudDfMoneyInfo.setBankno(singlePerson.get("bankNo"));
             cloudDfMoneyInfo.setBanknickname(singlePerson.get("name"));
             cloudDfMoneyInfo.setIdno(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
