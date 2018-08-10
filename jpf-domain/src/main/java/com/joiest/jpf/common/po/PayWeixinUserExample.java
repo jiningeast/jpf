@@ -1585,6 +1585,136 @@ public class PayWeixinUserExample {
             return (Criteria) this;
         }
 
+        public Criteria andPrivilegeIsNull() {
+            addCriterion("privilege is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeIsNotNull() {
+            addCriterion("privilege is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeEqualTo(String value) {
+            addCriterion("privilege =", value, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeNotEqualTo(String value) {
+            addCriterion("privilege <>", value, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeGreaterThan(String value) {
+            addCriterion("privilege >", value, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeGreaterThanOrEqualTo(String value) {
+            addCriterion("privilege >=", value, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeLessThan(String value) {
+            addCriterion("privilege <", value, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeLessThanOrEqualTo(String value) {
+            addCriterion("privilege <=", value, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeLike(String value) {
+            addCriterion("privilege like", value, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeNotLike(String value) {
+            addCriterion("privilege not like", value, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeIn(List<String> values) {
+            addCriterion("privilege in", values, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeNotIn(List<String> values) {
+            addCriterion("privilege not in", values, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeBetween(String value1, String value2) {
+            addCriterion("privilege between", value1, value2, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeNotBetween(String value1, String value2) {
+            addCriterion("privilege not between", value1, value2, "privilege");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Byte value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Byte value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Byte value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Byte value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Byte> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Byte> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Byte value1, Byte value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedIsNull() {
             addCriterion("created is null");
             return (Criteria) this;
@@ -1777,6 +1907,11 @@ public class PayWeixinUserExample {
 
         public Criteria andQrSceneStrLikeInsensitive(String value) {
             addCriterion("upper(qr_scene_str) like", value.toUpperCase(), "qrSceneStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivilegeLikeInsensitive(String value) {
+            addCriterion("upper(privilege) like", value.toUpperCase(), "privilege");
             return (Criteria) this;
         }
     }
