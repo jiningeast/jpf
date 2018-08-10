@@ -89,13 +89,13 @@ public class OrdersController {
         //油卡充值
         if ( request.getOtype().equals("1") || request.getOtype().equals("2") )
         {
-            if ( !request.getCardno().equals(request.getCardNo()) )
+            if ( !request.getCardno().equals(request.getCardnumber()) )
             {
                 throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "油卡卡号不一致");
             }
             //TODO 油卡卡号校验
 
-            chargeNo = request.getCardNo();
+            chargeNo = request.getCardnumber();
         } else if ( request.getOtype().equals("3") )
         {
             //话费充值
@@ -164,6 +164,7 @@ public class OrdersController {
     @ResponseBody
     public String dopay(String data)
     {
+        String code =ToolUtils.CreateCode(String.valueOf(userInfo.getDou()),uid);
         //1.金额校验 2.订单用户校验 3.用户券列表 4.扣除相应的券 5.更新code
         //订单信息+用户 TODO 用户信息
         Map<String, Object> requestMap = new HashMap<>();
@@ -201,7 +202,7 @@ public class OrdersController {
         }
 
         //过期券处理
-        shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
+        int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
 
         //用户可用券列表
         GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(uid);
@@ -210,22 +211,13 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
         }
         int orderDou = orderInfo.getTotalDou();
-        if ( orderDou < userInfo.getDou() )
+        if ( orderDou > userInfo.getDou() || orderDou > userCouponList.getDouTotal())
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(), JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(), "");
         }
 
-        for ( ShopCouponRemainInfo one : userCouponList.getList())
-        {
-            //1单张券满足 2.需要多张券
-            if ( orderDou < one.getCouponDouLeft() )
-            {
-                //1.remain减去金额 2.active log 3.customer减去金额 4.code生成
+        shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
 
-                break;
-            }
-
-        }
         return "";
     }
 

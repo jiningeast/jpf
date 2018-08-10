@@ -3,6 +3,7 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.po.PayShopCouponActive;
 import com.joiest.jpf.common.po.PayShopCouponActiveExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponActiveMapper;
+import com.joiest.jpf.dto.GetShopCouponActiveInterfaceRequest;
 import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
 import com.joiest.jpf.entity.ShopCouponActiveInterfaceInfo;
 import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
@@ -100,4 +101,50 @@ public class ShopCouponActiveInterfaceServiceFacadeImpl implements ShopCouponAct
         response.setDouTotal(dou_able);
         return response;
     }
+
+    @Override
+    public GetUserCouponActiveInterfaceResponse getUserCouponActiveList(GetShopCouponActiveInterfaceRequest request) {
+
+        if ( request.getPage() ==null || Long.parseLong(request.getPage()) <= 0 )
+        {
+            request.setPage("1");
+        }
+
+        if ( StringUtils.isBlank(request.getUid()) )
+        {
+            return null;
+        }
+
+        PayShopCouponActiveExample example = new PayShopCouponActiveExample();
+        example.setPageNo(Long.parseLong(request.getPage()));
+        example.setPageSize(Long.parseLong(request.getPageSize()));
+        example.setOrderByClause("addtime ASC");
+        PayShopCouponActiveExample.Criteria c = example.createCriteria();
+        c.andCustomerIdEqualTo(request.getUid());
+        if ( StringUtils.isNotBlank(request.getType()) )
+        {
+            c.andTypeEqualTo(request.getType());
+        }
+
+        List<PayShopCouponActive> list = payShopCouponActiveMapper.selectByExample(example);
+        if ( list.isEmpty() || list == null )
+        {
+            return null;
+        }
+
+        List<ShopCouponActiveInterfaceInfo> resultList = new ArrayList<>();
+        for (PayShopCouponActive one : list)
+        {
+            ShopCouponActiveInterfaceInfo info = new ShopCouponActiveInterfaceInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopCouponActive.class, ShopCouponActiveInterfaceInfo.class, false);
+            beanCopier.copy(one, info, null);
+            resultList.add(info);
+        }
+        GetUserCouponActiveInterfaceResponse response = new GetUserCouponActiveInterfaceResponse();
+        response.setList(resultList);
+        int count = payShopCouponActiveMapper.countByExample(example);
+        response.setCount(count);
+        return response;
+    }
+
 }

@@ -45,7 +45,7 @@ public class PayShopCustomer implements Serializable {
     private String phone;
 
     /**
-     * 是否实名认证
+     * 是否实名认证 0=未认证 1=已认证
      */
     private Byte isVerify;
 
@@ -73,6 +73,11 @@ public class PayShopCustomer implements Serializable {
      * 
      */
     private Date updatetime;
+
+    /**
+     * 隶属公众号id
+     */
+    private String mpid;
 
     private static final long serialVersionUID = 1L;
 
@@ -188,6 +193,14 @@ public class PayShopCustomer implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public String getMpid() {
+        return mpid;
+    }
+
+    public void setMpid(String mpid) {
+        this.mpid = mpid == null ? null : mpid.trim();
+    }
+
     /**
      *
      */
@@ -211,6 +224,7 @@ public class PayShopCustomer implements Serializable {
         sb.append(", code=").append(code);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", mpid=").append(mpid);
         sb.append("]");
         return sb.toString();
     }
@@ -244,7 +258,8 @@ public class PayShopCustomer implements Serializable {
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
             && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()));
     }
 
     /**
@@ -268,6 +283,7 @@ public class PayShopCustomer implements Serializable {
         result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getMpid() == null) ? 0 : getMpid().hashCode());
         return result;
     }
 }

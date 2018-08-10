@@ -81,7 +81,7 @@ public enum JpfInterfaceErrorInfo {
     GOODLIST_IS_EMPTY("50006", "无对应商品信息"),
     BRANDLIST_IS_EMPTY("50006", "无对应商品信息"),
     USER_IS_FREEZE("50007", "您的帐户已被冻结"),
-    USER_DOU_NOT_SUFFICIENT("50007", "您的帐户已被冻结");
+    USER_DOU_NOT_SUFFICIENT("50007", "帐户余额不足");
 
     private final String desc;
 

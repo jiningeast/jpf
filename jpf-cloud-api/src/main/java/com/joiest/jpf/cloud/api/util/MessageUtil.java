@@ -90,7 +90,9 @@ public class MessageUtil {
      * */
     public static final String HTTPS_URL = "https://api.weixin.qq.com/";
 
-    /**
+    public static final String HTTPS_API_URL = " https://api.weixin.qq.com/";
+
+   /**
      * CLICK
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";
@@ -104,29 +106,34 @@ public class MessageUtil {
         curTime = myfmt.format(date);
         dateTime = date;
     }
-
+    /**
+     * @Description: 解析微信发来的请求（XML）
+     * @param @param request
+     * @param @return
+     * @param @throws Exception
+     * @author dapengniao
+     * @date 2016年3月7日 上午10:04:02
+     */
     public static Map<String,String> parseXml(HttpServletRequest request){
 
-        Map<String,String> messageMap=new HashMap<String, String>();
+        Map<String,String> messageMap=new HashMap<>();
 
         InputStream inputStream=null;
         try {
             //读取request Stream信息
             inputStream=request.getInputStream();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
-
         SAXReader reader = new SAXReader();
         Document document=null;
         try {
             document = reader.read(inputStream);
         } catch (DocumentException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
-
         Element root=document.getRootElement();
         List<Element> elementsList=root.elements();
 
@@ -135,7 +142,6 @@ public class MessageUtil {
         }
         try {
             inputStream.close();
-            inputStream=null;
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -143,7 +149,9 @@ public class MessageUtil {
 
         return messageMap;
     }
-
+    /**
+     * 基础接口获取用户信息
+     * */
     public JSONObject getUserInfo(String access_token,String openid){
 
         Map<String, Object> map = new HashMap<>();
@@ -162,12 +170,15 @@ public class MessageUtil {
 
         return res;
     }
-    public String getOpenid(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
+    /**
+     * 获取网页授权access_token
+     * */
+    public JSONObject getWebAccessToken(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
 
         Map<String, Object> map = new HashMap<>();
 
         String code = request.getParameter("code");
-        String url = HTTPS_URL+"/sns/oauth2/access_token?appid="+weixinMpInfo.getAppid()+"&secret="+weixinMpInfo.getAppsecret()+"&code="+code+"&grant_type=authorization_code";
+        String url = HTTPS_API_URL+"sns/oauth2/access_token?appid="+weixinMpInfo.getAppid()+"&secret="+weixinMpInfo.getAppsecret()+"&code="+code+"&grant_type=authorization_code";
 
         JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(url,map));
 
@@ -181,7 +192,33 @@ public class MessageUtil {
 
         if(res.containsKey("openid")){
 
-            return res.get("openid").toString();
+            return res;
+        }
+        return null;
+    }
+    /**
+     * 网页授权获取用户信息
+     * */
+    public JSONObject snsapiUserinfo(String accessToken,String openid){
+
+        Map<String, Object> map = new HashMap<>();
+
+        String userInfoUrl = HTTPS_API_URL+"sns/userinfo?access_token="+accessToken+"&openid="+openid+"&lang=zh_CN";
+
+        JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(userInfoUrl,map));
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + curTime);
+        sbf.append("\n请求类型：微信公众号授权获取用户信息snsapi_serinfo");
+        sbf.append("\n请求地址："+userInfoUrl);
+        sbf.append("\n获取接口参数："+res);
+        String fileName = "WeixinSnsapiUserinfoLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
+
+        if(res.containsKey("openid")){
+
+            return res;
         }
         return null;
     }

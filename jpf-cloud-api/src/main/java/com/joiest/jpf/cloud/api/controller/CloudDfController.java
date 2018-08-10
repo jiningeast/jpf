@@ -245,7 +245,10 @@ public class CloudDfController {
         }
         Map<String,String> apiInfo = new HashMap<>();
 
-        apiInfo.put("tranNo",cloudDfOrderInterfaceInfo.getTranno());
+        if ( StringUtils.isNotBlank(cloudDfOrderInterfaceInfo.getTranno()) && cloudDfOrderInterfaceInfo.getTranno() != null )
+        {
+            apiInfo.put("tranNo",cloudDfOrderInterfaceInfo.getTranno());
+        }
         apiInfo.put("outOrderNo",cloudDfOrderInterfaceInfo.getOrderid());
 
         //获取此单查询次数

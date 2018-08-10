@@ -15,7 +15,7 @@ public class PayWeixinUser implements Serializable {
     private Long mpid;
 
     /**
-     * 用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。
+     * 用户是否关注该公众号标识，0未关注，1 已关注 2网页授权
      */
     private Byte subscribe;
 
@@ -108,6 +108,16 @@ public class PayWeixinUser implements Serializable {
      * 二维码扫码场景描述
      */
     private String qrSceneStr;
+
+    /**
+     * 用户特权信息，json 数组，如微信沃卡用户为（chinaunicom）
+     */
+    private String privilege;
+
+    /**
+     * 状态 1可用  2不可用
+     */
+    private Byte status;
 
     /**
      * 
@@ -289,6 +299,22 @@ public class PayWeixinUser implements Serializable {
         this.qrSceneStr = qrSceneStr == null ? null : qrSceneStr.trim();
     }
 
+    public String getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String privilege) {
+        this.privilege = privilege == null ? null : privilege.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -335,6 +361,8 @@ public class PayWeixinUser implements Serializable {
         sb.append(", subscribeScene=").append(subscribeScene);
         sb.append(", qrScene=").append(qrScene);
         sb.append(", qrSceneStr=").append(qrSceneStr);
+        sb.append(", privilege=").append(privilege);
+        sb.append(", status=").append(status);
         sb.append(", created=").append(created);
         sb.append(", updated=").append(updated);
         sb.append("]");
@@ -378,6 +406,8 @@ public class PayWeixinUser implements Serializable {
             && (this.getSubscribeScene() == null ? other.getSubscribeScene() == null : this.getSubscribeScene().equals(other.getSubscribeScene()))
             && (this.getQrScene() == null ? other.getQrScene() == null : this.getQrScene().equals(other.getQrScene()))
             && (this.getQrSceneStr() == null ? other.getQrSceneStr() == null : this.getQrSceneStr().equals(other.getQrSceneStr()))
+            && (this.getPrivilege() == null ? other.getPrivilege() == null : this.getPrivilege().equals(other.getPrivilege()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
     }
@@ -410,6 +440,8 @@ public class PayWeixinUser implements Serializable {
         result = prime * result + ((getSubscribeScene() == null) ? 0 : getSubscribeScene().hashCode());
         result = prime * result + ((getQrScene() == null) ? 0 : getQrScene().hashCode());
         result = prime * result + ((getQrSceneStr() == null) ? 0 : getQrSceneStr().hashCode());
+        result = prime * result + ((getPrivilege() == null) ? 0 : getPrivilege().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
         return result;

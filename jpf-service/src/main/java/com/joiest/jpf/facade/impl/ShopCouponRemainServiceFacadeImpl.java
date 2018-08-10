@@ -1,19 +1,21 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.entity.ShopCouponRemainInfo;
+import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
+import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServiceFacade {
 
@@ -34,6 +36,9 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
     @Autowired
     private PayShopBatchMapper payShopBatchMapper;
+
+    @Autowired
+    private PayShopOrderMapper payShopOrderMapper;
 
     /**
      * 处理过期的券
@@ -135,7 +140,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         example.setOrderByClause("id ASC");
         PayShopCouponRemainExample.Criteria c = example.createCriteria();
         c.andCustomerIdEqualTo(uid);
-        c.andStatusEqualTo((byte)1);
+        c.andStatusEqualTo((byte)0);
         List<PayShopCouponRemain> list = payShopCouponRemainMapper.selectByExample(example);
         if ( list.isEmpty() || list == null )
         {
@@ -158,5 +163,139 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
         return response;
     }
+
+    public int CouponHandler(List<ShopCouponRemainInfo> list, ShopOrderInterfaceInfo orderInfo, ShopCustomerInterfaceInfo userInfo)
+    {
+        int orderBlance = orderInfo.getTotalDou();  //订单总额
+
+        List<Map<String,String>> coupon_detail = new ArrayList<>();
+        Map<String,String> map = new HashMap<>();
+
+        //1:用完  0未用完
+        for ( ShopCouponRemainInfo one : list)
+        {
+            Map<String,String> mapJosn = new HashMap<>();
+            mapJosn.put("remainId", list.get(0).getId());
+            mapJosn.put("couponId", list.get(0).getCouponId());
+            mapJosn.put("couponNo", list.get(0).getCouponNo());
+
+            if ( orderBlance > one.getCouponDouLeft() )
+            {
+                //全部扣除
+                one.setStatus((byte)1);
+                Boolean isTrue = doCoupon(one, one.getCouponDouLeft(), orderInfo); //用完
+
+                orderBlance = orderBlance - one.getCouponDouLeft();
+
+                mapJosn.put("deduct", one.getCouponDouLeft().toString());   //扣减豆的数量
+                int douBlance = 0;
+                mapJosn.put("remainDou", String.valueOf(douBlance));   //  全部扣除
+            } else if( orderBlance <= one.getCouponDouLeft() )
+            {
+                byte status = 0;
+                if ( orderBlance < one.getCouponDouLeft() )
+                {
+                    status = 0;    //未扣完
+                } else if ( orderBlance == one.getCouponDouLeft() )
+                {
+                    status = 1;    //全部扣除
+                }
+                one.setStatus(status);
+                Boolean isTrue = doCoupon(one, orderBlance, orderInfo); //未用完
+
+                int douBlance = one.getCouponDouLeft() - orderBlance;
+
+                mapJosn.put("deduct", String.valueOf(orderBlance));
+                mapJosn.put("remainDou", String.valueOf(douBlance));
+
+                orderBlance = 0;
+            }
+            coupon_detail.add(mapJosn);
+            if ( orderBlance == 0 ) break;
+        }
+        String json_couponDetail = JsonUtils.toJson(coupon_detail);
+        //更新订单状态
+        int res_order = updateOrder(orderInfo, json_couponDetail);
+        return res_order;
+    }
+
+    /**
+     * @param remainInfo
+     * @param deduct    需要扣除的豆
+     */
+    @Transactional
+    public Boolean doCoupon(ShopCouponRemainInfo remainInfo, int deduct, ShopOrderInterfaceInfo orderInfo)
+    {
+        //1.remain减去金额 2.active log 3.customer减去金额 & code生成
+
+        PayShopCustomer payShopCustomer = payShopCustomerMapper.selectByPrimaryKey(remainInfo.getCustomerId());
+        PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(remainInfo.getCouponId());
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(payShopBatchCoupon.getCompanyId());
+        PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(payShopBatchCoupon.getBatchId());
+
+        //更新批次余额表pay_shop_coupon_remain
+        PayShopCouponRemain payShopCouponRemain = new PayShopCouponRemain();
+        BeanCopier beanCopier = BeanCopier.create(ShopCouponRemainInfo.class, PayShopCouponRemain.class, false);
+        beanCopier.copy(remainInfo, payShopCouponRemain, null);
+        int remain = payShopCouponRemain.getCouponDouLeft() - deduct;
+        payShopCouponRemain.setCouponDouLeft(remain);
+        payShopCouponRemain.setUpdatetime(new Date());
+        int rescouponRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
+
+        // 新增日志表一条记录pay_shop_coupon_active
+        PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+        payShopCouponActive.setCustomerId(orderInfo.getCustomerId());
+        payShopCouponActive.setCustomerName(orderInfo.getCustomerName());
+        payShopCouponActive.setCompanyId(Integer.parseInt(payShopCompany.getId()));
+        payShopCouponActive.setCompanyName(payShopCompany.getCompanyName());
+        payShopCouponActive.setBatchId(Integer.parseInt(payShopBatch.getId()));
+        payShopCouponActive.setBatchNo(payShopBatch.getBatchNo());
+        payShopCouponActive.setCouponNo(payShopBatchCoupon.getCouponNo());
+        payShopCouponActive.setActiveCode(payShopBatchCoupon.getActiveCode());
+        payShopCouponActive.setPayWay(orderInfo.getPayWay());
+        payShopCouponActive.setMoney(new BigDecimal("0"));
+        payShopCouponActive.setDou(deduct);     //消费豆数量
+        payShopCouponActive.setContent("行为:消费;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getName() + ";豆数量:" + deduct + ";orderId:" + orderInfo.getId() );
+        payShopCouponActive.setType("1");
+        payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
+        payShopCouponActive.setAddtime(new Date());
+        payShopCouponActive.setOrderId(orderInfo.getId());
+        int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
+
+        // 客户总豆数量减去一部分pay_shop_customer
+        PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
+        int dou = payShopCustomer.getDou() - deduct;
+        String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
+        payShopCustomerUpdate.setId(orderInfo.getCustomerId());
+        payShopCustomerUpdate.setDou(dou);
+        payShopCustomerUpdate.setCode(code);
+        payShopCustomerUpdate.setUpdatetime(new Date());
+        payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
+
+        return true;
+    }
+
+    /**
+     * 更新订单信息
+     * @param orderInfo
+     * @return
+     */
+    public int updateOrder(ShopOrderInterfaceInfo orderInfo, String coupon_detail)
+    {
+        PayShopOrder payShopOrder = new PayShopOrder();
+        BeanCopier beanCopier = BeanCopier.create(ShopOrderInterfaceInfo.class, PayShopOrder.class, false);
+        beanCopier.copy(orderInfo, payShopOrder, null);
+        payShopOrder.setId(orderInfo.getId());
+        payShopOrder.setCouponDetail(coupon_detail);
+        PayShopOrderExample example = new PayShopOrderExample();
+        PayShopOrderExample.Criteria c = example.createCriteria();
+        c.andIdEqualTo(orderInfo.getId());
+        c.andCustomerIdEqualTo(orderInfo.getCustomerId());
+        c.andOrderNoEqualTo(orderInfo.getOrderNo());
+        int res_upOrder = payShopOrderMapper.updateByExample(payShopOrder, example);
+
+        return res_upOrder;
+    }
+
 
 }

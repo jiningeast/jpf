@@ -263,6 +263,9 @@ public class CloudTaskController {
                 }
             }
         }
+        // 把excel表的金额统计保留两位小数
+        BigDecimal companyMoneyBigDecimal = new BigDecimal(companyMoney);
+        companyMoneyBigDecimal = companyMoneyBigDecimal.setScale(2,RoundingMode.HALF_UP);
         if(!fileName.equals(Batchno)){
             responseMap.put("code","10004");
             responseMap.put("info","批次号与文件名不一致请修改后上传！");
@@ -287,7 +290,7 @@ public class CloudTaskController {
             responseMap.put("data",staffInfosFailed);
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
-        }else if ( companyInfo.getCloudmoney().compareTo(new BigDecimal(companyMoney)) == -1 ){
+        }else if ( companyInfo.getCloudmoney().compareTo(companyMoneyBigDecimal) == -1 ){
             // "该企业账户余额不足，剩余："+companyInfo.getCloudmoney()
             return "-3";
         }else{
@@ -626,14 +629,14 @@ public class CloudTaskController {
             cloudDfMoneyInfo.setUsername(singlePerson.get("phone"));
             // 7月31日新增 实发金额减去个人所得税 start
             BigDecimal preMoney = new BigDecimal(String.valueOf(singlePerson.get("money")));    // 预发放金额，即excel表上填的金额
-            Double preMoneyDouble = new Double(String.valueOf(singlePerson.get("money")));
+//            Double preMoneyDouble = new Double(String.valueOf(singlePerson.get("money")));
             Double tax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));     // 个人所得税税点
-            Double commoneyDouble = preMoneyDouble * ( 1 - tax );       // 计算实发金额
-            BigDecimal commoney = new BigDecimal(ToolUtils.halfUpDouble(commoneyDouble, 2));    // 实发金额四舍五入
+//            Double commoneyDouble = preMoneyDouble * ( 1 - tax );       // 计算实发金额
+//            BigDecimal commoney = new BigDecimal(ToolUtils.halfUpDouble(commoneyDouble, 2));    // 实发金额四舍五入
             // 7月31日新增 实发金额减去个人所得税 end
             cloudDfMoneyInfo.setPreMoney(preMoney);
             cloudDfMoneyInfo.setIncomeRate(BigDecimal.valueOf(tax));
-            cloudDfMoneyInfo.setCommoney(commoney);
+            cloudDfMoneyInfo.setCommoney(preMoney);
             cloudDfMoneyInfo.setBankno(singlePerson.get("bankNo"));
             cloudDfMoneyInfo.setBanknickname(singlePerson.get("name"));
             cloudDfMoneyInfo.setIdno(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
