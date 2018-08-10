@@ -89,6 +89,50 @@ public class WeixinController {
         }
         return null;
     }
+    /**
+     * 开发者认证
+     * @param request
+     * @param weixinMpInfo 公众号信息
+     * */
+    @RequestMapping(value = "/checkSignature", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String checkSignature(HttpServletRequest request,WeixinMpInfo weixinMpInfo){
+
+        String echostr = request.getParameter("echostr");
+        String signature = request.getParameter("signature");
+        String nonce = request.getParameter("nonce");
+        String timestamp = request.getParameter("timestamp");
+        String content=request.getQueryString();
+
+        List<String> list = new ArrayList<>();
+        list.add(weixinMpInfo.getToken());
+        list.add(nonce);
+        list.add(timestamp);
+
+        list.sort(Comparator.naturalOrder());
+
+        String param = StringUtils.join(list,"");
+        String sign = DigestUtils.shaHex(param);
+
+        //日志记录
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求类型：微信公众号开发者认证");
+        sbf.append("\n请求参数："+content);
+        sbf.append("\n加密SIGN："+sign);
+        String fileName = "WeixinAuthlog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
+        if(signature.equals(sign)){
+            return echostr;
+        }
+        return null;
+    }
+    /**
+     * 事件处理
+     * */
     @RequestMapping(value = "/responseMsg", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String responseMsg(HttpServletRequest request,HttpServletResponse response,Map requestMap){
@@ -192,49 +236,9 @@ public class WeixinController {
         }
         return userData;
     }
+
     /**
-     * 开发者认证
-     * @param request
-     * @param weixinMpInfo 公众号信息
-     * */
-    @RequestMapping(value = "/checkSignature", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String checkSignature(HttpServletRequest request,WeixinMpInfo weixinMpInfo){
-
-        String echostr = request.getParameter("echostr");
-        String signature = request.getParameter("signature");
-        String nonce = request.getParameter("nonce");
-        String timestamp = request.getParameter("timestamp");
-        String content=request.getQueryString();
-
-        List<String> list = new ArrayList<>();
-        list.add(weixinMpInfo.getToken());
-        list.add(nonce);
-        list.add(timestamp);
-
-        list.sort(Comparator.naturalOrder());
-
-        String param = StringUtils.join(list,"");
-        String sign = DigestUtils.shaHex(param);
-
-        //日志记录
-        StringBuilder sbf = new StringBuilder();
-        Date date = new Date();
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sbf.append("\n\nTime:" + myfmt.format(date));
-        sbf.append("\n请求类型：微信公众号开发者认证");
-        sbf.append("\n请求参数："+content);
-        sbf.append("\n加密SIGN："+sign);
-        String fileName = "WeixinAuthlog";
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
-
-        if(signature.equals(sign)){
-            return echostr;
-        }
-        return null;
-    }
-    /**
-     * 获取openid
+     * 网页授权接口
      * @param request
      * */
     @RequestMapping(value = "/userUnionId",produces = "application/json;charset=utf-8")
