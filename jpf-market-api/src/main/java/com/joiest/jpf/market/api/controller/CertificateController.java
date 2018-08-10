@@ -124,7 +124,7 @@ public class CertificateController {
 
         if(response==null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), "请求数据失败", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), "未匹配到相关数据", null);
 
         }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "请求数据成功", response.getList());
