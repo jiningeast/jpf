@@ -3,6 +3,7 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.po.PayShopCustomerExample;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopCustomerCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
@@ -10,12 +11,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShopCustomerInterfaceServiceFacadeImpl implements ShopCustomerInterfaceServiceFacade {
 
     @Autowired
     private PayShopCustomerMapper payShopCustomerMapper;
+
+    @Autowired
+    private PayShopCustomerCustomMapper payShopCustomerCustomMapper;
 
     @Override
     public ShopCustomerInterfaceInfo getCustomer(String uid) {
@@ -38,7 +43,7 @@ public class ShopCustomerInterfaceServiceFacadeImpl implements ShopCustomerInter
     }
 
     @Override
-    public ShopCustomerInterfaceInfo getCustomerByOpenId(String openId) {
+    public List<ShopCustomerInterfaceInfo> getCustomerByOpenId(String openId) {
         if ( StringUtils.isBlank(openId) )
         {
             return null;
@@ -46,20 +51,25 @@ public class ShopCustomerInterfaceServiceFacadeImpl implements ShopCustomerInter
         PayShopCustomerExample example = new PayShopCustomerExample();
         PayShopCustomerExample.Criteria c = example.createCriteria();
         c.andOpenidEqualTo(openId);
-        List<PayShopCustomer> payShopCustomer = payShopCustomerMapper.selectByExample(example);
-        if ( payShopCustomer == null )
+        List<PayShopCustomer> list = payShopCustomerMapper.selectByExample(example);
+        if ( list == null || list.size()<=0  )
         {
             return null;
         }
-        ShopCustomerInterfaceInfo info = new ShopCustomerInterfaceInfo();
-        BeanCopier beanCopier = BeanCopier.create(PayShopCustomer.class, ShopCustomerInterfaceInfo.class, false);
-        beanCopier.copy(payShopCustomer, info, null);
+        List<ShopCustomerInterfaceInfo> infos = new ArrayList<>();
+        for(PayShopCustomer payShopCustomer:list){
+            ShopCustomerInterfaceInfo shopCustomerInterfaceInfo = new ShopCustomerInterfaceInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopCustomer.class, ShopCustomerInterfaceInfo.class, false);
+            beanCopier.copy(payShopCustomer,shopCustomerInterfaceInfo, null);
 
-        return info;
+            infos.add(shopCustomerInterfaceInfo);
+        }
+
+        return infos;
     }
 
     @Override
-    public ShopCustomerInterfaceInfo getCustomerByPhone(String phone) {
+    public List<ShopCustomerInterfaceInfo> getCustomerByPhone(String phone) {
         if ( StringUtils.isBlank(phone) )
         {
             return null;
@@ -67,16 +77,22 @@ public class ShopCustomerInterfaceServiceFacadeImpl implements ShopCustomerInter
         PayShopCustomerExample example = new PayShopCustomerExample();
         PayShopCustomerExample.Criteria c = example.createCriteria();
         c.andPhoneEqualTo(phone);
-        List<PayShopCustomer> payShopCustomer = payShopCustomerMapper.selectByExample(example);
-        if ( payShopCustomer == null )
+        List<PayShopCustomer> list = payShopCustomerMapper.selectByExample(example);
+        if ( list == null || list.size()<=0 )
         {
             return null;
         }
-        ShopCustomerInterfaceInfo info = new ShopCustomerInterfaceInfo();
-        BeanCopier beanCopier = BeanCopier.create(PayShopCustomer.class, ShopCustomerInterfaceInfo.class, false);
-        beanCopier.copy(payShopCustomer, info, null);
+        List<ShopCustomerInterfaceInfo> infos = new ArrayList<>();
+        for(PayShopCustomer payShopCustomer:list){
+            ShopCustomerInterfaceInfo shopCustomerInterfaceInfo = new ShopCustomerInterfaceInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopCustomer.class, ShopCustomerInterfaceInfo.class, false);
+            beanCopier.copy(payShopCustomer,shopCustomerInterfaceInfo, null);
 
-        return info;
+            infos.add(shopCustomerInterfaceInfo);
+        }
+
+
+        return infos;
     }
 
     @Override
@@ -94,6 +110,21 @@ public class ShopCustomerInterfaceServiceFacadeImpl implements ShopCustomerInter
 
         return responseDto;
 
+    }
+
+    @Override
+    public String addCustomer(PayShopCustomer record) {
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        if(record == null ){
+            return null;
+        }
+        int count = payShopCustomerCustomMapper.insertSelective(record);
+        if( count <= 0 ){
+            return null;
+        }
+
+
+        return record.getId().toString();
     }
 
 }

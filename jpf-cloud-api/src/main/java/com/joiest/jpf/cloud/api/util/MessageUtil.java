@@ -106,29 +106,34 @@ public class MessageUtil {
         curTime = myfmt.format(date);
         dateTime = date;
     }
-
+    /**
+     * @Description: 解析微信发来的请求（XML）
+     * @param @param request
+     * @param @return
+     * @param @throws Exception
+     * @author dapengniao
+     * @date 2016年3月7日 上午10:04:02
+     */
     public static Map<String,String> parseXml(HttpServletRequest request){
 
-        Map<String,String> messageMap=new HashMap<String, String>();
+        Map<String,String> messageMap=new HashMap<>();
 
         InputStream inputStream=null;
         try {
             //读取request Stream信息
             inputStream=request.getInputStream();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
-
         SAXReader reader = new SAXReader();
         Document document=null;
         try {
             document = reader.read(inputStream);
         } catch (DocumentException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
-
         Element root=document.getRootElement();
         List<Element> elementsList=root.elements();
 
@@ -137,7 +142,6 @@ public class MessageUtil {
         }
         try {
             inputStream.close();
-            inputStream=null;
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();

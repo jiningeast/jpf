@@ -331,7 +331,7 @@ public class WeixinController {
             e.printStackTrace();
         }
         String BASE_GRANT_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+weixinMpInfo.getAppid()+"&redirect_uri="+redirectUri+"&response_type=code&scope=snsapi_base&state=base#wechat_redirect";
-        String USER_GRANT_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+weixinMpInfo.getAppid()+"&redirect_uri="+redirectUri+"&response_type=code&scope=snsapi_userinfo&state=base#wechat_redirect";
+        String USER_GRANT_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+weixinMpInfo.getAppid()+"&redirect_uri="+redirectUri+"&response_type=code&scope=snsapi_userinfo&state=userinfo#wechat_redirect";
 
         JSONObject res = new JSONObject();
         res.put("encrypt",encrypt);

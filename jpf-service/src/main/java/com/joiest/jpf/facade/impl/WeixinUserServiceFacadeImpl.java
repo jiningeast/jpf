@@ -43,6 +43,31 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
 
         return weixinUserInfo;
     }
+
+    /**
+     * 获取微信用户基本信息by openid
+     * */
+    public WeixinUserInfo getWeixinUserByOpenid(String openid){
+
+        PayWeixinUserExample example = new PayWeixinUserExample();
+        PayWeixinUserExample.Criteria c = example.createCriteria();
+        c.andOpenidEqualTo(openid);
+
+        List<PayWeixinUser> getPayWeixinUser = payWeixinUserMapper.selectByExample(example);
+
+        if (getPayWeixinUser.isEmpty()) return null;
+
+        PayWeixinUser payWeixinUser = getPayWeixinUser.get(0);
+
+        WeixinUserInfo weixinUserInfo = new WeixinUserInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayWeixinUser.class,WeixinUserInfo.class,false);
+
+        beanCopier.copy(payWeixinUser,weixinUserInfo,null);
+
+        return weixinUserInfo;
+    }
+
     /**
      *添加微信用户基本信息
      * */
