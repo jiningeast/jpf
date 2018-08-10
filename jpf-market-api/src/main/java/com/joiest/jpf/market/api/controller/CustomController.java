@@ -6,12 +6,13 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopCustomer;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.po.PayWeixinUser;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
+import com.joiest.jpf.entity.WeixinUserInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
+import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import com.joiest.jpf.market.api.util.RedisUtils;
 import com.joiest.jpf.market.api.util.SmsUtils;
 import com.joiest.jpf.market.api.util.ToolsUtils;
@@ -40,6 +41,9 @@ public class CustomController {
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
 
+    @Autowired
+    private WeixinUserServiceFacade weixinUserServiceFacade;
+
     /*
      * 绑定用户手机号
      * */
@@ -54,16 +58,20 @@ public class CustomController {
         Map<String,String> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, String>>(){});
 
         //判断请求参数是否合法
-        if(!requestMap.containsKey("mobile")){
+        String mobile = requestMap.get("mobile");
+        String code = requestMap.get("code");//短信码
+        String Token = requestMap.get("Token");
+        if(StringUtils.isBlank(mobile) || StringUtils.isBlank(code)|| StringUtils.isBlank(Token)  ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请求参数错误", null);
         }
 
-        String mobile = requestMap.get("mobile");
-        String code = requestMap.get("code");//短信码
-        String openId = requestMap.get("openId");//用户标识
+        Token = AESUtils.decrypt(Token, ConfigUtil.getValue("AES_KEY"));
+        if(StringUtils.isBlank(Token) || Token == null ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Token参数错误", null);
+        }
 
-        //openId判断是否真实？？？？？？？？？？？？
-
+        //redis取openId
+        String openId = redisCustomServiceFacade.get("WEIXIN_LOGIN_KEY"+Token); //redis存储短信码
         if(StringUtils.isBlank(openId)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "openId参数错误", null);
         }
@@ -74,21 +82,48 @@ public class CustomController {
         }
 
 
-        ShopCustomerInterfaceInfo customerRecrd =  shopCustomerInterfaceServiceFacade.getCustomerByOpenId(mobile);
+        List<ShopCustomerInterfaceInfo> customerRecrd =  shopCustomerInterfaceServiceFacade.getCustomerByPhone(mobile);
         if( customerRecrd != null  ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "手机号已存在", null);
         }
 
-        ShopCustomerInterfaceInfo infos =  shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
-        if( infos == null  ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未匹配到openId", null);
+        List<ShopCustomerInterfaceInfo> infos =  shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
+        if( infos != null  ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "openId已存在", null);
         }
-        //绑定用户手机号和当前openId
+
+        //1、根据opneId来查询微信用户信息
+        WeixinUserInfo weixinUserInfo= weixinUserServiceFacade.getWeixinUserByOpenid(openId);
+        if( weixinUserInfo== null){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未查询到数据", null);
+        }
+
+        //2、插入pay_shop_customer 用户信息
+        Date date = new Date();
+        String dou = "0"; //豆数量
+
         PayShopCustomer record = new PayShopCustomer();
+        record.setName("");
+        record.setCompanyId(Long.parseLong("0"));
+        record.setCompanyName("");
+        record.setOpenid(weixinUserInfo.getOpenid().toString());
+        record.setMpid(weixinUserInfo.getMpid().toString());
+        record.setNickname(weixinUserInfo.getNickname());
+        record.setIsVerify((byte)0); // 默认未实名认证
+        record.setStatus((byte)1);
         record.setPhone(mobile);
-        record.setUpdatetime(new Date());
-        JpfResponseDto responseDto = shopCustomerInterfaceServiceFacade.updateCustomerByOpenId(record,openId);
-        if(responseDto.getRetCode().equals("0000")){
+        record.setDou(Integer.parseInt(dou));
+        record.setCode("");
+        record.setDou(0);
+        record.setAddtime(date);
+        record.setUpdatetime(date);
+        String shopCustomId = shopCustomerInterfaceServiceFacade.addCustomer(record);
+        if( shopCustomId !=null && StringUtils.isNotBlank(shopCustomId)){
+            PayShopCustomer retInfo = new PayShopCustomer();
+            String uid = shopCustomId;
+            String customCode = ToolUtils.CreateCode(dou,uid);
+            retInfo.setCode(customCode);
+            shopCustomerInterfaceServiceFacade.updateCustomerByOpenId(retInfo,weixinUserInfo.getOpenid());
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "更新成功", null);
         }else{
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "更新失败", null);

@@ -12,6 +12,11 @@ public class ShopOrderInfoInterface {
     private String id;
 
     /**
+     * 用户当前豆数量
+     */
+    private String douTotal;
+
+    /**
      * 状态中文名
      */
     private String statusName;
@@ -517,5 +522,13 @@ public class ShopOrderInfoInterface {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getDouTotal() {
+        return douTotal;
+    }
+
+    public void setDouTotal(String douTotal) {
+        this.douTotal = douTotal;
     }
 }

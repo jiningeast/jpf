@@ -100,6 +100,7 @@ public class OrderInfoController {
         if( response == null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "未匹配到相关数据", null);
         }
+        response.setDouTotal(userInfo.getDou().toString()); //获取用户当前豆数量
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
     }
 
