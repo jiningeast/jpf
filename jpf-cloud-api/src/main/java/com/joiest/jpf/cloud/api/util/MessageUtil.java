@@ -91,7 +91,8 @@ public class MessageUtil {
     public static final String HTTPS_URL = "https://api.weixin.qq.com/";
 
     public static final String HTTPS_API_URL = " https://api.weixin.qq.com/";
-    /**
+
+   /**
      * CLICK
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";

@@ -1085,6 +1085,66 @@ public class PayShopCustomerExample {
             return (Criteria) this;
         }
 
+        public Criteria andMpidIsNull() {
+            addCriterion("mpid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidIsNotNull() {
+            addCriterion("mpid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidEqualTo(String value) {
+            addCriterion("mpid =", value, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidNotEqualTo(String value) {
+            addCriterion("mpid <>", value, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidGreaterThan(String value) {
+            addCriterion("mpid >", value, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidGreaterThanOrEqualTo(String value) {
+            addCriterion("mpid >=", value, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidLessThan(String value) {
+            addCriterion("mpid <", value, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidLessThanOrEqualTo(String value) {
+            addCriterion("mpid <=", value, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidIn(List<String> values) {
+            addCriterion("mpid in", values, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidNotIn(List<String> values) {
+            addCriterion("mpid not in", values, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidBetween(String value1, String value2) {
+            addCriterion("mpid between", value1, value2, "mpid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpidNotBetween(String value1, String value2) {
+            addCriterion("mpid not between", value1, value2, "mpid");
+            return (Criteria) this;
+        }
+
         public Criteria andNameLikeInsensitive(String value) {
             addCriterion("upper(name) like", value.toUpperCase(), "name");
             return (Criteria) this;
