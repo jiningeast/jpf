@@ -16,7 +16,7 @@ public class CreateOrderInterfaceRequest {
     /**
      * 卡号2
      */
-    private String cardNo;
+    private String cardnumber;
 
     /**
      * 手机号
@@ -31,13 +31,13 @@ public class CreateOrderInterfaceRequest {
     /**
      * 充值金额
      */
-    @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2}){1}$", message = "充值金额错误")
+    @Pattern(regexp = "^\\d{1,5}$", message = "充值金额错误")
     private String money;
 
     /**
      * 实付金额
      */
-    @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2}){1}$", message = "交易金额格式错误")
+    @Pattern(regexp = "^\\d{1,5}$", message = "交易金额格式错误")
     private String paymoney;
 
     /**
@@ -60,12 +60,12 @@ public class CreateOrderInterfaceRequest {
         this.cardno = cardno;
     }
 
-    public String getCardNo() {
-        return cardNo;
+    public String getCardnumber() {
+        return cardnumber;
     }
 
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
+    public void setCardnumber(String cardnumber) {
+        this.cardnumber = cardnumber;
     }
 
     public String getPhone() {

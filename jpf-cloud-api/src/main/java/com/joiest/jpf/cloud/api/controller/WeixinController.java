@@ -1,17 +1,20 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.MessageUtil;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.LogsCustomUtils;
+import com.joiest.jpf.cloud.api.util.ToolsUtils;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.entity.WeixinMpInfo;
 import com.joiest.jpf.entity.WeixinUserInfo;
+import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
 import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +35,8 @@ import java.util.*;
 @RequestMapping("weixin")
 public class WeixinController {
 
+    private static final Logger logger = LogManager.getLogger(merchInfoController.class);
+
     private WeixinMpInfo weixinMpInfo;
 
     @Autowired
@@ -39,6 +44,9 @@ public class WeixinController {
 
     @Autowired
     private WeixinUserServiceFacade weixinUserServiceFacade;
+
+    @Autowired
+    private RedisCustomServiceFacade redisCustomServiceFacade;
 
     @RequestMapping(value = "/weiIndex", produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -89,6 +97,50 @@ public class WeixinController {
         }
         return null;
     }
+    /**
+     * 开发者认证
+     * @param request
+     * @param weixinMpInfo 公众号信息
+     * */
+    @RequestMapping(value = "/checkSignature", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String checkSignature(HttpServletRequest request,WeixinMpInfo weixinMpInfo){
+
+        String echostr = request.getParameter("echostr");
+        String signature = request.getParameter("signature");
+        String nonce = request.getParameter("nonce");
+        String timestamp = request.getParameter("timestamp");
+        String content=request.getQueryString();
+
+        List<String> list = new ArrayList<>();
+        list.add(weixinMpInfo.getToken());
+        list.add(nonce);
+        list.add(timestamp);
+
+        list.sort(Comparator.naturalOrder());
+
+        String param = StringUtils.join(list,"");
+        String sign = DigestUtils.shaHex(param);
+
+        //日志记录
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求类型：微信公众号开发者认证");
+        sbf.append("\n请求参数："+content);
+        sbf.append("\n加密SIGN："+sign);
+        String fileName = "WeixinAuthlog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
+        if(signature.equals(sign)){
+            return echostr;
+        }
+        return null;
+    }
+    /**
+     * 事件处理
+     * */
     @RequestMapping(value = "/responseMsg", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String responseMsg(HttpServletRequest request,HttpServletResponse response,Map requestMap){
@@ -142,7 +194,7 @@ public class WeixinController {
         userData.put("openid",userInfo.get("openid").toString());
         userData.put("subscribe",userInfo.get("subscribe").toString());
 
-        if(userInfo.get("subscribe").toString().equals("1")){
+        if(userInfo.get("subscribe").toString().equals("1") || userInfo.get("subscribe").toString().equals("2")){
 
             userData.put("nickname",userInfo.get("nickname").toString());
             String nickname = null;
@@ -168,13 +220,17 @@ public class WeixinController {
             else
                 userData.put("unionid","");
 
-            userData.put("remark",userInfo.get("remark").toString());
-            userData.put("groupid",userInfo.get("groupid").toString());
-            userData.put("tagid_list",userInfo.get("tagid_list").toString());
-            userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
-            userData.put("qr_scene",userInfo.get("qr_scene").toString());
-            userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+            if(userInfo.get("subscribe").toString().equals("2")){
 
+                userData.put("privilege",userInfo.get("privilege").toString());
+            }else{
+                userData.put("remark",userInfo.get("remark").toString());
+                userData.put("groupid",userInfo.get("groupid").toString());
+                userData.put("tagid_list",userInfo.get("tagid_list").toString());
+                userData.put("subscribe_scene",userInfo.get("subscribe_scene").toString());
+                userData.put("qr_scene",userInfo.get("qr_scene").toString());
+                userData.put("qr_scene_str",userInfo.get("qr_scene_str").toString());
+            }
             if(weixinUserInfo!=null){
 
                 weixinUserServiceFacade.upWeixinUserById(userData,weixinUserInfo.getId());
@@ -188,49 +244,9 @@ public class WeixinController {
         }
         return userData;
     }
+
     /**
-     * 开发者认证
-     * @param request
-     * @param weixinMpInfo 公众号信息
-     * */
-    @RequestMapping(value = "/checkSignature", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String checkSignature(HttpServletRequest request,WeixinMpInfo weixinMpInfo){
-
-        String echostr = request.getParameter("echostr");
-        String signature = request.getParameter("signature");
-        String nonce = request.getParameter("nonce");
-        String timestamp = request.getParameter("timestamp");
-        String content=request.getQueryString();
-
-        List<String> list = new ArrayList<>();
-        list.add(weixinMpInfo.getToken());
-        list.add(nonce);
-        list.add(timestamp);
-
-        list.sort(Comparator.naturalOrder());
-
-        String param = StringUtils.join(list,"");
-        String sign = DigestUtils.shaHex(param);
-
-        //日志记录
-        StringBuilder sbf = new StringBuilder();
-        Date date = new Date();
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sbf.append("\n\nTime:" + myfmt.format(date));
-        sbf.append("\n请求类型：微信公众号开发者认证");
-        sbf.append("\n请求参数："+content);
-        sbf.append("\n加密SIGN："+sign);
-        String fileName = "WeixinAuthlog";
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
-
-        if(signature.equals(sign)){
-            return echostr;
-        }
-        return null;
-    }
-    /**
-     * 获取openid
+     * 网页授权接口
      * @param request
      * */
     @RequestMapping(value = "/userUnionId",produces = "application/json;charset=utf-8")
@@ -242,18 +258,88 @@ public class WeixinController {
         if(StringUtils.isNotBlank(state)){
 
             String encrypt = request.getParameter("encrypt");
-            String vueUrl = request.getParameter("vueurl");
+            String responseurl = request.getParameter("responseurl");
+            responseurl = Base64CustomUtils.base64Decoder(responseurl);
+
+            StringBuilder sbf = new StringBuilder();
+            Date date = new Date();
+            SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sbf.append("\n\nTime:" + myfmt.format(date));
+            sbf.append("\n请求类型：微信公众号开发者认证");
+            sbf.append("\n请求参数："+ request.getQueryString());
+            String fileName = "test";
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/", fileName,true);
 
             //获取公众号信息
             weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
-            String openid = new MessageUtil().getOpenid(request,weixinMpInfo);
+            JSONObject webAccessToken = new MessageUtil().getWebAccessToken(request,weixinMpInfo);
 
-            vueUrl = Base64CustomUtils.base64Decoder(vueUrl)+"&openid="+openid;
+            if(webAccessToken.isEmpty()){
 
+                response.setStatus(302);
+                response.setHeader("location",responseurl+"#openid=");
+            }
+            String openid = webAccessToken.get("openid").toString();
+            logger.info("openid",openid);
+
+            if(state.equals("userinfo")){
+
+                //获取是否有当前微信用户信息
+                WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinUserByOpenid(webAccessToken.get("openid").toString(),weixinMpInfo.getId());
+                if(weixinUserInfo == null){
+
+                    //授权获取用户基本信息
+                    JSONObject snsapiUserinfo = new MessageUtil().snsapiUserinfo(webAccessToken.get("access_token").toString(),webAccessToken.get("openid").toString());
+                    //snsapiUserinfo.put("mpid",weixinMpInfo.getId());
+                    snsapiUserinfo.put("subscribe","2");
+                    snsapiUserinfo.put("subscribe_time",System.currentTimeMillis()/1000);
+
+                    dealUserInfo(weixinMpInfo,weixinUserInfo,snsapiUserinfo);
+                }
+            }
+            String token = AESUtils.encrypt(weixinMpInfo.getAppid()+openid,ConfigUtil.getValue("AES_KEY"));
+            String openidEn = AESUtils.encrypt(openid, ConfigUtil.getValue("AES_KEY"));
+            redisCustomServiceFacade.set(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token, openidEn, Long.parseLong(ConfigUtil.getValue("WEIXIN_LOGIN_EXPIRE_30")) );
+
+            logger.info("token",token);
+            logger.info("加密openid",openidEn);
 
             response.setStatus(302);
-            response.setHeader("location",vueUrl);
+            response.setHeader("location",responseurl+"#"+openidEn);
         }
-
     }
+    /**
+     * 获取公众号信息
+     * */
+    @RequestMapping(value = "/mpFoundate", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String mpFoundate(HttpServletRequest request){
+
+        String encrypt = request.getParameter("encrypt");
+
+        weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
+        if(weixinMpInfo == null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "ERROR", null);
+        }
+        String redirectUri = ConfigUtil.getValue("BASE_API_URL")+"weixin/userUnionId?encrypt="+encrypt+"&responseurl=locationurl";
+        try {
+
+            redirectUri = URLEncoder.encode(redirectUri, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+
+            e.printStackTrace();
+        }
+        String BASE_GRANT_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+weixinMpInfo.getAppid()+"&redirect_uri="+redirectUri+"&response_type=code&scope=snsapi_base&state=base#wechat_redirect";
+        String USER_GRANT_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+weixinMpInfo.getAppid()+"&redirect_uri="+redirectUri+"&response_type=code&scope=snsapi_userinfo&state=base#wechat_redirect";
+
+        JSONObject res = new JSONObject();
+        res.put("encrypt",encrypt);
+        res.put("appid",weixinMpInfo.getAppid());
+        res.put("basegranturl",BASE_GRANT_URL);
+        res.put("usergranturl",USER_GRANT_URL);
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "SUCCESS", res);
+    }
+
 }

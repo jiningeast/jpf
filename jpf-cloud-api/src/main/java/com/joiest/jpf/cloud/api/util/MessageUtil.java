@@ -90,7 +90,9 @@ public class MessageUtil {
      * */
     public static final String HTTPS_URL = "https://api.weixin.qq.com/";
 
-    /**
+    public static final String HTTPS_API_URL = " https://api.weixin.qq.com/";
+
+   /**
      * CLICK
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";
@@ -143,7 +145,9 @@ public class MessageUtil {
 
         return messageMap;
     }
-
+    /**
+     * 基础接口获取用户信息
+     * */
     public JSONObject getUserInfo(String access_token,String openid){
 
         Map<String, Object> map = new HashMap<>();
@@ -162,12 +166,15 @@ public class MessageUtil {
 
         return res;
     }
-    public String getOpenid(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
+    /**
+     * 获取网页授权access_token
+     * */
+    public JSONObject getWebAccessToken(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
 
         Map<String, Object> map = new HashMap<>();
 
         String code = request.getParameter("code");
-        String url = HTTPS_URL+"/sns/oauth2/access_token?appid="+weixinMpInfo.getAppid()+"&secret="+weixinMpInfo.getAppsecret()+"&code="+code+"&grant_type=authorization_code";
+        String url = HTTPS_API_URL+"sns/oauth2/access_token?appid="+weixinMpInfo.getAppid()+"&secret="+weixinMpInfo.getAppsecret()+"&code="+code+"&grant_type=authorization_code";
 
         JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(url,map));
 
@@ -181,7 +188,33 @@ public class MessageUtil {
 
         if(res.containsKey("openid")){
 
-            return res.get("openid").toString();
+            return res;
+        }
+        return null;
+    }
+    /**
+     * 网页授权获取用户信息
+     * */
+    public JSONObject snsapiUserinfo(String accessToken,String openid){
+
+        Map<String, Object> map = new HashMap<>();
+
+        String userInfoUrl = HTTPS_API_URL+"sns/userinfo?access_token="+accessToken+"&openid="+openid+"&lang=zh_CN";
+
+        JSONObject res = JSONObject.fromObject(OkHttpUtils.postForm(userInfoUrl,map));
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + curTime);
+        sbf.append("\n请求类型：微信公众号授权获取用户信息snsapi_serinfo");
+        sbf.append("\n请求地址："+userInfoUrl);
+        sbf.append("\n获取接口参数："+res);
+        String fileName = "WeixinSnsapiUserinfoLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
+
+        if(res.containsKey("openid")){
+
+            return res;
         }
         return null;
     }
