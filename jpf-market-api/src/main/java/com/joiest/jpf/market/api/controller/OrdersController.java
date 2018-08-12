@@ -15,6 +15,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -60,6 +61,7 @@ public class OrdersController {
     @Autowired
     private ShopBrandServiceFacade shopBrandServiceFacade;
 
+    //TODO  记录请求日志  商品类别判断
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String createOrder(String data)
@@ -136,8 +138,8 @@ public class OrdersController {
         ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
 
         info.setOrderNo(orderno);
-        info.setCustomerId("2");    //TODO 获取用户信息
-        info.setCustomerName("测试客户");
+        info.setCustomerId(userInfo.getId());
+        info.setCustomerName(userInfo.getName());
         info.setProductId(productInfo.getId());
         info.setProductName(productInfo.getName());
         info.setProductMoney(productInfo.getMoney());
@@ -162,6 +164,7 @@ public class OrdersController {
      */
     @RequestMapping(value = "/pay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
+    @Transactional
     public String dopay(String data)
     {
         String code =ToolUtils.CreateCode(String.valueOf(userInfo.getDou()),uid);
@@ -216,7 +219,14 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(), JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(), "");
         }
 
-        shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
+        //TODO  pay_shop_order.coupon_active_id & pay_shop_order.coupon_detail
+        int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
+        if ( res_uporder == 1 )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
+        }
+
+        //充值  1.区分充值类型 2.调用接口
 
         return "";
     }
@@ -249,6 +259,13 @@ public class OrdersController {
             uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY_MARKET"));
             userInfo = shopCustomerInterfaceServiceFacade.getCustomer(uid);
         }
+//        String token = request.getHeader("Token");
+//        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token);
+//        if (StringUtils.isNotBlank(uid_encrypt))
+//        {
+//            openId = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY_MARKET"));
+//            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+//        }
     }
 
     /**
@@ -287,6 +304,7 @@ public class OrdersController {
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), dataJson);
     }
+
 
     @RequestMapping(value = "getbrand", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
