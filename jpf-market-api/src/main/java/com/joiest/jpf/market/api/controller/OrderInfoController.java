@@ -1,6 +1,7 @@
 package com.joiest.jpf.market.api.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.*;
@@ -134,16 +135,48 @@ public class OrderInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
     }
 
+    /*
+     * 订单取消
+     * */
+    @RequestMapping(value = "/cancel", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String orderInfoCancel(String data){
+        if( StringUtils.isBlank(data) ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
+        }
+        String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+        String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+        Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+        ShopOrderInfoInterfaceRequest request = new ShopOrderInfoInterfaceRequest();
+        try{
+            request =  (ShopOrderInfoInterfaceRequest) ClassUtil.mapToObject(requestMap, request.getClass());
+        }catch (Exception e)
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未登录", null);
+        }
+
+        if ( StringUtils.isBlank(request.getOrderNo()))
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单编号不能为空", null);
+        }
+        request.setUid(uid); // 用户登录ID
+        JpfResponseDto jpfResponseDto = shopOrderInfoInterfaceServiceFacade.shopOrderCancel(request);
+        if( jpfResponseDto == null || !jpfResponseDto.getRetCode().equals("0000") ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "数据操作失败", null);
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
+    }
+
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
-        //获取用户信息 Token
+        String openId;
         String token = request.getHeader("Token");
-        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token);
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(uid_encrypt))
-        {
-            uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY_MARKET"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomer(uid);
+        String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (StringUtils.isNotBlank(openId_encrypt)) {
+            openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
         }
     }
 

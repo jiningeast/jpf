@@ -20,11 +20,9 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +31,10 @@ import java.util.Map;
 @Controller
 @RequestMapping("custom")
 public class CustomController {
+
+    private String uid;
+    private String openId;
+    private ShopCustomerInterfaceInfo userInfo;
 
     private  String smsPrefix = "marketBindSend";
     @Autowired
@@ -186,6 +188,19 @@ public class CustomController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功", null);
 
 
+    }
+
+    @ModelAttribute
+    public void beforAction(HttpServletRequest request)
+    {
+        String openId;
+        String token = request.getHeader("Token");
+        String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (StringUtils.isNotBlank(openId_encrypt)) {
+            openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
+        }
     }
 
 }

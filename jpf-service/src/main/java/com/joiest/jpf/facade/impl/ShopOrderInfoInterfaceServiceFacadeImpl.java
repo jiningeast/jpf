@@ -1,11 +1,14 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayShopOrderCustom;
+import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayShopOrder;
 import com.joiest.jpf.common.po.PayShopOrderExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopOrderCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopOrderMapper;
 import com.joiest.jpf.dto.GetShopOrderRequest;
 import com.joiest.jpf.dto.GetShopOrderResponse;
 import com.joiest.jpf.dto.ShopOrderInfoInterfaceRequest;
@@ -18,12 +21,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInterfaceServiceFacade {
 
     @Autowired
     private PayShopOrderCustomMapper payShopOrderCustomMapper;
+
+    @Autowired
+    private PayShopOrderMapper payShopOrderMapper;
 
     /**
      * 订单列表---后台
@@ -102,5 +109,34 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         return shopOrderInfoInterface;
     }
 
+
+    /**
+     * 订单详情
+     */
+    public JpfResponseDto shopOrderCancel(ShopOrderInfoInterfaceRequest request)
+    {
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        if ( StringUtils.isBlank(request.getOrderNo()))
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单编号不能为空");
+        }
+        //更新调教
+        PayShopOrder record = new PayShopOrder();
+        record.setStatus((byte)3);
+        record.setUpdatetime(new Date());
+        //查询条件
+        PayShopOrderExample example = new PayShopOrderExample();
+        PayShopOrderExample.Criteria c = example.createCriteria();
+        c.andCustomerIdEqualTo(request.getUid());
+        c.andOrderNoEqualTo(request.getOrderNo());
+        c.andStatusEqualTo((byte)0); //待支付状态
+        int count = payShopOrderMapper.updateByExampleSelective(record ,example);
+
+        if(count <= 0 ){
+            return null;
+        }
+
+        return jpfResponseDto;
+    }
 
 }

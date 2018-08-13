@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.dto.GetShopOrderRequest;
 import com.joiest.jpf.dto.GetShopOrderResponse;
 import com.joiest.jpf.dto.ShopOrderInfoInterfaceRequest;
@@ -18,5 +19,10 @@ public interface ShopOrderInfoInterfaceServiceFacade {
      * 获取单条订单信息
      */
     public ShopOrderInfoInterface getOne(ShopOrderInfoInterfaceRequest request);
+
+    /**
+     * 取消订单信息
+     */
+    public JpfResponseDto shopOrderCancel(ShopOrderInfoInterfaceRequest request);
 
 }
