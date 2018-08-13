@@ -23,7 +23,6 @@ import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
-import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -526,6 +525,58 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         PayCloudDfMoney payCloudDfMoney = new PayCloudDfMoney();
         payCloudDfMoney.setMontype(1);
         return payCloudDfMoneyMapper.updateByExampleSelective(payCloudDfMoney,e);
+    }
+    //根据商户号和批次id查询出当前批次详情
+
+    @Override
+    public GetCloudMoneyDfResponse getBatchList(String pactNo,String merchNo) {
+
+        if ( StringUtils.isBlank(pactNo) ||   StringUtils.isBlank(merchNo))
+        {
+            return null;
+        }
+
+        PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
+
+        //分页
+        /*if(StringUtils.isBlank(pageNo) || pageNo==null){
+            example.setPageNo(1);
+        }else {
+            example.setPageNo(Long.parseLong(pageNo));
+        }
+        if(StringUtils.isBlank(pageSize) || pageSize==null){
+            example.setPageSize(10);
+        }else{
+            example.setPageSize(Long.parseLong(pageSize));
+        }*/
+
+        example.setOrderByClause("addtime ASC");
+        PayCloudDfMoneyExample.Criteria c = example.createCriteria();
+        c.andMerchNoEqualTo(merchNo);
+        c.andPactnoEqualTo(pactNo);
+
+        List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(example);
+
+        if ( list.isEmpty() || list == null )
+        {
+            return null;
+        }
+
+        List<CloudDfMoneyInterfaceInfo> resultList = new ArrayList<>();
+
+        for (PayCloudDfMoney one : list)
+        {
+            CloudDfMoneyInterfaceInfo info = new CloudDfMoneyInterfaceInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoney.class, CloudDfMoneyInterfaceInfo.class, false);
+            beanCopier.copy(one, info, null);
+            resultList.add(info);
+
+        }
+        GetCloudMoneyDfResponse response = new GetCloudMoneyDfResponse();
+        response.setList(resultList);
+        int count = payCloudDfMoneyMapper.countByExample(example);
+        response.setCount(count);
+        return response;
     }
 
 }
