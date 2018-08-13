@@ -2,14 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:context="http://www.springframework.org/schema/context"
-	   xmlns:mvc="http://www.springframework.org/schema/mvc"
-	   xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
+	   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     
    
     <!-- 配置注解驱动的Spring MVC Controller 的编程模型.注:此标签只在 Servlet MVC工作! -->
@@ -34,8 +33,16 @@
 	    </mvc:message-converters>
 	</mvc:annotation-driven>
 	<!-- 扫描注解组件并且自动的注入-->
-    <context:component-scan base-package="com.joiest.jpf.market.api" />
-    	 
+    <context:component-scan base-package="com.joiest.jpf.market.api" >
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<bean id="transactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
     <!-- 静态资源的处理 -->
     <mvc:resources location="/resources/" mapping="/resources/**"/>
 
