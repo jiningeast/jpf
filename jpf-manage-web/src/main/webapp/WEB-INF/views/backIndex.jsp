@@ -55,6 +55,7 @@
                     "menuname" : "微信公众号管理",
                     "icon" : "icon-nav",
                     "url" : "weixinMp/index"
+
                 }]
     		},{
     			"menuid" : "2",
