@@ -91,7 +91,8 @@ public class MessageUtil {
     public static final String HTTPS_URL = "https://api.weixin.qq.com/";
 
     public static final String HTTPS_API_URL = " https://api.weixin.qq.com/";
-    /**
+
+   /**
      * CLICK
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";
@@ -105,29 +106,34 @@ public class MessageUtil {
         curTime = myfmt.format(date);
         dateTime = date;
     }
-
+    /**
+     * @Description: 解析微信发来的请求（XML）
+     * @param @param request
+     * @param @return
+     * @param @throws Exception
+     * @author dapengniao
+     * @date 2016年3月7日 上午10:04:02
+     */
     public static Map<String,String> parseXml(HttpServletRequest request){
 
-        Map<String,String> messageMap=new HashMap<String, String>();
+        Map<String,String> messageMap=new HashMap<>();
 
         InputStream inputStream=null;
         try {
             //读取request Stream信息
             inputStream=request.getInputStream();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
-
         SAXReader reader = new SAXReader();
         Document document=null;
         try {
             document = reader.read(inputStream);
         } catch (DocumentException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
-
         Element root=document.getRootElement();
         List<Element> elementsList=root.elements();
 
@@ -136,7 +142,6 @@ public class MessageUtil {
         }
         try {
             inputStream.close();
-            inputStream=null;
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -144,7 +149,9 @@ public class MessageUtil {
 
         return messageMap;
     }
-
+    /**
+     * 基础接口获取用户信息
+     * */
     public JSONObject getUserInfo(String access_token,String openid){
 
         Map<String, Object> map = new HashMap<>();
@@ -163,6 +170,9 @@ public class MessageUtil {
 
         return res;
     }
+    /**
+     * 获取网页授权access_token
+     * */
     public JSONObject getWebAccessToken(HttpServletRequest request, WeixinMpInfo weixinMpInfo){
 
         Map<String, Object> map = new HashMap<>();
@@ -186,7 +196,9 @@ public class MessageUtil {
         }
         return null;
     }
-
+    /**
+     * 网页授权获取用户信息
+     * */
     public JSONObject snsapiUserinfo(String accessToken,String openid){
 
         Map<String, Object> map = new HashMap<>();

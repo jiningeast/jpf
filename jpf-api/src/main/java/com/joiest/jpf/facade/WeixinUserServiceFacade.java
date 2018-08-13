@@ -12,6 +12,11 @@ public interface WeixinUserServiceFacade {
     public WeixinUserInfo getWeixinUserByOpenid(String openid,Long id);
 
     /**
+     * 获取微信用户基本信息by openid
+     * */
+    public WeixinUserInfo getWeixinUserByOpenid(String openid);
+
+    /**
      *添加微信用户基本信息
      * */
     public int addWeixinUser(Map<String ,String> wei);

@@ -108,4 +108,11 @@ public interface PayShopOrderCustomMapper {
      */
     PayShopOrderCustom selectOrderAll(String orderNo);
 
+    /**
+     *
+     *获取业务公司连表信息
+
+     */
+    PayShopOrderCustom selectOrderInterfaceAll(PayShopOrderExample example);
+
 }

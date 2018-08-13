@@ -1,21 +1,20 @@
 package com.joiest.jpf.dto;
 
-import com.joiest.jpf.common.po.PayShopOrder;
+import com.joiest.jpf.common.po.PayShopCouponActive;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ShopOrderInfoInterfaceRequest {
+public class GetShopCouponActiveInterfaceRequest {
+    /**
+     * 消费行为 0=激活 1=消费 2=退豆 3=过期
+     */
+    private String type;
 
     /**
-     * 用户ID
+     * 用户id
      */
-    private String  uid;
-
-    /**
-     * 搜过内容
-     */
-    private String  keyword;
+    private String uid;
 
     /**
      * 页码
@@ -26,19 +25,6 @@ public class ShopOrderInfoInterfaceRequest {
      * 分页条数
      */
     private String pageSize;
-
-    /**
-     * 订单号
-     */
-    private String orderNo;
-
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
 
     public String getPage() {
         return page;
@@ -56,12 +42,12 @@ public class ShopOrderInfoInterfaceRequest {
         this.pageSize = pageSize;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getType() {
+        return type;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getUid() {
