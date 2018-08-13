@@ -155,6 +155,7 @@ public class WeixinController {
                 break;
             case MessageUtil.REQ_MESSAGE_TYPE_TEXT:
 
+                logger.info("文本消息接收");
                 //普通文本消息
                 TextMessageInfo txtmsg=new TextMessageInfo();
                 txtmsg.setToUserName(requestMap.get("FromUserName").toString());
@@ -163,8 +164,8 @@ public class WeixinController {
                 txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
                 txtmsg.setContent("您好，欢迎留言~");
 
-                MessageUtil.textMessageToXml(txtmsg);
-                break;
+                return MessageUtil.textMessageToXml(txtmsg);
+
             default:
 
                 break;
@@ -202,7 +203,7 @@ public class WeixinController {
             txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
             txtmsg.setContent(weixinMpInfo.getFollowreply());
 
-            MessageUtil.textMessageToXml(txtmsg);
+            return MessageUtil.textMessageToXml(txtmsg);
 
         }
        return null;

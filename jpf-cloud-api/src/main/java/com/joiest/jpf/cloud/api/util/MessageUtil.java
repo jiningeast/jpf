@@ -8,6 +8,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.joiest.jpf.cloud.api.controller.merchInfoController;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.OkHttpUtils;
 
@@ -19,6 +20,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 import net.sf.json.JSONObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -26,6 +29,7 @@ import org.dom4j.io.SAXReader;
 
 public class MessageUtil {
 
+    private static final Logger logger = LogManager.getLogger(merchInfoController.class);
 
     /**
      * 返回消息类型：文本
@@ -196,6 +200,8 @@ public class MessageUtil {
      * @date 2016年3月8日 下午4:13:22
      */
     public static String textMessageToXml(TextMessageInfo textMessageInfo) {
+
+        logger.info("textMessageToXml处理");
         xstream.alias("xml", textMessageInfo.getClass());
         return xstream.toXML(textMessageInfo);
     }
