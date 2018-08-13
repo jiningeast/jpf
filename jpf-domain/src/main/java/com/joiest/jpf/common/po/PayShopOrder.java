@@ -21,9 +21,24 @@ public class PayShopOrder implements Serializable {
     private Byte orderType;
 
     /**
-     * 创建订单的请求参数
+     * 第三方订单号
+     */
+    private String foreignOrderNo;
+
+    /**
+     * 前端创建订单的请求参数
      */
     private String requestedContent;
+
+    /**
+     * 第三方接口请求参数
+     */
+    private String foreignRequestContent;
+
+    /**
+     * 第三方接口返回内容
+     */
+    private String foreignResponseContent;
 
     /**
      * 
@@ -151,12 +166,36 @@ public class PayShopOrder implements Serializable {
         this.orderType = orderType;
     }
 
+    public String getForeignOrderNo() {
+        return foreignOrderNo;
+    }
+
+    public void setForeignOrderNo(String foreignOrderNo) {
+        this.foreignOrderNo = foreignOrderNo == null ? null : foreignOrderNo.trim();
+    }
+
     public String getRequestedContent() {
         return requestedContent;
     }
 
     public void setRequestedContent(String requestedContent) {
         this.requestedContent = requestedContent == null ? null : requestedContent.trim();
+    }
+
+    public String getForeignRequestContent() {
+        return foreignRequestContent;
+    }
+
+    public void setForeignRequestContent(String foreignRequestContent) {
+        this.foreignRequestContent = foreignRequestContent == null ? null : foreignRequestContent.trim();
+    }
+
+    public String getForeignResponseContent() {
+        return foreignResponseContent;
+    }
+
+    public void setForeignResponseContent(String foreignResponseContent) {
+        this.foreignResponseContent = foreignResponseContent == null ? null : foreignResponseContent.trim();
     }
 
     public String getCustomerId() {
@@ -331,7 +370,10 @@ public class PayShopOrder implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", orderNo=").append(orderNo);
         sb.append(", orderType=").append(orderType);
+        sb.append(", foreignOrderNo=").append(foreignOrderNo);
         sb.append(", requestedContent=").append(requestedContent);
+        sb.append(", foreignRequestContent=").append(foreignRequestContent);
+        sb.append(", foreignResponseContent=").append(foreignResponseContent);
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName=").append(customerName);
         sb.append(", productId=").append(productId);
@@ -375,7 +417,10 @@ public class PayShopOrder implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getOrderType() == null ? other.getOrderType() == null : this.getOrderType().equals(other.getOrderType()))
+            && (this.getForeignOrderNo() == null ? other.getForeignOrderNo() == null : this.getForeignOrderNo().equals(other.getForeignOrderNo()))
             && (this.getRequestedContent() == null ? other.getRequestedContent() == null : this.getRequestedContent().equals(other.getRequestedContent()))
+            && (this.getForeignRequestContent() == null ? other.getForeignRequestContent() == null : this.getForeignRequestContent().equals(other.getForeignRequestContent()))
+            && (this.getForeignResponseContent() == null ? other.getForeignResponseContent() == null : this.getForeignResponseContent().equals(other.getForeignResponseContent()))
             && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
             && (this.getCustomerName() == null ? other.getCustomerName() == null : this.getCustomerName().equals(other.getCustomerName()))
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
@@ -408,7 +453,10 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getOrderType() == null) ? 0 : getOrderType().hashCode());
+        result = prime * result + ((getForeignOrderNo() == null) ? 0 : getForeignOrderNo().hashCode());
         result = prime * result + ((getRequestedContent() == null) ? 0 : getRequestedContent().hashCode());
+        result = prime * result + ((getForeignRequestContent() == null) ? 0 : getForeignRequestContent().hashCode());
+        result = prime * result + ((getForeignResponseContent() == null) ? 0 : getForeignResponseContent().hashCode());
         result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());
         result = prime * result + ((getCustomerName() == null) ? 0 : getCustomerName().hashCode());
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
