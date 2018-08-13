@@ -12,6 +12,8 @@ import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import java.io.PrintWriter;
 import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -144,7 +146,7 @@ public class WeixinController {
      * */
     @RequestMapping(value = "/responseMsg", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String responseMsg(HttpServletRequest request,HttpServletResponse response,Map requestMap){
+    public String responseMsg(HttpServletRequest request,HttpServletResponse response,Map requestMap) throws IOException {
 
         String msgType = requestMap.get("MsgType").toString();
         switch (msgType){
@@ -164,7 +166,14 @@ public class WeixinController {
                 txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
                 txtmsg.setContent("您好，欢迎留言~");
 
-                return MessageUtil.textMessageToXml(txtmsg);
+
+                String xml= MessageUtil.textMessageToXml(txtmsg);
+
+                System.out.println("xml:"+xml);
+
+                PrintWriter out = response.getWriter();
+                out.print(xml);
+                out.close();
 
             default:
 
