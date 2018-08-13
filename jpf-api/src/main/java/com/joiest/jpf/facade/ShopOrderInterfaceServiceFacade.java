@@ -19,4 +19,5 @@ public interface ShopOrderInterfaceServiceFacade {
      */
     public int getOrdersCount(String customerId);
 
+    public int updateOrder(ShopOrderInterfaceInfo info);
 }

@@ -4,12 +4,14 @@ package com.joiest.jpf.market.api.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
+import com.joiest.jpf.common.po.PayShopInterfaceStream;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.util.ToolsUtils;
+import com.joiest.jpf.market.api.util.ofpayUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -30,8 +33,11 @@ import java.util.regex.Pattern;
 public class OrdersController {
 
     private String uid;
-
+    private String openId;
     private ShopCustomerInterfaceInfo userInfo;
+
+    String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
+
     /**
      * 商品
      */
@@ -61,6 +67,8 @@ public class OrdersController {
     @Autowired
     private ShopBrandServiceFacade shopBrandServiceFacade;
 
+    @Autowired
+    private ShopInterfaceStreamServiceFacade ShopInterfaceStreamServiceFacade;
     //TODO  记录请求日志  商品类别判断
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -75,6 +83,7 @@ public class OrdersController {
         Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});*/
         Map<String, Object> requestMap = new HashMap<>();
         requestMap = _filter(data);
+        String requestJson = JsonUtils.toJson(requestMap);
         if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
@@ -96,12 +105,11 @@ public class OrdersController {
                 throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "油卡卡号不一致");
             }
             //TODO 油卡卡号校验
-
             chargeNo = request.getCardnumber();
         } else if ( request.getOtype().equals("3") )
         {
             //话费充值
-            String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
+//            String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
             Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(request.getPhone()).matches();
             if ( !phoneIsTrue )
             {
@@ -150,6 +158,8 @@ public class OrdersController {
         info.setTotalDou(productInfo.getDou());
         info.setChargeNo(chargeNo);
         info.setAddtime(new Date());
+        info.setOrderType(Byte.valueOf(request.getOtype()));
+        info.setRequestedContent(requestJson);
         int res = shopOrderInterfaceServiceFacade.addOrder(info);
         if ( res >= 0 )
         {
@@ -164,7 +174,7 @@ public class OrdersController {
      */
     @RequestMapping(value = "/pay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    @Transactional
+//    @Transactional
     public String dopay(String data)
     {
         String code =ToolUtils.CreateCode(String.valueOf(userInfo.getDou()),uid);
@@ -219,17 +229,165 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(), JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(), "");
         }
 
-        //TODO  pay_shop_order.coupon_active_id & pay_shop_order.coupon_detail
-        int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
-        if ( res_uporder == 1 )
+        //TODO 接口查询
+//        if ( orderInfo.getOrderType() == 3 )
+//        {
+//            Map<String,String> queryMap = new HashMap<>();
+//            queryMap.put("phoneno", "18618380116");
+//            queryMap.put("pervalue", "50");
+//            Map<String, String> queryPhoneResponseMap = new ofpayUtils().telquery(queryMap);
+//            if ( !queryPhoneResponseMap.get("retcode").equals("1") )
+//            {
+//                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), "retcode:" + queryPhoneResponseMap.get("retcode") + " ;err_msg:" + queryPhoneResponseMap.get("err_msg"));
+//            }
+//
+//        }else if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 )
+//        {
+//
+//        }
+
+        //扣减豆操作
+//        int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
+
+        //商品信息
+        ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(orderInfo.getProductId());
+
+        Map<String, Object> rechargeMap = new HashMap<>();
+        Map<String, String> resultMap = new HashMap<>();
+        //充值  1.区分充值类型 2.调用接口
+        //油卡充值
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if ( orderInfo.getOrderType() == 3 )
         {
-            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
+            Boolean res_phoneRecharge = this.phoneRecharge(orderInfo, productInfo);
+            if ( res_phoneRecharge )
+            {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "充值成功", orderInfo.getOrderNo());
+            }
+//            //话费充值
+//            Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(orderInfo.getChargeNo()).matches();
+//            if ( !phoneIsTrue )
+//            {
+//                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码错误");
+//            }
+//            rechargeMap.put("cardnum", productInfo.getRechargeMoney().toString());
+//            rechargeMap.put("sporder_id", orderInfo.getOrderNo());
+//            rechargeMap.put("sporder_time", orderInfo.getAddtime());
+//            rechargeMap.put("game_userid", orderInfo.getChargeNo());
+//            rechargeMap.put("buyNum", "1");     //暂定为 1
+//
+//            resultMap = new ofpayUtils().chargePhone(rechargeMap);
+
+        }else if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 )
+        {
+            //油卡充值 1:中国石化 2:中国石油
         }
 
-        //充值  1.区分充值类型 2.调用接口
+        //添加通道流水 更新order状态
+//        if ( resultMap.containsKey("game_state") && resultMap.get("game_state").equals("1") && resultMap.containsKey("game_state") && resultMap.get("game_state").equals("1") )
+//        {
+//            //充值成功
+//        } else
+//        {
+//            String err_msg = resultMap.getOrDefault("game_state", "");
+//            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "充值失败：" + err_msg);
+//        }
+//        String foreign_orderid = resultMap.getOrDefault("orderid", "");     //接口订单id
+//
+//        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+//        stream.setType((byte)3);
+//        stream.setBatchId(orderInfo.getOrderNo());
+//        stream.setRequestUrl(resultMap.get("requestUrl"));
+//        stream.setRequestContent(resultMap.get("requestParam"));
+//        String requestUrl = resultMap.get("requestUrl");
+//        String requestParam = resultMap.get("requestParam");
+//        resultMap.remove("requestUrl");
+//        resultMap.remove("requestParam");
+//        String responseJson = JsonUtils.toJson(resultMap);
+//        stream.setResponseContent(responseJson);
+//        stream.setAddtime(new Date());
+//        int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
+//
+//        //更新订单
+//        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+//        orderinfo.setId(orderInfo.getId());
+//        orderInfo.setRechargeTime(new Date());
+//        orderinfo.setRechargeStatus(resultMap.get("game_state"));     //0充值中 1充值成功 9充值失败
+//        orderinfo.setForeignOrderNo(foreign_orderid);
+//        orderinfo.setForeignRequestContent(requestUrl + "?" + requestParam);
+//        orderinfo.setForeignResponseContent(responseJson);
+//        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
 
-        return "";
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "充值成功", "");
     }
+
+    private Boolean phoneRecharge(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo)
+    {
+        //查询
+        Map<String,String> queryMap = new HashMap<>();
+        queryMap.put("phoneno", orderInfo.getChargeNo());
+        queryMap.put("pervalue", productInfo.getRechargeMoney().toString());
+        Map<String, String> queryPhoneResponseMap = new ofpayUtils().telquery(queryMap);
+        if ( !queryPhoneResponseMap.get("retcode").equals("1") )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), "retcode:" + queryPhoneResponseMap.get("retcode") + " ;err_msg:" + queryPhoneResponseMap.get("err_msg"));
+        }
+
+        //话费充值
+        Map<String, Object> rechargeMap = new HashMap<>();
+        Map<String, String> resultMap = new HashMap<>();
+
+        Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(orderInfo.getChargeNo()).matches();
+        if ( !phoneIsTrue )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码错误");
+        }
+        rechargeMap.put("cardnum", productInfo.getRechargeMoney().toString());
+        rechargeMap.put("sporder_id", orderInfo.getOrderNo());
+        rechargeMap.put("sporder_time", orderInfo.getAddtime());
+        rechargeMap.put("game_userid", orderInfo.getChargeNo());
+        rechargeMap.put("buyNum", "1");     //暂定为 1
+
+        resultMap = new ofpayUtils().chargePhone(rechargeMap);
+        if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") )
+        {
+            //充值成功
+            String foreign_orderid = resultMap.getOrDefault("orderid", "");     //接口订单id
+
+            ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+            stream.setType((byte)3);
+            stream.setBatchId(orderInfo.getOrderNo());
+            stream.setRequestUrl(resultMap.get("requestUrl"));
+            stream.setRequestContent(resultMap.get("requestParam"));
+            String requestUrl = resultMap.get("requestUrl");
+            String requestParam = resultMap.get("requestParam");
+            resultMap.remove("requestUrl");
+            resultMap.remove("requestParam");
+            String responseJson = JsonUtils.toJson(resultMap);
+            stream.setResponseContent(responseJson);
+            stream.setAddtime(new Date());
+            int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
+
+            //更新订单
+            ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+            orderinfo.setId(orderInfo.getId());
+            orderInfo.setRechargeTime(new Date());
+            orderinfo.setRechargeStatus(resultMap.get("game_state"));     //0充值中 1充值成功 9充值失败
+            orderinfo.setForeignOrderNo(foreign_orderid);
+            orderinfo.setForeignRequestContent(requestUrl + "?" + requestParam);
+            orderinfo.setForeignResponseContent(responseJson);
+            int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+
+            return true;
+
+        } else
+        {
+            String err_msg = resultMap.getOrDefault("game_state", "");
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "充值失败：" + err_msg);
+        }
+    }
+
 
     @RequestMapping(value = "blance", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -245,27 +403,13 @@ public class OrdersController {
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
-//        String uid = "1";
-//        int random = ToolUtils.getRandomInt(10000,99999);
-//        String token1 = AESUtils.encrypt(uid + random,ConfigUtil.getValue("AES_KEY_MARKET"));
-//        String uid_encrypt1 = AESUtils.encrypt(uid, ConfigUtil.getValue("AES_KEY_MARKET"));
-//        redisCustomServiceFacade.set(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token1, uid_encrypt1, Long.parseLong(ConfigUtil.getValue("MARKET_USER_LOGIN_EXPIRE_7")) );
-
-        //获取用户信息
         String token = request.getHeader("Token");
-        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token);
-        if (StringUtils.isNotBlank(uid_encrypt))
-        {
-            uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY_MARKET"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomer(uid);
+        String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (StringUtils.isNotBlank(openId_encrypt)) {
+            openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
         }
-//        String token = request.getHeader("Token");
-//        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token);
-//        if (StringUtils.isNotBlank(uid_encrypt))
-//        {
-//            openId = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY_MARKET"));
-//            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
-//        }
     }
 
     /**

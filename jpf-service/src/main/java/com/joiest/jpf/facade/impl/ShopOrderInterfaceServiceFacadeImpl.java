@@ -58,4 +58,12 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
 
         return payShopOrderMapper.countByExample(e);
     }
+
+    @Override
+    public int updateOrder(ShopOrderInterfaceInfo info) {
+        PayShopOrder payShopOrder = new PayShopOrder();
+        BeanCopier beanCopier = BeanCopier.create(ShopOrderInterfaceInfo.class, PayShopOrder.class, false);
+        beanCopier.copy(info, payShopOrder, null);
+        return payShopOrderMapper.updateByPrimaryKeySelective(payShopOrder);
+    }
 }

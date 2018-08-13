@@ -79,9 +79,10 @@ public enum JpfInterfaceErrorInfo {
     CURR_DOU_TOTAL_ZERO("50004", "无可用欣豆"),
     USER_DOU_CODE_ERROR("50005", "当前余额异常"),
     GOODLIST_IS_EMPTY("50006", "无对应商品信息"),
-    BRANDLIST_IS_EMPTY("50006", "无对应商品信息"),
-    USER_IS_FREEZE("50007", "您的帐户已被冻结"),
-    USER_DOU_NOT_SUFFICIENT("50007", "帐户余额不足");
+    BRANDLIST_IS_EMPTY("50007", "无品牌信息"),
+    USER_IS_FREEZE("50008", "您的帐户已被冻结"),
+    USER_DOU_NOT_SUFFICIENT("50009", "帐户余额不足"),
+    ADD_STREAM_ERROR("50010", "添加流水失败");
 
     private final String desc;
 

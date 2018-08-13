@@ -169,7 +169,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
     /**
      * 个人支付操作
      */
-//    @Transactional
+    @Transactional
     public int CouponHandler(List<ShopCouponRemainInfo> list, ShopOrderInterfaceInfo orderInfo, ShopCustomerInterfaceInfo userInfo)
     {
         int orderBlance = orderInfo.getTotalDou();  //订单总额
@@ -221,11 +221,12 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         }
         String json_couponDetail = JsonUtils.toJson(coupon_detail);
         //更新订单状态
+        orderInfo.setPaytime(new Date());
         int res_order = updateOrder(orderInfo, json_couponDetail);
-//        if ( res_order == 1 )
-//        {
-//            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
-//        }
+        if ( res_order < 1 )
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
+        }
         return res_order;
     }
 
@@ -316,6 +317,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         payShopOrder.setStatus((byte)1);
         payShopOrder.setId(orderInfo.getId());
         payShopOrder.setCouponDetail(coupon_detail);
+        payShopOrder.setPaytime(new Date());
 
         PayShopOrderExample example = new PayShopOrderExample();
         PayShopOrderExample.Criteria c = example.createCriteria();
