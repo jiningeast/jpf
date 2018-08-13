@@ -4,6 +4,7 @@ import com.joiest.jpf.cloud.api.util.MessageUtil;
 import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.entity.TextMessageInfo;
 import com.joiest.jpf.entity.WeixinMpInfo;
 import com.joiest.jpf.entity.WeixinUserInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
@@ -11,6 +12,8 @@ import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import java.io.PrintWriter;
 import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -143,18 +146,34 @@ public class WeixinController {
      * */
     @RequestMapping(value = "/responseMsg", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String responseMsg(HttpServletRequest request,HttpServletResponse response,Map requestMap){
+    public String responseMsg(HttpServletRequest request,HttpServletResponse response,Map requestMap) throws IOException {
 
         String msgType = requestMap.get("MsgType").toString();
         switch (msgType){
 
             case MessageUtil.REQ_MESSAGE_TYPE_EVENT:
 
-                reqMessageTypeEvent(request,requestMap);
+                reqMessageTypeEvent(request,response,requestMap);
                 break;
             case MessageUtil.REQ_MESSAGE_TYPE_TEXT:
 
+                logger.info("文本消息接收");
+                //普通文本消息
+                TextMessageInfo txtmsg=new TextMessageInfo();
+                txtmsg.setToUserName(requestMap.get("FromUserName").toString());
+                txtmsg.setFromUserName(requestMap.get("ToUserName").toString());
+                txtmsg.setCreateTime(new Date().getTime());
+                txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+                txtmsg.setContent("您好，欢迎留言~");
 
+
+                String xml= MessageUtil.textMessageToXml(txtmsg);
+
+                logger.info("xml:"+xml);
+
+                PrintWriter out = response.getWriter();
+                out.print(xml);
+                out.close();
                 break;
             default:
 
@@ -167,8 +186,7 @@ public class WeixinController {
      * */
     @RequestMapping(value = "/reqMessageTypeEvent", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String reqMessageTypeEvent(HttpServletRequest request,Map requestMap){
-
+    public String reqMessageTypeEvent(HttpServletRequest request,HttpServletResponse response,Map requestMap){
 
         if(requestMap.get("Event").toString().contains("subscribe")){
 
@@ -180,6 +198,28 @@ public class WeixinController {
             JSONObject userInfo = new MessageUtil().getUserInfo(access_token,requestMap.get("FromUserName").toString());
             //关注取消事件处理
             Map<String,String> userData = dealUserInfo(weixinMpInfo,weixinUserInfo,userInfo);
+
+        }
+        if(requestMap.get("Event").toString().equals("subscribe")){
+
+            //普通文本消息
+            TextMessageInfo txtmsg=new TextMessageInfo();
+            txtmsg.setToUserName(requestMap.get("FromUserName").toString());
+            txtmsg.setFromUserName(requestMap.get("ToUserName").toString());
+            txtmsg.setCreateTime(new Date().getTime());
+            txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+            txtmsg.setContent(weixinMpInfo.getFollowreply());
+
+            String xml= MessageUtil.textMessageToXml(txtmsg);
+
+            logger.info("xml:"+xml);
+            try {
+                PrintWriter out = response.getWriter();
+                out.print(xml);
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
        return null;
     }

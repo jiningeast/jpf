@@ -11,9 +11,19 @@ public class PayShopOrder implements Serializable {
     private String id;
 
     /**
-     * 
+     * 订单号：OD+3位随机数+毫秒时间戳+3位随机数
      */
     private String orderNo;
+
+    /**
+     * 订单类型 1:中国石化; 2中国石油; 3话费充值
+     */
+    private Byte orderType;
+
+    /**
+     * 创建订单的请求参数
+     */
+    private String requestedContent;
 
     /**
      * 
@@ -86,6 +96,16 @@ public class PayShopOrder implements Serializable {
     private Byte status;
 
     /**
+     * 充值状态
+     */
+    private String rechargeStatus;
+
+    /**
+     * 充值时间
+     */
+    private Date rechargeTime;
+
+    /**
      * 消费时关联券使用记录表的id
      */
     private String couponActiveId;
@@ -121,6 +141,22 @@ public class PayShopOrder implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public Byte getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Byte orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getRequestedContent() {
+        return requestedContent;
+    }
+
+    public void setRequestedContent(String requestedContent) {
+        this.requestedContent = requestedContent == null ? null : requestedContent.trim();
     }
 
     public String getCustomerId() {
@@ -235,6 +271,22 @@ public class PayShopOrder implements Serializable {
         this.status = status;
     }
 
+    public String getRechargeStatus() {
+        return rechargeStatus;
+    }
+
+    public void setRechargeStatus(String rechargeStatus) {
+        this.rechargeStatus = rechargeStatus == null ? null : rechargeStatus.trim();
+    }
+
+    public Date getRechargeTime() {
+        return rechargeTime;
+    }
+
+    public void setRechargeTime(Date rechargeTime) {
+        this.rechargeTime = rechargeTime;
+    }
+
     public String getCouponActiveId() {
         return couponActiveId;
     }
@@ -278,6 +330,8 @@ public class PayShopOrder implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", orderNo=").append(orderNo);
+        sb.append(", orderType=").append(orderType);
+        sb.append(", requestedContent=").append(requestedContent);
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName=").append(customerName);
         sb.append(", productId=").append(productId);
@@ -292,6 +346,8 @@ public class PayShopOrder implements Serializable {
         sb.append(", chargeNo=").append(chargeNo);
         sb.append(", couponDetail=").append(couponDetail);
         sb.append(", status=").append(status);
+        sb.append(", rechargeStatus=").append(rechargeStatus);
+        sb.append(", rechargeTime=").append(rechargeTime);
         sb.append(", couponActiveId=").append(couponActiveId);
         sb.append(", addtime=").append(addtime);
         sb.append(", paytime=").append(paytime);
@@ -318,6 +374,8 @@ public class PayShopOrder implements Serializable {
         PayShopOrder other = (PayShopOrder) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
+            && (this.getOrderType() == null ? other.getOrderType() == null : this.getOrderType().equals(other.getOrderType()))
+            && (this.getRequestedContent() == null ? other.getRequestedContent() == null : this.getRequestedContent().equals(other.getRequestedContent()))
             && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
             && (this.getCustomerName() == null ? other.getCustomerName() == null : this.getCustomerName().equals(other.getCustomerName()))
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
@@ -332,6 +390,8 @@ public class PayShopOrder implements Serializable {
             && (this.getChargeNo() == null ? other.getChargeNo() == null : this.getChargeNo().equals(other.getChargeNo()))
             && (this.getCouponDetail() == null ? other.getCouponDetail() == null : this.getCouponDetail().equals(other.getCouponDetail()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getRechargeStatus() == null ? other.getRechargeStatus() == null : this.getRechargeStatus().equals(other.getRechargeStatus()))
+            && (this.getRechargeTime() == null ? other.getRechargeTime() == null : this.getRechargeTime().equals(other.getRechargeTime()))
             && (this.getCouponActiveId() == null ? other.getCouponActiveId() == null : this.getCouponActiveId().equals(other.getCouponActiveId()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
@@ -347,6 +407,8 @@ public class PayShopOrder implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
+        result = prime * result + ((getOrderType() == null) ? 0 : getOrderType().hashCode());
+        result = prime * result + ((getRequestedContent() == null) ? 0 : getRequestedContent().hashCode());
         result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());
         result = prime * result + ((getCustomerName() == null) ? 0 : getCustomerName().hashCode());
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
@@ -361,6 +423,8 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getChargeNo() == null) ? 0 : getChargeNo().hashCode());
         result = prime * result + ((getCouponDetail() == null) ? 0 : getCouponDetail().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getRechargeStatus() == null) ? 0 : getRechargeStatus().hashCode());
+        result = prime * result + ((getRechargeTime() == null) ? 0 : getRechargeTime().hashCode());
         result = prime * result + ((getCouponActiveId() == null) ? 0 : getCouponActiveId().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());

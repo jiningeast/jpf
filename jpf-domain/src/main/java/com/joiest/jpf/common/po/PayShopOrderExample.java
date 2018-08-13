@@ -306,6 +306,136 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderTypeIsNull() {
+            addCriterion("order_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIsNotNull() {
+            addCriterion("order_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeEqualTo(Byte value) {
+            addCriterion("order_type =", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotEqualTo(Byte value) {
+            addCriterion("order_type <>", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeGreaterThan(Byte value) {
+            addCriterion("order_type >", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("order_type >=", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeLessThan(Byte value) {
+            addCriterion("order_type <", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("order_type <=", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIn(List<Byte> values) {
+            addCriterion("order_type in", values, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotIn(List<Byte> values) {
+            addCriterion("order_type not in", values, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeBetween(Byte value1, Byte value2) {
+            addCriterion("order_type between", value1, value2, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("order_type not between", value1, value2, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentIsNull() {
+            addCriterion("requested_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentIsNotNull() {
+            addCriterion("requested_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentEqualTo(String value) {
+            addCriterion("requested_content =", value, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentNotEqualTo(String value) {
+            addCriterion("requested_content <>", value, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentGreaterThan(String value) {
+            addCriterion("requested_content >", value, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentGreaterThanOrEqualTo(String value) {
+            addCriterion("requested_content >=", value, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentLessThan(String value) {
+            addCriterion("requested_content <", value, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentLessThanOrEqualTo(String value) {
+            addCriterion("requested_content <=", value, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentLike(String value) {
+            addCriterion("requested_content like", value, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentNotLike(String value) {
+            addCriterion("requested_content not like", value, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentIn(List<String> values) {
+            addCriterion("requested_content in", values, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentNotIn(List<String> values) {
+            addCriterion("requested_content not in", values, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentBetween(String value1, String value2) {
+            addCriterion("requested_content between", value1, value2, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestedContentNotBetween(String value1, String value2) {
+            addCriterion("requested_content not between", value1, value2, "requestedContent");
+            return (Criteria) this;
+        }
+
         public Criteria andCustomerIdIsNull() {
             addCriterion("customer_id is null");
             return (Criteria) this;
@@ -1186,6 +1316,136 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andRechargeStatusIsNull() {
+            addCriterion("recharge_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusIsNotNull() {
+            addCriterion("recharge_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusEqualTo(String value) {
+            addCriterion("recharge_status =", value, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusNotEqualTo(String value) {
+            addCriterion("recharge_status <>", value, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusGreaterThan(String value) {
+            addCriterion("recharge_status >", value, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("recharge_status >=", value, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusLessThan(String value) {
+            addCriterion("recharge_status <", value, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusLessThanOrEqualTo(String value) {
+            addCriterion("recharge_status <=", value, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusLike(String value) {
+            addCriterion("recharge_status like", value, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusNotLike(String value) {
+            addCriterion("recharge_status not like", value, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusIn(List<String> values) {
+            addCriterion("recharge_status in", values, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusNotIn(List<String> values) {
+            addCriterion("recharge_status not in", values, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusBetween(String value1, String value2) {
+            addCriterion("recharge_status between", value1, value2, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusNotBetween(String value1, String value2) {
+            addCriterion("recharge_status not between", value1, value2, "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeIsNull() {
+            addCriterion("recharge_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeIsNotNull() {
+            addCriterion("recharge_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeEqualTo(Date value) {
+            addCriterion("recharge_time =", value, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeNotEqualTo(Date value) {
+            addCriterion("recharge_time <>", value, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeGreaterThan(Date value) {
+            addCriterion("recharge_time >", value, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("recharge_time >=", value, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeLessThan(Date value) {
+            addCriterion("recharge_time <", value, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeLessThanOrEqualTo(Date value) {
+            addCriterion("recharge_time <=", value, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeIn(List<Date> values) {
+            addCriterion("recharge_time in", values, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeNotIn(List<Date> values) {
+            addCriterion("recharge_time not in", values, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeBetween(Date value1, Date value2) {
+            addCriterion("recharge_time between", value1, value2, "rechargeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTimeNotBetween(Date value1, Date value2) {
+            addCriterion("recharge_time not between", value1, value2, "rechargeTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCouponActiveIdIsNull() {
             addCriterion("coupon_active_id is null");
             return (Criteria) this;
@@ -1223,6 +1483,16 @@ public class PayShopOrderExample {
 
         public Criteria andCouponActiveIdLessThanOrEqualTo(String value) {
             addCriterion("coupon_active_id <=", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdLike(String value) {
+            addCriterion("coupon_active_id like", value, "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdNotLike(String value) {
+            addCriterion("coupon_active_id not like", value, "couponActiveId");
             return (Criteria) this;
         }
 
@@ -1431,6 +1701,11 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andRequestedContentLikeInsensitive(String value) {
+            addCriterion("upper(requested_content) like", value.toUpperCase(), "requestedContent");
+            return (Criteria) this;
+        }
+
         public Criteria andCustomerNameLikeInsensitive(String value) {
             addCriterion("upper(customer_name) like", value.toUpperCase(), "customerName");
             return (Criteria) this;
@@ -1448,6 +1723,16 @@ public class PayShopOrderExample {
 
         public Criteria andCouponDetailLikeInsensitive(String value) {
             addCriterion("upper(coupon_detail) like", value.toUpperCase(), "couponDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeStatusLikeInsensitive(String value) {
+            addCriterion("upper(recharge_status) like", value.toUpperCase(), "rechargeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponActiveIdLikeInsensitive(String value) {
+            addCriterion("upper(coupon_active_id) like", value.toUpperCase(), "couponActiveId");
             return (Criteria) this;
         }
     }
