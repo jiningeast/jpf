@@ -24,7 +24,7 @@ import java.util.Map;
 public class CertificateController {
 
     private String uid;
-
+    private String openId;
     private ShopCustomerInterfaceInfo userInfo;
 
     @Autowired
@@ -134,14 +134,12 @@ public class CertificateController {
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
-        //获取用户信息Token
         String token = request.getHeader("Token");
-        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token);
-
-        if (StringUtils.isNotBlank(uid_encrypt))
-        {
-            uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY_MARKET"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomer(uid);
+        String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (StringUtils.isNotBlank(openId_encrypt)) {
+            openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
         }
     }
    }

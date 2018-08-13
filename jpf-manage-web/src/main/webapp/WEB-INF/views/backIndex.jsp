@@ -50,6 +50,12 @@
                     "menuname" : "银行管理",
                     "icon" : "icon-nav",
                     "url" : "bank/index"
+                },{
+                    "menuid" : "107",
+                    "menuname" : "微信公众号管理",
+                    "icon" : "icon-nav",
+                    "url" : "weixinMp/index"
+
                 }]
     		},{
     			"menuid" : "2",
