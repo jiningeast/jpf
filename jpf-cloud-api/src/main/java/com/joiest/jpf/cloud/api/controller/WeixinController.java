@@ -153,7 +153,7 @@ public class WeixinController {
 
             case MessageUtil.REQ_MESSAGE_TYPE_EVENT:
 
-                reqMessageTypeEvent(request,requestMap);
+                reqMessageTypeEvent(request,response,requestMap);
                 break;
             case MessageUtil.REQ_MESSAGE_TYPE_TEXT:
 
@@ -169,12 +169,12 @@ public class WeixinController {
 
                 String xml= MessageUtil.textMessageToXml(txtmsg);
 
-                System.out.println("xml:"+xml);
+                logger.info("xml:"+xml);
 
                 PrintWriter out = response.getWriter();
                 out.print(xml);
                 out.close();
-
+                break;
             default:
 
                 break;
@@ -186,8 +186,7 @@ public class WeixinController {
      * */
     @RequestMapping(value = "/reqMessageTypeEvent", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String reqMessageTypeEvent(HttpServletRequest request,Map requestMap){
-
+    public String reqMessageTypeEvent(HttpServletRequest request,HttpServletResponse response,Map requestMap){
 
         if(requestMap.get("Event").toString().contains("subscribe")){
 
@@ -201,7 +200,6 @@ public class WeixinController {
             Map<String,String> userData = dealUserInfo(weixinMpInfo,weixinUserInfo,userInfo);
 
         }
-
         if(requestMap.get("Event").toString().equals("subscribe")){
 
             //普通文本消息
@@ -212,8 +210,16 @@ public class WeixinController {
             txtmsg.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
             txtmsg.setContent(weixinMpInfo.getFollowreply());
 
-            return MessageUtil.textMessageToXml(txtmsg);
+            String xml= MessageUtil.textMessageToXml(txtmsg);
 
+            logger.info("xml:"+xml);
+            try {
+                PrintWriter out = response.getWriter();
+                out.print(xml);
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
        return null;
     }
