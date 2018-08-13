@@ -20,6 +20,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +52,7 @@ public class CustomController {
      * */
     @RequestMapping(value = "/bind", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public String bind(String data){
         if( StringUtils.isBlank(data) ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
@@ -125,8 +127,12 @@ public class CustomController {
             String uid = shopCustomId;
             String customCode = ToolUtils.CreateCode(dou,uid);
             retInfo.setCode(customCode);
-            shopCustomerInterfaceServiceFacade.updateCustomerByOpenId(retInfo,weixinUserInfo.getOpenid());
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "更新成功", null);
+            JpfResponseDto responseDto =shopCustomerInterfaceServiceFacade.updateCustomerByOpenId(retInfo,weixinUserInfo.getOpenid());
+            if(responseDto.getRetCode().equals("0000")){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "更新成功", null);
+            }else{
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "更新失败", null);
+            }
         }else{
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "更新失败", null);
         }
