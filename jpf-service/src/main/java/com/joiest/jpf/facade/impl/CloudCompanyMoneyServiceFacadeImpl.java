@@ -6,7 +6,9 @@ import com.joiest.jpf.common.custom.PayCloudDfMoneyCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.po.PayCloudCompanyMoney;
+import com.joiest.jpf.common.po.PayCloudCompanyMoneyExample;
+import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudCompanyMoneyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyCustomMapper;
@@ -15,9 +17,7 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyMapper;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
-import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
-import com.joiest.jpf.entity.CloudDfMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInterfaceInfo;
 import com.joiest.jpf.facade.CloudCompanyMoneyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -337,6 +337,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
      */
     @Override
     public CloudCompanyMoneyInfo getRecByBatchNo(String batchNo){
+
         PayCloudCompanyMoneyExample e = new PayCloudCompanyMoneyExample();
         PayCloudCompanyMoneyExample.Criteria c = e.createCriteria();
         c.andBatchnoEqualTo(batchNo);

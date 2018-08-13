@@ -29,5 +29,6 @@
 	<bean id="OrderServiceFacade" class="com.joiest.jpf.facade.impl.OrderServiceFacadeImpl"></bean>
 	<bean id="WeixinMpServiceFacade" class="com.joiest.jpf.facade.impl.WeixinMpServiceFacadeImpl"></bean>
 	<bean id="WeixinUserServiceFacade" class="com.joiest.jpf.facade.impl.WeixinUserServiceFacadeImpl"></bean>
+	<bean id="CloudCompanyMoneyServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyMoneyServiceFacadeImpl"></bean>
 
 </beans>

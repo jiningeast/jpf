@@ -1,12 +1,12 @@
 package com.joiest.jpf.cloud.api.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
-import com.joiest.jpf.common.po.PayCloudFansource;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +43,12 @@ public class CompanyInfoController {
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
     @Autowired
+    private CloudCompanyMoneyServiceFacade cloudCompanyMoneyServiceFacade;
+
+    @Autowired
+    private CloudDfMoneyServiceFacade cloudDfMoneyServiceFacade;
+
+    @Autowired
     private  CloudCompanyAgentServiceFacade cloudCompanyAgentServiceFacade;
 
     @Autowired
@@ -50,6 +56,11 @@ public class CompanyInfoController {
 
     @Autowired
     private CloudCompanyBankServiceFacade cloudCompanyBankServiceFacade;
+
+    @Autowired
+    private CloudRechargeServiceFacade cloudRechargeServiceFacade;
+
+
 
     private String uid;
     private CloudEmployeeInfo companyInfo;
@@ -153,6 +164,7 @@ public class CompanyInfoController {
     @RequestMapping("companyUpPwd")
     @ResponseBody
     public String companyUpPwd(HttpServletRequest request){
+
 
         String token = request.getHeader("token");
 
@@ -345,6 +357,64 @@ public class CompanyInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息错误，请重新填写", null);
         }
     }
+
+    /**
+     * 打款批次详情
+     * */
+    @RequestMapping("/batchView")
+    @ResponseBody
+    public String batchView(HttpServletRequest request,String data){
+
+        //判断公司是否登录
+        String token = request.getHeader("token");
+
+        Map<String,String> loginResultMap = companyIsLogin(token);
+
+        if ( !loginResultMap.get("0").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+        {
+            return ToolUtils.toJsonBase64(loginResultMap.get("0"), loginResultMap.get("1"), null);
+        }
+        if ( StringUtils.isBlank(data) || data==null  )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+        }
+
+        String pactNo= null;//批次号
+        try {
+            String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+            String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+            Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+            pactNo = (String) requestMap.get("pactNo");
+            if(pactNo==null){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+            }
+        } catch (Exception e) {
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+
+        }
+
+        //根据合同号查询是否有当前合
+        CloudRechargeInfo cloudRechargeInfo=cloudRechargeServiceFacade.getRecByPactno(pactNo);
+
+        if(cloudRechargeInfo.getPactno()==null){
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), "当前需求不存在", null);
+
+        }
+
+        String merchNo=companyInfo.getMerchNo();
+
+        GetCloudMoneyDfResponse response=cloudDfMoneyServiceFacade.getBatchList(pactNo,merchNo);
+
+         if(response==null){
+             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), "未匹配到相关数据", null);
+         }
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "请求数据成功", response.getList());
+
+    }
+
 
     @ModelAttribute
     public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
