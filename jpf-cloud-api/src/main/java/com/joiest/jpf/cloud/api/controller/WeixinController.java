@@ -345,7 +345,7 @@ public class WeixinController {
             logger.info("加密openid:"+openidEn);
 
             response.setStatus(302);
-            response.setHeader("location",responseurl+"&"+token);
+            response.setHeader("location",responseurl+token);
         }
     }
     /**
