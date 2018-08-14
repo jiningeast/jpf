@@ -21,9 +21,24 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private Byte orderType;
 
     /**
-     * 创建订单的请求参数
+     * 第三方订单号
+     */
+    private String foreignOrderNo;
+
+    /**
+     * 前端创建订单的请求参数
      */
     private String requestedContent;
+
+    /**
+     * 第三方接口请求参数
+     */
+    private String foreignRequestContent;
+
+    /**
+     * 第三方接口返回内容
+     */
+    private String foreignResponseContent;
 
     /**
      *
@@ -149,12 +164,36 @@ public class ShopOrderInterfaceInfo implements Serializable {
         this.orderType = orderType;
     }
 
+    public String getForeignOrderNo() {
+        return foreignOrderNo;
+    }
+
+    public void setForeignOrderNo(String foreignOrderNo) {
+        this.foreignOrderNo = foreignOrderNo;
+    }
+
     public String getRequestedContent() {
         return requestedContent;
     }
 
     public void setRequestedContent(String requestedContent) {
         this.requestedContent = requestedContent;
+    }
+
+    public String getForeignRequestContent() {
+        return foreignRequestContent;
+    }
+
+    public void setForeignRequestContent(String foreignRequestContent) {
+        this.foreignRequestContent = foreignRequestContent;
+    }
+
+    public String getForeignResponseContent() {
+        return foreignResponseContent;
+    }
+
+    public void setForeignResponseContent(String foreignResponseContent) {
+        this.foreignResponseContent = foreignResponseContent;
     }
 
     public String getCustomerId() {

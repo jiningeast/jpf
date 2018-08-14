@@ -69,7 +69,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         logger.info("request path : {}", uri);
         String requestUri = uri.replace( contextPath, "");
         String Token = request.getHeader("Token");
-        System.out.println("abc" + NOTLOGINURL.contains(requestUri));
         if ( NOTLOGINURL.contains(requestUri) ) { // 不需要过滤的地址
             return super.preHandle(request, response, handler);
         } else if( !NOTLOGINURL.contains(requestUri) ) {

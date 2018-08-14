@@ -11,6 +11,7 @@
 	<bean id="ShopCustomerInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopCustomerInterfaceServiceFacadeImpl"></bean>
 	<bean id="ShopBrandServiceFacade" class="com.joiest.jpf.facade.impl.ShopBrandServiceFacadeImpl"></bean>
 	<bean id="ShopCouponRemainServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponRemainServiceFacadeImpl"></bean>
+	<bean id="ShopInterfaceStreamServiceFacade" class="com.joiest.jpf.facade.impl.ShopInterfaceStreamServiceFacadeImpl"></bean>
 
 	<!--<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>-->
 	<bean id="ShopOrderInfoInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopOrderInfoInterfaceServiceFacadeImpl"></bean>
