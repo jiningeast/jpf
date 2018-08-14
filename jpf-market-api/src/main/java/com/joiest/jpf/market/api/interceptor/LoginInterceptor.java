@@ -12,6 +12,7 @@ import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -70,6 +71,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         logger.info("request path : {}", uri);
         String requestUri = uri.replace( contextPath, "");
         String Token = request.getHeader("Token");
+        logger.info("token==========" + Token);
         if ( NOTLOGINURL.contains(requestUri) ) { // 不需要过滤的地址
             return super.preHandle(request, response, handler);
         } else if( !NOTLOGINURL.contains(requestUri) ) {
@@ -90,12 +92,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         String openId;
         ShopCustomerInterfaceInfo userInfo;
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
-        System.out.printf("openId_encrypt : " + openId_encrypt);
+        logger.info("openId_encrypt : " + openId_encrypt);
         if (StringUtils.isNotBlank(openId_encrypt)) {
+            logger.info("AES_KEY : " + ConfigUtil.getValue("AES_KEY"));
             openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
-            System.out.printf("openId : " + openId);
+            logger.info("openId : " + openId);
             List<ShopCustomerInterfaceInfo> userinfoList = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
-            System.out.printf("userinfoList : " + userinfoList);
+            logger.info("userinfoList : " + userinfoList);
             if ( userinfoList.isEmpty() || userinfoList == null )
             {
                 return false;
@@ -106,7 +109,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             }
             return true;
         } else {
-            System.out.printf("openId_encrypt 22222222222: " + openId_encrypt);
+            logger.info("openId_encrypt 22222222222: " + openId_encrypt);
             return false;
         }
     }
