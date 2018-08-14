@@ -90,9 +90,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         String openId;
         ShopCustomerInterfaceInfo userInfo;
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        System.out.printf("openId_encrypt : " + openId_encrypt);
         if (StringUtils.isNotBlank(openId_encrypt)) {
             openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
+            System.out.printf("openId : " + openId);
             List<ShopCustomerInterfaceInfo> userinfoList = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
+            System.out.printf("userinfoList : " + userinfoList);
             if ( userinfoList.isEmpty() || userinfoList == null )
             {
                 return false;
@@ -103,6 +106,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             }
             return true;
         } else {
+            System.out.printf("openId_encrypt 22222222222: " + openId_encrypt);
             return false;
         }
     }
