@@ -66,7 +66,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         } else {
             accessLink = requestURI.substring(1, requestURI.length());
         }
-        logger.info("userName:{}---------访问主机地址:{}------------------访问功能链接地址:{}------------------", request.getRemoteHost(), accessLink);
+        logger.info("userName:{}---------访问主机11111111111地址:{}------------------访问功能链222222222222222接地址:{}------------------", request.getRemoteHost(), accessLink);
         String uri = request.getRequestURI();
         logger.info("request path : {}", uri);
         String requestUri = uri.replace( contextPath, "");
