@@ -69,16 +69,17 @@ public class CustomController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请求参数错误", null);
         }
 
-        Token = AESUtils.decrypt(Token, ConfigUtil.getValue("AES_KEY"));
+        /*Token = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY")+Token);
         if(StringUtils.isBlank(Token) || Token == null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "Token参数错误", null);
         }
 
         //redis取openId
-        String openId = redisCustomServiceFacade.get("WEIXIN_LOGIN_KEY"+Token); //redis存储短信码
+        String openId =  AESUtils.decrypt(Token, ConfigUtil.getValue("AES_KEY"));//redis存储短信码
+
         if(StringUtils.isBlank(openId)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "openId参数错误", null);
-        }
+        }*/
 
         String smsCode = redisCustomServiceFacade.get(smsPrefix+mobile); //redis存储短信码
         if( !code.equals(smsCode) ){
@@ -199,13 +200,12 @@ public class CustomController {
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
-        String openId;
         String token = request.getHeader("Token");
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(openId_encrypt)) {
             openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
-            uid = userInfo.getId();
+            //userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            //uid = userInfo.getId();
         }
     }
 
