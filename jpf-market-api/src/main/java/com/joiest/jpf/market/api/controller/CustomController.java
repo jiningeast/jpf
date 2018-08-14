@@ -20,11 +20,10 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +32,10 @@ import java.util.Map;
 @Controller
 @RequestMapping("custom")
 public class CustomController {
+
+    private String uid;
+    private String openId;
+    private ShopCustomerInterfaceInfo userInfo;
 
     private  String smsPrefix = "marketBindSend";
     @Autowired
@@ -49,6 +52,7 @@ public class CustomController {
      * */
     @RequestMapping(value = "/bind", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public String bind(String data){
         if( StringUtils.isBlank(data) ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
@@ -123,8 +127,12 @@ public class CustomController {
             String uid = shopCustomId;
             String customCode = ToolUtils.CreateCode(dou,uid);
             retInfo.setCode(customCode);
-            shopCustomerInterfaceServiceFacade.updateCustomerByOpenId(retInfo,weixinUserInfo.getOpenid());
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "更新成功", null);
+            JpfResponseDto responseDto =shopCustomerInterfaceServiceFacade.updateCustomerByOpenId(retInfo,weixinUserInfo.getOpenid());
+            if(responseDto.getRetCode().equals("0000")){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "更新成功", null);
+            }else{
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "更新失败", null);
+            }
         }else{
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "更新失败", null);
         }
@@ -186,6 +194,19 @@ public class CustomController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "短信发送成功", null);
 
 
+    }
+
+    @ModelAttribute
+    public void beforAction(HttpServletRequest request)
+    {
+        String openId;
+        String token = request.getHeader("Token");
+        String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (StringUtils.isNotBlank(openId_encrypt)) {
+            openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
+        }
     }
 
 }

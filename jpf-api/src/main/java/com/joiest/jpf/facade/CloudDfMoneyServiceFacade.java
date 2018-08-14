@@ -63,6 +63,13 @@ public interface CloudDfMoneyServiceFacade {
 
     // 更新某批次订单号的id相关联的打款信息为可代付
     public int updateDfMontype(String companyMoneyId);
+
+
+    /**
+     * 获取指定批次充值列表
+     * @param batchId
+     */
+    public GetCloudMoneyDfResponse getBatchList(String batchId, String merchNo);
 }
 
 

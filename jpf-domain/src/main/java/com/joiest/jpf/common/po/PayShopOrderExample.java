@@ -366,6 +366,76 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andForeignOrderNoIsNull() {
+            addCriterion("foreign_order_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoIsNotNull() {
+            addCriterion("foreign_order_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoEqualTo(String value) {
+            addCriterion("foreign_order_no =", value, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoNotEqualTo(String value) {
+            addCriterion("foreign_order_no <>", value, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoGreaterThan(String value) {
+            addCriterion("foreign_order_no >", value, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("foreign_order_no >=", value, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoLessThan(String value) {
+            addCriterion("foreign_order_no <", value, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("foreign_order_no <=", value, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoLike(String value) {
+            addCriterion("foreign_order_no like", value, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoNotLike(String value) {
+            addCriterion("foreign_order_no not like", value, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoIn(List<String> values) {
+            addCriterion("foreign_order_no in", values, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoNotIn(List<String> values) {
+            addCriterion("foreign_order_no not in", values, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoBetween(String value1, String value2) {
+            addCriterion("foreign_order_no between", value1, value2, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignOrderNoNotBetween(String value1, String value2) {
+            addCriterion("foreign_order_no not between", value1, value2, "foreignOrderNo");
+            return (Criteria) this;
+        }
+
         public Criteria andRequestedContentIsNull() {
             addCriterion("requested_content is null");
             return (Criteria) this;
@@ -433,6 +503,146 @@ public class PayShopOrderExample {
 
         public Criteria andRequestedContentNotBetween(String value1, String value2) {
             addCriterion("requested_content not between", value1, value2, "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentIsNull() {
+            addCriterion("foreign_request_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentIsNotNull() {
+            addCriterion("foreign_request_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentEqualTo(String value) {
+            addCriterion("foreign_request_content =", value, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentNotEqualTo(String value) {
+            addCriterion("foreign_request_content <>", value, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentGreaterThan(String value) {
+            addCriterion("foreign_request_content >", value, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentGreaterThanOrEqualTo(String value) {
+            addCriterion("foreign_request_content >=", value, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentLessThan(String value) {
+            addCriterion("foreign_request_content <", value, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentLessThanOrEqualTo(String value) {
+            addCriterion("foreign_request_content <=", value, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentLike(String value) {
+            addCriterion("foreign_request_content like", value, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentNotLike(String value) {
+            addCriterion("foreign_request_content not like", value, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentIn(List<String> values) {
+            addCriterion("foreign_request_content in", values, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentNotIn(List<String> values) {
+            addCriterion("foreign_request_content not in", values, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentBetween(String value1, String value2) {
+            addCriterion("foreign_request_content between", value1, value2, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentNotBetween(String value1, String value2) {
+            addCriterion("foreign_request_content not between", value1, value2, "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentIsNull() {
+            addCriterion("foreign_response_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentIsNotNull() {
+            addCriterion("foreign_response_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentEqualTo(String value) {
+            addCriterion("foreign_response_content =", value, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentNotEqualTo(String value) {
+            addCriterion("foreign_response_content <>", value, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentGreaterThan(String value) {
+            addCriterion("foreign_response_content >", value, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentGreaterThanOrEqualTo(String value) {
+            addCriterion("foreign_response_content >=", value, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentLessThan(String value) {
+            addCriterion("foreign_response_content <", value, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentLessThanOrEqualTo(String value) {
+            addCriterion("foreign_response_content <=", value, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentLike(String value) {
+            addCriterion("foreign_response_content like", value, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentNotLike(String value) {
+            addCriterion("foreign_response_content not like", value, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentIn(List<String> values) {
+            addCriterion("foreign_response_content in", values, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentNotIn(List<String> values) {
+            addCriterion("foreign_response_content not in", values, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentBetween(String value1, String value2) {
+            addCriterion("foreign_response_content between", value1, value2, "foreignResponseContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentNotBetween(String value1, String value2) {
+            addCriterion("foreign_response_content not between", value1, value2, "foreignResponseContent");
             return (Criteria) this;
         }
 
@@ -1701,8 +1911,23 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andForeignOrderNoLikeInsensitive(String value) {
+            addCriterion("upper(foreign_order_no) like", value.toUpperCase(), "foreignOrderNo");
+            return (Criteria) this;
+        }
+
         public Criteria andRequestedContentLikeInsensitive(String value) {
             addCriterion("upper(requested_content) like", value.toUpperCase(), "requestedContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignRequestContentLikeInsensitive(String value) {
+            addCriterion("upper(foreign_request_content) like", value.toUpperCase(), "foreignRequestContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andForeignResponseContentLikeInsensitive(String value) {
+            addCriterion("upper(foreign_response_content) like", value.toUpperCase(), "foreignResponseContent");
             return (Criteria) this;
         }
 
