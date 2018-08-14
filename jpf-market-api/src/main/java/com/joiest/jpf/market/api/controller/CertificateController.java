@@ -49,7 +49,9 @@ public class CertificateController {
 
        //判断当前用户是否锁定
        if(userInfo.getStatus()==0){
+
            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您已经被冻结请联系客服", null);
+
        }
 
        if ( StringUtils.isBlank(data) || data==null  )

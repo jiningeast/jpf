@@ -50,6 +50,17 @@ public class CloudDfMoneyInterfaceInfo {
      */
     private String username;
 
+
+    /**
+     * 预发金额
+     */
+    private BigDecimal preMoney;
+
+    /**
+     * 个人所得税费率
+     */
+    private BigDecimal incomeRate;
+
     /**
      * 发放金额
      */
@@ -199,6 +210,24 @@ public class CloudDfMoneyInterfaceInfo {
 
     //月份
     private String datemonth;
+
+
+    /**
+     * 是否签约 0=未签约 1=已签约
+     */
+    private Byte sisActive;
+
+
+    /**
+     * 用户签约合同状态  0 未签协议合同  1  已签协议合同
+     */
+    private Byte compactActive;
+
+    /**
+     * 用户状态四要素  0 银行卡未激活  1  银行卡已激活
+     */
+    private String bankActive;
+
 
     public Long getId() {
         return id;
@@ -520,4 +549,43 @@ public class CloudDfMoneyInterfaceInfo {
         this.companyMoneyId = companyMoneyId;
     }
 
+    public Byte getSisActive() {
+        return sisActive;
+    }
+
+    public void setSisActive(Byte sisActive) {
+        this.sisActive = sisActive;
+    }
+
+    public Byte getCompactActive() {
+        return compactActive;
+    }
+
+    public void setCompactActive(Byte compactActive) {
+        this.compactActive = compactActive;
+    }
+
+    public String getBankActive() {
+        return bankActive;
+    }
+
+    public void setBankActive(String bankActive) {
+        this.bankActive = bankActive;
+    }
+
+    public BigDecimal getPreMoney() {
+        return preMoney;
+    }
+
+    public void setPreMoney(BigDecimal preMoney) {
+        this.preMoney = preMoney;
+    }
+
+    public BigDecimal getIncomeRate() {
+        return incomeRate;
+    }
+
+    public void setIncomeRate(BigDecimal incomeRate) {
+        this.incomeRate = incomeRate;
+    }
 }

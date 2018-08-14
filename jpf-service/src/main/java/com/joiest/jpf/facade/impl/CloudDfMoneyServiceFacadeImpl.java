@@ -555,7 +555,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         c.andMerchNoEqualTo(merchNo);
         c.andPactnoEqualTo(pactNo);
 
-        List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(example);
+        List<PayCloudDfMoneyInterfaceCustom> list = payCloudDfMoneyInterfaceCustomMapper.selectListDf(example);
 
         if ( list.isEmpty() || list == null )
         {
@@ -564,17 +564,17 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
         List<CloudDfMoneyInterfaceInfo> resultList = new ArrayList<>();
 
-        for (PayCloudDfMoney one : list)
+        for (PayCloudDfMoneyInterfaceCustom one : list)
         {
             CloudDfMoneyInterfaceInfo info = new CloudDfMoneyInterfaceInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoney.class, CloudDfMoneyInterfaceInfo.class, false);
+            BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoneyInterfaceCustom.class, CloudDfMoneyInterfaceInfo.class, false);
             beanCopier.copy(one, info, null);
             resultList.add(info);
 
         }
         GetCloudMoneyDfResponse response = new GetCloudMoneyDfResponse();
         response.setList(resultList);
-        int count = payCloudDfMoneyMapper.countByExample(example);
+        int count = payCloudDfMoneyInterfaceCustomMapper.countByExampleList(example);
         response.setCount(count);
         return response;
     }
