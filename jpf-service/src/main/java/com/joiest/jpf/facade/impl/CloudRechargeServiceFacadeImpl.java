@@ -19,7 +19,6 @@ import com.joiest.jpf.entity.RechargeNeedInfo;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudRechargeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -864,6 +863,25 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         c.andPactnoEqualTo(pactno);
         c.andStatusGreaterThanOrEqualTo((byte)4);
 
+        List<PayCloudRecharge> list = payCloudRechargeMapper.selectByExample(e);
+        CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
+
+        if ( !list.isEmpty() ){
+            BeanCopier beanCopier = BeanCopier.create(PayCloudRecharge.class, CloudRechargeInfo.class, false);
+            beanCopier.copy(list.get(0), cloudRechargeInfo, null);
+        }
+
+        return cloudRechargeInfo;
+    }
+    /**
+     * 根据合同编号获取记录
+     */
+    @Override
+    public CloudRechargeInfo getRecByPactnoList(String pactno){
+
+        PayCloudRechargeExample e = new PayCloudRechargeExample();
+        PayCloudRechargeExample.Criteria c = e.createCriteria();
+        c.andPactnoEqualTo(pactno);
         List<PayCloudRecharge> list = payCloudRechargeMapper.selectByExample(e);
         CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
 

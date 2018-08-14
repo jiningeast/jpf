@@ -395,11 +395,11 @@ public class CompanyInfoController {
         }
 
         //根据合同号查询是否有当前合
-        CloudRechargeInfo cloudRechargeInfo=cloudRechargeServiceFacade.getRecByPactno(pactNo);
+        CloudRechargeInfo cloudRechargeInfo=cloudRechargeServiceFacade.getRecByPactnoList(pactNo);
 
         if(cloudRechargeInfo.getPactno()==null){
 
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), "当前需求不存在", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), "当前合同不存在", null);
 
         }
 
