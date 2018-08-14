@@ -34,7 +34,7 @@ public class SendMailUtil{
     private static String from = ConfigUtil.getValue("EMAIL_NAME");;
 
     // 收件人
-    private static String to = "11743555934@qq.com";
+    private static String to = "";
 
     // 初始化连接邮件服务器的会话信息
     private static Properties props = null;
@@ -48,6 +48,7 @@ public class SendMailUtil{
         props.setProperty("mail.smtp.ssl.enable", IS_AUTH);
         props.setProperty("mail.debug",IS_ENABLED_DEBUG_MOD);
     }
+
 
 
     /**
