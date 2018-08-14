@@ -52,6 +52,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/custom/bind");        //绑定手机号
                 add("/custom/sendSms");     //绑定手机号
                 add("/nologin/userIndex");
+                add("/orders/ofpayNotifyUrl");
             }
         };
 
@@ -91,7 +92,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(openId_encrypt)) {
             openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            List<ShopCustomerInterfaceInfo> userinfoList = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
+            if ( userinfoList.isEmpty() || userinfoList == null )
+            {
+                return false;
+            }
+            userInfo = userinfoList.get(0);
             if (userInfo == null) {
                 return  false;
             }
@@ -100,6 +106,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
     }
+
 
 }
 
