@@ -2,7 +2,6 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
