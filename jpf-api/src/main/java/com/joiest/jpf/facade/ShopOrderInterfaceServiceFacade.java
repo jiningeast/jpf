@@ -10,9 +10,14 @@ public interface ShopOrderInterfaceServiceFacade {
     public int addOrder(ShopOrderInterfaceInfo info);
 
     /**
-     * 获取单条订单信息
+     * 获取单条订单信息 by uid
      */
     public ShopOrderInterfaceInfo getOrderOne(String orderNo, String uid);
+
+    /**
+     * 获取单条订单信息 by uid
+     */
+    public ShopOrderInterfaceInfo getOrder(String orderNo);
 
     /**
      * 获取用户订单数量，已取消的不统计
@@ -20,4 +25,9 @@ public interface ShopOrderInterfaceServiceFacade {
     public int getOrdersCount(String customerId);
 
     public int updateOrder(ShopOrderInterfaceInfo info);
+
+    /**
+     * 取消订单消费的豆
+     */
+    public int cancelOrderDou(String orderNo);
 }

@@ -399,49 +399,49 @@ public class OrdersController {
     public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
     {
         //1.流水 2.订单信息 3.更新订单状态
-//        Map<String, Object> map = ClassUtil.requestToMap(request);
-//        String json = JsonUtils.toJson(map);
-//
-//        StringBuilder sbf = new StringBuilder();
-//        Date date = new Date();
-//        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        sbf.append("\n\nTime:" + myfmt1.format(date));
-//        sbf.append("\n充值类型:" + "充值回调");
-//        sbf.append("\n访问地址：" + ServletUtils.getIpAddr(httpRequest));
-//        sbf.append("\n访问参数：" + map);
-//
-//        String fileName = "ofpayGasNotify";
-//        String path = "/logs/jpf-market-api/log/";
-//
-//
-//        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrder(request.getSporder_id());
-//        if ( orderInfo == null )
-//        {
-//            sbf.append("\n描述： 订单ID：" + request.getSporder_id() + "不存在");
-//            LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
-//            return "N";
-//        }
-//
-//        //流水
-//        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
-//        stream.setType((byte)7);
-//        stream.setBatchId(orderInfo.getOrderNo());
-//        stream.setResponseContent(json);
-//        stream.setAddtime(new Date());
-//        int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
-//        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
-//        String rechargeStatus = "0";
-//        if ( request.getRet_code().equals("9") )    //1成功 9失败
-//        {
-//            //支付失败 取消豆
-//            int res = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
-//            int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
-//            return "Y";
-//        }
-//        orderinfo.setId(orderInfo.getId());
-//        orderinfo.setRechargeStatus(request.getRet_code());     //0充值中 1充值成功 9充值失败
-//        orderinfo.setUpdatetime(new Date());
-//        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+        Map<String, Object> map = ClassUtil.requestToMap(request);
+        String json = JsonUtils.toJson(map);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n充值类型:" + "充值回调");
+        sbf.append("\n访问地址：" + ServletUtils.getIpAddr(httpRequest));
+        sbf.append("\n访问参数：" + map);
+
+        String fileName = "ofpayGasNotify";
+        String path = "/logs/jpf-market-api/log/";
+
+
+        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrder(request.getSporder_id());
+        if ( orderInfo == null )
+        {
+            sbf.append("\n描述： 订单ID：" + request.getSporder_id() + "不存在");
+            LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+            return "N";
+        }
+
+        //流水
+        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+        stream.setType((byte)7);
+        stream.setBatchId(orderInfo.getOrderNo());
+        stream.setResponseContent(json);
+        stream.setAddtime(new Date());
+        int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
+        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+        String rechargeStatus = "0";
+        if ( request.getRet_code().equals("9") )    //1成功 9失败
+        {
+            //支付失败 取消豆
+            int res = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
+            int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
+            return "Y";
+        }
+        orderinfo.setId(orderInfo.getId());
+        orderinfo.setRechargeStatus(request.getRet_code());     //0充值中 1充值成功 9充值失败
+        orderinfo.setUpdatetime(new Date());
+        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
         return "Y";
     }
 
