@@ -99,7 +99,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             logger.info("openId : " + openId);
             List<ShopCustomerInterfaceInfo> userinfoList = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
             logger.info("userinfoList : " + userinfoList);
-            if ( userinfoList.isEmpty() || userinfoList == null )
+            if ( userinfoList == null || userinfoList.isEmpty() )
             {
                 return false;
             }
