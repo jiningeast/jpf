@@ -342,8 +342,9 @@ public class WeixinController {
             String openidEn = AESUtils.encrypt(openid, ConfigUtil.getValue("AES_KEY"));
             redisCustomServiceFacade.set(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token, openidEn, Long.parseLong(ConfigUtil.getValue("WEIXIN_LOGIN_EXPIRE_30")) );
 
-            logger.info("token:"+token);
-            logger.info("加密openid:"+openidEn);
+            logger.info("===============token=================:"+token);
+            logger.info("===============openid================:"+openid);
+            logger.info("===============加密openid=============:"+openidEn);
 
             response.setStatus(302);
             response.setHeader("location",responseurl+token);
