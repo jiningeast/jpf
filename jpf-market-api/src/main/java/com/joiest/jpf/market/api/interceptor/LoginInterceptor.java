@@ -12,6 +12,7 @@ import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -52,6 +53,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/custom/bind");        //绑定手机号
                 add("/custom/sendSms");     //绑定手机号
                 add("/nologin/userIndex");
+                add("/orders/ofpayNotifyUrl");
             }
         };
 
@@ -64,11 +66,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         } else {
             accessLink = requestURI.substring(1, requestURI.length());
         }
-        logger.info("userName:{}---------访问主机地址:{}------------------访问功能链接地址:{}------------------", request.getRemoteHost(), accessLink);
+        logger.info("userName:{}---------访问主机33333333333333地址:{}------------------访问功能链222222222222222接地址:{}------------------", request.getRemoteHost(), accessLink);
         String uri = request.getRequestURI();
         logger.info("request path : {}", uri);
         String requestUri = uri.replace( contextPath, "");
         String Token = request.getHeader("Token");
+        logger.info("token==========" + Token);
         if ( NOTLOGINURL.contains(requestUri) ) { // 不需要过滤的地址
             return super.preHandle(request, response, handler);
         } else if( !NOTLOGINURL.contains(requestUri) ) {
@@ -89,17 +92,28 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         String openId;
         ShopCustomerInterfaceInfo userInfo;
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        logger.info("openId_encrypt : " + openId_encrypt);
         if (StringUtils.isNotBlank(openId_encrypt)) {
+            logger.info("AES_KEY : " + ConfigUtil.getValue("AES_KEY"));
             openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            logger.info("openId : " + openId);
+            List<ShopCustomerInterfaceInfo> userinfoList = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
+            logger.info("userinfoList=================== : " + userinfoList);
+            if ( userinfoList == null || userinfoList.isEmpty() )
+            {
+                return false;
+            }
+            userInfo = userinfoList.get(0);
             if (userInfo == null) {
                 return  false;
             }
             return true;
         } else {
+            logger.info("openId_encrypt 22222222222: " + openId_encrypt);
             return false;
         }
     }
+
 
 }
 

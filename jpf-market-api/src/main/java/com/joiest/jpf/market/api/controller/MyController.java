@@ -34,6 +34,8 @@ public class MyController {
 
     private String uid;
 
+    private String openId;
+
     private ShopCustomerInterfaceInfo userInfo;
 
     @RequestMapping("/index")
@@ -55,13 +57,12 @@ public class MyController {
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
-        //获取用户信息
         String token = request.getHeader("Token");
-        String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("MARKET_USER_LOGIN_KEY") + token);
-        if (StringUtils.isNotBlank(uid_encrypt))
-        {
-            uid = AESUtils.decrypt(uid_encrypt, ConfigUtil.getValue("AES_KEY_MARKET"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomer(uid);
+        String openId_encrypt = redisCustomServiceFacade.get(com.joiest.jpf.market.api.controller.ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(openId_encrypt)) {
+            openId = AESUtils.decrypt(openId_encrypt, com.joiest.jpf.market.api.controller.ConfigUtil.getValue("AES_KEY"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
         }
     }
 }

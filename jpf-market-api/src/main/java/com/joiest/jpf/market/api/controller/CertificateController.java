@@ -49,7 +49,9 @@ public class CertificateController {
 
        //判断当前用户是否锁定
        if(userInfo.getStatus()==0){
+
            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您已经被冻结请联系客服", null);
+
        }
 
        if ( StringUtils.isBlank(data) || data==null  )
@@ -57,10 +59,18 @@ public class CertificateController {
            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
        }
 
-       String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
-       String requestStr = Base64CustomUtils.base64Decoder(dataStr);
-       Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
-       String code= (String) requestMap.get("code");
+       String code= null;
+       try {
+           String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+           String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+           Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+           code = (String) requestMap.get("code");
+           if(code==null){
+               return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+           }
+       } catch (Exception e) {
+           return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+       }
 
        //查询当前激活码是否存在
        int infos = shopBatchCouponInterfaceServiceFacade.getCouponByCouponNo(code.trim(),uid);
@@ -113,9 +123,17 @@ public class CertificateController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
         }
 
-        String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
-        String requestStr = Base64CustomUtils.base64Decoder(dataStr);
-        Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+        Map<String,Object> requestMap = null;
+        try {
+            String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+            String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+            requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+            if(requestMap==null){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+            }
+        } catch (Exception e) {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+        }
 
         String pageNo= (String) requestMap.get("pageNo");
         String pageSize= (String) requestMap.get("pageSize");

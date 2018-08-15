@@ -73,4 +73,9 @@ public interface CloudRechargeServiceFacade {
      */
     public CloudRechargeInfo getRecByPactno(String pactno);
 
+    /**
+     * 根据合同编号获取记录
+     */
+    public CloudRechargeInfo getRecByPactnoList(String pactno);
+
 }
