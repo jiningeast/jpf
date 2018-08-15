@@ -307,8 +307,8 @@ public class WeixinController {
             sbf.append("\n\nTime:" + myfmt.format(date));
             sbf.append("\n请求类型：微信公众号开发者认证");
             sbf.append("\n请求参数："+ request.getQueryString());
-            String fileName = "test";
-            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/", fileName,true);
+            String fileName = "WeixinWebAccessTokenLog";
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
 
             //获取公众号信息
             weixinMpInfo = weixinMpServiceFacade.getWeixinMpByEncrypt(encrypt);
