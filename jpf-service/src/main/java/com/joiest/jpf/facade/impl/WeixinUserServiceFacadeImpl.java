@@ -80,7 +80,7 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
         payWeixinUser.setSubscribe(new Byte(wei.get("subscribe")));
         payWeixinUser.setMpid(new Long(wei.get("mpid")));
         payWeixinUser.setOpenid(wei.get("openid"));
-        //payWeixinUser.setNickname(wei.get("nickname"));
+        payWeixinUser.setNickname(wei.get("nickname"));
         payWeixinUser.setNicknameencode(wei.get("nicknameEncode"));
         payWeixinUser.setSex(new Byte(wei.get("sex")));
         payWeixinUser.setLanguage(wei.get("language"));
@@ -124,7 +124,7 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
 
         payWeixinUser.setId(id);
         payWeixinUser.setSubscribe(new Byte(wei.get("subscribe")));
-        //payWeixinUser.setNickname(wei.get("nickname"));
+        payWeixinUser.setNickname(wei.get("nickname"));
         payWeixinUser.setNicknameencode(wei.get("nicknameEncode"));
         payWeixinUser.setSex(new Byte(wei.get("sex")));
         payWeixinUser.setLanguage(wei.get("language"));
