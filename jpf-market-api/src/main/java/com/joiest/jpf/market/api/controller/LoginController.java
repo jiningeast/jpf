@@ -22,7 +22,8 @@ public class LoginController {
     @ResponseBody
     public String userIndex(HttpServletResponse response, HttpServletRequest request)
     {
-        response.setStatus(401);
+//        response.setStatus(401);
+//        response.setHeader("Authorization", "Basic Realm=\"test\"");
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
     }
 
