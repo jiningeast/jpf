@@ -113,7 +113,7 @@ public class CustomController {
         record.setCompanyName("");
         record.setOpenid(weixinUserInfo.getOpenid().toString());
         record.setMpid(weixinUserInfo.getMpid().toString());
-        record.setNickname(weixinUserInfo.getNickname());
+        record.setNickname(weixinUserInfo.getNicknameencode());
         record.setIsVerify((byte)0); // 默认未实名认证
         record.setStatus((byte)1);
         record.setPhone(mobile);
