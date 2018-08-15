@@ -46,6 +46,7 @@ public class MyController {
         Map<String,Object> responseMap = new HashMap<>();
         responseMap.put("phone",userInfo.getPhone());
         responseMap.put("dou",userInfo.getDou());
+        responseMap.put("avatar",userInfo.getAvatar());
         responseMap.put("ordersCount",count);
         responseMap.put("customerServicePhone","400-000-0000");
         responseMap.put("complainEmail","service@xinxiangfuwu.com");
