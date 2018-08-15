@@ -413,7 +413,6 @@ public class OrdersController {
         String fileName = "ofpayGasNotify";
         String path = "/logs/jpf-market-api/log/";
 
-
         ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrder(request.getSporder_id());
         if ( orderInfo == null )
         {
@@ -431,17 +430,29 @@ public class OrdersController {
         int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
         ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
         String rechargeStatus = "0";
+        Map<String,String> res_cancelDouMap = new HashMap<>();
         if ( request.getRet_code().equals("9") )    //1成功 9失败
         {
             //支付失败 取消豆
-            int res = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
-            int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
-            return "Y";
+            res_cancelDouMap = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
+
+            int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(orderInfo.getCustomerId());
+
+            sbf.append("\n订单状态：充值失败");
+            sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","豆退还操作信息为空"));
+
+        } else
+        {
+            sbf.append("\n订单状态：充值成功");
+            sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","更新订单成功"));
         }
         orderinfo.setId(orderInfo.getId());
         orderinfo.setRechargeStatus(request.getRet_code());     //0充值中 1充值成功 9充值失败
         orderinfo.setUpdatetime(new Date());
         int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         return "Y";
     }
 
