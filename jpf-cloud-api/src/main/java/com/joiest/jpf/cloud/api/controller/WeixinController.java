@@ -250,6 +250,7 @@ public class WeixinController {
             userData.put("province",userInfo.get("province").toString());
             userData.put("country",userInfo.get("country").toString());
             userData.put("headimgurl",userInfo.get("headimgurl").toString());
+            userData.put("serverheadimg",userInfo.get("headimgurl").toString());
 
             String subTime = DateUtils.stampToDate(userInfo.get("subscribe_time").toString());
 
@@ -326,7 +327,7 @@ public class WeixinController {
 
                 //获取是否有当前微信用户信息
                 WeixinUserInfo weixinUserInfo = weixinUserServiceFacade.getWeixinUserByOpenid(webAccessToken.get("openid").toString(),weixinMpInfo.getId());
-                if(weixinUserInfo == null){
+                //if(weixinUserInfo == null){
 
                     //授权获取用户基本信息
                     JSONObject snsapiUserinfo = new MessageUtil().snsapiUserinfo(webAccessToken.get("access_token").toString(),webAccessToken.get("openid").toString());
@@ -335,14 +336,15 @@ public class WeixinController {
                     snsapiUserinfo.put("subscribe_time",System.currentTimeMillis()/1000);
 
                     dealUserInfo(weixinMpInfo,weixinUserInfo,snsapiUserinfo);
-                }
+                //}
             }
             String token = AESUtils.encrypt(weixinMpInfo.getAppid()+openid,ConfigUtil.getValue("AES_KEY"));
             String openidEn = AESUtils.encrypt(openid, ConfigUtil.getValue("AES_KEY"));
             redisCustomServiceFacade.set(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token, openidEn, Long.parseLong(ConfigUtil.getValue("WEIXIN_LOGIN_EXPIRE_30")) );
 
-            logger.info("token:"+token);
-            logger.info("加密openid:"+openidEn);
+            logger.info("===============token=================:"+token);
+            logger.info("===============openid================:"+openid);
+            logger.info("===============加密openid=============:"+openidEn);
 
             response.setStatus(302);
             response.setHeader("location",responseurl+token);

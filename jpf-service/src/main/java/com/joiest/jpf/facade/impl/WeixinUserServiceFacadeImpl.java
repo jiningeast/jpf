@@ -140,12 +140,18 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
             e.printStackTrace();
         }
         payWeixinUser.setUnionid(wei.get("unionid"));
-        payWeixinUser.setRemark(wei.get("remark"));
-        payWeixinUser.setGroupid(new Byte(wei.get("groupid")));
-        payWeixinUser.setTagidList(wei.get("tagid_list"));
-        payWeixinUser.setSubscribeScene(wei.get("subscribe_scene"));;
-        payWeixinUser.setQrScene(wei.get("qr_scene"));
-        payWeixinUser.setQrSceneStr(wei.get("qr_scene_str"));
+        if(wei.get("subscribe").equals("1")){
+
+            payWeixinUser.setRemark(wei.get("remark"));
+            payWeixinUser.setGroupid(new Byte(wei.get("groupid")));
+            payWeixinUser.setTagidList(wei.get("tagid_list"));
+            payWeixinUser.setSubscribeScene(wei.get("subscribe_scene"));;
+            payWeixinUser.setQrScene(wei.get("qr_scene"));
+            payWeixinUser.setQrSceneStr(wei.get("privilege"));
+        }else if(wei.get("subscribe").equals("2")){
+
+            payWeixinUser.setQrSceneStr(wei.get("qr_scene_str"));
+        }
         payWeixinUser.setUpdated(new Date());
 
         return payWeixinUserMapper.updateByPrimaryKeySelective(payWeixinUser);
