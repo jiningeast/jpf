@@ -9,6 +9,7 @@ import com.joiest.jpf.entity.CloudEmployeeInfo;
 import com.joiest.jpf.facade.CloudCompanyStaffServiceFacade;
 import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
+import com.joiest.jpf.market.api.util.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,7 +57,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/orders/ofpayNotifyUrl");
             }
         };
-
+        System.out.println(ServletUtils.getIpAddr(request));
         String contextPath = request.getContextPath();
         String requestURI = request.getRequestURI();
         String accessLink = "";
@@ -80,7 +81,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             {
                 return super.preHandle(request, response, handler);
             }
-            response.sendRedirect(request.getContextPath() + "/nologin/userIndex");
+//            response.sendRedirect(request.getContextPath() + "/nologin/userIndex");
+            response.sendError(401);
             return false;
         } else {
             return false;
