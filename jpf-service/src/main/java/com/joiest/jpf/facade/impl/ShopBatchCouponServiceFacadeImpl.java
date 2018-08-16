@@ -26,8 +26,8 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
 
         PayShopBatchCouponExample e = new PayShopBatchCouponExample();
         PayShopBatchCouponExample.Criteria c = e.createCriteria();
-        int count = payShopBatchCouponMapper.countByExample(e);
         c.andBatchIdEqualTo(batchId);
+        int count = payShopBatchCouponMapper.countByExample(e);
         e.setPageNo(page);
         e.setPageSize(rows);
 
