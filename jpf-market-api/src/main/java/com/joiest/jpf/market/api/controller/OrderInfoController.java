@@ -67,7 +67,7 @@ public class OrderInfoController {
 
         ShopOrderInfoInterfaceResponse response = shopOrderInfoInterfaceServiceFacade.getList(request);
         if( response == null ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "未匹配到相关数据", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "没有更多", null);
         }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
     }
@@ -99,7 +99,7 @@ public class OrderInfoController {
         request.setUid(uid); // 用户登录ID
         ShopOrderInfoInterface response = shopOrderInfoInterfaceServiceFacade.getOne(request);
         if( response == null ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "未匹配到相关数据", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "没有更多", null);
         }
         response.setDouTotal(userInfo.getDou().toString()); //获取用户当前豆数量
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
@@ -129,7 +129,7 @@ public class OrderInfoController {
 
         GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponActiveList(request);
         if( response == null ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "未匹配到相关数据", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "没有更多", null);
         }
         response.setDouTotal(userInfo.getDou()); //获取用户当前豆数量
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
