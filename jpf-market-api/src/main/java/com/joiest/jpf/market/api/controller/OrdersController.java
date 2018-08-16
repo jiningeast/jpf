@@ -39,9 +39,9 @@ public class OrdersController {
     private String openId;
     private ShopCustomerInterfaceInfo userInfo;
 
-    String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
+    private String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
 
-    String res_gas = "^(100011\\d{13})|(90\\d{14})$";      //中石化：以100011开头共19位、中石油：以90开头共16位
+    private String res_gas = "^(100011\\d{13})|(90\\d{14})$";      //中石化：以100011开头共19位、中石油：以90开头共16位
     /**
      * 商品
      */
@@ -320,7 +320,7 @@ public class OrdersController {
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         stream.setType((byte)3);
-        stream.setBatchId(orderInfo.getOrderNo());
+        stream.setBatchId(orderInfo.getId());
         stream.setRequestUrl(queryPhoneResponseMap.get("requestUrl"));
         stream.setRequestContent(queryPhoneResponseMap.get("requestParam"));
         String requestUrl = queryPhoneResponseMap.get("requestUrl");
@@ -367,7 +367,7 @@ public class OrdersController {
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         stream.setType((byte)5);
-        stream.setBatchId(orderInfo.getOrderNo());
+        stream.setBatchId(orderInfo.getId());
         stream.setRequestUrl(queryGasResponseMap.get("requestUrl"));
         stream.setRequestContent(queryGasResponseMap.get("requestParam"));
         String requestUrl = queryGasResponseMap.get("requestUrl");
