@@ -144,6 +144,16 @@ public class PayShopOrderCustom implements Serializable {
      */
     private String phone;
 
+    /**
+     * 产品金额
+     */
+    private BigDecimal money;
+
+    /**
+     * 产品充值金额
+     */
+    private Integer rechargeMoney;
+
 
     /**
      * 商品进价
@@ -506,5 +516,25 @@ public class PayShopOrderCustom implements Serializable {
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 }

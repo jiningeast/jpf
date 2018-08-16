@@ -117,6 +117,15 @@ public class ShopOrderInfoInterface {
     private Date updatetime;
 
 
+    /**
+     * 产品金额
+     */
+    private BigDecimal money;
+
+    /**
+     * 产品充值金额
+     */
+    private Integer rechargeMoney;
 
     /**
      * 商品分类
@@ -530,5 +539,25 @@ public class ShopOrderInfoInterface {
 
     public void setDouTotal(String douTotal) {
         this.douTotal = douTotal;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 }
