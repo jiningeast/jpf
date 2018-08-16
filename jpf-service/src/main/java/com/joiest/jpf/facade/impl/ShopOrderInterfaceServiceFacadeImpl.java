@@ -92,7 +92,7 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
         PayShopOrderExample e = new PayShopOrderExample();
         PayShopOrderExample.Criteria c = e.createCriteria();
         c.andCustomerIdEqualTo(customerId);
-        c.andStatusNotEqualTo((byte)3);
+        // c.andStatusNotEqualTo((byte)3);
 
         return payShopOrderMapper.countByExample(e);
     }
