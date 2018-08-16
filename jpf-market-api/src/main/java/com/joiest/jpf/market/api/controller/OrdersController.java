@@ -320,7 +320,7 @@ public class OrdersController {
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         stream.setType((byte)3);
-        stream.setBatchId(orderInfo.getId());
+        stream.setBatchId(orderInfo.getOrderNo());
         stream.setRequestUrl(queryPhoneResponseMap.get("requestUrl"));
         stream.setRequestContent(queryPhoneResponseMap.get("requestParam"));
         String requestUrl = queryPhoneResponseMap.get("requestUrl");
@@ -367,7 +367,7 @@ public class OrdersController {
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         stream.setType((byte)5);
-        stream.setBatchId(orderInfo.getId());
+        stream.setBatchId(orderInfo.getOrderNo());
         stream.setRequestUrl(queryGasResponseMap.get("requestUrl"));
         stream.setRequestContent(queryGasResponseMap.get("requestParam"));
         String requestUrl = queryGasResponseMap.get("requestUrl");
