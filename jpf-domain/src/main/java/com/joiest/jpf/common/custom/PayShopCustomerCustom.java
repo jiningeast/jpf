@@ -1,12 +1,11 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.common.custom;
 
-import com.joiest.jpf.common.po.PayShopCustomer;
-
+import java.io.Serializable;
 import java.util.Date;
 
-public class ShopCustomerInterfaceInfo {
+public class PayShopCustomerCustom implements Serializable {
     /**
-     *
+     * 
      */
     private String id;
 
@@ -51,7 +50,7 @@ public class ShopCustomerInterfaceInfo {
     private String phone;
 
     /**
-     * 是否实名认证
+     * 是否实名认证 0=未认证 1=已认证
      */
     private Byte isVerify;
 
@@ -71,14 +70,19 @@ public class ShopCustomerInterfaceInfo {
     private String code;
 
     /**
-     *
+     * 
      */
     private Date addtime;
 
     /**
-     *
+     * 
      */
     private Date updatetime;
+
+    /**
+     * 隶属公众号id
+     */
+    private String mpid;
 
     private static final long serialVersionUID = 1L;
 
@@ -202,6 +206,13 @@ public class ShopCustomerInterfaceInfo {
         this.updatetime = updatetime;
     }
 
+    public String getMpid() {
+        return mpid;
+    }
+
+    public void setMpid(String mpid) {
+        this.mpid = mpid == null ? null : mpid.trim();
+    }
 
     /**
      *
@@ -226,6 +237,7 @@ public class ShopCustomerInterfaceInfo {
         sb.append(", code=").append(code);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", mpid=").append(mpid);
         sb.append("]");
         return sb.toString();
     }
@@ -245,21 +257,22 @@ public class ShopCustomerInterfaceInfo {
         if (getClass() != that.getClass()) {
             return false;
         }
-        PayShopCustomer other = (PayShopCustomer) that;
+        PayShopCustomerCustom other = (PayShopCustomerCustom) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-                && (this.getNickname() == null ? other.getNickname() == null : this.getNickname().equals(other.getNickname()))
-                && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
-                && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
-                && (this.getOpenid() == null ? other.getOpenid() == null : this.getOpenid().equals(other.getOpenid()))
-                && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
-                && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
-                && (this.getIsVerify() == null ? other.getIsVerify() == null : this.getIsVerify().equals(other.getIsVerify()))
-                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-                && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
-                && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
-                && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-                && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getNickname() == null ? other.getNickname() == null : this.getNickname().equals(other.getNickname()))
+            && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
+            && (this.getOpenid() == null ? other.getOpenid() == null : this.getOpenid().equals(other.getOpenid()))
+            && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
+            && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
+            && (this.getIsVerify() == null ? other.getIsVerify() == null : this.getIsVerify().equals(other.getIsVerify()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
+            && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()));
     }
 
     /**
@@ -283,6 +296,7 @@ public class ShopCustomerInterfaceInfo {
         result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getMpid() == null) ? 0 : getMpid().hashCode());
         return result;
     }
 }

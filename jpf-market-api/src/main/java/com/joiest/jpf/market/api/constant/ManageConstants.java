@@ -22,6 +22,12 @@ public class ManageConstants {
             put("12", "支付返回失败");
         }
     };
-
+    public static final Map<String, String> rechargeStatusCn_map = new HashMap<String, String>(){
+        {
+            put("0","充值中");
+            put("1","充值成功");
+            put("9","撤消(充值失败)");
+        }
+    };
 
 }

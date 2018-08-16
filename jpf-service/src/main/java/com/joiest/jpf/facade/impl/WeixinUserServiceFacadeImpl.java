@@ -80,7 +80,7 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
         payWeixinUser.setSubscribe(new Byte(wei.get("subscribe")));
         payWeixinUser.setMpid(new Long(wei.get("mpid")));
         payWeixinUser.setOpenid(wei.get("openid"));
-        payWeixinUser.setNickname(wei.get("nickname"));
+        //payWeixinUser.setNickname(wei.get("nickname"));
         payWeixinUser.setNicknameencode(wei.get("nicknameEncode"));
         payWeixinUser.setSex(new Byte(wei.get("sex")));
         payWeixinUser.setLanguage(wei.get("language"));
@@ -124,7 +124,7 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
 
         payWeixinUser.setId(id);
         payWeixinUser.setSubscribe(new Byte(wei.get("subscribe")));
-        payWeixinUser.setNickname(wei.get("nickname"));
+        //payWeixinUser.setNickname(wei.get("nickname"));
         payWeixinUser.setNicknameencode(wei.get("nicknameEncode"));
         payWeixinUser.setSex(new Byte(wei.get("sex")));
         payWeixinUser.setLanguage(wei.get("language"));
@@ -140,12 +140,18 @@ public class WeixinUserServiceFacadeImpl implements WeixinUserServiceFacade {
             e.printStackTrace();
         }
         payWeixinUser.setUnionid(wei.get("unionid"));
-        payWeixinUser.setRemark(wei.get("remark"));
-        payWeixinUser.setGroupid(new Byte(wei.get("groupid")));
-        payWeixinUser.setTagidList(wei.get("tagid_list"));
-        payWeixinUser.setSubscribeScene(wei.get("subscribe_scene"));;
-        payWeixinUser.setQrScene(wei.get("qr_scene"));
-        payWeixinUser.setQrSceneStr(wei.get("qr_scene_str"));
+        if(wei.get("subscribe").equals("1")){
+
+            payWeixinUser.setRemark(wei.get("remark"));
+            payWeixinUser.setGroupid(new Byte(wei.get("groupid")));
+            payWeixinUser.setTagidList(wei.get("tagid_list"));
+            payWeixinUser.setSubscribeScene(wei.get("subscribe_scene"));;
+            payWeixinUser.setQrScene(wei.get("qr_scene"));
+            payWeixinUser.setQrSceneStr(wei.get("privilege"));
+        }else if(wei.get("subscribe").equals("2")){
+
+            payWeixinUser.setQrSceneStr(wei.get("qr_scene_str"));
+        }
         payWeixinUser.setUpdated(new Date());
 
         return payWeixinUserMapper.updateByPrimaryKeySelective(payWeixinUser);

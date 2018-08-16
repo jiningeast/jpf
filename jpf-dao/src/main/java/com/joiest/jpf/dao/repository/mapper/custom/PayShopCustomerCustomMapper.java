@@ -1,5 +1,6 @@
 package com.joiest.jpf.dao.repository.mapper.custom;
 
+import com.joiest.jpf.common.custom.PayShopCustomerCustom;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.po.PayShopCustomerExample;
 import org.apache.ibatis.annotations.Param;
@@ -84,4 +85,9 @@ public interface PayShopCustomerCustomMapper {
      * @param record
      */
     int updateByPrimaryKey(PayShopCustomer record);
+
+    /**
+     * 获取用户数据时联合查询微信表获取微信头像
+     */
+    List<PayShopCustomerCustom> selectWxByExample(PayShopCustomerExample example);
 }

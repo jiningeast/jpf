@@ -225,6 +225,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         int res_order = updateOrder(orderInfo, json_couponDetail);
         if ( res_order < 1 )
         {
+            //更新信息
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
         }
         return res_order;
@@ -270,7 +271,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             payShopCouponActive.setPayWay(orderInfo.getPayWay());
             payShopCouponActive.setMoney(new BigDecimal("0"));
             payShopCouponActive.setDou(deduct);     //消费豆数量
-            payShopCouponActive.setContent("行为:消费;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getName() + ";豆消费:" + deduct + ";orderId:" + orderInfo.getId() + ";剩余豆:" + remain);
+            payShopCouponActive.setContent("行为:消费;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";豆消费:" + deduct + ";orderId:" + orderInfo.getId() + ";剩余豆:" + remain);
             payShopCouponActive.setType("1");
             payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
             payShopCouponActive.setAddtime(new Date());
@@ -298,7 +299,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             return true;
         }catch (Exception e)
         {
-            throw new JpfInterfaceException("10008", e.getMessage());
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), e.getMessage());
         }
 
     }
@@ -311,21 +312,19 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
     public int updateOrder(ShopOrderInterfaceInfo orderInfo, String coupon_detail)
     {
         PayShopOrder payShopOrder = new PayShopOrder();
-        BeanCopier beanCopier = BeanCopier.create(ShopOrderInterfaceInfo.class, PayShopOrder.class, false);
-        beanCopier.copy(orderInfo, payShopOrder, null);
 
         payShopOrder.setStatus((byte)1);
         payShopOrder.setId(orderInfo.getId());
         payShopOrder.setCouponDetail(coupon_detail);
         payShopOrder.setPaytime(new Date());
 
-        PayShopOrderExample example = new PayShopOrderExample();
-        PayShopOrderExample.Criteria c = example.createCriteria();
-        c.andIdEqualTo(orderInfo.getId());
-        c.andCustomerIdEqualTo(orderInfo.getCustomerId());
-        c.andOrderNoEqualTo(orderInfo.getOrderNo());
+//        PayShopOrderExample example = new PayShopOrderExample();
+//        PayShopOrderExample.Criteria c = example.createCriteria();
+//        c.andIdEqualTo(orderInfo.getId());
+//        c.andCustomerIdEqualTo(orderInfo.getCustomerId());
+//        c.andOrderNoEqualTo(orderInfo.getOrderNo());
 
-        int res_upOrder = payShopOrderMapper.updateByExample(payShopOrder, example);
+        int res_upOrder = payShopOrderMapper.updateByPrimaryKeySelective(payShopOrder);
 
         return res_upOrder;
     }

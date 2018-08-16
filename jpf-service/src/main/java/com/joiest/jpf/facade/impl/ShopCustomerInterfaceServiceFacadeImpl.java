@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.custom.PayShopCustomerCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.po.PayShopCustomerExample;
@@ -51,15 +52,15 @@ public class ShopCustomerInterfaceServiceFacadeImpl implements ShopCustomerInter
         PayShopCustomerExample example = new PayShopCustomerExample();
         PayShopCustomerExample.Criteria c = example.createCriteria();
         c.andOpenidEqualTo(openId);
-        List<PayShopCustomer> list = payShopCustomerMapper.selectByExample(example);
+        List<PayShopCustomerCustom> list = payShopCustomerCustomMapper.selectWxByExample(example);
         if ( list == null || list.size()<=0  )
         {
             return null;
         }
         List<ShopCustomerInterfaceInfo> infos = new ArrayList<>();
-        for(PayShopCustomer payShopCustomer:list){
+        for(PayShopCustomerCustom payShopCustomer:list){
             ShopCustomerInterfaceInfo shopCustomerInterfaceInfo = new ShopCustomerInterfaceInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayShopCustomer.class, ShopCustomerInterfaceInfo.class, false);
+            BeanCopier beanCopier = BeanCopier.create(PayShopCustomerCustom.class, ShopCustomerInterfaceInfo.class, false);
             beanCopier.copy(payShopCustomer,shopCustomerInterfaceInfo, null);
 
             infos.add(shopCustomerInterfaceInfo);
