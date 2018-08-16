@@ -109,11 +109,15 @@ public class OrdersController {
                 throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "油卡卡号不一致");
             }
             //TODO 油卡卡号校验
+            Boolean gasIsTrue = Pattern.compile(res_gas).matcher(request.getCardnumber()).matches();
+            if ( !gasIsTrue )
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "油卡卡号错误");
+            }
             chargeNo = request.getCardnumber();
         } else if ( request.getOtype().equals("3") )
         {
             //话费充值
-//            String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
             Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(request.getPhone()).matches();
             if ( !phoneIsTrue )
             {
@@ -398,6 +402,8 @@ public class OrdersController {
     @ResponseBody
     public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
     {
+//        String sign =
+
         //1.流水 2.订单信息 3.更新订单状态
         Map<String, Object> map = ClassUtil.requestToMap(request);
         String json = JsonUtils.toJson(map);
@@ -450,7 +456,6 @@ public class OrdersController {
         orderinfo.setRechargeStatus(request.getRet_code());     //0充值中 1充值成功 9充值失败
         orderinfo.setUpdatetime(new Date());
         int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
-
 
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         return "Y";
