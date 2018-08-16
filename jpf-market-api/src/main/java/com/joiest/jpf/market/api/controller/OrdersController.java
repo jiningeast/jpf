@@ -271,7 +271,7 @@ public class OrdersController {
             rechargeType = 4;
         }
         stream.setType(rechargeType);
-        stream.setBatchId(orderInfo.getOrderNo());
+        stream.setOrderNo(orderInfo.getOrderNo());
         stream.setRequestUrl(resultMap.get("requestUrl"));
         stream.setRequestContent(resultMap.get("requestParam"));
         String requestUrl = resultMap.get("requestUrl");
