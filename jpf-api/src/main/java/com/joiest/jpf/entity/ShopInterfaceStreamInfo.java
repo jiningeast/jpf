@@ -9,7 +9,7 @@ public class ShopInterfaceStreamInfo {
     private String id;
 
     /**
-     * 接口类型 0=OSS文件上传 1=短信
+     * 接口类型 0=OSS文件上传 1=短信 3=话费是否可充值接口查询 4=话费充值接口 5=油卡是否可充值接口查询 6=油卡充值
      */
     private Byte type;
 
@@ -32,6 +32,11 @@ public class ShopInterfaceStreamInfo {
      * 打款任务id
      */
     private String batchId;
+
+    /**
+     * 订单编号
+     */
+    private String orderNo;
 
     /**
      *
@@ -84,6 +89,14 @@ public class ShopInterfaceStreamInfo {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public Date getAddtime() {
