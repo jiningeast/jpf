@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceServiceFacade {
 
@@ -109,15 +106,19 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
     }
 
     @Override
-    public int cancelOrderDou(String orderNo) {
+    public Map<String,String> cancelOrderDou(String orderNo) {
+        Map<String,String> resultMap = new HashMap<>();
         ShopOrderInterfaceInfo orderInfo = getOrder(orderNo);
         if ( orderInfo.getCouponDetail().equals("") )
         {
-            return -1;  //订单豆消费为空
+            resultMap.put("code","-1");
+            resultMap.put("msg", "订单豆消费记录为空");
+            return resultMap;  //订单豆消费为空
         }
         List<Map<String,String>> couponDetailList = new ArrayList<>();
         couponDetailList = JsonUtils.toObject(orderInfo.getCouponDetail(), List.class);
-
+        Map<String,String> douAddMap = new HashMap<>();
+        List<Map<String,String>> doutAddList = new ArrayList<>();
         //[{"deduct":"15","remainId":"1","remainDou":"20","couponNo":"CP2031533283923997641","couponId":"41"}]
         for ( int i=0; i<couponDetailList.size(); i++ )
         {
@@ -137,6 +138,13 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
             PayShopCouponRemainExample example = new PayShopCouponRemainExample();
             int res_updateRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(remain);
 
+            douAddMap.put("add", couponDetailList.get(i).get("deduct"));
+            douAddMap.put("remainId", remain.getId());
+            douAddMap.put("currDouTotal", String.valueOf(curr_total));
+            douAddMap.put("couponNo", remain.getCouponNo());
+            douAddMap.put("couponId", remain.getCouponId());
+            doutAddList.add(douAddMap);
+
             // 新增日志表一条记录pay_shop_coupon_active
             PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
             payShopCouponActive.setCustomerId(orderInfo.getCustomerId());
@@ -150,7 +158,7 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
             payShopCouponActive.setPayWay(orderInfo.getPayWay());
             payShopCouponActive.setMoney(new BigDecimal("0"));
             payShopCouponActive.setDou(deduct);     //消费豆数量
-            payShopCouponActive.setContent("行为:退豆;;退还:" + deduct + ";orderId:" + orderInfo.getId() + ";剩余豆:" + curr_total);
+            payShopCouponActive.setContent("行为:退豆;;退还:" + deduct + ";orderId:" + orderInfo.getId() + ";剩余豆:" + curr_total + ";remainId" + remain.getId() + ";couponNo" + remain.getCouponNo());
             payShopCouponActive.setType("2");
             payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
             payShopCouponActive.setAddtime(new Date());
@@ -167,7 +175,12 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
             payShopCustomerUpdate.setUpdatetime(new Date());
             int res_updateCustomCode = payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
         }
-        return 1;   //恢复豆操作成功
+        String douJson = JsonUtils.toJson(doutAddList);
+        resultMap.put("code","1");
+        resultMap.put("msg", "退豆操作成功");
+        resultMap.put("douJson", douJson);
+
+        return resultMap;   //恢复豆操作成功
     }
 
     //获取券信息

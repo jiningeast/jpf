@@ -2,6 +2,8 @@ package com.joiest.jpf.facade;
 
 import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
 
+import java.util.Map;
+
 public interface ShopOrderInterfaceServiceFacade {
 
     /**
@@ -29,5 +31,5 @@ public interface ShopOrderInterfaceServiceFacade {
     /**
      * 取消订单消费的豆
      */
-    public int cancelOrderDou(String orderNo);
+    public Map<String,String> cancelOrderDou(String orderNo);
 }

@@ -144,14 +144,6 @@ public class ofpayUtils {
         return sign;
     }
 
-    public static void main(String[] args) {
-        Map<String,String> queryMap = new HashMap<>();
-        queryMap.put("game_userid", "1000111100006805204");
-//        queryMap.put("chargeType", "1");
-        Map<String, String> resultMap = new ofpayUtils().gasQuery(queryMap);
-        System.out.println("#333333333333");
-    }
-
     /**
      * 加油卡卡号信息查询
      */
@@ -199,7 +191,7 @@ public class ofpayUtils {
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyyMMddHHmmss");
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid", userid);           // 商户号
-        requestMap.put("userpws", "3234234232");         // 商户密码
+        requestMap.put("userpws", userpws);         // 商户密码
         requestMap.put("cardid", "64127500");       // 商品编号以产品部门提供的为准
         requestMap.put("cardnum",rechargeMap.get("cardnum").toString());                // 1.任意充需要待充值面值（1的整数倍) 2.卡充充值这里表示数量
         requestMap.put("sporder_id", rechargeMap.get("sporder_id").toString());
@@ -269,4 +261,9 @@ public class ofpayUtils {
 
         return sign;
     }
+
+//    public String getNotifySign(String ret_Code, String sporder_id)
+//    {
+//        String str = userid + ret_Code + userpws +
+//    }
 }

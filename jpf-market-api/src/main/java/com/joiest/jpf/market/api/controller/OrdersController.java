@@ -39,9 +39,9 @@ public class OrdersController {
     private String openId;
     private ShopCustomerInterfaceInfo userInfo;
 
-    String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
+    private String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
 
-    String res_gas = "^(100011\\d{13})|(90\\d{14})$";      //中石化：以100011开头共19位、中石油：以90开头共16位
+    private String res_gas = "^(100011\\d{13})|(90\\d{14})$";      //中石化：以100011开头共19位、中石油：以90开头共16位
     /**
      * 商品
      */
@@ -109,11 +109,15 @@ public class OrdersController {
                 throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "油卡卡号不一致");
             }
             //TODO 油卡卡号校验
+            Boolean gasIsTrue = Pattern.compile(res_gas).matcher(request.getCardnumber()).matches();
+            if ( !gasIsTrue )
+            {
+                throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "油卡卡号错误");
+            }
             chargeNo = request.getCardnumber();
         } else if ( request.getOtype().equals("3") )
         {
             //话费充值
-//            String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
             Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(request.getPhone()).matches();
             if ( !phoneIsTrue )
             {
@@ -316,7 +320,7 @@ public class OrdersController {
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         stream.setType((byte)3);
-        stream.setBatchId(orderInfo.getOrderNo());
+        stream.setBatchId(orderInfo.getId());
         stream.setRequestUrl(queryPhoneResponseMap.get("requestUrl"));
         stream.setRequestContent(queryPhoneResponseMap.get("requestParam"));
         String requestUrl = queryPhoneResponseMap.get("requestUrl");
@@ -363,7 +367,7 @@ public class OrdersController {
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         stream.setType((byte)5);
-        stream.setBatchId(orderInfo.getOrderNo());
+        stream.setBatchId(orderInfo.getId());
         stream.setRequestUrl(queryGasResponseMap.get("requestUrl"));
         stream.setRequestContent(queryGasResponseMap.get("requestParam"));
         String requestUrl = queryGasResponseMap.get("requestUrl");
@@ -398,6 +402,8 @@ public class OrdersController {
     @ResponseBody
     public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
     {
+//        String sign =
+
         //1.流水 2.订单信息 3.更新订单状态
         Map<String, Object> map = ClassUtil.requestToMap(request);
         String json = JsonUtils.toJson(map);
@@ -412,7 +418,6 @@ public class OrdersController {
 
         String fileName = "ofpayGasNotify";
         String path = "/logs/jpf-market-api/log/";
-
 
         ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrder(request.getSporder_id());
         if ( orderInfo == null )
@@ -431,17 +436,28 @@ public class OrdersController {
         int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
         ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
         String rechargeStatus = "0";
+        Map<String,String> res_cancelDouMap = new HashMap<>();
         if ( request.getRet_code().equals("9") )    //1成功 9失败
         {
             //支付失败 取消豆
-            int res = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
-            int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
-            return "Y";
+            res_cancelDouMap = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
+
+            int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(orderInfo.getCustomerId());
+
+            sbf.append("\n订单状态：充值失败");
+            sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","豆退还操作信息为空"));
+
+        } else
+        {
+            sbf.append("\n订单状态：充值成功");
+            sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","更新订单成功"));
         }
         orderinfo.setId(orderInfo.getId());
         orderinfo.setRechargeStatus(request.getRet_code());     //0充值中 1充值成功 9充值失败
         orderinfo.setUpdatetime(new Date());
         int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         return "Y";
     }
 

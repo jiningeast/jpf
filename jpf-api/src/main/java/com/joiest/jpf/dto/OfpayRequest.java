@@ -17,6 +17,8 @@ public class OfpayRequest {
     //err_msg 失败原因(ret_code为1时，该值为空)
     private String err_msg;
 
+    private String sign;
+
     public String getUserid() {
         return userid;
     }
@@ -55,5 +57,13 @@ public class OfpayRequest {
 
     public void setErr_msg(String err_msg) {
         this.err_msg = err_msg;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }
