@@ -69,6 +69,14 @@ public class PayShopOrderExample {
     }
 
     /**
+     * 新加的 and
+     * @param criteria
+     */
+    public void  and(Criteria criteria) {
+        oredCriteria.add(criteria);
+    }
+
+    /**
      *
      */
     public Criteria or() {

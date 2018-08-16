@@ -26,7 +26,7 @@ public class ShopCouponActiveInterfaceServiceFacadeImpl implements ShopCouponAct
             return null;
         }
         PayShopCouponActiveExample example = new PayShopCouponActiveExample();
-        example.setOrderByClause("addtime ASC");
+        example.setOrderByClause("addtime DESC");
         PayShopCouponActiveExample.Criteria c = example.createCriteria();
         c.andCustomerIdEqualTo(uid);
         c.andTypeEqualTo("0");
@@ -73,7 +73,7 @@ public class ShopCouponActiveInterfaceServiceFacadeImpl implements ShopCouponAct
             example.setPageSize(Long.parseLong(pageSize));
         }
 
-        example.setOrderByClause("addtime ASC");
+        example.setOrderByClause("addtime DESC");
         PayShopCouponActiveExample.Criteria c = example.createCriteria();
         c.andCustomerIdEqualTo(uid);
         c.andTypeEqualTo("0");

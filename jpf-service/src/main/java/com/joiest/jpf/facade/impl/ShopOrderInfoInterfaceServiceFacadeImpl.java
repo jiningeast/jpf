@@ -4,21 +4,17 @@ import com.joiest.jpf.common.custom.PayShopOrderCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayShopOrder;
-import com.joiest.jpf.common.po.PayShopOrderExample;
-import com.joiest.jpf.common.po.PayShopProductType;
-import com.joiest.jpf.common.po.PayShopProductTypeExample;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopOrderMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductInfoMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductTypeMapper;
 import com.joiest.jpf.dto.GetShopOrderRequest;
 import com.joiest.jpf.dto.GetShopOrderResponse;
 import com.joiest.jpf.dto.ShopOrderInfoInterfaceRequest;
 import com.joiest.jpf.dto.ShopOrderInfoInterfaceResponse;
-import com.joiest.jpf.entity.ShopOrderInfo;
-import com.joiest.jpf.entity.ShopOrderInfoInterface;
-import com.joiest.jpf.entity.ShopProductTypeInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.ShopOrderInfoInterfaceServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +33,7 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
     private PayShopOrderMapper payShopOrderMapper;
 
     @Autowired
-    private PayShopProductTypeMapper payShopProductTypeMapper;
+    private PayShopProductInfoMapper payShopProductInfoMapper;
     /**
      * 订单列表---后台
      */
@@ -56,42 +52,41 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         }
 
         PayShopOrderExample example = new PayShopOrderExample();
-        PayShopOrderExample example1 = new PayShopOrderExample();
+        PayShopOrderExample example1 = example;
         example.setPageNo(Long.parseLong(request.getPage()));
         example.setPageSize(Long.parseLong(request.getPageSize()));
         example.setOrderByClause("addtime DESC");
 
         PayShopOrderExample.Criteria c =example.createCriteria();
         PayShopOrderExample.Criteria c2 =example.createCriteria();
-        PayShopOrderExample.Criteria c3 =example.createCriteria();
         c.andCustomerIdEqualTo(request.getUid());
         //目前只支持  订单号 、商品名称（商品类型） 搜索
         if ( StringUtils.isNotBlank(request.getKeyword()))
         {
-            c.andOrderNoEqualTo( request.getKeyword()  );
-            /*//查询商品名称
-            PayShopProductTypeExample payShopProductTypeExample = new PayShopProductTypeExample();
-            PayShopProductTypeExample.Criteria shopC = payShopProductTypeExample.createCriteria();
-            shopC.andPnameLike("%"+request.getKeyword()+"%");
-            List<PayShopProductType> shopProductTypesList = payShopProductTypeMapper.selectByExample(payShopProductTypeExample);
-            List<Byte> productInfoStr = new ArrayList();
-            productInfoStr.add((byte)0);
-            if( shopProductTypesList.size() <=0 || shopProductTypesList == null){
-                c2.andOrderTypeIn(productInfoStr);
+            //c.andOrderNoEqualTo( request.getKeyword()  );
+            //查询商品名称
+            PayShopProductInfoExample payShopProductInfoExample = new PayShopProductInfoExample();
+            PayShopProductInfoExample.Criteria shopC = payShopProductInfoExample.createCriteria();
+            shopC.andTypeNameLike("%"+request.getKeyword()+"%");
+            List<PayShopProductInfo> shopProductInfoList = payShopProductInfoMapper.selectByExample(payShopProductInfoExample);
+            List<Integer> productInfoStr = new ArrayList();
+            productInfoStr.add(0);
+            if( shopProductInfoList.size() <=0 || shopProductInfoList == null){
+                c2.andProductInfoIdIn(productInfoStr);
             }else{
 
-                for (PayShopProductType one : shopProductTypesList)
+                for (PayShopProductInfo one : shopProductInfoList)
                 {
-                    ShopProductTypeInfo info = new ShopProductTypeInfo();
-                    BeanCopier beanCopier = BeanCopier.create(PayShopProductType.class, ShopProductTypeInfo.class, false);
+                    ShopProductInfoInfo info = new ShopProductInfoInfo();
+                    BeanCopier beanCopier = BeanCopier.create(PayShopProductInfo.class, ShopProductInfoInfo.class, false);
                     beanCopier.copy(one, info, null);
-                    productInfoStr.add(Byte.parseByte(info.getPid().toString()));
+                    productInfoStr.add(info.getId());
                 }
-                c2.andOrderTypeIn(productInfoStr);
+                c2.andProductInfoIdIn(productInfoStr);
             }
             c2.andOrderNoEqualTo( request.getKeyword()   );
-            example.or(c2);
-            //example.or(c3);*/
+            //example.or(c2);
+            example.and(c2);
         }
 
         List<PayShopOrderCustom> list = payShopOrderCustomMapper.selectByExampleInterfaceJoin(example);
