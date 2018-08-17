@@ -1,5 +1,7 @@
 package com.joiest.jpf.market.api.interceptor;
 
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.market.api.controller.ConfigUtil;
@@ -83,12 +85,17 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 return super.preHandle(request, response, handler);
             }
             logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+ConfigUtil.getValue("SHOP_FRONT_URL") + "/nologin/userIndex");
-            response.sendRedirect(ConfigUtil.getValue("SHOP_FRONT_URL") + "/nologin/userIndex");
+            returnNotLogin();
+//            response.sendRedirect(ConfigUtil.getValue("SHOP_FRONT_URL") + "/nologin/userIndex");
 //            response.sendError(401);
             return false;
         } else {
             return false;
         }
+    }
+
+    public String returnNotLogin(){
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
     }
 
     private Boolean userIsLogin(String token)
