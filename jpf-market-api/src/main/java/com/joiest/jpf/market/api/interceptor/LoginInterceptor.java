@@ -82,8 +82,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             }
             logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+ConfigUtil.getValue("SHOP_FRONT_URL") + "/nologin/userIndex");
             logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null));
-            returnNotLogin();
-//            response.sendRedirect(ConfigUtil.getValue("SHOP_FRONT_URL") + "/nologin/userIndex");
+//            returnNotLogin();
+            response.sendRedirect(ConfigUtil.getValue("SHOP_FRONT_URL") + "/nologin/userIndex");
 //            response.sendError(401);
             return false;
         } else {
