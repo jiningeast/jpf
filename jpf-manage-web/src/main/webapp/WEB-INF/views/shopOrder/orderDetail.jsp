@@ -19,10 +19,12 @@
                     <th>详细信息</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">订单号：</td>
+                    <td style="text-align: right;width:40%" bgcolor="#f1f1f1">订单号：</td>
                     <td>
                         ${shopOrderInfo.orderNo}
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">客户名称：</td>
                     <td>
                         ${shopOrderInfo.customerName}
@@ -33,6 +35,8 @@
                     <td>
                         ${shopOrderInfo.productName}
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">商品价格：</td>
                     <td>
                         ${shopOrderInfo.productMoney}
@@ -43,6 +47,8 @@
                     <td>
                         ${shopOrderInfo.amount}
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">欣豆数量：</td>
                     <td>
                         ${shopOrderInfo.productDou}
@@ -54,6 +60,8 @@
                         <img src=" ${shopOrderInfo.image}" style="width: 100px;height: 100px;">
 
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">商品进价：</td>
                     <td>
                         ${shopOrderInfo.bid}
@@ -64,7 +72,8 @@
                     <td >
                         ${shopOrderInfo.phone}
                     </td>
-
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">券消费详情：</td>
                     <td >
                         ${shopOrderInfo.couponDetail}
@@ -76,6 +85,8 @@
                     <td >
                         ${shopOrderInfo.chargeNo}
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">支付方式：</td>
                     <td colspan="3">
                         <c:if  test="${shopOrderInfo.payWay eq 0 }">欣豆支付</c:if>
@@ -87,6 +98,7 @@
                     <td >
                         ${shopOrderInfo.totalMoney}
                     </td>
+                </tr>
                     <td style="text-align: right;background-color: #f1f1f1;">订单总豆数量：</td>
                     <td >
                         ${shopOrderInfo.totalDou}
@@ -100,6 +112,8 @@
                         <c:if  test="${shopOrderInfo.status eq 2 }">支付失败</c:if>
                         <c:if  test="${shopOrderInfo.status eq 3 }">已取消</c:if>
                     </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">下单时间：</td>
                     <td  >
                         <fmt:formatDate value="${shopOrderInfo.addtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -112,8 +126,6 @@
                         <fmt:formatDate value="${shopOrderInfo.paytime}" pattern="yyyy-MM-dd HH:mm:ss"/>
 
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
             </table>
         </form>
