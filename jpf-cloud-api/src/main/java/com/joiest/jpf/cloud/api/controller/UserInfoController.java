@@ -808,6 +808,7 @@ public class UserInfoController {
     @ModelAttribute
     public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
     {
+        logger.info("userinfo的beforeAction");
         // 跨域
         String originHeader = httpRequest.getHeader("Origin");
         /*response.setHeader("Access-Control-Allow-Headers", "accept, content-type");
