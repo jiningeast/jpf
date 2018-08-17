@@ -3,13 +3,9 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayShopCompany;
-import com.joiest.jpf.common.po.PayShopCompanyExample;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.po.PayShopCustomerExample;
 import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
 import com.joiest.jpf.dto.GetShopCustomerRequest;
 import com.joiest.jpf.dto.GetShopCustomerResponse;
@@ -19,10 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade {
 
@@ -32,6 +29,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
     /**
      * 公司列表---后台
      */
+    @Override
     public GetShopCustomerResponse getList(GetShopCustomerRequest request)
     {
         if ( request.getRows() <= 0 )
@@ -52,7 +50,13 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         PayShopCustomerExample.Criteria c = example.createCriteria();
         if ( StringUtils.isNotBlank(request.getNickname()))
         {
-            c.andNicknameEqualTo(request.getNickname() );
+            String  nickname="";
+            try {
+                nickname = URLEncoder.encode(request.getNickname().toString(), "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            c.andNicknameEqualTo( nickname);
         }
         if( StringUtils.isNotBlank(request.getCompanyName())){
             c.andCompanyNameEqualTo(request.getCompanyName());

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class ShopCustomerController {
      */
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list(GetShopCustomerRequest request) {
+    public Map<String, Object> list(GetShopCustomerRequest request)throws UnsupportedEncodingException {
         GetShopCustomerResponse response= shopCustomerServiceFacade.getList(request);
         Map<String, Object> map = new HashMap<>();
         map.put("total", response.getCount());

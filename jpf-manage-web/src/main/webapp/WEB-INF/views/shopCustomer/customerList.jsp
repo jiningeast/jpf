@@ -117,7 +117,12 @@
                         }
                     },
                     // {field:'idno',title:'身份证号码',width:'15%'},
-                    {field:'nickname',title:'微信昵称',width:'8%'},
+                    {field:'nickname',title:'微信昵称',width:'8%',
+                        formatter : function(value,row,index){
+
+                            return  decodeURI(value);
+                        }
+                    },
                     {field:'dou',title:'欣豆数量',width:'10%'},
                     // {field:'companyId',title:'所属公司id',width:'10%'},
                     // {field:'companyName',title:'注册所属公司',width:'15%'},

@@ -228,13 +228,17 @@
   </select>
 
   <!--自定义连表查询 单条业务  -->
-  <select id="selectOrderAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectOrderAll" parameterType="com.joiest.jpf.common.po.PayShopOrderExample" resultMap="BaseResultMap">
 
-  select a.*,b.type_name,b.supplier_name,b.brand_name,b.contact_name,b.contact_phone,b.contact_email,c.phone,d.image,d.bid,d.stored from pay_shop_order a
+  select a.*,b.type_name,b.supplier_name,b.brand_name,b.contact_name,b.contact_phone,b.contact_email,c.phone,d.image,d.bid,d.stored
+    from pay_shop_order a
     LEFT JOIN  pay_shop_product_info b ON  a.product_info_id=b.id
     LEFT  JOIN   pay_shop_customer c ON a.customer_id=c.id
     LEFT JOIN pay_shop_product d ON  a.product_id=d.id
-    where a.order_no=#{orderNo,jdbcType=VARCHAR}
+
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause_Custom" />
+    </if>
 
   </select>
 
@@ -467,13 +471,13 @@
 
   <select id="countByExampleList" parameterType="com.joiest.jpf.common.po.PayShopOrderExample" resultType="java.lang.Integer">
 
-    select count(*) from pay_shop_order
+    select count(*) from pay_shop_order a
     LEFT JOIN  pay_shop_product_info b ON  a.product_info_id=b.id
     LEFT  JOIN   pay_shop_customer c ON a.customer_id=c.id
     LEFT JOIN pay_shop_product d ON  a.product_id=d.id
 
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause_Custom" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
