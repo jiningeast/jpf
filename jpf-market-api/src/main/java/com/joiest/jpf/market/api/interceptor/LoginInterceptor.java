@@ -75,25 +75,16 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return super.preHandle(request, response, handler);
         } else if( !NOTLOGINURL.contains(requestUri) ) {
             Boolean isLogin = userIsLogin(Token);
-            logger.info("islogin="+isLogin);
             if ( isLogin )
             {
                 return super.preHandle(request, response, handler);
             }
-            logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+ConfigUtil.getValue("SHOP_FRONT_URL") + "/nologin/userIndex");
-            logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null));
-//            returnNotLogin();
-            response.sendRedirect(ConfigUtil.getValue("SHOP_FRONT_URL") + "/nologin/userIndex");
+            response.sendRedirect(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
 //            response.sendError(401);
             return false;
         } else {
             return false;
         }
-    }
-
-    @ResponseBody
-    public String returnNotLogin(){
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
     }
 
     private Boolean userIsLogin(String token)
