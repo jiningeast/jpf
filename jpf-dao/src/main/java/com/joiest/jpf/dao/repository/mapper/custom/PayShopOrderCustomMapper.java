@@ -15,6 +15,13 @@ public interface PayShopOrderCustomMapper {
      */
     int countByExample(PayShopOrderExample example);
 
+
+    /**
+     * 根据条件计数连表
+     *
+     * @param example
+     */
+    int countByExampleList(PayShopOrderExample example);
     /**
      *
      * @param example
@@ -106,7 +113,7 @@ public interface PayShopOrderCustomMapper {
      *获取业务公司连表信息
 
      */
-    PayShopOrderCustom selectOrderAll(String orderNo);
+    PayShopOrderCustom selectOrderAll(PayShopOrderExample example);
 
     /**
      *

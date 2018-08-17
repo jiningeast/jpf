@@ -115,20 +115,20 @@
                 url:'list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
-                    {field:'orderNo',title:'订单号',width:'10%',
+                    {field:'orderNo',title:'订单号',width:'15%',
                         formatter : function(value,row,index){
-                            return  "<a onclick=\"goActiveOrder('"+value+\")\">"+value+" </a>";
+                            return  "<a onclick=\"goActiveOrder('"+value+" ')\">"+value+" </a>";
                         }
                     },
-                    {field:'addtime',title:'下单时间',width:'10%',formatter: formatDateStr},
                     {field:'customerName',title:'客户名字',width:'8%'},
                     {field:'productName',title:'产品名称',width:'10%'},
-                    {field:'typeName',title:'产品类型',width:'15%'},
-                    {field:'amount',title:'数量',width:'10%'},
-                    {field:'totalMoney',title:'总金额',width:'15%'},
+                    {field:'typeName',title:'产品类型',width:'8%'},
+                    {field:'amount',title:'数量',width:'5%'},
+                    {field:'totalMoney',title:'总金额',width:'10%'},
                     {field:'totalDou',title:'总欣豆',width:'10%'},
-                    {field:'paytime',title:'支付时间',width:'10%',formatter: formatDateStr},
-                    {field:'status',title:'状态',width:'8%',
+                    {field:'addtime',title:'下单时间',width:'15%',formatter: formatDateStr},
+                    {field:'paytime',title:'支付时间',width:'15%',formatter: formatDateStr},
+                    {field:'status',title:'状态',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='0'){return '待支付'}
                             else if(value=="1"){return '已支付'}

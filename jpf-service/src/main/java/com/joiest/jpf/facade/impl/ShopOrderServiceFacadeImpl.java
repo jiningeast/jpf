@@ -90,7 +90,7 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         }
         GetShopOrderResponse response = new GetShopOrderResponse();
         response.setList(infoList);
-        int count = payShopOrderCustomMapper.countByExample(example);
+        int count = payShopOrderCustomMapper.countByExampleList(example);
         response.setCount(count);
         return response;
     }
@@ -106,7 +106,10 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单编号不能为空");
         }
-        PayShopOrderCustom payShopOrderCustom = payShopOrderCustomMapper.selectOrderAll(orderNo);
+        PayShopOrderExample exampleall = new PayShopOrderExample();
+        PayShopOrderExample.Criteria cll=exampleall.createCriteria();
+        cll.andOrderNoEqualTo(orderNo);
+        PayShopOrderCustom payShopOrderCustom = payShopOrderCustomMapper.selectOrderAll(exampleall);
 
         if(payShopOrderCustom==null){
 

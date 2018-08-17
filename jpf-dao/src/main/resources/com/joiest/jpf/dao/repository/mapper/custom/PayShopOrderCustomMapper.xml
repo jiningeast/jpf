@@ -464,6 +464,18 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
+  <select id="countByExampleList" parameterType="com.joiest.jpf.common.po.PayShopOrderExample" resultType="java.lang.Integer">
+
+    select count(*) from pay_shop_order
+    LEFT JOIN  pay_shop_product_info b ON  a.product_info_id=b.id
+    LEFT  JOIN   pay_shop_customer c ON a.customer_id=c.id
+    LEFT JOIN pay_shop_product d ON  a.product_id=d.id
+
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       @mbggenerated
