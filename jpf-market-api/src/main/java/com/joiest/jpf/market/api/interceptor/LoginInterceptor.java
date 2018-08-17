@@ -82,6 +82,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             {
                 return super.preHandle(request, response, handler);
             }
+            logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+request.getContextPath());
             response.sendRedirect(request.getContextPath() + "/nologin/userIndex");
 //            response.sendError(401);
             return false;
