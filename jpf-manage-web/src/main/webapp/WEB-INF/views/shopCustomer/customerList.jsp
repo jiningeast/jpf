@@ -116,11 +116,11 @@
                             return  "<a onclick='goActive("+row['id']+","+row['phone']+","+row['dou']+")'>"+value+" </a>";
                         }
                     },
-                    {field:'idno',title:'身份证号码',width:'15%'},
+                    // {field:'idno',title:'身份证号码',width:'15%'},
                     {field:'nickname',title:'微信昵称',width:'8%'},
                     {field:'dou',title:'欣豆数量',width:'10%'},
                     // {field:'companyId',title:'所属公司id',width:'10%'},
-                    {field:'companyName',title:'注册所属公司',width:'15%'},
+                    // {field:'companyName',title:'注册所属公司',width:'15%'},
                     {field:'status',title:'登录状态',width:'8%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '正常'}
