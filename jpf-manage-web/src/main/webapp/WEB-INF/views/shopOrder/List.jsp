@@ -117,7 +117,7 @@
                     {field:'id',title:'ID',width:'3%'},
                     {field:'orderNo',title:'订单号',width:'10%',
                         formatter : function(value,row,index){
-                            return  "<a onclick='goActiveOrder("+row['orderNo']+")'>"+value+" </a>";
+                            return  "<a onclick=\"goActiveOrder('"+value+\")\">"+value+" </a>";
                         }
                     },
                     {field:'addtime',title:'下单时间',width:'10%',formatter: formatDateStr},
