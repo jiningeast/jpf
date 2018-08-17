@@ -145,7 +145,7 @@ public class UserInfoController {
     //判断用户是否登录
     private Map<String,String> userIsLogin(String token)
     {
-
+        logger.info("判断用户是否登录 start");
         Map<String,String> resultMap = new HashMap<>();
         String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(uid_encrypt)) {
@@ -173,7 +173,6 @@ public class UserInfoController {
             logger.info("未登录返回："+resultMap);
             return resultMap;
         }
-
     }
 
     /**
