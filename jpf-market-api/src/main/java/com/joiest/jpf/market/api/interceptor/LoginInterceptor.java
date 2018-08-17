@@ -77,6 +77,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return super.preHandle(request, response, handler);
         } else if( !NOTLOGINURL.contains(requestUri) ) {
             Boolean isLogin = userIsLogin(Token);
+            logger.info("islogin="+isLogin);
             if ( isLogin )
             {
                 return super.preHandle(request, response, handler);
