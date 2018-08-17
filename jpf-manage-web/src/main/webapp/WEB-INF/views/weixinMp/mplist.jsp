@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>代理公司管理</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
+
     <script>
         $(function() {
             $('#infoDiv').window({
@@ -13,9 +14,26 @@
                 width:'80%',
                 height:'500px',
                 closed:true,
-                modal:true
+                modal:true,
+            //maximized:true,//弹出窗口最大化
             });
             var toolbar = [
+                {
+                    text : '自定义菜单',
+                    iconCls : 'icon-save',
+                    id:"customMenue",
+                    /*handler : function(){
+
+                        /!*var rows = $('#dg').datagrid('getSelections');
+                        if (rows.length != 1) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return +rows[0].id
+                        }*!/
+                        window.open('weixinMp/customMenu?id=1');
+                       // location.href ='weixinMp/customMenu?id=1';
+                        //$("#infoDiv").window("open").window('refresh', '../weixinMp/customMenu?id=1').window('setTitle','自定义菜单管理');
+                    }*/
+                },
                 {
                     text : '新增',
                     iconCls : 'icon-add',
@@ -83,6 +101,8 @@
                     $('#searchForm').form('reset');
                 }
             });
+
+
         });
 
         $(window).resize(function() {
@@ -147,4 +167,97 @@
 <div id="infoDiv"></div>
 <div id="edit"></div>
 </body>
+<script type="text/javascript" src="${basePath}/resources/js/dialog.js"> </script>
+<%--
+<script type="text/javascript" src="${basePath}/resources/easyui144/outlook.js?ts=234"> </script>
+--%>
+
+<script>
+    function addTab(subtitle, url, icon) {
+
+        if (!parent.$('#tabs').tabs('exists', subtitle)) {
+
+            parent.$('#tabs').tabs('add', {
+                title : subtitle,
+                content : createFrame(url),
+                closable : true,
+                icon : icon
+            });
+
+        } else {
+
+            parent.$('#tabs').tabs('select', subtitle);
+            parent.$('#mm-tabupdate').click();
+        }
+        //alert("aaa");
+        parent.$('#tabs').tabs('getSelected').css("overflow-y","hidden");
+        var width = parent.$("div[name='formDiv']").css("width") - 10;
+        parent.$("div[name='formDiv']").css("width", width);
+
+        tabClose();
+    }
+    function tabClose() {
+
+        /* 双击关闭TAB选项卡 */
+        parent.$(".tabs-inner").dblclick(function() {
+            var subtitle = parent.$(this).children(".tabs-closable").text();
+            parent.$('#tabs').tabs('close', subtitle);
+        });
+        /* 为选项卡绑定右键 */
+        parent.$(".tabs-inner").bind('contextmenu', function(e) {
+            parent.$('#mm').menu('show', {
+                left : e.pageX,
+                top : e.pageY
+            });
+            var subtitle = parent.$(this).children(".tabs-closable").text();
+            parent.$('#mm').data("currtab", subtitle);
+            parent.$('#tabs').tabs('select', subtitle);
+            return false;
+        });
+    }
+    function createFrame(url) {
+
+        var s = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+        return s;
+    }
+    $(function(){
+
+        $(document).on("click","#customMenue",function () {
+
+            var tabTitle = "自定义菜单";
+            var url = 'weixinMp/customMenu?id=1';
+            var icon = "icon icon-nav";//getIcon(menuid, icon);
+            addTab(tabTitle, url, icon);
+            //$('#wnav li div').removeClass("selected");
+            //$(this).parent().addClass("selected");
+            /*console.dir(11111111)
+
+            var remarkDialog = dialog({
+                title: '自定义菜单',
+                width: 650,
+                height: 600,
+            })//.showModal();
+
+            $.ajax({
+                type:"get",
+                url:"../weixinMp/customMenu?id=1",
+                dataType:"json",
+                data:{"a":"234"},
+                success:function(re){
+                    console.dir(re);
+                    console.dir(2222222222222222)
+
+                   remarkDialog.content(re).show();
+                },
+                error:function(er,co,rt){
+                    console.dir(er);
+                    console.dir(co);
+                    console.dir(rt);
+                    console.dir(44444444444);
+                }
+
+            })*/
+        })
+    })
+</script>
 </html>
