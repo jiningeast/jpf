@@ -10,6 +10,8 @@ import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -56,6 +58,9 @@ public class UserInfoController {
     private String uid;
 
     private CloudCompanyStaffInfo userInfo;
+
+    private static final Logger logger = LogManager.getLogger(UserInfoController.class);
+
     //登录
     @RequestMapping("/login")
     @ResponseBody
@@ -165,6 +170,7 @@ public class UserInfoController {
         } else {
             resultMap.put("0",JpfInterfaceErrorInfo.NOTlOGIN.getCode());
             resultMap.put("1",JpfInterfaceErrorInfo.NOTlOGIN.getDesc());
+            logger.info("未登录返回："+resultMap);
             return resultMap;
         }
 
