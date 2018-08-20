@@ -172,7 +172,7 @@ public class CustomController {
 
         String logFileName = "customBindMobile";
 
-        Map<String,String> responseSmsMap = SmsUtils.send(mobile,content,logFileName);
+        Map<String,String> responseSmsMap = SmsUtils.send(mobile,content,logFileName,"xinxiang");
 
         if(responseSmsMap == null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "短信通道异常，请稍后重试", null);

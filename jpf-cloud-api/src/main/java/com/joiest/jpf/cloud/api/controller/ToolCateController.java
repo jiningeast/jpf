@@ -1,35 +1,29 @@
 package com.joiest.jpf.cloud.api.controller;
 
-import com.aliyun.oss.OSSClient;
 import com.joiest.jpf.cloud.api.util.BankCheck;
-import com.joiest.jpf.cloud.api.util.ExcelDealUtils;
 import com.joiest.jpf.cloud.api.util.IdentAuth;
 import com.joiest.jpf.cloud.api.util.MwSmsUtils;
-import com.joiest.jpf.common.dto.YjResponseDto;
+import com.joiest.jpf.cloud.api.util.XinxiangMwSmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.dto.OrderRequest;
-import com.joiest.jpf.dto.OrderResponse;
-import com.joiest.jpf.entity.*;
+import com.joiest.jpf.entity.CloudBankcheckInfo;
+import com.joiest.jpf.entity.CloudIdcardInfo;
+import com.joiest.jpf.entity.CloudIdenauthInfo;
+import com.joiest.jpf.entity.MwmultSmsInfo;
 import com.joiest.jpf.facade.CloudBankcheckServiceFacade;
 import com.joiest.jpf.facade.CloudIdcardServiceFacade;
 import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
-import com.joiest.jpf.facade.OrderServiceFacade;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONString;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import net.sf.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.InetAddress;
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -415,6 +409,10 @@ public class ToolCateController {
         String mobile = request.getParameter("mobile");
         String content = request.getParameter("content");
         String dateTime = request.getParameter("dateTime");
+        String accountType = "";
+        if ( StringUtils.isNotBlank(request.getParameter("accountType")) ){
+            accountType = request.getParameter("accountType");
+        }
         String sign = request.getParameter("sign");
 
         JSONObject json = new JSONObject();
@@ -452,8 +450,13 @@ public class ToolCateController {
             return json;
         }
         try{
-            
-            int result = new MwSmsUtils().sendSms(mobile, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            int result;
+            if ( accountType.equals("xinxiang") ){
+                result = new XinxiangMwSmsUtils().sendSms(mobile, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            }else{
+                result = new MwSmsUtils().sendSms(mobile, content);//toolCateServiceFacade.sendSms(mobile, content);//短信息发送接口（相同内容群发，可自定义流水号）POST请求。
+            }
+
             if(result==0){//返回值为0，代表成功
 
                 json.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
