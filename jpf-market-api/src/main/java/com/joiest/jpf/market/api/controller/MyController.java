@@ -40,7 +40,14 @@ public class MyController {
 
     @RequestMapping("/index")
     @ResponseBody
-    public String index(){
+    public String index(HttpServletRequest request){
+        String token = request.getHeader("Token");
+        String openId_encrypt = redisCustomServiceFacade.get(com.joiest.jpf.market.api.controller.ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(openId_encrypt)) {
+            openId = AESUtils.decrypt(openId_encrypt, com.joiest.jpf.market.api.controller.ConfigUtil.getValue("AES_KEY"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
+        }
         int count = shopOrderInterfaceServiceFacade.getOrdersCount(uid);
 
         Map<String,Object> responseMap = new HashMap<>();
@@ -64,17 +71,5 @@ public class MyController {
         responseMap.put("servicePeriod","9：00-18：00 工作日");
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), responseMap);
-    }
-
-    @ModelAttribute
-    public void beforAction(HttpServletRequest request)
-    {
-        String token = request.getHeader("Token");
-        String openId_encrypt = redisCustomServiceFacade.get(com.joiest.jpf.market.api.controller.ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(openId_encrypt)) {
-            openId = AESUtils.decrypt(openId_encrypt, com.joiest.jpf.market.api.controller.ConfigUtil.getValue("AES_KEY"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
-            uid = userInfo.getId();
-        }
     }
 }
