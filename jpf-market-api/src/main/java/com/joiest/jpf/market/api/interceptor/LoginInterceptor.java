@@ -1,6 +1,7 @@
 package com.joiest.jpf.market.api.interceptor;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
@@ -92,7 +93,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String noLogin(){
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
+        throw new JpfInterfaceException(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc());
+//        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
     }
 
     private Boolean userIsLogin(String token)
