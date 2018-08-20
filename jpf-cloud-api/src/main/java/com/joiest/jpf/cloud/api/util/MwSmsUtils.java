@@ -49,8 +49,14 @@ public class MwSmsUtils {
 
             String result = null;//存放解析后的返回值
 
+
             param.setUserId(ConfigUtil.getValue("MW_USERID"));//设置账号
             param.setPassword(ConfigUtil.getValue("MW_PASSWORD"));//设置密码
+
+
+            //param.setUserId(ConfigUtil.getValue("XINXIANG_MW_USERID"));//设置账号
+            //param.setPassword(ConfigUtil.getValue("XINXIANG_MW_PASSWORD"));//设置密码
+
             param.setPszMobis(strMobiles);//设置手机号码
             param.setPszMsg(strMessage);//设置短信内容
             param.setIMobiCount(String.valueOf(strMobiles.split(",").length));//设置手机号码个数
@@ -58,6 +64,9 @@ public class MwSmsUtils {
             param.setMsgId(strUserMsgId);//设置流水号
 
             Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("MW_MONGATESENDSUBMITURL"));//调用底层POST方法提交
+
+            //Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("XINXIANG_MW_MONGATESENDSUBMITURL"));//调用底层POST方法提交
+
             //请求返回值不为空，则解析返回值
             if(Message != null&& Message != "") {
 
@@ -101,11 +110,11 @@ public class MwSmsUtils {
     public int SendMultixSms(List<MwmultSmsInfo> MultixMt)
     {
         int returnInt=-200;
+        String Message = null;
+        MwSmsInfo param = new MwSmsInfo();
         try {
             String result = null;
             StringBuffer multixmt =new StringBuffer();//批量请求包字符串
-
-            MwSmsInfo param = new MwSmsInfo();
             param.setUserId(ConfigUtil.getValue("MW_USERID"));//设置账号
             param.setPassword(ConfigUtil.getValue("MW_PASSWORD"));//设置密码
 
@@ -122,7 +131,7 @@ public class MwSmsUtils {
             String Multixmt = multixmt.substring(0,multixmt.length()-1);//截取最后一个逗号
             param.setMultixmt(Multixmt);//设置批量请求包
 
-            String Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("MW_MONGATEMULTIXSENDURL"));//调用底层POST方法提交
+            Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("MW_MONGATEMULTIXSENDURL"));//调用底层POST方法提交
             //请求返回值不为空，则解析返回值
             if(Message != null&& Message != "")
             {
@@ -146,6 +155,17 @@ public class MwSmsUtils {
             returnInt=-200;
             e.printStackTrace();//异常处理
         }
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址：" + ConfigUtil.getValue("MW_MONGATEMULTIXSENDURL"));
+        sbf.append("\n接口参数：" + JSONObject.fromObject(param));
+        sbf.append("\n回调信息：" + Message);
+        String fileName = "MwSmslog";
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
         return returnInt;//返回返回值
     }
 }

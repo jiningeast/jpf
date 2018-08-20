@@ -99,7 +99,7 @@ public class BankCheck {
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sbf.append("\n\nTime:" + myfmt.format(date));
-        sbf.append("\n请求地址：" + BankHost+BankThreePath);
+        sbf.append("\n请求地址：" + BankHost+BankFourPath);
         sbf.append("\n接口参数headers：" + JSONObject.fromObject(headers));
         sbf.append("\n接口业务参数：" + JSONObject.fromObject(bankMap));
         sbf.append("\n回调ContentType：" + toolCateResponse.getContentType());

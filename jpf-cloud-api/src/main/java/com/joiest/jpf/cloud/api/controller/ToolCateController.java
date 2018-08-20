@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -117,6 +118,18 @@ public class ToolCateController {
 
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址："+request.getRequestURL().toString());
+        sbf.append("\n接口参数：" + respos+"&sign="+sign);
+        sbf.append("\n生成签名：" + selfSign);
+        String fileName = "IdenAuthlog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
 
         if(!selfSign.equals(sign)){
 
@@ -232,6 +245,17 @@ public class ToolCateController {
 
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址："+request.getRequestURL().toString());
+        sbf.append("\n接口参数：" + respos+"&sign="+sign);
+        sbf.append("\n生成签名：" + selfSign);
+        String fileName = "BankFourCheckLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
         if(!selfSign.equals(sign)){
 
             json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
@@ -275,6 +299,17 @@ public class ToolCateController {
 
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址："+request.getRequestURL().toString());
+        sbf.append("\n接口参数：" + respos+"&sign="+sign);
+        sbf.append("\n生成签名：" + selfSign);
+        String fileName = "BankThreeCheckLog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
         if(!selfSign.equals(sign)){
 
             json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
@@ -400,6 +435,16 @@ public class ToolCateController {
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
 
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址："+request.getRequestURL().toString());
+        sbf.append("\n接口参数：" + respos+"&sign="+sign);
+        sbf.append("\n生成签名：" + selfSign);
+        String fileName = "MwSmslog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
         if(!selfSign.equals(sign)){
 
             json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
@@ -453,6 +498,19 @@ public class ToolCateController {
 
         String respos = ToolUtils.mapToUrl(treeMap);
         String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt.format(date));
+        sbf.append("\n请求地址："+request.getRequestURL().toString());
+        sbf.append("\n接口参数：" + respos+"&sign="+sign);
+        sbf.append("\n生成签名：" + selfSign);
+        String fileName = "MwSmslog";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-cloud-api/log/", fileName,true);
+
         if(!selfSign.equals(sign)){
 
             json.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
