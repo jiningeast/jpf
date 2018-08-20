@@ -426,6 +426,7 @@ public class ToolCateController {
         map.put("mobile",mobile);
         map.put("content",content);
         map.put("dateTime",dateTime);
+        map.put("accountType",accountType);
 
         Map<String,Object> treeMap = new TreeMap<>();
         treeMap.putAll(map);
