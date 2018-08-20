@@ -10,6 +10,8 @@ import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -56,6 +58,9 @@ public class UserInfoController {
     private String uid;
 
     private CloudCompanyStaffInfo userInfo;
+
+    private static final Logger logger = LogManager.getLogger(UserInfoController.class);
+
     //登录
     @RequestMapping("/login")
     @ResponseBody
@@ -140,7 +145,7 @@ public class UserInfoController {
     //判断用户是否登录
     private Map<String,String> userIsLogin(String token)
     {
-
+        logger.info("判断用户是否登录 start");
         Map<String,String> resultMap = new HashMap<>();
         String uid_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("CLOUD_USER_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(uid_encrypt)) {
@@ -165,9 +170,9 @@ public class UserInfoController {
         } else {
             resultMap.put("0",JpfInterfaceErrorInfo.NOTlOGIN.getCode());
             resultMap.put("1",JpfInterfaceErrorInfo.NOTlOGIN.getDesc());
+            logger.info("未登录返回："+resultMap);
             return resultMap;
         }
-
     }
 
     /**
@@ -803,6 +808,7 @@ public class UserInfoController {
     @ModelAttribute
     public void beforeAction(HttpServletRequest httpRequest, HttpServletResponse response)
     {
+        logger.info("userinfo的beforeAction");
         // 跨域
         String originHeader = httpRequest.getHeader("Origin");
         /*response.setHeader("Access-Control-Allow-Headers", "accept, content-type");

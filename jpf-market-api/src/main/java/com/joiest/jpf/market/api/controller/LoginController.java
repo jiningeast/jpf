@@ -2,6 +2,8 @@ package com.joiest.jpf.market.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.ToolUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/nologin")
 public class LoginController {
 
+    private static final Logger logger = LogManager.getLogger(LoginController.class);
+
     /**
      * 个人登录判断
      *
@@ -24,6 +28,7 @@ public class LoginController {
     {
 //        response.setStatus(401);
 //        response.setHeader("Authorization", "Basic Realm=\"test\"");
+        logger.info("============================================userIndex=======================================");
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
     }
 

@@ -1,20 +1,18 @@
 package com.joiest.jpf.market.api.interceptor;
 
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.AESUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
+import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.market.api.controller.ConfigUtil;
-import com.joiest.jpf.common.util.AESUtils;
-import com.joiest.jpf.entity.CloudCompanyStaffInfo;
-import com.joiest.jpf.entity.CloudEmployeeInfo;
-import com.joiest.jpf.facade.CloudCompanyStaffServiceFacade;
-import com.joiest.jpf.facade.CloudEmployeeServiceFacade;
-import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.market.api.util.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -22,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LogManager.getLogger(LoginInterceptor.class);
@@ -46,6 +43,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
+    @ResponseBody
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         logger.info("===========LoginInterceptor preHandle===========");
@@ -67,7 +65,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         } else {
             accessLink = requestURI.substring(1, requestURI.length());
         }
-        logger.info("userName:{}---------访问主机33333333333333地址:{}------------------访问功能链222222222222222接地址:{}------------------", request.getRemoteHost(), accessLink);
+        logger.info("userName:{}---------访问主机地址:{}------------------访问功能链接地址:{}------------------", request.getRemoteHost(), accessLink);
         String uri = request.getRequestURI();
         logger.info("request path : {}", uri);
         String requestUri = uri.replace( contextPath, "");
@@ -81,7 +79,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             {
                 return super.preHandle(request, response, handler);
             }
-            response.sendRedirect(request.getContextPath() + "/nologin/userIndex");
+            response.sendRedirect(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
 //            response.sendError(401);
             return false;
         } else {

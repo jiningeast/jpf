@@ -26,6 +26,7 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
     /**
      * 订单列表---后台
      */
+    @Override
     public GetShopOrderResponse getList(GetShopOrderRequest request)
     {
         if ( request.getRows() <= 0 )

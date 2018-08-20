@@ -118,7 +118,7 @@ public class ShopCouponActiveInterfaceServiceFacadeImpl implements ShopCouponAct
         PayShopCouponActiveExample example = new PayShopCouponActiveExample();
         example.setPageNo(Long.parseLong(request.getPage()));
         example.setPageSize(Long.parseLong(request.getPageSize()));
-        example.setOrderByClause("addtime DESC");
+        example.setOrderByClause("id DESC");
         PayShopCouponActiveExample.Criteria c = example.createCriteria();
         c.andCustomerIdEqualTo(request.getUid());
         if ( StringUtils.isNotBlank(request.getType()) )
