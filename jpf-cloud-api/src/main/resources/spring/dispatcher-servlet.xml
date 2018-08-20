@@ -39,6 +39,7 @@
     <!-- 静态资源的处理 -->
     <mvc:resources location="/resources/" mapping="/resources/**"/>
 	<mvc:resources location="/" mapping="/MP_verify_Yd64CsFHn4rtgkmx.txt"/>
+	<mvc:resources location="/" mapping="/MP_verify_zN6EEND31EpeHxXN.txt"/>
 	<!--<mvc:resources location="/" mapping="/**.html"/>-->
 
 	<mvc:interceptors>
