@@ -1,6 +1,8 @@
 package com.joiest.jpf.market.api.util;
 
 import com.joiest.jpf.common.util.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +11,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class SmsUtils {
+
+    private static final Logger logger = LogManager.getLogger(SmsUtils.class);
 
     public static Map<String,String> send(String mobile,String content,String logFileName){
 
@@ -86,7 +90,7 @@ public class SmsUtils {
 
         String requestUrl = ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi";//请求Url
         String requestParam = ToolUtils.mapToUrl(map);//请求参数
-
+        logger.info("------------------------------------------"+map);
         String response = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi",map);
 
         //json---转换代码---

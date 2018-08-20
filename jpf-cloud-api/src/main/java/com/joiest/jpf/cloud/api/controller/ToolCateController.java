@@ -16,6 +16,8 @@ import com.joiest.jpf.facade.CloudIdenauthServiceFacade;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,8 @@ public class ToolCateController {
 
     @Autowired
     private CloudBankcheckServiceFacade cloudBankcheckServiceFacade;
+
+    private static final Logger logger = LogManager.getLogger(ToolCateController.class);
 
     /**
      * 身份证OCR识别
@@ -427,7 +431,7 @@ public class ToolCateController {
         map.put("content",content);
         map.put("dateTime",dateTime);
         map.put("accountType",accountType);
-
+        logger.info("==================================================="+map);
         Map<String,Object> treeMap = new TreeMap<>();
         treeMap.putAll(map);
 
