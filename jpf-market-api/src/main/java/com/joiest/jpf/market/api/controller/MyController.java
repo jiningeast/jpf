@@ -48,9 +48,20 @@ public class MyController {
         responseMap.put("dou",userInfo.getDou());
         responseMap.put("avatar",userInfo.getAvatar());
         responseMap.put("ordersCount",count);
-        responseMap.put("customerServicePhone","400-000-0000");
+        responseMap.put("customerServicePhone","010-67077608");
         responseMap.put("complainEmail","service@xinxiangfuwu.com");
-        responseMap.put("servicePeriod","周一至周日 9:00-18:00");
+        responseMap.put("servicePeriod","9：00-18：00 工作日");
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), responseMap);
+    }
+
+    @RequestMapping("/welcome")
+    @ResponseBody
+    public String welcome(){
+        Map<String,Object> responseMap = new HashMap<>();
+        responseMap.put("customerServicePhone","010-67077608");
+        responseMap.put("complainEmail","service@xinxiangfuwu.com");
+        responseMap.put("servicePeriod","9：00-18：00 工作日");
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), responseMap);
     }

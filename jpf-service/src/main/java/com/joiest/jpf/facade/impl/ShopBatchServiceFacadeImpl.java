@@ -278,7 +278,13 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         String filepathArr[] = StringUtils.split(filepath,'/');
         String filename = filepathArr[filepathArr.length-1];    // 文件名.xlsx
         filepath = ConfigUtil.getValue("EXCEL_PATH") + filename;
-        String html = "附件中的压缩包包含为您生成的批量激活码，该压缩包为加密压缩包，密码已发送至贵公司在我平台注册的企业联系人的手机号中，请注意查收";//可以使用标签拼装
+        // 邮件内容
+//        String html = "附件中的压缩包包含为您生成的批量激活码，该压缩包为加密压缩包，密码已发送至贵公司在我平台注册的企业联系人的手机号中，请注意查收";//可以使用标签拼装
+        String html = "<p>尊敬的客户，您好：</p>" +
+                "<p style='text-index:2em;'>附件打包文件是您的欣券详单，批次号为【" + payShopBatch.getBatchNo() + "】。请您注意查收您在本公司预留的手机号码，并使用手机短信秘钥进行文件解密。</p>" +
+                "<p style='text-index:2em; color:red;'>【请您知晓，您应妥善保管欣券详单及手机短信秘钥信息。因泄露信息导致的损失需由您自行承担】</p>" +
+                "<p style='text-align:right;'>此文件为系统自动发送，无需回复。</p>" +
+                "<p style='text-align:right;'>欣享爱生活</p>";
         Boolean sendStatus =  SendMailUtil.sendMultipleEmail(subject,sendName,recipients,recipientsName,filepath,filename,html);
         if ( !sendStatus ){
             // 邮件发送失败

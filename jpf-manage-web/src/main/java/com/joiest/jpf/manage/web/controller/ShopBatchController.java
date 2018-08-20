@@ -183,7 +183,9 @@ public class ShopBatchController {
         if ( emailRes == 1 ){
             // email发送成功则发送短信
             String mobile = shopCompanyInfo.getReceivePhone();
-            String content = "已将批次号为" + shopBatchInfo.getBatchNo() + "的欣券激活码发送至您的邮箱，附件压缩包的密码是：" + shopBatchInfo.getZipPassword();
+            // 短信内容
+//            String content = "已将批次号为" + shopBatchInfo.getBatchNo() + "的欣券激活码发送至您的邮箱，附件压缩包的密码是：" + shopBatchInfo.getZipPassword();
+            String content = "尊敬的客户您好，批次号为【" + shopBatchInfo.getBatchNo() + "】的解压密码为【"+ shopBatchInfo.getZipPassword() +"】，请您妥善保管";
             Map<String,String> smsResMap = SmsUtils.send(mobile,content);
             Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
             if ( responseMap.get("code").equals("10000") ){

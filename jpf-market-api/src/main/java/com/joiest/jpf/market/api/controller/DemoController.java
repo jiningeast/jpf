@@ -26,20 +26,41 @@ public class DemoController {
     @RequestMapping("/chargePhone")
     @ResponseBody
     public String chargePhone(){
-        String url = "http://apitest.ofpay.com/onlineorder.do";
+        int testEnv = 1;
+        String url = "";
         Map<String,Object> requestMap = new LinkedHashMap<>();
-        requestMap.put("userid","A08566");      // 商户号
-        requestMap.put("userpws","4c625b7861a92c7971cd2029c2fd3c4a");   // 商户密码
-        requestMap.put("cardid","140101");      // 快充140101，慢充170101
-        requestMap.put("cardnum","50");         // 充值金额
-        // requestMap.put("mctype","48");          // 如果是慢充商品必须传如48 表示48小时到账
-        requestMap.put("sporder_id", ToolUtils.createOrderid());
-        requestMap.put("sporder_time", DateUtils.format(new Date(),DateUtils.Date_FORMAT_YMDHMS));
-        requestMap.put("game_userid","15810063151");       // 手机号码
-        requestMap.put("md5_str",getPhoneSign(requestMap));       // 签名串
-        requestMap.put("ret_url","http://www.baidu.com");    // 返回地址
-        requestMap.put("version","6.0");
-        requestMap.put("buyNum","5");
+
+        if ( testEnv == 1 ){
+            // 测试环境
+            url = "http://apitest.ofpay.com/onlineorder.do";
+            requestMap.put("userid","A08566");      // 商户号
+            requestMap.put("userpws","4c625b7861a92c7971cd2029c2fd3c4a");   // 商户密码
+            requestMap.put("cardid","140101");      // 快充140101，慢充170101
+            requestMap.put("cardnum","50");         // 充值金额
+            // requestMap.put("mctype","48");          // 如果是慢充商品必须传如48 表示48小时到账
+            requestMap.put("sporder_id", ToolUtils.createOrderid());
+            requestMap.put("sporder_time", DateUtils.format(new Date(),DateUtils.Date_FORMAT_YMDHMS));
+            requestMap.put("game_userid","15810063151");       // 手机号码
+            requestMap.put("md5_str",getPhoneSign(requestMap));       // 签名串
+            requestMap.put("ret_url","http://www.baidu.com");    // 返回地址
+            requestMap.put("version","6.0");
+            requestMap.put("buyNum","5");
+        }else{
+            // 正式环境
+            url = "http://api2.ofpay.com/onlineorder.do";
+            requestMap.put("userid","A1408311");      // 商户号
+            requestMap.put("userpws",Md5Encrypt.md5("Xinxiang#13579").toLowerCase());   // 商户密码
+            requestMap.put("cardid","140101");      // 快充140101，慢充170101
+            requestMap.put("cardnum","100");         // 充值金额
+            // requestMap.put("mctype","48");          // 如果是慢充商品必须传如48 表示48小时到账
+            requestMap.put("sporder_id", ToolUtils.createOrderid());
+            requestMap.put("sporder_time", DateUtils.format(new Date(),DateUtils.Date_FORMAT_YMDHMS));
+            requestMap.put("game_userid","15810063151");       // 手机号码
+            requestMap.put("md5_str",getPhoneSign(requestMap));       // 签名串
+            requestMap.put("ret_url","http://www.baidu.com");    // 返回地址
+            requestMap.put("version","6.0");
+            requestMap.put("buyNum","5");
+        }
 
         return OkHttpUtils.postForm(url,requestMap);
     }
