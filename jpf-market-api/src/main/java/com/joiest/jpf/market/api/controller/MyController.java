@@ -40,24 +40,7 @@ public class MyController {
 
     @RequestMapping("/index")
     @ResponseBody
-    public String index(){
-        int count = shopOrderInterfaceServiceFacade.getOrdersCount(uid);
-
-        Map<String,Object> responseMap = new HashMap<>();
-        responseMap.put("phone",userInfo.getPhone());
-        responseMap.put("dou",userInfo.getDou());
-        responseMap.put("avatar",userInfo.getAvatar());
-        responseMap.put("ordersCount",count);
-        responseMap.put("customerServicePhone","400-000-0000");
-        responseMap.put("complainEmail","service@xinxiangfuwu.com");
-        responseMap.put("servicePeriod","周一至周日 9:00-18:00");
-
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), responseMap);
-    }
-
-    @ModelAttribute
-    public void beforAction(HttpServletRequest request)
-    {
+    public String index(HttpServletRequest request){
         String token = request.getHeader("Token");
         String openId_encrypt = redisCustomServiceFacade.get(com.joiest.jpf.market.api.controller.ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
         if (org.apache.commons.lang3.StringUtils.isNotBlank(openId_encrypt)) {
@@ -65,5 +48,28 @@ public class MyController {
             userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
             uid = userInfo.getId();
         }
+        int count = shopOrderInterfaceServiceFacade.getOrdersCount(uid);
+
+        Map<String,Object> responseMap = new HashMap<>();
+        responseMap.put("phone",userInfo.getPhone());
+        responseMap.put("dou",userInfo.getDou());
+        responseMap.put("avatar",userInfo.getAvatar());
+        responseMap.put("ordersCount",count);
+        responseMap.put("customerServicePhone","010-67077608");
+        responseMap.put("complainEmail","service@xinxiangfuwu.com");
+        responseMap.put("servicePeriod","9：00-18：00 工作日");
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), responseMap);
+    }
+
+    @RequestMapping("/welcome")
+    @ResponseBody
+    public String welcome(){
+        Map<String,Object> responseMap = new HashMap<>();
+        responseMap.put("customerServicePhone","010-67077608");
+        responseMap.put("complainEmail","service@xinxiangfuwu.com");
+        responseMap.put("servicePeriod","9：00-18：00 工作日");
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), responseMap);
     }
 }
