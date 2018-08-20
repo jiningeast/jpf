@@ -80,12 +80,17 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 return super.preHandle(request, response, handler);
             }
             logger.info(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
+            noLogin();
             response.sendRedirect(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
 //            response.sendError(401);
             return false;
         } else {
             return false;
         }
+    }
+
+    private String noLogin(){
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
     }
 
     private Boolean userIsLogin(String token)
