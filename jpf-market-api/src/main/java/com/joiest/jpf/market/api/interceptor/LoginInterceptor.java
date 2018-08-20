@@ -79,6 +79,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             {
                 return super.preHandle(request, response, handler);
             }
+            logger.info(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
             response.sendRedirect(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
 //            response.sendError(401);
             return false;
