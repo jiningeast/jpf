@@ -84,7 +84,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             /*response.setStatus(302);
             response.setHeader("location",ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");*/
 //            response.sendRedirect(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
-            System.out.println(request.getContextPath() + "/nologin/userIndex");
+            logger.info("3333333333333" + request.getContextPath() + "/nologin/userIndex");
             request.getRequestDispatcher("/nologin/userIndex").forward(request,response);
             return false;
         } else {
