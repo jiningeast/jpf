@@ -877,7 +877,7 @@ public class CloudTaskController {
             }*/
             if( content != "" ){
                 //发送短信
-                Map<String,String> retsult = SmsUtils.send(mobile,content);
+                Map<String,String> retsult = SmsUtils.send(mobile,content,"xinxiang");
                 if ( retsult == null ){
                     jpfResponseDto.setRetCode("0010");
                     jpfResponseDto.setRetMsg("触发短信接口失败，请检查");
