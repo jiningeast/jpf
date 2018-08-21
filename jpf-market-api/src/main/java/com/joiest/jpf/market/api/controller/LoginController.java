@@ -22,7 +22,7 @@ public class LoginController {
      * 个人登录判断
      *
      */
-    @RequestMapping(value = "userIndex", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "userIndex", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String userIndex(HttpServletResponse response, HttpServletRequest request)
     {
