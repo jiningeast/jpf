@@ -143,11 +143,11 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
                 payShopBatchCoupon.setCompanyId(shopBatchRequest.getCompanyId());
                 payShopBatchCoupon.setCompanyName(shopBatchRequest.getCompanyName());
                 payShopBatchCoupon.setCouponNo(createCouponNo());
-                String activeCode = getRandomString(32);
+                String activeCode = getRandomString(10);
                 while ( isActiveCodeExist(activeCode) ){
-                    activeCode = getRandomString(32);
+                    activeCode = getRandomString(10);
                 }
-                payShopBatchCoupon.setActiveCode(getRandomString(32));
+                payShopBatchCoupon.setActiveCode(getRandomString(10));
                 payShopBatchCoupon.setMoney(Integer.parseInt(single.get("money")));
                 // 根据兑换比例把面值兑换成豆
                 Double money = new Double(single.get("money"));

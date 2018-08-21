@@ -161,6 +161,7 @@
                 }
                 $("#batchDG").datagrid('reload');
                 $("#addWindow").window("close");
+                window.location.reload();
             },
             error:function() {
                 ajaxLoadEnd();
