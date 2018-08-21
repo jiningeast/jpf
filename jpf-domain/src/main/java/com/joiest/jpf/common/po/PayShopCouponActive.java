@@ -86,6 +86,11 @@ public class PayShopCouponActive implements Serializable {
     private String orderId;
 
     /**
+     * 消费或退款等对应的订单号
+     */
+    private String orderNo;
+
+    /**
      * 
      */
     private Date addtime;
@@ -225,6 +230,14 @@ public class PayShopCouponActive implements Serializable {
         this.orderId = orderId == null ? null : orderId.trim();
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -266,6 +279,7 @@ public class PayShopCouponActive implements Serializable {
         sb.append(", type=").append(type);
         sb.append(", expireTime=").append(expireTime);
         sb.append(", orderId=").append(orderId);
+        sb.append(", orderNo=").append(orderNo);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -304,6 +318,7 @@ public class PayShopCouponActive implements Serializable {
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
+            && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -331,6 +346,7 @@ public class PayShopCouponActive implements Serializable {
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
+        result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
