@@ -52,10 +52,10 @@ public class ofpayUtils {
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid", userid);       // 商户号
         requestMap.put("userpws", userpws);     // 商户密码
-        requestMap.put("phoneno", queryMap.get("phoneno") );     // 商户密码
-        requestMap.put("pervalue", queryMap.get("pervalue") );     // 商户密码
-        requestMap.put("mctype", "" );     // 商户密码
-        requestMap.put("version", version_phone );     // 商户密码
+        requestMap.put("phoneno", queryMap.get("phoneno") );        // 手机号码
+        requestMap.put("pervalue", queryMap.get("pervalue") );      // 面值
+//        requestMap.put("mctype", "" );
+        requestMap.put("version", version_phone );
 
         String requestParam = ToolUtils.mapToUrl(requestMap);   //请求参数
 
@@ -75,7 +75,7 @@ public class ofpayUtils {
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
         Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
-        resultMap.put("requestUrl", phone_requestUrl);
+        resultMap.put("requestUrl", phone_query);
         resultMap.put("requestParam", requestParam);
         return resultMap;
     }
@@ -178,7 +178,7 @@ public class ofpayUtils {
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
         Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
-        resultMap.put("requestUrl", phone_requestUrl);
+        resultMap.put("requestUrl", gas_query);
         resultMap.put("requestParam", requestParam);
         return resultMap;
     }
@@ -215,7 +215,7 @@ public class ofpayUtils {
         SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sbf.append("\n\nTime:" + myfmt1.format(date));
         sbf.append("\n充值类型:" + "油卡充值");
-        sbf.append("\n请求地址：" + phone_requestUrl);
+        sbf.append("\n请求地址：" + gas_requestUrl);
         sbf.append("\n接口参数：" + requestMap);
         sbf.append("\n回调信息：" + resultXml);
 
@@ -237,7 +237,7 @@ public class ofpayUtils {
 
         sbf.append("\n提交状态：" + orderStatus_cn + ";充值状态:" + rechargeStatus_cn);
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
-        map.put("requestUrl", phone_requestUrl);
+        map.put("requestUrl", gas_requestUrl);
         map.put("requestParam", requestParam);
         return map;
     }
