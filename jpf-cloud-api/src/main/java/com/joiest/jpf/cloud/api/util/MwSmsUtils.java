@@ -50,12 +50,12 @@ public class MwSmsUtils {
             String result = null;//存放解析后的返回值
 
 
-            param.setUserId(ConfigUtil.getValue("MW_USERID"));//设置账号
-            param.setPassword(ConfigUtil.getValue("MW_PASSWORD"));//设置密码
+            //param.setUserId(ConfigUtil.getValue("MW_USERID"));//设置账号
+            //param.setPassword(ConfigUtil.getValue("MW_PASSWORD"));//设置密码
 
 
-            //param.setUserId(ConfigUtil.getValue("XINXIANG_MW_USERID"));//设置账号
-            //param.setPassword(ConfigUtil.getValue("XINXIANG_MW_PASSWORD"));//设置密码
+            param.setUserId(ConfigUtil.getValue("XINXIANG_MW_USERID"));//设置账号
+            param.setPassword(ConfigUtil.getValue("XINXIANG_MW_PASSWORD"));//设置密码
 
             param.setPszMobis(strMobiles);//设置手机号码
             param.setPszMsg(strMessage);//设置短信内容
@@ -63,9 +63,9 @@ public class MwSmsUtils {
             param.setPszSubPort(strSubPort);//设置扩展子号
             param.setMsgId(strUserMsgId);//设置流水号
 
-            Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("MW_MONGATESENDSUBMITURL"));//调用底层POST方法提交
+            //Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("MW_MONGATESENDSUBMITURL"));//调用底层POST方法提交
 
-            //Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("XINXIANG_MW_MONGATESENDSUBMITURL"));//调用底层POST方法提交
+            Message = OkHttpUtils.executeMwPost(param, ConfigUtil.getValue("XINXIANG_MW_MONGATESENDSUBMITURL"));//调用底层POST方法提交
 
             //请求返回值不为空，则解析返回值
             if(Message != null&& Message != "") {

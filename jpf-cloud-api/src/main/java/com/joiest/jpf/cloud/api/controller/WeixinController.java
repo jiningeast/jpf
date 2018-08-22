@@ -318,7 +318,7 @@ public class WeixinController {
             if(webAccessToken.isEmpty()){
 
                 response.setStatus(302);
-                response.setHeader("location",responseurl+"#openid=");
+                response.setHeader("location",responseurl);
             }
             String openid = webAccessToken.get("openid").toString();
             logger.info("openid:"+openid);
