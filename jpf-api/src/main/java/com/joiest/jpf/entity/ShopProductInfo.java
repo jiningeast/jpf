@@ -21,12 +21,17 @@ public class ShopProductInfo {
     private String name;
 
     /**
+     * 商品编号
+     */
+    private String cardid;
+
+    /**
      * 商品图片
      */
     private String image;
 
     /**
-     * 金额
+     * 商品售价
      */
     private BigDecimal money;
 
@@ -112,6 +117,14 @@ public class ShopProductInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCardid() {
+        return cardid;
+    }
+
+    public void setCardid(String cardid) {
+        this.cardid = cardid;
     }
 
     public String getImage() {

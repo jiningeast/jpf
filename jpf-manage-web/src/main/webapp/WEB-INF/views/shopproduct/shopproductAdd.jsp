@@ -38,10 +38,11 @@
                         <td>
                             <input id="product_name" name="name" type="text" style="width:220px" class="easyui-textbox" value="" data-options="required:true"/>
                         </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
+                        <td style="text-align: right;background-color: #f1f1f1;">商品编号：</td>
                         <td>
-                            <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                            <input id="product_cardid" name="cardid" type="text" style="width:220px" class="easyui-textbox" value="" />
                         </td>
+
                         <%--<td style="text-align: right;background-color: #f1f1f1;">接口形式：</td>--%>
                         <%--<td>--%>
                             <%--<select id="stored_type" name="storedType" data-options="required:true" class="easyui-combobox" style="width:120px;">--%>
@@ -63,22 +64,24 @@
 
                     </tr>--%>
                     <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
+                        <td>
+                            <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                        </td>
                         <td style="text-align: right;background-color: #f1f1f1;">欣豆：</td>
                         <td>
                             <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
+                    </tr>
+                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
                         <td>
                             <input id="stored_safe" name="storedSafe" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
-                    </tr>
-                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">当前库存：</td>
                         <td>
                             <input id="stored" name="stored" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
-                        <td style="text-align: right;background-color: #f1f1f1;"></td>
-                        <td> </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品描述：</td>
