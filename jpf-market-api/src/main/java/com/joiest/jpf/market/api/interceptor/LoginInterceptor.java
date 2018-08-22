@@ -1,8 +1,10 @@
 package com.joiest.jpf.market.api.interceptor;
 
 import com.joiest.jpf.common.util.AESUtils;
+import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
+import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.market.api.controller.ConfigUtil;
 import com.joiest.jpf.market.api.util.ServletUtils;
@@ -22,11 +24,18 @@ import java.util.List;
 public class LoginInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LogManager.getLogger(LoginInterceptor.class);
 
+    private ShopCustomerInterfaceInfo userInfo;
+
+    private String openId;
+
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
 
     @Autowired
     private ShopCustomerInterfaceServiceFacade shopCustomerInterfaceServiceFacade;
+
+    @Autowired
+    private ShopCouponActiveInterfaceServiceFacade shopCouponActiveInterfaceServiceFacade;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
@@ -50,6 +59,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/custom/bind");        //绑定手机号
                 add("/custom/sendSms");     //绑定手机号
                 add("/nologin/userIndex");
+                add("/nologin/userNotBindCoupon");
                 add("/orders/ofpayNotifyUrl");
             }
         };
@@ -73,13 +83,20 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return super.preHandle(request, response, handler);
         } else if( !NOTLOGINURL.contains(requestUri) ) {
             Boolean isLogin = userIsLogin(Token);
-            if ( isLogin )
+            if ( !isLogin )
             {
-                return super.preHandle(request, response, handler);
+                logger.info("========跳转到未登录处理的方法地址: /nologin/userIndex");
+                request.getRequestDispatcher("/nologin/userIndex").forward(request,response);
+                return false;
             }
-            logger.info("========跳转到未登录处理的方法地址: /nologin/userIndex");
-            request.getRequestDispatcher("/nologin/userIndex").forward(request,response);
-            return false;
+            Boolean isBindCoupon = userIsBindCoupon();
+            if ( !isBindCoupon )
+            {
+                logger.info("========跳转到未绑定券的处理的方法地址: /nologin/userIndex");
+                request.getRequestDispatcher("/nologin/userNotBindCoupon").forward(request,response);
+                return false;
+            }
+            return super.preHandle(request, response, handler);
         } else {
             return false;
         }
@@ -87,8 +104,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     private Boolean userIsLogin(String token)
     {
-        String openId;
-        ShopCustomerInterfaceInfo userInfo;
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
         logger.info("========openId_encrypt : " + openId_encrypt);
         if (StringUtils.isNotBlank(openId_encrypt)) {
@@ -112,6 +127,19 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
+    private Boolean userIsBindCoupon()
+    {
+        if ( userInfo == null )
+        {
+            return false;
+        }
+        GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList(userInfo.getId());
+        if ( response == null || response.getList() == null)
+        {
+            return false;
+        }
+        return true;
+    }
 
 }
 

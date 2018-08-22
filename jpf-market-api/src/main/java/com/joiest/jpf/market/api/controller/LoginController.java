@@ -19,7 +19,6 @@ public class LoginController {
 
     /**
      * 个人登录判断
-     *
      */
     @RequestMapping(value = "userIndex", produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -27,6 +26,17 @@ public class LoginController {
     {
         logger.info("===============未登录处理的方法 start===============");
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
+    }
+
+    /**
+     * 个人登录判断
+     */
+    @RequestMapping(value = "userNotBindCoupon", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String userNotBindCoupon(HttpServletResponse response, HttpServletRequest request)
+    {
+        logger.info("===============未绑定券处理的方法 start===============");
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getCode(),JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getDesc(),null);
     }
 
 }
