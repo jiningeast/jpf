@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +25,7 @@ public class LoginController {
     @ResponseBody
     public String userIndex(HttpServletResponse response, HttpServletRequest request)
     {
-//        response.setStatus(401);
-//        response.setHeader("Authorization", "Basic Realm=\"test\"");
-        logger.info("============================================userIndex=======================================");
+        logger.info("===============未登录处理的方法 start===============");
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
     }
 

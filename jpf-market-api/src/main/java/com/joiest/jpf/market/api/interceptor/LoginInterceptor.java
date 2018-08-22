@@ -1,9 +1,6 @@
 package com.joiest.jpf.market.api.interceptor;
 
-import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
-import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.AESUtils;
-import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
@@ -71,7 +68,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         logger.info("request path : {}", uri);
         String requestUri = uri.replace( contextPath, "");
         String Token = request.getHeader("Token");
-        logger.info("token==========" + Token);
+        logger.info("========Token" + Token);
         if ( NOTLOGINURL.contains(requestUri) ) { // 不需要过滤的地址
             return super.preHandle(request, response, handler);
         } else if( !NOTLOGINURL.contains(requestUri) ) {
@@ -80,11 +77,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             {
                 return super.preHandle(request, response, handler);
             }
-            logger.info(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
-            /*response.setStatus(302);
-            response.setHeader("location",ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");*/
-//            response.sendRedirect(ConfigUtil.getValue("SHOP_API_URL") + "/nologin/userIndex");
-            logger.info("3333333333333" + request.getContextPath() + "/nologin/userIndex");
+            logger.info("========跳转到未登录处理的方法地址: /nologin/userIndex");
             request.getRequestDispatcher("/nologin/userIndex").forward(request,response);
             return false;
         } else {
@@ -92,23 +85,18 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
-    private String noLogin(){
-        throw new JpfInterfaceException(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc());
-//        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
-    }
-
     private Boolean userIsLogin(String token)
     {
         String openId;
         ShopCustomerInterfaceInfo userInfo;
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
-        logger.info("openId_encrypt : " + openId_encrypt);
+        logger.info("========openId_encrypt : " + openId_encrypt);
         if (StringUtils.isNotBlank(openId_encrypt)) {
-            logger.info("AES_KEY : " + ConfigUtil.getValue("AES_KEY"));
+            logger.info("========AES_KEY : " + ConfigUtil.getValue("AES_KEY"));
             openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
-            logger.info("openId : " + openId);
+            logger.info("========openId : " + openId);
             List<ShopCustomerInterfaceInfo> userinfoList = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
-            logger.info("userinfoList=================== : " + userinfoList);
+            logger.info("========userinfoList: " + userinfoList);
             if ( userinfoList == null || userinfoList.isEmpty() )
             {
                 return false;
@@ -119,7 +107,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             }
             return true;
         } else {
-            logger.info("openId_encrypt 22222222222: " + openId_encrypt);
+            logger.info("========openId_encrypt 为空: " + openId_encrypt);
             return false;
         }
     }
