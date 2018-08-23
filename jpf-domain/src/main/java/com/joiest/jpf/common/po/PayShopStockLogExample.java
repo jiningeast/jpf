@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -232,6 +233,136 @@ public class PayShopStockLogExample {
 
         public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdIsNull() {
+            addCriterion("stock_order_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdIsNotNull() {
+            addCriterion("stock_order_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdEqualTo(String value) {
+            addCriterion("stock_order_id =", value, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdNotEqualTo(String value) {
+            addCriterion("stock_order_id <>", value, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdGreaterThan(String value) {
+            addCriterion("stock_order_id >", value, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdGreaterThanOrEqualTo(String value) {
+            addCriterion("stock_order_id >=", value, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdLessThan(String value) {
+            addCriterion("stock_order_id <", value, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdLessThanOrEqualTo(String value) {
+            addCriterion("stock_order_id <=", value, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdIn(List<String> values) {
+            addCriterion("stock_order_id in", values, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdNotIn(List<String> values) {
+            addCriterion("stock_order_id not in", values, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdBetween(String value1, String value2) {
+            addCriterion("stock_order_id between", value1, value2, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderIdNotBetween(String value1, String value2) {
+            addCriterion("stock_order_id not between", value1, value2, "stockOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoIsNull() {
+            addCriterion("stock_order_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoIsNotNull() {
+            addCriterion("stock_order_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoEqualTo(String value) {
+            addCriterion("stock_order_no =", value, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoNotEqualTo(String value) {
+            addCriterion("stock_order_no <>", value, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoGreaterThan(String value) {
+            addCriterion("stock_order_no >", value, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("stock_order_no >=", value, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoLessThan(String value) {
+            addCriterion("stock_order_no <", value, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("stock_order_no <=", value, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoLike(String value) {
+            addCriterion("stock_order_no like", value, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoNotLike(String value) {
+            addCriterion("stock_order_no not like", value, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoIn(List<String> values) {
+            addCriterion("stock_order_no in", values, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoNotIn(List<String> values) {
+            addCriterion("stock_order_no not in", values, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoBetween(String value1, String value2) {
+            addCriterion("stock_order_no between", value1, value2, "stockOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoNotBetween(String value1, String value2) {
+            addCriterion("stock_order_no not between", value1, value2, "stockOrderNo");
             return (Criteria) this;
         }
 
@@ -1162,6 +1293,11 @@ public class PayShopStockLogExample {
 
         public Criteria andAddtimeNotBetween(Date value1, Date value2) {
             addCriterion("addtime not between", value1, value2, "addtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockOrderNoLikeInsensitive(String value) {
+            addCriterion("upper(stock_order_no) like", value.toUpperCase(), "stockOrderNo");
             return (Criteria) this;
         }
 
