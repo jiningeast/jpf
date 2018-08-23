@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopStockLog implements Serializable {
