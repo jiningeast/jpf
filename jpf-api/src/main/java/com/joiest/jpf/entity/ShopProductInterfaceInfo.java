@@ -21,12 +21,17 @@ public class ShopProductInterfaceInfo {
     private String name;
 
     /**
+     * 商品编号
+     */
+    private String cardid;
+
+    /**
      * 商品图片
      */
     private String image;
 
     /**
-     * 金额
+     * 商品售价
      */
     private BigDecimal money;
 
@@ -114,6 +119,14 @@ public class ShopProductInterfaceInfo {
         this.name = name;
     }
 
+    public String getCardid() {
+        return cardid;
+    }
+
+    public void setCardid(String cardid) {
+        this.cardid = cardid;
+    }
+
     public String getImage() {
         return image;
     }
@@ -128,6 +141,14 @@ public class ShopProductInterfaceInfo {
 
     public void setMoney(BigDecimal money) {
         this.money = money;
+    }
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
     }
 
     public BigDecimal getBid() {
@@ -216,14 +237,6 @@ public class ShopProductInterfaceInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
-    }
-
-    public Integer getRechargeMoney() {
-        return rechargeMoney;
-    }
-
-    public void setRechargeMoney(Integer rechargeMoney) {
-        this.rechargeMoney = rechargeMoney;
     }
 
     //================ 自定义字段 begin ================

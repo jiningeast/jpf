@@ -1,0 +1,225 @@
+package com.joiest.jpf.common.po;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class PayShopStockCard implements Serializable {
+    /**
+     * 
+     */
+    private String id;
+
+    /**
+     * 卡号
+     */
+    private String cardNo;
+
+    /**
+     * 卡密
+     */
+    private String cardPass;
+
+    /**
+     * 采购订单id
+     */
+    private String stockOrderId;
+
+    /**
+     * 采购订单单号
+     */
+    private String stockOrderNo;
+
+    /**
+     * 客户id
+     */
+    private String customerId;
+
+    /**
+     * 客户姓名
+     */
+    private String customerName;
+
+    /**
+     * 客户手机号
+     */
+    private String customerPhone;
+
+    /**
+     * 1=中国石化 2=中国石油 3=话费充值
+     */
+    private Byte type;
+
+    /**
+     * 0=正常 1=已出售
+     */
+    private Byte status;
+
+    /**
+     * 添加时间
+     */
+    private Date addtime;
+
+    private static final long serialVersionUID = 1L;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo == null ? null : cardNo.trim();
+    }
+
+    public String getCardPass() {
+        return cardPass;
+    }
+
+    public void setCardPass(String cardPass) {
+        this.cardPass = cardPass == null ? null : cardPass.trim();
+    }
+
+    public String getStockOrderId() {
+        return stockOrderId;
+    }
+
+    public void setStockOrderId(String stockOrderId) {
+        this.stockOrderId = stockOrderId == null ? null : stockOrderId.trim();
+    }
+
+    public String getStockOrderNo() {
+        return stockOrderNo;
+    }
+
+    public void setStockOrderNo(String stockOrderNo) {
+        this.stockOrderNo = stockOrderNo == null ? null : stockOrderNo.trim();
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId == null ? null : customerId.trim();
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName == null ? null : customerName.trim();
+    }
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone == null ? null : customerPhone.trim();
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Date getAddtime() {
+        return addtime;
+    }
+
+    public void setAddtime(Date addtime) {
+        this.addtime = addtime;
+    }
+
+    /**
+     *
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", cardNo=").append(cardNo);
+        sb.append(", cardPass=").append(cardPass);
+        sb.append(", stockOrderId=").append(stockOrderId);
+        sb.append(", stockOrderNo=").append(stockOrderNo);
+        sb.append(", customerId=").append(customerId);
+        sb.append(", customerName=").append(customerName);
+        sb.append(", customerPhone=").append(customerPhone);
+        sb.append(", type=").append(type);
+        sb.append(", status=").append(status);
+        sb.append(", addtime=").append(addtime);
+        sb.append("]");
+        return sb.toString();
+    }
+
+    /**
+     *
+     * @param that
+     */
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        }
+        if (that == null) {
+            return false;
+        }
+        if (getClass() != that.getClass()) {
+            return false;
+        }
+        PayShopStockCard other = (PayShopStockCard) that;
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getCardNo() == null ? other.getCardNo() == null : this.getCardNo().equals(other.getCardNo()))
+            && (this.getCardPass() == null ? other.getCardPass() == null : this.getCardPass().equals(other.getCardPass()))
+            && (this.getStockOrderId() == null ? other.getStockOrderId() == null : this.getStockOrderId().equals(other.getStockOrderId()))
+            && (this.getStockOrderNo() == null ? other.getStockOrderNo() == null : this.getStockOrderNo().equals(other.getStockOrderNo()))
+            && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
+            && (this.getCustomerName() == null ? other.getCustomerName() == null : this.getCustomerName().equals(other.getCustomerName()))
+            && (this.getCustomerPhone() == null ? other.getCustomerPhone() == null : this.getCustomerPhone().equals(other.getCustomerPhone()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
+    }
+
+    /**
+     *
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getCardNo() == null) ? 0 : getCardNo().hashCode());
+        result = prime * result + ((getCardPass() == null) ? 0 : getCardPass().hashCode());
+        result = prime * result + ((getStockOrderId() == null) ? 0 : getStockOrderId().hashCode());
+        result = prime * result + ((getStockOrderNo() == null) ? 0 : getStockOrderNo().hashCode());
+        result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());
+        result = prime * result + ((getCustomerName() == null) ? 0 : getCustomerName().hashCode());
+        result = prime * result + ((getCustomerPhone() == null) ? 0 : getCustomerPhone().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
+        return result;
+    }
+}

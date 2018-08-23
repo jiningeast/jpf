@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,16 +19,24 @@ public class LoginController {
 
     /**
      * 个人登录判断
-     *
      */
     @RequestMapping(value = "userIndex", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String userIndex(HttpServletResponse response, HttpServletRequest request)
     {
-//        response.setStatus(401);
-//        response.setHeader("Authorization", "Basic Realm=\"test\"");
-        logger.info("============================================userIndex=======================================");
+        logger.info("===============未登录处理的方法 start===============");
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NOTlOGIN.getCode(),JpfInterfaceErrorInfo.NOTlOGIN.getDesc(),null);
+    }
+
+    /**
+     * 个人登录判断
+     */
+    @RequestMapping(value = "userNotBindCoupon", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String userNotBindCoupon(HttpServletResponse response, HttpServletRequest request)
+    {
+        logger.info("===============未绑定券处理的方法 start===============");
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getCode(),JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getDesc(),null);
     }
 
 }

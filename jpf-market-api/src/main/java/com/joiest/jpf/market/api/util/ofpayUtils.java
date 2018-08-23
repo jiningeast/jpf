@@ -94,8 +94,8 @@ public class ofpayUtils {
         requestMap.put("sporder_id", rechargeMap.get("sporder_id").toString());
         requestMap.put("sporder_time", myfmt.format(rechargeMap.get("sporder_time")));
         requestMap.put("game_userid", rechargeMap.get("game_userid").toString());       // 手机号码
-        requestMap.put("md5_str", getPhoneSign(requestMap));       // 签名串
-//        requestMap.put("ret_url", );    // 返回地址
+        requestMap.put("md5_str", getPhoneSign(requestMap));        // 签名串
+        requestMap.put("ret_url", rechargeMap.get("ret_url"));      // 返回地址
         requestMap.put("version", version_phone);
         requestMap.put("buyNum", rechargeMap.get("buyNum").toString());
 
@@ -192,7 +192,8 @@ public class ofpayUtils {
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid", userid);           // 商户号
         requestMap.put("userpws", userpws);         // 商户密码
-        requestMap.put("cardid", "64127500");       // 商品编号以产品部门提供的为准
+        requestMap.put("cardid", rechargeMap.get("cardid"));                            // 商品编号以产品部门提供的为准
+//        requestMap.put("cardid", "64127500");                            // 商品编号以产品部门提供的为准
         requestMap.put("cardnum",rechargeMap.get("cardnum").toString());                // 1.任意充需要待充值面值（1的整数倍) 2.卡充充值这里表示数量
         requestMap.put("sporder_id", rechargeMap.get("sporder_id").toString());
         requestMap.put("sporder_time", myfmt.format(rechargeMap.get("sporder_time")));
@@ -203,7 +204,7 @@ public class ofpayUtils {
             requestMap.put("chargeType", rechargeMap.get("chargeType") );               // 加油卡类型 （1:中石化、2:中石油；默认为1，不参与MD5校验）
         }
         requestMap.put("md5_str", getOilSign(requestMap));          // 签名串
-//        requestMap.put("ret_url","http://www.baidu.com");         // 返回地址 TODO
+        requestMap.put("ret_url", rechargeMap.get("ret_url"));         // 返回地址
         requestMap.put("version", version_phone);
 
         String requestParam = ToolUtils.mapToUrl(requestMap);       //请求参数

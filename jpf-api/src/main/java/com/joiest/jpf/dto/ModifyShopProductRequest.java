@@ -27,6 +27,11 @@ public class ModifyShopProductRequest {
     private String name;
 
     /**
+     * 商品编号
+     */
+    private String cardid;
+
+    /**
      * 商品图片
      */
     @NotBlank(message = "请上传商品图片")
@@ -213,5 +218,13 @@ public class ModifyShopProductRequest {
 
     public void setRechargeMoney(String rechargeMoney) {
         this.rechargeMoney = rechargeMoney;
+    }
+
+    public String getCardid() {
+        return cardid;
+    }
+
+    public void setCardid(String cardid) {
+        this.cardid = cardid;
     }
 }

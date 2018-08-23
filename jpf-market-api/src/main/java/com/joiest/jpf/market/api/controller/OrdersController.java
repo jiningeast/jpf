@@ -345,7 +345,7 @@ public class OrdersController {
         rechargeMap.put("sporder_time", orderInfo.getAddtime());
         rechargeMap.put("game_userid", orderInfo.getChargeNo());
         rechargeMap.put("buyNum", "1");     //暂定为 1
-
+        rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
         resultMap = new ofpayUtils().chargePhone(rechargeMap);
         return resultMap;
     }
@@ -366,7 +366,7 @@ public class OrdersController {
         Map<String, String> queryGasResponseMap = new ofpayUtils().gasQuery(queryMap);
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
-        stream.setType((byte)5);
+        stream.setType((byte)5);    //油卡充值
         stream.setOrderNo(orderInfo.getOrderNo());
         stream.setRequestUrl(queryGasResponseMap.get("requestUrl"));
         stream.setRequestContent(queryGasResponseMap.get("requestParam"));
@@ -388,11 +388,13 @@ public class OrdersController {
         Map<String, String> resultMap = new HashMap<>();
 
         rechargeMap.put("cardnum", productInfo.getRechargeMoney().toString());
+        rechargeMap.put("cardid", productInfo.getCardid());
         rechargeMap.put("sporder_id", orderInfo.getOrderNo());
         rechargeMap.put("sporder_time", orderInfo.getAddtime());
         rechargeMap.put("game_userid", orderInfo.getChargeNo());
         rechargeMap.put("chargeType", chargeType );
         rechargeMap.put("buyNum", "1");     //暂定为 1
+        rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
 
         resultMap = new ofpayUtils().chargeGas(rechargeMap);
         return resultMap;
@@ -416,7 +418,7 @@ public class OrdersController {
         sbf.append("\n访问地址：" + ServletUtils.getIpAddr(httpRequest));
         sbf.append("\n访问参数：" + map);
 
-        String fileName = "ofpayGasNotify";
+        String fileName = "ofpayNotify";
         String path = "/logs/jpf-market-api/log/";
 
         ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrder(request.getSporder_id());
