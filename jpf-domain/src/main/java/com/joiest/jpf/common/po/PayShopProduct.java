@@ -21,6 +21,11 @@ public class PayShopProduct implements Serializable {
     private String name;
 
     /**
+     * 商品编号
+     */
+    private String cardid;
+
+    /**
      * 商品图片
      */
     private String image;
@@ -114,6 +119,14 @@ public class PayShopProduct implements Serializable {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getCardid() {
+        return cardid;
+    }
+
+    public void setCardid(String cardid) {
+        this.cardid = cardid == null ? null : cardid.trim();
     }
 
     public String getImage() {
@@ -240,6 +253,7 @@ public class PayShopProduct implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", productInfoId=").append(productInfoId);
         sb.append(", name=").append(name);
+        sb.append(", cardid=").append(cardid);
         sb.append(", image=").append(image);
         sb.append(", money=").append(money);
         sb.append(", rechargeMoney=").append(rechargeMoney);
@@ -277,6 +291,7 @@ public class PayShopProduct implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getProductInfoId() == null ? other.getProductInfoId() == null : this.getProductInfoId().equals(other.getProductInfoId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getCardid() == null ? other.getCardid() == null : this.getCardid().equals(other.getCardid()))
             && (this.getImage() == null ? other.getImage() == null : this.getImage().equals(other.getImage()))
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getRechargeMoney() == null ? other.getRechargeMoney() == null : this.getRechargeMoney().equals(other.getRechargeMoney()))
@@ -303,6 +318,7 @@ public class PayShopProduct implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getProductInfoId() == null) ? 0 : getProductInfoId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getCardid() == null) ? 0 : getCardid().hashCode());
         result = prime * result + ((getImage() == null) ? 0 : getImage().hashCode());
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
         result = prime * result + ((getRechargeMoney() == null) ? 0 : getRechargeMoney().hashCode());

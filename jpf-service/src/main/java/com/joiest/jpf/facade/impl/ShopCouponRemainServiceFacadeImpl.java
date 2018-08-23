@@ -276,6 +276,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
             payShopCouponActive.setAddtime(new Date());
             payShopCouponActive.setOrderId(orderInfo.getId());
+            payShopCouponActive.setOrderNo(orderInfo.getOrderNo());
             int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
             if ( res_couponActive < 1 )
             {
@@ -317,12 +318,6 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         payShopOrder.setId(orderInfo.getId());
         payShopOrder.setCouponDetail(coupon_detail);
         payShopOrder.setPaytime(new Date());
-
-//        PayShopOrderExample example = new PayShopOrderExample();
-//        PayShopOrderExample.Criteria c = example.createCriteria();
-//        c.andIdEqualTo(orderInfo.getId());
-//        c.andCustomerIdEqualTo(orderInfo.getCustomerId());
-//        c.andOrderNoEqualTo(orderInfo.getOrderNo());
 
         int res_upOrder = payShopOrderMapper.updateByPrimaryKeySelective(payShopOrder);
 

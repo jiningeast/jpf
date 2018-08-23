@@ -150,6 +150,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setOperatorId(request.getOperatorId());
         payShopProduct.setOperatorName(request.getOperatorName());
         payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
+        payShopProduct.setCardid(request.getCardid());
         int res = payShopProductMapper.insertSelective(payShopProduct);
         return new JpfResponseDto();
     }
@@ -192,6 +193,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setStatus(request.getStatus());
         payShopProduct.setUpdatetime(new Date());
         payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
+        payShopProduct.setCardid(request.getCardid());
         int res = payShopProductMapper.updateByPrimaryKeySelective(payShopProduct);
         return new JpfResponseDto();
     }

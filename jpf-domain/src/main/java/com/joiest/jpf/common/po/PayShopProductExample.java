@@ -366,6 +366,76 @@ public class PayShopProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andCardidIsNull() {
+            addCriterion("cardid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidIsNotNull() {
+            addCriterion("cardid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidEqualTo(String value) {
+            addCriterion("cardid =", value, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidNotEqualTo(String value) {
+            addCriterion("cardid <>", value, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidGreaterThan(String value) {
+            addCriterion("cardid >", value, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidGreaterThanOrEqualTo(String value) {
+            addCriterion("cardid >=", value, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidLessThan(String value) {
+            addCriterion("cardid <", value, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidLessThanOrEqualTo(String value) {
+            addCriterion("cardid <=", value, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidLike(String value) {
+            addCriterion("cardid like", value, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidNotLike(String value) {
+            addCriterion("cardid not like", value, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidIn(List<String> values) {
+            addCriterion("cardid in", values, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidNotIn(List<String> values) {
+            addCriterion("cardid not in", values, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidBetween(String value1, String value2) {
+            addCriterion("cardid between", value1, value2, "cardid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidNotBetween(String value1, String value2) {
+            addCriterion("cardid not between", value1, value2, "cardid");
+            return (Criteria) this;
+        }
+
         public Criteria andImageIsNull() {
             addCriterion("image is null");
             return (Criteria) this;
@@ -1238,6 +1308,11 @@ public class PayShopProductExample {
 
         public Criteria andNameLikeInsensitive(String value) {
             addCriterion("upper(name) like", value.toUpperCase(), "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardidLikeInsensitive(String value) {
+            addCriterion("upper(cardid) like", value.toUpperCase(), "cardid");
             return (Criteria) this;
         }
 

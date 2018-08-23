@@ -163,6 +163,7 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
             payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
             payShopCouponActive.setAddtime(new Date());
             payShopCouponActive.setOrderId(orderInfo.getId());
+            payShopCouponActive.setOrderId(orderInfo.getOrderNo());
             int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
 
             // 客户总豆数量减去一部分pay_shop_customer
