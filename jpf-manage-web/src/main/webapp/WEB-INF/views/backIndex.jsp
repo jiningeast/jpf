@@ -143,6 +143,11 @@
                     "menuname" : "欣券管理",
                     "icon" : "icon-nav",
                     "url" : "shopBatch/index"
+                },{
+                    "menuid" : "505",
+                    "menuname" : "采购管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopStockOrder/index"
                 }]
             },{
                     "menuid" : "6",
