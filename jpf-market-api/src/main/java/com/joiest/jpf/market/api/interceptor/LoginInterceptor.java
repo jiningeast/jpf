@@ -56,11 +56,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         logger.info("===========LoginInterceptor preHandle===========");
         List<String> NOTLOGINURL = new ArrayList<String>() {
             {
-                add("/custom/bind");        //绑定手机号
-                add("/custom/sendSms");     //绑定手机号
+                add("/custom/bind");                //绑定手机号
+                add("/custom/sendSms");             //绑定手机号
                 add("/nologin/userIndex");
                 add("/nologin/userNotBindCoupon");
                 add("/orders/ofpayNotifyUrl");
+                add("/certificate/activation");     //用户激活券url
             }
         };
         System.out.println(ServletUtils.getIpAddr(request));
@@ -92,7 +93,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             Boolean isBindCoupon = userIsBindCoupon();
             if ( !isBindCoupon )
             {
-                logger.info("========跳转到未绑定券的处理的方法地址: /nologin/userIndex");
+                logger.info("========跳转到未绑定券的处理的方法地址: /nologin/userNotBindCoupon");
                 request.getRequestDispatcher("/nologin/userNotBindCoupon").forward(request,response);
                 return false;
             }
@@ -134,6 +135,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList(userInfo.getId());
+        logger.info("========用户券数量: " + response.getCount());
         if ( response == null || response.getList() == null)
         {
             return false;
