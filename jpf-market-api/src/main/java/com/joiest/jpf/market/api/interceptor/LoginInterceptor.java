@@ -135,7 +135,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         GetUserCouponActiveInterfaceResponse response = shopCouponActiveInterfaceServiceFacade.getUserCouponList(userInfo.getId());
-        logger.info("========用户券数量: " + response.getCount());
         if ( response == null || response.getList() == null)
         {
             return false;

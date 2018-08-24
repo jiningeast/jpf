@@ -57,4 +57,5 @@
 	<bean id="ShopInterfaceStreamServiceFacade" class="com.joiest.jpf.facade.impl.ShopInterfaceStreamServiceFacadeImpl"></bean>
 	<bean id="ShopCouponRemainServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponRemainServiceFacadeImpl"></bean>
 	<bean id="WeixinMenuServiceFacade" class="com.joiest.jpf.facade.impl.WeixinMenuServiceFacadeImpl"></bean>
+	<bean id="ShopStockOrderServiceFacade" class="com.joiest.jpf.facade.impl.ShopStockOrderServiceFacadeImpl"></bean>
 </beans>
