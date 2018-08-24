@@ -61,6 +61,11 @@ public class PayShopStockOrder implements Serializable {
     private String memo;
 
     /**
+     * 上传的excel文件远程路径
+     */
+    private String ossUrl;
+
+    /**
      * 
      */
     private Date addtime;
@@ -155,6 +160,14 @@ public class PayShopStockOrder implements Serializable {
         this.memo = memo == null ? null : memo.trim();
     }
 
+    public String getOssUrl() {
+        return ossUrl;
+    }
+
+    public void setOssUrl(String ossUrl) {
+        this.ossUrl = ossUrl == null ? null : ossUrl.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -183,6 +196,7 @@ public class PayShopStockOrder implements Serializable {
         sb.append(", paytypeId=").append(paytypeId);
         sb.append(", paytypeCn=").append(paytypeCn);
         sb.append(", memo=").append(memo);
+        sb.append(", ossUrl=").append(ossUrl);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
         return sb.toString();
@@ -215,6 +229,7 @@ public class PayShopStockOrder implements Serializable {
             && (this.getPaytypeId() == null ? other.getPaytypeId() == null : this.getPaytypeId().equals(other.getPaytypeId()))
             && (this.getPaytypeCn() == null ? other.getPaytypeCn() == null : this.getPaytypeCn().equals(other.getPaytypeCn()))
             && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
+            && (this.getOssUrl() == null ? other.getOssUrl() == null : this.getOssUrl().equals(other.getOssUrl()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
 
@@ -236,6 +251,7 @@ public class PayShopStockOrder implements Serializable {
         result = prime * result + ((getPaytypeId() == null) ? 0 : getPaytypeId().hashCode());
         result = prime * result + ((getPaytypeCn() == null) ? 0 : getPaytypeCn().hashCode());
         result = prime * result + ((getMemo() == null) ? 0 : getMemo().hashCode());
+        result = prime * result + ((getOssUrl() == null) ? 0 : getOssUrl().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
     }

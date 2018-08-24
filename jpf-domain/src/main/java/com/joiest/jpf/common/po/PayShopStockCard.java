@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopStockCard implements Serializable {
@@ -18,6 +19,21 @@ public class PayShopStockCard implements Serializable {
      * 卡密
      */
     private String cardPass;
+
+    /**
+     * 有效期，单位月
+     */
+    private Integer expireMonth;
+
+    /**
+     * 到期时间
+     */
+    private Date expireDate;
+
+    /**
+     * 进价
+     */
+    private BigDecimal bid;
 
     /**
      * 采购订单id
@@ -83,6 +99,30 @@ public class PayShopStockCard implements Serializable {
 
     public void setCardPass(String cardPass) {
         this.cardPass = cardPass == null ? null : cardPass.trim();
+    }
+
+    public Integer getExpireMonth() {
+        return expireMonth;
+    }
+
+    public void setExpireMonth(Integer expireMonth) {
+        this.expireMonth = expireMonth;
+    }
+
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public BigDecimal getBid() {
+        return bid;
+    }
+
+    public void setBid(BigDecimal bid) {
+        this.bid = bid;
     }
 
     public String getStockOrderId() {
@@ -161,6 +201,9 @@ public class PayShopStockCard implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", cardNo=").append(cardNo);
         sb.append(", cardPass=").append(cardPass);
+        sb.append(", expireMonth=").append(expireMonth);
+        sb.append(", expireDate=").append(expireDate);
+        sb.append(", bid=").append(bid);
         sb.append(", stockOrderId=").append(stockOrderId);
         sb.append(", stockOrderNo=").append(stockOrderNo);
         sb.append(", customerId=").append(customerId);
@@ -192,6 +235,9 @@ public class PayShopStockCard implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getCardNo() == null ? other.getCardNo() == null : this.getCardNo().equals(other.getCardNo()))
             && (this.getCardPass() == null ? other.getCardPass() == null : this.getCardPass().equals(other.getCardPass()))
+            && (this.getExpireMonth() == null ? other.getExpireMonth() == null : this.getExpireMonth().equals(other.getExpireMonth()))
+            && (this.getExpireDate() == null ? other.getExpireDate() == null : this.getExpireDate().equals(other.getExpireDate()))
+            && (this.getBid() == null ? other.getBid() == null : this.getBid().equals(other.getBid()))
             && (this.getStockOrderId() == null ? other.getStockOrderId() == null : this.getStockOrderId().equals(other.getStockOrderId()))
             && (this.getStockOrderNo() == null ? other.getStockOrderNo() == null : this.getStockOrderNo().equals(other.getStockOrderNo()))
             && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
@@ -212,6 +258,9 @@ public class PayShopStockCard implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getCardNo() == null) ? 0 : getCardNo().hashCode());
         result = prime * result + ((getCardPass() == null) ? 0 : getCardPass().hashCode());
+        result = prime * result + ((getExpireMonth() == null) ? 0 : getExpireMonth().hashCode());
+        result = prime * result + ((getExpireDate() == null) ? 0 : getExpireDate().hashCode());
+        result = prime * result + ((getBid() == null) ? 0 : getBid().hashCode());
         result = prime * result + ((getStockOrderId() == null) ? 0 : getStockOrderId().hashCode());
         result = prime * result + ((getStockOrderNo() == null) ? 0 : getStockOrderNo().hashCode());
         result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());
