@@ -9,10 +9,7 @@ import com.joiest.jpf.common.po.PayCloudCompany;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
 import com.joiest.jpf.common.po.PayCloudInterfaceStream;
-import com.joiest.jpf.common.util.BigDecimalCalculateUtils;
-import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.LogsCustomUtils;
-import com.joiest.jpf.common.util.Md5Encrypt;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayCloudDfMoneyInterfaceCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
@@ -537,19 +534,6 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         }
 
         PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
-
-        //分页
-        /*if(StringUtils.isBlank(pageNo) || pageNo==null){
-            example.setPageNo(1);
-        }else {
-            example.setPageNo(Long.parseLong(pageNo));
-        }
-        if(StringUtils.isBlank(pageSize) || pageSize==null){
-            example.setPageSize(10);
-        }else{
-            example.setPageSize(Long.parseLong(pageSize));
-        }*/
-
         example.setOrderByClause("addtime ASC");
         PayCloudDfMoneyExample.Criteria c = example.createCriteria();
         c.andMerchNoEqualTo(merchNo);
@@ -569,6 +553,11 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
             CloudDfMoneyInterfaceInfo info = new CloudDfMoneyInterfaceInfo();
             BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoneyInterfaceCustom.class, CloudDfMoneyInterfaceInfo.class, false);
             beanCopier.copy(one, info, null);
+            //敏感数据星号代替
+            info.setUsername(ToolUtils.getStarString(one.getUsername(),3,7));//手机号
+            info.setBankphone(ToolUtils.getStarString(one.getBankphone(),3,7));//手机号
+            info.setBankno(ToolUtils.getStarString2(one.getBankno(),4,4));
+            info.setIdno(ToolUtils.getStarString2(one.getIdno(),4,4));
             resultList.add(info);
 
         }
