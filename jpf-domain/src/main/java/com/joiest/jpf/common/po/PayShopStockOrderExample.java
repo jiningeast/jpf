@@ -886,6 +886,76 @@ public class PayShopStockOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andOssUrlIsNull() {
+            addCriterion("oss_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlIsNotNull() {
+            addCriterion("oss_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlEqualTo(String value) {
+            addCriterion("oss_url =", value, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlNotEqualTo(String value) {
+            addCriterion("oss_url <>", value, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlGreaterThan(String value) {
+            addCriterion("oss_url >", value, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("oss_url >=", value, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlLessThan(String value) {
+            addCriterion("oss_url <", value, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlLessThanOrEqualTo(String value) {
+            addCriterion("oss_url <=", value, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlLike(String value) {
+            addCriterion("oss_url like", value, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlNotLike(String value) {
+            addCriterion("oss_url not like", value, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlIn(List<String> values) {
+            addCriterion("oss_url in", values, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlNotIn(List<String> values) {
+            addCriterion("oss_url not in", values, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlBetween(String value1, String value2) {
+            addCriterion("oss_url between", value1, value2, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlNotBetween(String value1, String value2) {
+            addCriterion("oss_url not between", value1, value2, "ossUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
@@ -968,6 +1038,11 @@ public class PayShopStockOrderExample {
 
         public Criteria andMemoLikeInsensitive(String value) {
             addCriterion("upper(memo) like", value.toUpperCase(), "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssUrlLikeInsensitive(String value) {
+            addCriterion("upper(oss_url) like", value.toUpperCase(), "ossUrl");
             return (Criteria) this;
         }
     }
