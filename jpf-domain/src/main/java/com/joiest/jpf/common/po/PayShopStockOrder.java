@@ -66,6 +66,11 @@ public class PayShopStockOrder implements Serializable {
     private String ossUrl;
 
     /**
+     * 商品采购入库时间【导入excel时间】
+     */
+    private Date cardtime;
+
+    /**
      * 
      */
     private Date addtime;
@@ -168,6 +173,14 @@ public class PayShopStockOrder implements Serializable {
         this.ossUrl = ossUrl == null ? null : ossUrl.trim();
     }
 
+    public Date getCardtime() {
+        return cardtime;
+    }
+
+    public void setCardtime(Date cardtime) {
+        this.cardtime = cardtime;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -197,6 +210,7 @@ public class PayShopStockOrder implements Serializable {
         sb.append(", paytypeCn=").append(paytypeCn);
         sb.append(", memo=").append(memo);
         sb.append(", ossUrl=").append(ossUrl);
+        sb.append(", cardtime=").append(cardtime);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
         return sb.toString();
@@ -230,6 +244,7 @@ public class PayShopStockOrder implements Serializable {
             && (this.getPaytypeCn() == null ? other.getPaytypeCn() == null : this.getPaytypeCn().equals(other.getPaytypeCn()))
             && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
             && (this.getOssUrl() == null ? other.getOssUrl() == null : this.getOssUrl().equals(other.getOssUrl()))
+            && (this.getCardtime() == null ? other.getCardtime() == null : this.getCardtime().equals(other.getCardtime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
 
@@ -252,6 +267,7 @@ public class PayShopStockOrder implements Serializable {
         result = prime * result + ((getPaytypeCn() == null) ? 0 : getPaytypeCn().hashCode());
         result = prime * result + ((getMemo() == null) ? 0 : getMemo().hashCode());
         result = prime * result + ((getOssUrl() == null) ? 0 : getOssUrl().hashCode());
+        result = prime * result + ((getCardtime() == null) ? 0 : getCardtime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
     }

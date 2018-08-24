@@ -956,6 +956,66 @@ public class PayShopStockOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andCardtimeIsNull() {
+            addCriterion("cardtime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeIsNotNull() {
+            addCriterion("cardtime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeEqualTo(Date value) {
+            addCriterion("cardtime =", value, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeNotEqualTo(Date value) {
+            addCriterion("cardtime <>", value, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeGreaterThan(Date value) {
+            addCriterion("cardtime >", value, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("cardtime >=", value, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeLessThan(Date value) {
+            addCriterion("cardtime <", value, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeLessThanOrEqualTo(Date value) {
+            addCriterion("cardtime <=", value, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeIn(List<Date> values) {
+            addCriterion("cardtime in", values, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeNotIn(List<Date> values) {
+            addCriterion("cardtime not in", values, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeBetween(Date value1, Date value2) {
+            addCriterion("cardtime between", value1, value2, "cardtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardtimeNotBetween(Date value1, Date value2) {
+            addCriterion("cardtime not between", value1, value2, "cardtime");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
