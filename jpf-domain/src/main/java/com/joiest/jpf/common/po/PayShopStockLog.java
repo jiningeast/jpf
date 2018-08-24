@@ -11,6 +11,16 @@ public class PayShopStockLog implements Serializable {
     private String id;
 
     /**
+     * 采购订单id
+     */
+    private String stockOrderId;
+
+    /**
+     * 采购订单单号
+     */
+    private String stockOrderNo;
+
+    /**
      * 产品id
      */
     private String productId;
@@ -93,6 +103,22 @@ public class PayShopStockLog implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getStockOrderId() {
+        return stockOrderId;
+    }
+
+    public void setStockOrderId(String stockOrderId) {
+        this.stockOrderId = stockOrderId == null ? null : stockOrderId.trim();
+    }
+
+    public String getStockOrderNo() {
+        return stockOrderNo;
+    }
+
+    public void setStockOrderNo(String stockOrderNo) {
+        this.stockOrderNo = stockOrderNo == null ? null : stockOrderNo.trim();
     }
 
     public String getProductId() {
@@ -225,6 +251,8 @@ public class PayShopStockLog implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", stockOrderId=").append(stockOrderId);
+        sb.append(", stockOrderNo=").append(stockOrderNo);
         sb.append(", productId=").append(productId);
         sb.append(", productName=").append(productName);
         sb.append(", customerId=").append(customerId);
@@ -261,6 +289,8 @@ public class PayShopStockLog implements Serializable {
         }
         PayShopStockLog other = (PayShopStockLog) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getStockOrderId() == null ? other.getStockOrderId() == null : this.getStockOrderId().equals(other.getStockOrderId()))
+            && (this.getStockOrderNo() == null ? other.getStockOrderNo() == null : this.getStockOrderNo().equals(other.getStockOrderNo()))
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
             && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
             && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
@@ -286,6 +316,8 @@ public class PayShopStockLog implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getStockOrderId() == null) ? 0 : getStockOrderId().hashCode());
+        result = prime * result + ((getStockOrderNo() == null) ? 0 : getStockOrderNo().hashCode());
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
         result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
         result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());

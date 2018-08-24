@@ -261,6 +261,10 @@ public class OrdersController {
             //充值成功
             String foreign_orderid = resultMap.getOrDefault("orderid", "");     //接口订单id
             orderinfo.setForeignOrderNo(foreign_orderid);
+            orderinfo.setStatus((byte)1);
+        }else
+        {
+            orderinfo.setStatus((byte)2);
         }
         byte rechargeType = 0;
         if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 )
