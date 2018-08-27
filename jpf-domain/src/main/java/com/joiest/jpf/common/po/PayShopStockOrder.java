@@ -71,6 +71,11 @@ public class PayShopStockOrder implements Serializable {
     private Date cardtime;
 
     /**
+     * 商品是否采购    1 是  2否
+     */
+    private Byte isUpload;
+
+    /**
      * 
      */
     private Date addtime;
@@ -181,6 +186,14 @@ public class PayShopStockOrder implements Serializable {
         this.cardtime = cardtime;
     }
 
+    public Byte getIsUpload() {
+        return isUpload;
+    }
+
+    public void setIsUpload(Byte isUpload) {
+        this.isUpload = isUpload;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -211,6 +224,7 @@ public class PayShopStockOrder implements Serializable {
         sb.append(", memo=").append(memo);
         sb.append(", ossUrl=").append(ossUrl);
         sb.append(", cardtime=").append(cardtime);
+        sb.append(", isUpload=").append(isUpload);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
         return sb.toString();
@@ -245,6 +259,7 @@ public class PayShopStockOrder implements Serializable {
             && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
             && (this.getOssUrl() == null ? other.getOssUrl() == null : this.getOssUrl().equals(other.getOssUrl()))
             && (this.getCardtime() == null ? other.getCardtime() == null : this.getCardtime().equals(other.getCardtime()))
+            && (this.getIsUpload() == null ? other.getIsUpload() == null : this.getIsUpload().equals(other.getIsUpload()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
 
@@ -268,6 +283,7 @@ public class PayShopStockOrder implements Serializable {
         result = prime * result + ((getMemo() == null) ? 0 : getMemo().hashCode());
         result = prime * result + ((getOssUrl() == null) ? 0 : getOssUrl().hashCode());
         result = prime * result + ((getCardtime() == null) ? 0 : getCardtime().hashCode());
+        result = prime * result + ((getIsUpload() == null) ? 0 : getIsUpload().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
     }
