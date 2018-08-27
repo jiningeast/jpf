@@ -124,6 +124,104 @@ public class CloudRechargeInfo {
 
     private Date pacttime;
 
+    //===========企业信息 begin ===========
+
+    /**
+     * 自增ID
+     */
+    private String companyId;
+
+    /**
+     * 公司名称
+     */
+    private String companyName;
+
+    /**
+     * 商户别名
+     */
+    private String merchName;
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getMerchName() {
+        return merchName;
+    }
+
+    public void setMerchName(String merchName) {
+        this.merchName = merchName;
+    }
+
+    //===========企业信息 end ===========
+    //===========发票科目信息 begin ===========
+
+    /**
+     *
+     */
+    private String catid;
+
+    /**
+     *
+     */
+    private String pid;
+
+    /**
+     *
+     */
+    private String catpath;
+
+    /**
+     *
+     */
+    private String cat;
+
+    public String getCatid() {
+        return catid;
+    }
+
+    public void setCatid(String catid) {
+        this.catid = catid;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public String getCatpath() {
+        return catpath;
+    }
+
+    public void setCatpath(String catpath) {
+        this.catpath = catpath;
+    }
+
+    public String getCat() {
+        return cat;
+    }
+
+    public void setCat(String cat) {
+        this.cat = cat;
+    }
+
+    //===========发票科目信息 end ===========
+
     public Long getId() {
         return id;
     }
