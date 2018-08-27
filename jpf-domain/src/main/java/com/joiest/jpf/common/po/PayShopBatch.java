@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PayShopBatch implements Serializable {
     /**
-     * 
+     * 主键id
      */
     private String id;
 
@@ -101,7 +101,7 @@ public class PayShopBatch implements Serializable {
     private String emailContent;
 
     /**
-     * 
+     * 邮件发送时间
      */
     private Date emailTime;
 
@@ -131,12 +131,27 @@ public class PayShopBatch implements Serializable {
     private String operatorName;
 
     /**
-     * 
+     * 群发给个人时运营上传的excel文件地址
+     */
+    private String excelUrl;
+
+    /**
+     * 群发给个人的时间
+     */
+    private Date sendTime;
+
+    /**
+     * 分发方式 0=email发给接收人 1=群发给个人
+     */
+    private Byte sendType;
+
+    /**
+     * 添加时间
      */
     private Date addtime;
 
     /**
-     * 
+     * 更新时间
      */
     private Date updatetime;
 
@@ -347,6 +362,30 @@ public class PayShopBatch implements Serializable {
         this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
+    public String getExcelUrl() {
+        return excelUrl;
+    }
+
+    public void setExcelUrl(String excelUrl) {
+        this.excelUrl = excelUrl == null ? null : excelUrl.trim();
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public Byte getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(Byte sendType) {
+        this.sendType = sendType;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -405,6 +444,9 @@ public class PayShopBatch implements Serializable {
         sb.append(", smsStatus=").append(smsStatus);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
+        sb.append(", excelUrl=").append(excelUrl);
+        sb.append(", sendTime=").append(sendTime);
+        sb.append(", sendType=").append(sendType);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append(", smsContent=").append(smsContent);
@@ -453,6 +495,9 @@ public class PayShopBatch implements Serializable {
             && (this.getSmsStatus() == null ? other.getSmsStatus() == null : this.getSmsStatus().equals(other.getSmsStatus()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
+            && (this.getExcelUrl() == null ? other.getExcelUrl() == null : this.getExcelUrl().equals(other.getExcelUrl()))
+            && (this.getSendTime() == null ? other.getSendTime() == null : this.getSendTime().equals(other.getSendTime()))
+            && (this.getSendType() == null ? other.getSendType() == null : this.getSendType().equals(other.getSendType()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
             && (this.getSmsContent() == null ? other.getSmsContent() == null : this.getSmsContent().equals(other.getSmsContent()));
@@ -490,6 +535,9 @@ public class PayShopBatch implements Serializable {
         result = prime * result + ((getSmsStatus() == null) ? 0 : getSmsStatus().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
+        result = prime * result + ((getExcelUrl() == null) ? 0 : getExcelUrl().hashCode());
+        result = prime * result + ((getSendTime() == null) ? 0 : getSendTime().hashCode());
+        result = prime * result + ((getSendType() == null) ? 0 : getSendType().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getSmsContent() == null) ? 0 : getSmsContent().hashCode());
