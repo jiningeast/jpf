@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopCompany implements Serializable {
@@ -10,7 +11,7 @@ public class PayShopCompany implements Serializable {
     private String id;
 
     /**
-     * 
+     * 商户号：SP+时间戳+4位随机数
      */
     private String merchNo;
 
@@ -58,6 +59,16 @@ public class PayShopCompany implements Serializable {
      * 商户状态 0=停用 1=启用
      */
     private Byte status;
+
+    /**
+     * 余额
+     */
+    private BigDecimal money;
+
+    /**
+     * 余额校验码
+     */
+    private String moneyCode;
 
     /**
      * 
@@ -154,6 +165,22 @@ public class PayShopCompany implements Serializable {
         this.status = status;
     }
 
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public String getMoneyCode() {
+        return moneyCode;
+    }
+
+    public void setMoneyCode(String moneyCode) {
+        this.moneyCode = moneyCode == null ? null : moneyCode.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -182,6 +209,8 @@ public class PayShopCompany implements Serializable {
         sb.append(", saleName=").append(saleName);
         sb.append(", salePhone=").append(salePhone);
         sb.append(", status=").append(status);
+        sb.append(", money=").append(money);
+        sb.append(", moneyCode=").append(moneyCode);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
         return sb.toString();
@@ -214,6 +243,8 @@ public class PayShopCompany implements Serializable {
             && (this.getSaleName() == null ? other.getSaleName() == null : this.getSaleName().equals(other.getSaleName()))
             && (this.getSalePhone() == null ? other.getSalePhone() == null : this.getSalePhone().equals(other.getSalePhone()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
+            && (this.getMoneyCode() == null ? other.getMoneyCode() == null : this.getMoneyCode().equals(other.getMoneyCode()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
 
@@ -235,6 +266,8 @@ public class PayShopCompany implements Serializable {
         result = prime * result + ((getSaleName() == null) ? 0 : getSaleName().hashCode());
         result = prime * result + ((getSalePhone() == null) ? 0 : getSalePhone().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
+        result = prime * result + ((getMoneyCode() == null) ? 0 : getMoneyCode().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
     }

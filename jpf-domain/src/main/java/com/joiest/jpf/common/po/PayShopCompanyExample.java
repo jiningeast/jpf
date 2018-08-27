@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -925,6 +926,136 @@ public class PayShopCompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andMoneyIsNull() {
+            addCriterion("money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyIsNotNull() {
+            addCriterion("money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyEqualTo(BigDecimal value) {
+            addCriterion("money =", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("money <>", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyGreaterThan(BigDecimal value) {
+            addCriterion("money >", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("money >=", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyLessThan(BigDecimal value) {
+            addCriterion("money <", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("money <=", value, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyIn(List<BigDecimal> values) {
+            addCriterion("money in", values, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("money not in", values, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("money between", value1, value2, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("money not between", value1, value2, "money");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeIsNull() {
+            addCriterion("money_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeIsNotNull() {
+            addCriterion("money_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeEqualTo(String value) {
+            addCriterion("money_code =", value, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeNotEqualTo(String value) {
+            addCriterion("money_code <>", value, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeGreaterThan(String value) {
+            addCriterion("money_code >", value, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("money_code >=", value, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeLessThan(String value) {
+            addCriterion("money_code <", value, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeLessThanOrEqualTo(String value) {
+            addCriterion("money_code <=", value, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeLike(String value) {
+            addCriterion("money_code like", value, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeNotLike(String value) {
+            addCriterion("money_code not like", value, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeIn(List<String> values) {
+            addCriterion("money_code in", values, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeNotIn(List<String> values) {
+            addCriterion("money_code not in", values, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeBetween(String value1, String value2) {
+            addCriterion("money_code between", value1, value2, "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeNotBetween(String value1, String value2) {
+            addCriterion("money_code not between", value1, value2, "moneyCode");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
@@ -1027,6 +1158,11 @@ public class PayShopCompanyExample {
 
         public Criteria andSalePhoneLikeInsensitive(String value) {
             addCriterion("upper(sale_phone) like", value.toUpperCase(), "salePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyCodeLikeInsensitive(String value) {
+            addCriterion("upper(money_code) like", value.toUpperCase(), "moneyCode");
             return (Criteria) this;
         }
     }

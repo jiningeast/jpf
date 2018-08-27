@@ -15,6 +15,11 @@ public class PayShopBatchCoupon implements Serializable {
     private String batchId;
 
     /**
+     * 批次号
+     */
+    private String batchNo;
+
+    /**
      * 
      */
     private String companyId;
@@ -99,6 +104,14 @@ public class PayShopBatchCoupon implements Serializable {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId == null ? null : batchId.trim();
+    }
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo == null ? null : batchNo.trim();
     }
 
     public String getCompanyId() {
@@ -216,6 +229,7 @@ public class PayShopBatchCoupon implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", batchId=").append(batchId);
+        sb.append(", batchNo=").append(batchNo);
         sb.append(", companyId=").append(companyId);
         sb.append(", companyName=").append(companyName);
         sb.append(", couponNo=").append(couponNo);
@@ -251,6 +265,7 @@ public class PayShopBatchCoupon implements Serializable {
         PayShopBatchCoupon other = (PayShopBatchCoupon) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getBatchId() == null ? other.getBatchId() == null : this.getBatchId().equals(other.getBatchId()))
+            && (this.getBatchNo() == null ? other.getBatchNo() == null : this.getBatchNo().equals(other.getBatchNo()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getCouponNo() == null ? other.getCouponNo() == null : this.getCouponNo().equals(other.getCouponNo()))
@@ -275,6 +290,7 @@ public class PayShopBatchCoupon implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getBatchId() == null) ? 0 : getBatchId().hashCode());
+        result = prime * result + ((getBatchNo() == null) ? 0 : getBatchNo().hashCode());
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getCouponNo() == null) ? 0 : getCouponNo().hashCode());
