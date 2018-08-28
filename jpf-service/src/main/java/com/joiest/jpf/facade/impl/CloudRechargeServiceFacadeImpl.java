@@ -137,7 +137,7 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             companyC.andMerchNoEqualTo(cloudRechargeInfo.getMerchNo());
 
             List<PayCloudCompany> companyList =  payCloudCompanyMapper.selectByExample(example);
-            if( list != null || !list.isEmpty() ){
+            if( companyList != null && !companyList.isEmpty() ){
                 PayCloudCompany payCloudCompany = companyList.get(0);
                 cloudRechargeInfo.setCompanyId(payCloudCompany.getId());
                 cloudRechargeInfo.setCompanyName(payCloudCompany.getName());
@@ -247,24 +247,28 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         beanCopier.copy(PayCloudRecharge,cloudRechargeInfo,null);
 
         //发票信息
-        String[] invos = cloudRechargeInfo.getNeedcatpath().split(",");
-        String catidStr = "";
-        String catStr = "";
-        for (String str : invos )
+        if ( StringUtils.isNotBlank(cloudRechargeInfo.getNeedcatpath()) )
         {
-            PayMerchantsTypeExample example = new PayMerchantsTypeExample();
-            PayMerchantsTypeExample.Criteria c = example.createCriteria();
-            c.andCatpathEqualTo(str);
-            List<PayMerchantsType> merTypeList = payMerchantsTypeMapper.selectByExample(example);
-            if ( merTypeList != null && !merTypeList.isEmpty() )
+            String[] invos = cloudRechargeInfo.getNeedcatpath().split(",");
+            String catidStr = "";
+            String catStr = "";
+            for (String str : invos )
             {
-                PayMerchantsType merType = merTypeList.get(0);
-                catidStr += merType.getCatid() + ",";
-                catStr += merType.getCat() + ",";
+                PayMerchantsTypeExample example = new PayMerchantsTypeExample();
+                PayMerchantsTypeExample.Criteria c = example.createCriteria();
+                c.andCatpathEqualTo(str);
+                List<PayMerchantsType> merTypeList = payMerchantsTypeMapper.selectByExample(example);
+                if ( merTypeList != null && !merTypeList.isEmpty() )
+                {
+                    PayMerchantsType merType = merTypeList.get(0);
+                    catidStr += merType.getCatid() + ",";
+                    catStr += merType.getCat() + ",";
+                }
             }
+            cloudRechargeInfo.setCatid(catidStr);
+            cloudRechargeInfo.setCat(catStr.substring(0, catStr.length()-1));
         }
-        cloudRechargeInfo.setCatid(catidStr);
-        cloudRechargeInfo.setCat(catStr.substring(0, catStr.length()-1));
+
         //备注信息添加时间
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         if(cloudRechargeInfo.getKfremarks() != null && StringUtils.isNotBlank(cloudRechargeInfo.getKfremarks()) ){
