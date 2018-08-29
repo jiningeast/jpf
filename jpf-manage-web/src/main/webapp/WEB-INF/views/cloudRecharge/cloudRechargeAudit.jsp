@@ -80,10 +80,13 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">手续费金额：</td>
-                    <td colspan="4">
+                    <td colspan="1">
                         ${cloudRechargeInfo.feemoney}
                     </td>
-
+                    <td style="text-align: right;background-color: #f1f1f1;">发票内容：</td>
+                    <td colspan="4">
+                        ${cloudRechargeInfo.cat}
+                    </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">代理平台费率0.00:不收取费率：</td>

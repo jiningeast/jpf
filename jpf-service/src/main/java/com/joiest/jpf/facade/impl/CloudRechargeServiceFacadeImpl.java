@@ -52,6 +52,10 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
     @Autowired
     private PayCloudDfMoneyMapper payCloudDfMoneyMapper;
+
+    @Autowired
+    private PayMerchantsTypeMapper payMerchantsTypeMapper;
+
     /*
     * 统计充值总笔数
     * */
@@ -127,7 +131,18 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
             BeanCopier beanCopier = BeanCopier.create(PayCloudRecharge.class, CloudRechargeInfo.class, false);
             beanCopier.copy(payCloudRecharge, cloudRechargeInfo, null);
+            //商户信息
+            PayCloudCompanyExample example = new PayCloudCompanyExample();
+            PayCloudCompanyExample.Criteria companyC = example.createCriteria();
+            companyC.andMerchNoEqualTo(cloudRechargeInfo.getMerchNo());
 
+            List<PayCloudCompany> companyList =  payCloudCompanyMapper.selectByExample(example);
+            if( companyList != null && !companyList.isEmpty() ){
+                PayCloudCompany payCloudCompany = companyList.get(0);
+                cloudRechargeInfo.setCompanyId(payCloudCompany.getId());
+                cloudRechargeInfo.setCompanyName(payCloudCompany.getName());
+                cloudRechargeInfo.setMerchName(payCloudCompany.getMerchName());
+            }
             infos.add(cloudRechargeInfo);
         }
 
@@ -230,6 +245,29 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
 
         BeanCopier beanCopier = BeanCopier.create(PayCloudRecharge.class, CloudRechargeInfo.class, false);
         beanCopier.copy(PayCloudRecharge,cloudRechargeInfo,null);
+
+        //发票信息
+        if ( StringUtils.isNotBlank(cloudRechargeInfo.getNeedcatpath()) )
+        {
+            String[] invos = cloudRechargeInfo.getNeedcatpath().split(",");
+            String catidStr = "";
+            String catStr = "";
+            for (String str : invos )
+            {
+                PayMerchantsTypeExample example = new PayMerchantsTypeExample();
+                PayMerchantsTypeExample.Criteria c = example.createCriteria();
+                c.andCatpathEqualTo(str);
+                List<PayMerchantsType> merTypeList = payMerchantsTypeMapper.selectByExample(example);
+                if ( merTypeList != null && !merTypeList.isEmpty() )
+                {
+                    PayMerchantsType merType = merTypeList.get(0);
+                    catidStr += merType.getCatid() + ",";
+                    catStr += merType.getCat() + ",";
+                }
+            }
+            cloudRechargeInfo.setCatid(catidStr);
+            cloudRechargeInfo.setCat(catStr.substring(0, catStr.length()-1));
+        }
 
         //备注信息添加时间
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式

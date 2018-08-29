@@ -1016,6 +1016,66 @@ public class PayShopStockOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsUploadIsNull() {
+            addCriterion("is_upload is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadIsNotNull() {
+            addCriterion("is_upload is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadEqualTo(Byte value) {
+            addCriterion("is_upload =", value, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadNotEqualTo(Byte value) {
+            addCriterion("is_upload <>", value, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadGreaterThan(Byte value) {
+            addCriterion("is_upload >", value, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_upload >=", value, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadLessThan(Byte value) {
+            addCriterion("is_upload <", value, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadLessThanOrEqualTo(Byte value) {
+            addCriterion("is_upload <=", value, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadIn(List<Byte> values) {
+            addCriterion("is_upload in", values, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadNotIn(List<Byte> values) {
+            addCriterion("is_upload not in", values, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadBetween(Byte value1, Byte value2) {
+            addCriterion("is_upload between", value1, value2, "isUpload");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsUploadNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_upload not between", value1, value2, "isUpload");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;

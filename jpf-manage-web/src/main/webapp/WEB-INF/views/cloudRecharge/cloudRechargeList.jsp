@@ -41,6 +41,7 @@
                 columns : [[
                     {field:'id', title:'ID',width:'4%'},
                     {field:'fid', title:'充值单号',width:'10%'},
+                    {field:'companyName', title:'企业名称',width:'8%'},
                     {field:'agentNo', title:'代理聚合商户编号',width:'10%'},
                     {field:'merchNo', title:'到账聚合商户编号',width:'10%'},
                     {field:'payway', title:'支付方式',width:'5%'},
