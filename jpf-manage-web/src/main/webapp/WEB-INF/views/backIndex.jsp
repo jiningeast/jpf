@@ -145,7 +145,7 @@
                     "url" : "shopBatch/index"
                 },{
                     "menuid" : "505",
-                    "menuname" : "采购管理",
+                    "menuname" : "运营采购管理",
                     "icon" : "icon-nav",
                     "url" : "shopStockOrder/index"
                 }]
@@ -173,6 +173,11 @@
                         "menuname" : "云账户代付管理",
                         "icon" : "icon-nav",
                         "url" : "cloudCompanyMoney/caiwu/index"
+                    },{
+                        "menuid" : "605",
+                        "menuname" : "财务采购管理",
+                        "icon" : "icon-nav",
+                        "url" : "shopStockOrder/indexCaiwu"
                     }]
             },{
                 "menuid" : "7",
@@ -193,6 +198,16 @@
                     "menuname" : "欣券客户管理",
                     "icon" : "icon-nav",
                     "url" : "shopCustomer/index"
+                }]
+            },{
+                "menuid" : "9",
+                "icon" : "icon-sys",
+                "menuname" : "商品进销存管理",
+                "menus" : [{
+                    "menuid" : "901",
+                    "menuname" : "进销存统计",
+                    "icon" : "icon-nav",
+                    "url" : "shopStockLog/index"
                 }]
             }]
     	};

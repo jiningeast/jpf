@@ -51,7 +51,7 @@
                             <%--</select>--%>
                         <%--</td>--%>
                     </tr>
-                    <%--<tr>
+                    <tr>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">标准进价：</td>
                         <td>
@@ -62,7 +62,7 @@
                             <input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />
                         </td>
 
-                    </tr>--%>
+                    </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
                         <td>

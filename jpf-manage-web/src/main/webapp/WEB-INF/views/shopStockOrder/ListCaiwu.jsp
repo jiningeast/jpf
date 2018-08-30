@@ -32,16 +32,7 @@
                 modal:true,
                 // maximized:true,//弹出窗口最大化
             });
-
-
-           var toolbar = [
-                {
-                    text : '新增采购订单',
-                    iconCls : 'icon-add',
-                    handler : function(){
-                        $("#addWindowP").window("open").window('refresh', '../shopStockOrder/add/page').window('setTitle','新增');
-                    }
-                },
+            var toolbar = [
                 {
                     text:'审核',
                     iconCls:'icon-key-add',
@@ -51,7 +42,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#detailWindowP').window("open").window('refresh', '../shopStockOrder/audit/page?orderNo='+rows[0].orderNo+'&type=1').window('setTitle','审核');
+                        $('#detailWindowP').window("open").window('refresh', '../shopStockOrder/audit/page?orderNo='+rows[0].orderNo+'&type=2').window('setTitle','审核');
                     }
                 }
             ];
@@ -67,7 +58,7 @@
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
                 // width:500,
-                url:'list',
+                url:'listCaiwu',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'orderNo',title:'采购订单号',width:'15%',
@@ -76,8 +67,8 @@
                         }
                     },
                     {field:'addtime',title:'采购时间',width:'12%',formatter: formatDateStr},
-            /*        {field:'order_no',title:'供应商',width:'10%'},
-                    {field:'typeName',title:'品牌',width:'7%'},*/
+                    /*        {field:'order_no',title:'供应商',width:'10%'},
+                            {field:'typeName',title:'品牌',width:'7%'},*/
                     {field:'money',title:'采购预付金额',width:'7%'},
                     {field:'operatorName',title:'操作人',width:'7%'},
                     {field:'status',title:'状态',width:'6%',
@@ -167,15 +158,15 @@
                         <td><input id="productName" name="productName" class="easyui-textbox" type="text" /></td>--%>
                         <td>状态:</td>
                         <td><select id="status" name="status" class="easyui-combobox">
-                                <option value="">全部</option>
-                                <option value="0">已取消</option>
-                                <option value="1">新建</option>
-                                <option value="2">已提交待审批</option>
-                            </select>
+                            <option value="">全部</option>
+                            <option value="0">已取消</option>
+                            <option value="1">新建</option>
+                            <option value="2">已提交待审批</option>
+                        </select>
                         </td>
                         <td></td>
                         <td></td>
-                        </tr>
+                    </tr>
                 </table>
             </form>
         </div>

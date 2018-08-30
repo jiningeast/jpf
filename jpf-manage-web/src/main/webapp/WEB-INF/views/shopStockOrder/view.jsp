@@ -69,9 +69,19 @@
 
                     </td>
                 </tr>
+                <tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
+                    <td>
+                       ${shopStockOrderInfo.memo}
+                    </td>
+                <td></td>
+                <td></td>
+                </tr>
+                </tr>
             </table>
             <div id="productView"></div>
-            <table cellpadding=4 class="table table-bordered">
+          <%--  <table cellpadding=4 class="table table-bordered">
                 <tr>
                     <th>审核采购订单</th>
                 </tr>
@@ -82,14 +92,14 @@
 
                             <c:if test="${type == 1 }">
                                 <option value="" selected="selected">请选择</option>
-                                <option value="0"  <c:if  test="${shopStockOrderInfo.status == '0' }">selected</c:if>>取消</option>
-                                <%--<option value="1"  >新建,待提交</option>--%>
-                                <option value="2" <c:if  test="${shopStockOrderInfo.status == '2' }">selected</c:if> >提交</option>
-                                <option value="3" <c:if  test="${shopStockOrderInfo.status == '3' }">selected</c:if> >审批</option>
+                                <option value="0"  >取消</option>
+                                &lt;%&ndash;<option value="1"  >新建,待提交</option>&ndash;%&gt;
+                                <option value="2"  >提交</option>
+                                <option value="3"  >审批</option>
                             </c:if>
                             <c:if test="${type == 2 }">
                                 <option value="" selected="selected">请选择</option>
-                                <option value="0"  <c:if  test="${shopStockOrderInfo.status == '0' }">selected</c:if>>取消</option>
+                                <option value="0"  >取消</option>
                                 <option value="4"  <c:if  test="${shopStockOrderInfo.status == '4' }">selected</c:if>>已付款</option>
                             </c:if>
 
@@ -97,22 +107,17 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
-                    <td colspan="4">
-                        <textarea id="memo" name="memo"   style="width:500px; height:60px;">${shopStockOrderInfo.memo}</textarea>
-                    </td>
-                </tr>
+
             </table>
-        </form>
+--%>        </form>
     </div>
-    <div region="south" border="false"
+<%--    <div region="south" border="false"
          style="text-align: right; height: 30px; line-height: 30px;">
         <a id="saveBtn_audit" class="easyui-linkbutton" icon="icon-ok"
            href="javascript:void(0)">确定</a>
         <a id="cancelBtn_audit" class="easyui-linkbutton" icon="icon-cancel"
            href="javascript:void(0)">取消</a>
-    </div>
+    </div>--%>
 </div>
 <!-- /添加弹出窗口 -->
 
@@ -153,9 +158,9 @@
 
             onClick: function () {
                 var reqUrl = "audit/action";
-              /*  if( ${type == 2 } ){
+                if( ${type == 2 } ){
                     reqUrl = "caiwu/audit/action";
-                }*/
+                }
                 var isValid = $("#auditForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
@@ -173,10 +178,8 @@
                                 $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                             } else {
                                 $.messager.alert('消息提示', msg.retMsg, 'info');
-                                $('#detailWindowP').window('close');
+                                $('#infoDiv').window('close');
                                 $('#dg').datagrid('reload');
-                                window.location.reload();
-
                             }
                         },
                         error: function () {
