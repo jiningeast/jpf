@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PayShopStockCard implements Serializable {
     /**
-     * 
+     *
      */
     private String id;
 

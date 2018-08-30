@@ -14,6 +14,7 @@ import com.joiest.jpf.dto.GetShopOrderResponse;
 import com.joiest.jpf.dto.GetShopStockOrderRequest;
 import com.joiest.jpf.dto.GetShopStockOrderResponse;
 import com.joiest.jpf.entity.ShopOrderInfo;
+import com.joiest.jpf.entity.ShopStockCardInfo;
 import com.joiest.jpf.entity.ShopStockOrderInfo;
 import com.joiest.jpf.facade.ShopOrderServiceFacade;
 import com.joiest.jpf.facade.ShopStockOrderServiceFacade;
@@ -23,6 +24,7 @@ import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFacade {
 
@@ -102,5 +104,35 @@ public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFac
         return info;
     }
 
+    /***
+     *根据主键id获取采购订单
+     * */
+    @Override
+    public ShopStockOrderInfo getStockOrderById(String id){
 
+        PayShopStockOrder payShopStockOrder = payShopStockOrderMapper.selectByPrimaryKey(id);
+
+        if(payShopStockOrder == null) return null;
+
+        ShopStockOrderInfo shopStockOrderInfo = new ShopStockOrderInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayShopStockOrder.class,ShopStockOrderInfo.class,false);
+        beanCopier.copy(payShopStockOrder,shopStockOrderInfo,null);
+
+        return shopStockOrderInfo;
+    }
+
+    /***
+     *根据主键id更新采购订单
+     * */
+    public int upStockOrderById(Map<String,String> stockOrder){
+
+        PayShopStockOrder payShopStockOrder = new PayShopStockOrder();
+
+        payShopStockOrder.setId(stockOrder.get("id"));
+        if(stockOrder.containsKey("oss_url"))
+            payShopStockOrder.setOssUrl(stockOrder.get("oss_url"));
+
+
+        return payShopStockOrderMapper.updateByPrimaryKeySelective(payShopStockOrder);
+    }
 }

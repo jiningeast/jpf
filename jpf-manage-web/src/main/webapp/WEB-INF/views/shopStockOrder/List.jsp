@@ -6,6 +6,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>商品采购管理</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
+    <style>
+        .notice{ padding: 10px; background: rgb(255,251,230); border: solid 1px rgb(255,229,143); margin-bottom: 20px; }
+        .notice h6 { margin: 0; }
+        .notice p:last-child { margin-bottom: 0; }
+        table.payment tr { line-height: 3; }
+        table.payment tr td:first-child { text-align: right;}
+        table.companys tr td:nth-child(odd) { text-align: right; }
+        .datagrid tr td { text-align: center; }
+        .datagrid-mask { z-index: 9998; }
+        .datagrid-mask-msg { z-index: 9999; }
+    </style>
     <script>
         $(function() {
             $('#infoDiv').window({
@@ -22,8 +33,19 @@
                     handler : function(){
                         $("#infoDiv").window("open").window('refresh', 'add/page').window('setTitle','新增');
                     }
-                },
-                {
+                },{
+                   text:'商品采购',
+                   iconCls:'icon-ok',
+                   handler:function(){
+
+                       var rows = $('#dg').datagrid('getSelections');
+                       if (rows.length != 1) {
+                           $.messager.alert('消息提示','请选择一条数据！','info');
+                           return
+                       }
+                       $('#infoDiv').window("open").window('refresh', 'purchase?id='+rows[0].id).window('setTitle','商品采购');
+                   }
+               },{
                     text:'审核',
                     iconCls:'icon-key-add',
                     handler:function(){
@@ -168,7 +190,8 @@
     <br/>
     <table id="dg"></table>
 </div>
-<div id="infoDiv"></div>
+<div id="infoDiv" style="padding: 10px;"></div>
 <div id="edit"></div>
+
 </body>
 </html>
