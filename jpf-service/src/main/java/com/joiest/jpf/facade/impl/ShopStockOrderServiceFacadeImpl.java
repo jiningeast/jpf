@@ -212,6 +212,8 @@ public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFac
         if(stockOrder.containsKey("oss_url"))
             payShopStockOrder.setOssUrl(stockOrder.get("oss_url"));
 
+        if(stockOrder.containsKey("is_upload"))
+            payShopStockOrder.setIsUpload(Byte.valueOf(stockOrder.get("is_upload")));
 
         return payShopStockOrderMapper.updateByPrimaryKeySelective(payShopStockOrder);
     }
