@@ -21,17 +21,42 @@ public class PayShopStockOrder implements Serializable {
     private BigDecimal money;
 
     /**
-     * 后台操作人id
+     * 总商品数量
+     */
+    private Integer productAmount;
+
+    /**
+     * 成功导入数量
+     */
+    private Integer importedAmount;
+
+    /**
+     * 运营操作人id
      */
     private String operatorId;
 
     /**
-     * 后台操作人姓名
+     * 运营操作人姓名
      */
     private String operatorName;
 
     /**
-     * 0=取消 1=新建，待提交 2=已提交，待审批 3=已审批，待付款 4=已付款，完成
+     * 审核人id
+     */
+    private String checkOperatorId;
+
+    /**
+     * 审核人姓名
+     */
+    private String checkOperatorName;
+
+    /**
+     * 审核时间
+     */
+    private Date checkTime;
+
+    /**
+     * 0=取消 1=新建，待提交 2=已提交，待审批 3=已审批，待付款 4=已付款，完成 
      */
     private Byte status;
 
@@ -76,9 +101,14 @@ public class PayShopStockOrder implements Serializable {
     private Byte isUpload;
 
     /**
-     * 
+     * 添加时间
      */
     private Date addtime;
+
+    /**
+     * 修改时间
+     */
+    private Date updatetime;
 
     private static final long serialVersionUID = 1L;
 
@@ -106,6 +136,22 @@ public class PayShopStockOrder implements Serializable {
         this.money = money;
     }
 
+    public Integer getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(Integer productAmount) {
+        this.productAmount = productAmount;
+    }
+
+    public Integer getImportedAmount() {
+        return importedAmount;
+    }
+
+    public void setImportedAmount(Integer importedAmount) {
+        this.importedAmount = importedAmount;
+    }
+
     public String getOperatorId() {
         return operatorId;
     }
@@ -120,6 +166,30 @@ public class PayShopStockOrder implements Serializable {
 
     public void setOperatorName(String operatorName) {
         this.operatorName = operatorName == null ? null : operatorName.trim();
+    }
+
+    public String getCheckOperatorId() {
+        return checkOperatorId;
+    }
+
+    public void setCheckOperatorId(String checkOperatorId) {
+        this.checkOperatorId = checkOperatorId == null ? null : checkOperatorId.trim();
+    }
+
+    public String getCheckOperatorName() {
+        return checkOperatorName;
+    }
+
+    public void setCheckOperatorName(String checkOperatorName) {
+        this.checkOperatorName = checkOperatorName == null ? null : checkOperatorName.trim();
+    }
+
+    public Date getCheckTime() {
+        return checkTime;
+    }
+
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
     }
 
     public Byte getStatus() {
@@ -202,6 +272,14 @@ public class PayShopStockOrder implements Serializable {
         this.addtime = addtime;
     }
 
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
+    }
+
     /**
      *
      */
@@ -214,8 +292,13 @@ public class PayShopStockOrder implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", orderNo=").append(orderNo);
         sb.append(", money=").append(money);
+        sb.append(", productAmount=").append(productAmount);
+        sb.append(", importedAmount=").append(importedAmount);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
+        sb.append(", checkOperatorId=").append(checkOperatorId);
+        sb.append(", checkOperatorName=").append(checkOperatorName);
+        sb.append(", checkTime=").append(checkTime);
         sb.append(", status=").append(status);
         sb.append(", paywayId=").append(paywayId);
         sb.append(", paywayCn=").append(paywayCn);
@@ -226,6 +309,7 @@ public class PayShopStockOrder implements Serializable {
         sb.append(", cardtime=").append(cardtime);
         sb.append(", isUpload=").append(isUpload);
         sb.append(", addtime=").append(addtime);
+        sb.append(", updatetime=").append(updatetime);
         sb.append("]");
         return sb.toString();
     }
@@ -249,8 +333,13 @@ public class PayShopStockOrder implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
+            && (this.getProductAmount() == null ? other.getProductAmount() == null : this.getProductAmount().equals(other.getProductAmount()))
+            && (this.getImportedAmount() == null ? other.getImportedAmount() == null : this.getImportedAmount().equals(other.getImportedAmount()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
+            && (this.getCheckOperatorId() == null ? other.getCheckOperatorId() == null : this.getCheckOperatorId().equals(other.getCheckOperatorId()))
+            && (this.getCheckOperatorName() == null ? other.getCheckOperatorName() == null : this.getCheckOperatorName().equals(other.getCheckOperatorName()))
+            && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getPaywayId() == null ? other.getPaywayId() == null : this.getPaywayId().equals(other.getPaywayId()))
             && (this.getPaywayCn() == null ? other.getPaywayCn() == null : this.getPaywayCn().equals(other.getPaywayCn()))
@@ -260,7 +349,8 @@ public class PayShopStockOrder implements Serializable {
             && (this.getOssUrl() == null ? other.getOssUrl() == null : this.getOssUrl().equals(other.getOssUrl()))
             && (this.getCardtime() == null ? other.getCardtime() == null : this.getCardtime().equals(other.getCardtime()))
             && (this.getIsUpload() == null ? other.getIsUpload() == null : this.getIsUpload().equals(other.getIsUpload()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
 
     /**
@@ -273,8 +363,13 @@ public class PayShopStockOrder implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
+        result = prime * result + ((getProductAmount() == null) ? 0 : getProductAmount().hashCode());
+        result = prime * result + ((getImportedAmount() == null) ? 0 : getImportedAmount().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
+        result = prime * result + ((getCheckOperatorId() == null) ? 0 : getCheckOperatorId().hashCode());
+        result = prime * result + ((getCheckOperatorName() == null) ? 0 : getCheckOperatorName().hashCode());
+        result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getPaywayId() == null) ? 0 : getPaywayId().hashCode());
         result = prime * result + ((getPaywayCn() == null) ? 0 : getPaywayCn().hashCode());
@@ -285,6 +380,7 @@ public class PayShopStockOrder implements Serializable {
         result = prime * result + ((getCardtime() == null) ? 0 : getCardtime().hashCode());
         result = prime * result + ((getIsUpload() == null) ? 0 : getIsUpload().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
+        result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
     }
 }

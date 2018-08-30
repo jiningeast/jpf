@@ -6,17 +6,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>商品采购管理</title>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
-    <style>
-        .notice{ padding: 10px; background: rgb(255,251,230); border: solid 1px rgb(255,229,143); margin-bottom: 20px; }
-        .notice h6 { margin: 0; }
-        .notice p:last-child { margin-bottom: 0; }
-        table.payment tr { line-height: 3; }
-        table.payment tr td:first-child { text-align: right;}
-        table.companys tr td:nth-child(odd) { text-align: right; }
-        .datagrid tr td { text-align: center; }
-        .datagrid-mask { z-index: 9998; }
-        .datagrid-mask-msg { z-index: 9999; }
-    </style>
     <script>
         $(function() {
             $('#addWindowP').window({
@@ -27,15 +16,6 @@
                 modal:true,
                 // maximized:true,//弹出窗口最大化
             });
-            $('#infoDiv').window({
-                title:'添加',
-                width:'80%',
-                height:'500px',
-                closed:true,
-                modal:true,
-                // maximized:true,//弹出窗口最大化
-            });
-
             $('#detailWindowP').window({
                 title:'审核',
                 width:'80%',
@@ -52,28 +32,8 @@
                 modal:true,
                 // maximized:true,//弹出窗口最大化
             });
-
-
-           var toolbar = [
+            var toolbar = [
                 {
-                    text : '新增采购订单',
-                    iconCls : 'icon-add',
-                    handler : function(){
-                        $("#addWindowP").window("open").window('refresh', '../shopStockOrder/add/page').window('setTitle','新增');
-                    }
-                },{
-                   text:'商品采购',
-                   iconCls:'icon-ok',
-                   handler:function(){
-
-                       var rows = $('#dg').datagrid('getSelections');
-                       if (rows.length != 1) {
-                           $.messager.alert('消息提示','请选择一条数据！','info');
-                           return
-                       }
-                       $('#infoDiv').window("open").window('refresh', 'purchase?id='+rows[0].id).window('setTitle','商品采购');
-                   }
-               },{
                     text:'审核',
                     iconCls:'icon-key-add',
                     handler:function(){
@@ -82,7 +42,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#detailWindowP').window("open").window('refresh', '../shopStockOrder/audit/page?orderNo='+rows[0].orderNo+'&type=1').window('setTitle','审核');
+                        $('#detailWindowP').window("open").window('refresh', '../shopStockOrder/audit/page?orderNo='+rows[0].orderNo+'&type=2').window('setTitle','审核');
                     }
                 }
             ];
@@ -98,7 +58,7 @@
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
                 // width:500,
-                url:'list',
+                url:'listCaiwu',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'orderNo',title:'采购订单号',width:'15%',
@@ -107,8 +67,8 @@
                         }
                     },
                     {field:'addtime',title:'采购时间',width:'12%',formatter: formatDateStr},
-            /*        {field:'order_no',title:'供应商',width:'10%'},
-                    {field:'typeName',title:'品牌',width:'7%'},*/
+                    /*        {field:'order_no',title:'供应商',width:'10%'},
+                            {field:'typeName',title:'品牌',width:'7%'},*/
                     {field:'money',title:'采购预付金额',width:'7%'},
                     {field:'operatorName',title:'操作人',width:'7%'},
                     {field:'status',title:'状态',width:'6%',
@@ -198,15 +158,15 @@
                         <td><input id="productName" name="productName" class="easyui-textbox" type="text" /></td>--%>
                         <td>状态:</td>
                         <td><select id="status" name="status" class="easyui-combobox">
-                                <option value="">全部</option>
-                                <option value="0">已取消</option>
-                                <option value="1">新建</option>
-                                <option value="2">已提交待审批</option>
-                            </select>
+                            <option value="">全部</option>
+                            <option value="0">已取消</option>
+                            <option value="1">新建</option>
+                            <option value="2">已提交待审批</option>
+                        </select>
                         </td>
                         <td></td>
                         <td></td>
-                        </tr>
+                    </tr>
                 </table>
             </form>
         </div>
@@ -218,11 +178,11 @@
     <br/>
     <table id="dg"></table>
 </div>
-<div id="infoDiv" style="padding: 10px;"></div>
-<div id="addWindowP" style="padding: 5px;"></div>
-<div id="detailWindowP" style="padding: 10px;"></div>
-<div id="viewWindow" style="padding: 10px;"></div>
+<div id="infoDiv">
+    <div id="addWindowP" style="padding: 5px;"></div>
+    <div id="detailWindowP" style="padding: 10px;"></div>
+    <div id="viewWindow" style="padding: 10px;"></div>
+</div>
 <div id="edit"></div>
-
 </body>
 </html>
