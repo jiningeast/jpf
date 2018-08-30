@@ -107,11 +107,19 @@
                         }
                     },
                     {field:'addtime',title:'采购时间',width:'12%',formatter: formatDateStr},
-            /*        {field:'order_no',title:'供应商',width:'10%'},
-                    {field:'typeName',title:'品牌',width:'7%'},*/
+                    {field:'cardtime',title:'采购入库时间',width:'10%'},
+                    {field:'isUpload',title:'采购状态',width:'6%',
+                        formatter : function(value,row,index){
+                            if(value=='1'){return '已采购'}
+                            else if(value=="2"){return '未采购'}
+
+                        },styler: function (value, row, index) {
+                            return 'color:red';
+                        }
+                    },
                     {field:'money',title:'采购预付金额',width:'7%'},
                     {field:'operatorName',title:'操作人',width:'7%'},
-                    {field:'status',title:'状态',width:'6%',
+                    {field:'status',title:'订单状态',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='0'){return '已取消'}
                             else if(value=="1"){return '新建'}
@@ -196,7 +204,7 @@
                     <tr>
                         <%--<td>关键字:</td>
                         <td><input id="productName" name="productName" class="easyui-textbox" type="text" /></td>--%>
-                        <td>状态:</td>
+                        <td>订单状态:</td>
                         <td><select id="status" name="status" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="0">已取消</option>
@@ -204,8 +212,13 @@
                                 <option value="2">已提交待审批</option>
                             </select>
                         </td>
-                        <td></td>
-                        <td></td>
+                            <td>采购状态:</td>
+                            <td><select id="isUpload" name="isUpload" class="easyui-combobox">
+                                <option value="">全部</option>
+                                <option value="1">已采购</option>
+                                <option value="2">未采购</option>
+                            </select>
+                            </td>
                         </tr>
                 </table>
             </form>

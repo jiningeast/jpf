@@ -72,6 +72,9 @@ public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFac
                 c.andStatusIn(request.getStatusArr()); //查询指定状态值数据
             }
         }
+        if(request.getIsUpload()!=null && request.getIsUpload().toString()!=""){
+            c.andIsUploadEqualTo(request.getIsUpload());
+        }
         if(StringUtils.isNotBlank(request.getOrderNo())){
             c.andOrderNoEqualTo(request.getOrderNo());
         }
@@ -125,6 +128,9 @@ public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFac
             if( request.getStatusArr() != null ){
                 c.andStatusIn(request.getStatusArr()); //查询指定状态值数据
             }
+        }
+        if(request.getIsUpload()!=null && request.getIsUpload().toString()!=""){
+            c.andIsUploadEqualTo(request.getIsUpload());
         }
         // 添加时间搜索
         if (StringUtils.isNotBlank(request.getAddtimeStart()))
