@@ -11,6 +11,26 @@ public class PayShopStockCard implements Serializable {
     private String id;
 
     /**
+     * 商品id
+     */
+    private String productId;
+
+    /**
+     * 
+     */
+    private String productName;
+
+    /**
+     * 供应商id
+     */
+    private String supplierId;
+
+    /**
+     * 供应商id
+     */
+    private String supplierName;
+
+    /**
      * 卡号
      */
     private String cardNo;
@@ -83,6 +103,38 @@ public class PayShopStockCard implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId == null ? null : productId.trim();
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName == null ? null : productName.trim();
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
     }
 
     public String getCardNo() {
@@ -199,6 +251,10 @@ public class PayShopStockCard implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", productId=").append(productId);
+        sb.append(", productName=").append(productName);
+        sb.append(", supplierId=").append(supplierId);
+        sb.append(", supplierName=").append(supplierName);
         sb.append(", cardNo=").append(cardNo);
         sb.append(", cardPass=").append(cardPass);
         sb.append(", expireMonth=").append(expireMonth);
@@ -233,6 +289,10 @@ public class PayShopStockCard implements Serializable {
         }
         PayShopStockCard other = (PayShopStockCard) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
+            && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
+            && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
+            && (this.getSupplierName() == null ? other.getSupplierName() == null : this.getSupplierName().equals(other.getSupplierName()))
             && (this.getCardNo() == null ? other.getCardNo() == null : this.getCardNo().equals(other.getCardNo()))
             && (this.getCardPass() == null ? other.getCardPass() == null : this.getCardPass().equals(other.getCardPass()))
             && (this.getExpireMonth() == null ? other.getExpireMonth() == null : this.getExpireMonth().equals(other.getExpireMonth()))
@@ -256,6 +316,10 @@ public class PayShopStockCard implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
+        result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
+        result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
+        result = prime * result + ((getSupplierName() == null) ? 0 : getSupplierName().hashCode());
         result = prime * result + ((getCardNo() == null) ? 0 : getCardNo().hashCode());
         result = prime * result + ((getCardPass() == null) ? 0 : getCardPass().hashCode());
         result = prime * result + ((getExpireMonth() == null) ? 0 : getExpireMonth().hashCode());
