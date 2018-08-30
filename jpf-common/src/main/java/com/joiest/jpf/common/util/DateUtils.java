@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.text.DateFormat;
@@ -399,6 +400,7 @@ public class DateUtils {
 		return fDate;
 	}
 
+
 	/*
 	 * 将时间戳转换为时间
 	 */
@@ -420,6 +422,23 @@ public class DateUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	/**
+	 * 时间字符串转换为date类型   年月日格式
+	 * */
+	public static Date stringToDate(String dateString){
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATEFORMATSHORT);
+		Date time2 = new Date();
+		if(StringUtils.isNotBlank(dateString)){
+			try {
+				System.out.println(dateString);
+				time2 = simpleDateFormat.parse(dateString);//date类型
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return time2;
 	}
 
 	public static void main(String[] args) {

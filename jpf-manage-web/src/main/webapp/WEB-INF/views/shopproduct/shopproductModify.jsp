@@ -52,11 +52,16 @@
                         <%--</td>--%>
                     </tr>
                     <tr>
-<%--                        </td>
                         <td style="text-align: right;background-color: #f1f1f1;">标准进价：</td>
                         <td>
-                            <input id="bid" name="bid" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />
-                        </td>--%>
+                            <input id="bid" name="bid" type="text" style="width:220px" class="easyui-textbox" value="${productOne.bid}" data-options="required:true,validType:'floatNumber'" />
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">商品售价：</td>
+                        <td>
+                            <input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" value="${productOne.money}" data-options="required:true,validType:'floatNumber'" />
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
                         <td>
                             <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.rechargeMoney}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
@@ -65,10 +70,7 @@
                         <td>
                             <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.dou}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
-                        <%--<td style="text-align: right;background-color: #f1f1f1;">商品售价：</td>--%>
-                        <%--<td>--%>
-                            <%--<input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />--%>
-                        <%--</td>--%>
+
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
