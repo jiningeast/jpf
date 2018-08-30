@@ -71,6 +71,7 @@ public class ShopStockOrderController {
         statusArr.add((byte)0);  //取消
         statusArr.add((byte)1);  //新建
         statusArr.add((byte)2); //审批
+        statusArr.add((byte)3); //已经审批
         request.setStatusArr(statusArr);
         GetShopStockOrderResponse response= shopStockOrderServiceFacade.getList(request);
         Map<String, Object> map = new HashMap<>();

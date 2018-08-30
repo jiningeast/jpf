@@ -67,15 +67,15 @@
                         }
                     },
                     {field:'addtime',title:'采购时间',width:'12%',formatter: formatDateStr},
-                    {field:'cardtime',title:'采购入库时间',width:'10%'},
+                    {field:'cardtime',title:'采购入库时间',width:'10%',formatter: formatDateStr},
                     {field:'isUpload',title:'采购状态',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '已采购'}
                             else if(value=="2"){return '未采购'}
 
-                        },styler: function (value, row, index) {
+                        }/*,styler: function (value, row, index) {
                             return 'color:red';
-                        }
+                        }*/
                     },
                     {field:'money',title:'采购预付金额',width:'7%'},
                     {field:'operatorName',title:'操作人',width:'7%'},
@@ -83,12 +83,12 @@
                         formatter : function(value,row,index){
                             if(value=='0'){return '已取消'}
                             else if(value=="1"){return '新建'}
-                            else if(value=="2"){return '已提交待审批'}
-                            else if(value=="3"){return '已审批代付款'}
+                            else if(value=="2"){return '已提交'}
+                            else if(value=="3"){return '已审批'}
                             else if(value=="4"){return '已付款'}
-                        },styler: function (value, row, index) {
+                        }/*,styler: function (value, row, index) {
                             return 'color:red';
-                        }
+                        }*/
                     }
 
                 ]]
@@ -167,8 +167,8 @@
                         <td>订单状态:</td>
                         <td><select id="status" name="status" class="easyui-combobox">
                             <option value="">全部</option>
-                            <option value="0">已取消</option>
-                            <option value="3">已审批</option>
+                            <option value="0">取消</option>
+                            <option value="3">审批</option>
                             <option value="4">已付款</option>
                         </select>
                         </td>
