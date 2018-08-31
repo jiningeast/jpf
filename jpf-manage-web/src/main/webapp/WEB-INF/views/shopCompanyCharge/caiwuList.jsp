@@ -16,13 +16,13 @@
                 modal:true
             });
             var toolbar = [
-                {
+                /*{
                     text : '新增',
                     iconCls : 'icon-add',
                     handler : function(){
                         $("#infoDiv").window("open").window('refresh', 'add/page').window('setTitle','新增');
                     }
-                },
+                },*/
                 {
                     text:'审核',
                     iconCls:'icon-key-add',
@@ -32,7 +32,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#infoDiv').window("open").window('refresh', 'audit/page?id='+rows[0].id).window('setTitle','编辑');
+                        $('#infoDiv').window("open").window('refresh', 'caiwu/audit/page?id='+rows[0].id).window('setTitle','编辑');
                     }
                 }
             ];
@@ -60,7 +60,7 @@
                     {field:'status',title:'状态',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='-1'){return '已取消'}
-                            else if(value=='0'){return '新建'}
+                            else if(value=='0'){return '申请'}
                             else if(value=="1"){return '审核通过已充值'}
                             else if(value=="2"){return '审核驳回'}
                         },styler: function (value, row, index) {
@@ -143,7 +143,7 @@
                         <td><select id="status" name="status" class="easyui-combobox">
                             <option value="">全部</option>
                             <option value="-1">已取消</option>
-                            <option value="0">新建</option>
+                            <option value="0">申请</option>
                             <option value="1">审核并充值</option>
                             <option value="2">审批驳回</option>
                         </select>

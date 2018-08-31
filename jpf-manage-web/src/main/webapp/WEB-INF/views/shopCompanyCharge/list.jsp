@@ -60,7 +60,7 @@
                     {field:'status',title:'状态',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='-1'){return '已取消'}
-                            else if(value=='0'){return '新建'}
+                            else if(value=='0'){return '申请'}
                             else if(value=="1"){return '审核通过已充值'}
                             else if(value=="2"){return '审核驳回'}
                         },styler: function (value, row, index) {
@@ -143,7 +143,7 @@
                         <td><select id="status" name="status" class="easyui-combobox">
                             <option value="">全部</option>
                             <option value="-1">已取消</option>
-                            <option value="0">新建</option>
+                            <option value="0">申请</option>
                             <option value="1">审核并充值</option>
                             <option value="2">审批驳回</option>
                         </select>
