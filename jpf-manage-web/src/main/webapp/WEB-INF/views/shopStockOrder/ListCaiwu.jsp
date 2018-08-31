@@ -16,7 +16,7 @@
                 modal:true,
                 // maximized:true,//弹出窗口最大化
             });
-            $('#detailWindowPCaiwu').window({
+            $('#detailWindowP').window({
                 title:'审核',
                 width:'80%',
                 height:'500px',
@@ -42,7 +42,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#detailWindowPCaiwu').window("open").window('refresh', '../shopStockOrder/audit/page?orderNo='+rows[0].orderNo+'&type=2').window('setTitle','审核');
+                        $('#detailWindowP').window("open").window('refresh', '../shopStockOrder/audit/page?orderNo='+rows[0].orderNo+'&type=2').window('setTitle','审核');
                     }
                 }
             ];
@@ -193,7 +193,7 @@
 </div>
 <div id="infoDiv">
     <div id="addWindowP" style="padding: 5px;"></div>
-    <div id="detailWindowPCaiwu" style="padding: 10px;"></div>
+    <div id="detailWindowP" style="padding: 10px;"></div>
     <div id="viewWindow" style="padding: 10px;"></div>
 </div>
 <div id="edit"></div>

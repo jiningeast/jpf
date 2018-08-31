@@ -107,7 +107,7 @@
                         }
                     },
                     {field:'addtime',title:'采购时间',width:'12%',formatter: formatDateStr},
-                    {field:'cardtime',title:'采购入库时间',width:'10%'},
+                    {field:'cardtime',title:'采购入库时间',width:'10%',formatter: formatDateStr},
                     {field:'isUpload',title:'采购状态',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '已采购'}
