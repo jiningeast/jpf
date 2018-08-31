@@ -59,5 +59,6 @@
 	<bean id="WeixinMenuServiceFacade" class="com.joiest.jpf.facade.impl.WeixinMenuServiceFacadeImpl"></bean>
 	<bean id="ShopStockLogServiceFacade" class="com.joiest.jpf.facade.impl.ShopStockLogServiceFacadeImpl"></bean>
 	<bean id="ShopStockOrderServiceFacade" class="com.joiest.jpf.facade.impl.ShopStockOrderServiceFacadeImpl"></bean>
+	<bean id="ShopCompanyChargeServiceFacade" class="com.joiest.jpf.facade.impl.ShopCompanyChargeServiceFacadeImpl"></bean>
 	<bean id="ShopStockOrderProductServiceFacade" class="com.joiest.jpf.facade.impl.ShopStockOrderProductServiceFacadeImpl"></bean>
 </beans>
