@@ -540,6 +540,7 @@ public class ShopStockOrderController {
             //修改库存订单
             Map<String, String> stockOrder = new HashMap<>();
             stockOrder.put("is_upload", "1");
+            stockOrder.put("cardtime", "1");
             stockOrder.put("id", id);
             int upStockOrderById = shopStockOrderServiceFacade.upStockOrderById(stockOrder);
 
