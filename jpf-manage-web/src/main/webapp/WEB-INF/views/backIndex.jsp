@@ -202,7 +202,7 @@
             },{
                 "menuid" : "9",
                 "icon" : "icon-sys",
-                "menuname" : "商品进销存管理",
+                "menuname" : "统计管理",
                 "menus" : [{
                     "menuid" : "901",
                     "menuname" : "进销存统计",

@@ -138,4 +138,14 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         return new JpfResponseDto();
     }
 
+    @Override
+    public PayShopCustomer getCustomerByPhone(String phone){
+        PayShopCustomerExample e = new PayShopCustomerExample();
+        PayShopCustomerExample.Criteria c = e.createCriteria();
+        c.andPhoneEqualTo(phone);
+        List<PayShopCustomer> list = payShopCustomerMapper.selectByExample(e);
+
+        return list.get(0);
+    }
+
 }

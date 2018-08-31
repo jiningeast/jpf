@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.dto.GetShopCustomerRequest;
 import com.joiest.jpf.dto.GetShopCustomerResponse;
 
@@ -16,4 +17,8 @@ public interface ShopCustomerServiceFacade {
      */
     public JpfResponseDto delCompanyCustomer(String id,int type);
 
+    /**
+     * 根据手机号获取用户
+     */
+    public PayShopCustomer getCustomerByPhone(String phoen);
 }
