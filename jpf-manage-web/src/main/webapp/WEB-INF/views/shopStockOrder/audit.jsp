@@ -152,6 +152,12 @@
         $("#saveBtn_audit").linkbutton({
 
             onClick: function () {
+                //获取当前选中的值
+                var  selectVelue=$("#status_audit").combobox('getValue');
+                if (selectVelue== '') {
+                    $.messager.alert('消息提示', '请选择审核状态', 'error');
+                    return;
+                }
                 var reqUrl = "audit/action";
               /*  if( ${type == 2 } ){
                     reqUrl = "caiwu/audit/action";
