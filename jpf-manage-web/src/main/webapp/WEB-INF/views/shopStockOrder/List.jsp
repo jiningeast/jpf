@@ -215,6 +215,7 @@
                                 <option value="1">新建</option>
                                 <option value="2">提交</option>
                                 <option value="3">审批</option>
+                                <option value="4">付款</option>
                             </select>
                         </td>
                             <td>采购状态:</td>
