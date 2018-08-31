@@ -71,8 +71,13 @@
                            $.messager.alert('消息提示','请选择一条数据！','info');
                            return
                        }
+                       if(rows[0].status!='4'){
+
+                           $.messager.alert('消息提示','此单尚未付款','info');
+                           return false;
+                       }
                        if(rows[0].isUpload=='2')
-                         $('#infoDiv').window("open").window('refresh', 'purchase?id='+rows[0].id).window('setTitle','商品采购');
+                            $('#infoDiv').window("open").window('refresh', 'purchase?id='+rows[0].id).window('setTitle','商品采购');
                        else
                            $.messager.alert('消息提示','此单已采购，请勿重复操作','info');
                    }
