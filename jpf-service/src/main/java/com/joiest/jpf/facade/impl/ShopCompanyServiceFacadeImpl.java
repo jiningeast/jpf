@@ -384,6 +384,24 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     }
 
     /**
+     * 公司单条记录
+     */
+    @Override
+    public JpfResponseDto updateCompanyRecord(PayShopCompany payShopCompany)
+    {
+        if ( StringUtils.isBlank(payShopCompany.getId()))
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        int count = payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompany);
+        if(count != 1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "更新失败");
+        }
+
+        return new JpfResponseDto();
+    }
+
+    /**
      * 公司充值
      */
     @Override

@@ -29,6 +29,11 @@ public interface ShopCompanyServiceFacade {
     public JpfResponseDto editCompany(GetShopCompanyRequest request,int account);
 
     /**
+     * 根据主键更新公司信息
+     */
+    public JpfResponseDto updateCompanyRecord(PayShopCompany payShopCompany);
+
+    /**
      * 公司停用和启用
      */
     public JpfResponseDto delCompanyShop(String merchNo,int type);

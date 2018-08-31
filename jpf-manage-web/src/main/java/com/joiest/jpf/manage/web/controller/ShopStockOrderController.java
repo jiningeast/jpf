@@ -72,6 +72,7 @@ public class ShopStockOrderController {
         statusArr.add((byte)1);  //新建
         statusArr.add((byte)2); //审批
         statusArr.add((byte)3); //已经审批
+        statusArr.add((byte)4); //已经付款
         request.setStatusArr(statusArr);
         GetShopStockOrderResponse response= shopStockOrderServiceFacade.getList(request);
         Map<String, Object> map = new HashMap<>();
@@ -367,13 +368,19 @@ public class ShopStockOrderController {
 
                         if(!lie.getValue().toString().equals(actualySize.toString())){
 
-                            jsonObject.put("info","总笔数与实际笔数不符请修改后上传！");
+                            jsonObject.put("info","总笔数与实际笔数不符，请修改后上传！");
                             return jsonObject;
                         }
                     }
                 }
             }
         }
+        if(!shopStockOrderInfo.getProductAmount().equals(allNum)){
+
+            jsonObject.put("info","采购数量与订单商品数不符，请修改后上传！");
+            //return jsonObject;
+        }
+
         UUID fileUUid = UUID.randomUUID();
 
         //组装文件数据
@@ -518,6 +525,10 @@ public class ShopStockOrderController {
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })//事务添加
     public JSONObject dealPurchaseData(HttpServletRequest request){
 
+        // 查询操作人id和姓名
+        HttpSession session = request.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+
         String fileUUid = request.getParameter("fileUUid");
         String id = request.getParameter("orderid");
 
@@ -536,6 +547,12 @@ public class ShopStockOrderController {
         JSONObject fileCon = JSONObject.fromObject(fileContent);
         JSONArray all = fileCon.getJSONArray("sucessData");
 
+        //参数传递
+        JSONObject param = new JSONObject();
+        param.put("orderNo",shopStockOrderInfo.getOrderNo());
+        param.put("allSize",all.size()-1);
+        param.put("userid",userInfo.getId());
+        param.put("username",userInfo.getUserName());
         try {
             //修改库存订单
             Map<String, String> stockOrder = new HashMap<>();
@@ -549,10 +566,18 @@ public class ShopStockOrderController {
 
                 for (int i = 0; i < all.size(); i++) {
 
+                    param.put("sigleSize",i);
+
                     JSONObject object = (JSONObject) all.get(i);
-                    shopStockCardServiceFacade.addShopStockCard(object, shopStockOrderInfo.getOrderNo());
+                    //shopStockCardServiceFacade.addShopStockCard(object, param);
                 }
             }
+
+            //读取暂存文件
+            //String cacheContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE"),"UTF-8");
+            //JSONArray cacheCon = JSONArray.fromObject(cacheContent);
+            //LogsCustomUtils2.writeIntoFile(fileData.toString(),ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE")+".txt",false);
+
             jsonObject.put("code", "10000");
             jsonObject.put("info", "SUCCESS");
         }catch (Exception e){

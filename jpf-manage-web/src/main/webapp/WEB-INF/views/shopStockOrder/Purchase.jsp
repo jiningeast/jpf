@@ -80,7 +80,7 @@
                     $('#purcaseShow').window("open").window('refresh', 'purchaseData?fileUUid='+obj.data.fileUUid+'&id='+obj.data.id).window('setTitle','确认采购商品数据');
 
                 }else{
-                    $.messager.alert('提示',msg.info,'info')
+                    $.messager.alert('提示',obj.info,'info')
                 }
             }
         });

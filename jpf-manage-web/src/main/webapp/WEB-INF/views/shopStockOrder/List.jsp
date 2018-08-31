@@ -71,8 +71,13 @@
                            $.messager.alert('消息提示','请选择一条数据！','info');
                            return
                        }
+                       if(rows[0].status!='4'){
+
+                           $.messager.alert('消息提示','此单尚未付款','info');
+                           return false;
+                       }
                        if(rows[0].isUpload=='2')
-                         $('#infoDiv').window("open").window('refresh', 'purchase?id='+rows[0].id).window('setTitle','商品采购');
+                            $('#infoDiv').window("open").window('refresh', 'purchase?id='+rows[0].id).window('setTitle','商品采购');
                        else
                            $.messager.alert('消息提示','此单已采购，请勿重复操作','info');
                    }
@@ -111,6 +116,7 @@
                     },
                     {field:'addtime',title:'采购时间',width:'12%',formatter: formatDateStr},
                     {field:'cardtime',title:'采购入库时间',width:'10%',formatter: formatDateStr},
+                    {field:'productAmount',title:'采购数量',width:'10%'},
                     {field:'isUpload',title:'采购状态',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '已采购'}
@@ -218,6 +224,7 @@
                                 <option value="1">新建</option>
                                 <option value="2">提交</option>
                                 <option value="3">审批</option>
+                                <option value="4">付款</option>
                             </select>
                         </td>
                             <td>采购状态:</td>

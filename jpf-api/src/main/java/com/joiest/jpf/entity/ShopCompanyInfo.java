@@ -1,5 +1,7 @@
 package com.joiest.jpf.entity;
 import com.joiest.jpf.common.po.PayShopCompany;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ShopCompanyInfo {
@@ -62,6 +64,16 @@ public class ShopCompanyInfo {
      *
      */
     private Date addtime;
+
+    /**
+     * 余额
+     */
+    private BigDecimal money;
+
+    /**
+     * 余额校验码
+     */
+    private String moneyCode;
 
     private static final long serialVersionUID = 1L;
 
@@ -236,5 +248,21 @@ public class ShopCompanyInfo {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public String getMoneyCode() {
+        return moneyCode;
+    }
+
+    public void setMoneyCode(String moneyCode) {
+        this.moneyCode = moneyCode;
     }
 }
