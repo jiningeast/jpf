@@ -1,16 +1,12 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.*;
-import com.joiest.jpf.entity.ShopInterfaceStreamInfo;
-import com.joiest.jpf.entity.ShopStockCardInfo;
-import com.joiest.jpf.entity.ShopStockOrderInfo;
-import com.joiest.jpf.entity.UserInfo;
-import com.joiest.jpf.facade.ShopInterfaceStreamServiceFacade;
-import com.joiest.jpf.facade.ShopProductServiceFacade;
-import com.joiest.jpf.facade.ShopStockOrderProductServiceFacade;
-import com.joiest.jpf.facade.ShopStockOrderServiceFacade;
+import com.joiest.jpf.entity.*;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -23,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,6 +48,9 @@ public class ShopStockOrderController {
 
     @Autowired
     private ShopProductServiceFacade shopProductServiceFacade;
+
+    @Autowired
+    private ShopStockCardServiceFacade shopStockCardServiceFacade;
     /**
      * 运营采购订单页面
      */
@@ -246,11 +246,29 @@ public class ShopStockOrderController {
         jsonObject.put("code","10008");
         jsonObject.put("info","ERROR");
 
+        //获取采购订单
         ShopStockOrderInfo shopStockOrderInfo = shopStockOrderServiceFacade.getStockOrderById(id);
         if(shopStockOrderInfo == null){
 
             jsonObject.put("info","未获取到采购订单");
             return jsonObject;
+        }
+        //获取采购订单商品
+        GetShopStockOrderProductResponse allPro = shopStockOrderProductServiceFacade.getProduct(shopStockOrderInfo.getOrderNo());
+        List<ShopStockOrderProductInfo>  orderProductList = allPro.getList();
+
+        //处理订单商品
+        JSONObject orderP = new JSONObject();
+        for (int i=0;i< orderProductList.size();i++) {
+
+            ShopStockOrderProductInfo one =  orderProductList.get(i);
+
+            JSONObject orderPtwo = new JSONObject();
+            orderPtwo.put("productId",one.getProductId());
+            orderPtwo.put("productName",one.getProductName());
+            orderPtwo.put("supplierId",one.getSupplierId());
+            orderPtwo.put("supplierName",one.getSupplierName());
+            orderP.put(one.getProductId(),orderPtwo);
         }
         InputStream in = file.getInputStream();
         Map<Object,Object> rowoOb = new ExcelDealUtils().getImportExcel(in, file.getOriginalFilename());
@@ -271,6 +289,7 @@ public class ShopStockOrderController {
         // 组装自由职业者信息数组
         JSONArray shopStockCardSuccess = new JSONArray();
         JSONArray shopStockCardFailed = new JSONArray();
+        int allNum = 0;
         //循环行
         for (Map.Entry<Object, Object> hang : rowoOb.entrySet()) {
 
@@ -281,6 +300,7 @@ public class ShopStockOrderController {
             }
             if ((Integer) hang.getKey()  > 4) {
 
+                allNum++;
                 ShopStockCardInfo scinfo = new ShopStockCardInfo();
                 boolean flag = true;
                 for (Map.Entry<Object, Object> lie : cellOb.entrySet()) {
@@ -294,7 +314,18 @@ public class ShopStockOrderController {
                     }
                     if(col.equals("0")){
 
-                        scinfo.setType(Byte.valueOf(lie.getValue().toString()));
+                        //处理商品数据 验证是否是采购订单商品
+                        if(orderP.containsKey(lie.getValue())){
+
+                            JSONObject siglePro = orderP.getJSONObject(lie.getValue().toString());
+                            scinfo.setProductName(siglePro.get("productName").toString());
+                            scinfo.setSupplierId(siglePro.get("supplierId").toString());
+                            scinfo.setSupplierName(siglePro.get("supplierName").toString());
+                        }else{
+
+                            flag = false;
+                        }
+                        scinfo.setProductId(lie.getValue().toString());
                     }
                     if(col.equals("1")){
 
@@ -459,21 +490,16 @@ public class ShopStockOrderController {
 
         // 读取暂存文件
         String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+fileUUid+".txt","UTF-8");
-        //Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
         JSONObject fileCon = JSONObject.fromObject(fileContent);
 
         JSONArray rows;
         if(type.equals("success")){
 
             rows = fileCon.getJSONArray("sucessData");
-            //Map<String,List< LinkedHashMap<String,String> >> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
-            //List< LinkedHashMap<String,String> > list = jsonMap.get("data");
-            //Map<String,Object> responseMap = new HashMap<>();
         }else{
 
             rows = fileCon.getJSONArray("faildData");
         }
-        String data = rows.toString();
         List jsonMap = JSONArray.toList(rows, new ShopStockCardInfo(), new JsonConfig());
 
         Map<String ,Object> responseMap = new HashMap<>();
@@ -481,5 +507,58 @@ public class ShopStockOrderController {
         responseMap.put("total",rows.size());
 
         return responseMap;
+    }
+
+    /**
+     * 操作excel 数据 入库
+     * */
+    @RequestMapping(value = "/dealPurchaseData", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })//事务添加
+    public JSONObject dealPurchaseData(HttpServletRequest request){
+
+        String fileUUid = request.getParameter("fileUUid");
+        String id = request.getParameter("orderid");
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code","10008");
+        jsonObject.put("info","ERROR");
+
+        ShopStockOrderInfo shopStockOrderInfo = shopStockOrderServiceFacade.getStockOrderById(id);
+        if(shopStockOrderInfo == null){
+
+            jsonObject.put("info","未获取到采购订单");
+            return jsonObject;
+        }
+        //读取暂存文件
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+fileUUid+".txt","UTF-8");
+        JSONObject fileCon = JSONObject.fromObject(fileContent);
+        JSONArray all = fileCon.getJSONArray("sucessData");
+
+        try {
+            //修改库存订单
+            Map<String, String> stockOrder = new HashMap<>();
+            stockOrder.put("is_upload", "1");
+            stockOrder.put("id", id);
+            int upStockOrderById = shopStockOrderServiceFacade.upStockOrderById(stockOrder);
+
+            //采购商品添加
+            if (!all.isEmpty()) {
+
+                for (int i = 0; i < all.size(); i++) {
+
+                    JSONObject object = (JSONObject) all.get(i);
+                    shopStockCardServiceFacade.addShopStockCard(object, shopStockOrderInfo.getOrderNo());
+                }
+            }
+            jsonObject.put("code", "10000");
+            jsonObject.put("info", "SUCCESS");
+        }catch (Exception e){
+
+            e.printStackTrace();
+            jsonObject.put("code", "10000");
+            jsonObject.put("info", "导入失败，请重试");
+        }
+        return jsonObject;
     }
 }
