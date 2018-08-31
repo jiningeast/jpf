@@ -236,6 +236,7 @@
     //关闭登录窗口
     function closePwd() {
         $('#w').window('close');
+
     }
 
 
