@@ -37,9 +37,17 @@ public enum JpfErrorInfo {
     CHANNEL_ERROR("渠道服务异常"),
 
     DAL_ERROR("数据层操作异常"),
-    SYSTEM_ERROR("系统异常");
+    SYSTEM_ERROR("系统异常"),
 
-
+    // ===================================== 管理后台相关 start
+    // 欣券相关
+    MAX_LIMIT("超过最大数限制"),
+    EMPTY_COMPANY_NAME("公司名称为空"),
+    ERROR_COMPANY_NAME("批次所属企业名称与表中企业名称不一致"),
+    COMPANY_NOT_AVAILABLE("该企业已停用"),
+    EMPTY_BATCH_NO("欣券批次号为空"),
+    BATCH_NOT_EXIST("批次号错误");
+    // ===================================== 管理后台相关 end
 
     private final String desc;
 

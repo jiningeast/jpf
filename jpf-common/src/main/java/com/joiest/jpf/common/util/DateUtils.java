@@ -409,6 +409,15 @@ public class DateUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMATLONG);
 		return sdf.format(new Date(Long.valueOf(seconds+"000")));
 	}
+
+	/*
+	 * 将时间戳转换为时间  date
+	 */
+	public static Date stampToDateRe(String seconds){
+
+		SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMATLONG);
+		return new Date(Long.valueOf(seconds));
+	}
 	/*
 	 * 将时间转换为时间戳
 	 */

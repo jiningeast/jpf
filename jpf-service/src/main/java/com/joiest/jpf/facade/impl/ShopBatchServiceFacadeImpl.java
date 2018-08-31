@@ -133,6 +133,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
 
         payShopBatchCustomMapper.insertSelective(payShopBatch);
         String batchId = payShopBatch.getId();
+        String batchNo = payShopBatch.getBatchNo();
 
         // 添加券
         List<PayShopBatchCoupon> payShopBatchCouponsList = new ArrayList<>();
@@ -140,6 +141,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             for ( int i=0; i<Integer.parseInt(single.get("amount")); i++){
                 PayShopBatchCoupon payShopBatchCoupon = new PayShopBatchCoupon();
                 payShopBatchCoupon.setBatchId(batchId);
+                payShopBatchCoupon.setBatchNo(batchNo);
                 payShopBatchCoupon.setCompanyId(shopBatchRequest.getCompanyId());
                 payShopBatchCoupon.setCompanyName(shopBatchRequest.getCompanyName());
                 payShopBatchCoupon.setCouponNo(createCouponNo());
@@ -155,6 +157,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
                 payShopBatchCoupon.setDou( dou.intValue() );
                 payShopBatchCoupon.setIsActive((byte)0);
                 payShopBatchCoupon.setExpireMonth(shopBatchRequest.getExpireMonth());
+                payShopBatchCoupon.setIsExpired((byte)0);
                 payShopBatchCoupon.setAddtime(new Date());
                 payShopBatchCouponsList.add(payShopBatchCoupon);
 
@@ -349,5 +352,20 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         }else{
             return true;
         }
+    }
+
+    /**
+     * 根据批次号查找批次
+     */
+    public PayShopBatch getBatchByBatchNo(String batchNo){
+        PayShopBatchExample e = new PayShopBatchExample();
+        PayShopBatchExample.Criteria c = e.createCriteria();
+        c.andBatchNoEqualTo(batchNo);
+        List<PayShopBatch> list = payShopBatchMapper.selectByExample(e);
+        if ( list.isEmpty() || list == null ){
+            return new PayShopBatch();
+        }
+
+        return list.get(0);
     }
 }

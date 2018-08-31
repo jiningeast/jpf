@@ -4,11 +4,30 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ShopStockCardInfo {
-
     /**
      *
      */
     private String id;
+
+    /**
+     * 商品id
+     */
+    private String productId;
+
+    /**
+     *
+     */
+    private String productName;
+
+    /**
+     * 供应商id
+     */
+    private String supplierId;
+
+    /**
+     * 供应商id
+     */
+    private String supplierName;
 
     /**
      * 卡号
@@ -83,6 +102,38 @@ public class ShopStockCardInfo {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId == null ? null : productId.trim();
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName == null ? null : productName.trim();
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
     }
 
     public String getCardNo() {

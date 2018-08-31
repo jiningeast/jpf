@@ -218,8 +218,52 @@ public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFac
         if(stockOrder.containsKey("oss_url"))
             payShopStockOrder.setOssUrl(stockOrder.get("oss_url"));
 
+        if(stockOrder.containsKey("is_upload"))
+            payShopStockOrder.setIsUpload(Byte.valueOf(stockOrder.get("is_upload")));
+
+        if(stockOrder.containsKey("cardtime"))
+            payShopStockOrder.setCardtime(new Date());
 
         return payShopStockOrderMapper.updateByPrimaryKeySelective(payShopStockOrder);
+    }
+
+
+    /***
+     *根据订单更新商品库存
+     * */
+    @Override
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })//事务添加
+    public int upProductStockByOrderNo(String order_no) throws Exception{
+
+        PayShopStockOrderProductExample example = new PayShopStockOrderProductExample();
+        PayShopStockOrderProductExample.Criteria c = example.createCriteria();
+        c.andStockOrderNoEqualTo(order_no);
+
+        List<PayShopStockOrderProduct> listProducts = payShopStockOrderProductMapper.selectByExample(example);
+        Boolean isUp = true;
+        //循环修改商品表里面的库存
+        for (int i=0;i<listProducts.size();i++)
+        {
+            //修改商品表
+            PayShopProductExample example1=new PayShopProductExample();
+            PayShopProductExample.Criteria c1=example1.createCriteria();
+
+            c1.andIdEqualTo(listProducts.get(i).getProductId());
+
+            PayShopProduct payShopProduct=new PayShopProduct();//listProducts.get(i).getAmount()
+            payShopProduct.setStored(Integer.valueOf(""));
+
+            int isSuc = payShopProductMapper.updateByExampleSelective(payShopProduct,example1);
+            if(isSuc != 1){
+
+                isUp = false;
+            }
+            //插入上商品log表；
+        }
+        if(isUp)
+            return 0;
+        else
+            return 1;
     }
     /**
      * 采购订单添加
@@ -412,5 +456,6 @@ public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFac
 
         return new JpfResponseDto();
     }
+
 
 }
