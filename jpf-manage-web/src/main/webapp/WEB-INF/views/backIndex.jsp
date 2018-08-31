@@ -148,6 +148,11 @@
                     "menuname" : "运营采购管理",
                     "icon" : "icon-nav",
                     "url" : "shopStockOrder/index"
+                },{
+                    "menuid" : "506",
+                    "menuname" : "欣豆商户充值",
+                    "icon" : "icon-nav",
+                    "url" : "shopCompanyCharge/index"
                 }]
             },{
                     "menuid" : "6",
@@ -178,6 +183,11 @@
                         "menuname" : "财务采购管理",
                         "icon" : "icon-nav",
                         "url" : "shopStockOrder/indexCaiwu"
+                    },{
+                        "menuid" : "606",
+                        "menuname" : "欣豆商户充值管理",
+                        "icon" : "icon-nav",
+                        "url" : "shopCompanyCharge/caiwuIndex"
                     }]
             },{
                 "menuid" : "7",
