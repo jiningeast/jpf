@@ -18,8 +18,8 @@
         <form id="confirmPersonsForm" method="post" enctype="multipart/form-data">
             <input id="fileUUid" name="fileUUid" type="hidden" value=${fileUUid}>
             <input id="orderid" name="orderid" type="hidden" value=${id}>
-            <input id="faildsize" name="faildsize" type="hidden" value="0">
-<%--${faildSize}--%>        </form>
+            <input id="faildsize" name="faildsize" type="hidden" value=${faildSize}>
+       </form>
     </c:if>
     <c:if  test="${faildSize != '0'}">
         <div class="notice" style="background-color: #ffe9e9;border-color: #ffa8a8">
@@ -69,7 +69,7 @@
                 remoteSort: false,
                 url:"purchaseShow?type="+type+"&fileUUid=${fileUUid}",
                 columns:[[
-                    {field:'type',title:'商品id',width:"15%"},
+                    {field:'productId',title:'商品id',width:"15%"},
                     {field:'cardNo',title:'卡号',width:"15%"},
                     {field:'cardPass',title:'开户行省',width:"15%"},
                     {field:'expireMonth',title:'有效期',width:"15%"},
@@ -132,7 +132,7 @@
                 remoteSort: false,
                 url:"purchaseShow?type=success&fileUUid=${fileUUid}",
                 columns:[[
-                    {field:'type',title:'商品id',width:"10%"},
+                    {field:'productId',title:'商品id',width:"10%"},
                     {field:'cardNo',title:'卡号',width:"10%"},
                     {field:'cardPass',title:'开户行省',width:"10%"},
                     {field:'expireMonth',title:'有效期',width:"10%"},
