@@ -319,11 +319,21 @@ public class ShopBatchController {
 
             return jpfResponseDto;
         }
+        // 获取总面值,判断其不为空
+        String totalMoney = excelInfo.get(2);
+        if ( !StringUtils.isNotBlank(totalMoney) ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg(JpfErrorInfo.EMPTY_TOTAL_MONEY.desc());
+
+            return jpfResponseDto;
+        }
 
         // 验证该企业有没有excel上描述的券
         // 获取excel各面值券的数量
         List<ShopCustomerInfo> personsList = new ArrayList<>();    // 新建校验人数组
         Map<String,Integer> valueCount = new HashedMap();
+        int totalValue = 0;
         for ( int i=4; i<list.size(); i++){
             // 获取每条信息详情
             Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
@@ -373,6 +383,8 @@ public class ShopBatchController {
             if ( failCustomer.getName() != null ){
                 personsList.add(failCustomer);
             }
+            // 统计总金额
+            totalValue = totalValue + Integer.parseInt(value);
 
             // 统计各面值的数量
             if ( valueCount.get(value) == null ){
@@ -380,6 +392,15 @@ public class ShopBatchController {
             }else{
                 valueCount.put( value,valueCount.get(value) + 1);
             }
+        }
+
+        // 判断总面值和各人员面值的总和是不是统一
+        if ( Integer.parseInt(totalMoney) != totalValue ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg(JpfErrorInfo.ERROR_TOTAL_MONEY.desc());
+
+            return jpfResponseDto;
         }
 
         // 判断数据库中有没有对应的这些个券
@@ -405,6 +426,7 @@ public class ShopBatchController {
             responseMap.put("batchNo",batchNo);
             responseMap.put("path",path);
             responseMap.put("data",JsonUtils.toJson(personsList));
+            responseMap.put("totalMoney",totalMoney);
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
 
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
@@ -431,9 +453,23 @@ public class ShopBatchController {
         String companyName = jsonMap.get("companyName");
         String batchNo = jsonMap.get("batchNo");
         String excelLocalUrl = jsonMap.get("path");
+        String totalMoney = jsonMap.get("totalMoney");
+
+        // 检验金额验证码的正确性
+        if ( !shopCompanyServiceFacade.checkMoneyCode(companyId) ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("金额校验码错误");
+
+            return jpfResponseDto;
+        }
 
         // 开始群发欣券
         List<ShopCustomerInfo> sendedList = shopBatchCouponServiceFacade.sendCouponsToPersons(list,companyId,companyName,batchNo,excelLocalUrl);
+
+        // 扣款
+        shopCompanyServiceFacade.charge(companyId,0-Double.parseDouble(totalMoney));
+
         // 开始发短信
         for ( ShopCustomerInfo customerInfo:sendedList ){
             String content = "尊敬的"+customerInfo.getName()+"，您在欣享爱生活平台免费获得了一张欣券，请微信搜索“欣享爱生活”公众号，进入商城即可消费。";

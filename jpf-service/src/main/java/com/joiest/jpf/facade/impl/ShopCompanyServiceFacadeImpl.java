@@ -399,6 +399,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         payShopCompanyUpdate.setId(companyId);
         payShopCompanyUpdate.setMoney(BigDecimal.valueOf(newMoney));                        // 充值后的余额
         payShopCompanyUpdate.setMoneyCode(getMoneyCode(companyId,newMoney.toString()));     // 新的金额校验码
+
         return payShopCompanyMapper.updateByPrimaryKey(payShopCompanyUpdate);
     }
 

@@ -46,7 +46,9 @@ public enum JpfErrorInfo {
     ERROR_COMPANY_NAME("批次所属企业名称与表中企业名称不一致"),
     COMPANY_NOT_AVAILABLE("该企业已停用"),
     EMPTY_BATCH_NO("欣券批次号为空"),
-    BATCH_NOT_EXIST("批次号错误");
+    BATCH_NOT_EXIST("批次号错误"),
+    EMPTY_TOTAL_MONEY("总金额为空"),
+    ERROR_TOTAL_MONEY("总金额和各人员金额有误");
     // ===================================== 管理后台相关 end
 
     private final String desc;
