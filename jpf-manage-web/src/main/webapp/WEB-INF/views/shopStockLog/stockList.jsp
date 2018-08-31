@@ -28,6 +28,8 @@
                     {title:'日常进货',colspan:2},
                     {title:'日常出货',colspan:2},
                     {title:'期末结存',colspan:2},
+                    {field:'addtime',title:'添加时间',rowspan:2,width:'10%',align:'center',formatter: formatDateStr},
+
                 ],[
                     {field:'beginCount',title:'数量',width:'10%',align:'center'},
                     {field:'beginMoney',title:'金额',width:'10%',align:'center'},
@@ -92,13 +94,11 @@
             <form id="searchForm" method="post">
                 <table cellpadding="5" >
                     <tr>
-                        <td>关键字:</td>
+                        <td>商品名称:</td>
                         <td><input id="productName" name="productName" class="easyui-textbox" type="text" /></td>
 
-                        <td>采购id:</td>
-                        <td><input id="stockOrderId" name="stockOrderId" class="easyui-textbox" type="text" /></td>
-                        </tr>
-                    <tr>
+                        <%--<td>采购id:</td>
+                        <td><input id="stockOrderId" name="stockOrderId" class="easyui-textbox" type="text" /></td>--%>
                         <td>统计时间:</td>
                         <td>
                             <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
@@ -108,7 +108,7 @@
                                    name="addtimeEnd"
                                    onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
                         </td>
-                    </tr>
+                        </tr>
 
                 </table>
             </form>
