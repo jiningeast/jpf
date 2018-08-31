@@ -174,8 +174,10 @@
                             } else {
                                 $.messager.alert('消息提示', msg.retMsg, 'info');
                                 $('#dg').datagrid('reload');
+
                                 $('#detailWindowP').window('close');
-                                window.location.reload();
+                                $('#detailWindowP').window('reload');
+
 
                             }
                         },
