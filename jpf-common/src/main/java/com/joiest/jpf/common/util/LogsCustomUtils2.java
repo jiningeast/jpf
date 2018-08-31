@@ -166,6 +166,53 @@ public class LogsCustomUtils2 {
 
 
     /**
+     * 将指定字符串写入文件。如果给定的文件路径不存在，将新建文件后写入。
+     * @param log       要写入文件的字符串
+     * @param filePath      文件路径的字符串表示形式，目录的层次分隔可以是“/”也可以是“\\”
+     * @param isAppend      true：追加到文件的末尾；false：以覆盖原文件的方式写入
+     */
+
+    public static boolean writeFileInfo(String log, String filePath, boolean isAppend) throws Exception{
+        boolean isSuccess = true;
+        //如有则将"\\"转为"/",没有则不产生任何变化
+        String filePathTurn = filePath.replaceAll("\\\\", "/");
+        //先过滤掉文件名
+        int index = filePath.lastIndexOf("/");
+        String dir = filePath.substring(0, index);
+        //创建除文件的路径
+        File fileDir = new File(dir);
+        fileDir.mkdirs();
+        //再创建路径下的文件
+        File file = null;
+        try {
+            file = new File(filePath);
+            file.createNewFile();
+        } catch (IOException e) {
+            isSuccess = false;
+            //e.printStackTrace();
+        }
+        //将logs写入文件
+        BufferedWriter fileWriter = new BufferedWriter (new OutputStreamWriter (new FileOutputStream (filePath,isAppend),"UTF-8"));
+//        FileWriter fileWriter = null;
+        try {
+//            fileWriter = new FileWriter(file, isAppend);
+            fileWriter.write(log);
+            fileWriter.flush();
+        } catch (IOException e) {
+            isSuccess = false;
+            //e.printStackTrace();
+        } finally{
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                //e.printStackTrace();
+            }
+        }
+
+        return isSuccess;
+    }
+
+    /**
      * 创建文件，如果该文件已存在将不再创建（即不起任何作用）
      * @param filePath       要创建文件的路径的字符串表示形式，目录的层次分隔可以是“/”也可以是“\\”
      * @return      创建成功将返回true；创建不成功则返回false

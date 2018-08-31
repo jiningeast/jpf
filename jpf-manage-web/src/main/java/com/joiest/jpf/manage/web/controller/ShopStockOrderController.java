@@ -288,6 +288,16 @@ public class ShopStockOrderController {
         }
         Map<Object,Object> singlePerson = null;
 
+        //读取缓存文件获取已存在的卡号
+        File fileCache = new File(ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE"));
+        JSONArray cache = new JSONArray();
+        if(fileCache.exists()){
+
+            //读取暂存文件
+            String cacheContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE"),"UTF-8");
+            cache = JSONArray.fromObject(cacheContent);
+        }
+
         // 组装自由职业者信息数组
         JSONArray shopStockCardSuccess = new JSONArray();
         JSONArray shopStockCardFailed = new JSONArray();
@@ -300,7 +310,7 @@ public class ShopStockOrderController {
             if(cellOb==null || cellOb.size() ==0){
                 continue;
             }
-            if ((Integer) hang.getKey()  > 4) {
+            if ((Integer) hang.getKey()  > 3) {
 
                 allNum++;
                 ShopStockCardInfo scinfo = new ShopStockCardInfo();
@@ -331,6 +341,9 @@ public class ShopStockOrderController {
                     }
                     if(col.equals("1")){
 
+                        if(cache.contains(lie.getValue())){
+                            flag = false;
+                        }
                         scinfo.setCardNo(lie.getValue().toString());
                     }
                     if(col.equals("2")){
@@ -378,7 +391,7 @@ public class ShopStockOrderController {
         if(!shopStockOrderInfo.getProductAmount().equals(allNum)){
 
             jsonObject.put("info","采购数量与订单商品数不符，请修改后上传！");
-            //return jsonObject;
+            return jsonObject;
         }
 
         UUID fileUUid = UUID.randomUUID();
@@ -553,31 +566,38 @@ public class ShopStockOrderController {
         param.put("allSize",all.size()-1);
         param.put("userid",userInfo.getId());
         param.put("username",userInfo.getUserName());
+
+
+        //缓存文件存储  将卡号放入缓存文件，待下次上传是获取进行判断
+        File file = new File(ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE"));
+        JSONArray cache = new JSONArray();
+        if(file.exists()){
+
+            //读取暂存文件
+            String cacheContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE"),"UTF-8");
+            cache = JSONArray.fromObject(cacheContent);
+        }
         try {
+
             //修改库存订单
             Map<String, String> stockOrder = new HashMap<>();
             stockOrder.put("is_upload", "1");
             stockOrder.put("cardtime", "1");
             stockOrder.put("id", id);
             int upStockOrderById = shopStockOrderServiceFacade.upStockOrderById(stockOrder);
-
             //采购商品添加
             if (!all.isEmpty()) {
 
                 for (int i = 0; i < all.size(); i++) {
 
                     param.put("sigleSize",i);
-
                     JSONObject object = (JSONObject) all.get(i);
-                    //shopStockCardServiceFacade.addShopStockCard(object, param);
+
+                    cache.add(object.get("cardNo"));
+
+                    shopStockCardServiceFacade.addShopStockCard(object, param);
                 }
             }
-
-            //读取暂存文件
-            //String cacheContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE"),"UTF-8");
-            //JSONArray cacheCon = JSONArray.fromObject(cacheContent);
-            //LogsCustomUtils2.writeIntoFile(fileData.toString(),ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE")+".txt",false);
-
             jsonObject.put("code", "10000");
             jsonObject.put("info", "SUCCESS");
         }catch (Exception e){
@@ -585,6 +605,12 @@ public class ShopStockOrderController {
             e.printStackTrace();
             jsonObject.put("code", "10000");
             jsonObject.put("info", "导入失败，请重试");
+            return jsonObject;
+        }
+        try {
+            LogsCustomUtils2.writeFileInfo(cache.toString(),ConfigUtil.getValue("CACHE_PATH")+ConfigUtil.getValue("EXCEL_PURCHASE_CACHE"),false);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return jsonObject;
     }
