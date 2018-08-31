@@ -37,6 +37,11 @@ public interface ShopStockOrderServiceFacade {
      * */
     public int upStockOrderById(Map<String,String> stockOrder);
 
+    /***
+     *根据订单更新商品库存
+     * */
+    public int upProductStockByOrderNo(String order_no) throws Exception;
+
     /**
      * 添加采购订单
      */

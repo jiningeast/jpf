@@ -56,11 +56,11 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">订单状态：</td>
                     <td >
-                        <c:if  test="${shopStockOrderInfo.status == 0 }">已取消</c:if>
-                        <c:if  test="${shopStockOrderInfo.status == 1 }">新建,待提交</c:if>
-                        <c:if  test="${shopStockOrderInfo.status == 2 }">已提交,待审批</c:if>
-                        <c:if  test="${shopStockOrderInfo.status == 3 }">已审批，待付款</c:if>
-                        <c:if  test="${shopStockOrderInfo.status == 4 }">已付款，完成</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 0 }">取消</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 1 }">新建</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 2 }">提交</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 3 }">审批</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 4 }">已付款</c:if>
                     </td>
                     <td style="text-align: right;background-color: #f1f1f1;">是否采购：</td>
                     <td >
@@ -173,8 +173,8 @@
                                 $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                             } else {
                                 $.messager.alert('消息提示', msg.retMsg, 'info');
-                                $('#detailWindowP').window('close');
                                 $('#dg').datagrid('reload');
+                                $('#detailWindowP').window('close');
                                 window.location.reload();
 
                             }

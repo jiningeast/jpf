@@ -2,8 +2,6 @@ package com.joiest.jpf.common.util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
@@ -369,7 +367,7 @@ public class ToolUtils {
         return res;
     }
     /**
-     * 加密code
+     * 加密欣豆市场个人豆的校验码code
      */
     public static String CreateCode(String dou,String uid){
 
@@ -439,4 +437,11 @@ public class ToolUtils {
 
     }
 
+    /**
+     * 验证手机号
+     */
+    public static Boolean checkPhone(String phone){
+        String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
+        return Pattern.compile(reg_phone).matcher(phone).matches();
+    }
 }

@@ -18,8 +18,8 @@
         <form id="confirmPersonsForm" method="post" enctype="multipart/form-data">
             <input id="fileUUid" name="fileUUid" type="hidden" value=${fileUUid}>
             <input id="orderid" name="orderid" type="hidden" value=${id}>
-            <input id="faildsize" name="faildsize" type="hidden" value=${faildSize}>
-        </form>
+            <input id="faildsize" name="faildsize" type="hidden" value="0">
+<%--${faildSize}--%>        </form>
     </c:if>
     <c:if  test="${faildSize != '0'}">
         <div class="notice" style="background-color: #ffe9e9;border-color: #ffa8a8">
@@ -37,7 +37,6 @@
 
     $(function () {
 
-        requestta();
         var toolbar = [{
             text:'确认',
             id:'textShow',
@@ -47,6 +46,7 @@
                 $("#confirmPersonsForm").submit();
             }
         }];
+        requestta();
         $('.viewData').click(function(){
 
             var _this = $(this),type=null;
@@ -76,32 +76,41 @@
                     {field:'expireDate',title:'到期时间',width:"15%"},
                 ]]
             })
-            if($('#faildsize').val()>0){
+            if(parseInt($('#faildsize').val())>=1){
 
                 $('.datagrid-toolbar').remove()//根据下标删除
             }
         }
         $("#confirmPersonsForm").form({
             type:'post',
-            url:"../cloudTask/confirmPersons",
+            url:"dealPurchaseData",
             dataType:"json",
             contentType:"application/json",
             enctype:"multipart/form-data",
             onSubmit:function () {
+
                 ajaxLoading();
             },
             success:function (msg) {
                 ajaxLoadEnd();
-                var response = JSON.parse(msg);
-                if (response.retCode != '0000') {
-                    $.messager.alert('消息提示', response.retMsg, 'error');
-                } else {
-                    alert(response.retMsg);
-                    window.location.reload();
+                var obj = JSON.parse(msg);//转化为json对象
+                if(obj.code == "10000"){
+
+                    $('#infoDiv').window('close');
+                    $('#purcaseShow').window("close");
+
+                    var queryArray = $('#searchForm').serializeArray();
+                    var postData = parsePostData(queryArray);
+                    $('#dg').datagrid('reload', postData);
+
+                    $.messager.alert('提示',"导入成功",'info')
+                    //window.location.reload();
+                }else{
+                    $.messager.alert('提示',obj.info,'info')
                 }
+
             }
         });
-
         //采用jquery easyui loading css效果
         function ajaxLoading(){
             $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:"100%",height:$(window).height()}).appendTo("body");
@@ -111,30 +120,33 @@
             $(".datagrid-mask").remove();
             $(".datagrid-mask-msg").remove();
         }
+
+        function requestta() {
+
+            $("#purchaseShow").datagrid({
+                title:'商品信息',
+                toolbar:toolbar,
+                singleSelect:true,
+                multiselect:false,
+                selectOnCheck:true,
+                remoteSort: false,
+                url:"purchaseShow?type=success&fileUUid=${fileUUid}",
+                columns:[[
+                    {field:'type',title:'商品id',width:"10%"},
+                    {field:'cardNo',title:'卡号',width:"10%"},
+                    {field:'cardPass',title:'开户行省',width:"10%"},
+                    {field:'expireMonth',title:'有效期',width:"10%"},
+                    {field:'expireDate',title:'到期时间',width:"10%"},
+                ]]
+            })
+            if(parseInt($('#faildsize').val())>=1){
+
+                $('.datagrid-toolbar').remove()//根据下标删除
+            }
+        }
     })
 
-    function requestta() {
-        $("#purchaseShow").datagrid({
-            title:'商品信息',
-            toolbar:toolbar,
-            singleSelect:true,
-            multiselect:false,
-            selectOnCheck:true,
-            remoteSort: false,
-            url:"purchaseShow?type=success&fileUUid=${fileUUid}",
-            columns:[[
-                {field:'type',title:'商品id',width:"10%"},
-                {field:'cardNo',title:'卡号',width:"10%"},
-                {field:'cardPass',title:'开户行省',width:"10%"},
-                {field:'expireMonth',title:'有效期',width:"10%"},
-                {field:'expireDate',title:'到期时间',width:"10%"},
-            ]]
-        })
-        if($('#faildsize').val()>0){
 
-            $('.datagrid-toolbar').remove()//根据下标删除
-        }
-    }
 
 </script>
 </body>

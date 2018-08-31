@@ -13,6 +13,8 @@ import com.joiest.jpf.facade.ShopCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -399,4 +401,64 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         return new JpfResponseDto();
     }
 
+    /**
+     * 公司充值
+     */
+    @Override
+    public int charge(String companyId, double chargeMoney){
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(companyId);
+        if ( !checkMoneyCode(companyId) ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "该企业已被启用");
+        }
+
+        String money = payShopCompany.getMoney().toString();    // 原始余额
+        Double newMoney = Double.parseDouble(money) + chargeMoney;                          // 充值后的余额
+        PayShopCompany payShopCompanyUpdate = new PayShopCompany();
+        payShopCompanyUpdate.setId(companyId);
+        payShopCompanyUpdate.setMoney(BigDecimal.valueOf(newMoney));                        // 充值后的余额
+        payShopCompanyUpdate.setMoneyCode(getMoneyCode(companyId,newMoney.toString()));     // 新的金额校验码
+        return payShopCompanyMapper.updateByPrimaryKey(payShopCompanyUpdate);
+    }
+
+    /**
+     * 获取最新的余额校验码
+     */
+    @Override
+    public String getMoneyCode(String companyId, String money){
+        return Md5Encrypt.md5(companyId + money + ConfigUtil.getValue("MONEY_VALID_CODE"));
+    }
+
+    /**
+     * 验证金额校验码的准确性
+     * 返回ture为验证通过
+     * 返回false为验证失败
+     */
+    @Override
+    public boolean checkMoneyCode(String companyId){
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(companyId);
+        String newCode = payShopCompany.getId() + payShopCompany.getMoney() + ConfigUtil.getValue("MONEY_VALID_CODE");
+        newCode = Md5Encrypt.md5(newCode);
+
+        if ( newCode.equals(payShopCompany.getMoneyCode()) ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 通过企业名称获取企业
+     */
+    @Override
+    public PayShopCompany getCompanyByName(String companyName){
+        PayShopCompanyExample e = new PayShopCompanyExample();
+        PayShopCompanyExample.Criteria c = e.createCriteria();
+        c.andCompanyNameEqualTo(companyName);
+        List<PayShopCompany> list = payShopCompanyMapper.selectByExample(e);
+        if ( list.isEmpty() || list == null ){
+            return new PayShopCompany();
+        }
+
+        return list.get(0);
+    }
 }

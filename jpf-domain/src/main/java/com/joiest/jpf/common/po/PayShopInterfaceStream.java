@@ -35,6 +35,11 @@ public class PayShopInterfaceStream implements Serializable {
     private String batchId;
 
     /**
+     * 批次号
+     */
+    private String batchNo;
+
+    /**
      * 订单编号
      */
     private String orderNo;
@@ -94,6 +99,14 @@ public class PayShopInterfaceStream implements Serializable {
         this.batchId = batchId == null ? null : batchId.trim();
     }
 
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo == null ? null : batchNo.trim();
+    }
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -125,6 +138,7 @@ public class PayShopInterfaceStream implements Serializable {
         sb.append(", requestContent=").append(requestContent);
         sb.append(", responseContent=").append(responseContent);
         sb.append(", batchId=").append(batchId);
+        sb.append(", batchNo=").append(batchNo);
         sb.append(", orderNo=").append(orderNo);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
@@ -153,6 +167,7 @@ public class PayShopInterfaceStream implements Serializable {
             && (this.getRequestContent() == null ? other.getRequestContent() == null : this.getRequestContent().equals(other.getRequestContent()))
             && (this.getResponseContent() == null ? other.getResponseContent() == null : this.getResponseContent().equals(other.getResponseContent()))
             && (this.getBatchId() == null ? other.getBatchId() == null : this.getBatchId().equals(other.getBatchId()))
+            && (this.getBatchNo() == null ? other.getBatchNo() == null : this.getBatchNo().equals(other.getBatchNo()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
@@ -170,6 +185,7 @@ public class PayShopInterfaceStream implements Serializable {
         result = prime * result + ((getRequestContent() == null) ? 0 : getRequestContent().hashCode());
         result = prime * result + ((getResponseContent() == null) ? 0 : getResponseContent().hashCode());
         result = prime * result + ((getBatchId() == null) ? 0 : getBatchId().hashCode());
+        result = prime * result + ((getBatchNo() == null) ? 0 : getBatchNo().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;

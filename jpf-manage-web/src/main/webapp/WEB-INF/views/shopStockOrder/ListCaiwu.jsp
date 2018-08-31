@@ -16,7 +16,7 @@
                 modal:true,
                 // maximized:true,//弹出窗口最大化
             });
-            $('#detailWindowPCaiwu').window({
+            $('#detailWindowP').window({
                 title:'审核',
                 width:'80%',
                 height:'500px',
@@ -42,7 +42,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#detailWindowPCaiwu').window("open").window('refresh', '../shopStockOrder/audit/page?orderNo='+rows[0].orderNo+'&type=2').window('setTitle','审核');
+                        $('#detailWindowP').window("open").window('refresh', '../shopStockOrder/audit/page?orderNo='+rows[0].orderNo+'&type=2').window('setTitle','审核');
                     }
                 }
             ];
@@ -67,15 +67,16 @@
                         }
                     },
                     {field:'addtime',title:'采购时间',width:'12%',formatter: formatDateStr},
-                    {field:'cardtime',title:'采购入库时间',width:'10%'},
+                    {field:'cardtime',title:'采购入库时间',width:'10%',formatter: formatDateStr},
+                    {field:'productAmount',title:'采购数量',width:'10%'},
                     {field:'isUpload',title:'采购状态',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '已采购'}
                             else if(value=="2"){return '未采购'}
 
-                        },styler: function (value, row, index) {
+                        }/*,styler: function (value, row, index) {
                             return 'color:red';
-                        }
+                        }*/
                     },
                     {field:'money',title:'采购预付金额',width:'7%'},
                     {field:'operatorName',title:'操作人',width:'7%'},
@@ -83,12 +84,12 @@
                         formatter : function(value,row,index){
                             if(value=='0'){return '已取消'}
                             else if(value=="1"){return '新建'}
-                            else if(value=="2"){return '已提交待审批'}
-                            else if(value=="3"){return '已审批代付款'}
+                            else if(value=="2"){return '已提交'}
+                            else if(value=="3"){return '已审批'}
                             else if(value=="4"){return '已付款'}
-                        },styler: function (value, row, index) {
+                        }/*,styler: function (value, row, index) {
                             return 'color:red';
-                        }
+                        }*/
                     }
 
                 ]]
@@ -167,8 +168,8 @@
                         <td>订单状态:</td>
                         <td><select id="status" name="status" class="easyui-combobox">
                             <option value="">全部</option>
-                            <option value="0">已取消</option>
-                            <option value="3">已审批</option>
+                            <option value="0">取消</option>
+                            <option value="3">审批</option>
                             <option value="4">已付款</option>
                         </select>
                         </td>
@@ -193,7 +194,7 @@
 </div>
 <div id="infoDiv">
     <div id="addWindowP" style="padding: 5px;"></div>
-    <div id="detailWindowPCaiwu" style="padding: 10px;"></div>
+    <div id="detailWindowP" style="padding: 10px;"></div>
     <div id="viewWindow" style="padding: 10px;"></div>
 </div>
 <div id="edit"></div>

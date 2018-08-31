@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayShopBatch;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
 import com.joiest.jpf.entity.ShopBatchInfo;
@@ -33,4 +34,9 @@ public interface ShopBatchServiceFacade {
      * 发送邮件和短信
      */
     public int sendEmail(String batchId) throws Exception;
+
+    /**
+     * 根据批次号查找批次
+     */
+    public PayShopBatch getBatchByBatchNo(String batchNo);
 }

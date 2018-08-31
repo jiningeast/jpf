@@ -144,9 +144,17 @@
                 {field:'stockAmount',title:'产品库存',width:"10%",align:"center"},
                 {field:'supplierName',title:'供应商',width:"10%",align:"center"},
                 {field:'brandName',title:'品牌',width:"10%",align:"center"},
-                {field:'bid',title:'本次进价/件',width:"18%",align:"center"},
+                {field:'bid',title:'本次进价/件',width:"18%",align:"center",formatter: function (value, row, index) {
+                        if (row != null) {
+                            return parseFloat(value).toFixed(2);
+                        }
+                    }},
                 {field:'amount',title:'采购数量',width:"18%",align:"center"},
-                {field:'money',title:'总计金额(元)',width:"15%",align:"center"},
+                {field:'money',title:'总计金额(元)',width:"15%",align:"center",formatter: function (value, row, index) {
+                        if (row != null) {
+                            return parseFloat(value).toFixed(2);
+                        }
+                    }},
                 {field:'addtime',title:'添加时间',width:"10%",align:"center"}
             ]]
         });
