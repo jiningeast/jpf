@@ -130,17 +130,17 @@
                     "url" : "tdorder/index"
                 },{
                     "menuid" : "502",
-                    "menuname" : "云账户充值列表",
+                    "menuname" : "云账户充值管理",
                     "icon" : "icon-nav",
                     "url" : "cloudRecharge/index"
                 },{
                     "menuid" : "503",
-                    "menuname" : "代付任务管理",
+                    "menuname" : "云账户代付任务",
                     "icon" : "icon-nav",
                     "url" : "cloudTask/index"
                 },{
                     "menuid" : "504",
-                    "menuname" : "欣豆市场商户充值",
+                    "menuname" : "欣豆市场商户充值管理",
                     "icon" : "icon-nav",
                     "url" : "shopCompanyCharge/index"
                 },{
@@ -165,27 +165,27 @@
                         "url" : "orders/index"
                     },{
                         "menuid" : "602",
-                        "menuname" : "旅游退单管理",
+                        "menuname" : "旅游退单审核",
                         "icon" : "icon-nav",
                         "url" : "orderCpsingle/index"
                     },{
                         "menuid" : "603",
-                        "menuname" : "云账户充值管理",
+                        "menuname" : "云账户充值审核",
                         "icon" : "icon-nav",
                         "url" : "cloudRecharge/caiwuIndex"
                     },{
                         "menuid" : "604",
-                        "menuname" : "云账户代付管理",
+                        "menuname" : "云账户代付到账",
                         "icon" : "icon-nav",
                         "url" : "cloudCompanyMoney/caiwu/index"
                     },{
                         "menuid" : "605",
-                        "menuname" : "欣豆市场商户充值",
+                        "menuname" : "欣豆市场商户充值审核",
                         "icon" : "icon-nav",
                         "url" : "shopCompanyCharge/caiwuIndex"
                     },{
                         "menuid" : "606",
-                        "menuname" : "欣豆市场采购管理",
+                        "menuname" : "欣豆市场采购审核",
                         "icon" : "icon-nav",
                         "url" : "shopStockOrder/indexCaiwu"
                     }]
