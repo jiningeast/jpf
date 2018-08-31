@@ -416,8 +416,8 @@ public class ShopStockOrderController {
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("path",path);
         String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
-        String response = "https://yifuka.oss-cn-beijing.aliyuncs.com/clouds/1533717137872.zip";
-        //String response = OkHttpUtils.postForm(url,requestMap);
+        //String response = "https://yifuka.oss-cn-beijing.aliyuncs.com/clouds/1533717137872.zip";
+        String response = OkHttpUtils.postForm(url,requestMap);
 
         // 添加OSS流水
         ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
