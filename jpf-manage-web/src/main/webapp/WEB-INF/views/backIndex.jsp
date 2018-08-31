@@ -140,19 +140,19 @@
                     "url" : "cloudTask/index"
                 },{
                     "menuid" : "504",
-                    "menuname" : "欣券管理",
+                    "menuname" : "欣豆市场商户充值",
+                    "icon" : "icon-nav",
+                    "url" : "shopCompanyCharge/index"
+                },{
+                    "menuid" : "505",
+                    "menuname" : "欣豆市场欣券管理",
                     "icon" : "icon-nav",
                     "url" : "shopBatch/index"
                 },{
-                    "menuid" : "505",
-                    "menuname" : "运营采购管理",
+                    "menuid" : "506",
+                    "menuname" : "欣豆市场采购管理",
                     "icon" : "icon-nav",
                     "url" : "shopStockOrder/index"
-                },{
-                    "menuid" : "506",
-                    "menuname" : "欣豆商户充值",
-                    "icon" : "icon-nav",
-                    "url" : "shopCompanyCharge/index"
                 }]
             },{
                     "menuid" : "6",
@@ -160,19 +160,19 @@
                     "menuname" : "财务管理",
                     "menus" : [{
                         "menuid" : "601",
+                        "menuname" : "聚合通道订单管理",
+                        "icon" : "icon-nav",
+                        "url" : "orders/index"
+                    },{
+                        "menuid" : "602",
                         "menuname" : "旅游退单管理",
                         "icon" : "icon-nav",
                         "url" : "orderCpsingle/index"
                     },{
-                        "menuid" : "602",
+                        "menuid" : "603",
                         "menuname" : "云账户充值管理",
                         "icon" : "icon-nav",
                         "url" : "cloudRecharge/caiwuIndex"
-                    },{
-                        "menuid" : "603",
-                        "menuname" : "聚合通道订单管理",
-                        "icon" : "icon-nav",
-                        "url" : "orders/index"
                     },{
                         "menuid" : "604",
                         "menuname" : "云账户代付管理",
@@ -180,14 +180,14 @@
                         "url" : "cloudCompanyMoney/caiwu/index"
                     },{
                         "menuid" : "605",
-                        "menuname" : "财务采购管理",
-                        "icon" : "icon-nav",
-                        "url" : "shopStockOrder/indexCaiwu"
-                    },{
-                        "menuid" : "606",
-                        "menuname" : "欣豆商户充值管理",
+                        "menuname" : "欣豆市场商户充值",
                         "icon" : "icon-nav",
                         "url" : "shopCompanyCharge/caiwuIndex"
+                    },{
+                        "menuid" : "606",
+                        "menuname" : "欣豆市场采购管理",
+                        "icon" : "icon-nav",
+                        "url" : "shopStockOrder/indexCaiwu"
                     }]
             },{
                 "menuid" : "7",
@@ -215,7 +215,7 @@
                 "menuname" : "统计管理",
                 "menus" : [{
                     "menuid" : "901",
-                    "menuname" : "进销存统计",
+                    "menuname" : "欣豆市场进销存统计",
                     "icon" : "icon-nav",
                     "url" : "shopStockLog/index"
                 }]

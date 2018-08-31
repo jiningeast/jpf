@@ -11,7 +11,7 @@
     <div class="notice">
         <h6>商品采购模板使用说明</h6>
         <p>1.单批次最大支持10000条订单</p>
-        <p>2.文件名格式为[供应商名称-日期-采购订单Id]，例如：XXX供应商-20180825-01</p>
+        <p>2.文件名格式为[供应商名称-日期-序号]，例如：XXX供应商-20180825-01</p>
         <p><a href="../shopStockOrder/download" style="color: #0e90d2;">点击下载Excel模板</a></p>
     </div>
     <div class="easyui-panel" title="批量采购" data-options="footer:'#confirm'">

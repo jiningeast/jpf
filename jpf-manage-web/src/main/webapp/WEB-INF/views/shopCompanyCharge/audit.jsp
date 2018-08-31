@@ -46,7 +46,7 @@
                     </tr>
                 </c:if>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">充值状态：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">状态：</td>
                     <td>${shopCompanyChargeInfo.statusCn}</td>
                 </tr>
                 <tr>
@@ -58,18 +58,18 @@
                     <td><fmt:formatDate value="${shopCompanyChargeInfo.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">审核：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">审核状态：</td>
                     <td colspan="4">
                         <select id="status_audit" name="status" class="easyui-combobox" style="width:120px;" data-options="">
                             <option value="">请选择</option>
                             <c:if test="${auditPageType == 1 }">
-                                <option value="-1">已取消</option>
-                                <option value="0">申请</option>
+                                <option value=-1>已取消</option>
+                                <%--<option value="0">申请</option>--%>
                             </c:if>
                                 <%--<option value="0">新增</option>--%>
                             <c:if test="${auditPageType == 2 }">
-                                <option value="1">审核通过并充值 </option>
-                                <option value="2">审核拒绝</option>
+                                <option value=1>审核通过并充值 </option>
+                                <option value=2>审核拒绝</option>
                             </c:if>
                         </select>
                     </td>
@@ -85,7 +85,7 @@
 
     function initData() {
 
-        $('#status_audit').combobox('select', '${shopCompanyChargeInfo.status}');
+        //$('#status_audit').combobox('select', '${shopCompanyChargeInfo.status}');
 
     }
 
@@ -108,6 +108,12 @@
                 if (!isValid) {
                     return;
                 }
+
+                if ( $("#status_audit").combobox('getValue') =="" ) {
+                    $.messager.alert('消息提示', "请选择审核状态", 'info');
+                    return;
+                }
+
                 var queryArray = $('#auditForm').serializeArray();
                 var postData = parsePostData(queryArray);
                 if( postData.status==1 ){
