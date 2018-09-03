@@ -15,91 +15,23 @@
                 closed:true,
                 modal:true
             });
-           /* var toolbar = [
+            var toolbar = [
+
                 {
-                    text : '新增',
-                    iconCls : 'icon-add',
-                    handler : function(){
-                        $("#infoDiv").window("open").window('refresh', 'addCompany/page').window('setTitle','新增');
-                    }
-                },
-                {
-                    text:'编辑',
-                    iconCls:'icon-edit',
+                    text:'详情',
+                    iconCls:'icon-view-detail',
                     handler:function(){
                         var rows = $('#dg').datagrid('getSelections');
                         if (rows.length != 1) {
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#infoDiv').window("open").window('refresh', 'edit/page?id='+rows[0].id).window('setTitle','编辑');
+                        $('#infoDiv').window("open").window('refresh', 'orderInfo?orderNo='+rows[0].orderNo).window('setTitle','订单详情');
                     }
                 },
-                {
-                    text : '停用',
-                    iconCls:'icon-no',
-                    handler : function () {
-                        var rows = $("#dg").datagrid('getSelections');
-                        if ( rows.length != 1 ) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return false;
-                        }
-                        $.messager.confirm('停用','确认停用操作？',function(r){
-                            if (r){
-                                $.ajax({
-                                    type : 'get',
-                                    url :'delCompanyShop?merchNo='+rows[0].merchNo+'&type=2',
-                                    dataType:"json",
-                                    contentType:"application/json",
-                                    success : function(msg){
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                        } else {
-                                            $.messager.alert('消息提示','操作成功!','info');
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error : function () {
-                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                    }
-                                })
-                            }
-                        })
-                    }
-                },
-                {
-                    text : '启用',
-                    iconCls:'icon-ok',
-                    handler : function () {
-                        var rows = $("#dg").datagrid('getSelections');
-                        if ( rows.length != 1 ) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return false;
-                        }
-                        $.messager.confirm('启用','确认启用操作？',function(r){
-                            if (r){
-                                $.ajax({
-                                    type : 'get',
-                                    url :'delCompanyShop?merchNo='+rows[0].merchNo+'&type=1',
-                                    dataType:"json",
-                                    contentType:"application/json",
-                                    success : function(msg){
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                        } else {
-                                            $.messager.alert('消息提示','操作成功!','info');
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error : function () {
-                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                    }
-                                })
-                            }
-                        })
-                    }
-                }
-            ];*/
+
+
+            ];
 
             $('#dg').datagrid({
                 title:'欣豆市场订单列表',
@@ -116,9 +48,9 @@
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'orderNo',title:'订单号',width:'15%',
-                        formatter : function(value,row,index){
+                     /*   formatter : function(value,row,index){
                             return  "<a onclick=\"goActiveOrder('"+value+" ')\">"+value+" </a>";
-                        }
+                        }*/
                     },
                     {field:'productName',title:'产品名称',width:'10%'},
                     {field:'typeName',title:'产品类型',width:'7%'},
