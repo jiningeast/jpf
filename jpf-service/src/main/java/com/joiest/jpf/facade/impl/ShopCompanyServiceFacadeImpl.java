@@ -9,6 +9,7 @@ import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
 import com.joiest.jpf.dto.GetShopCompanyRequest;
 import com.joiest.jpf.dto.GetShopCompanyResponse;
@@ -29,9 +30,12 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     @Autowired
     private PayShopCompanyMapper payShopCompanyMapper;
 
+    @Autowired
+    private PayShopCompanyCustomMapper payShopCompanyCustomMapper;
     /**
      * 公司列表---后台
      */
+    @Override
     public GetShopCompanyResponse getList(GetShopCompanyRequest request)
     {
         if ( request.getRows() <= 0 )
@@ -95,7 +99,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     /**
      * 公司添加
      */
-
+    @Override
     public JpfResponseDto addCompany(GetShopCompanyRequest request,int account){
 
         //验证参数
@@ -208,11 +212,26 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         payShopCompany.setReceiveEmail(request.getReceiveEmail());
         payShopCompany.setSaleName(request.getSaleName());
         payShopCompany.setSalePhone(request.getSalePhone());
+        BigDecimal loanAmount = new BigDecimal("0.00");
+        String accountReturn=loanAmount.toString();
+        payShopCompany.setMoney(loanAmount);
         payShopCompany.setAddtime(date);
-        int res = payShopCompanyMapper.insertSelective(payShopCompany);
-        if(res!=1){
-            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
-        }
+        //获取刚插入的id
+           int res = payShopCompanyCustomMapper.insertSelective(payShopCompany);
+            String sprimatkey = payShopCompany.getId();
+           //修改金额校验
+            PayShopCompanyExample updateCode=new PayShopCompanyExample();
+            PayShopCompanyExample.Criteria cUpdate=updateCode.createCriteria();
+            cUpdate.andIdEqualTo(sprimatkey);
+            PayShopCompany payShopCompanyUp=new PayShopCompany();
+            String code=ToolUtils.CreateCode(accountReturn,sprimatkey);
+            payShopCompanyUp.setMoneyCode(code);
+            try {
+                payShopCompanyMapper.updateByExampleSelective(payShopCompanyUp,updateCode);
+            } catch (Exception e) {
+                throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
+            }
+
         return new JpfResponseDto();
     }
 
@@ -238,7 +257,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     /**
      * 公司修改
      */
-
+    @Override
     public JpfResponseDto editCompany(GetShopCompanyRequest request,int account){
 
         //验证参数
