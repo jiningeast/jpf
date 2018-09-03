@@ -430,7 +430,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
      */
     @Override
     public String getMoneyCode(String companyId, String money){
-        return Md5Encrypt.md5(companyId + money + ConfigUtil.getValue("MONEY_VALID_CODE"));
+        return ToolUtils.CreateCode(money,companyId);
     }
 
     /**
@@ -441,8 +441,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     @Override
     public boolean checkMoneyCode(String companyId){
         PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(companyId);
-        String newCode = payShopCompany.getId() + payShopCompany.getMoney() + ConfigUtil.getValue("MONEY_VALID_CODE");
-        newCode = Md5Encrypt.md5(newCode);
+        String newCode = ToolUtils.CreateCode(payShopCompany.getMoney().toString(),payShopCompany.getId());
 
         if ( newCode.equals(payShopCompany.getMoneyCode()) ){
             return true;
