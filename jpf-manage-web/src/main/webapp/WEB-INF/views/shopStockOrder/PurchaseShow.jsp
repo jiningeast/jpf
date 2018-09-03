@@ -9,11 +9,11 @@
     <%--成功失败列表提示信息--%>
     <c:if  test="${successSize != '0'}">
         <div class="notice" >
-            <p style="margin-top: 0;">成功：Excel表格信息正确 ${successSize }条 <%--<span id="success" class="viewData success" style="border: 2px solid #3398FF;
+            <p style="margin-top: 0;">成功：Excel表格信息正确 ${successSize }条 <span id="success" class="viewData success" style="border: 2px solid #3398FF;
             padding: 3px;
             background: #3398FF;
             color: #FFFFFF;
-            cursor: pointer;">点击查看</span>--%></p>
+            cursor: pointer;">点击查看</span></p>
         </div>
     </c:if>
         <form id="confirmPersonsForm" method="post" enctype="multipart/form-data">
@@ -24,11 +24,11 @@
 
     <c:if  test="${faildSize != '0'}">
         <div class="notice" style="background-color: #ffe9e9;border-color: #ffa8a8">
-            <p style="margin-top: 0px;">失败：Excel表格错误信息共 ${faildSize} 条 <%--<span class="viewData faild" style="border: 2px solid #3398FF;
+            <p style="margin-top: 0px;">失败：Excel表格错误信息共 ${faildSize} 条 <span class="viewData faild" style="border: 2px solid #3398FF;
             padding: 3px;
             background: #3398FF;
             color: #FFFFFF;
-            cursor: pointer;">点击查看</span>--%>，请修改后重新上传【可能原因：商品和采购订单商品不匹配、采购数量和订单商品数量不匹配、字段值为空、卡号重复】</p>
+            cursor: pointer;">点击查看</span>，请修改后重新上传【可能原因：商品和采购订单商品不匹配、采购数量和订单商品数量不匹配、字段值为空、卡号重复】</p>
         </div>
     </c:if>
     <div id="purchaseShow"></div>
