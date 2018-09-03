@@ -115,6 +115,14 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
 
             totalCount += Integer.parseInt(single.get("amount"));
         }
+        // 判断该企业有没有这些券的总余额
+        if ( payShopCompany.getMoney().compareTo(new BigDecimal(totalMoney)) < 0 ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("商户余额不足");
+
+            return jpfResponseDto;
+        }
         payShopBatch.setMoney(new BigDecimal(totalMoney));
         payShopBatch.setScale(1.00);
         payShopBatch.setCount(totalCount);
@@ -164,6 +172,14 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
                 payShopBatchCouponMapper.insert(payShopBatchCoupon);
             }
         }
+
+        // 扣企业的款
+        Double newMoney = new Double(payShopCompany.getMoney().toString()) - Double.parseDouble(String.valueOf(totalMoney));
+        payShopCompany.setMoney(new BigDecimal(newMoney));
+        String moneyCode = ToolUtils.CreateCode(newMoney.toString(),payShopCompany.getId());
+        payShopCompany.setMoneyCode(moneyCode);
+
+        payShopCompanyMapper.updateByPrimaryKey(payShopCompany);
 
         List<ShopBatchCouponInfo> infoList = new ArrayList<>();
         for ( PayShopBatchCoupon payCoupon:payShopBatchCouponsList ){
