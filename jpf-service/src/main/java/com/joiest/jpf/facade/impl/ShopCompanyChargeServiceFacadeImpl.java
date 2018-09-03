@@ -227,7 +227,7 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
                     String companyId = shopCompanyChargeInfo.getCompanyId();
                     //校验欣豆商户金额
                     ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(companyId);
-                    Boolean flag = ToolUtils.ValidateCode(shopCompanyInfo.getMoneyCode().toString(),companyId.toString(),shopCompanyInfo.getMoney().toString());
+                    Boolean flag = ToolUtils.ValidateCode(shopCompanyInfo.getMoneyCode(),companyId,shopCompanyInfo.getMoney().toString());
                     if( flag ){
                         BigDecimal companyMoney =shopCompanyInfo.getMoney();
                         BigDecimal afterMoney = money.add(companyMoney);

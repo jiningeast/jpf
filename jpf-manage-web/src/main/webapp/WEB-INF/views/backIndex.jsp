@@ -140,7 +140,7 @@
                     "url" : "cloudTask/index"
                 },{
                     "menuid" : "504",
-                    "menuname" : "欣豆市场商户充值管理",
+                    "menuname" : "欣豆市场充值管理",
                     "icon" : "icon-nav",
                     "url" : "shopCompanyCharge/index"
                 },{
@@ -180,7 +180,7 @@
                         "url" : "cloudCompanyMoney/caiwu/index"
                     },{
                         "menuid" : "605",
-                        "menuname" : "欣豆市场商户充值审核",
+                        "menuname" : "欣豆市场充值审核",
                         "icon" : "icon-nav",
                         "url" : "shopCompanyCharge/caiwuIndex"
                     },{
