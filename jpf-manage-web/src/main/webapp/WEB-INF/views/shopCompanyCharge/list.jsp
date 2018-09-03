@@ -64,7 +64,10 @@
                             else if(value=="1"){return '审核通过已充值'}
                             else if(value=="2"){return '审核驳回'}
                         },styler: function (value, row, index) {
-                            return 'color:red';
+                           if(value=="2"){
+                               return 'color:red';
+
+                           }
                         }
                     }
 

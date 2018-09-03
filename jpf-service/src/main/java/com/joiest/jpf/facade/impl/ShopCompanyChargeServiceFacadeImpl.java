@@ -247,7 +247,7 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
 
                 }
                 if( request.getStatus() ==  2){ // 审核驳回
-
+                    ret = 1;
                 }
                 break;
             case 1:
