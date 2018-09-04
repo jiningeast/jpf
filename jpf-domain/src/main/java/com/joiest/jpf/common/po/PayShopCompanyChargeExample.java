@@ -566,6 +566,126 @@ public class PayShopCompanyChargeExample {
             return (Criteria) this;
         }
 
+        public Criteria andRateIsNull() {
+            addCriterion("rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateIsNotNull() {
+            addCriterion("rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateEqualTo(BigDecimal value) {
+            addCriterion("rate =", value, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateNotEqualTo(BigDecimal value) {
+            addCriterion("rate <>", value, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateGreaterThan(BigDecimal value) {
+            addCriterion("rate >", value, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("rate >=", value, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateLessThan(BigDecimal value) {
+            addCriterion("rate <", value, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("rate <=", value, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateIn(List<BigDecimal> values) {
+            addCriterion("rate in", values, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateNotIn(List<BigDecimal> values) {
+            addCriterion("rate not in", values, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("rate between", value1, value2, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("rate not between", value1, value2, "rate");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyIsNull() {
+            addCriterion("contract_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyIsNotNull() {
+            addCriterion("contract_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyEqualTo(BigDecimal value) {
+            addCriterion("contract_money =", value, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("contract_money <>", value, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyGreaterThan(BigDecimal value) {
+            addCriterion("contract_money >", value, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("contract_money >=", value, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyLessThan(BigDecimal value) {
+            addCriterion("contract_money <", value, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("contract_money <=", value, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyIn(List<BigDecimal> values) {
+            addCriterion("contract_money in", values, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("contract_money not in", values, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("contract_money between", value1, value2, "contractMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("contract_money not between", value1, value2, "contractMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andMoneyIsNull() {
             addCriterion("money is null");
             return (Criteria) this;

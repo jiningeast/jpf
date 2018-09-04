@@ -36,7 +36,17 @@ public class PayShopCompanyCharge implements Serializable {
     private String imgUrl;
 
     /**
-     * 充值金额
+     * 费率
+     */
+    private BigDecimal rate;
+
+    /**
+     * 合同金额
+     */
+    private BigDecimal contractMoney;
+
+    /**
+     * 企业实际到账金额
      */
     private BigDecimal money;
 
@@ -120,6 +130,22 @@ public class PayShopCompanyCharge implements Serializable {
         this.imgUrl = imgUrl == null ? null : imgUrl.trim();
     }
 
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
+    }
+
+    public BigDecimal getContractMoney() {
+        return contractMoney;
+    }
+
+    public void setContractMoney(BigDecimal contractMoney) {
+        this.contractMoney = contractMoney;
+    }
+
     public BigDecimal getMoney() {
         return money;
     }
@@ -191,6 +217,8 @@ public class PayShopCompanyCharge implements Serializable {
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
         sb.append(", imgUrl=").append(imgUrl);
+        sb.append(", rate=").append(rate);
+        sb.append(", contractMoney=").append(contractMoney);
         sb.append(", money=").append(money);
         sb.append(", checkOperatorId=").append(checkOperatorId);
         sb.append(", checkOperatorName=").append(checkOperatorName);
@@ -224,6 +252,8 @@ public class PayShopCompanyCharge implements Serializable {
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
             && (this.getImgUrl() == null ? other.getImgUrl() == null : this.getImgUrl().equals(other.getImgUrl()))
+            && (this.getRate() == null ? other.getRate() == null : this.getRate().equals(other.getRate()))
+            && (this.getContractMoney() == null ? other.getContractMoney() == null : this.getContractMoney().equals(other.getContractMoney()))
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getCheckOperatorId() == null ? other.getCheckOperatorId() == null : this.getCheckOperatorId().equals(other.getCheckOperatorId()))
             && (this.getCheckOperatorName() == null ? other.getCheckOperatorName() == null : this.getCheckOperatorName().equals(other.getCheckOperatorName()))
@@ -246,6 +276,8 @@ public class PayShopCompanyCharge implements Serializable {
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
         result = prime * result + ((getImgUrl() == null) ? 0 : getImgUrl().hashCode());
+        result = prime * result + ((getRate() == null) ? 0 : getRate().hashCode());
+        result = prime * result + ((getContractMoney() == null) ? 0 : getContractMoney().hashCode());
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
         result = prime * result + ((getCheckOperatorId() == null) ? 0 : getCheckOperatorId().hashCode());
         result = prime * result + ((getCheckOperatorName() == null) ? 0 : getCheckOperatorName().hashCode());

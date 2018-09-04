@@ -1655,6 +1655,66 @@ public class PayWeixinUserExample {
             return (Criteria) this;
         }
 
+        public Criteria andShopTypeIsNull() {
+            addCriterion("shop_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeIsNotNull() {
+            addCriterion("shop_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeEqualTo(Byte value) {
+            addCriterion("shop_type =", value, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeNotEqualTo(Byte value) {
+            addCriterion("shop_type <>", value, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeGreaterThan(Byte value) {
+            addCriterion("shop_type >", value, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("shop_type >=", value, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeLessThan(Byte value) {
+            addCriterion("shop_type <", value, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("shop_type <=", value, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeIn(List<Byte> values) {
+            addCriterion("shop_type in", values, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeNotIn(List<Byte> values) {
+            addCriterion("shop_type not in", values, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeBetween(Byte value1, Byte value2) {
+            addCriterion("shop_type between", value1, value2, "shopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("shop_type not between", value1, value2, "shopType");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
