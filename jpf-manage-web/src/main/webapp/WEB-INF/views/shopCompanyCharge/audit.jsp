@@ -12,7 +12,7 @@
 <body>
 <!-- 添加弹出窗口 -->
 <div class="easyui-layout" fit="true">
-    <div id="formDiv1" class="easyui-panel"  style="padding: 10px; background: #fff; border: 1px solid #ccc;">
+    <div id="formDiv1" class="easyui-panel"  region="center"  style="padding: 10px; background: #fff; border: 1px solid #ccc;">
         <form id="auditForm" method="post" enctype="multipart/form-data">
             <input type="hidden" id="id_audit" name="id" value="${shopCompanyChargeInfo.id}">
             <table cellpadding=3 class="table table-bordered">
