@@ -24,7 +24,15 @@
                     <td>${shopCompanyChargeInfo.companyName}</td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">充值金额：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同金额：</td>
+                    <td>${shopCompanyChargeInfo.contractMoney}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">费率 (%)：</td>
+                    <td>${shopCompanyChargeInfo.rate} </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">实际到帐：</td>
                     <td>${shopCompanyChargeInfo.money}</td>
                 </tr>
                 <tr>
