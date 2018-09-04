@@ -27,7 +27,7 @@ public class PayShopAd implements Serializable {
     /**
      * 排序 数越大越靠前
      */
-    private Integer order;
+    private Integer weight;
 
     /**
      * 广告类型 0=首页图标 1=首页轮播图 2=首页banner图片
@@ -83,12 +83,12 @@ public class PayShopAd implements Serializable {
         this.url = url == null ? null : url.trim();
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getWeight() {
+        return weight;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public Byte getType() {
@@ -136,7 +136,7 @@ public class PayShopAd implements Serializable {
         sb.append(", title=").append(title);
         sb.append(", imgUrl=").append(imgUrl);
         sb.append(", url=").append(url);
-        sb.append(", order=").append(order);
+        sb.append(", weight=").append(weight);
         sb.append(", type=").append(type);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
@@ -165,7 +165,7 @@ public class PayShopAd implements Serializable {
             && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
             && (this.getImgUrl() == null ? other.getImgUrl() == null : this.getImgUrl().equals(other.getImgUrl()))
             && (this.getUrl() == null ? other.getUrl() == null : this.getUrl().equals(other.getUrl()))
-            && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
+            && (this.getWeight() == null ? other.getWeight() == null : this.getWeight().equals(other.getWeight()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
@@ -183,7 +183,7 @@ public class PayShopAd implements Serializable {
         result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
         result = prime * result + ((getImgUrl() == null) ? 0 : getImgUrl().hashCode());
         result = prime * result + ((getUrl() == null) ? 0 : getUrl().hashCode());
-        result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
+        result = prime * result + ((getWeight() == null) ? 0 : getWeight().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
