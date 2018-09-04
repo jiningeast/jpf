@@ -35,6 +35,17 @@ public class GetShopCompanyChargeRequest {
     private String imgUrl;
 
     /**
+     * 费率
+     */
+    private BigDecimal rate;
+
+    /**
+     * 合同金额
+     */
+    private BigDecimal contractMoney;
+
+
+    /**
      * 充值金额
      */
     private BigDecimal money;
@@ -236,5 +247,21 @@ public class GetShopCompanyChargeRequest {
 
     public void setStatusCn(String statusCn) {
         this.statusCn = statusCn;
+    }
+
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
+    }
+
+    public BigDecimal getContractMoney() {
+        return contractMoney;
+    }
+
+    public void setContractMoney(BigDecimal contractMoney) {
+        this.contractMoney = contractMoney;
     }
 }
