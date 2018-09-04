@@ -30,6 +30,11 @@ public class PayShopAd implements Serializable {
     private Integer order;
 
     /**
+     * 广告类型 0=首页图标 1=首页轮播图 2=首页banner图片
+     */
+    private Byte type;
+
+    /**
      * 状态 0=不可见 1=可见
      */
     private Byte status;
@@ -86,6 +91,14 @@ public class PayShopAd implements Serializable {
         this.order = order;
     }
 
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
     public Byte getStatus() {
         return status;
     }
@@ -124,6 +137,7 @@ public class PayShopAd implements Serializable {
         sb.append(", imgUrl=").append(imgUrl);
         sb.append(", url=").append(url);
         sb.append(", order=").append(order);
+        sb.append(", type=").append(type);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
@@ -152,6 +166,7 @@ public class PayShopAd implements Serializable {
             && (this.getImgUrl() == null ? other.getImgUrl() == null : this.getImgUrl().equals(other.getImgUrl()))
             && (this.getUrl() == null ? other.getUrl() == null : this.getUrl().equals(other.getUrl()))
             && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -169,6 +184,7 @@ public class PayShopAd implements Serializable {
         result = prime * result + ((getImgUrl() == null) ? 0 : getImgUrl().hashCode());
         result = prime * result + ((getUrl() == null) ? 0 : getUrl().hashCode());
         result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());

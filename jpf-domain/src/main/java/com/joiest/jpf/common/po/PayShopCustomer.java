@@ -50,6 +50,11 @@ public class PayShopCustomer implements Serializable {
     private Byte isVerify;
 
     /**
+     * 用户类型 0=正常用户 1=特殊用户
+     */
+    private Byte type;
+
+    /**
      * 客户状态 0=冻结 1=正常
      */
     private Byte status;
@@ -153,6 +158,14 @@ public class PayShopCustomer implements Serializable {
         this.isVerify = isVerify;
     }
 
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
     public Byte getStatus() {
         return status;
     }
@@ -219,6 +232,7 @@ public class PayShopCustomer implements Serializable {
         sb.append(", idno=").append(idno);
         sb.append(", phone=").append(phone);
         sb.append(", isVerify=").append(isVerify);
+        sb.append(", type=").append(type);
         sb.append(", status=").append(status);
         sb.append(", dou=").append(dou);
         sb.append(", code=").append(code);
@@ -254,6 +268,7 @@ public class PayShopCustomer implements Serializable {
             && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getIsVerify() == null ? other.getIsVerify() == null : this.getIsVerify().equals(other.getIsVerify()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
             && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
@@ -278,6 +293,7 @@ public class PayShopCustomer implements Serializable {
         result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getIsVerify() == null) ? 0 : getIsVerify().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
         result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
