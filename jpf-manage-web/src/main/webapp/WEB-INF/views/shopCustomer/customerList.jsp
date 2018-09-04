@@ -17,10 +17,18 @@
                 maximized:true,//弹出窗口最大化
 
             });
+            $('#infoUpdate').window({
+                title:'详情',
+                width:'1024px',
+                height:'500px',
+                closed:true,
+                modal:true,
+                maximized:false,//弹出窗口最大化
+            });
             var toolbar = [
                 {
                     text:'详情',
-                    iconCls:'icon-edit',
+                    iconCls:'icon-view-detail',
                     handler:function(){
                         var rows = $('#dg').datagrid('getSelections');
                         if (rows.length != 1) {
@@ -93,6 +101,18 @@
                             }
                         })
                     }
+                },
+                {
+                    text : '类型编辑',
+                    iconCls:'icon-edit',
+                    handler : function () {
+                        var rows = $("#dg").datagrid('getSelections');
+                        if ( rows.length != 1 ) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return false;
+                        }
+                        $('#infoUpdate').window("open").window('refresh', 'editCustomer/page?id='+rows[0].id+'&phone='+rows[0].phone+'&dou='+rows[0].dou).window('setTitle','编辑用户详情');
+                    }
                 }
             ];
 
@@ -137,6 +157,13 @@
                         formatter : function(value,row,index){
                             if(value=='1'){return '已实名认证'}
                             else{return '未实名认证'}
+                        },styler: function (value, row, index) {
+                            return 'color:red';
+                        }
+                    },{field:'type',title:'用户类型',width:'8%',
+                        formatter : function(value,row,index){
+                            if(value=='1'){return '特殊用户'}
+                            else{return '正常用户'}
                         },styler: function (value, row, index) {
                             return 'color:red';
                         }
@@ -248,6 +275,7 @@
     <table id="dg"></table>
 </div>
 <div id="infoDiv"></div>
+<div id="infoUpdate"></div>
 <div id="edit"></div>
 </body>
 </html>

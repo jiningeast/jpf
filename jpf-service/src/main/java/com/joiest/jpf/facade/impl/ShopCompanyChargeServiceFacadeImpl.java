@@ -118,14 +118,28 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "公司不能为空");
         }
 
-        if( request.getMoney().toString().equals("") || request.getMoney().compareTo(new BigDecimal("0")) < 1  ){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "金额不能为空或小于0");
+        if(request.getMoney()==null || request.getMoney().toString().equals("") || request.getMoney().compareTo(new BigDecimal("0")) < 1   ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "实际到帐金额不能为空或小于0");
         }
 
+        if(request.getContractMoney()==null || request.getContractMoney().toString().equals("") || request.getContractMoney().compareTo(new BigDecimal("0")) < 1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "合同金额不能为空或小于0");
+        }
+        if( request.getRate()==null || request.getRate().toString().equals("") || request.getRate().compareTo(new BigDecimal("0")) <0   ){
+
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "费率不能为空或小于0");
+        }
         if( request.getImgUrl().equals("") ||  request.getImgUrl()== null  ){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "金额不能为空或小于0");
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "图片不能为空");
         }
-
+        BigDecimal resultMoney;
+        BigDecimal roteMoney;
+        roteMoney=request.getContractMoney().multiply(request.getRate().divide(new BigDecimal("100")));
+        resultMoney=request.getContractMoney().subtract(roteMoney);
+        //金额校验
+        if(request.getMoney().compareTo(resultMoney)!=0){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "金额校验失败");
+        }
         Date curretDate = new Date();
         PayShopCompanyCharge payShopCompanyCharge = new PayShopCompanyCharge();
         payShopCompanyCharge.setCompanyId(request.getCompanyId());
@@ -135,10 +149,13 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
         payShopCompanyCharge.setOperatorName(request.getOperatorName());
 
         payShopCompanyCharge.setImgUrl(request.getImgUrl());
+        payShopCompanyCharge.setContractMoney(request.getContractMoney());
+        payShopCompanyCharge.setRate(request.getRate());
         payShopCompanyCharge.setMoney(request.getMoney());
         payShopCompanyCharge.setAddtime(curretDate);
         payShopCompanyCharge.setStatus((byte)0);
         payShopCompanyCharge.setUpdatetime(curretDate);
+
         int count = payShopCompanyChargeMapper.insertSelective(payShopCompanyCharge);
         if( count != 1 ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "添加失败");

@@ -52,7 +52,21 @@
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'companyName',title:'公司名称',width:'12%'},
-                    {field:'money',title:'充值金额',width:'10%'},
+                    {field:'contractMoney',title:'合同金额',width:'12%',formatter: function (value, row, index) {
+                            if (row != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
+                    {field:'rate',title:'费率 (%)',width:'12%',  formatter: function (value, row, index) {
+                            if (row != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
+                    {field:'money',title:'实际到帐金额',width:'10%',formatter: function (value, row, index) {
+                            if (row != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
                     {field:'operatorName',title:'添加人',width:'8%'},
                     {field:'checkOperatorName',title:'审核人',width:'8%'},
                     {field:'addtime',title:'添加时间',width:'8%',formatter: formatDateStr},

@@ -1,15 +1,15 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.common.util.ConfigUtil;
-import com.joiest.jpf.common.util.OkHttpUtils;
-import com.joiest.jpf.common.util.PhotoUtil;
 import com.joiest.jpf.dto.GetShopCompanyChargeRequest;
 import com.joiest.jpf.dto.GetShopCompanyChargeResponse;
 import com.joiest.jpf.entity.ShopCompanyChargeInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.ShopCompanyChargeServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,6 +55,7 @@ public class ShopCompanyChargeController {
         Map<String, Object> map = new HashMap<>();
         map.put("total", response.getCount());
         map.put("rows", response.getList());
+
         return map;
     }
 
@@ -68,6 +69,7 @@ public class ShopCompanyChargeController {
         Map<String, Object> map = new HashMap<>();
         map.put("total", response.getCount());
         map.put("rows", response.getList());
+
         return map;
     }
 

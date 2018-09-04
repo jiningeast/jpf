@@ -41,6 +41,16 @@ public class ShopCompanyChargeInfo implements Serializable {
     private BigDecimal money;
 
     /**
+     * 费率
+     */
+    private BigDecimal rate;
+
+    /**
+     * 合同金额
+     */
+    private BigDecimal contractMoney;
+
+    /**
      * 财务审核操作者id
      */
     private String checkOperatorId;
@@ -179,6 +189,22 @@ public class ShopCompanyChargeInfo implements Serializable {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
+    }
+
+    public BigDecimal getContractMoney() {
+        return contractMoney;
+    }
+
+    public void setContractMoney(BigDecimal contractMoney) {
+        this.contractMoney = contractMoney;
     }
 
     /**

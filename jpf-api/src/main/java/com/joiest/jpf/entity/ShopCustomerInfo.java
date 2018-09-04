@@ -50,6 +50,11 @@ public class ShopCustomerInfo {
     private Byte isVerify;
 
     /**
+     * 用户类型 0=正常用户 1=特殊用户
+     */
+    private Byte type;
+
+    /**
      * 客户状态 0=冻结 1=正常
      */
     private Byte status;
@@ -270,5 +275,13 @@ public class ShopCustomerInfo {
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 }
