@@ -41,12 +41,6 @@ public interface PayCloudRechargeMapper {
     int insertSelective(PayCloudRecharge record);
 
     /**
-     *
-     * @param example
-     */
-    List<PayCloudRecharge> selectByExampleWithBLOBs(PayCloudRechargeExample example);
-
-    /**
      * 根据条件查询列表
      *
      * @param example
@@ -74,14 +68,6 @@ public interface PayCloudRechargeMapper {
      * @param record
      * @param example
      */
-    int updateByExampleWithBLOBs(@Param("record") PayCloudRecharge record, @Param("example") PayCloudRechargeExample example);
-
-    /**
-     * 选择性更新数据库记录
-     *
-     * @param record
-     * @param example
-     */
     int updateByExample(@Param("record") PayCloudRecharge record, @Param("example") PayCloudRechargeExample example);
 
     /**
@@ -90,12 +76,6 @@ public interface PayCloudRechargeMapper {
      * @param record
      */
     int updateByPrimaryKeySelective(PayCloudRecharge record);
-
-    /**
-     *
-     * @param record
-     */
-    int updateByPrimaryKeyWithBLOBs(PayCloudRecharge record);
 
     /**
      * 根据主键来更新数据库记录
