@@ -115,11 +115,6 @@ public class PayWeixinUser implements Serializable {
     private String privilege;
 
     /**
-     * 欣豆市场用户类型 0=普通用户 1=特殊用户
-     */
-    private Byte shopType;
-
-    /**
      * 状态 1可用  2不可用
      */
     private Byte status;
@@ -312,14 +307,6 @@ public class PayWeixinUser implements Serializable {
         this.privilege = privilege == null ? null : privilege.trim();
     }
 
-    public Byte getShopType() {
-        return shopType;
-    }
-
-    public void setShopType(Byte shopType) {
-        this.shopType = shopType;
-    }
-
     public Byte getStatus() {
         return status;
     }
@@ -375,7 +362,6 @@ public class PayWeixinUser implements Serializable {
         sb.append(", qrScene=").append(qrScene);
         sb.append(", qrSceneStr=").append(qrSceneStr);
         sb.append(", privilege=").append(privilege);
-        sb.append(", shopType=").append(shopType);
         sb.append(", status=").append(status);
         sb.append(", created=").append(created);
         sb.append(", updated=").append(updated);
@@ -421,7 +407,6 @@ public class PayWeixinUser implements Serializable {
             && (this.getQrScene() == null ? other.getQrScene() == null : this.getQrScene().equals(other.getQrScene()))
             && (this.getQrSceneStr() == null ? other.getQrSceneStr() == null : this.getQrSceneStr().equals(other.getQrSceneStr()))
             && (this.getPrivilege() == null ? other.getPrivilege() == null : this.getPrivilege().equals(other.getPrivilege()))
-            && (this.getShopType() == null ? other.getShopType() == null : this.getShopType().equals(other.getShopType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()));
@@ -456,7 +441,6 @@ public class PayWeixinUser implements Serializable {
         result = prime * result + ((getQrScene() == null) ? 0 : getQrScene().hashCode());
         result = prime * result + ((getQrSceneStr() == null) ? 0 : getQrSceneStr().hashCode());
         result = prime * result + ((getPrivilege() == null) ? 0 : getPrivilege().hashCode());
-        result = prime * result + ((getShopType() == null) ? 0 : getShopType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
