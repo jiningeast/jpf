@@ -106,6 +106,16 @@ public class PayCloudRecharge implements Serializable {
     private String imgurl;
 
     /**
+     * 客服备注
+     */
+    private String kfremarks;
+
+    /**
+     * 删除标记 0=未删 1=删除
+     */
+    private Byte isDel;
+
+    /**
      * 申请时间
      */
     private Date addtime;
@@ -134,11 +144,6 @@ public class PayCloudRecharge implements Serializable {
      * 需求确认：1默认，2:确认需求
      */
     private Byte pactstatus;
-
-    /**
-     * 客服备注
-     */
-    private String kfremarks;
 
     private static final long serialVersionUID = 1L;
 
@@ -302,6 +307,22 @@ public class PayCloudRecharge implements Serializable {
         this.imgurl = imgurl == null ? null : imgurl.trim();
     }
 
+    public String getKfremarks() {
+        return kfremarks;
+    }
+
+    public void setKfremarks(String kfremarks) {
+        this.kfremarks = kfremarks == null ? null : kfremarks.trim();
+    }
+
+    public Byte getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Byte isDel) {
+        this.isDel = isDel;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -350,14 +371,6 @@ public class PayCloudRecharge implements Serializable {
         this.pactstatus = pactstatus;
     }
 
-    public String getKfremarks() {
-        return kfremarks;
-    }
-
-    public void setKfremarks(String kfremarks) {
-        this.kfremarks = kfremarks == null ? null : kfremarks.trim();
-    }
-
     /**
      *
      */
@@ -387,13 +400,14 @@ public class PayCloudRecharge implements Serializable {
         sb.append(", agentRate=").append(agentRate);
         sb.append(", salesRate=").append(salesRate);
         sb.append(", imgurl=").append(imgurl);
+        sb.append(", kfremarks=").append(kfremarks);
+        sb.append(", isDel=").append(isDel);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append(", shenhetime=").append(shenhetime);
         sb.append(", chargetime=").append(chargetime);
         sb.append(", pacttime=").append(pacttime);
         sb.append(", pactstatus=").append(pactstatus);
-        sb.append(", kfremarks=").append(kfremarks);
         sb.append("]");
         return sb.toString();
     }
@@ -434,13 +448,14 @@ public class PayCloudRecharge implements Serializable {
             && (this.getAgentRate() == null ? other.getAgentRate() == null : this.getAgentRate().equals(other.getAgentRate()))
             && (this.getSalesRate() == null ? other.getSalesRate() == null : this.getSalesRate().equals(other.getSalesRate()))
             && (this.getImgurl() == null ? other.getImgurl() == null : this.getImgurl().equals(other.getImgurl()))
+            && (this.getKfremarks() == null ? other.getKfremarks() == null : this.getKfremarks().equals(other.getKfremarks()))
+            && (this.getIsDel() == null ? other.getIsDel() == null : this.getIsDel().equals(other.getIsDel()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
             && (this.getShenhetime() == null ? other.getShenhetime() == null : this.getShenhetime().equals(other.getShenhetime()))
             && (this.getChargetime() == null ? other.getChargetime() == null : this.getChargetime().equals(other.getChargetime()))
             && (this.getPacttime() == null ? other.getPacttime() == null : this.getPacttime().equals(other.getPacttime()))
-            && (this.getPactstatus() == null ? other.getPactstatus() == null : this.getPactstatus().equals(other.getPactstatus()))
-            && (this.getKfremarks() == null ? other.getKfremarks() == null : this.getKfremarks().equals(other.getKfremarks()));
+            && (this.getPactstatus() == null ? other.getPactstatus() == null : this.getPactstatus().equals(other.getPactstatus()));
     }
 
     /**
@@ -470,13 +485,14 @@ public class PayCloudRecharge implements Serializable {
         result = prime * result + ((getAgentRate() == null) ? 0 : getAgentRate().hashCode());
         result = prime * result + ((getSalesRate() == null) ? 0 : getSalesRate().hashCode());
         result = prime * result + ((getImgurl() == null) ? 0 : getImgurl().hashCode());
+        result = prime * result + ((getKfremarks() == null) ? 0 : getKfremarks().hashCode());
+        result = prime * result + ((getIsDel() == null) ? 0 : getIsDel().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getShenhetime() == null) ? 0 : getShenhetime().hashCode());
         result = prime * result + ((getChargetime() == null) ? 0 : getChargetime().hashCode());
         result = prime * result + ((getPacttime() == null) ? 0 : getPacttime().hashCode());
         result = prime * result + ((getPactstatus() == null) ? 0 : getPactstatus().hashCode());
-        result = prime * result + ((getKfremarks() == null) ? 0 : getKfremarks().hashCode());
         return result;
     }
 }
