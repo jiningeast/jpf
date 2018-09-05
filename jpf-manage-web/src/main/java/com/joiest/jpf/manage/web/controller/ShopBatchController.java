@@ -2,7 +2,6 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
-import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayShopBatch;
 import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.po.PayShopCustomer;
@@ -16,10 +15,15 @@ import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.joiest.jpf.manage.web.thread.AddBatchThread;
 import com.joiest.jpf.manage.web.util.SmsUtils;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -32,6 +36,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Controller
@@ -127,11 +134,60 @@ public class ShopBatchController {
     @ResponseBody
     public Map<String,Object> detailData(String batchId, int page, int rows){
         ShopBatchCouponResponse response =  shopBatchCouponServiceFacade.getCouponByBatchId(batchId, page, rows);
+        List<ShopBatchCouponInfo> list = response.getList();
+        for (ShopBatchCouponInfo info:list) {
+            String start = StringUtils.substring(info.getActiveCode(),0,2);
+            String end = StringUtils.substring(info.getActiveCode(),-2,info.getActiveCode().length());
+            info.setActiveCode(start+"****"+end);
+        }
+
         Map<String,Object> map = new HashMap<>();
         map.put("total",response.getCount());
         map.put("rows",response.getList());
 
         return map;
+    }
+
+    /**
+     * 下载excel模板
+     */
+    @RequestMapping("/download")
+    public ResponseEntity<byte[]> download()throws Exception {
+        //下载文件路径
+        String path = ConfigUtil.getValue("EXCEL_PATH") + "module/";
+        String filename = "欣券群发模板.xlsx";
+        String filename2 = null;
+        try {
+            // 解决找到文件问题:
+            // URLEonder把中文用UTF-8编码,然而,tomcat用iso-8859-1解码
+            // 我们需要用iso-8859-1编码,再重新用utf-8解码才能匹配到硬盘文件的名字
+            filename2 = new String(filename.getBytes("ISO-8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
+        File file = new File(path + filename2);
+        HttpHeaders headers = new HttpHeaders();
+
+        String filename3 = null;
+        try {
+            // 解决提示下载框的中文问题:
+            // 所有浏览器都会使用本地编码，即中文操作系统使用GBK
+            // 浏览器收到这个文件名后，会使用iso-8859-1来解码
+            // 编码流程:把中文用GBK编码为字节数组,再用ISO-8859-1编码,浏览器先用ISO-8859-1解码为字节数组,在用GBK解码为中文
+            filename3 = new String(filename2.getBytes("GBK"), "ISO-8859-1");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
+
+        headers.setContentDispositionFormData("attachment", filename3);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        try {
+            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**
