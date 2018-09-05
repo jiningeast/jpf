@@ -27,26 +27,11 @@
                         <a id="searchCompany" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选取商户</a>
                     </td>
                 </tr>
-
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">合同金额：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">充值金额：</td>
                     <td>
-                        <input id="contractMoney" name="contractMoney" type="text"   data-options="required:true,onChange:getRealMoney"
-                               missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">费率：</td>
-                    <td>
-                        <input id="rate" name="rate" type="text"
-                                width="120" class="easyui-numberbox" precision="2"  value="0" data-options="required:true,onChange:getRealMoney"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">实际到帐金额：</td>
-                    <td>
-                        <input id="moneyCopy" name="moneyCopy" class="easyui-textbox" disabled="disabled"/>
-                        <input id="money" name="money" type="hidden"/>
+                        <input id="money" name="money" type="text" value="1"  data-options="required:true"
+                               missingMessage=""  width="120" class="easyui-numberbox" precision="2"/>
                     </td>
                 </tr>
                 <tr>
