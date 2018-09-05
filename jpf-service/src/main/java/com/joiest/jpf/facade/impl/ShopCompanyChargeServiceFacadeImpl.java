@@ -248,6 +248,7 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
                     if( flag ){
                         BigDecimal companyMoney =shopCompanyInfo.getMoney();
                         BigDecimal afterMoney = money.add(companyMoney);
+                        afterMoney =afterMoney.setScale(2,BigDecimal.ROUND_DOWN);
                         String afterCode = ToolUtils.CreateCode(afterMoney.toString(),companyId);
                         PayShopCompany shopCompany = new PayShopCompany();
                         shopCompany.setMoney(afterMoney);
