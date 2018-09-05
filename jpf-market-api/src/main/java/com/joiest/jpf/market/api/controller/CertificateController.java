@@ -152,6 +152,7 @@ public class CertificateController {
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
+        String openId;
         String token = request.getHeader("Token");
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(openId_encrypt)) {
