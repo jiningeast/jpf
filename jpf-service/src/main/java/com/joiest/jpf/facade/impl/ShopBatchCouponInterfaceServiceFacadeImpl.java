@@ -155,6 +155,10 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         remain.setExpireTime(dateAddMonth);
         remain.setAddtime(dNow);
         int insertRemain=payShopCouponRemainMapper.insertSelective(remain);
+        //修改批次的激活数量
+        PayShopBatch payShopBatch =new PayShopBatch();
+        payShopBatch.setActivetedNum(listBatch.get(0).getActivetedNum()+1);
+        payShopBatchMapper.updateByExampleSelective(payShopBatch,batche);
         if(activeIsert==1 && upcoupon==1 && upcustom ==1 && insertRemain==1 ){
             return 1;//激活成功
         }else{
