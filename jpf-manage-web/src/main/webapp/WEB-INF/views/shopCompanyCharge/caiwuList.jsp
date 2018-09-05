@@ -52,7 +52,7 @@
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'companyName',title:'公司名称',width:'12%'},
-                    {field:'contractMoney',title:'合同金额',width:'12%',formatter: function (value, row, index) {
+                   /* {field:'contractMoney',title:'合同金额',width:'12%',formatter: function (value, row, index) {
                             if (row != null) {
                                 return parseFloat(value).toFixed(2);
                             }
@@ -61,7 +61,7 @@
                             if (row != null) {
                                 return parseFloat(value).toFixed(2);
                             }
-                        }},
+                        }},*/
                     {field:'money',title:'实际到帐金额',width:'10%',formatter: function (value, row, index) {
                             if (row != null) {
                                 return parseFloat(value).toFixed(2);
