@@ -16,4 +16,5 @@
 	<!--<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>-->
 	<bean id="ShopOrderInfoInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopOrderInfoInterfaceServiceFacadeImpl"></bean>
 	<bean id="WeixinUserServiceFacade" class="com.joiest.jpf.facade.impl.WeixinUserServiceFacadeImpl"></bean>
+	<bean id="ShopAdInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopAdInterfaceServiceFacadeImpl"></bean>
 </beans>
