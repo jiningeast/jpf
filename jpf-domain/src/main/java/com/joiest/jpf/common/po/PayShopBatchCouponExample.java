@@ -815,6 +815,66 @@ public class PayShopBatchCouponExample {
             return (Criteria) this;
         }
 
+        public Criteria andActiveCustomerIdIsNull() {
+            addCriterion("active_customer_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdIsNotNull() {
+            addCriterion("active_customer_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdEqualTo(String value) {
+            addCriterion("active_customer_id =", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdNotEqualTo(String value) {
+            addCriterion("active_customer_id <>", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdGreaterThan(String value) {
+            addCriterion("active_customer_id >", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdGreaterThanOrEqualTo(String value) {
+            addCriterion("active_customer_id >=", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdLessThan(String value) {
+            addCriterion("active_customer_id <", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdLessThanOrEqualTo(String value) {
+            addCriterion("active_customer_id <=", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdIn(List<String> values) {
+            addCriterion("active_customer_id in", values, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdNotIn(List<String> values) {
+            addCriterion("active_customer_id not in", values, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdBetween(String value1, String value2) {
+            addCriterion("active_customer_id between", value1, value2, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdNotBetween(String value1, String value2) {
+            addCriterion("active_customer_id not between", value1, value2, "activeCustomerId");
+            return (Criteria) this;
+        }
+
         public Criteria andActivePhoneIsNull() {
             addCriterion("active_phone is null");
             return (Criteria) this;

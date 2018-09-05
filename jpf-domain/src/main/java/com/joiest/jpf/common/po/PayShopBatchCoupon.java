@@ -59,6 +59,11 @@ public class PayShopBatchCoupon implements Serializable {
     private Byte isActive;
 
     /**
+     * 激活人id
+     */
+    private String activeCustomerId;
+
+    /**
      * 激活者手机号
      */
     private String activePhone;
@@ -180,6 +185,14 @@ public class PayShopBatchCoupon implements Serializable {
         this.isActive = isActive;
     }
 
+    public String getActiveCustomerId() {
+        return activeCustomerId;
+    }
+
+    public void setActiveCustomerId(String activeCustomerId) {
+        this.activeCustomerId = activeCustomerId == null ? null : activeCustomerId.trim();
+    }
+
     public String getActivePhone() {
         return activePhone;
     }
@@ -263,6 +276,7 @@ public class PayShopBatchCoupon implements Serializable {
         sb.append(", money=").append(money);
         sb.append(", dou=").append(dou);
         sb.append(", isActive=").append(isActive);
+        sb.append(", activeCustomerId=").append(activeCustomerId);
         sb.append(", activePhone=").append(activePhone);
         sb.append(", activeName=").append(activeName);
         sb.append(", activeTime=").append(activeTime);
@@ -301,6 +315,7 @@ public class PayShopBatchCoupon implements Serializable {
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
             && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
+            && (this.getActiveCustomerId() == null ? other.getActiveCustomerId() == null : this.getActiveCustomerId().equals(other.getActiveCustomerId()))
             && (this.getActivePhone() == null ? other.getActivePhone() == null : this.getActivePhone().equals(other.getActivePhone()))
             && (this.getActiveName() == null ? other.getActiveName() == null : this.getActiveName().equals(other.getActiveName()))
             && (this.getActiveTime() == null ? other.getActiveTime() == null : this.getActiveTime().equals(other.getActiveTime()))
@@ -328,6 +343,7 @@ public class PayShopBatchCoupon implements Serializable {
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
         result = prime * result + ((getIsActive() == null) ? 0 : getIsActive().hashCode());
+        result = prime * result + ((getActiveCustomerId() == null) ? 0 : getActiveCustomerId().hashCode());
         result = prime * result + ((getActivePhone() == null) ? 0 : getActivePhone().hashCode());
         result = prime * result + ((getActiveName() == null) ? 0 : getActiveName().hashCode());
         result = prime * result + ((getActiveTime() == null) ? 0 : getActiveTime().hashCode());
