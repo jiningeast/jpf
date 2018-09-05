@@ -85,6 +85,7 @@
                     {field:'money',title:'金额',width:"10%"},
                     {field:'count',title:'券数量',width:"10%"},
                     {field:'activetedNum',title:'已激活',width:"10%"},
+                    {field:'activePhone',title:'激活手机号',width:"10%"},
                     {field:'expireMonth',title:'有效期',width:"10%",formatter:function(value,row,index){
                         return value+"个月";
                         }},
