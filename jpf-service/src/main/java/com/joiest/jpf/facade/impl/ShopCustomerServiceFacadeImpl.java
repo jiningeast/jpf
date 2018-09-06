@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,12 +139,66 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         return new JpfResponseDto();
     }
 
+    /**
+     * 停用公司 更改状态 1启用 0停用
+     */
+    @Override
+    public JpfResponseDto editCompanyCustomer(GetShopCustomerRequest request)
+    {
+        if ( StringUtils.isBlank(request.getId()) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        //查询当前添加的是否存在
+        PayShopCustomerExample example= new PayShopCustomerExample();
+        PayShopCustomerExample.Criteria c = example.createCriteria();
+        c.andIdEqualTo(request.getId());
+
+        List<PayShopCustomer> payShopCustomerList = payShopCustomerMapper.selectByExample(example);
+        if(payShopCustomerList.isEmpty() || payShopCustomerList==null){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "此条记录不存在");
+        }
+        Byte defaultType =payShopCustomerList.get(0).getType();
+        PayShopCustomer payShopCustomer = new PayShopCustomer();
+        if(defaultType==request.getType()){
+            String word = defaultType == 1 ? "特殊用户":"正常用户";
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "不能更新状态为："+word);
+        }
+
+        // 创建日期
+        Date d = new Date();
+        payShopCustomer.setType(request.getType());
+        payShopCustomer.setUpdatetime(d);
+        int count = payShopCustomerMapper.updateByExampleSelective(payShopCustomer,example);
+        if(count != 1 ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "更新失败");
+        }
+        return new JpfResponseDto();
+    }
+
     @Override
     public PayShopCustomer getCustomerByPhone(String phone){
         PayShopCustomerExample e = new PayShopCustomerExample();
         PayShopCustomerExample.Criteria c = e.createCriteria();
         c.andPhoneEqualTo(phone);
         List<PayShopCustomer> list = payShopCustomerMapper.selectByExample(e);
+
+        return list.get(0);
+    }
+
+    @Override
+    public PayShopCustomer getCustomerById(String id) {
+        PayShopCustomerExample e = new PayShopCustomerExample();
+        PayShopCustomerExample.Criteria c = e.createCriteria();
+        c.andIdEqualTo(id);
+        List<PayShopCustomer> list = payShopCustomerMapper.selectByExample(e);
+
+
+        try {
+            list.get(0).setNickname( URLDecoder.decode( list.get(0).getNickname(),"UTF-8" ));
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
 
         return list.get(0);
     }

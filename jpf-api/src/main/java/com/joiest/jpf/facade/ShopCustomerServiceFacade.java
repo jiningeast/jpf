@@ -18,7 +18,18 @@ public interface ShopCustomerServiceFacade {
     public JpfResponseDto delCompanyCustomer(String id,int type);
 
     /**
+     * 编辑用户信息
+     */
+    public JpfResponseDto editCompanyCustomer(GetShopCustomerRequest request);
+
+    /**
      * 根据手机号获取用户
      */
     public PayShopCustomer getCustomerByPhone(String phoen);
+
+    /**
+     * 更新主键获取用户信息
+     */
+    public PayShopCustomer getCustomerById(String id);
+
 }

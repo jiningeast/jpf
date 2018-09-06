@@ -815,6 +815,206 @@ public class PayShopBatchCouponExample {
             return (Criteria) this;
         }
 
+        public Criteria andActiveCustomerIdIsNull() {
+            addCriterion("active_customer_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdIsNotNull() {
+            addCriterion("active_customer_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdEqualTo(String value) {
+            addCriterion("active_customer_id =", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdNotEqualTo(String value) {
+            addCriterion("active_customer_id <>", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdGreaterThan(String value) {
+            addCriterion("active_customer_id >", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdGreaterThanOrEqualTo(String value) {
+            addCriterion("active_customer_id >=", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdLessThan(String value) {
+            addCriterion("active_customer_id <", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdLessThanOrEqualTo(String value) {
+            addCriterion("active_customer_id <=", value, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdIn(List<String> values) {
+            addCriterion("active_customer_id in", values, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdNotIn(List<String> values) {
+            addCriterion("active_customer_id not in", values, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdBetween(String value1, String value2) {
+            addCriterion("active_customer_id between", value1, value2, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveCustomerIdNotBetween(String value1, String value2) {
+            addCriterion("active_customer_id not between", value1, value2, "activeCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneIsNull() {
+            addCriterion("active_phone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneIsNotNull() {
+            addCriterion("active_phone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneEqualTo(String value) {
+            addCriterion("active_phone =", value, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneNotEqualTo(String value) {
+            addCriterion("active_phone <>", value, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneGreaterThan(String value) {
+            addCriterion("active_phone >", value, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("active_phone >=", value, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneLessThan(String value) {
+            addCriterion("active_phone <", value, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneLessThanOrEqualTo(String value) {
+            addCriterion("active_phone <=", value, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneLike(String value) {
+            addCriterion("active_phone like", value, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneNotLike(String value) {
+            addCriterion("active_phone not like", value, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneIn(List<String> values) {
+            addCriterion("active_phone in", values, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneNotIn(List<String> values) {
+            addCriterion("active_phone not in", values, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneBetween(String value1, String value2) {
+            addCriterion("active_phone between", value1, value2, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneNotBetween(String value1, String value2) {
+            addCriterion("active_phone not between", value1, value2, "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameIsNull() {
+            addCriterion("active_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameIsNotNull() {
+            addCriterion("active_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameEqualTo(String value) {
+            addCriterion("active_name =", value, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameNotEqualTo(String value) {
+            addCriterion("active_name <>", value, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameGreaterThan(String value) {
+            addCriterion("active_name >", value, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameGreaterThanOrEqualTo(String value) {
+            addCriterion("active_name >=", value, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameLessThan(String value) {
+            addCriterion("active_name <", value, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameLessThanOrEqualTo(String value) {
+            addCriterion("active_name <=", value, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameLike(String value) {
+            addCriterion("active_name like", value, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameNotLike(String value) {
+            addCriterion("active_name not like", value, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameIn(List<String> values) {
+            addCriterion("active_name in", values, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameNotIn(List<String> values) {
+            addCriterion("active_name not in", values, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameBetween(String value1, String value2) {
+            addCriterion("active_name between", value1, value2, "activeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameNotBetween(String value1, String value2) {
+            addCriterion("active_name not between", value1, value2, "activeName");
+            return (Criteria) this;
+        }
+
         public Criteria andActiveTimeIsNull() {
             addCriterion("active_time is null");
             return (Criteria) this;
@@ -1192,6 +1392,16 @@ public class PayShopBatchCouponExample {
 
         public Criteria andActiveCodeLikeInsensitive(String value) {
             addCriterion("upper(active_code) like", value.toUpperCase(), "activeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivePhoneLikeInsensitive(String value) {
+            addCriterion("upper(active_phone) like", value.toUpperCase(), "activePhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiveNameLikeInsensitive(String value) {
+            addCriterion("upper(active_name) like", value.toUpperCase(), "activeName");
             return (Criteria) this;
         }
     }

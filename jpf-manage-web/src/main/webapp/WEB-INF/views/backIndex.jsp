@@ -153,6 +153,11 @@
                     "menuname" : "欣豆市场采购管理",
                     "icon" : "icon-nav",
                     "url" : "shopStockOrder/index"
+                },{
+                    "menuid" : "507",
+                    "menuname" : "云市场图片管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopAd/index"
                 }]
             },{
                     "menuid" : "6",

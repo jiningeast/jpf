@@ -50,6 +50,16 @@ public class ShopBatchCouponInfo {
     private Byte isActive;
 
     /**
+     * 激活者手机号
+     */
+    private String activePhone;
+
+    /**
+     * 激活者姓名
+     */
+    private String activeName;
+
+    /**
      * 激活时间
      */
     private Date activeTime;
@@ -149,6 +159,22 @@ public class ShopBatchCouponInfo {
 
     public void setIsActive(Byte isActive) {
         this.isActive = isActive;
+    }
+
+    public String getActivePhone() {
+        return activePhone;
+    }
+
+    public void setActivePhone(String activePhone) {
+        this.activePhone = activePhone;
+    }
+
+    public String getActiveName() {
+        return activeName;
+    }
+
+    public void setActiveName(String activeName) {
+        this.activeName = activeName;
     }
 
     public Date getActiveTime() {

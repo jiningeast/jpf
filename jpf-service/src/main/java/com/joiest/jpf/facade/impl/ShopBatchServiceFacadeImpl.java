@@ -175,8 +175,9 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
 
         // 扣企业的款
         Double newMoney = new Double(payShopCompany.getMoney().toString()) - Double.parseDouble(String.valueOf(totalMoney));
-        payShopCompany.setMoney(new BigDecimal(newMoney));
-        String moneyCode = ToolUtils.CreateCode(newMoney.toString(),payShopCompany.getId());
+        BigDecimal newMoneyBD = new BigDecimal(newMoney).setScale(2,BigDecimal.ROUND_DOWN);
+        payShopCompany.setMoney(newMoneyBD);
+        String moneyCode = ToolUtils.CreateCode(newMoneyBD.toString(),payShopCompany.getId());
         payShopCompany.setMoneyCode(moneyCode);
 
         payShopCompanyMapper.updateByPrimaryKey(payShopCompany);

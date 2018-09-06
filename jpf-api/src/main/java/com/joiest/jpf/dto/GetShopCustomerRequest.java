@@ -51,6 +51,11 @@ public class GetShopCustomerRequest {
     private Byte isVerify;
 
     /**
+     * 用户类型 0=正常用户 1=特殊用户
+     */
+    private Byte type;
+
+    /**
      * 客户状态 0=冻结 1=正常
      */
     private Byte status;
@@ -314,5 +319,13 @@ public class GetShopCustomerRequest {
 
     public void setAddtimeEnd(String addtimeEnd) {
         this.addtimeEnd = addtimeEnd;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 }

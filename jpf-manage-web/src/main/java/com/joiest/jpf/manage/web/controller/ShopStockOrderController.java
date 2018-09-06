@@ -454,7 +454,7 @@ public class ShopStockOrderController {
 
         //下载文件路径
         String filename=ConfigUtil.getValue("EXCEL_PURCHASE_NAME");
-        String path=ConfigUtil.getValue("EXCEL_PATH");
+        String path=ConfigUtil.getValue("EXCEL_PATH")+"module/";
         String filename2 = null;
         String filename3 = null;
 

@@ -117,6 +117,8 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
                 c.andStatusIn(cloudRechargeRequest.getStatusArr()); //查询指定状态值数据
             }
         }
+        // 只查询未删的
+        c.andIsDelEqualTo((byte)0);
 
 
         //System.out.println(cloudRechargeRequest.getStatus());

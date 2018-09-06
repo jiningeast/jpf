@@ -23,7 +23,7 @@
                 <div style="padding-left: 30px; margin: 15px 0;">
                     <label for="uploadfile">上传客户excel文件：</label>
                     <input id="uploadfile" class="easyui-filebox" name="uploadfile" style="width: 238px;">
-                    <span style="padding-left: 10px;"><a href="#" style="color: blue;">下载excel模板文件</a></span>
+                    <span style="padding-left: 10px;"><a href="../shopBatch/download" style="color: blue;">下载excel模板文件</a></span>
                 </div>
             </div>
             <a id="confirmBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 30px;">确定</a>
