@@ -139,23 +139,23 @@
             url:'productsList?OrderNo='+"${shopStockOrderInfo.orderNo}",
             columns:[[
                 {field:'productId',title:'商品ID',width:"6%",align:"center"},
-                {field:'productName',title:'商品名称',width:"10%",align:"center"},
+                {field:'productName',title:'商品名称',width:"12%",align:"center"},
                 {field:'productBid',title:'产品进价',width:"10%",align:"center"},
                 {field:'stockAmount',title:'产品库存',width:"10%",align:"center"},
                 {field:'supplierName',title:'供应商',width:"10%",align:"center"},
                 {field:'brandName',title:'品牌',width:"10%",align:"center"},
-                {field:'bid',title:'本次进价/件',width:"18%",align:"center",formatter: function (value, row, index) {
+                {field:'bid',title:'本次进价/件',width:"10%",align:"center",formatter: function (value, row, index) {
                         if (row != null) {
                             return parseFloat(value).toFixed(2);
                         }
                     }},
-                {field:'amount',title:'采购数量',width:"18%",align:"center"},
-                {field:'money',title:'总计金额(元)',width:"15%",align:"center",formatter: function (value, row, index) {
+                {field:'amount',title:'采购数量',width:"10%",align:"center"},
+                {field:'money',title:'总计金额(元)',width:"13%",align:"center",formatter: function (value, row, index) {
                         if (row != null) {
                             return parseFloat(value).toFixed(2);
                         }
                     }},
-                {field:'addtime',title:'添加时间',width:"10%",align:"center"}
+                {field:'addtime',title:'添加时间',width:"12%",align:"center"}
             ]]
         });
 

@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.*;
@@ -314,6 +315,9 @@ public class ShopStockOrderController {
 
                 allNum++;
                 ShopStockCardInfo scinfo = new ShopStockCardInfo();
+                scinfo.setStockOrderId(shopStockOrderInfo.getId());
+                scinfo.setStockOrderNo(shopStockOrderInfo.getOrderNo());
+
                 boolean flag = true;
                 for (Map.Entry<Object, Object> lie : cellOb.entrySet()) {
 
@@ -394,7 +398,7 @@ public class ShopStockOrderController {
             return jsonObject;
         }
 
-        UUID fileUUid = UUID.randomUUID();
+        String fileUUid = "purchase_"+UUID.randomUUID().toString();
 
         //组装文件数据
         JSONObject fileData = new JSONObject();
@@ -408,7 +412,7 @@ public class ShopStockOrderController {
 
             fileData.put("sucessData",shopStockCardSuccess);
         }
-        LogsCustomUtils2.writeIntoFile(fileData.toString(),ConfigUtil.getValue("CACHE_PATH")+fileUUid.toString()+".txt",false);
+        LogsCustomUtils2.writeIntoFile(fileData.toString(),ConfigUtil.getValue("CACHE_PATH")+fileUUid+".txt",false);
 
         // OSS上传excel文件
         String savePre = ConfigUtil.getValue("EXCEL_PATH");

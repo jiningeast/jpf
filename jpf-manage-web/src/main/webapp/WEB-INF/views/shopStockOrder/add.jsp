@@ -110,18 +110,18 @@
             fitColumns:true,
             columns:[[
                 {field:'id',title:'商品ID',width:"6%",align:"center"},
-                {field:'Pname',title:'商品名称',width:"10%",align:"center"},
+                {field:'Pname',title:'商品名称',width:"12%",align:"center"},
                 {field:'bidOld',title:'产品进价',width:"10%",align:"center",hidden:'true'},
                 {field:'moneyOld',title:'产品售价',width:"10%",align:"center",hidden:'true'},
                 {field:'stored',title:'产品库存',width:"10%",align:"center",hidden:'true'},
-                {field:'supplierName',title:'供应商',width:"10%",align:"center"},
+                {field:'supplierName',title:'供应商',width:"9%",align:"center"},
                 {field:'supplierId',title:'供应商ID',width:"10%",align:"center",hidden:'true'},
                 {field:'brandName',title:'品牌',width:"10%",align:"center"},
                 {field:'brandId',title:'品牌ID',width:"10%",align:"center",hidden:'true'},
-                {field:'productBid',title:'标准进价/件',width:"10%",align:"center"},
-                {field:'bid',title:'本次进价/件(必填)',width:"18%",align:"center"},
-                {field:'amount',title:'采购数量(必填)',width:"18%",align:"center"},
-                {field:'money',title:'采购金额(元)',width:"15%",align:"center"},
+                {field:'productBid',title:'标准进价/件',width:"9%",align:"center"},
+                {field:'bid',title:'本次进价/件(必填)',width:"15%",align:"center"},
+                {field:'amount',title:'采购数量(必填)',width:"15%",align:"center"},
+                {field:'money',title:'采购金额(元)',width:"16%",align:"center"},
                 {field:'delete',title:'操作',width:"10%",align:"center"}
             ]]
         });
