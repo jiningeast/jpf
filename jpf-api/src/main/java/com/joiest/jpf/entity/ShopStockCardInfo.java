@@ -30,6 +30,11 @@ public class ShopStockCardInfo {
     private String supplierName;
 
     /**
+     * 卡类型 1=代充 2=卡密
+     */
+    private Byte cardType;
+
+    /**
      * 卡号
      */
     private String cardNo;
@@ -134,6 +139,14 @@ public class ShopStockCardInfo {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName == null ? null : supplierName.trim();
+    }
+
+    public Byte getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(Byte cardType) {
+        this.cardType = cardType;
     }
 
     public String getCardNo() {
