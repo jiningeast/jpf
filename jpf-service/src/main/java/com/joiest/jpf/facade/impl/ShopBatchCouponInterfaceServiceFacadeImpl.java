@@ -127,6 +127,7 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         coupon.setUpdatetime(dNow);
         coupon.setActivePhone(listCustom.get(0).getPhone());
         coupon.setActiveName(listCustom.get(0).getNickname());
+        coupon.setActiveCustomerId(uid);
         PayShopBatchCouponExample exampleup= new PayShopBatchCouponExample();
         PayShopBatchCouponExample.Criteria ca = exampleup.createCriteria();
         ca.andActiveCodeEqualTo(couponNo);
