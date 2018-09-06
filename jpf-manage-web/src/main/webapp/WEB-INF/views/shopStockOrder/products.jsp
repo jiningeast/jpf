@@ -90,13 +90,25 @@
                     bid: '<input id="bid'+rows[0].id+'" data-id="'+rows[0].id+'" name="bid" type="text" data-options="required:true"  style="color: #ff2810;">',
                     amount: '<input id="amount'+rows[0].id+'"  data-id="'+rows[0].id+'"  name="amount" type="text"  data-options="required:true" style="color: #ff2b0e;">',
                     money: '<input id="money'+rows[0].id+'" type="text" class="easyui-textbox" disabled="disabled"> ',
+                    cardType:'  <select id="cardType'+rows[0].id+'" class="easyui-combobox" style="width: 100px">\n' +
+                    '            <option value="1">直冲</option>\n' +
+                    '            <option value="2" selected="selected">卡密</option>\n' +
+                    '        </select>\n',
                     delete: '<a class="delCoupon easyui-linkbutton" style="cursor: pointer;color: #0e90d2">删除</a>'
                 });
                 $("#products").window("close");
 
 
             }
-        }];
+        },
+            {
+                text:'取消',
+                iconCls:'icon-cancel',
+                handler:function(){
+                        $("#products").window('close');
+                    }
+
+            }];
 
         $('#dgproducts').datagrid({
             title:'旅游产品列表',
@@ -113,6 +125,8 @@
             columns:[[
                 {field:'id',title:'商品ID',width:80},
                 {field:'name',title:'商品名称',width:200},
+                {field:'bid',title:'商品进价',width:200},
+                {field:'money',title:'商品售价',width:200},
                 {field:'rechargeMoney',title:'充值面额(元)',width:150},
                 {field:'dou',title:'所需豆',width:150},
                 {field:'brandName',title:'商品品牌',width:200},

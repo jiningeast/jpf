@@ -110,18 +110,19 @@
             fitColumns:true,
             columns:[[
                 {field:'id',title:'商品ID',width:"6%",align:"center"},
-                {field:'Pname',title:'商品名称',width:"12%",align:"center"},
+                {field:'Pname',title:'商品名称',width:"10%",align:"center"},
                 {field:'bidOld',title:'产品进价',width:"10%",align:"center",hidden:'true'},
                 {field:'moneyOld',title:'产品售价',width:"10%",align:"center",hidden:'true'},
                 {field:'stored',title:'产品库存',width:"10%",align:"center",hidden:'true'},
-                {field:'supplierName',title:'供应商',width:"9%",align:"center"},
+                {field:'supplierName',title:'供应商',width:"10%",align:"center"},
                 {field:'supplierId',title:'供应商ID',width:"10%",align:"center",hidden:'true'},
                 {field:'brandName',title:'品牌',width:"10%",align:"center"},
                 {field:'brandId',title:'品牌ID',width:"10%",align:"center",hidden:'true'},
-                {field:'productBid',title:'标准进价/件',width:"9%",align:"center"},
-                {field:'bid',title:'本次进价/件(必填)',width:"15%",align:"center"},
-                {field:'amount',title:'采购数量(必填)',width:"15%",align:"center"},
-                {field:'money',title:'采购金额(元)',width:"16%",align:"center"},
+                {field:'productBid',title:'标准进价/件',width:"10%",align:"center"},
+                {field:'bid',title:'本次进价/件(必填)',width:"18%",align:"center"},
+                {field:'amount',title:'采购数量(必填)',width:"18%",align:"center"},
+                {field:'money',title:'采购金额(元)',width:"15%",align:"center"},
+                {field:'cardType',title:'充值类型',width:"15%",align:"center"},
                 {field:'delete',title:'操作',width:"10%",align:"center"}
             ]]
         });
@@ -190,7 +191,6 @@
             data:data,
             dataType:"json",
             contentType:"application/json",
-
             onSubmit:function(){
                 // 判断选择公司
                 if ( $("#typeName").val() == "" ){
@@ -223,9 +223,9 @@
                     $.messager.alert('消息提示','新增失败[' + msg.retMsg + ']!','error');
                 } else {
                     $.messager.alert('消息提示','新增成功','info');
-                    $("#batchDG").datagrid('reload');
-                    $("#addWindow").window("close");
-                    window.location.reload();
+                    $("#addWindowP").window("close");
+                    $("#dg").datagrid('reload');
+
                 }
 
             },
@@ -243,6 +243,7 @@
                 var amountCopy=0;
                 var bidCopy=0;
                 var moneyCopy=0;
+                var type=2;
                 //定义一个新数组
                 var CopyArray={};
 
@@ -252,12 +253,14 @@
                     amountCopy=getVolue(n.id,"amount");
                     bidCopy=getVolue(n.id,"bid");
                     moneyCopy=getVolue(n.id,"money");
+                    type=getVolue(n.id,"cardType");
                     //定义数组对象把新数据追加进去
                     CopyArray[i]={};
                     CopyArray[i]['id']=n.id;//商品id
                     CopyArray[i]['pname']=n.Pname;//名称
                     CopyArray[i]['amount']=amountCopy;//总数
                     CopyArray[i]['bid']=bidCopy;//本次进价
+                    CopyArray[i]['cardType']=type;//充值类型
                     CopyArray[i]['bidOld']=n.bidOld;//产品进价
                     CopyArray[i]['moneyOld']=n.moneyOld//产品售价
                     CopyArray[i]['stored']=n.stored;//产品售价
@@ -267,6 +270,7 @@
                     CopyArray[i]['productBid']=n.productBid;//标准进价
                     CopyArray[i]['supplierName']=n.supplierName;//供应商名字
                     CopyArray[i]['supplierId']=n.supplierId;//供应商id
+
 
                 })
                 $("#productsAll").val( JSON.stringify(CopyArray));//json赋值商品信息
@@ -311,6 +315,8 @@
               return $("#bid"+id).val();
           }else if(type=="money"){
               return $("#money"+id).val();
+          }else if(type=="cardType"){
+              return $("#cardType"+id).val();
           }
 
      }
