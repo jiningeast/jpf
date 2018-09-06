@@ -349,6 +349,8 @@ public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFac
                  products.setBrandName(aa.get("brandName").toString());
                  BigDecimal bid = new BigDecimal(aa.get("bid").toString());
                  products.setBid(bid);
+                 Byte type=new Byte(aa.get("cardType").toString());
+                 products.setCardType( type);
                  //System.out.println(aa.get("amount").getClass().getName());
                  Integer amount = Integer.valueOf(aa.get("amount").toString());
                  products.setAmount(amount);

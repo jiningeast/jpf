@@ -68,6 +68,9 @@
                     $.messager.alert('提示', '所选的文件格式不正确!', 'info');
                     return false;
                 }
+
+
+
                 ajaxLoading();
             },
             success:function (msg) {
@@ -90,6 +93,7 @@
             onClick:function(){
                 // 表单提交
                 $("#taskForm").submit();
+
             }
         })
 

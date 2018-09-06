@@ -21,7 +21,7 @@
         $(function() {
             $('#addWindowP').window({
                 title:'添加',
-                width:'80%',
+                width:'100%',
                 height:'500px',
                 closed:true,
                 modal:true,
@@ -29,8 +29,8 @@
             });
             $('#infoDiv').window({
                 title:'添加',
-                width:'80%',
-                height:'500px',
+                width:'60%',
+                height:'400px',
                 closed:true,
                 modal:true,
                 // maximized:true,//弹出窗口最大化
@@ -62,6 +62,18 @@
                         $("#addWindowP").window("open").window('refresh', '../shopStockOrder/add/page').window('setTitle','新增');
                     }
                 },{
+                   text : '订单详情',
+                   iconCls : 'icon-view-detail',
+                   handler : function(){
+
+                       var rows = $('#dg').datagrid('getSelections');
+                       if (rows.length != 1) {
+                           $.messager.alert('消息提示','请选择一条数据！','info');
+                           return
+                       }
+                       $('#viewWindow').window("open").window('refresh', '../shopStockOrder/view/page?orderNo='+rows[0].orderNo).window('setTitle','详情');
+                   }
+               },{
                    text:'商品采购',
                    iconCls:'icon-ok',
                    handler:function(){
@@ -76,6 +88,7 @@
                            $.messager.alert('消息提示','此单尚未付款','info');
                            return false;
                        }
+
                        if(rows[0].isUpload=='2')
                             $('#infoDiv').window("open").window('refresh', 'purchase?id='+rows[0].id).window('setTitle','商品采购');
                        else
@@ -109,11 +122,7 @@
                 url:'list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
-                    {field:'orderNo',title:'采购订单号',width:'15%',
-                        formatter : function(value,row,index){
-                            return  "<a onclick=\"goActiveOrder('"+value+" ')\">"+value+" </a>";
-                        }
-                    },
+                    {field:'orderNo',title:'采购订单号',width:'15%'},
                     {field:'addtime',title:'采购时间',width:'12%',formatter: formatDateStr},
                     {field:'cardtime',title:'采购入库时间',width:'10%',formatter: formatDateStr},
                     {field:'productAmount',title:'采购数量',width:'10%'},
@@ -184,10 +193,6 @@
         function get_time() {
             return new Date().getTime();
         }
-        function goActiveOrder(orderNo) {
-            $('#viewWindow').window("open").window('refresh', '../shopStockOrder/view/page?orderNo='+orderNo).window('setTitle','详情');
-        }
-
     </script>
     <style>
         #searchForm table tr td:nth-child(odd) { text-align: right; }
@@ -203,11 +208,11 @@
                     <tr>
                         <td>采购时间:</td>
                         <td>
-                            <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
+                            <input type="text" class="Wdate" style="width:158px;border-radius: 4px;border-color: #95B8E7;padding-left: 5px;" id="addtimeStart"
                                    name="addtimeStart"
                                    onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'addtimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
                             -
-                            <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
+                            <input type="text" class="Wdate" style="width:158px;border-radius: 4px;border-color: #95B8E7;padding-left: 5px;" id="addtimeEnd"
                                    name="addtimeEnd"
                                    onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
                         </td>
@@ -218,7 +223,7 @@
                         <%--<td>关键字:</td>
                         <td><input id="productName" name="productName" class="easyui-textbox" type="text" /></td>--%>
                         <td>订单状态:</td>
-                        <td><select id="status" name="status" class="easyui-combobox">
+                        <td><select id="status" name="status" class="easyui-combobox" style="width:70px;">
                                 <option value="">全部</option>
                                 <option value="0">取消</option>
                                 <option value="1">新建</option>
@@ -228,7 +233,7 @@
                             </select>
                         </td>
                             <td>采购状态:</td>
-                            <td><select id="isUpload" name="isUpload" class="easyui-combobox">
+                            <td><select id="isUpload" name="isUpload" class="easyui-combobox" style="width:70px;">
                                 <option value="">全部</option>
                                 <option value="1">已采购</option>
                                 <option value="2">未采购</option>
