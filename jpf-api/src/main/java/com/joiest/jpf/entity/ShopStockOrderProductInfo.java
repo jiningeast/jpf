@@ -35,6 +35,11 @@ public class ShopStockOrderProductInfo {
     private BigDecimal productBid;
 
     /**
+     * 卡类型 1=代充 2=卡密
+     */
+    private Byte cardType;
+
+    /**
      * 库存数量
      */
     private Integer stockAmount;
@@ -129,6 +134,14 @@ public class ShopStockOrderProductInfo {
         this.productBid = productBid;
     }
 
+    public Byte getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(Byte cardType) {
+        this.cardType = cardType;
+    }
+
     public Integer getStockAmount() {
         return stockAmount;
     }
@@ -200,4 +213,5 @@ public class ShopStockOrderProductInfo {
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
     }
+
 }
