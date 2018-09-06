@@ -1,8 +1,6 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.common.exception.JpfErrorInfo;
-import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
@@ -271,6 +269,7 @@ public class ShopStockOrderController {
             orderPtwo.put("productName",one.getProductName());
             orderPtwo.put("supplierId",one.getSupplierId());
             orderPtwo.put("supplierName",one.getSupplierName());
+            orderPtwo.put("cardType",one.getCardType());
             orderP.put(one.getProductId(),orderPtwo);
         }
         InputStream in = file.getInputStream();
@@ -317,23 +316,22 @@ public class ShopStockOrderController {
                 ShopStockCardInfo scinfo = new ShopStockCardInfo();
                 scinfo.setStockOrderId(shopStockOrderInfo.getId());
                 scinfo.setStockOrderNo(shopStockOrderInfo.getOrderNo());
-
+                JSONObject siglePro = null;
                 boolean flag = true;
                 for (Map.Entry<Object, Object> lie : cellOb.entrySet()) {
 
                     String col = lie.getKey().toString();
-
-                    // 前5列数据必填
+                    // 前6列数据必填
                     if ( StringUtils.isBlank(lie.getValue().toString()) ){
 
                         flag = false;
                     }
-                    if(col.equals("0")){
+                   if(col.equals("0")){
 
                         //处理商品数据 验证是否是采购订单商品
                         if(orderP.containsKey(lie.getValue())){
 
-                            JSONObject siglePro = orderP.getJSONObject(lie.getValue().toString());
+                            siglePro = orderP.getJSONObject(lie.getValue().toString());
                             scinfo.setProductName(siglePro.get("productName").toString());
                             scinfo.setSupplierId(siglePro.get("supplierId").toString());
                             scinfo.setSupplierName(siglePro.get("supplierName").toString());
@@ -343,22 +341,36 @@ public class ShopStockOrderController {
                         }
                         scinfo.setProductId(lie.getValue().toString());
                     }
+                    //卡类型
                     if(col.equals("1")){
+
+                        if(siglePro!=null && siglePro.containsKey("cardType") && siglePro.get("cardType").toString().equals(lie.getValue().toString())){
+
+                        }else{
+                            flag = false;
+                        }
+                        scinfo.setCardType(Byte.valueOf(lie.getValue().toString()));
+                    }
+                    //卡号
+                    if(col.equals("2")){
 
                         if(cache.contains(lie.getValue())){
                             flag = false;
                         }
                         scinfo.setCardNo(lie.getValue().toString());
                     }
-                    if(col.equals("2")){
+                    //卡密
+                    if(col.equals("3")){
 
                         scinfo.setCardPass(lie.getValue().toString());
                     }
-                    if(col.equals("3")){
+                    //有效期（单位：月）
+                    if(col.equals("4")){
 
                         scinfo.setExpireMonth(new Integer(lie.getValue().toString()));
                     }
-                    if(col.equals("4")){
+                    //到期时间
+                    if(col.equals("5")){
 
                         Date time = DateUtils.stringToDate(lie.getValue().toString());
                         scinfo.setExpireDate(time);

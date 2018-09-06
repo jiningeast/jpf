@@ -84,6 +84,17 @@
                         </td>
                     </tr>
                     <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">充值类型：</td>
+                        <td>
+                            <select id="type" name="type" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                                <option value="0" selected>直充</option>
+                                <option value="1">代充</option>
+                                <option value="2">卡密</option>
+                                <option value="3">混合</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品描述：</td>
                         <td colspan="3">
                             <input id="intro" name="intro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="required:true,multiline:true"/>
@@ -172,6 +183,8 @@
                 // var stored_safe = $("#stored_safe").numberbox("getValue");
                 // console.log(postData)
                 // alert(isValid);return false;
+
+
                 $.ajax({
                     type: 'post',
                     url: 'add/action',
@@ -181,7 +194,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             $('#infoDiv').window('close');
                             $('#dg').datagrid('reload');
                         }

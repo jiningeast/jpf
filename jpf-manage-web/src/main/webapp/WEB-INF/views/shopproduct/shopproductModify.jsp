@@ -85,6 +85,17 @@
                         <td> </td>
                     </tr>
                     <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">充值类型：</td>
+                        <td>
+                            <select id="type" name="type" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                                <option value="0" <c:if test="${productOne.type =='0'}">selected</c:if> >直充</option>
+                                <option value="1" <c:if test="${productOne.type =='1'}">selected</c:if> >代充</option>
+                                <option value="2" <c:if test="${productOne.type =='2'}">selected</c:if> >卡密</option>
+                                <option value="3" <c:if test="${productOne.type =='3'}">selected</c:if> >混合</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品描述：</td>
                         <td colspan="3">
                             <input id="intro" value="${productOne.intro}" name="intro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="required:true,multiline:true"/>
@@ -211,8 +222,8 @@
     function doUploadImg() {
         var formData = new FormData();
         formData.append('file', $('#uploadfile')[0].files[0]);
-        console.log(formData);
-        console.log($('#uploadfile')[0].files[0]);
+       // console.log(formData);
+        //console.log($('#uploadfile')[0].files[0]);
         $.ajax({
             url: '../cloudCompany/upload',
             type: 'POST',
@@ -222,7 +233,6 @@
             contentType: false,
             processData: false,
             success: function (ret) {
-                console.log(ret);
                 var c=   '<img width="200px" height="200px" src="'+ret+'"/>';
                 $("#imgDiv").html(c);
                 $("#imgurl").val(ret);

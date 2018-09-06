@@ -108,6 +108,11 @@ public class ModifyShopProductRequest {
     @Digits(integer=5,fraction=0, message = "充值面额只能为整数")
     private String rechargeMoney;
 
+    /**
+     * 充值类型 0=直冲 1=代充 2=卡密 3=混合
+     */
+    private Byte type;
+
     public String getId() {
         return id;
     }
@@ -243,4 +248,13 @@ public class ModifyShopProductRequest {
     public void setBid(String bid) {
         this.bid = bid;
     }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
 }

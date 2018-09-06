@@ -71,15 +71,16 @@
                 url:"purchaseShow?type="+type+"&fileUUid=${fileUUid}",
                 columns:[[
                     {field:'productId',title:'商品id',width:"20%"},
+                    {field:'cardType',title:'卡类型',width:"10%"},
                     {field:'cardNo',title:'卡号',width:"20%"},
                     {field:'cardPass',title:'密码',width:"20%"},
-                    {field:'expireMonth',title:'有效期',width:"20%"},
+                    {field:'expireMonth',title:'有效期',width:"10%"},
                     {field:'expireDate',title:'到期时间',width:"20%"},
                 ]]
             })
             if(parseInt($('#faildsize').val())>=1){
 
-                $('.datagrid-toolbar').remove()//根据下标删除
+                $('#purcaseShow .datagrid-toolbar').remove()//根据下标删除
             }
         }
         $("#confirmPersonsForm").form({
@@ -133,16 +134,17 @@
                 remoteSort: false,
                 url:"purchaseShow?type=success&fileUUid=${fileUUid}",
                 columns:[[
-                    {field:'productId',title:'商品id',width:"10%"},
-                    {field:'cardNo',title:'卡号',width:"10%"},
-                    {field:'cardPass',title:'开户行省',width:"10%"},
+                    {field:'productId',title:'商品id',width:"20%"},
+                    {field:'cardType',title:'卡类型',width:"10%"},
+                    {field:'cardNo',title:'卡号',width:"20%"},
+                    {field:'cardPass',title:'密码',width:"20%"},
                     {field:'expireMonth',title:'有效期',width:"10%"},
-                    {field:'expireDate',title:'到期时间',width:"10%"},
+                    {field:'expireDate',title:'到期时间',width:"20%"},
                 ]]
             })
             if(parseInt($('#faildsize').val())>=1){
 
-                $('.datagrid-toolbar').remove()//根据下标删除
+                $('#purcaseShow .datagrid-toolbar').remove()//根据下标删除
             }
         }
     })

@@ -156,6 +156,8 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         BigDecimal money=new BigDecimal(request.getMoney());
         payShopProduct.setBid(bid);
         payShopProduct.setMoney(money);
+        payShopProduct.setType(request.getType());
+
         int res = payShopProductMapper.insertSelective(payShopProduct);
         return new JpfResponseDto();
     }
@@ -203,6 +205,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         BigDecimal money=new BigDecimal(request.getMoney());
         payShopProduct.setBid(bid);
         payShopProduct.setMoney(money);
+        payShopProduct.setType(request.getType());
         int res = payShopProductMapper.updateByPrimaryKeySelective(payShopProduct);
         return new JpfResponseDto();
     }

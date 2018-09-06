@@ -86,6 +86,9 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
         if (stockCard.containsKey("stockOrderNo") && !(stockCard.get("stockOrderNo").equals("")))
             payShopStockCard.setStockOrderNo(stockCard.get("stockOrderNo").toString());
 
+        if (stockCard.containsKey("cardType") && !(stockCard.get("cardType").equals("")))
+            payShopStockCard.setCardType(Byte.valueOf(stockCard.get("cardType").toString()));
+
         payShopStockCard.setAddtime(new Date());
 
         int isSuc =payShopStockCardMapper.insertSelective(payShopStockCard);

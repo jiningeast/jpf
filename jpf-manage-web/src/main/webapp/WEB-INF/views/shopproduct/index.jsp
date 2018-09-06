@@ -94,7 +94,8 @@
                     text:'添加商品',
                     iconCls:'icon-add',
                     handler:function(){
-                        $('#infoDiv').window("open").window('refresh', 'add/page').window('setTitle','新增');
+
+                       $('#infoDiv').window("open").window('refresh', 'add/page').window('setTitle','新增');
                     }
                 },
                 {
