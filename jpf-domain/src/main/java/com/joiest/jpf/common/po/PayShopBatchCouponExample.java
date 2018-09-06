@@ -1255,6 +1255,126 @@ public class PayShopBatchCouponExample {
             return (Criteria) this;
         }
 
+        public Criteria andSendTimeIsNull() {
+            addCriterion("send_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeIsNotNull() {
+            addCriterion("send_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeEqualTo(Date value) {
+            addCriterion("send_time =", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotEqualTo(Date value) {
+            addCriterion("send_time <>", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeGreaterThan(Date value) {
+            addCriterion("send_time >", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("send_time >=", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeLessThan(Date value) {
+            addCriterion("send_time <", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeLessThanOrEqualTo(Date value) {
+            addCriterion("send_time <=", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeIn(List<Date> values) {
+            addCriterion("send_time in", values, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotIn(List<Date> values) {
+            addCriterion("send_time not in", values, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeBetween(Date value1, Date value2) {
+            addCriterion("send_time between", value1, value2, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotBetween(Date value1, Date value2) {
+            addCriterion("send_time not between", value1, value2, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeIsNull() {
+            addCriterion("send_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeIsNotNull() {
+            addCriterion("send_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeEqualTo(Byte value) {
+            addCriterion("send_type =", value, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeNotEqualTo(Byte value) {
+            addCriterion("send_type <>", value, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeGreaterThan(Byte value) {
+            addCriterion("send_type >", value, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("send_type >=", value, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeLessThan(Byte value) {
+            addCriterion("send_type <", value, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("send_type <=", value, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeIn(List<Byte> values) {
+            addCriterion("send_type in", values, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeNotIn(List<Byte> values) {
+            addCriterion("send_type not in", values, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeBetween(Byte value1, Byte value2) {
+            addCriterion("send_type between", value1, value2, "sendType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("send_type not between", value1, value2, "sendType");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;

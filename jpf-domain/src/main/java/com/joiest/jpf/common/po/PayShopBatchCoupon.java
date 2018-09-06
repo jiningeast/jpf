@@ -94,6 +94,16 @@ public class PayShopBatchCoupon implements Serializable {
     private Byte isExpired;
 
     /**
+     * 发送时间
+     */
+    private Date sendTime;
+
+    /**
+     * 发送方式 0=email发给接收人 1=群发给个人
+     */
+    private Byte sendType;
+
+    /**
      * 
      */
     private Date addtime;
@@ -241,6 +251,22 @@ public class PayShopBatchCoupon implements Serializable {
         this.isExpired = isExpired;
     }
 
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public Byte getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(Byte sendType) {
+        this.sendType = sendType;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -283,6 +309,8 @@ public class PayShopBatchCoupon implements Serializable {
         sb.append(", expireMonth=").append(expireMonth);
         sb.append(", expireTime=").append(expireTime);
         sb.append(", isExpired=").append(isExpired);
+        sb.append(", sendTime=").append(sendTime);
+        sb.append(", sendType=").append(sendType);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -322,6 +350,8 @@ public class PayShopBatchCoupon implements Serializable {
             && (this.getExpireMonth() == null ? other.getExpireMonth() == null : this.getExpireMonth().equals(other.getExpireMonth()))
             && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getIsExpired() == null ? other.getIsExpired() == null : this.getIsExpired().equals(other.getIsExpired()))
+            && (this.getSendTime() == null ? other.getSendTime() == null : this.getSendTime().equals(other.getSendTime()))
+            && (this.getSendType() == null ? other.getSendType() == null : this.getSendType().equals(other.getSendType()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -350,6 +380,8 @@ public class PayShopBatchCoupon implements Serializable {
         result = prime * result + ((getExpireMonth() == null) ? 0 : getExpireMonth().hashCode());
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getIsExpired() == null) ? 0 : getIsExpired().hashCode());
+        result = prime * result + ((getSendTime() == null) ? 0 : getSendTime().hashCode());
+        result = prime * result + ((getSendType() == null) ? 0 : getSendType().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
