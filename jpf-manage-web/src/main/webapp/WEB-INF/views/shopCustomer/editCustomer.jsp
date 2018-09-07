@@ -148,7 +148,7 @@
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', msg.retMsg, 'info');
-                            $('#infoDiv').window('close');
+                            $('#infoUpdate').window('close');
                             $('#dg').datagrid('reload');
                         }
                     },
@@ -162,7 +162,7 @@
 
         $('#cancelBtn_audit').linkbutton({
             onClick: function(){
-                $('#infoDiv').window('close');
+                $('#infoUpdate').window('close');
             }
         });
     })
