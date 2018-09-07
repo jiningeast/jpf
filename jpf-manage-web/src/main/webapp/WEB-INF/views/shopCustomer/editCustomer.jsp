@@ -148,11 +148,12 @@
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', msg.retMsg, 'info');
-                            $('#infoDiv').window('close');
+                            $('#infoUpdate').window('close');
                             $('#dg').datagrid('reload');
                         }
                     },
                     error: function () {
+
                         $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
                     }
                 });
@@ -162,7 +163,7 @@
 
         $('#cancelBtn_audit').linkbutton({
             onClick: function(){
-                $('#infoDiv').window('close');
+                $('#infoUpdate').window('close');
             }
         });
     })
