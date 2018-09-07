@@ -153,6 +153,7 @@
                         }
                     },
                     error: function () {
+
                         $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
                     }
                 });
