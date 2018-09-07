@@ -5,19 +5,13 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.LogsCustomUtils;
-import com.joiest.jpf.common.util.LogsCustomUtils2;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopStockLogCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopStockCardMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopStockOrderMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopStockOrderProductMapper;
 import com.joiest.jpf.entity.ShopProductInfo;
-import com.joiest.jpf.entity.ShopStockLogInfo;
-import com.joiest.jpf.entity.ShopStockOrderProductInfo;
 import com.joiest.jpf.facade.ShopProductServiceFacade;
 import com.joiest.jpf.facade.ShopStockCardServiceFacade;
-import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacade {
 
@@ -182,5 +175,19 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
             return 1;
         else
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新库存失败");
+    }
+
+    /**
+     * 查找某个用户买过的卡密个数
+     */
+    @Override
+    public int getBoughtCardCount(String customerId){
+        PayShopStockCardExample e = new PayShopStockCardExample();
+        PayShopStockCardExample.Criteria c = e.createCriteria();
+        c.andCustomerIdEqualTo(customerId);
+        c.andCardTypeEqualTo((byte)2);
+        c.andStatusEqualTo((byte)1);
+
+        return payShopStockCardMapper.countByExample(e);
     }
 }

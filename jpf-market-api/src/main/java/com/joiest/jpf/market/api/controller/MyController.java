@@ -8,6 +8,7 @@ import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.facade.ShopOrderInterfaceServiceFacade;
+import com.joiest.jpf.facade.ShopStockCardServiceFacade;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,9 @@ public class MyController {
     @Autowired
     private ShopOrderInterfaceServiceFacade shopOrderInterfaceServiceFacade;
 
+    @Autowired
+    private ShopStockCardServiceFacade shopStockCardServiceFacade;
+
     private String uid;
 
     private String openId;
@@ -40,14 +44,8 @@ public class MyController {
 
     @RequestMapping("/index")
     @ResponseBody
-    public String index(HttpServletRequest request){
-        String token = request.getHeader("Token");
-        String openId_encrypt = redisCustomServiceFacade.get(com.joiest.jpf.market.api.controller.ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(openId_encrypt)) {
-            openId = AESUtils.decrypt(openId_encrypt, com.joiest.jpf.market.api.controller.ConfigUtil.getValue("AES_KEY"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
-            uid = userInfo.getId();
-        }
+    public String index(HttpServletRequest httpRequest){
+        getUserInfo(httpRequest);
         int count = shopOrderInterfaceServiceFacade.getOrdersCount(uid);
 
         Map<String,Object> responseMap = new HashMap<>();
@@ -71,5 +69,26 @@ public class MyController {
         responseMap.put("servicePeriod","9：00-18：00 工作日");
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), responseMap);
+    }
+
+    @RequestMapping("/sendCardsPage")
+    @ResponseBody
+    public String sendCardsPage(HttpServletRequest httpRequest){
+        getUserInfo(httpRequest);
+        int count = shopStockCardServiceFacade.getBoughtCardCount(uid);
+        Map<String,Object> responseMap = new HashMap<>();
+        responseMap.put("count",count);
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), responseMap);
+    }
+
+    public void getUserInfo(HttpServletRequest httpRequest){
+        String token = httpRequest.getHeader("Token");
+        String openId_encrypt = redisCustomServiceFacade.get(com.joiest.jpf.market.api.controller.ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(openId_encrypt)) {
+            openId = AESUtils.decrypt(openId_encrypt, com.joiest.jpf.market.api.controller.ConfigUtil.getValue("AES_KEY"));
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
+        }
     }
 }
