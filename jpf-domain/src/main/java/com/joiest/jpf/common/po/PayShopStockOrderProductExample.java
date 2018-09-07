@@ -556,6 +556,66 @@ public class PayShopStockOrderProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andCardTypeIsNull() {
+            addCriterion("card_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeIsNotNull() {
+            addCriterion("card_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeEqualTo(Byte value) {
+            addCriterion("card_type =", value, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeNotEqualTo(Byte value) {
+            addCriterion("card_type <>", value, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeGreaterThan(Byte value) {
+            addCriterion("card_type >", value, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("card_type >=", value, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeLessThan(Byte value) {
+            addCriterion("card_type <", value, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("card_type <=", value, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeIn(List<Byte> values) {
+            addCriterion("card_type in", values, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeNotIn(List<Byte> values) {
+            addCriterion("card_type not in", values, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeBetween(Byte value1, Byte value2) {
+            addCriterion("card_type between", value1, value2, "cardType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCardTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("card_type not between", value1, value2, "cardType");
+            return (Criteria) this;
+        }
+
         public Criteria andStockAmountIsNull() {
             addCriterion("stock_amount is null");
             return (Criteria) this;

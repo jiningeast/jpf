@@ -6,14 +6,15 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopCustomer;
-import com.joiest.jpf.common.po.PayWeixinUser;
-import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.common.util.AESUtils;
+import com.joiest.jpf.common.util.Base64CustomUtils;
+import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.entity.WeixinUserInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
-import com.joiest.jpf.market.api.util.RedisUtils;
 import com.joiest.jpf.market.api.util.SmsUtils;
 import com.joiest.jpf.market.api.util.ToolsUtils;
 import net.sf.json.JSONObject;
@@ -21,11 +22,14 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +38,13 @@ import java.util.Map;
 public class CustomController {
 
     private String uid;
+
     private String openId;
+
     private ShopCustomerInterfaceInfo userInfo;
 
     private  String smsPrefix = "marketBindSend";
+
     @Autowired
     private ShopCustomerInterfaceServiceFacade shopCustomerInterfaceServiceFacade;
 
@@ -197,6 +204,21 @@ public class CustomController {
 
     }
 
+    /**
+     * 首页返回用户身份识别：普通用户 特殊用户
+     */
+    @RequestMapping("/index")
+    @ResponseBody
+    public String index(){
+        // 构建返回
+        Map<String, Object> responseDataMap = new HashMap<>();
+        responseDataMap.put("type", userInfo.getType());
+        String responseDataJson = JsonUtils.toJson(responseDataMap);
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"获取用户身份成功",responseDataJson);
+    }
+
+
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
@@ -204,8 +226,8 @@ public class CustomController {
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(openId_encrypt)) {
             openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
-            //userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
-            //uid = userInfo.getId();
+            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
+            uid = userInfo.getId();
         }
     }
 

@@ -117,13 +117,21 @@
                     {field:'id',title:'ID',width:'3%'},
                     {field:'merchNo',title:'商户编号',width:'10%'},
                     {field:'companyName',title:'公司名称',width:'8%'},
-                    {field:'contactName',title:'联系人姓名',width:'10%'},
-                    {field:'contactPhone',title:'联系电话',width:'15%'},
-                    {field:'receiveName',title:'接收人姓名',width:'15%'},
+                    {field:'contactName',title:'联系人姓名',width:'5%'},
+                    {field:'contactPhone',title:'联系电话',width:'5%'},
+                    {field:'receiveName',title:'接收人姓名',width:'5%'},
                     {field:'receivePhone',title:'接收人电话',width:'10%'},
                     {field:'receiveEmail',title:'接收人邮箱',width:'10%'},
-                    {field:'saleName',title:'所属销售名字',width:'10%'},
-                    {field:'salePhone',title:'所属销售电话',width:'10%'},
+                    {field:'saleName',title:'所属销售名字',width:'6%'},
+                    {field:'salePhone',title:'所属销售电话',width:'5%'},
+                    {field:'money',title:'账户余额',width:'5%',
+                        formatter:function (value,row,index) {
+                            if ( value == null || value == "" ){
+                                return 0;
+                            }else{
+                                return value;
+                            }
+                        }},
                     {field:'addtime',title:'添加时间',width:'10%',formatter: formatDateStr},
                     {field:'status',title:'登录状态',width:'8%',
                         formatter : function(value,row,index){

@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
@@ -151,6 +152,12 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setOperatorName(request.getOperatorName());
         payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
         payShopProduct.setCardid(request.getCardid());
+        BigDecimal bid=new BigDecimal(request.getBid());
+        BigDecimal money=new BigDecimal(request.getMoney());
+        payShopProduct.setBid(bid);
+        payShopProduct.setMoney(money);
+        payShopProduct.setType(request.getType());
+
         int res = payShopProductMapper.insertSelective(payShopProduct);
         return new JpfResponseDto();
     }
@@ -194,6 +201,11 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setUpdatetime(new Date());
         payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
         payShopProduct.setCardid(request.getCardid());
+        BigDecimal bid=new BigDecimal(request.getBid());
+        BigDecimal money=new BigDecimal(request.getMoney());
+        payShopProduct.setBid(bid);
+        payShopProduct.setMoney(money);
+        payShopProduct.setType(request.getType());
         int res = payShopProductMapper.updateByPrimaryKeySelective(payShopProduct);
         return new JpfResponseDto();
     }

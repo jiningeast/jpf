@@ -59,6 +59,21 @@ public class PayShopBatchCoupon implements Serializable {
     private Byte isActive;
 
     /**
+     * 激活人id
+     */
+    private String activeCustomerId;
+
+    /**
+     * 激活者手机号
+     */
+    private String activePhone;
+
+    /**
+     * 激活人姓名
+     */
+    private String activeName;
+
+    /**
      * 激活时间
      */
     private Date activeTime;
@@ -77,6 +92,16 @@ public class PayShopBatchCoupon implements Serializable {
      * 券状态 0=未过期 1=已过期
      */
     private Byte isExpired;
+
+    /**
+     * 发送时间
+     */
+    private Date sendTime;
+
+    /**
+     * 发送方式 0=email发给接收人 1=群发给个人
+     */
+    private Byte sendType;
 
     /**
      * 
@@ -170,6 +195,30 @@ public class PayShopBatchCoupon implements Serializable {
         this.isActive = isActive;
     }
 
+    public String getActiveCustomerId() {
+        return activeCustomerId;
+    }
+
+    public void setActiveCustomerId(String activeCustomerId) {
+        this.activeCustomerId = activeCustomerId == null ? null : activeCustomerId.trim();
+    }
+
+    public String getActivePhone() {
+        return activePhone;
+    }
+
+    public void setActivePhone(String activePhone) {
+        this.activePhone = activePhone == null ? null : activePhone.trim();
+    }
+
+    public String getActiveName() {
+        return activeName;
+    }
+
+    public void setActiveName(String activeName) {
+        this.activeName = activeName == null ? null : activeName.trim();
+    }
+
     public Date getActiveTime() {
         return activeTime;
     }
@@ -200,6 +249,22 @@ public class PayShopBatchCoupon implements Serializable {
 
     public void setIsExpired(Byte isExpired) {
         this.isExpired = isExpired;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public Byte getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(Byte sendType) {
+        this.sendType = sendType;
     }
 
     public Date getAddtime() {
@@ -237,10 +302,15 @@ public class PayShopBatchCoupon implements Serializable {
         sb.append(", money=").append(money);
         sb.append(", dou=").append(dou);
         sb.append(", isActive=").append(isActive);
+        sb.append(", activeCustomerId=").append(activeCustomerId);
+        sb.append(", activePhone=").append(activePhone);
+        sb.append(", activeName=").append(activeName);
         sb.append(", activeTime=").append(activeTime);
         sb.append(", expireMonth=").append(expireMonth);
         sb.append(", expireTime=").append(expireTime);
         sb.append(", isExpired=").append(isExpired);
+        sb.append(", sendTime=").append(sendTime);
+        sb.append(", sendType=").append(sendType);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -273,10 +343,15 @@ public class PayShopBatchCoupon implements Serializable {
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
             && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
+            && (this.getActiveCustomerId() == null ? other.getActiveCustomerId() == null : this.getActiveCustomerId().equals(other.getActiveCustomerId()))
+            && (this.getActivePhone() == null ? other.getActivePhone() == null : this.getActivePhone().equals(other.getActivePhone()))
+            && (this.getActiveName() == null ? other.getActiveName() == null : this.getActiveName().equals(other.getActiveName()))
             && (this.getActiveTime() == null ? other.getActiveTime() == null : this.getActiveTime().equals(other.getActiveTime()))
             && (this.getExpireMonth() == null ? other.getExpireMonth() == null : this.getExpireMonth().equals(other.getExpireMonth()))
             && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getIsExpired() == null ? other.getIsExpired() == null : this.getIsExpired().equals(other.getIsExpired()))
+            && (this.getSendTime() == null ? other.getSendTime() == null : this.getSendTime().equals(other.getSendTime()))
+            && (this.getSendType() == null ? other.getSendType() == null : this.getSendType().equals(other.getSendType()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -298,10 +373,15 @@ public class PayShopBatchCoupon implements Serializable {
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
         result = prime * result + ((getIsActive() == null) ? 0 : getIsActive().hashCode());
+        result = prime * result + ((getActiveCustomerId() == null) ? 0 : getActiveCustomerId().hashCode());
+        result = prime * result + ((getActivePhone() == null) ? 0 : getActivePhone().hashCode());
+        result = prime * result + ((getActiveName() == null) ? 0 : getActiveName().hashCode());
         result = prime * result + ((getActiveTime() == null) ? 0 : getActiveTime().hashCode());
         result = prime * result + ((getExpireMonth() == null) ? 0 : getExpireMonth().hashCode());
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getIsExpired() == null) ? 0 : getIsExpired().hashCode());
+        result = prime * result + ((getSendTime() == null) ? 0 : getSendTime().hashCode());
+        result = prime * result + ((getSendType() == null) ? 0 : getSendType().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;

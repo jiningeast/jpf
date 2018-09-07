@@ -51,7 +51,7 @@
                             <%--</select>--%>
                         <%--</td>--%>
                     </tr>
-                    <%--<tr>
+                    <tr>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">标准进价：</td>
                         <td>
@@ -62,7 +62,7 @@
                             <input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />
                         </td>
 
-                    </tr>--%>
+                    </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
                         <td>
@@ -81,6 +81,17 @@
                         <td style="text-align: right;background-color: #f1f1f1;">当前库存：</td>
                         <td>
                             <input id="stored" name="stored" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">充值类型：</td>
+                        <td>
+                            <select id="type" name="type" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                                <option value="0" selected>直充</option>
+                                <option value="1">代充</option>
+                                <option value="2">卡密</option>
+                                <option value="3">混合</option>
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -172,6 +183,8 @@
                 // var stored_safe = $("#stored_safe").numberbox("getValue");
                 // console.log(postData)
                 // alert(isValid);return false;
+
+
                 $.ajax({
                     type: 'post',
                     url: 'add/action',
@@ -181,7 +194,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             $('#infoDiv').window('close');
                             $('#dg').datagrid('reload');
                         }

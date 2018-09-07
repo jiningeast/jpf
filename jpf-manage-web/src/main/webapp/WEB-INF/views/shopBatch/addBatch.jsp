@@ -157,11 +157,11 @@
                 if (msg.retCode != "0000") {
                     $.messager.alert('消息提示','新增失败[' + msg.retMsg + ']!','error');
                 } else {
-                    $.messager.alert('消息提示','新增成功','info');
+                    $.messager.alert('消息提示','新增成功，请稍候刷新列表查看','info');
                 }
                 $("#batchDG").datagrid('reload');
                 $("#addWindow").window("close");
-                window.location.reload();
+                // window.location.reload();
             },
             error:function() {
                 ajaxLoadEnd();

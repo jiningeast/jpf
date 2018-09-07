@@ -34,7 +34,6 @@
     var tempObj = {};//存储HTML对象
 	var button = obj.menu.button;//一级菜单
 
-    console.dir(button);
 
 	//显示异常
 	if(obj.errcode){
@@ -295,7 +294,6 @@
 	var colIndex;//一级菜单列数
 	customBtns.on('click','li>.text-ellipsis>i',function(){
 
-	    console.dir("添加子菜单");
 		//绑定删除事件
 		$('.msg-panel__del').on('click',delClick);
 		colIndex=$(this).parents('.custom-menu-view__menu').attr('alt');

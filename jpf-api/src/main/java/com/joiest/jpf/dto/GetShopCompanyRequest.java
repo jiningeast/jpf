@@ -2,6 +2,7 @@ package com.joiest.jpf.dto;
 
 import com.joiest.jpf.common.po.PayShopCompany;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class GetShopCompanyRequest {
@@ -75,6 +76,16 @@ public class GetShopCompanyRequest {
     private long rows;
 
     private long page;
+
+    /**
+     * 余额
+     */
+    private BigDecimal money;
+
+    /**
+     * 余额校验码
+     */
+    private String moneyCode;
 
     public String getId() {
         return id;
@@ -276,5 +287,21 @@ public class GetShopCompanyRequest {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public String getMoneyCode() {
+        return moneyCode;
+    }
+
+    public void setMoneyCode(String moneyCode) {
+        this.moneyCode = moneyCode;
     }
 }

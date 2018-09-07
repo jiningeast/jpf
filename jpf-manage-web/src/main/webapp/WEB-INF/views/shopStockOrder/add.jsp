@@ -1,253 +1,325 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
 <head>
-    <title>商户信息</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
+    <meta http-equiv="Content-Type" content="multipart/form-data;charset=utf-8" />
+    <title>商品采购申请</title>
 </head>
 <body>
-<!-- 添加弹出窗口 -->
-<div class="easyui-layout" fit="true">
-    <div region="center" border="false"
-         style="padding: 10px; background: #fff; border: 1px solid #ccc;">
-        <form id="auditForm" method="post">
-            <input type="hidden" id="id_audit" name="id" value="${shopStockOrderInfo.id}">
-            <table cellpadding=3 class="table table-bordered">
+<div class="contentDiv" style="padding: 10px;">
+    <div id="formDiv"  class="easyui-panel" title="采购申请" data-options="footer:'#batch_ft'" style="padding: 10px;">
+        <form id="addBatchFormP">
+            <input type="hidden" id="productsAll" name="productsAll">
+            <input type="hidden" id="countProducts" name="countProducts">
+            <input type="hidden" id="countMoneys" name="countMoneys">
+            <table id="addCoupons" cellpadding="5"  >
                 <tr>
-                    <th>基本信息</th>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">代理聚合商户号：</td>
-                    <td>
-                        ${shopStockOrderInfo.agentNo}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">到账聚合商户号：</td>
-                    <td>
-                        ${shopStockOrderInfo.merchNo}
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">需求ID：</td>
-                    <td>
-                        ${shopStockOrderInfo.needid}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">合同编号：</td>
-                    <td>
-                        <c:if test="${shopStockOrderInfo.status=='1'}">
-                            <input name="pactno" value="" type="text">
-                        </c:if>
-                        <c:if test="${shopStockOrderInfo.status!='1'}">
-                            ${shopStockOrderInfo.pactno}
-                        </c:if>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">手续费金额：</td>
-                    <td colspan="4">
-                        ${shopStockOrderInfo.feemoney}
+                    <td style="text-align: right; width: 100px">付款方式：</td>
+                    <td >
+                        <select id="typeId" name="typeId" data-options="required:true" class="easyui-combobox" style="width:100px" ></select>
+                        <input type="hidden" name="typeName" id="typeName" value="" />
+                        <input type="hidden" name="typeNum" id="typeNum" value="" />
                     </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">代理平台费率0.00:不收取费率：</td>
-                    <td >
-                        ${shopStockOrderInfo.agentRate}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">服务平台费费率：</td>
-                    <td >
-                        ${shopStockOrderInfo.salesRate}
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">代理手续费：</td>
-                    <td >
-                        ${shopStockOrderInfo.agentFeemoney}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">服务平台手续费：</td>
-                    <td >
-                        ${shopStockOrderInfo.salesFeemoney}
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">支付凭证：</td>
-                    <td colspan="3">
-                        <c:if test="${shopStockOrderInfo.imgurl!='' && shopStockOrderInfo.imgurl!=null }">
-                            <img width="200" height="200" src="${shopStockOrderInfo.imgurl}" />
-                        </c:if>
-                        <c:if test="${shopStockOrderInfo.imgurl =='' || shopStockOrderInfo.imgurl ==null }">
-                            未上传付款凭证
-                        </c:if>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>
+                    <td style="text-align: right; width: 100px">付款周期：</td>
                     <td>
-                        <fmt:formatDate value="${shopStockOrderInfo.addtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">更新时间：</td>
-                    <td>
-                        <fmt:formatDate value="${shopStockOrderInfo.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <select id="supplierId" name="supplierId" data-options="required:true" class="easyui-combobox" style="width:100px" ></select>
+                        <input type="hidden" name="supplierName" id="supplierName" value="" />
+                        <input type="hidden" name="supplierNum" id="supplierNum" value="" />
                     </td>
                 </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">审核时间：</td>
+
+                <tr >
+                    <td style="text-align: right;width: 100px">备注：</td>
                     <td >
-                        <fmt:formatDate value="${shopStockOrderInfo.shenhetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">充值时间：</td>
-                    <td>
-                        <fmt:formatDate value="${shopStockOrderInfo.chargetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <textarea id="memo" name="memo" style="width:300px"></textarea>
                     </td>
                 </tr>
+
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">充值状态：</td>
-                    <td >
-                        ${shopStockOrderInfo.status_cn}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">期望完成时间：</td>
-                    <td >
-                        <fmt:formatDate value="${shopStockOrderInfo.pacttime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                    </td>
+
+                    <td style="text-align: right;width: 100px">选定商品列表</td>
+                    <td align="right" colspan="6" style="text-align: left;"><a id="searchProducts" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">添加商品</a></td>
+                </tr>
+
+            </table>
+            <div id="couponDG"></div>
+            <br>
+            <table width="100%">
+                <tr>
+
+                    <td width="200" align="right" style="color: red">采购数量总计：</td>
+                    <td id="totalCount" style="color: red">0</td>
+                    <td width="200" align="right" style="color: red">采购金额总计：</td>
+                    <td  id="totalMoney" style="color: red">0</td>
                 </tr>
             </table>
-            <table cellpadding=4 class="table table-bordered">
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">审核：</td>
-                    <td colspan="4">
-                        <select id="status_audit" name="status" class="easyui-combobox" style="width:120px;" data-options="">
-                            <option value="">请选择</option>
-                            <c:if test="${auditPageType == 1 }">
-                                <option value="0">已取消</option>
-                                <option value="1">已申请</option>
-                                <option value="2">已审核(待上传付款凭证)</option>
-                            </c:if>
-                            <c:if test="${auditPageType == 2 }">
-                                <option value="8">审核拒绝</option>
-                                <option value="3">已支付(已上传凭证)</option>
-                                <option value="4">已充值开票中</option>
-                                <option value="5">已充值已开票</option>
-                                <option value="6">已发货</option>
-                                <option value="7">已完成</option>
-                            </c:if>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
-                    <td colspan="4">
-                        <textarea id="kfremarks" name="kfremarks"   style="width:500px; height:60px;">${shopStockOrderInfo.kfremarks}</textarea>
-                    </td>
-                </tr>
-            </table>
+
         </form>
     </div>
-    <div region="south" border="false"
-         style="text-align: right; height: 30px; line-height: 30px;">
-        <a id="saveBtn_audit" class="easyui-linkbutton" icon="icon-ok"
-           href="javascript:void(0)">确定</a>
-        <a id="cancelBtn_audit" class="easyui-linkbutton" icon="icon-cancel"
-           href="javascript:void(0)">取消</a>
+    <div id="batch_ft" style="padding:5px;">
+        <a id="confirmBatch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">保存采购申请</a>
     </div>
+    <div id="products"></div>
 </div>
-<!-- /添加弹出窗口 -->
-
 <script>
-    function initData() {
-
-        $('#status_audit').combobox('select', '${shopStockOrderInfo.status}');
-        <%--$('#attestation_audit').combobox('select', '${shopStockOrderInfo.attestation==true?0:1}');--%>
-
-    }
-
     $(function () {
-        /*$('#auditForm #province_audit').combobox({
-            url:'../param/getPca',
+        //付款方式以及付款周期
+        $("#typeId").combobox({
+            url:'../param/getType?pid=99',
             valueField:'catid',
             textField:'cat',
-            onSelect: function(record){
-                $('#auditForm #city_audit').combobox({
-                    url:'../param/getPca?pid=' + record.catid,
-                    valueField:'catid',
-                    textField:'cat'
+            onSelect: function () {
+                var typeName = $("#typeId").combobox("getText");
+                var typeNum = $("#typeId").combobox("getValue");
+                $("#typeName").val(typeName)
+                $("#typeNum").val(typeNum)
+            }
+        });
+
+        $("#supplierId").combobox({
+            url:'../param/getType?pid=105',
+            valueField:'catid',
+            textField:'cat',
+            onSelect: function () {
+                var supplierName = $("#supplierId").combobox("getText");
+                var supplierNum = $("#supplierId").combobox("getValue");
+                $("#supplierName").val(supplierName)
+                $("#supplierNum").val(supplierNum)
+            }
+        });
+        //===========
+        // 选取公司按钮
+        $("#searchProducts").linkbutton({
+            onClick:function(){
+                $('#products').window("open").window('refresh', '../shopStockOrder/products').window('setTitle','选取商品');
+            }
+        });
+
+        // 选取公司弹窗大小
+        $('#products').window({
+            width:'1024px',
+            height:'550px',
+            closed:true,
+            modal:true
+        });
+
+        // 定义新增商品列表
+        $("#couponDG").datagrid({
+            singleSelect:true,
+            multiselect:false,
+            fitColumns:true,
+            columns:[[
+                {field:'id',title:'商品ID',width:"6%",align:"center"},
+                {field:'Pname',title:'商品名称',width:"10%",align:"center"},
+                {field:'bidOld',title:'产品进价',width:"10%",align:"center",hidden:'true'},
+                {field:'moneyOld',title:'产品售价',width:"10%",align:"center",hidden:'true'},
+                {field:'stored',title:'产品库存',width:"10%",align:"center",hidden:'true'},
+                {field:'supplierName',title:'供应商',width:"10%",align:"center"},
+                {field:'supplierId',title:'供应商ID',width:"10%",align:"center",hidden:'true'},
+                {field:'brandName',title:'品牌',width:"10%",align:"center"},
+                {field:'brandId',title:'品牌ID',width:"10%",align:"center",hidden:'true'},
+                {field:'productBid',title:'标准进价/件',width:"10%",align:"center"},
+                {field:'bid',title:'本次进价/件(必填)',width:"18%",align:"center"},
+                {field:'amount',title:'采购数量(必填)',width:"18%",align:"center"},
+                {field:'money',title:'采购金额(元)',width:"15%",align:"center"},
+                {field:'cardType',title:'充值类型',width:"15%",align:"center"},
+                {field:'delete',title:'操作',width:"10%",align:"center"}
+            ]]
+        });
+
+
+        //input失焦事件改变数值
+        $(".datagrid").on("blur","input[id^='bid']",function () {
+
+
+            var bid = $(this).val();//进价单件
+            var id = $(this).data('id');
+            var amount = $("#amount"+id).val();//数量
+            var calculate = bid * amount;
+            var reg=/^[1-9]{1}\d*(\.\d{1,2})?$/;
+            if(reg.test(bid)==false){
+                $.messager.alert('消息提示','请输入正确的金额','error');
+                return false;
+            }else{
+                if(amount!=""){
+                    $("#money"+id).val(calculate.toFixed(2));
+                    //统计总额总数量
+                    getTotalMoney();
+                    return false;
+                }
+
+            }
+
+        });
+
+        $(".datagrid").on("blur","input[id^='amount']",function () {
+
+            var amount = $(this).val();//进价单件
+            var id = $(this).data('id');
+            var bid = $("#bid"+id).val();//数量
+            var calculate = bid * amount;
+            var reg = /^[0-9]*$/;
+
+            if(reg.test(amount)==false){
+                $.messager.alert('消息提示','请输入正确的数量','error');
+                return false;
+            }else{
+                if(bid !=''){
+                    $("#money"+id).val(calculate.toFixed(2));
+                    //统计总额总数量
+                    getTotalMoney();
+                    return false;
+                }
+
+            }
+
+        });
+
+        // 点击删除商品
+        $(".datagrid").on("click",".delCoupon",function () {
+            var row = $('#couponDG').datagrid('getSelected');
+            var rowIndex = $('#couponDG').datagrid('getRowIndex',row);
+            $('#couponDG').datagrid('deleteRow',rowIndex);
+            getTotalMoney();
+        });
+        // 新增采购form表单属性
+        var data = new FormData($("#addBatchFormP")[0]);
+
+        $("#addBatchFormP").form({
+            type:'post',
+            url:"../shopStockOrder/submitProducts",
+            data:data,
+            dataType:"json",
+            contentType:"application/json",
+            onSubmit:function(){
+                // 判断选择公司
+                if ( $("#typeName").val() == "" ){
+                    $.messager.alert('提示', '请选择付款方式', 'info');
+                    return false;
+                }
+                if ( $("#supplierName").val() == "" ){
+                    $.messager.alert('提示', '请选择付款周期', 'info');
+                    return false;
+                }
+                var arr = $("#couponDG").datagrid("getData").rows;
+                var myArray=new Array()
+                $.each(arr,function (i,n) {
+                    myArray.push(n.id)
+
                 });
-            }
-        });*/
-
-
-        //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
-        setTimeout("initData()", 500);
-        // initData();
-
-        $("#saveBtn_audit").linkbutton({
-
-            onClick: function () {
-                var reqUrl = "audit/action";
-                if( ${auditPageType == 2 } ){
-                    reqUrl = "caiwu/audit/action";
+                if(myArray.length==0){
+                    $.messager.alert('消息提示','请选择商品','error');
+                    return false;
                 }
-                var isValid = $("#auditForm").form('enableValidation').form('validate');
-                if (!isValid) {
-                    return;
+                //判断总金额限制表单提交
+                if($("#totalCount").text()==0 || $("#totalMoney").text()==0){
+                    $.messager.alert('消息提示','请输入正确的进价或数量','error');
+                    return false;
                 }
-                var queryArray = $('#auditForm').serializeArray();
-                var postData = parsePostData(queryArray);
-                if( postData.status==4 ){
-                    $.messager.confirm('确认','充值前请确保实际到账金额与付款凭证金额一致',function(r){
-                        if (r){
-                            $.ajax({
-                                type: 'post',
-                                url: reqUrl ,
-                                data: postData,
-                                dataType: 'json',
-                                success: function (msg) {
-                                    if (msg.retCode != '0000') {
-                                        $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-                                    } else {
-                                        $.messager.alert('消息提示', msg.retMsg, 'info');
-                                        $('#infoDiv').window('close');
-                                        $('#dg').datagrid('reload');
-                                    }
-                                },
-                                error: function () {
-                                    $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                                }
-                            });
-                        }
-                    });
-                }else{
-                    $.ajax({
-                        type: 'post',
-                        url: reqUrl ,
-                        data: postData,
-                        dataType: 'json',
-                        success: function (msg) {
-                            if (msg.retCode != '0000') {
-                                $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-                            } else {
-                                $.messager.alert('消息提示', msg.retMsg, 'info');
-                                $('#infoDiv').window('close');
-                                $('#dg').datagrid('reload');
-                            }
-                        },
-                        error: function () {
-                            $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                        }
-                    });
-                }
-            }
-        });
+            },
+            success:function (msg) {
+                msg = JSON.parse(msg);
+                if (msg.retCode != "0000") {
+                    $.messager.alert('消息提示','新增失败[' + msg.retMsg + ']!','error');
+                } else {
+                    $.messager.alert('消息提示','新增成功','info');
+                    $("#addWindowP").window("close");
+                    $("#dg").datagrid('reload');
 
-        $('#cancelBtn_audit').linkbutton({
-            onClick: function(){
-                $('#infoDiv').window('close');
+                }
+
+            },
+            error:function() {
+                $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
             }
-        });
-    })
+        })
+
+        // 点击确定
+        $("#confirmBatch").linkbutton({
+            onClick : function () {
+
+               var arrCopy=$("#couponDG").datagrid("getData").rows;
+                //循环动态插入值
+                var amountCopy=0;
+                var bidCopy=0;
+                var moneyCopy=0;
+                var type=2;
+                //定义一个新数组
+                var CopyArray={};
+
+                $.each(arrCopy,function (i,n) {
+
+                    //动态获取进价数量总金额
+                    amountCopy=getVolue(n.id,"amount");
+                    bidCopy=getVolue(n.id,"bid");
+                    moneyCopy=getVolue(n.id,"money");
+                    type=getVolue(n.id,"cardType");
+                    //定义数组对象把新数据追加进去
+                    CopyArray[i]={};
+                    CopyArray[i]['id']=n.id;//商品id
+                    CopyArray[i]['pname']=n.Pname;//名称
+                    CopyArray[i]['amount']=amountCopy;//总数
+                    CopyArray[i]['bid']=bidCopy;//本次进价
+                    CopyArray[i]['cardType']=type;//充值类型
+                    CopyArray[i]['bidOld']=n.bidOld;//产品进价
+                    CopyArray[i]['moneyOld']=n.moneyOld//产品售价
+                    CopyArray[i]['stored']=n.stored;//产品售价
+                    CopyArray[i]['money']=moneyCopy;//总金额
+                    CopyArray[i]['brandName']=n.brandName;//品牌名称
+                    CopyArray[i]['brandId']=n.brandId;//品牌id
+                    CopyArray[i]['productBid']=n.productBid;//标准进价
+                    CopyArray[i]['supplierName']=n.supplierName;//供应商名字
+                    CopyArray[i]['supplierId']=n.supplierId;//供应商id
+
+
+                })
+                $("#productsAll").val( JSON.stringify(CopyArray));//json赋值商品信息
+                $("#countProducts").val($("#totalCount").text());
+                $("#countMoneys").val($("#totalMoney").text());
+                $("#addBatchFormP").submit();
+            }
+        })
+
+        //采用jquery easyui loading css效果
+      /*  function ajaxLoading(){
+            $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:"100%",height:$(window).height()}).appendTo("body");
+            $("<div class=\"datagrid-mask-msg\"></div>").html("正在处理，请稍候。。。").appendTo("body").css({display:"block",left:($(document.body).outerWidth(true) - 190) / 2,top:($(window).height() - 45) / 2});
+        }
+        function ajaxLoadEnd(){
+            $(".datagrid-mask").remove();
+            $(".datagrid-mask-msg").remove();
+        }*/
+
+    });
+    // 计算总计
+    function getTotalMoney() {
+
+        // 获取页面id为money的值
+        var totalMoney = 0,totalCount = 0;
+
+        $.each($("input[name='amount']"),function(i,n){
+
+            var id = n.dataset.id;
+            totalCount = totalCount+parseInt(n.value);
+            totalMoney = totalMoney+parseFloat($("#money"+id).val());
+        })
+        $("#totalMoney").text(totalMoney.toFixed(2));
+        $("#totalCount").text(totalCount);
+    }
+    // 计算小计
+   // 动态获取当前值的函数
+     function getVolue(id,type){
+          if(type=="amount"){
+              return $("#amount"+id).val();
+          }else if(type=="bid"){
+              return $("#bid"+id).val();
+          }else if(type=="money"){
+              return $("#money"+id).val();
+          }else if(type=="cardType"){
+              return $("#cardType"+id).val();
+          }
+
+     }
+
 </script>
 </body>
-</html>

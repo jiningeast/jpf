@@ -85,6 +85,12 @@ public class ShopProductInfo {
      */
     private Byte status;
 
+
+    /**
+     * 充值类型 0=直冲 1=代充 2=卡密 3=混合
+     */
+    private Byte type;
+
     /**
      * 创建时间
      */
@@ -222,6 +228,16 @@ public class ShopProductInfo {
     public void setStatus(Byte status) {
         this.status = status;
     }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+
 
     public Date getAddtime() {
         return addtime;

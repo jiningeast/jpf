@@ -50,6 +50,16 @@ public class ShopBatchCouponInfo {
     private Byte isActive;
 
     /**
+     * 激活者手机号
+     */
+    private String activePhone;
+
+    /**
+     * 激活者姓名
+     */
+    private String activeName;
+
+    /**
      * 激活时间
      */
     private Date activeTime;
@@ -63,6 +73,16 @@ public class ShopBatchCouponInfo {
      * 到期时间
      */
     private Date expireTime;
+
+    /**
+     * 发送时间
+     */
+    private Date sendTime;
+
+    /**
+     * 发送方式 0=email发给接收人 1=群发给个人
+     */
+    private Byte sendType;
 
     /**
      *
@@ -151,6 +171,22 @@ public class ShopBatchCouponInfo {
         this.isActive = isActive;
     }
 
+    public String getActivePhone() {
+        return activePhone;
+    }
+
+    public void setActivePhone(String activePhone) {
+        this.activePhone = activePhone;
+    }
+
+    public String getActiveName() {
+        return activeName;
+    }
+
+    public void setActiveName(String activeName) {
+        this.activeName = activeName;
+    }
+
     public Date getActiveTime() {
         return activeTime;
     }
@@ -173,6 +209,22 @@ public class ShopBatchCouponInfo {
 
     public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public Byte getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(Byte sendType) {
+        this.sendType = sendType;
     }
 
     public Date getAddtime() {

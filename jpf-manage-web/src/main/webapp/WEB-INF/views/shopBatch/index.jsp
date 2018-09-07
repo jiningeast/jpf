@@ -23,8 +23,16 @@
 
             // 券批次详情弹窗大小
             $('#detailWindow').window({
-                width:'1100px',
+                width:'1300px',
                 height:'550px',
+                closed:true,
+                modal:true
+            });
+
+            // 发送邮件选项
+            $("#sendEmail").window({
+                width:'900px',
+                height:'250px',
                 closed:true,
                 modal:true
             });
@@ -47,7 +55,7 @@
                     $("#detailWindow").window("open").window('refresh','../shopBatch/detail?batchId='+rows[0].id).window('setTitle','欣券批次详情');
                 }
             },{
-                text:'发送EMAIL',
+                text:'发送...',
                 iconCls:'icon-redo',
                 handler:function(){
                     var rows = $('#batchDG').datagrid('getSelections');
@@ -55,32 +63,7 @@
                         $.messager.alert('消息提示','请选择一条数据！','info');
                         return false;
                     }
-                    $.messager.confirm('发送EMAIL','确定发送含有压缩包的EMAIL吗？',function (r) {
-                        if (r){
-                            ajaxLoading();
-                            $.ajax({
-                                type : 'get',
-                                url : 'sendZip?batchId='+rows[0].id,
-                                dataType:"json",
-                                contentType:"application/json",
-                                success : function(msg){
-                                    ajaxLoadEnd();
-                                    if (msg.retCode != '0000') {
-                                        $('#dg').datagrid('reload');
-                                        $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                    } else {
-                                        $('#dg').datagrid('reload');
-                                        $.messager.alert('消息提示','操作成功!','info');
-                                    }
-                                },
-                                error : function () {
-                                    ajaxLoadEnd();
-                                    $('#dg').datagrid('reload');
-                                    $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                }
-                            })
-                        }
-                    })
+                    $("#sendEmail").window("open").window('refresh','../shopBatch/sendEmail?companyId='+rows[0].companyId+'&batchId='+rows[0].id).window('setTitle','发送选项');
                 }
             }];
 
@@ -105,17 +88,16 @@
                     {field:'expireMonth',title:'有效期',width:"10%",formatter:function(value,row,index){
                         return value+"个月";
                         }},
-                    {field:'status',title:'状态',width:"10%",formatter:function (value,row,index) {
+                    {field:'sendType',title:'发送方式',width:"10%",formatter:function (value,row,index) {
                             if ( value == 0 ){
-                                return "券生成中";
+                                return "<font style='color: #0e90d2'>Email发送</font>";
                             }else if ( value == 1 ){
-                                return "券已生成，待发送";
-                            }else if ( value == 2 ){
-                                return "券已发送";
-                            }else if ( value == 3 ){
-                                return "已取消";
+                                return "<font style='color: #0e90d2'>群发给个人</font>";
+                            }else {
+                                return "未发送";
                             }
-                        }}
+                        }},
+                    {field:'sendTime',title:'发送时间',width:"11%",formatter:formatDateStr}
                 ]]
             });
         })
@@ -136,5 +118,6 @@
     <div id="batchDG"></div>
     <div id="addWindow" style="padding: 5px;"></div>
     <div id="detailWindow" style="padding: 10px;"></div>
+    <div id="sendEmail"></div>
 </div>
 </body>

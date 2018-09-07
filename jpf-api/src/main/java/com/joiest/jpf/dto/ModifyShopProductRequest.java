@@ -40,14 +40,14 @@ public class ModifyShopProductRequest {
     /**
      * 金额
      */
-//    @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$", message = "商品金额格式错误")
-//    private String money;
+    @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$", message = "商品金额格式错误")
+    private String money;
 
     /**
      * 商品进价
      */
-//    @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$", message = "商品进价格式错误")
-//    private String bid;
+    @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$", message = "商品进价格式错误")
+    private String bid;
 
     /**
      * 豆
@@ -107,6 +107,11 @@ public class ModifyShopProductRequest {
      */
     @Digits(integer=5,fraction=0, message = "充值面额只能为整数")
     private String rechargeMoney;
+
+    /**
+     * 充值类型 0=直冲 1=代充 2=卡密 3=混合
+     */
+    private Byte type;
 
     public String getId() {
         return id;
@@ -227,4 +232,29 @@ public class ModifyShopProductRequest {
     public void setCardid(String cardid) {
         this.cardid = cardid;
     }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money;
+    }
+
+    public String getBid() {
+        return bid;
+    }
+
+    public void setBid(String bid) {
+        this.bid = bid;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
 }

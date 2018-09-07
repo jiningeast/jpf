@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>商户信息</title>
+    <title>采购订单信息</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
 </head>
@@ -18,129 +18,89 @@
             <input type="hidden" id="id_audit" name="id" value="${shopStockOrderInfo.id}">
             <table cellpadding=3 class="table table-bordered">
                 <tr>
-                    <th>基本信息</th>
+                    <th>采购订单详细信息</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">供应商：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">采购序列号：</td>
                     <td>
-                        ${shopStockOrderInfo.agentNo}
+                        ${shopStockOrderInfo.id}
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">品牌：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">采购订单号：</td>
                     <td>
-                        ${shopStockOrderInfo.merchNo}
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">采购金额：</td>
-                    <td>
-                        ${shopStockOrderInfo.needid}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">合同编号：</td>
-                    <td>
-                        <c:if test="${shopStockOrderInfo.status=='1'}">
-                            <input name="pactno" value="" type="text">
-                        </c:if>
-                        <c:if test="${shopStockOrderInfo.status!='1'}">
-                            ${shopStockOrderInfo.pactno}
-                        </c:if>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">手续费金额：</td>
-                    <td colspan="4">
-                        ${shopStockOrderInfo.feemoney}
+                        ${shopStockOrderInfo.orderNo}
                     </td>
 
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">代理平台费率0.00:不收取费率：</td>
-                    <td >
-                        ${shopStockOrderInfo.agentRate}
+                    <td style="text-align: right;background-color: #f1f1f1;">采购订单金额：</td>
+                    <td>
+                        ${shopStockOrderInfo.money}
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">服务平台费费率：</td>
-                    <td >
-                        ${shopStockOrderInfo.salesRate}
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">代理手续费：</td>
-                    <td >
-                        ${shopStockOrderInfo.agentFeemoney}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">服务平台手续费：</td>
-                    <td >
-                        ${shopStockOrderInfo.salesFeemoney}
+                    <td style="text-align: right;background-color: #f1f1f1;">付款方式：</td>
+                    <td>
+                        ${shopStockOrderInfo.paywayCn}
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">支付凭证：</td>
-                    <td colspan="3">
-                        <c:if test="${shopStockOrderInfo.imgurl!='' && shopStockOrderInfo.imgurl!=null }">
-                            <img width="200" height="200" src="${shopStockOrderInfo.imgurl}" />
-                        </c:if>
-                        <c:if test="${shopStockOrderInfo.imgurl =='' || shopStockOrderInfo.imgurl ==null }">
-                            未上传付款凭证
-                        </c:if>
+                    <td style="text-align: right;background-color: #f1f1f1;">付款周期: </td>
+                    <td>
+                        ${shopStockOrderInfo.paytypeCn}
                     </td>
-                </tr>
-                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>
                     <td>
                         <fmt:formatDate value="${shopStockOrderInfo.addtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">更新时间：</td>
-                    <td>
-                        <fmt:formatDate value="${shopStockOrderInfo.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                    </td>
+
                 </tr>
+
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">审核时间：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">订单状态：</td>
                     <td >
-                        <fmt:formatDate value="${shopStockOrderInfo.shenhetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <c:if  test="${shopStockOrderInfo.status == 0 }">取消</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 1 }">新建</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 2 }">提交</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 3 }">审批</c:if>
+                        <c:if  test="${shopStockOrderInfo.status == 4 }">已付款</c:if>
                     </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">充值时间：</td>
-                    <td>
-                        <fmt:formatDate value="${shopStockOrderInfo.chargetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">充值状态：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">是否采购：</td>
                     <td >
-                        ${shopStockOrderInfo.status_cn}
-                    </td>
-                    <td style="text-align: right;background-color: #f1f1f1;">期望完成时间：</td>
-                    <td >
-                        <fmt:formatDate value="${shopStockOrderInfo.pacttime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <c:if  test="${shopStockOrderInfo.isUpload == 1 }">已采购</c:if>
+                        <c:if  test="${shopStockOrderInfo.isUpload == 2 }">未采购</c:if>
+
                     </td>
                 </tr>
             </table>
+            <div id="productView"></div>
             <table cellpadding=4 class="table table-bordered">
+                <tr>
+                    <th>审核采购订单</th>
+                </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">审核：</td>
                     <td colspan="4">
                         <select id="status_audit" name="status" class="easyui-combobox" style="width:120px;" data-options="">
-                            <option value="">请选择</option>
-                            <c:if test="${auditPageType == 1 }">
-                                <option value="0">已取消</option>
-                                <option value="1">已申请</option>
-                                <option value="2">已审核(待上传付款凭证)</option>
+
+                            <c:if test="${type == 1 }">
+                                <option value="" selected="selected">请选择</option>
+                                <option value="0"  <c:if  test="${shopStockOrderInfo.status == '0' }">selected</c:if>>取消</option>
+                                <%--<option value="1"  >新建,待提交</option>--%>
+                                <option value="2" <c:if  test="${shopStockOrderInfo.status == '2' }">selected</c:if> >提交</option>
+                                <option value="3" <c:if  test="${shopStockOrderInfo.status == '3' }">selected</c:if> >审批</option>
                             </c:if>
-                            <c:if test="${auditPageType == 2 }">
-                                <option value="8">审核拒绝</option>
-                                <option value="3">已支付(已上传凭证)</option>
-                                <option value="4">已充值开票中</option>
-                                <option value="5">已充值已开票</option>
-                                <option value="6">已发货</option>
-                                <option value="7">已完成</option>
+                            <c:if test="${type == 2 }">
+                                <option value="" selected="selected">请选择</option>
+                                <option value="0"  <c:if  test="${shopStockOrderInfo.status == '0' }">selected</c:if>>取消</option>
+                                <option value="4"  <c:if  test="${shopStockOrderInfo.status == '4' }">selected</c:if>>已付款</option>
                             </c:if>
+
+
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
                     <td colspan="4">
-                        <textarea id="kfremarks" name="kfremarks"   style="width:500px; height:60px;">${shopStockOrderInfo.kfremarks}</textarea>
+                        <textarea id="memo" name="memo"   style="width:500px; height:60px;">${shopStockOrderInfo.memo}</textarea>
                     </td>
                 </tr>
             </table>
@@ -157,69 +117,58 @@
 <!-- /添加弹出窗口 -->
 
 <script>
-    function initData() {
-
-        $('#status_audit').combobox('select', '${shopStockOrderInfo.status}');
-        <%--$('#attestation_audit').combobox('select', '${shopStockOrderInfo.attestation==true?0:1}');--%>
-
-    }
 
     $(function () {
-        /*$('#auditForm #province_audit').combobox({
-            url:'../param/getPca',
-            valueField:'catid',
-            textField:'cat',
-            onSelect: function(record){
-                $('#auditForm #city_audit').combobox({
-                    url:'../param/getPca?pid=' + record.catid,
-                    valueField:'catid',
-                    textField:'cat'
-                });
-            }
-        });*/
+
+        $("#productView").datagrid({
+            title:'商品列表',
+            toolbar:toolbar,
+            // rownumbers:true,//如果为true，则显示一个行号列。
+            //pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
+            // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
+            singleSelect:true,
+            multiselect:true,
+            selectOnCheck:true,
+            remoteSort: false, // 服务端排序
+            // width:500,
+            url:'productsList?OrderNo='+"${shopStockOrderInfo.orderNo}",
+            columns:[[
+                {field:'productId',title:'商品ID',width:"6%",align:"center"},
+                {field:'productName',title:'商品名称',width:"10%",align:"center"},
+                {field:'productBid',title:'产品进价',width:"10%",align:"center"},
+                {field:'stockAmount',title:'产品库存',width:"10%",align:"center"},
+                {field:'supplierName',title:'供应商',width:"10%",align:"center"},
+                {field:'brandName',title:'品牌',width:"10%",align:"center"},
+                {field:'bid',title:'本次进价/件',width:"18%",align:"center"},
+                {field:'amount',title:'采购数量',width:"18%",align:"center"},
+                {field:'money',title:'总计金额(元)',width:"15%",align:"center"},
+                {field:'addtime',title:'添加时间',width:"10%",align:"center"}
+            ]]
+        });
 
 
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
-        setTimeout("initData()", 500);
-        // initData();
 
         $("#saveBtn_audit").linkbutton({
 
             onClick: function () {
-                var reqUrl = "audit/action";
-                if( ${auditPageType == 2 } ){
-                    reqUrl = "caiwu/audit/action";
+                //获取当前选中的值
+                var  selectVelue=$("#status_audit").combobox('getValue');
+                if (selectVelue== '') {
+                    $.messager.alert('消息提示', '请选择审核状态', 'error');
+                    return;
                 }
+                var reqUrl = "audit/action";
+              /*  if( ${type == 2 } ){
+                    reqUrl = "caiwu/audit/action";
+                }*/
                 var isValid = $("#auditForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
                 }
                 var queryArray = $('#auditForm').serializeArray();
                 var postData = parsePostData(queryArray);
-                if( postData.status==4 ){
-                    $.messager.confirm('确认','充值前请确保实际到账金额与付款凭证金额一致',function(r){
-                        if (r){
-                            $.ajax({
-                                type: 'post',
-                                url: reqUrl ,
-                                data: postData,
-                                dataType: 'json',
-                                success: function (msg) {
-                                    if (msg.retCode != '0000') {
-                                        $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-                                    } else {
-                                        $.messager.alert('消息提示', msg.retMsg, 'info');
-                                        $('#infoDiv').window('close');
-                                        $('#dg').datagrid('reload');
-                                    }
-                                },
-                                error: function () {
-                                    $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                                }
-                            });
-                        }
-                    });
-                }else{
+
                     $.ajax({
                         type: 'post',
                         url: reqUrl ,
@@ -230,21 +179,25 @@
                                 $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                             } else {
                                 $.messager.alert('消息提示', msg.retMsg, 'info');
-                                $('#infoDiv').window('close');
                                 $('#dg').datagrid('reload');
+
+                                $('#detailWindowP').window('close');
+                                $('#detailWindowP').window('reload');
+
+
                             }
                         },
                         error: function () {
                             $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
                         }
                     });
-                }
+
             }
         });
 
         $('#cancelBtn_audit').linkbutton({
             onClick: function(){
-                $('#infoDiv').window('close');
+                $('#detailWindowP').window('close');
             }
         });
     })

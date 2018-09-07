@@ -3,8 +3,13 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.*;
-import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.common.po.PayShopCompany;
+import com.joiest.jpf.common.po.PayShopCompanyExample;
+import com.joiest.jpf.common.util.ConfigUtil;
+import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.util.Md5Encrypt;
+import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
 import com.joiest.jpf.dto.GetShopCompanyRequest;
 import com.joiest.jpf.dto.GetShopCompanyResponse;
@@ -13,6 +18,8 @@ import com.joiest.jpf.facade.ShopCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,9 +30,12 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     @Autowired
     private PayShopCompanyMapper payShopCompanyMapper;
 
+    @Autowired
+    private PayShopCompanyCustomMapper payShopCompanyCustomMapper;
     /**
      * 公司列表---后台
      */
+    @Override
     public GetShopCompanyResponse getList(GetShopCompanyRequest request)
     {
         if ( request.getRows() <= 0 )
@@ -89,7 +99,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     /**
      * 公司添加
      */
-
+    @Override
     public JpfResponseDto addCompany(GetShopCompanyRequest request,int account){
 
         //验证参数
@@ -202,11 +212,26 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         payShopCompany.setReceiveEmail(request.getReceiveEmail());
         payShopCompany.setSaleName(request.getSaleName());
         payShopCompany.setSalePhone(request.getSalePhone());
+        BigDecimal loanAmount = new BigDecimal("0.00");
+        String accountReturn=loanAmount.toString();
+        payShopCompany.setMoney(loanAmount);
         payShopCompany.setAddtime(date);
-        int res = payShopCompanyMapper.insertSelective(payShopCompany);
-        if(res!=1){
-            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
-        }
+        //获取刚插入的id
+           int res = payShopCompanyCustomMapper.insertSelective(payShopCompany);
+            String sprimatkey = payShopCompany.getId();
+           //修改金额校验
+            PayShopCompanyExample updateCode=new PayShopCompanyExample();
+            PayShopCompanyExample.Criteria cUpdate=updateCode.createCriteria();
+            cUpdate.andIdEqualTo(sprimatkey);
+            PayShopCompany payShopCompanyUp=new PayShopCompany();
+            String code=ToolUtils.CreateCode(accountReturn,sprimatkey);
+            payShopCompanyUp.setMoneyCode(code);
+            try {
+                payShopCompanyMapper.updateByExampleSelective(payShopCompanyUp,updateCode);
+            } catch (Exception e) {
+                throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
+            }
+
         return new JpfResponseDto();
     }
 
@@ -232,7 +257,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     /**
      * 公司修改
      */
-
+    @Override
     public JpfResponseDto editCompany(GetShopCompanyRequest request,int account){
 
         //验证参数
@@ -381,4 +406,83 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         return new JpfResponseDto();
     }
 
+    /**
+     * 公司单条记录
+     */
+    @Override
+    public JpfResponseDto updateCompanyRecord(PayShopCompany payShopCompany)
+    {
+        if ( StringUtils.isBlank(payShopCompany.getId()))
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        int count = payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompany);
+        if(count != 1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "更新失败");
+        }
+
+        return new JpfResponseDto();
+    }
+
+    /**
+     * 公司充值
+     */
+    @Override
+    public int charge(String companyId, double chargeMoney){
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(companyId);
+        if ( !checkMoneyCode(companyId) ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "该企业已被启用");
+        }
+
+        String money = payShopCompany.getMoney().toString();    // 原始余额
+        Double newMoney = Double.parseDouble(money) + chargeMoney;                          // 充值后的余额
+        BigDecimal newMoneyBD = new BigDecimal(newMoney).setScale(2,BigDecimal.ROUND_DOWN);
+        PayShopCompany payShopCompanyUpdate = new PayShopCompany();
+        payShopCompanyUpdate.setId(companyId);
+        payShopCompanyUpdate.setMoney(newMoneyBD);                        // 充值后的余额
+        payShopCompanyUpdate.setMoneyCode(getMoneyCode(companyId,newMoneyBD.toString()));     // 新的金额校验码
+
+        return payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompanyUpdate);
+    }
+
+    /**
+     * 获取最新的余额校验码
+     */
+    @Override
+    public String getMoneyCode(String companyId, String money){
+        return ToolUtils.CreateCode(money,companyId);
+    }
+
+    /**
+     * 验证金额校验码的准确性
+     * 返回ture为验证通过
+     * 返回false为验证失败
+     */
+    @Override
+    public boolean checkMoneyCode(String companyId){
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(companyId);
+        String newCode = ToolUtils.CreateCode(payShopCompany.getMoney().toString(),payShopCompany.getId());
+
+        if ( newCode.equals(payShopCompany.getMoneyCode()) ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 通过企业名称获取企业
+     */
+    @Override
+    public PayShopCompany getCompanyByName(String companyName){
+        PayShopCompanyExample e = new PayShopCompanyExample();
+        PayShopCompanyExample.Criteria c = e.createCriteria();
+        c.andCompanyNameEqualTo(companyName);
+        List<PayShopCompany> list = payShopCompanyMapper.selectByExample(e);
+        if ( list.isEmpty() || list == null ){
+            return new PayShopCompany();
+        }
+
+        return list.get(0);
+    }
 }

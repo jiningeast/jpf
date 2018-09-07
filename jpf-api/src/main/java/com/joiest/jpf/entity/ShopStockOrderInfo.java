@@ -60,6 +60,50 @@ public class ShopStockOrderInfo {
     private String memo;
 
     /**
+     * 上传的excel文件远程路径
+     */
+    private String ossUrl;
+
+    /**
+     * 商品采购入库时间【导入excel时间】
+     */
+    private Date cardtime;
+
+    /**
+     * 商品是否采购    1 是  2否
+     */
+    private Byte isUpload;
+
+    /**
+     * 总商品数量
+     */
+    private Integer productAmount;
+
+    /**
+     * 成功导入数量
+     */
+    private Integer importedAmount;
+
+    /**
+     * 审核人id
+     */
+    private String checkOperatorId;
+
+    /**
+     * 审核人姓名
+     */
+    private String checkOperatorName;
+
+    /**
+     * 审核时间
+     */
+    private Date checkTime;
+
+    /**
+     * 修改时间
+     */
+    private Date updatetime;
+    /**
      *
      */
     private Date addtime;
@@ -160,5 +204,81 @@ public class ShopStockOrderInfo {
 
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
+    }
+
+    public String getOssUrl() {
+        return ossUrl;
+    }
+
+    public void setOssUrl(String ossUrl) {
+        this.ossUrl = ossUrl;
+    }
+
+    public Date getCardtime() {
+        return cardtime;
+    }
+
+    public void setCardtime(Date cardtime) {
+        this.cardtime = cardtime;
+    }
+
+    public Byte getIsUpload() {
+        return isUpload;
+    }
+
+    public void setIsUpload(Byte isUpload) {
+        this.isUpload = isUpload;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(Integer productAmount) {
+        this.productAmount = productAmount;
+    }
+
+    public Integer getImportedAmount() {
+        return importedAmount;
+    }
+
+    public void setImportedAmount(Integer importedAmount) {
+        this.importedAmount = importedAmount;
+    }
+
+    public String getCheckOperatorId() {
+        return checkOperatorId;
+    }
+
+    public void setCheckOperatorId(String checkOperatorId) {
+        this.checkOperatorId = checkOperatorId;
+    }
+
+    public String getCheckOperatorName() {
+        return checkOperatorName;
+    }
+
+    public void setCheckOperatorName(String checkOperatorName) {
+        this.checkOperatorName = checkOperatorName;
+    }
+
+    public Date getCheckTime() {
+        return checkTime;
+    }
+
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 }

@@ -34,6 +34,11 @@ public class ShopInterfaceStreamInfo {
     private String batchId;
 
     /**
+     * 批次号
+     */
+    private String batchNo;
+
+    /**
      * 订单编号
      */
     private String orderNo;
@@ -89,6 +94,14 @@ public class ShopInterfaceStreamInfo {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId;
+    }
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
     }
 
     public String getOrderNo() {

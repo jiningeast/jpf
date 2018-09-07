@@ -125,6 +125,9 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         coupon.setActiveTime(dNow);
         coupon.setExpireTime(dateAddMonth);
         coupon.setUpdatetime(dNow);
+        coupon.setActivePhone(listCustom.get(0).getPhone());
+        coupon.setActiveName(listCustom.get(0).getNickname());
+        coupon.setActiveCustomerId(uid);
         PayShopBatchCouponExample exampleup= new PayShopBatchCouponExample();
         PayShopBatchCouponExample.Criteria ca = exampleup.createCriteria();
         ca.andActiveCodeEqualTo(couponNo);
@@ -155,6 +158,10 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         remain.setExpireTime(dateAddMonth);
         remain.setAddtime(dNow);
         int insertRemain=payShopCouponRemainMapper.insertSelective(remain);
+        //修改批次的激活数量
+        PayShopBatch payShopBatch =new PayShopBatch();
+        payShopBatch.setActivetedNum(listBatch.get(0).getActivetedNum()+1);
+        payShopBatchMapper.updateByExampleSelective(payShopBatch,batche);
         if(activeIsert==1 && upcoupon==1 && upcustom ==1 && insertRemain==1 ){
             return 1;//激活成功
         }else{

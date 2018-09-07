@@ -81,6 +81,11 @@ public class PayShopProduct implements Serializable {
     private String operatorName;
 
     /**
+     * 充值类型 0=直冲 1=代充 2=卡密 3=混合
+     */
+    private Byte type;
+
+    /**
      * 商品状态：0=下架 1=上架
      */
     private Byte status;
@@ -217,6 +222,14 @@ public class PayShopProduct implements Serializable {
         this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
     public Byte getStatus() {
         return status;
     }
@@ -265,6 +278,7 @@ public class PayShopProduct implements Serializable {
         sb.append(", storedType=").append(storedType);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
+        sb.append(", type=").append(type);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
@@ -303,6 +317,7 @@ public class PayShopProduct implements Serializable {
             && (this.getStoredType() == null ? other.getStoredType() == null : this.getStoredType().equals(other.getStoredType()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -330,6 +345,7 @@ public class PayShopProduct implements Serializable {
         result = prime * result + ((getStoredType() == null) ? 0 : getStoredType().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());

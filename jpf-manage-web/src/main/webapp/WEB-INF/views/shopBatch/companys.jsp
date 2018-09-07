@@ -56,7 +56,7 @@
             remoteSort: false, // 服务端排序
             url:'../shopCompany/list',
             columns:[[
-                {field:'id',title:'商户Id',width:"10%"},
+                {field:'id',title:'商户Id',width:"5%"},
                 {field:'merchNo',title:'聚合商户号',width:"10%"},
                 {field:'companyName',title:'商户名称',width:"10%"},
                 {field:'contactName',title:'联系人姓名',width:"10%"},
@@ -64,6 +64,7 @@
                 {field:'receiveName',title:'接收人姓名',width:"10%"},
                 {field:'receivePhone',title:'接收人手机号',width:"10%"},
                 {field:'receiveEmail',title:'接收人邮箱',width:"10%"},
+                {field:'money',title:'余额',width:"5%"},
                 {field:'addtime',title:'创建时间',width:"20%",formatter: formatDateStr}
             ]]
         });

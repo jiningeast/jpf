@@ -1466,6 +1466,136 @@ public class PayCloudRechargeExample {
             return (Criteria) this;
         }
 
+        public Criteria andKfremarksIsNull() {
+            addCriterion("kfremarks is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksIsNotNull() {
+            addCriterion("kfremarks is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksEqualTo(String value) {
+            addCriterion("kfremarks =", value, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksNotEqualTo(String value) {
+            addCriterion("kfremarks <>", value, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksGreaterThan(String value) {
+            addCriterion("kfremarks >", value, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksGreaterThanOrEqualTo(String value) {
+            addCriterion("kfremarks >=", value, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksLessThan(String value) {
+            addCriterion("kfremarks <", value, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksLessThanOrEqualTo(String value) {
+            addCriterion("kfremarks <=", value, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksLike(String value) {
+            addCriterion("kfremarks like", value, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksNotLike(String value) {
+            addCriterion("kfremarks not like", value, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksIn(List<String> values) {
+            addCriterion("kfremarks in", values, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksNotIn(List<String> values) {
+            addCriterion("kfremarks not in", values, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksBetween(String value1, String value2) {
+            addCriterion("kfremarks between", value1, value2, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksNotBetween(String value1, String value2) {
+            addCriterion("kfremarks not between", value1, value2, "kfremarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelIsNull() {
+            addCriterion("is_del is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelIsNotNull() {
+            addCriterion("is_del is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelEqualTo(Byte value) {
+            addCriterion("is_del =", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelNotEqualTo(Byte value) {
+            addCriterion("is_del <>", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelGreaterThan(Byte value) {
+            addCriterion("is_del >", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_del >=", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelLessThan(Byte value) {
+            addCriterion("is_del <", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelLessThanOrEqualTo(Byte value) {
+            addCriterion("is_del <=", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelIn(List<Byte> values) {
+            addCriterion("is_del in", values, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelNotIn(List<Byte> values) {
+            addCriterion("is_del not in", values, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelBetween(Byte value1, Byte value2) {
+            addCriterion("is_del between", value1, value2, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_del not between", value1, value2, "isDel");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
@@ -1868,6 +1998,11 @@ public class PayCloudRechargeExample {
 
         public Criteria andImgurlLikeInsensitive(String value) {
             addCriterion("upper(imgurl) like", value.toUpperCase(), "imgurl");
+            return (Criteria) this;
+        }
+
+        public Criteria andKfremarksLikeInsensitive(String value) {
+            addCriterion("upper(kfremarks) like", value.toUpperCase(), "kfremarks");
             return (Criteria) this;
         }
     }

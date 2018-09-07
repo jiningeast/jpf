@@ -94,7 +94,8 @@
                     text:'添加商品',
                     iconCls:'icon-add',
                     handler:function(){
-                        $('#infoDiv').window("open").window('refresh', 'add/page').window('setTitle','新增');
+
+                       $('#infoDiv').window("open").window('refresh', 'add/page').window('setTitle','新增');
                     }
                 },
                 {
@@ -125,6 +126,8 @@
                 columns:[[
                     {field:'id',title:'商品ID',width:80},
                     {field:'name',title:'商品名称',width:200},
+                    {field:'bid',title:'商品进价',width:200},
+                    {field:'money',title:'商品售价',width:200},
                     {field:'rechargeMoney',title:'充值面额(元)',width:150},
                     {field:'dou',title:'所需豆',width:150},
                     {field:'brandName',title:'商品品牌',width:200},

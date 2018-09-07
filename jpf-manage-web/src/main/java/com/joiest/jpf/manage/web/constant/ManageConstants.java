@@ -86,4 +86,18 @@ public class ManageConstants {
 
         }
     };
+
+    /**
+     * pay_shop_company_charge 充值状态集合
+     */
+    public static Map<String,String> COMPANYCHARGELIST= new HashMap<String, String>() {
+        {
+            put("-1", "已取消");    //已取消
+            put("0", "已申请");       //新增
+            put("1", "已审核，已充值");    //已审核，已充值
+            put("2", "审核驳回");    //审核拒绝
+
+        }
+    };
+
 }

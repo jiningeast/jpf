@@ -1,6 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.dto.GetShopCouponActiveRequest;
 import com.joiest.jpf.dto.GetShopCouponActiveResponse;
 import com.joiest.jpf.dto.GetShopCustomerRequest;
@@ -56,6 +57,28 @@ public class ShopCustomerController {
     public JpfResponseDto delCompanyCustomer(String id,int type) {
 
         return shopCustomerServiceFacade.delCompanyCustomer(id,type);
+    }
+
+    /**
+     * 编辑用户信息
+     */
+    @RequestMapping("/editCustomer/page")
+    @ResponseBody
+    public ModelAndView editCustomerPage(String id, ModelMap modelMap ) {
+
+        PayShopCustomer payShopCustomer = shopCustomerServiceFacade.getCustomerById(id);
+        modelMap.addAttribute("payShopCustomer",payShopCustomer);
+        return new ModelAndView("shopCustomer/editCustomer",modelMap);
+    }
+
+    /**
+     * 编辑用户信息
+     */
+    @RequestMapping("/editCustomer/action")
+    @ResponseBody
+    public JpfResponseDto editCustomerAction(GetShopCustomerRequest request) {
+
+        return shopCustomerServiceFacade.editCompanyCustomer(request);
     }
 
     /**

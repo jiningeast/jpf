@@ -36,6 +36,11 @@ public class PayShopStockOrderProduct implements Serializable {
     private BigDecimal productBid;
 
     /**
+     * 卡类型 1=代充 2=卡密
+     */
+    private Byte cardType;
+
+    /**
      * 库存数量
      */
     private Integer stockAmount;
@@ -130,6 +135,14 @@ public class PayShopStockOrderProduct implements Serializable {
         this.productBid = productBid;
     }
 
+    public Byte getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(Byte cardType) {
+        this.cardType = cardType;
+    }
+
     public Integer getStockAmount() {
         return stockAmount;
     }
@@ -217,6 +230,7 @@ public class PayShopStockOrderProduct implements Serializable {
         sb.append(", productId=").append(productId);
         sb.append(", productName=").append(productName);
         sb.append(", productBid=").append(productBid);
+        sb.append(", cardType=").append(cardType);
         sb.append(", stockAmount=").append(stockAmount);
         sb.append(", supplierId=").append(supplierId);
         sb.append(", supplierName=").append(supplierName);
@@ -252,6 +266,7 @@ public class PayShopStockOrderProduct implements Serializable {
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
             && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
             && (this.getProductBid() == null ? other.getProductBid() == null : this.getProductBid().equals(other.getProductBid()))
+            && (this.getCardType() == null ? other.getCardType() == null : this.getCardType().equals(other.getCardType()))
             && (this.getStockAmount() == null ? other.getStockAmount() == null : this.getStockAmount().equals(other.getStockAmount()))
             && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
             && (this.getSupplierName() == null ? other.getSupplierName() == null : this.getSupplierName().equals(other.getSupplierName()))
@@ -276,6 +291,7 @@ public class PayShopStockOrderProduct implements Serializable {
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
         result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
         result = prime * result + ((getProductBid() == null) ? 0 : getProductBid().hashCode());
+        result = prime * result + ((getCardType() == null) ? 0 : getCardType().hashCode());
         result = prime * result + ((getStockAmount() == null) ? 0 : getStockAmount().hashCode());
         result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
         result = prime * result + ((getSupplierName() == null) ? 0 : getSupplierName().hashCode());

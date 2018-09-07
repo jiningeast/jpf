@@ -130,24 +130,34 @@
                     "url" : "tdorder/index"
                 },{
                     "menuid" : "502",
-                    "menuname" : "云账户充值列表",
+                    "menuname" : "云账户充值管理",
                     "icon" : "icon-nav",
                     "url" : "cloudRecharge/index"
                 },{
                     "menuid" : "503",
-                    "menuname" : "代付任务管理",
+                    "menuname" : "云账户代付任务",
                     "icon" : "icon-nav",
                     "url" : "cloudTask/index"
                 },{
                     "menuid" : "504",
-                    "menuname" : "欣券管理",
+                    "menuname" : "欣豆市场充值管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopCompanyCharge/index"
+                },{
+                    "menuid" : "505",
+                    "menuname" : "欣豆市场欣券管理",
                     "icon" : "icon-nav",
                     "url" : "shopBatch/index"
                 },{
-                    "menuid" : "505",
-                    "menuname" : "采购管理",
+                    "menuid" : "506",
+                    "menuname" : "欣豆市场采购管理",
                     "icon" : "icon-nav",
                     "url" : "shopStockOrder/index"
+                },{
+                    "menuid" : "507",
+                    "menuname" : "云市场图片管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopAd/index"
                 }]
             },{
                     "menuid" : "6",
@@ -155,24 +165,34 @@
                     "menuname" : "财务管理",
                     "menus" : [{
                         "menuid" : "601",
-                        "menuname" : "旅游退单管理",
-                        "icon" : "icon-nav",
-                        "url" : "orderCpsingle/index"
-                    },{
-                        "menuid" : "602",
-                        "menuname" : "云账户充值管理",
-                        "icon" : "icon-nav",
-                        "url" : "cloudRecharge/caiwuIndex"
-                    },{
-                        "menuid" : "603",
                         "menuname" : "聚合通道订单管理",
                         "icon" : "icon-nav",
                         "url" : "orders/index"
                     },{
+                        "menuid" : "602",
+                        "menuname" : "旅游退单审核",
+                        "icon" : "icon-nav",
+                        "url" : "orderCpsingle/index"
+                    },{
+                        "menuid" : "603",
+                        "menuname" : "云账户充值审核",
+                        "icon" : "icon-nav",
+                        "url" : "cloudRecharge/caiwuIndex"
+                    },{
                         "menuid" : "604",
-                        "menuname" : "云账户代付管理",
+                        "menuname" : "云账户代付到账",
                         "icon" : "icon-nav",
                         "url" : "cloudCompanyMoney/caiwu/index"
+                    },{
+                        "menuid" : "605",
+                        "menuname" : "欣豆市场充值审核",
+                        "icon" : "icon-nav",
+                        "url" : "shopCompanyCharge/caiwuIndex"
+                    },{
+                        "menuid" : "606",
+                        "menuname" : "欣豆市场采购审核",
+                        "icon" : "icon-nav",
+                        "url" : "shopStockOrder/indexCaiwu"
                     }]
             },{
                 "menuid" : "7",
@@ -194,6 +214,16 @@
                     "icon" : "icon-nav",
                     "url" : "shopCustomer/index"
                 }]
+            },{
+                "menuid" : "9",
+                "icon" : "icon-sys",
+                "menuname" : "统计管理",
+                "menus" : [{
+                    "menuid" : "901",
+                    "menuname" : "欣豆市场进销存统计",
+                    "icon" : "icon-nav",
+                    "url" : "shopStockLog/index"
+                }]
             }]
     	};
 
@@ -212,7 +242,6 @@
     function closePwd() {
         $('#w').window('close');
     }
-
 
 
     //修改密码

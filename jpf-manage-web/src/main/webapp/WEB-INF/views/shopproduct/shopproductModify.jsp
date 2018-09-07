@@ -52,11 +52,16 @@
                         <%--</td>--%>
                     </tr>
                     <tr>
-<%--                        </td>
                         <td style="text-align: right;background-color: #f1f1f1;">标准进价：</td>
                         <td>
-                            <input id="bid" name="bid" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />
-                        </td>--%>
+                            <input id="bid" name="bid" type="text" style="width:220px" class="easyui-textbox" value="${productOne.bid}" data-options="required:true,validType:'floatNumber'" />
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">商品售价：</td>
+                        <td>
+                            <input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" value="${productOne.money}" data-options="required:true,validType:'floatNumber'" />
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
                         <td>
                             <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.rechargeMoney}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
@@ -65,10 +70,7 @@
                         <td>
                             <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.dou}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
-                        <%--<td style="text-align: right;background-color: #f1f1f1;">商品售价：</td>--%>
-                        <%--<td>--%>
-                            <%--<input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" data-options="required:true,validType:'floatNumber'" />--%>
-                        <%--</td>--%>
+
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
@@ -81,6 +83,17 @@
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;"></td>
                         <td> </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">充值类型：</td>
+                        <td>
+                            <select id="type" name="type" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                                <option value="0" <c:if test="${productOne.type =='0'}">selected</c:if> >直充</option>
+                                <option value="1" <c:if test="${productOne.type =='1'}">selected</c:if> >代充</option>
+                                <option value="2" <c:if test="${productOne.type =='2'}">selected</c:if> >卡密</option>
+                                <option value="3" <c:if test="${productOne.type =='3'}">selected</c:if> >混合</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品描述：</td>
@@ -209,8 +222,8 @@
     function doUploadImg() {
         var formData = new FormData();
         formData.append('file', $('#uploadfile')[0].files[0]);
-        console.log(formData);
-        console.log($('#uploadfile')[0].files[0]);
+       // console.log(formData);
+        //console.log($('#uploadfile')[0].files[0]);
         $.ajax({
             url: '../cloudCompany/upload',
             type: 'POST',
@@ -220,7 +233,6 @@
             contentType: false,
             processData: false,
             success: function (ret) {
-                console.log(ret);
                 var c=   '<img width="200px" height="200px" src="'+ret+'"/>';
                 $("#imgDiv").html(c);
                 $("#imgurl").val(ret);
