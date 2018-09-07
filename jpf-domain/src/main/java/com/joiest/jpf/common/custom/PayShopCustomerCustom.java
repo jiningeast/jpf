@@ -55,6 +55,11 @@ public class PayShopCustomerCustom implements Serializable {
     private Byte isVerify;
 
     /**
+     * 用户类型
+     */
+    private Byte type;
+
+    /**
      * 客户状态 0=冻结 1=正常
      */
     private Byte status;
@@ -164,6 +169,14 @@ public class PayShopCustomerCustom implements Serializable {
 
     public void setIsVerify(Byte isVerify) {
         this.isVerify = isVerify;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 
     public Byte getStatus() {

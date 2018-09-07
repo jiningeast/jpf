@@ -15,6 +15,7 @@
     <result column="idno" jdbcType="VARCHAR" property="idno" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="is_verify" jdbcType="TINYINT" property="isVerify" />
+    <result column="type" jdbcType="TINYINT" property="type" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="dou" jdbcType="INTEGER" property="dou" />
     <result column="code" jdbcType="VARCHAR" property="code" />
@@ -206,13 +207,13 @@
     -->
     insert into pay_shop_customer (id, name, nickname, 
       company_id, company_name, openid, 
-      idno, phone, is_verify, 
+      idno, phone, is_verify, type,
       status, dou, code, 
       addtime, updatetime, mpid
       )
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
       #{companyId,jdbcType=BIGINT}, #{companyName,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
-      #{idno,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{isVerify,jdbcType=TINYINT}, 
+      #{idno,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{isVerify,jdbcType=TINYINT}, #{type,jdbcType=TINYINT},
       #{status,jdbcType=TINYINT}, #{dou,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, 
       #{addtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{mpid,jdbcType=BIGINT}
       )
@@ -250,6 +251,9 @@
       </if>
       <if test="isVerify != null">
         is_verify,
+      </if>
+      <if test="type != null">
+        type,
       </if>
       <if test="status != null">
         status,
@@ -297,6 +301,9 @@
       </if>
       <if test="isVerify != null">
         #{isVerify,jdbcType=TINYINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
@@ -362,6 +369,9 @@
       <if test="record.isVerify != null">
         is_verify = #{record.isVerify,jdbcType=TINYINT},
       </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
@@ -400,6 +410,7 @@
       idno = #{record.idno,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
       is_verify = #{record.isVerify,jdbcType=TINYINT},
+      type = #{record.type,jdbcType=TINYINT},
       status = #{record.status,jdbcType=TINYINT},
       dou = #{record.dou,jdbcType=INTEGER},
       code = #{record.code,jdbcType=VARCHAR},
@@ -441,6 +452,9 @@
       <if test="isVerify != null">
         is_verify = #{isVerify,jdbcType=TINYINT},
       </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
@@ -476,6 +490,7 @@
       idno = #{idno,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       is_verify = #{isVerify,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
       dou = #{dou,jdbcType=INTEGER},
       code = #{code,jdbcType=VARCHAR},
