@@ -27,4 +27,9 @@ public interface ShopBatchCouponServiceFacade {
      * 将一个欣券发给某个人
      */
     public ShopCustomerInfo sendCouponToPerson(String name, String phone, String idno, String dou, String companyId, String companyName, String batchId);
+
+    /**
+     * 根据批次id批量更新券的发送方式
+     */
+    public int updateCouponSendTypeByBatchId(String batchId);
 }

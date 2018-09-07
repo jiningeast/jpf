@@ -75,6 +75,16 @@ public class ShopBatchCouponInfo {
     private Date expireTime;
 
     /**
+     * 发送时间
+     */
+    private Date sendTime;
+
+    /**
+     * 发送方式 0=email发给接收人 1=群发给个人
+     */
+    private Byte sendType;
+
+    /**
      *
      */
     private Date addtime;
@@ -199,6 +209,22 @@ public class ShopBatchCouponInfo {
 
     public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public Byte getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(Byte sendType) {
+        this.sendType = sendType;
     }
 
     public Date getAddtime() {

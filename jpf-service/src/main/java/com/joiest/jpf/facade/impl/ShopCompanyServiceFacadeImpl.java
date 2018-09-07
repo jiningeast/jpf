@@ -436,12 +436,13 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
 
         String money = payShopCompany.getMoney().toString();    // 原始余额
         Double newMoney = Double.parseDouble(money) + chargeMoney;                          // 充值后的余额
+        BigDecimal newMoneyBD = new BigDecimal(newMoney).setScale(2,BigDecimal.ROUND_DOWN);
         PayShopCompany payShopCompanyUpdate = new PayShopCompany();
         payShopCompanyUpdate.setId(companyId);
-        payShopCompanyUpdate.setMoney(BigDecimal.valueOf(newMoney));                        // 充值后的余额
-        payShopCompanyUpdate.setMoneyCode(getMoneyCode(companyId,newMoney.toString()));     // 新的金额校验码
+        payShopCompanyUpdate.setMoney(newMoneyBD);                        // 充值后的余额
+        payShopCompanyUpdate.setMoneyCode(getMoneyCode(companyId,newMoneyBD.toString()));     // 新的金额校验码
 
-        return payShopCompanyMapper.updateByPrimaryKey(payShopCompanyUpdate);
+        return payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompanyUpdate);
     }
 
     /**

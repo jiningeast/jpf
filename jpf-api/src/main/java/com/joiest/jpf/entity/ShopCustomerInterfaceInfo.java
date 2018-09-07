@@ -56,6 +56,11 @@ public class ShopCustomerInterfaceInfo {
     private Byte isVerify;
 
     /**
+     * 用户类型
+     */
+    private Byte type;
+
+    /**
      * 客户状态 0=冻结 1=正常
      */
     private Byte status;
@@ -79,8 +84,6 @@ public class ShopCustomerInterfaceInfo {
      *
      */
     private Date updatetime;
-
-    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
@@ -160,6 +163,14 @@ public class ShopCustomerInterfaceInfo {
 
     public void setIsVerify(Byte isVerify) {
         this.isVerify = isVerify;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 
     public Byte getStatus() {

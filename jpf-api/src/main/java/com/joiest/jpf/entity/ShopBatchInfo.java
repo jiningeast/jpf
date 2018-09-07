@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ShopBatchInfo {
     /**
-     *
+     * 主键id
      */
     private String id;
 
@@ -20,7 +20,7 @@ public class ShopBatchInfo {
     private String companyName;
 
     /**
-     * 批次号
+     * 批次号：BA+MD5(UUID)
      */
     private String batchNo;
 
@@ -100,7 +100,7 @@ public class ShopBatchInfo {
     private String emailContent;
 
     /**
-     *
+     * 邮件发送时间
      */
     private Date emailTime;
 
@@ -130,12 +130,27 @@ public class ShopBatchInfo {
     private String operatorName;
 
     /**
-     *
+     * 群发给个人时运营上传的excel文件地址
+     */
+    private String excelUrl;
+
+    /**
+     * 群发给个人的时间
+     */
+    private Date sendTime;
+
+    /**
+     * 分发方式 0=email发给接收人 1=群发给个人
+     */
+    private Byte sendType;
+
+    /**
+     * 添加时间
      */
     private Date addtime;
 
     /**
-     *
+     * 更新时间
      */
     private Date updatetime;
 
@@ -342,6 +357,30 @@ public class ShopBatchInfo {
 
     public void setOperatorName(String operatorName) {
         this.operatorName = operatorName;
+    }
+
+    public String getExcelUrl() {
+        return excelUrl;
+    }
+
+    public void setExcelUrl(String excelUrl) {
+        this.excelUrl = excelUrl;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public Byte getSendType() {
+        return sendType;
+    }
+
+    public void setSendType(Byte sendType) {
+        this.sendType = sendType;
     }
 
     public Date getAddtime() {

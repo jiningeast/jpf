@@ -123,8 +123,16 @@ public class ShopBatchController {
      */
     @RequestMapping("/detail")
     public ModelAndView detail(String batchId, ModelMap modelMap){
-        modelMap.addAttribute("batchId",batchId);
-        return new ModelAndView("shopBatch/detail",modelMap);
+        // 查询批次信息
+        ShopBatchInfo shopBatchInfo = shopBatchServiceFacade.getBatchById(batchId);
+        if ( shopBatchInfo.getSendType() != null && shopBatchInfo.getSendType() == 1 ){
+            // 如果批次发送方式是Email发送
+            modelMap.addAttribute("batchId",batchId);
+            return new ModelAndView("shopBatch/detail",modelMap);
+        }else{
+            modelMap.addAttribute("batchId",batchId);
+            return new ModelAndView("shopBatch/detailEmail",modelMap);
+        }
     }
 
     /**
@@ -259,12 +267,15 @@ public class ShopBatchController {
         // 发送email
         int emailRes = shopBatchServiceFacade.sendEmail(batchId);
         if ( emailRes == 1 ){
+            // 更新该批次下所有券的状态为email发送
+            shopBatchCouponServiceFacade.updateCouponSendTypeByBatchId(batchId);
+
             // email发送成功则发送短信
             String mobile = shopCompanyInfo.getReceivePhone();
             // 短信内容
 //            String content = "已将批次号为" + shopBatchInfo.getBatchNo() + "的欣券激活码发送至您的邮箱，附件压缩包的密码是：" + shopBatchInfo.getZipPassword();
             String content = "尊敬的客户您好，批次号为【" + shopBatchInfo.getBatchNo() + "】的解压密码为【"+ shopBatchInfo.getZipPassword() +"】，请您妥善保管";
-            Map<String,String> smsResMap = SmsUtils.send(mobile,content);
+            Map<String,String> smsResMap = SmsUtils.send(mobile,content,"xinxiang");
             Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
             if ( responseMap.get("code").equals("10000") ){
                 // 短信发送成功更新批次表的状态为短信发送成功
@@ -568,6 +579,33 @@ public class ShopBatchController {
 
         return responseMap;
     }
+
+    @RequestMapping("/sendSmsAgain")
+    @ResponseBody
+    public JpfResponseDto sendSmsAgain(String data){
+/*        String[] cidArr = customerIds.split(",");
+        for (int i=0; i<cidArr.length; i++){
+            PayShopCustomer payShopCustomer = shopCustomerServiceFacade.getCustomerById(cidArr[i]);
+            String content = "尊敬的"+ payShopCustomer.getName() +"，您在欣享爱生活平台免费获得了一张欣券，请微信搜索“欣享爱生活”公众号，进入商城即可消费。";
+            Map<String,String> smsResMap = SmsUtils.send(payShopCustomer.getPhone(),content,"xinxiang");
+            Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
+            if ( responseMap.get("code").equals("10000") ){
+                // 添加短信流水
+                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+                shopInterfaceStreamInfo.setType((byte)1);
+                shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+                shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+                shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+                shopInterfaceStreamInfo.setBatchId(batchId);
+                shopInterfaceStreamInfo.setBatchNo();
+                shopInterfaceStreamInfo.setAddtime(new Date());
+                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+            }
+        }*/
+
+        return new JpfResponseDto();
+    }
+
 
     @RequestMapping("/checkExpire")
     @ResponseBody

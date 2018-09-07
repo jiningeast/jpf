@@ -170,6 +170,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         PayShopCustomerExample.Criteria c = payShopCustomerExample.createCriteria();
         c.andPhoneEqualTo(phone);
         List<PayShopCustomer> customerList = payShopCustomerMapper.selectByExample(payShopCustomerExample);
+        PayShopCustomer payShopCustomer;
         if ( customerList.isEmpty() ){
             // 如果没有该手机号用户，添加一个
             PayShopCustomer customerInsert = new PayShopCustomer();
@@ -191,84 +192,108 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             PayShopCustomer customerUpdate = new PayShopCustomer();
             customerUpdate.setCode(newCode);
             payShopCustomerMapper.updateByExampleSelective(customerUpdate,customerExample);
+
+            payShopCustomer = customerInsert;
         }else{
-            // 查找充值面值的一张券
-            PayShopBatchCouponExample couponExample = new PayShopBatchCouponExample();
-            PayShopBatchCouponExample.Criteria couponCriteria = couponExample.createCriteria();
-            couponCriteria.andCompanyIdEqualTo(companyId);
-            couponCriteria.andDouEqualTo(Integer.parseInt(dou));
-            couponCriteria.andBatchNoEqualTo(batchNo);
-            couponCriteria.andIsActiveEqualTo((byte)0);
-            couponCriteria.andIsExpiredEqualTo((byte)0);
-            List<PayShopBatchCoupon> list = payShopBatchCouponMapper.selectByExample(couponExample);
-            if ( !list.isEmpty() ){
-                // 充值豆
-                PayShopCustomer existCustomer = customerList.get(0);
-                Integer newDou = existCustomer.getDou() + Integer.parseInt(dou);
-                existCustomer.setDou(newDou);
-                String newCode = ToolUtils.CreateCode(newDou.toString(),existCustomer.getId());     // dou校验码
-                existCustomer.setCode(newCode);
-                existCustomer.setUpdatetime(new Date());
-                payShopCustomerMapper.updateByPrimaryKey(existCustomer);
+            // 充值豆
+            payShopCustomer = customerList.get(0);
+            Integer newDou = payShopCustomer.getDou() + Integer.parseInt(dou);
+            payShopCustomer.setDou(newDou);
+            String newCode = ToolUtils.CreateCode(newDou.toString(),payShopCustomer.getId());     // dou校验码
+            payShopCustomer.setCode(newCode);
+            payShopCustomer.setUpdatetime(new Date());
+            payShopCustomerMapper.updateByPrimaryKey(payShopCustomer);
+        }
 
-                // 券标记为已使用
-                PayShopBatchCoupon couponUpdate = list.get(0);
-                couponUpdate.setIsActive((byte)1);
-                couponUpdate.setActiveTime(new Date());
-                couponUpdate.setUpdatetime(new Date());
-                // 根据有效期获取过期时间
-                Date dNow = new Date();   //当前时间
-                Calendar calendar = Calendar.getInstance(); //得到日历
-                calendar.setTime(dNow);//把当前时间赋给日历
-                calendar.add(Calendar.MONTH, couponUpdate.getExpireMonth());  //设置为几个月
-                Date dBefore = calendar.getTime();   //得到几个月后的时间
-                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd 00:00:00"); //设置时间格式
-                String LastM= sdf.format(dBefore.getTime() + 24 * 3600 * 1000);    //格式化几个月后的时间
-                Date dateAddMonth=null;
-                try {
-                    dateAddMonth= sdf.parse(LastM);
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-                couponUpdate.setExpireTime(dateAddMonth);
-                payShopBatchCouponMapper.updateByPrimaryKey(list.get(0));
-
-                // 批次余额表
-                PayShopCouponRemain payShopCouponRemain = new PayShopCouponRemain();
-                payShopCouponRemain.setCouponId(couponUpdate.getId());
-                payShopCouponRemain.setCouponNo(couponUpdate.getCouponNo());
-                payShopCouponRemain.setCouponActiveCode(couponUpdate.getActiveCode());
-                payShopCouponRemain.setCustomerId(existCustomer.getId());
-                payShopCouponRemain.setCouponDou(couponUpdate.getDou());
-                payShopCouponRemain.setCouponDouLeft(couponUpdate.getDou());
-                payShopCouponRemain.setStatus((byte)0);
-                payShopCouponRemain.setExpireTime(couponUpdate.getExpireTime());
-                payShopCouponRemain.setAddtime(new Date());
-                payShopCouponRemain.setExpireTime(couponUpdate.getExpireTime());
-                payShopCouponRemainMapper.insertSelective(payShopCouponRemain);
-
-                // 激活日志
-                PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
-                payShopCouponActive.setCustomerId(existCustomer.getId());
-                payShopCouponActive.setCustomerName(existCustomer.getName());
-                payShopCouponActive.setCompanyId(Integer.parseInt(companyId));
-                payShopCouponActive.setCompanyName(companyName);
-                payShopCouponActive.setBatchId(Integer.parseInt(couponUpdate.getBatchId()));
-                payShopCouponActive.setBatchNo(couponUpdate.getBatchNo());
-                payShopCouponActive.setCouponNo(couponUpdate.getCouponNo());
-                payShopCouponActive.setActiveCode(couponUpdate.getActiveCode());
-                payShopCouponActive.setMoney(new BigDecimal(dou));
-                payShopCouponActive.setDou(Integer.parseInt(dou));
-                payShopCouponActive.setType("0");
-                payShopCouponActive.setExpireTime(couponUpdate.getExpireTime());
-                payShopCouponActive.setAddtime(new Date());
-                payShopCouponActiveMapper.insertSelective(payShopCouponActive);
-            }else{
-                throw new JpfException("10001","未查到豆数量为"+dou+"的可用的券");
+        // 查找充值面值的一张券
+        PayShopBatchCouponExample couponExample = new PayShopBatchCouponExample();
+        PayShopBatchCouponExample.Criteria couponCriteria = couponExample.createCriteria();
+        couponCriteria.andCompanyIdEqualTo(companyId);
+        couponCriteria.andDouEqualTo(Integer.parseInt(dou));
+        couponCriteria.andBatchNoEqualTo(batchNo);
+        couponCriteria.andIsActiveEqualTo((byte)0);
+        couponCriteria.andIsExpiredEqualTo((byte)0);
+        List<PayShopBatchCoupon> list = payShopBatchCouponMapper.selectByExample(couponExample);
+        if ( !list.isEmpty() ){
+            // 券标记为已使用
+            PayShopBatchCoupon couponUpdate = list.get(0);
+            couponUpdate.setIsActive((byte)1);
+            couponUpdate.setActiveTime(new Date());
+            couponUpdate.setUpdatetime(new Date());
+            // 根据有效期获取过期时间
+            Date dNow = new Date();   //当前时间
+            Calendar calendar = Calendar.getInstance(); //得到日历
+            calendar.setTime(dNow);//把当前时间赋给日历
+            calendar.add(Calendar.MONTH, couponUpdate.getExpireMonth());  //设置为几个月
+            Date dBefore = calendar.getTime();   //得到几个月后的时间
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd 00:00:00"); //设置时间格式
+            String LastM= sdf.format(dBefore.getTime() + 24 * 3600 * 1000);    //格式化几个月后的时间
+            Date dateAddMonth=null;
+            try {
+                dateAddMonth= sdf.parse(LastM);
+            } catch (ParseException e1) {
+                e1.printStackTrace();
             }
+            couponUpdate.setActiveCustomerId(payShopCustomer.getId());
+            couponUpdate.setActivePhone(phone);
+            couponUpdate.setActiveName(payShopCustomer.getName());
+            couponUpdate.setExpireTime(dateAddMonth);
+            couponUpdate.setSendTime(new Date());
+            couponUpdate.setSendType((byte)1);
+            payShopBatchCouponMapper.updateByPrimaryKey(list.get(0));
+
+            // 批次余额表
+            PayShopCouponRemain payShopCouponRemain = new PayShopCouponRemain();
+            payShopCouponRemain.setCouponId(couponUpdate.getId());
+            payShopCouponRemain.setCouponNo(couponUpdate.getCouponNo());
+            payShopCouponRemain.setCouponActiveCode(couponUpdate.getActiveCode());
+            payShopCouponRemain.setCustomerId(payShopCustomer.getId());
+            payShopCouponRemain.setCouponDou(couponUpdate.getDou());
+            payShopCouponRemain.setCouponDouLeft(couponUpdate.getDou());
+            payShopCouponRemain.setStatus((byte)0);
+            payShopCouponRemain.setExpireTime(couponUpdate.getExpireTime());
+            payShopCouponRemain.setAddtime(new Date());
+            payShopCouponRemain.setExpireTime(couponUpdate.getExpireTime());
+            payShopCouponRemainMapper.insertSelective(payShopCouponRemain);
+
+            // 激活日志
+            PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+            payShopCouponActive.setCustomerId(payShopCustomer.getId());
+            payShopCouponActive.setCustomerName(payShopCustomer.getName());
+            payShopCouponActive.setCompanyId(Integer.parseInt(companyId));
+            payShopCouponActive.setCompanyName(companyName);
+            payShopCouponActive.setBatchId(Integer.parseInt(couponUpdate.getBatchId()));
+            payShopCouponActive.setBatchNo(couponUpdate.getBatchNo());
+            payShopCouponActive.setCouponNo(couponUpdate.getCouponNo());
+            payShopCouponActive.setActiveCode(couponUpdate.getActiveCode());
+            payShopCouponActive.setMoney(new BigDecimal(dou));
+            payShopCouponActive.setDou(Integer.parseInt(dou));
+            payShopCouponActive.setType("0");
+            payShopCouponActive.setExpireTime(couponUpdate.getExpireTime());
+            payShopCouponActive.setAddtime(new Date());
+            payShopCouponActiveMapper.insertSelective(payShopCouponActive);
+        }else{
+            throw new JpfException("10001","未查到豆数量为"+dou+"的可用的券");
         }
 
         failCustomer.setStatus((byte)1);
         return failCustomer;
+    }
+
+    /**
+     * 根据批次id批量更新券的发送方式
+     */
+    @Override
+    @Transactional
+    public int updateCouponSendTypeByBatchId(String batchId){
+        PayShopBatchCouponExample e = new PayShopBatchCouponExample();
+        PayShopBatchCouponExample.Criteria c = e.createCriteria();
+        c.andBatchIdEqualTo(batchId);
+        PayShopBatchCoupon payShopBatchCoupon = new PayShopBatchCoupon();
+        payShopBatchCoupon.setSendTime(new Date());
+        payShopBatchCoupon.setSendType((byte)0);
+        payShopBatchCoupon.setUpdatetime(new Date());
+
+        return payShopBatchCouponMapper.updateByExampleSelective(payShopBatchCoupon,e);
     }
 }

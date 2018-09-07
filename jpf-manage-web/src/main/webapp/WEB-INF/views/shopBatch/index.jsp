@@ -23,7 +23,7 @@
 
             // 券批次详情弹窗大小
             $('#detailWindow').window({
-                width:'1100px',
+                width:'1300px',
                 height:'550px',
                 closed:true,
                 modal:true
@@ -85,21 +85,19 @@
                     {field:'money',title:'金额',width:"10%"},
                     {field:'count',title:'券数量',width:"10%"},
                     {field:'activetedNum',title:'已激活',width:"10%"},
-                    {field:'activePhone',title:'激活手机号',width:"10%"},
                     {field:'expireMonth',title:'有效期',width:"10%",formatter:function(value,row,index){
                         return value+"个月";
                         }},
-                    {field:'status',title:'状态',width:"10%",formatter:function (value,row,index) {
+                    {field:'sendType',title:'发送方式',width:"10%",formatter:function (value,row,index) {
                             if ( value == 0 ){
-                                return "券生成中";
+                                return "<font style='color: #0e90d2'>Email发送</font>";
                             }else if ( value == 1 ){
-                                return "券已生成，待发送";
-                            }else if ( value == 2 ){
-                                return "券已发送";
-                            }else if ( value == 3 ){
-                                return "已取消";
+                                return "<font style='color: #0e90d2'>群发给个人</font>";
+                            }else {
+                                return "未发送";
                             }
-                        }}
+                        }},
+                    {field:'sendTime',title:'发送时间',width:"11%",formatter:formatDateStr}
                 ]]
             });
         })

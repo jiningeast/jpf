@@ -180,7 +180,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         String moneyCode = ToolUtils.CreateCode(newMoneyBD.toString(),payShopCompany.getId());
         payShopCompany.setMoneyCode(moneyCode);
 
-        payShopCompanyMapper.updateByPrimaryKey(payShopCompany);
+        payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompany);
 
         List<ShopBatchCouponInfo> infoList = new ArrayList<>();
         for ( PayShopBatchCoupon payCoupon:payShopBatchCouponsList ){
@@ -319,6 +319,8 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         shopBatchInfoUpdate.setEmailContent(html);
         shopBatchInfoUpdate.setEmailStatus((byte)1);
         shopBatchInfoUpdate.setEmailTime(new Date());
+        shopBatchInfoUpdate.setSendType((byte)0);
+        shopBatchInfoUpdate.setSendTime(new Date());
 
         return updateColumnById(shopBatchInfoUpdate);
     }

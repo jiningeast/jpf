@@ -62,9 +62,6 @@
                         message = "确定发送含有压缩包的EMAIL吗？";
                         type = "get";
                     }else if ( sendType == 1 ){
-                        $.messager.alert('提示', '功能开发中……', 'info');
-                        return false;
-
                         // 判断上传文件
                         var file = $("#uploadfile").filebox('getValue');
                         if( file == "" ){

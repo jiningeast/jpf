@@ -33,6 +33,7 @@ public class ShopAdInterfaceServiceFacadeImpl implements ShopAdInterfaceServiceF
         if ( GetShopAdRequest.getType() != null &&  StringUtils.isNotBlank(GetShopAdRequest.getType()) ){
             c.andTypeEqualTo(Byte.parseByte(GetShopAdRequest.getType()));
         }
+        c.andStatusEqualTo((byte)1);
 
         //e.setPageSize(Long.parseLong(GetShopAdRequest.getPageSize()));
         //e.setPageNo(Long.parseLong(GetShopAdRequest.getPage()));

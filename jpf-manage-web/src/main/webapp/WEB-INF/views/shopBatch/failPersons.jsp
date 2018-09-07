@@ -21,7 +21,9 @@
                 handler : function(){
                     $.messager.confirm('请确认','确定要发送吗，该操作无法撤销',function (r) {
                         if (r){
+                            ajaxLoading();
                             $.post("sendCoupons",{fileName:'${fileName}'},function (msg) {
+                                ajaxLoadEnd();
                                 if (msg.retCode !== '0000'){
                                     $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']','error');
                                 }else{
@@ -48,7 +50,7 @@
                     {field:'name',title:'姓名',width:"10%"},
                     {field:'phone',title:'手机号',width:"20%"},
                     {field:'dou',title:'面值',width:"10%"},
-                    {field:'idno',title:'身份证号',width:"10%"},
+                    {field:'idno',title:'身份证号',width:"15%"},
                     {field:'status',title:'账户冻结',width:"10%",
                         formatter:function (value,row,index) {
                             if ( value == 0 ){
@@ -68,5 +70,15 @@
                 ]]
             });
         })
+
+        //采用jquery easyui loading css效果
+        function ajaxLoading(){
+            $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:"100%",height:$(window).height()}).appendTo("body");
+            $("<div class=\"datagrid-mask-msg\"></div>").html("正在处理，请稍候。。。").appendTo("body").css({display:"block",left:($(document.body).outerWidth(true) - 190) / 2,top:($(window).height() - 45) / 2});
+        }
+        function ajaxLoadEnd(){
+            $(".datagrid-mask").remove();
+            $(".datagrid-mask-msg").remove();
+        }
     </script>
 </body>

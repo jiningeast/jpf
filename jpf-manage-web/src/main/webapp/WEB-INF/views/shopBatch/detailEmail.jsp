@@ -13,53 +13,9 @@
 <div id="couponsDG"></div>
 <script>
     $(function () {
-        var toolbar = [{
-            text:'重发短信',
-            iconCls:'icon-redo',
-            handler:function(){
-                $.messager.confirm('确认','确定要重发短信吗？',function(r){
-                    var rows = $('#dgDetail').datagrid('getChecked'); // 取得checkbox选择行的数据，返回元素记录的数组数据。
-                    if (rows.length <= 0) {
-                        $.messager.alert('消息提示','请选择一条数据！','info');
-                        return false;
-                    }
-                    var param = {};
-                    param["batchId"] = rows[0].batchId;
-                    param["batchNo"] = rows[0].batchNo;
-                    param["customerIds"] = "";
-                    if (r){
-                        for (var i = 0; i < rows.length; i++) {
-                            param['customerIds'] += rows[i].id+',';
-                        }
-                        param['customerIds'] = param['customerIds'].substr(0,param['customerIds'].length-1);
-
-                        $.ajax({
-                            type : 'post',
-                            url : 'sendSmsAgain',
-                            data : param,
-                            dataType:"json",
-                            contentType:"application/json",
-                            success : function(msg){
-                                if (msg.retCode != '0000') {
-                                    $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                } else {
-                                    $.messager.alert('消息提示','操作成功!','info');
-                                    $('#dg').datagrid('reload');
-                                }
-                            },
-                            error : function () {
-                                $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                            }
-                        })
-                    }
-                })
-            }
-        }];
-
         // 欣券详情
         $('#couponsDG').datagrid({
             title:'欣券详情',
-            toolbar:toolbar,
             pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
             singleSelect:false,
             multiselect:true,
@@ -67,7 +23,7 @@
             remoteSort: false, // 服务端排序
             url:'detailData?batchId='+${requestScope.batchId},
             columns:[[
-                {field:'id',title:'券id',width:"5%",checkbox:true},
+                {field:'id',title:'券id',width:"5%"},
                 {field:'activeCode',title:'激活码',width:"8%"},
                 {field:'money',title:'面值',width:"5%"},
                 {field:'dou',title:'欣豆',width:"5%"},
@@ -78,8 +34,7 @@
                             return "<font style='color: #942a25'>已激活</font>";
                         }
                     }},
-                {field:'activePhone',title:'激活人手机号',width:"10%"},
-                {field:'expireMonth',title:'有效期',width:"5%",formatter:function (value,row,index) {
+                {field:'expireMonth',title:'有效期',width:"4%",formatter:function (value,row,index) {
                         return value+"个月";
                     }},
                 {field:'activeTime',title:'激活时间',width:"11%",formatter:formatDateStr},
