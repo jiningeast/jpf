@@ -155,7 +155,7 @@
                     "url" : "shopStockOrder/index"
                 },{
                     "menuid" : "507",
-                    "menuname" : "云市场图片管理",
+                    "menuname" : "欣豆市场广告管理",
                     "icon" : "icon-nav",
                     "url" : "shopAd/index"
                 }]

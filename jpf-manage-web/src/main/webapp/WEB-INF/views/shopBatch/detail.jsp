@@ -24,14 +24,12 @@
                         return false;
                     }
                     var param = {};
-                    param["batchId"] = rows[0].batchId;
-                    param["batchNo"] = rows[0].batchNo;
-                    param["customerIds"] = "";
+                    param["couponIds"] = "";
                     if (r){
                         for (var i = 0; i < rows.length; i++) {
-                            param['customerIds'] += rows[i].id+',';
+                            param['couponIds'] += rows[i].id+',';
                         }
-                        param['customerIds'] = param['customerIds'].substr(0,param['customerIds'].length-1);
+                        param['couponIds'] = param['couponIds'].substr(0,param['couponIds'].length-1);
 
                         $.ajax({
                             type : 'post',
