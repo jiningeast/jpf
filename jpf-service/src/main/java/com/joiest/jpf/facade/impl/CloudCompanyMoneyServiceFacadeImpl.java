@@ -419,4 +419,12 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         return infos;
     }
 
+    /**
+     * 查找所有订单
+     */
+    public List<PayCloudCompanyMoney> getAllRecords(){
+        PayCloudCompanyMoneyExample e = new PayCloudCompanyMoneyExample();
+        return payCloudCompanyMoneyMapper.selectByExample(e);
+    }
+
 }

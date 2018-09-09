@@ -508,28 +508,29 @@ public class CloudTaskController {
         Double totalRate = Double.parseDouble(agentInfo.getAgentRate().toString()) + Double.parseDouble(salesInfo.getSalesRate().toString());
         Double moneyDouble = new Double(money);
         Double feeMoney = totalRate * moneyDouble;
-//        feeMoney = Math.ceil(feeMoney*100) / 100;
-        feeMoney = ToolUtils.halfUpDouble(feeMoney,2);
-        cloudCompanyMoneyInfo.setFeemoney(new BigDecimal(feeMoney));   // 服务费金额：实发金额*服务费率
+        cloudCompanyMoneyInfo.setFeeRate(new BigDecimal(totalRate));
+        cloudCompanyMoneyInfo.setFeemoney(new BigDecimal(feeMoney).setScale(2,BigDecimal.ROUND_DOWN));   // 服务费金额：实发金额*服务费率
         // 增值税金额
         Double addedValueTax = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX"));
         Double taxMoney = ( moneyDouble + feeMoney ) / ( 1 + addedValueTax ) * addedValueTax;
-//        taxMoney = Math.ceil(taxMoney*100) / 100;
-        taxMoney = ToolUtils.halfUpDouble(taxMoney,2);
-        cloudCompanyMoneyInfo.setTaxmoney(new BigDecimal(taxMoney));
+        cloudCompanyMoneyInfo.setTaxRate(new BigDecimal(addedValueTax));
+        cloudCompanyMoneyInfo.setTaxmoney(new BigDecimal(taxMoney).setScale(2,BigDecimal.ROUND_DOWN));
         // 增值税附加金额
         Double addedValueTaxAddtion = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX_ADDITION"));
         Double addedValueTaxAddtionMoney = taxMoney*addedValueTaxAddtion;
-//        addedValueTaxAddtionMoney = Math.ceil(addedValueTaxAddtionMoney*100) / 100;
-        addedValueTaxAddtionMoney = ToolUtils.halfUpDouble(addedValueTaxAddtionMoney,2);
-        cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal(addedValueTaxAddtionMoney));
+        cloudCompanyMoneyInfo.setTaxmoreTax(new BigDecimal(addedValueTaxAddtion));
+        cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal(addedValueTaxAddtionMoney).setScale(2,BigDecimal.ROUND_DOWN));
         // 毛利金额
         Double individualTax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
-        Double supposePay = moneyDouble / (1-individualTax);   // 应发金额
-        Double profit = (moneyDouble + feeMoney) - (supposePay + taxMoney + addedValueTaxAddtionMoney);
-//        profit = Math.ceil(profit*100) / 100;
-        profit = ToolUtils.halfUpDouble(profit,2);
-        cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit));      // 毛利金额
+        BigDecimal shouldMoney = new BigDecimal(moneyDouble / ( 1-individualTax-0.0003)).setScale(2,BigDecimal.ROUND_DOWN); // 应发金额
+        Double profit = (moneyDouble + feeMoney) - (shouldMoney.doubleValue() + taxMoney + addedValueTaxAddtionMoney);
+        cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit).setScale(2,BigDecimal.ROUND_DOWN));      // 毛利金额
+        cloudCompanyMoneyInfo.setShouldMoney(shouldMoney);
+        cloudCompanyMoneyInfo.setIndividualTax(new BigDecimal(individualTax));
+        cloudCompanyMoneyInfo.setIndividualMoney(new BigDecimal(shouldMoney.doubleValue()*individualTax));
+        Double yinhuaTax = 0.0003;
+        cloudCompanyMoneyInfo.setYinhuaTax(new BigDecimal(yinhuaTax));
+        cloudCompanyMoneyInfo.setYinhuaMoney(new BigDecimal(shouldMoney.doubleValue()*yinhuaTax).setScale(2,BigDecimal.ROUND_DOWN));
         // 判断有没有已经存在的合同编号
         /*CloudCompanyMoneyInfo existCompanyMoneyInfo = CloudCompanyMoneyServiceFacade.getRecByFid(contractNo);
         if ( existCompanyMoneyInfo.getId() != null ){

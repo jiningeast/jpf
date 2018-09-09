@@ -73,4 +73,8 @@ public interface CloudCompanyMoneyServiceFacade {
      */
     public List<CloudCompanyMoneyInfo> searchCompanyMoneyAll(CloudCompanyMoneyRequest cloudCompanyMoneyRequest);
 
+    /**
+     * 查找所有订单
+     */
+    public List<PayCloudCompanyMoney> getAllRecords();
 }

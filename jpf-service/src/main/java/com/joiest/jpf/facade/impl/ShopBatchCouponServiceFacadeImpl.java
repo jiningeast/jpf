@@ -45,6 +45,19 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
     private PayCloudInterfaceStreamMapper payCloudInterfaceStreamMapper;
 
     /**
+     * 根据id获取单个券详情
+     */
+    @Override
+    public ShopBatchCouponInfo getCouponById(String id){
+        PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(id);
+        ShopBatchCouponInfo shopBatchCouponInfo = new ShopBatchCouponInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayShopBatchCoupon.class, ShopBatchCouponInfo.class, false);
+        beanCopier.copy(payShopBatchCoupon, shopBatchCouponInfo, null);
+
+        return shopBatchCouponInfo;
+    }
+
+    /**
      * 根据批次号获取券
      */
     @Override

@@ -539,23 +539,28 @@ public class ShopBatchController {
 
         // 开始发短信
         for ( ShopCustomerInfo customerInfo:sendedList ){
-            String content = "尊敬的"+customerInfo.getName()+"，您在欣享爱生活平台免费获得了一张欣券，请微信搜索“欣享爱生活”公众号，进入商城即可消费。";
-            Map<String,String> smsResMap = SmsUtils.send(customerInfo.getPhone(),content,"xinxiang");
-            Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
-            if ( responseMap.get("code").equals("10000") ){
-                // 添加短信流水
-                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
-                shopInterfaceStreamInfo.setType((byte)1);
-                shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
-                shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
-                shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
-                shopInterfaceStreamInfo.setBatchNo(batchNo);
-                shopInterfaceStreamInfo.setAddtime(new Date());
-                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
-            }
+            sendToPersonsSms(customerInfo,batchNo);
         }
 
         return new JpfResponseDto();
+    }
+
+    // 群发的短信
+    public void sendToPersonsSms(ShopCustomerInfo customerInfo,String batchNo){
+        String content = "尊敬的"+customerInfo.getName()+"，您在欣享爱生活平台获得一张欣券，请微信搜索“欣享爱生活”公众号，进入商城即可消费。";
+        Map<String,String> smsResMap = SmsUtils.send(customerInfo.getPhone(),content,"xinxiang");
+        Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
+        if ( responseMap.get("code").equals("10000") ){
+            // 添加短信流水
+            ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+            shopInterfaceStreamInfo.setType((byte)1);
+            shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+            shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+            shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+            shopInterfaceStreamInfo.setBatchNo(batchNo);
+            shopInterfaceStreamInfo.setAddtime(new Date());
+            shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+        }
     }
 
     @RequestMapping("/failPersons")
@@ -580,28 +585,20 @@ public class ShopBatchController {
         return responseMap;
     }
 
+    /**
+     * 重新发送短信
+     */
     @RequestMapping("/sendSmsAgain")
     @ResponseBody
     public JpfResponseDto sendSmsAgain(String data){
-/*        String[] cidArr = customerIds.split(",");
-        for (int i=0; i<cidArr.length; i++){
-            PayShopCustomer payShopCustomer = shopCustomerServiceFacade.getCustomerById(cidArr[i]);
-            String content = "尊敬的"+ payShopCustomer.getName() +"，您在欣享爱生活平台免费获得了一张欣券，请微信搜索“欣享爱生活”公众号，进入商城即可消费。";
-            Map<String,String> smsResMap = SmsUtils.send(payShopCustomer.getPhone(),content,"xinxiang");
-            Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
-            if ( responseMap.get("code").equals("10000") ){
-                // 添加短信流水
-                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
-                shopInterfaceStreamInfo.setType((byte)1);
-                shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
-                shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
-                shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
-                shopInterfaceStreamInfo.setBatchId(batchId);
-                shopInterfaceStreamInfo.setBatchNo();
-                shopInterfaceStreamInfo.setAddtime(new Date());
-                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
-            }
-        }*/
+        String[] couponIdArr = data.split(",");
+        for (int i=0; i<couponIdArr.length; i++) {
+            ShopBatchCouponInfo shopBatchCouponInfo = shopBatchCouponServiceFacade.getCouponById(couponIdArr[i]);
+            ShopCustomerInfo shopCustomerInfo = new ShopCustomerInfo();
+            shopCustomerInfo.setName(shopBatchCouponInfo.getActiveName());
+            shopCustomerInfo.setPhone(shopBatchCouponInfo.getActivePhone());
+            sendToPersonsSms(shopCustomerInfo,shopBatchCouponInfo.getBatchNo());
+        }
 
         return new JpfResponseDto();
     }

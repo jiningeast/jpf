@@ -1,12 +1,18 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
+import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public interface ShopBatchCouponServiceFacade {
+
+    /**
+     * 根据id获取单个券详情
+     */
+    public ShopBatchCouponInfo getCouponById(String id);
 
     /**
      * 根据批次号获取券

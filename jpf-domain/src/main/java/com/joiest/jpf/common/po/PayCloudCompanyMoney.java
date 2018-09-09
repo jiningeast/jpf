@@ -1,9 +1,10 @@
 package com.joiest.jpf.common.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PayCloudCompanyMoney {
+public class PayCloudCompanyMoney implements Serializable {
     /**
      * 自增ID
      */
@@ -20,22 +21,12 @@ public class PayCloudCompanyMoney {
     private String merchNo;
 
     /**
-     * 发放总金额
-     */
-    private BigDecimal commoney;
-
-    /**
-     * 发放时间
-     */
-    private Date addtime;
-
-    /**
-     * 企业添加人ID
+     * 企业ID
      */
     private String uid;
 
     /**
-     * 充值到账对应的交易记录编号
+     * excel中的合同编号
      */
     private String fid;
 
@@ -95,9 +86,14 @@ public class PayCloudCompanyMoney {
     private BigDecimal batchfailmoney;
 
     /**
-     * 更新时间
+     * 发放总金额
      */
-    private Date updatetime;
+    private BigDecimal commoney;
+
+    /**
+     * 服务费率
+     */
+    private BigDecimal feeRate;
 
     /**
      * 服务费金额
@@ -105,9 +101,49 @@ public class PayCloudCompanyMoney {
     private BigDecimal feemoney;
 
     /**
+     * 毛利金额
+     */
+    private BigDecimal profitmoney;
+
+    /**
+     * 应发金额
+     */
+    private BigDecimal shouldMoney;
+
+    /**
+     * 个人所得税税率
+     */
+    private BigDecimal individualTax;
+
+    /**
+     * 个人所得税金额
+     */
+    private BigDecimal individualMoney;
+
+    /**
+     * 印花税
+     */
+    private BigDecimal yinhuaTax;
+
+    /**
+     * 印花税金额
+     */
+    private BigDecimal yinhuaMoney;
+
+    /**
+     * 增值税税率
+     */
+    private BigDecimal taxRate;
+
+    /**
      * 增值税金额
      */
     private BigDecimal taxmoney;
+
+    /**
+     * 增值税税率
+     */
+    private BigDecimal taxmoreTax;
 
     /**
      * 增值税附加金额
@@ -115,9 +151,16 @@ public class PayCloudCompanyMoney {
     private BigDecimal taxmoremoney;
 
     /**
-     * 毛利金额
+     * 发放时间
      */
-    private BigDecimal profitmoney;
+    private Date addtime;
+
+    /**
+     * 更新时间
+     */
+    private Date updatetime;
+
+    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
@@ -141,22 +184,6 @@ public class PayCloudCompanyMoney {
 
     public void setMerchNo(String merchNo) {
         this.merchNo = merchNo == null ? null : merchNo.trim();
-    }
-
-    public BigDecimal getCommoney() {
-        return commoney;
-    }
-
-    public void setCommoney(BigDecimal commoney) {
-        this.commoney = commoney;
-    }
-
-    public Date getAddtime() {
-        return addtime;
-    }
-
-    public void setAddtime(Date addtime) {
-        this.addtime = addtime;
     }
 
     public String getUid() {
@@ -263,12 +290,20 @@ public class PayCloudCompanyMoney {
         this.batchfailmoney = batchfailmoney;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public BigDecimal getCommoney() {
+        return commoney;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setCommoney(BigDecimal commoney) {
+        this.commoney = commoney;
+    }
+
+    public BigDecimal getFeeRate() {
+        return feeRate;
+    }
+
+    public void setFeeRate(BigDecimal feeRate) {
+        this.feeRate = feeRate;
     }
 
     public BigDecimal getFeemoney() {
@@ -279,12 +314,76 @@ public class PayCloudCompanyMoney {
         this.feemoney = feemoney;
     }
 
+    public BigDecimal getProfitmoney() {
+        return profitmoney;
+    }
+
+    public void setProfitmoney(BigDecimal profitmoney) {
+        this.profitmoney = profitmoney;
+    }
+
+    public BigDecimal getShouldMoney() {
+        return shouldMoney;
+    }
+
+    public void setShouldMoney(BigDecimal shouldMoney) {
+        this.shouldMoney = shouldMoney;
+    }
+
+    public BigDecimal getIndividualTax() {
+        return individualTax;
+    }
+
+    public void setIndividualTax(BigDecimal individualTax) {
+        this.individualTax = individualTax;
+    }
+
+    public BigDecimal getIndividualMoney() {
+        return individualMoney;
+    }
+
+    public void setIndividualMoney(BigDecimal individualMoney) {
+        this.individualMoney = individualMoney;
+    }
+
+    public BigDecimal getYinhuaTax() {
+        return yinhuaTax;
+    }
+
+    public void setYinhuaTax(BigDecimal yinhuaTax) {
+        this.yinhuaTax = yinhuaTax;
+    }
+
+    public BigDecimal getYinhuaMoney() {
+        return yinhuaMoney;
+    }
+
+    public void setYinhuaMoney(BigDecimal yinhuaMoney) {
+        this.yinhuaMoney = yinhuaMoney;
+    }
+
+    public BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
     public BigDecimal getTaxmoney() {
         return taxmoney;
     }
 
     public void setTaxmoney(BigDecimal taxmoney) {
         this.taxmoney = taxmoney;
+    }
+
+    public BigDecimal getTaxmoreTax() {
+        return taxmoreTax;
+    }
+
+    public void setTaxmoreTax(BigDecimal taxmoreTax) {
+        this.taxmoreTax = taxmoreTax;
     }
 
     public BigDecimal getTaxmoremoney() {
@@ -295,11 +394,153 @@ public class PayCloudCompanyMoney {
         this.taxmoremoney = taxmoremoney;
     }
 
-    public BigDecimal getProfitmoney() {
-        return profitmoney;
+    public Date getAddtime() {
+        return addtime;
     }
 
-    public void setProfitmoney(BigDecimal profitmoney) {
-        this.profitmoney = profitmoney;
+    public void setAddtime(Date addtime) {
+        this.addtime = addtime;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
+    }
+
+    /**
+     *
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", agentNo=").append(agentNo);
+        sb.append(", merchNo=").append(merchNo);
+        sb.append(", uid=").append(uid);
+        sb.append(", fid=").append(fid);
+        sb.append(", vid=").append(vid);
+        sb.append(", intro=").append(intro);
+        sb.append(", montype=").append(montype);
+        sb.append(", batchstatus=").append(batchstatus);
+        sb.append(", batchno=").append(batchno);
+        sb.append(", batchitems=").append(batchitems);
+        sb.append(", batchallmoney=").append(batchallmoney);
+        sb.append(", batchdealitems=").append(batchdealitems);
+        sb.append(", batchdealmoney=").append(batchdealmoney);
+        sb.append(", batchfailitems=").append(batchfailitems);
+        sb.append(", batchfailmoney=").append(batchfailmoney);
+        sb.append(", commoney=").append(commoney);
+        sb.append(", feeRate=").append(feeRate);
+        sb.append(", feemoney=").append(feemoney);
+        sb.append(", profitmoney=").append(profitmoney);
+        sb.append(", shouldMoney=").append(shouldMoney);
+        sb.append(", individualTax=").append(individualTax);
+        sb.append(", individualMoney=").append(individualMoney);
+        sb.append(", yinhuaTax=").append(yinhuaTax);
+        sb.append(", yinhuaMoney=").append(yinhuaMoney);
+        sb.append(", taxRate=").append(taxRate);
+        sb.append(", taxmoney=").append(taxmoney);
+        sb.append(", taxmoreTax=").append(taxmoreTax);
+        sb.append(", taxmoremoney=").append(taxmoremoney);
+        sb.append(", addtime=").append(addtime);
+        sb.append(", updatetime=").append(updatetime);
+        sb.append("]");
+        return sb.toString();
+    }
+
+    /**
+     *
+     * @param that
+     */
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        }
+        if (that == null) {
+            return false;
+        }
+        if (getClass() != that.getClass()) {
+            return false;
+        }
+        PayCloudCompanyMoney other = (PayCloudCompanyMoney) that;
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getAgentNo() == null ? other.getAgentNo() == null : this.getAgentNo().equals(other.getAgentNo()))
+            && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
+            && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
+            && (this.getFid() == null ? other.getFid() == null : this.getFid().equals(other.getFid()))
+            && (this.getVid() == null ? other.getVid() == null : this.getVid().equals(other.getVid()))
+            && (this.getIntro() == null ? other.getIntro() == null : this.getIntro().equals(other.getIntro()))
+            && (this.getMontype() == null ? other.getMontype() == null : this.getMontype().equals(other.getMontype()))
+            && (this.getBatchstatus() == null ? other.getBatchstatus() == null : this.getBatchstatus().equals(other.getBatchstatus()))
+            && (this.getBatchno() == null ? other.getBatchno() == null : this.getBatchno().equals(other.getBatchno()))
+            && (this.getBatchitems() == null ? other.getBatchitems() == null : this.getBatchitems().equals(other.getBatchitems()))
+            && (this.getBatchallmoney() == null ? other.getBatchallmoney() == null : this.getBatchallmoney().equals(other.getBatchallmoney()))
+            && (this.getBatchdealitems() == null ? other.getBatchdealitems() == null : this.getBatchdealitems().equals(other.getBatchdealitems()))
+            && (this.getBatchdealmoney() == null ? other.getBatchdealmoney() == null : this.getBatchdealmoney().equals(other.getBatchdealmoney()))
+            && (this.getBatchfailitems() == null ? other.getBatchfailitems() == null : this.getBatchfailitems().equals(other.getBatchfailitems()))
+            && (this.getBatchfailmoney() == null ? other.getBatchfailmoney() == null : this.getBatchfailmoney().equals(other.getBatchfailmoney()))
+            && (this.getCommoney() == null ? other.getCommoney() == null : this.getCommoney().equals(other.getCommoney()))
+            && (this.getFeeRate() == null ? other.getFeeRate() == null : this.getFeeRate().equals(other.getFeeRate()))
+            && (this.getFeemoney() == null ? other.getFeemoney() == null : this.getFeemoney().equals(other.getFeemoney()))
+            && (this.getProfitmoney() == null ? other.getProfitmoney() == null : this.getProfitmoney().equals(other.getProfitmoney()))
+            && (this.getShouldMoney() == null ? other.getShouldMoney() == null : this.getShouldMoney().equals(other.getShouldMoney()))
+            && (this.getIndividualTax() == null ? other.getIndividualTax() == null : this.getIndividualTax().equals(other.getIndividualTax()))
+            && (this.getIndividualMoney() == null ? other.getIndividualMoney() == null : this.getIndividualMoney().equals(other.getIndividualMoney()))
+            && (this.getYinhuaTax() == null ? other.getYinhuaTax() == null : this.getYinhuaTax().equals(other.getYinhuaTax()))
+            && (this.getYinhuaMoney() == null ? other.getYinhuaMoney() == null : this.getYinhuaMoney().equals(other.getYinhuaMoney()))
+            && (this.getTaxRate() == null ? other.getTaxRate() == null : this.getTaxRate().equals(other.getTaxRate()))
+            && (this.getTaxmoney() == null ? other.getTaxmoney() == null : this.getTaxmoney().equals(other.getTaxmoney()))
+            && (this.getTaxmoreTax() == null ? other.getTaxmoreTax() == null : this.getTaxmoreTax().equals(other.getTaxmoreTax()))
+            && (this.getTaxmoremoney() == null ? other.getTaxmoremoney() == null : this.getTaxmoremoney().equals(other.getTaxmoremoney()))
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+    }
+
+    /**
+     *
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getAgentNo() == null) ? 0 : getAgentNo().hashCode());
+        result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
+        result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
+        result = prime * result + ((getFid() == null) ? 0 : getFid().hashCode());
+        result = prime * result + ((getVid() == null) ? 0 : getVid().hashCode());
+        result = prime * result + ((getIntro() == null) ? 0 : getIntro().hashCode());
+        result = prime * result + ((getMontype() == null) ? 0 : getMontype().hashCode());
+        result = prime * result + ((getBatchstatus() == null) ? 0 : getBatchstatus().hashCode());
+        result = prime * result + ((getBatchno() == null) ? 0 : getBatchno().hashCode());
+        result = prime * result + ((getBatchitems() == null) ? 0 : getBatchitems().hashCode());
+        result = prime * result + ((getBatchallmoney() == null) ? 0 : getBatchallmoney().hashCode());
+        result = prime * result + ((getBatchdealitems() == null) ? 0 : getBatchdealitems().hashCode());
+        result = prime * result + ((getBatchdealmoney() == null) ? 0 : getBatchdealmoney().hashCode());
+        result = prime * result + ((getBatchfailitems() == null) ? 0 : getBatchfailitems().hashCode());
+        result = prime * result + ((getBatchfailmoney() == null) ? 0 : getBatchfailmoney().hashCode());
+        result = prime * result + ((getCommoney() == null) ? 0 : getCommoney().hashCode());
+        result = prime * result + ((getFeeRate() == null) ? 0 : getFeeRate().hashCode());
+        result = prime * result + ((getFeemoney() == null) ? 0 : getFeemoney().hashCode());
+        result = prime * result + ((getProfitmoney() == null) ? 0 : getProfitmoney().hashCode());
+        result = prime * result + ((getShouldMoney() == null) ? 0 : getShouldMoney().hashCode());
+        result = prime * result + ((getIndividualTax() == null) ? 0 : getIndividualTax().hashCode());
+        result = prime * result + ((getIndividualMoney() == null) ? 0 : getIndividualMoney().hashCode());
+        result = prime * result + ((getYinhuaTax() == null) ? 0 : getYinhuaTax().hashCode());
+        result = prime * result + ((getYinhuaMoney() == null) ? 0 : getYinhuaMoney().hashCode());
+        result = prime * result + ((getTaxRate() == null) ? 0 : getTaxRate().hashCode());
+        result = prime * result + ((getTaxmoney() == null) ? 0 : getTaxmoney().hashCode());
+        result = prime * result + ((getTaxmoreTax() == null) ? 0 : getTaxmoreTax().hashCode());
+        result = prime * result + ((getTaxmoremoney() == null) ? 0 : getTaxmoremoney().hashCode());
+        result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
+        result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        return result;
     }
 }

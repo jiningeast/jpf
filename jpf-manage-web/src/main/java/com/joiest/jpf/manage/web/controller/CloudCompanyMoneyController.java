@@ -1,15 +1,14 @@
 package com.joiest.jpf.manage.web.controller;
 
 
+import com.joiest.jpf.common.po.PayCloudCompanyMoney;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
 import com.joiest.jpf.dto.GetCloudMoneyDfResponse;
-import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
-import com.joiest.jpf.entity.CloudDfMoneyInfo;
-import com.joiest.jpf.facade.CloudCompanyMoneyServiceFacade;
-import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
+import com.joiest.jpf.entity.*;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.util.ServicePayUtils;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +44,15 @@ public class CloudCompanyMoneyController {
 
     @Autowired
     private CloudDfMoneyServiceFacade cloudDfMoneyServiceFacade;
+
+    @Autowired
+    private CloudCompanyAgentServiceFacade cloudCompanyAgentServiceFacade;
+
+    @Autowired
+    private CloudCompanySalesServiceFacade cloudCompanySalesServiceFacade;
+
+    @Autowired
+    private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
     @RequestMapping("/index")
     public String index(){
@@ -472,6 +481,56 @@ public class CloudCompanyMoneyController {
 
         }
 
+    }
+
+    /**
+     * 批处理代付订单的各金额字段
+     */
+    @RequestMapping("/dealDfOrders")
+    public void dealDfOrders(){
+        List<PayCloudCompanyMoney> list = cloudCompanyMoneyServiceFacade.getAllRecords();
+        for (PayCloudCompanyMoney single:list){
+            String money = single.getCommoney().toString();
+
+            CloudCompanyMoneyInfo cloudCompanyMoneyInfo = new CloudCompanyMoneyInfo();
+            CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getMerchInfoByMerchNo(single.getMerchNo());
+            String agentNo = ConfigUtil.getValue("XINXIANG_AGENT_NO");
+            // 查询代理商户和业务商户的费率，计算总费率
+            CloudCompanyAgentInfo agentInfo = cloudCompanyAgentServiceFacade.getAgentByAgentNo(agentNo);
+            CloudCompanySalesInfo salesInfo = cloudCompanySalesServiceFacade.getSalesBySalesNo(companyInfo.getMerchNo());
+            Double totalRate = Double.parseDouble(agentInfo.getAgentRate().toString()) + Double.parseDouble(salesInfo.getSalesRate().toString());
+            Double moneyDouble = new Double(money);
+            Double feeMoney = totalRate * moneyDouble;
+            cloudCompanyMoneyInfo.setFeeRate(new BigDecimal(totalRate));
+            cloudCompanyMoneyInfo.setFeemoney(new BigDecimal(feeMoney).setScale(2,BigDecimal.ROUND_DOWN));   // 服务费金额：实发金额*服务费率
+            // 增值税金额
+            Double addedValueTax = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX"));
+            Double taxMoney = ( moneyDouble + feeMoney ) / ( 1 + addedValueTax ) * addedValueTax;
+            cloudCompanyMoneyInfo.setTaxRate(new BigDecimal(addedValueTax));
+            cloudCompanyMoneyInfo.setTaxmoney(new BigDecimal(taxMoney).setScale(2,BigDecimal.ROUND_DOWN));
+            // 增值税附加金额
+            Double addedValueTaxAddtion = new Double(ConfigUtil.getValue("ADDED_VALUE_TAX_ADDITION"));
+            Double addedValueTaxAddtionMoney = taxMoney*addedValueTaxAddtion;
+            cloudCompanyMoneyInfo.setTaxmoreTax(new BigDecimal(addedValueTaxAddtion));
+            cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal(addedValueTaxAddtionMoney).setScale(2,BigDecimal.ROUND_DOWN));
+            // 毛利金额
+            Double individualTax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
+            Double supposePay = moneyDouble / (1-individualTax);   // 应发金额
+            Double profit = (moneyDouble + feeMoney) - (supposePay + taxMoney + addedValueTaxAddtionMoney);
+            cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit).setScale(2,BigDecimal.ROUND_DOWN));      // 毛利金额
+            BigDecimal shouldMoney = new BigDecimal(moneyDouble / ( 1-individualTax-0.0003)).setScale(2,BigDecimal.ROUND_DOWN);
+            cloudCompanyMoneyInfo.setShouldMoney(shouldMoney);
+            cloudCompanyMoneyInfo.setIndividualTax(new BigDecimal(individualTax));
+            cloudCompanyMoneyInfo.setIndividualMoney(new BigDecimal(shouldMoney.doubleValue()*individualTax));
+            Double yinhuaTax = 0.0003;
+            cloudCompanyMoneyInfo.setYinhuaTax(new BigDecimal(yinhuaTax));
+            cloudCompanyMoneyInfo.setYinhuaMoney(new BigDecimal(shouldMoney.doubleValue()*yinhuaTax).setScale(2,BigDecimal.ROUND_DOWN));
+
+            PayCloudCompanyMoney payCloudCompanyMoney = new PayCloudCompanyMoney();
+            BeanCopier beanCopier = BeanCopier.create(CloudCompanyMoneyInfo.class, PayCloudCompanyMoney.class, false);
+            beanCopier.copy(cloudCompanyMoneyInfo, payCloudCompanyMoney, null);
+            cloudCompanyMoneyServiceFacade.updateRecById(payCloudCompanyMoney,single.getId());
+        }
     }
 
 }

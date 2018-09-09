@@ -34,6 +34,7 @@
                             return "<font style='color: #942a25'>已激活</font>";
                         }
                     }},
+                {field:'activePhone',title:'激活人手机号',width:"10%"},
                 {field:'expireMonth',title:'有效期',width:"4%",formatter:function (value,row,index) {
                         return value+"个月";
                     }},

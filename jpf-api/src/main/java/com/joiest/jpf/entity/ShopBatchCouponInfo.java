@@ -15,6 +15,11 @@ public class ShopBatchCouponInfo {
     private String batchId;
 
     /**
+     * 批次号
+     */
+    private String batchNo;
+
+    /**
      *
      */
     private String companyId;
@@ -113,6 +118,14 @@ public class ShopBatchCouponInfo {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId;
+    }
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
     }
 
     public String getCompanyId() {

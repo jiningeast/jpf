@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class CloudCompanyMoneyInfo {
-
     /**
      * 自增ID
      */
@@ -21,22 +20,12 @@ public class CloudCompanyMoneyInfo {
     private String merchNo;
 
     /**
-     * 发放总金额
-     */
-    private BigDecimal commoney;
-
-    /**
-     * 发放时间
-     */
-    private Date addtime;
-
-    /**
-     * 企业添加人ID
+     * 企业ID
      */
     private String uid;
 
     /**
-     * 充值到账对应的交易记录编号
+     * excel中的合同编号
      */
     private String fid;
 
@@ -96,9 +85,14 @@ public class CloudCompanyMoneyInfo {
     private BigDecimal batchfailmoney;
 
     /**
-     * 更新时间
+     * 发放总金额
      */
-    private Date updatetime;
+    private BigDecimal commoney;
+
+    /**
+     * 服务费率
+     */
+    private BigDecimal feeRate;
 
     /**
      * 服务费金额
@@ -106,9 +100,49 @@ public class CloudCompanyMoneyInfo {
     private BigDecimal feemoney;
 
     /**
+     * 毛利金额
+     */
+    private BigDecimal profitmoney;
+
+    /**
+     * 应发金额
+     */
+    private BigDecimal shouldMoney;
+
+    /**
+     * 个人所得税税率
+     */
+    private BigDecimal individualTax;
+
+    /**
+     * 个人所得税金额
+     */
+    private BigDecimal individualMoney;
+
+    /**
+     * 印花税
+     */
+    private BigDecimal yinhuaTax;
+
+    /**
+     * 印花税金额
+     */
+    private BigDecimal yinhuaMoney;
+
+    /**
+     * 增值税税率
+     */
+    private BigDecimal taxRate;
+
+    /**
      * 增值税金额
      */
     private BigDecimal taxmoney;
+
+    /**
+     * 增值税税率
+     */
+    private BigDecimal taxmoreTax;
 
     /**
      * 增值税附加金额
@@ -116,22 +150,26 @@ public class CloudCompanyMoneyInfo {
     private BigDecimal taxmoremoney;
 
     /**
-     * 毛利金额
+     * 发放时间
      */
-    private BigDecimal profitmoney;
+    private Date addtime;
+
+    /**
+     * 更新时间
+     */
+    private Date updatetime;
 
     /**
      * 公司名称
      */
     private String name;
 
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getAgentNo() {
@@ -139,7 +177,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setAgentNo(String agentNo) {
-        this.agentNo = agentNo == null ? null : agentNo.trim();
+        this.agentNo = agentNo;
     }
 
     public String getMerchNo() {
@@ -147,23 +185,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setMerchNo(String merchNo) {
-        this.merchNo = merchNo == null ? null : merchNo.trim();
-    }
-
-    public BigDecimal getCommoney() {
-        return commoney;
-    }
-
-    public void setCommoney(BigDecimal commoney) {
-        this.commoney = commoney;
-    }
-
-    public Date getAddtime() {
-        return addtime;
-    }
-
-    public void setAddtime(Date addtime) {
-        this.addtime = addtime;
+        this.merchNo = merchNo;
     }
 
     public String getUid() {
@@ -171,7 +193,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setUid(String uid) {
-        this.uid = uid == null ? null : uid.trim();
+        this.uid = uid;
     }
 
     public String getFid() {
@@ -179,7 +201,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setFid(String fid) {
-        this.fid = fid == null ? null : fid.trim();
+        this.fid = fid;
     }
 
     public Byte getVid() {
@@ -195,7 +217,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setIntro(String intro) {
-        this.intro = intro == null ? null : intro.trim();
+        this.intro = intro;
     }
 
     public Byte getMontype() {
@@ -219,7 +241,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setBatchno(String batchno) {
-        this.batchno = batchno == null ? null : batchno.trim();
+        this.batchno = batchno;
     }
 
     public String getBatchitems() {
@@ -227,7 +249,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setBatchitems(String batchitems) {
-        this.batchitems = batchitems == null ? null : batchitems.trim();
+        this.batchitems = batchitems;
     }
 
     public BigDecimal getBatchallmoney() {
@@ -243,7 +265,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setBatchdealitems(String batchdealitems) {
-        this.batchdealitems = batchdealitems == null ? null : batchdealitems.trim();
+        this.batchdealitems = batchdealitems;
     }
 
     public BigDecimal getBatchdealmoney() {
@@ -259,7 +281,7 @@ public class CloudCompanyMoneyInfo {
     }
 
     public void setBatchfailitems(String batchfailitems) {
-        this.batchfailitems = batchfailitems == null ? null : batchfailitems.trim();
+        this.batchfailitems = batchfailitems;
     }
 
     public BigDecimal getBatchfailmoney() {
@@ -270,12 +292,20 @@ public class CloudCompanyMoneyInfo {
         this.batchfailmoney = batchfailmoney;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public BigDecimal getCommoney() {
+        return commoney;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setCommoney(BigDecimal commoney) {
+        this.commoney = commoney;
+    }
+
+    public BigDecimal getFeeRate() {
+        return feeRate;
+    }
+
+    public void setFeeRate(BigDecimal feeRate) {
+        this.feeRate = feeRate;
     }
 
     public BigDecimal getFeemoney() {
@@ -286,12 +316,76 @@ public class CloudCompanyMoneyInfo {
         this.feemoney = feemoney;
     }
 
+    public BigDecimal getProfitmoney() {
+        return profitmoney;
+    }
+
+    public void setProfitmoney(BigDecimal profitmoney) {
+        this.profitmoney = profitmoney;
+    }
+
+    public BigDecimal getShouldMoney() {
+        return shouldMoney;
+    }
+
+    public void setShouldMoney(BigDecimal shouldMoney) {
+        this.shouldMoney = shouldMoney;
+    }
+
+    public BigDecimal getIndividualTax() {
+        return individualTax;
+    }
+
+    public void setIndividualTax(BigDecimal individualTax) {
+        this.individualTax = individualTax;
+    }
+
+    public BigDecimal getIndividualMoney() {
+        return individualMoney;
+    }
+
+    public void setIndividualMoney(BigDecimal individualMoney) {
+        this.individualMoney = individualMoney;
+    }
+
+    public BigDecimal getYinhuaTax() {
+        return yinhuaTax;
+    }
+
+    public void setYinhuaTax(BigDecimal yinhuaTax) {
+        this.yinhuaTax = yinhuaTax;
+    }
+
+    public BigDecimal getYinhuaMoney() {
+        return yinhuaMoney;
+    }
+
+    public void setYinhuaMoney(BigDecimal yinhuaMoney) {
+        this.yinhuaMoney = yinhuaMoney;
+    }
+
+    public BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
     public BigDecimal getTaxmoney() {
         return taxmoney;
     }
 
     public void setTaxmoney(BigDecimal taxmoney) {
         this.taxmoney = taxmoney;
+    }
+
+    public BigDecimal getTaxmoreTax() {
+        return taxmoreTax;
+    }
+
+    public void setTaxmoreTax(BigDecimal taxmoreTax) {
+        this.taxmoreTax = taxmoreTax;
     }
 
     public BigDecimal getTaxmoremoney() {
@@ -302,12 +396,20 @@ public class CloudCompanyMoneyInfo {
         this.taxmoremoney = taxmoremoney;
     }
 
-    public BigDecimal getProfitmoney() {
-        return profitmoney;
+    public Date getAddtime() {
+        return addtime;
     }
 
-    public void setProfitmoney(BigDecimal profitmoney) {
-        this.profitmoney = profitmoney;
+    public void setAddtime(Date addtime) {
+        this.addtime = addtime;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 
     public String getName() {
