@@ -207,6 +207,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             payShopCustomerMapper.updateByExampleSelective(customerUpdate,customerExample);
 
             payShopCustomer = customerInsert;
+            failCustomer.setPhone(phone);
         }else{
             // 充值豆
             payShopCustomer = customerList.get(0);
@@ -216,6 +217,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             payShopCustomer.setCode(newCode);
             payShopCustomer.setUpdatetime(new Date());
             payShopCustomerMapper.updateByPrimaryKey(payShopCustomer);
+            failCustomer.setPhone(payShopCustomer.getPhone());
         }
 
         // 查找充值面值的一张券

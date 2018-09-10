@@ -3,6 +3,7 @@ package com.joiest.jpf.common.util;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -12,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -165,6 +167,7 @@ public class ExcelDealUtils {
         }
         return value;
     }
+
     /**
      * 导出excel
      * @response 响应头
@@ -218,6 +221,128 @@ public class ExcelDealUtils {
                 //创建具体的列
                 HSSFCell ncell=nrow.createCell(m);
                 ncell.setCellValue(job.get(fild.get(m)).toString());
+            }
+            j++;
+        }
+        OutputStream output= null;
+        try {
+            String fileName = System.currentTimeMillis()+".xls";
+            if(type == 1){
+
+                response.reset();
+                output = response.getOutputStream();
+
+                response.setHeader("Content-disposition", "attachment;filename="+new String(fileName.getBytes("gbk"), "iso8859-1"));
+                response.setContentType("application/vnd.ms-excel");
+                workbook.write(output);
+                output.close();
+            }else{
+
+                File fileDir = new File(path);
+                if (!fileDir.exists()) {
+
+                    fileDir.mkdirs();
+                }
+                String actual = path+fileName;
+                File file = new File(actual);
+                file.createNewFile();
+                //将excel写入
+                FileOutputStream stream= FileUtils.openOutputStream(file);
+                workbook.write(stream);
+                stream.close();
+
+                JSONObject fileInfo = new JSONObject();
+                fileInfo.put("localUrl",actual);//服务器实际路径
+                fileInfo.put("fileName",fileName);//文件名
+
+                res.put("data",fileInfo);
+            }
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+
+    /**
+     * 导出excel 数据格式为info 可加数据类型
+     * @response 响应头
+     * @param titles excel表头信息
+     * @param filds 表头所对应的字段同时对应数据中的字段名
+     *@param data 数据
+     *@param type 1 下载  2 生成文件
+     * */
+    public JSONObject exportExcelByInfo(HttpServletResponse response, String titles, String filds, List data, int type, String path) throws Exception{
+
+        if(titles.isEmpty() || filds.isEmpty() || data.isEmpty()) return null;
+        if(type<1) type = 1;
+        //组装数据
+        JSONArray excelData  = JSONArray.fromObject(data);
+        List dataExecl  = data;
+
+        //定义字段类型
+        JSONArray fild =  JSONArray.fromObject(filds);
+        //定义表头
+        JSONArray title=JSONArray.fromObject(titles);
+
+        if(fild.isEmpty() || title.isEmpty() || excelData.isEmpty()) return null;
+        if(fild.size()!=title.size()) return null;
+
+        //定义返回信息
+        JSONObject res = new JSONObject();
+        res.put("code","10000");
+        res.put("info","SUCCESS");
+
+        //创建excel工作簿
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        //创建工作表sheet
+        HSSFSheet sheet=workbook.createSheet();
+        //创建第一行
+        HSSFRow row=sheet.createRow(0);
+        HSSFCell cell=null;
+        //插入第一行数据的表头
+        for(int i=0;i<title.size();i++){
+            cell=row.createCell(i);
+            cell.setCellValue(title.get(i).toString());
+        }
+        int j=1;
+        //循环数据
+        for(int i=0;i<dataExecl.size();i++){
+
+            Object info = dataExecl.get(i);
+            // 通过实例得到类
+            //@SuppressWarnings("rawtypes")
+            Class infoClass = info.getClass(); //studentClass
+
+            //String findStr = fieldName.getType().toString();//获取字段类型
+            //String fildType = StringUtils.substring(findStr,findStr.lastIndexOf(".")+1);
+
+            HSSFRow nrow=sheet.createRow(j);//创建行
+            //循环整体列
+            for (int m=0;m<title.size();m++){
+
+                //创建具体的列
+                HSSFCell ncell=nrow.createCell(m);
+
+                Field fieldName = infoClass.getDeclaredField(fild.get(m).toString());
+                fieldName.setAccessible(true);
+                Object fieldVal = fieldName.get(info);
+
+                if(fieldVal==null) continue;
+
+                String timeVal = "";
+                if(fieldName.get(info) instanceof Date){
+
+                    timeVal =  DateUtils.dateToString((Date) fieldName.get(info));
+                    if(StringUtils.isBlank(timeVal)){
+                        continue;
+                    }
+                    ncell.setCellValue(timeVal);
+                }else{
+
+                    ncell.setCellValue(fieldVal.toString());
+                }
             }
             j++;
         }
