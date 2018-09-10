@@ -449,7 +449,15 @@ public class DateUtils {
 		}
 		return time2;
 	}
+	/**
+	 * date类型转换为时间字符串   年月日格式
+	 * */
+	public static String dateToString(Date date){
 
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATEFORMATLONG);
+		String timeStr = simpleDateFormat.format(date);
+		return timeStr;
+	}
 	public static void main(String[] args) {
 //		System.out.println(DateUtils.getString2YmdDate("20120101").getTime());
 //		System.out.println(DateUtils.getCurrentTimeMillis());

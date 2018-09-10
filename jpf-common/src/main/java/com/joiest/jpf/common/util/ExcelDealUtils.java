@@ -278,7 +278,7 @@ public class ExcelDealUtils {
         if(titles.isEmpty() || filds.isEmpty() || data.isEmpty()) return null;
         if(type<1) type = 1;
         //组装数据
-        JSONArray excelData  = JSONArray.fromObject(data);
+        //JSONArray excelData  = JSONArray.fromObject(data);
         List dataExecl  = data;
 
         //定义字段类型
@@ -286,7 +286,7 @@ public class ExcelDealUtils {
         //定义表头
         JSONArray title=JSONArray.fromObject(titles);
 
-        if(fild.isEmpty() || title.isEmpty() || excelData.isEmpty()) return null;
+        if(fild.isEmpty() || title.isEmpty() || dataExecl.isEmpty()) return null;
         if(fild.size()!=title.size()) return null;
 
         //定义返回信息
