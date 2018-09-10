@@ -99,6 +99,13 @@ public class ShopStockCardInfo {
      */
     private Date addtime;
 
+
+    /**
+     * 支付时间
+     */
+    private Date paytime;
+
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -253,4 +260,11 @@ public class ShopStockCardInfo {
         this.addtime = addtime;
     }
 
+    public Date getPaytime() {
+        return paytime;
+    }
+
+    public void setPaytime(Date paytime) {
+        this.paytime = paytime;
+    }
 }
