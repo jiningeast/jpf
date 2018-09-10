@@ -548,7 +548,7 @@ public class ShopBatchController {
 
     // 群发的短信
     public void sendToPersonsSms(ShopCustomerInfo customerInfo,String batchNo){
-        String content = "尊敬的"+customerInfo.getName()+"，您的欣豆数量有变动，请微信搜索登录“欣享爱生活”查看。";
+        String content = "尊敬的用户，您的欣豆数量有变动，请微信搜索登录“欣享爱生活”查看。";
         Map<String,String> smsResMap = SmsUtils.send(customerInfo.getPhone(),content,"xinxiang");
         Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
         if ( responseMap.get("code").equals("10000") ){
