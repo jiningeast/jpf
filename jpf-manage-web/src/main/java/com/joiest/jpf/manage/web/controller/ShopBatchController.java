@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -547,7 +548,7 @@ public class ShopBatchController {
 
     // 群发的短信
     public void sendToPersonsSms(ShopCustomerInfo customerInfo,String batchNo){
-        String content = "尊敬的"+customerInfo.getName()+"，您在欣享爱生活平台获得一张欣券，请微信搜索“欣享爱生活”公众号，进入商城即可消费。";
+        String content = "尊敬的"+customerInfo.getName()+"，您的欣豆数量有变动，请微信搜索登录“欣享爱生活”查看。";
         Map<String,String> smsResMap = SmsUtils.send(customerInfo.getPhone(),content,"xinxiang");
         Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
         if ( responseMap.get("code").equals("10000") ){
@@ -588,10 +589,10 @@ public class ShopBatchController {
     /**
      * 重新发送短信
      */
-    @RequestMapping("/sendSmsAgain")
+    @RequestMapping(value = "/sendSmsAgain", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public JpfResponseDto sendSmsAgain(String data){
-        String[] couponIdArr = data.split(",");
+    public JpfResponseDto sendSmsAgain(String couponIds){
+        String[] couponIdArr = couponIds.split(",");
         for (int i=0; i<couponIdArr.length; i++) {
             ShopBatchCouponInfo shopBatchCouponInfo = shopBatchCouponServiceFacade.getCouponById(couponIdArr[i]);
             ShopCustomerInfo shopCustomerInfo = new ShopCustomerInfo();
