@@ -174,7 +174,7 @@ public class ShopBatchController {
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
-        File file = new File(path + filename2);
+        File file = new File(path + filename);
         HttpHeaders headers = new HttpHeaders();
 
         String filename3 = null;
@@ -183,7 +183,7 @@ public class ShopBatchController {
             // 所有浏览器都会使用本地编码，即中文操作系统使用GBK
             // 浏览器收到这个文件名后，会使用iso-8859-1来解码
             // 编码流程:把中文用GBK编码为字节数组,再用ISO-8859-1编码,浏览器先用ISO-8859-1解码为字节数组,在用GBK解码为中文
-            filename3 = new String(filename2.getBytes("GBK"), "ISO-8859-1");
+            filename3 = new String(filename.getBytes("GBK"), "ISO-8859-1");
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
