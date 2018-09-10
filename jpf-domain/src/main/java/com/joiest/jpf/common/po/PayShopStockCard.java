@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PayShopStockCard implements Serializable {
     /**
-     * 
+     * 主键id
      */
     private String id;
 
@@ -84,6 +84,11 @@ public class PayShopStockCard implements Serializable {
      * 客户手机号
      */
     private String customerPhone;
+
+    /**
+     * 支付时间
+     */
+    private Date paytime;
 
     /**
      * 1=中国石化 2=中国石油 3=话费充值
@@ -230,6 +235,14 @@ public class PayShopStockCard implements Serializable {
         this.customerPhone = customerPhone == null ? null : customerPhone.trim();
     }
 
+    public Date getPaytime() {
+        return paytime;
+    }
+
+    public void setPaytime(Date paytime) {
+        this.paytime = paytime;
+    }
+
     public Byte getType() {
         return type;
     }
@@ -279,6 +292,7 @@ public class PayShopStockCard implements Serializable {
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName=").append(customerName);
         sb.append(", customerPhone=").append(customerPhone);
+        sb.append(", paytime=").append(paytime);
         sb.append(", type=").append(type);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
@@ -318,6 +332,7 @@ public class PayShopStockCard implements Serializable {
             && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
             && (this.getCustomerName() == null ? other.getCustomerName() == null : this.getCustomerName().equals(other.getCustomerName()))
             && (this.getCustomerPhone() == null ? other.getCustomerPhone() == null : this.getCustomerPhone().equals(other.getCustomerPhone()))
+            && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
@@ -346,6 +361,7 @@ public class PayShopStockCard implements Serializable {
         result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());
         result = prime * result + ((getCustomerName() == null) ? 0 : getCustomerName().hashCode());
         result = prime * result + ((getCustomerPhone() == null) ? 0 : getCustomerPhone().hashCode());
+        result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
