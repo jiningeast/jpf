@@ -254,10 +254,11 @@ public class ShopStockOrderController {
             jsonObject.put("info","未获取到采购订单");
             return jsonObject;
         }
-        //获取采购订单商品
+        //获取采购订单商
         GetShopStockOrderProductResponse allPro = shopStockOrderProductServiceFacade.getProduct(shopStockOrderInfo.getOrderNo());
         List<ShopStockOrderProductInfo>  orderProductList = allPro.getList();
 
+        JSONObject purchaseCount = new JSONObject();//记录每个商品数量
         //处理订单商品
         JSONObject orderP = new JSONObject();
         for (int i=0;i< orderProductList.size();i++) {
@@ -271,7 +272,10 @@ public class ShopStockOrderController {
             orderPtwo.put("supplierName",one.getSupplierName());
             orderPtwo.put("cardType",one.getCardType());
             orderP.put(one.getProductId(),orderPtwo);
+
+            purchaseCount.put(one.getProductId(),0);//初始上传商品数量为0
         }
+
         InputStream in = file.getInputStream();
         Map<Object,Object> rowoOb = new ExcelDealUtils().getImportExcel(in, file.getOriginalFilename());
 
@@ -335,6 +339,11 @@ public class ShopStockOrderController {
                             scinfo.setProductName(siglePro.get("productName").toString());
                             scinfo.setSupplierId(siglePro.get("supplierId").toString());
                             scinfo.setSupplierName(siglePro.get("supplierName").toString());
+
+                            int shopCount = Integer.parseInt(purchaseCount.get(lie.getValue()).toString())+1;//获取当前商品上传数量
+                            //处理单个商品上传数
+                            purchaseCount.put(lie.getValue().toString(),shopCount);
+
                         }else{
 
                             flag = false;
@@ -409,7 +418,25 @@ public class ShopStockOrderController {
             jsonObject.put("info","采购数量与订单商品数不符，请修改后上传！");
             return jsonObject;
         }
+        String sigleShopid = "";
+        String shopCountInfo = "";
+        //单个商品采购数量验证
+        for (int i=0;i< orderProductList.size();i++) {
 
+            ShopStockOrderProductInfo one =  orderProductList.get(i);
+
+            if(!one.getAmount().toString().equals(purchaseCount.get(one.getProductId()).toString())){
+
+                sigleShopid+=one.getProductId()+",";
+            }
+        }
+        //采购数量和订单商品数量不符
+        if(StringUtils.isNotBlank(sigleShopid)){
+
+            shopCountInfo = "商品编号："+sigleShopid+"  采购数量与采购订单商品数量不一致";
+            jsonObject.put("info",shopCountInfo);
+            return jsonObject;
+        }
         String fileUUid = "purchase_"+UUID.randomUUID().toString();
 
         //组装文件数据
