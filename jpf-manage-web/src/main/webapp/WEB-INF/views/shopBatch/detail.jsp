@@ -18,7 +18,7 @@
             iconCls:'icon-redo',
             handler:function(){
                 $.messager.confirm('确认','确定要重发短信吗？',function(r){
-                    var rows = $('#dgDetail').datagrid('getChecked'); // 取得checkbox选择行的数据，返回元素记录的数组数据。
+                    var rows = $('#couponsDG').datagrid('getChecked'); // 取得checkbox选择行的数据，返回元素记录的数组数据。
                     if (rows.length <= 0) {
                         $.messager.alert('消息提示','请选择一条数据！','info');
                         return false;
@@ -27,14 +27,17 @@
                     param["couponIds"] = "";
                     if (r){
                         for (var i = 0; i < rows.length; i++) {
+                            if ( rows[i].isActive == 0 ){
+                                $.messager.alert('消息提示','请选择已经发送过短信的用户进行重发','info');
+                                return false;
+                            }
                             param['couponIds'] += rows[i].id+',';
                         }
                         param['couponIds'] = param['couponIds'].substr(0,param['couponIds'].length-1);
 
                         $.ajax({
-                            type : 'post',
-                            url : 'sendSmsAgain',
-                            data : param,
+                            type : 'get',
+                            url : 'sendSmsAgain?couponIds='+param["couponIds"],
                             dataType:"json",
                             contentType:"application/json",
                             success : function(msg){
@@ -42,7 +45,7 @@
                                     $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
                                 } else {
                                     $.messager.alert('消息提示','操作成功!','info');
-                                    $('#dg').datagrid('reload');
+                                    $('#couponsDG').datagrid('reload');
                                 }
                             },
                             error : function () {

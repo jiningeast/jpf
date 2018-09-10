@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -173,7 +174,7 @@ public class ShopBatchController {
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
-        File file = new File(path + filename2);
+        File file = new File(path + filename);
         HttpHeaders headers = new HttpHeaders();
 
         String filename3 = null;
@@ -182,7 +183,7 @@ public class ShopBatchController {
             // 所有浏览器都会使用本地编码，即中文操作系统使用GBK
             // 浏览器收到这个文件名后，会使用iso-8859-1来解码
             // 编码流程:把中文用GBK编码为字节数组,再用ISO-8859-1编码,浏览器先用ISO-8859-1解码为字节数组,在用GBK解码为中文
-            filename3 = new String(filename2.getBytes("GBK"), "ISO-8859-1");
+            filename3 = new String(filename.getBytes("GBK"), "ISO-8859-1");
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
@@ -274,7 +275,7 @@ public class ShopBatchController {
             String mobile = shopCompanyInfo.getReceivePhone();
             // 短信内容
 //            String content = "已将批次号为" + shopBatchInfo.getBatchNo() + "的欣券激活码发送至您的邮箱，附件压缩包的密码是：" + shopBatchInfo.getZipPassword();
-            String content = "尊敬的客户您好，批次号为【" + shopBatchInfo.getBatchNo() + "】的解压密码为【"+ shopBatchInfo.getZipPassword() +"】，请您妥善保管";
+            String content = "尊敬的客户您好，批次号为{" + shopBatchInfo.getBatchNo() + "}的解压密码为{"+ shopBatchInfo.getZipPassword() +"}，请您妥善保管。";
             Map<String,String> smsResMap = SmsUtils.send(mobile,content,"xinxiang");
             Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
             if ( responseMap.get("code").equals("10000") ){
@@ -547,7 +548,7 @@ public class ShopBatchController {
 
     // 群发的短信
     public void sendToPersonsSms(ShopCustomerInfo customerInfo,String batchNo){
-        String content = "尊敬的"+customerInfo.getName()+"，您在欣享爱生活平台获得一张欣券，请微信搜索“欣享爱生活”公众号，进入商城即可消费。";
+        String content = "尊敬的用户，您的欣豆数量有变动，请微信搜索登录“欣享爱生活”查看。";
         Map<String,String> smsResMap = SmsUtils.send(customerInfo.getPhone(),content,"xinxiang");
         Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
         if ( responseMap.get("code").equals("10000") ){
@@ -588,10 +589,10 @@ public class ShopBatchController {
     /**
      * 重新发送短信
      */
-    @RequestMapping("/sendSmsAgain")
+    @RequestMapping(value = "/sendSmsAgain", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public JpfResponseDto sendSmsAgain(String data){
-        String[] couponIdArr = data.split(",");
+    public JpfResponseDto sendSmsAgain(String couponIds){
+        String[] couponIdArr = couponIds.split(",");
         for (int i=0; i<couponIdArr.length; i++) {
             ShopBatchCouponInfo shopBatchCouponInfo = shopBatchCouponServiceFacade.getCouponById(couponIdArr[i]);
             ShopCustomerInfo shopCustomerInfo = new ShopCustomerInfo();
