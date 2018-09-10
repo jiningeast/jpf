@@ -522,13 +522,13 @@ public class CloudTaskController {
         cloudCompanyMoneyInfo.setTaxmoremoney(new BigDecimal(addedValueTaxAddtionMoney).setScale(2,BigDecimal.ROUND_DOWN));
         // 毛利金额
         Double individualTax = new Double(ConfigUtil.getValue("INDIVIDUAL_TAX"));
-        BigDecimal shouldMoney = new BigDecimal(moneyDouble / ( 1-individualTax-0.0003)).setScale(2,BigDecimal.ROUND_DOWN); // 应发金额
+        Double yinhuaTax = new Double(ConfigUtil.getValue("YINHUA_TAX"));
+        BigDecimal shouldMoney = new BigDecimal(moneyDouble / ( 1-individualTax-yinhuaTax)).setScale(2,BigDecimal.ROUND_DOWN); // 应发金额
         Double profit = (moneyDouble + feeMoney) - (shouldMoney.doubleValue() + taxMoney + addedValueTaxAddtionMoney);
         cloudCompanyMoneyInfo.setProfitmoney(new BigDecimal(profit).setScale(2,BigDecimal.ROUND_DOWN));      // 毛利金额
         cloudCompanyMoneyInfo.setShouldMoney(shouldMoney);
         cloudCompanyMoneyInfo.setIndividualTax(new BigDecimal(individualTax));
         cloudCompanyMoneyInfo.setIndividualMoney(new BigDecimal(shouldMoney.doubleValue()*individualTax));
-        Double yinhuaTax = 0.0003;
         cloudCompanyMoneyInfo.setYinhuaTax(new BigDecimal(yinhuaTax));
         cloudCompanyMoneyInfo.setYinhuaMoney(new BigDecimal(shouldMoney.doubleValue()*yinhuaTax).setScale(2,BigDecimal.ROUND_DOWN));
         // 判断有没有已经存在的合同编号
