@@ -3,6 +3,7 @@ package com.joiest.jpf.dao.repository.mapper.custom;
 import com.joiest.jpf.common.custom.PayShopOrderCustom;
 import com.joiest.jpf.common.po.PayShopOrder;
 import com.joiest.jpf.common.po.PayShopOrderExample;
+import com.joiest.jpf.common.custom.PayShopOrderCustomExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface PayShopOrderCustomMapper {
      *
      * @param example
      */
-    int countByExample(PayShopOrderExample example);
+    int countByExample(PayShopOrderCustomExample example);
 
 
     /**
@@ -21,12 +22,12 @@ public interface PayShopOrderCustomMapper {
      *
      * @param example
      */
-    int countByExampleList(PayShopOrderExample example);
+    int countByExampleList(PayShopOrderCustomExample example);
     /**
      *
      * @param example
      */
-    int deleteByExample(PayShopOrderExample example);
+    int deleteByExample(PayShopOrderCustomExample example);
 
     /**
      * 根据主键删除数据库的记录
@@ -54,7 +55,7 @@ public interface PayShopOrderCustomMapper {
      *
      * @param example
      */
-    List<PayShopOrder> selectByExample(PayShopOrderExample example);
+    List<PayShopOrder> selectByExample(PayShopOrderCustomExample example);
 
     /**
      * 根据主键获取一条数据库记录
@@ -69,7 +70,7 @@ public interface PayShopOrderCustomMapper {
      * @param record
      * @param example
      */
-    int updateByExampleSelective(@Param("record") PayShopOrder record, @Param("example") PayShopOrderExample example);
+    int updateByExampleSelective(@Param("record") PayShopOrder record, @Param("example") PayShopOrderCustomExample example);
 
     /**
      * 选择性更新数据库记录
@@ -77,7 +78,7 @@ public interface PayShopOrderCustomMapper {
      * @param record
      * @param example
      */
-    int updateByExample(@Param("record") PayShopOrder record, @Param("example") PayShopOrderExample example);
+    int updateByExample(@Param("record") PayShopOrder record, @Param("example") PayShopOrderCustomExample example);
 
     /**
      * 根据主键来更新部分数据库记录
@@ -99,27 +100,27 @@ public interface PayShopOrderCustomMapper {
      *
      * @param example
      */
-    List<PayShopOrderCustom> selectByExampleJoin(PayShopOrderExample example);
+    List<PayShopOrderCustom> selectByExampleJoin(PayShopOrderCustomExample example);
 
     /**
      * 订单列表接口查询
      *
      * @param example
      */
-    List<PayShopOrderCustom> selectByExampleInterfaceJoin(PayShopOrderExample example);
+    List<PayShopOrderCustom> selectByExampleInterfaceJoin(PayShopOrderCustomExample example);
 
     /**
      *
      *获取业务公司连表信息
 
      */
-    PayShopOrderCustom selectOrderAll(PayShopOrderExample example);
+    PayShopOrderCustom selectOrderAll(PayShopOrderCustomExample example);
 
     /**
      *
      *获取业务公司连表信息
 
      */
-    PayShopOrderCustom selectOrderInterfaceAll(PayShopOrderExample example);
+    PayShopOrderCustom selectOrderInterfaceAll(PayShopOrderCustomExample example);
 
 }

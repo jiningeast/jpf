@@ -154,6 +154,7 @@ public class ExcelDealUtils {
             // 空值
             case Cell.CELL_TYPE_BLANK:
                 value = "";
+
                 break;
             // 故障
             case Cell.CELL_TYPE_ERROR:

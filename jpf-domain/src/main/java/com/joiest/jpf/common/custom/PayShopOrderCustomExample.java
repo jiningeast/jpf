@@ -1,11 +1,11 @@
-package com.joiest.jpf.common.po;
+package com.joiest.jpf.common.custom;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PayShopOrderExample {
+public class PayShopOrderCustomExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -19,7 +19,7 @@ public class PayShopOrderExample {
     /**
      *
      */
-    public PayShopOrderExample() {
+    public PayShopOrderCustomExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -81,9 +81,9 @@ public class PayShopOrderExample {
      * 新加的 and
      * @param criteria
      */
-    /*public void  and(Criteria criteria) {
+    public void  and(Criteria criteria) {
         oredCriteria.add(criteria);
-    }*/
+    }
 
 
     /**

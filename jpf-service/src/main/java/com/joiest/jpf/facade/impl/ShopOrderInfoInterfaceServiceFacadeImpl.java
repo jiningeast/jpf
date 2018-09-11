@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayShopOrderCustom;
+import com.joiest.jpf.common.custom.PayShopOrderCustomExample;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
@@ -51,14 +52,14 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
             request.setPage("1");
         }
 
-        PayShopOrderExample example = new PayShopOrderExample();
-        PayShopOrderExample example1 = example;
+        PayShopOrderCustomExample example = new PayShopOrderCustomExample();
+        PayShopOrderCustomExample example1 = example;
         example.setPageNo(Long.parseLong(request.getPage()));
         example.setPageSize(Long.parseLong(request.getPageSize()));
         example.setOrderByClause("addtime DESC");
 
-        PayShopOrderExample.Criteria c =example.createCriteria();
-        PayShopOrderExample.Criteria c2 =example.createCriteria();
+        PayShopOrderCustomExample.Criteria c =example.createCriteria();
+        PayShopOrderCustomExample.Criteria c2 =example.createCriteria();
         c.andCustomerIdEqualTo(request.getUid());
         //目前只支持  订单号 、商品名称（商品类型） 搜索
         if ( StringUtils.isNotBlank(request.getKeyword()))
@@ -120,8 +121,8 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单编号不能为空");
         }
-        PayShopOrderExample example = new PayShopOrderExample();
-        PayShopOrderExample.Criteria c = example.createCriteria();
+        PayShopOrderCustomExample example = new PayShopOrderCustomExample();
+        PayShopOrderCustomExample.Criteria c = example.createCriteria();
         c.andCustomerIdEqualTo(request.getUid());
         c.andOrderNoEqualTo(request.getOrderNo());
         PayShopOrderCustom payShopOrderCustom = payShopOrderCustomMapper.selectOrderInterfaceAll(example);
