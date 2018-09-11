@@ -6,17 +6,17 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopCustomer;
-import com.joiest.jpf.common.util.AESUtils;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.GetShopStockCardResponse;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.entity.WeixinUserInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
+import com.joiest.jpf.facade.ShopStockCardServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import com.joiest.jpf.market.api.util.SmsUtils;
 import com.joiest.jpf.market.api.util.ToolsUtils;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +28,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("custom")
@@ -53,6 +56,9 @@ public class CustomController {
 
     @Autowired
     private WeixinUserServiceFacade weixinUserServiceFacade;
+
+    @Autowired
+    private ShopStockCardServiceFacade shopStockCardServiceFacade;
 
     /*
      * 绑定用户手机号
@@ -218,7 +224,90 @@ public class CustomController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"获取用户身份成功",responseDataJson);
     }
 
+    /*
+     * 用户卡密的Email附件的发送
+     * */
+    @RequestMapping(value = "/sendCardEmail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String sendCardEmail(HttpServletResponse Httpresponse,String data) throws Exception {
 
+        String email= null;
+        try {
+            String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+            String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+            Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+            email = (String) requestMap.get("email");
+
+            if(email==null){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+            }
+        } catch (Exception e) {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+        }
+        //判断请求参数是否合法
+        String emailpattern="^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
+        boolean isemail = Pattern.matches(emailpattern, email);
+
+        if(isemail==false){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "邮箱格式不正确", null);
+        }
+        //根据用户id查出当前用户的卡密
+        String cutomId=userInfo.getId();
+        if( StringUtils.isBlank(cutomId)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "用户未登录", null);
+        }
+        GetShopStockCardResponse response=shopStockCardServiceFacade.getCardM(cutomId);
+        if(response.getList().size()==0){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您还未有购买的卡密", null);
+        }
+       //如果有购买的卡密放到Excel
+//        设置excel标题以及字段
+        JSONArray res = new JSONArray();
+        res.add("卡号");
+        res.add("密码");
+        res.add("购买时间");
+
+        JSONArray filed = new JSONArray();
+        filed.add("cardNo");//卡号
+        filed.add("cardPass");
+        filed.add("paytime");
+        JSONObject excel;
+        String filepath="";
+        String filename="";
+
+        try {
+            excel = new ExcelDealUtils().exportExcelByInfo(Httpresponse,res.toString(),filed.toString(),response.getList(),2,ConfigUtil.getValue("EXCEL_PATH"));
+            filepath = excel.getJSONObject("data").get("localUrl").toString();
+            filename = excel.getJSONObject("data").get("fileName").toString();
+
+        } catch (Exception e) {
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件信息有误", null);
+        }
+        if(StringUtils.isBlank(filepath)|| StringUtils.isBlank(filename)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件信息有误", null);
+        }
+       // 发送邮件
+        String subject = "欣豆市场卡密";
+        String sendName = "欣享服务";
+        String recipients = email;//接收邮箱地址
+        String recipientsName = URLDecoder.decode(userInfo.getNickname(), "UTF-8");
+        ;//接收人姓名
+        String html = "<p>尊敬的客户，您好：</p>" +
+                "<p style='text-index:2em;'>附件打包文件是您的卡密。</p>" +
+                "<p style='text-index:2em; color:red;'>【请您知晓，您应妥善保管卡密信息。因泄露信息导致的损失需由您自行承担】</p>" +
+                "<p style='text-align:left;'>此文件为系统自动发送，无需回复。</p>" +
+                "<p style='text-align:left;'>欣享爱生活</p>";
+        Boolean sendStatus =SendMailUtil.sendMultipleEmail(subject,sendName,recipients,recipientsName,filepath,filename,html);
+
+        if ( !sendStatus ){
+            // 邮件发送失败
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "发送失败", null);
+        }else{
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "邮件发送成功", null);
+        }
+
+    }
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {

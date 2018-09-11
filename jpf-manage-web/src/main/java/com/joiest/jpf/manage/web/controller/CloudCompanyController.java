@@ -2,14 +2,12 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.common.exception.JpfErrorInfo;
-import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.dto.GetCloudCompanyResponse;
-import com.joiest.jpf.entity.*;
 import com.joiest.jpf.dto.GetCloudCompanysRequest;
 import com.joiest.jpf.dto.GetCloudCompanysResponse;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.apache.commons.lang.StringUtils;
@@ -25,10 +23,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 代理公司管理

@@ -91,7 +91,7 @@
                     amount: '<input id="amount'+rows[0].id+'"  data-id="'+rows[0].id+'"  name="amount" type="text"  data-options="required:true" style="color: #ff2b0e;">',
                     money: '<input id="money'+rows[0].id+'" type="text" class="easyui-textbox" disabled="disabled"> ',
                     cardType:'  <select id="cardType'+rows[0].id+'" class="easyui-combobox" style="width: 100px">\n' +
-                    '            <option value="1">直冲</option>\n' +
+                    '            <option value="1">代充</option>\n' +
                     '            <option value="2" selected="selected">卡密</option>\n' +
                     '        </select>\n',
                     delete: '<a class="delCoupon easyui-linkbutton" style="cursor: pointer;color: #0e90d2">删除</a>'

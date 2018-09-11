@@ -105,6 +105,10 @@ public class ShopStockCardInfo {
      */
     private Date paytime;
 
+    /**
+     * 支付时间格式转换
+     */
+    private String  paytimeCopy;
 
     private static final long serialVersionUID = 1L;
 
@@ -266,5 +270,13 @@ public class ShopStockCardInfo {
 
     public void setPaytime(Date paytime) {
         this.paytime = paytime;
+    }
+
+    public String getPaytimeCopy() {
+        return paytimeCopy;
+    }
+
+    public void setPaytimeCopy(String paytimeCopy) {
+        this.paytimeCopy = paytimeCopy;
     }
 }
