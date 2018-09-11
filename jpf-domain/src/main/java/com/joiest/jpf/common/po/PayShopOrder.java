@@ -16,6 +16,16 @@ public class PayShopOrder implements Serializable {
     private String orderNo;
 
     /**
+     * 充值类型 0=直充 1=代充 2=卡密
+     */
+    private Byte chargeType;
+
+    /**
+     * 充值类型是卡密的情况下对应的stock_card表id
+     */
+    private String stockCardId;
+
+    /**
      * 订单类型 1:中国石化; 2中国石油; 3话费充值
      */
     private Byte orderType;
@@ -156,6 +166,22 @@ public class PayShopOrder implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public Byte getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(Byte chargeType) {
+        this.chargeType = chargeType;
+    }
+
+    public String getStockCardId() {
+        return stockCardId;
+    }
+
+    public void setStockCardId(String stockCardId) {
+        this.stockCardId = stockCardId == null ? null : stockCardId.trim();
     }
 
     public Byte getOrderType() {
@@ -369,6 +395,8 @@ public class PayShopOrder implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", orderNo=").append(orderNo);
+        sb.append(", chargeType=").append(chargeType);
+        sb.append(", stockCardId=").append(stockCardId);
         sb.append(", orderType=").append(orderType);
         sb.append(", foreignOrderNo=").append(foreignOrderNo);
         sb.append(", requestedContent=").append(requestedContent);
@@ -416,6 +444,8 @@ public class PayShopOrder implements Serializable {
         PayShopOrder other = (PayShopOrder) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
+            && (this.getChargeType() == null ? other.getChargeType() == null : this.getChargeType().equals(other.getChargeType()))
+            && (this.getStockCardId() == null ? other.getStockCardId() == null : this.getStockCardId().equals(other.getStockCardId()))
             && (this.getOrderType() == null ? other.getOrderType() == null : this.getOrderType().equals(other.getOrderType()))
             && (this.getForeignOrderNo() == null ? other.getForeignOrderNo() == null : this.getForeignOrderNo().equals(other.getForeignOrderNo()))
             && (this.getRequestedContent() == null ? other.getRequestedContent() == null : this.getRequestedContent().equals(other.getRequestedContent()))
@@ -452,6 +482,8 @@ public class PayShopOrder implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
+        result = prime * result + ((getChargeType() == null) ? 0 : getChargeType().hashCode());
+        result = prime * result + ((getStockCardId() == null) ? 0 : getStockCardId().hashCode());
         result = prime * result + ((getOrderType() == null) ? 0 : getOrderType().hashCode());
         result = prime * result + ((getForeignOrderNo() == null) ? 0 : getForeignOrderNo().hashCode());
         result = prime * result + ((getRequestedContent() == null) ? 0 : getRequestedContent().hashCode());
