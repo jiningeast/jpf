@@ -9,14 +9,21 @@ import com.joiest.jpf.dao.repository.mapper.custom.PayShopStockLogCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopStockCardMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopStockOrderProductMapper;
+import com.joiest.jpf.dto.GetShopStockCardResponse;
 import com.joiest.jpf.entity.ShopProductInfo;
+import com.joiest.jpf.entity.ShopStockCardInfo;
 import com.joiest.jpf.facade.ShopProductServiceFacade;
 import com.joiest.jpf.facade.ShopStockCardServiceFacade;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -189,5 +196,40 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
         c.andStatusEqualTo((byte)1);
 
         return payShopStockCardMapper.countByExample(e);
+    }
+
+    /**
+     * 查找某个用户买过的卡密
+     */
+    @Override
+    public GetShopStockCardResponse getCardM (String customerId){
+
+        PayShopStockCardExample e = new PayShopStockCardExample();
+        PayShopStockCardExample.Criteria c = e.createCriteria();
+        e.setOrderByClause("ID DESC");
+        c.andCustomerIdEqualTo(customerId);
+        c.andCardTypeEqualTo((byte)2);
+        c.andStatusEqualTo((byte)1);
+        List<PayShopStockCard> list=payShopStockCardMapper.selectByExample(e);
+        List<ShopStockCardInfo>infoList= new ArrayList<>();
+        for (PayShopStockCard one : list)
+        {
+            ShopStockCardInfo info = new ShopStockCardInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopStockCard.class, ShopStockCardInfo.class, false);
+            beanCopier.copy(one, info, null);
+            //时间格式转换
+            if( info !=null){
+                Date currentTime = one.getPaytime();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                info.setPaytimeCopy(dateString);
+            }
+            infoList.add(info);
+        }
+        GetShopStockCardResponse response = new GetShopStockCardResponse();
+        response.setList(infoList);
+        int count = payShopStockCardMapper.countByExample(e);
+        response.setCount(count);
+        return response;
     }
 }

@@ -6,42 +6,47 @@ import java.util.Date;
 
 public class PayShopOrderCustom implements Serializable {
     /**
-     * 
+     *
      */
     private String id;
 
     /**
-     * 
+     *
      */
     private String orderNo;
 
     /**
-     * 
+     * 充值类型 0=直充 1=代充 2=卡密
+     */
+    private Byte chargeType;
+
+    /**
+     *
      */
     private String customerId;
 
     /**
-     * 
+     *
      */
     private String customerName;
 
     /**
-     * 
+     *
      */
     private String productId;
 
     /**
-     * 
+     *
      */
     private String productName;
 
     /**
-     * 
+     *
      */
     private BigDecimal productMoney;
 
     /**
-     * 
+     *
      */
     private Integer productDou;
 
@@ -101,7 +106,7 @@ public class PayShopOrderCustom implements Serializable {
     private Date paytime;
 
     /**
-     * 
+     *
      */
     private Date updatetime;
 
@@ -170,6 +175,36 @@ public class PayShopOrderCustom implements Serializable {
      * 商品图片
      */
     private String image;
+
+    /**
+     * 充值类型是卡密的情况下对应的stock_card表id
+     */
+    private String stockCardId;
+
+    /**
+     * 订单类型 1:中国石化; 2中国石油; 3话费充值
+     */
+    private Byte orderType;
+
+    /**
+     * 第三方订单号
+     */
+    private String foreignOrderNo;
+
+    /**
+     * 前端创建订单的请求参数
+     */
+    private String requestedContent;
+
+    /**
+     * 第三方接口请求参数
+     */
+    private String foreignRequestContent;
+
+    /**
+     * 第三方接口返回内容
+     */
+    private String foreignResponseContent;
 
 
 
@@ -536,5 +571,61 @@ public class PayShopOrderCustom implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public Byte getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(Byte chargeType) {
+        this.chargeType = chargeType;
+    }
+
+    public String getStockCardId() {
+        return stockCardId;
+    }
+
+    public void setStockCardId(String stockCardId) {
+        this.stockCardId = stockCardId;
+    }
+
+    public Byte getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Byte orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getForeignOrderNo() {
+        return foreignOrderNo;
+    }
+
+    public void setForeignOrderNo(String foreignOrderNo) {
+        this.foreignOrderNo = foreignOrderNo;
+    }
+
+    public String getRequestedContent() {
+        return requestedContent;
+    }
+
+    public void setRequestedContent(String requestedContent) {
+        this.requestedContent = requestedContent;
+    }
+
+    public String getForeignRequestContent() {
+        return foreignRequestContent;
+    }
+
+    public void setForeignRequestContent(String foreignRequestContent) {
+        this.foreignRequestContent = foreignRequestContent;
+    }
+
+    public String getForeignResponseContent() {
+        return foreignResponseContent;
+    }
+
+    public void setForeignResponseContent(String foreignResponseContent) {
+        this.foreignResponseContent = foreignResponseContent;
     }
 }

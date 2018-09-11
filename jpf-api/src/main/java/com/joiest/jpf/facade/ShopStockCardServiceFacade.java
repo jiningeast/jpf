@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.dto.GetShopStockCardResponse;
 import net.sf.json.JSONObject;
 
 public interface ShopStockCardServiceFacade {
@@ -18,4 +19,9 @@ public interface ShopStockCardServiceFacade {
      * 查找某个用户买过的卡密个数
      */
     public int getBoughtCardCount(String customerId);
+
+    /**
+     * 查找某个用户买过的卡密
+     */
+    public GetShopStockCardResponse getCardM(String customerId);
 }

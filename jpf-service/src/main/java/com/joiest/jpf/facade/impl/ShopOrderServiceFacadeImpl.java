@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayShopOrderCustom;
+import com.joiest.jpf.common.custom.PayShopOrderCustomExample;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayShopOrder;
@@ -39,12 +40,12 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
             request.setPage(1);
         }
 
-        PayShopOrderExample example = new PayShopOrderExample();
+        PayShopOrderCustomExample example = new PayShopOrderCustomExample();
         example.setPageNo(request.getPage());
         example.setPageSize(request.getRows());
         example.setOrderByClause("addtime DESC");
 
-        PayShopOrderExample.Criteria c =example.createCriteria();
+        PayShopOrderCustomExample.Criteria c =example.createCriteria();
 
         if ( StringUtils.isNotBlank(request.getProductName()))
         {
@@ -107,8 +108,8 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单编号不能为空");
         }
-        PayShopOrderExample exampleall = new PayShopOrderExample();
-        PayShopOrderExample.Criteria cll=exampleall.createCriteria();
+        PayShopOrderCustomExample exampleall = new PayShopOrderCustomExample();
+        PayShopOrderCustomExample.Criteria cll=exampleall.createCriteria();
         cll.andOrderNoEqualTo(orderNo);
         PayShopOrderCustom payShopOrderCustom = payShopOrderCustomMapper.selectOrderAll(exampleall);
 
