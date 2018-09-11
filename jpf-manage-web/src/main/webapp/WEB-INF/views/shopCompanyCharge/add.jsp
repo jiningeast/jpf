@@ -100,7 +100,7 @@
     function getRealMoney() {
 
         var moneyrel = parseInt( $("#contractMoney").val() );
-        var rote = parseInt( $("#rate").val() );
+        var rote = ( $("#rate").val() );
         if ( !isNaN(moneyrel) && !isNaN(rote) ){
             var calculate = (moneyrel * rote)/100;
             var money=(moneyrel-calculate).toFixed(2);

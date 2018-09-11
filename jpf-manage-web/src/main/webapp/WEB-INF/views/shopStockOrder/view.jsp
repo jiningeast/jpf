@@ -71,9 +71,9 @@
                 </tr>
                 <tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
-                    <td>
-                       ${shopStockOrderInfo.memo}
+                    <td style="text-align: right;background-color: #f1f1f1;"  >备注：</td>
+                    <td style="width: 30%;padding: 0px;margin: 0px;"  >
+                        <textarea title=' ${shopStockOrderInfo.memo}'style="width: 90%;" rows="5">${shopStockOrderInfo.memo}</textarea>
                     </td>
                 <td></td>
                 <td></td>
