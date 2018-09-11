@@ -16,6 +16,16 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private String orderNo;
 
     /**
+     * 充值类型 0=直充 1=代充 2=卡密
+     */
+    private Byte chargeType;
+
+    /**
+     * 充值类型是卡密的情况下对应的stock_card表id
+     */
+    private String stockCardId;
+
+    /**
      * 订单类型 1:中国石化; 2中国石油; 3话费充值
      */
     private Byte orderType;
@@ -156,6 +166,21 @@ public class ShopOrderInterfaceInfo implements Serializable {
         this.orderNo = orderNo;
     }
 
+    public Byte getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(Byte chargeType) {
+        this.chargeType = chargeType;
+    }
+
+    public String getStockCardId() {
+        return stockCardId;
+    }
+
+    public void setStockCardId(String stockCardId) {
+        this.stockCardId = stockCardId == null ? null : stockCardId.trim();
+    }
     public Byte getOrderType() {
         return orderType;
     }
