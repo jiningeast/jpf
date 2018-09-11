@@ -211,7 +211,12 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         fields.add("addtimeFormat");
 
         String excelPath = ConfigUtil.getValue("EXCEL_PATH");
-        JSONObject exExcelResponse = excelUtils.exportExcel(httpResponse,titles.toString(),fields.toString(),infoList,2,excelPath);
+        JSONObject exExcelResponse = null;
+        try {
+            exExcelResponse = excelUtils.exportExcel(httpResponse,titles.toString(),fields.toString(),infoList,2,excelPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JSONObject data = JSONObject.fromObject( exExcelResponse.get("data"));
         String uploadPath = data.get("localUrl").toString();    // excel文件的本地地址
 
