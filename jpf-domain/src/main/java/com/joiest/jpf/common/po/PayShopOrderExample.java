@@ -69,14 +69,6 @@ public class PayShopOrderExample {
     }
 
     /**
-     * 新加的 and
-     * @param criteria
-     */
-    public void  and(Criteria criteria) {
-        oredCriteria.add(criteria);
-    }
-
-    /**
      *
      */
     public Criteria or() {
@@ -84,6 +76,15 @@ public class PayShopOrderExample {
         oredCriteria.add(criteria);
         return criteria;
     }
+
+    /**
+     * 新加的 and
+     * @param criteria
+     */
+    public void  and(Criteria criteria) {
+        oredCriteria.add(criteria);
+    }
+
 
     /**
      *
@@ -311,6 +312,126 @@ public class PayShopOrderExample {
 
         public Criteria andOrderNoNotBetween(String value1, String value2) {
             addCriterion("order_no not between", value1, value2, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeIsNull() {
+            addCriterion("charge_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeIsNotNull() {
+            addCriterion("charge_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeEqualTo(Byte value) {
+            addCriterion("charge_type =", value, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeNotEqualTo(Byte value) {
+            addCriterion("charge_type <>", value, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeGreaterThan(Byte value) {
+            addCriterion("charge_type >", value, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("charge_type >=", value, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeLessThan(Byte value) {
+            addCriterion("charge_type <", value, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("charge_type <=", value, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeIn(List<Byte> values) {
+            addCriterion("charge_type in", values, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeNotIn(List<Byte> values) {
+            addCriterion("charge_type not in", values, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeBetween(Byte value1, Byte value2) {
+            addCriterion("charge_type between", value1, value2, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("charge_type not between", value1, value2, "chargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdIsNull() {
+            addCriterion("stock_card_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdIsNotNull() {
+            addCriterion("stock_card_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdEqualTo(String value) {
+            addCriterion("stock_card_id =", value, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdNotEqualTo(String value) {
+            addCriterion("stock_card_id <>", value, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdGreaterThan(String value) {
+            addCriterion("stock_card_id >", value, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdGreaterThanOrEqualTo(String value) {
+            addCriterion("stock_card_id >=", value, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdLessThan(String value) {
+            addCriterion("stock_card_id <", value, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdLessThanOrEqualTo(String value) {
+            addCriterion("stock_card_id <=", value, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdIn(List<String> values) {
+            addCriterion("stock_card_id in", values, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdNotIn(List<String> values) {
+            addCriterion("stock_card_id not in", values, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdBetween(String value1, String value2) {
+            addCriterion("stock_card_id between", value1, value2, "stockCardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockCardIdNotBetween(String value1, String value2) {
+            addCriterion("stock_card_id not between", value1, value2, "stockCardId");
             return (Criteria) this;
         }
 

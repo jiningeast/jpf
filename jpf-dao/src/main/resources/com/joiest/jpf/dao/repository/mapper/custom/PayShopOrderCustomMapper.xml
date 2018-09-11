@@ -8,6 +8,8 @@
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="charge_type" jdbcType="TINYINT" property="chargeType" />
+    <result column="stock_card_id" jdbcType="BIGINT" property="stockCardId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
     <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
     <result column="product_id" jdbcType="BIGINT" property="productId" />

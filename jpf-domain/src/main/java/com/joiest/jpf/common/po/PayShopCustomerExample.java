@@ -775,6 +775,66 @@ public class PayShopCustomerExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsBargainBuyerIsNull() {
+            addCriterion("is_bargain_buyer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerIsNotNull() {
+            addCriterion("is_bargain_buyer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerEqualTo(Byte value) {
+            addCriterion("is_bargain_buyer =", value, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerNotEqualTo(Byte value) {
+            addCriterion("is_bargain_buyer <>", value, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerGreaterThan(Byte value) {
+            addCriterion("is_bargain_buyer >", value, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_bargain_buyer >=", value, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerLessThan(Byte value) {
+            addCriterion("is_bargain_buyer <", value, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerLessThanOrEqualTo(Byte value) {
+            addCriterion("is_bargain_buyer <=", value, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerIn(List<Byte> values) {
+            addCriterion("is_bargain_buyer in", values, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerNotIn(List<Byte> values) {
+            addCriterion("is_bargain_buyer not in", values, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerBetween(Byte value1, Byte value2) {
+            addCriterion("is_bargain_buyer between", value1, value2, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBargainBuyerNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_bargain_buyer not between", value1, value2, "isBargainBuyer");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -952,6 +1012,66 @@ public class PayShopCustomerExample {
 
         public Criteria andDouNotBetween(Integer value1, Integer value2) {
             addCriterion("dou not between", value1, value2, "dou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouIsNull() {
+            addCriterion("freeze_dou is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouIsNotNull() {
+            addCriterion("freeze_dou is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouEqualTo(Integer value) {
+            addCriterion("freeze_dou =", value, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouNotEqualTo(Integer value) {
+            addCriterion("freeze_dou <>", value, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouGreaterThan(Integer value) {
+            addCriterion("freeze_dou >", value, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouGreaterThanOrEqualTo(Integer value) {
+            addCriterion("freeze_dou >=", value, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouLessThan(Integer value) {
+            addCriterion("freeze_dou <", value, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouLessThanOrEqualTo(Integer value) {
+            addCriterion("freeze_dou <=", value, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouIn(List<Integer> values) {
+            addCriterion("freeze_dou in", values, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouNotIn(List<Integer> values) {
+            addCriterion("freeze_dou not in", values, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouBetween(Integer value1, Integer value2) {
+            addCriterion("freeze_dou between", value1, value2, "freezeDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeDouNotBetween(Integer value1, Integer value2) {
+            addCriterion("freeze_dou not between", value1, value2, "freezeDou");
             return (Criteria) this;
         }
 

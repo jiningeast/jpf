@@ -50,7 +50,12 @@ public class PayShopCustomer implements Serializable {
     private Byte isVerify;
 
     /**
-     * 用户类型 0=正常用户 1=特殊用户
+     * 是否是欣豆交易的买家 0=不是 1=是
+     */
+    private Byte isBargainBuyer;
+
+    /**
+     * 用户类型 0=普通用户 1=特殊用户
      */
     private Byte type;
 
@@ -63,6 +68,11 @@ public class PayShopCustomer implements Serializable {
      * 欣豆数量
      */
     private Integer dou;
+
+    /**
+     * 冻结欣豆
+     */
+    private Integer freezeDou;
 
     /**
      * 充值校验码
@@ -158,6 +168,14 @@ public class PayShopCustomer implements Serializable {
         this.isVerify = isVerify;
     }
 
+    public Byte getIsBargainBuyer() {
+        return isBargainBuyer;
+    }
+
+    public void setIsBargainBuyer(Byte isBargainBuyer) {
+        this.isBargainBuyer = isBargainBuyer;
+    }
+
     public Byte getType() {
         return type;
     }
@@ -180,6 +198,14 @@ public class PayShopCustomer implements Serializable {
 
     public void setDou(Integer dou) {
         this.dou = dou;
+    }
+
+    public Integer getFreezeDou() {
+        return freezeDou;
+    }
+
+    public void setFreezeDou(Integer freezeDou) {
+        this.freezeDou = freezeDou;
     }
 
     public String getCode() {
@@ -232,9 +258,11 @@ public class PayShopCustomer implements Serializable {
         sb.append(", idno=").append(idno);
         sb.append(", phone=").append(phone);
         sb.append(", isVerify=").append(isVerify);
+        sb.append(", isBargainBuyer=").append(isBargainBuyer);
         sb.append(", type=").append(type);
         sb.append(", status=").append(status);
         sb.append(", dou=").append(dou);
+        sb.append(", freezeDou=").append(freezeDou);
         sb.append(", code=").append(code);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
@@ -268,9 +296,11 @@ public class PayShopCustomer implements Serializable {
             && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getIsVerify() == null ? other.getIsVerify() == null : this.getIsVerify().equals(other.getIsVerify()))
+            && (this.getIsBargainBuyer() == null ? other.getIsBargainBuyer() == null : this.getIsBargainBuyer().equals(other.getIsBargainBuyer()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
+            && (this.getFreezeDou() == null ? other.getFreezeDou() == null : this.getFreezeDou().equals(other.getFreezeDou()))
             && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
@@ -293,9 +323,11 @@ public class PayShopCustomer implements Serializable {
         result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getIsVerify() == null) ? 0 : getIsVerify().hashCode());
+        result = prime * result + ((getIsBargainBuyer() == null) ? 0 : getIsBargainBuyer().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
+        result = prime * result + ((getFreezeDou() == null) ? 0 : getFreezeDou().hashCode());
         result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
