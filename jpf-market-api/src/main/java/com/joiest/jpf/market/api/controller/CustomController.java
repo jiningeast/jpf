@@ -315,8 +315,12 @@ public class CustomController {
         String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
         if (StringUtils.isNotBlank(openId_encrypt)) {
             openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
-            userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
-            uid = userInfo.getId();
+            List<ShopCustomerInterfaceInfo> info = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
+            if( info != null && !info.isEmpty()  ){
+                userInfo = info.get(0);
+                uid = userInfo.getId();
+            }
+
         }
     }
 
