@@ -538,6 +538,14 @@ public class ShopBatchController {
         // 扣款
         shopCompanyServiceFacade.charge(companyId,0-Double.parseDouble(totalMoney));
 
+        // 更新批次记录已激活的券数量字段
+        PayShopBatch payShopBatch = shopBatchServiceFacade.getBatchByBatchNo(batchNo);
+        int newActivetedNum = payShopBatch.getActivetedNum() + sendedList.size();
+        ShopBatchInfo shopBatchInfo = new ShopBatchInfo();
+        shopBatchInfo.setId(payShopBatch.getId());
+        shopBatchInfo.setActivetedNum(newActivetedNum);
+        shopBatchServiceFacade.updateColumnById(shopBatchInfo);
+
         // 开始发短信
         for ( ShopCustomerInfo customerInfo:sendedList ){
             sendToPersonsSms(customerInfo,batchNo);
