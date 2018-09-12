@@ -643,12 +643,13 @@ public class OrdersController {
         JSONArray dataJson = new JSONArray();
         for ( ShopProductInterfaceInfo one: list )
         {
-            JSONObject oneJson = new JSONObject();
-            oneJson.put("id", one.getId());
-            oneJson.put("name", one.getName());
-            oneJson.put("faceValue", one.getRechargeMoney());   //面值
-            oneJson.put("dou", one.getDou());
-            dataJson.add(oneJson);
+            if (one.getId() != null && StringUtils.isNotBlank(one.getId())){
+                JSONObject oneJson = new JSONObject();
+                oneJson.put("id", one.getId());
+                oneJson.put("name", one.getName());
+                oneJson.put("faceValue", one.getRechargeMoney());   //面值
+                oneJson.put("dou", one.getDou());
+            }
         }
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), dataJson);
