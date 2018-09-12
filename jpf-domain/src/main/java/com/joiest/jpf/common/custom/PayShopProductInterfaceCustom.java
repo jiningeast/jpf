@@ -76,6 +76,11 @@ public class PayShopProductInterfaceCustom implements Serializable {
     private String operatorName;
 
     /**
+     * 充值类型 0=直冲 1=代充 2=卡密 3=混合
+     */
+    private Byte type;
+
+    /**
      * 商品状态：0=下架 1=上架
      */
     private Byte status;
@@ -377,4 +382,11 @@ public class PayShopProductInterfaceCustom implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
 }

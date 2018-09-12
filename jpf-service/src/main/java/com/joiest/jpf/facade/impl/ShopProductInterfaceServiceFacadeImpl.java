@@ -47,17 +47,26 @@ public class ShopProductInterfaceServiceFacadeImpl implements ShopProductInterfa
     }
 
     @Override
-    public List<ShopProductInterfaceInfo> getShopProductByBrandId(String brandId) {
+    public List<ShopProductInterfaceInfo> getShopProductByBrandId(String brandId, String chargeType) {
 
         if ( StringUtils.isBlank(brandId) )
         {
             return null;
         }
 
+        if ( StringUtils.isBlank(chargeType) )
+        {
+            return null;
+        }
         PayShopProductInfoExample example = new PayShopProductInfoExample();
         PayShopProductInfoExample.Criteria c = example.createCriteria();
         c.andBrandIdEqualTo(Integer.parseInt(brandId));
-        List<PayShopProductInterfaceCustom> list = payShopProductInterfaceCustomMapper.getProductListCustomByBrand(Integer.parseInt(brandId));
+
+        PayShopProductInterfaceCustom where = new PayShopProductInterfaceCustom();
+        where.setBrandId(Integer.parseInt(brandId));
+        where.setType(Byte.parseByte(chargeType));
+
+        List<PayShopProductInterfaceCustom> list = payShopProductInterfaceCustomMapper.getProductListCustomByBrand(where);
 
         List<ShopProductInterfaceInfo> resultList = new ArrayList<>();
         for (PayShopProductInterfaceCustom one : list)

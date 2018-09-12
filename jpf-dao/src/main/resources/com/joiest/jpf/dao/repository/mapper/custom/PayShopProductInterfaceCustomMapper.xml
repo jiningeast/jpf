@@ -466,15 +466,16 @@
     i.id AS infoId,i.type_id,i.type_name,i.supplier_id,i.supplier_name,i.brand_id,i.brand_name,i.contact_name,i.contact_phone,i.contact_email,i.remark,p.*
   </sql>
 
-  <select id="getProductListCustomByBrand" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="getProductListCustomByBrand" parameterType="com.joiest.jpf.common.custom.PayShopProductInterfaceCustom" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List_getList" />
     FROM pay_shop_product_info i
     LEFT JOIN pay_shop_product p ON i.id = p.product_info_id
     WHERE
-      1=1
+    1=1
     <if test="_parameter != null">
       AND i.brand_id = #{brandId,jdbcType=INTEGER}
+      AND p.type = #{type,jdbcType=INTEGER}
     </if>
     ORDER BY p.dou ASC
   </select>

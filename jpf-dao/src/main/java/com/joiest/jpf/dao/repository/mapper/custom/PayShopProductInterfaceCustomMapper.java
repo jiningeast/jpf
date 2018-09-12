@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface PayShopProductInterfaceCustomMapper {
 
-    List<PayShopProductInterfaceCustom> getProductListCustomByBrand(Integer brandId);
+    List<PayShopProductInterfaceCustom> getProductListCustomByBrand(PayShopProductInterfaceCustom info);
 
 }
