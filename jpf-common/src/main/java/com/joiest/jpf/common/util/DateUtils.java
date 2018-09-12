@@ -441,7 +441,7 @@ public class DateUtils {
 		Date time2 = new Date();
 		if(StringUtils.isNotBlank(dateString)){
 			try {
-				System.out.println(dateString);
+
 				time2 = simpleDateFormat.parse(dateString);//date类型
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -457,6 +457,15 @@ public class DateUtils {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATEFORMATLONG);
 		String timeStr = simpleDateFormat.format(date);
 		return timeStr;
+	}
+	/**
+	 * 获取当前时间
+	 * */
+	public static String getCurDate(){
+
+		Date date = new Date();
+		SimpleDateFormat myfmt1 = new SimpleDateFormat(DATEFORMATLONG);
+		return myfmt1.format(date);
 	}
 	public static void main(String[] args) {
 //		System.out.println(DateUtils.getString2YmdDate("20120101").getTime());

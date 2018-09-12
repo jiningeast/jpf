@@ -11,6 +11,7 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayShopStockCardMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopStockOrderProductMapper;
 import com.joiest.jpf.dto.GetShopStockCardResponse;
 import com.joiest.jpf.entity.ShopProductInfo;
+import com.joiest.jpf.entity.ShopProductInterfaceInfo;
 import com.joiest.jpf.entity.ShopStockCardInfo;
 import com.joiest.jpf.facade.ShopProductServiceFacade;
 import com.joiest.jpf.facade.ShopStockCardServiceFacade;
@@ -20,12 +21,11 @@ import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacade {
 
@@ -99,7 +99,7 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
         return isSuc;
     }
     /***
-     *根据订单更新商品库存
+     *根据采购订单更新商品库存
      * */
     @Override
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })//事务添加
@@ -146,7 +146,7 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
             payShopStockLog.setProductName(stockOrderProduct.getProductName());
             payShopStockLog.setOperatorId(param.get("userid").toString());
             payShopStockLog.setOperatorName(param.get("username").toString());
-            payShopStockLog.setInitMoney(stockOrderProduct.getProductBid());
+            //payShopStockLog.setInitMoney(stockOrderProduct.getProductBid());
 
             payShopStockLog.setDailyInMoney(stockOrderProduct.getMoney());
             payShopStockLog.setDailyInAmount(stockOrderProduct.getAmount());
@@ -183,6 +183,134 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
         else
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新库存失败");
     }
+
+    /**
+     * 查询商品的卡密 一条
+     * */
+    public ShopStockCardInfo getShopCard(String productId,Byte status){
+
+        PayShopStockCardExample example = new PayShopStockCardExample();
+        example.setPageNo(1);
+        example.setPageSize(1);
+        PayShopStockCardExample.Criteria c = example.createCriteria();
+
+        c.andProductIdEqualTo(productId);
+        c.andStatusEqualTo(status);
+
+        List<PayShopStockCard> getPayShopStockCard = payShopStockCardMapper.selectByExample(example);
+
+        if(getPayShopStockCard == null || getPayShopStockCard.isEmpty()) return null;
+
+        PayShopStockCard payShopStockCard = getPayShopStockCard.get(0);
+
+        ShopStockCardInfo shopStockCardInfo = new ShopStockCardInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayShopStockCard.class,ShopStockCardInfo.class,false);
+        beanCopier.copy(payShopStockCard,shopStockCardInfo,null);
+
+        return shopStockCardInfo;
+    }
+
+    /**
+     * 通过主键更新卡密信息
+     * */
+    @Override
+    public int upShopCardById(Map<String,String> cardInfo){
+
+        PayShopStockCard payShopStockCard = new PayShopStockCard();
+
+        payShopStockCard.setId(cardInfo.get("id"));
+        if(cardInfo.containsKey("customer_id"))
+            payShopStockCard.setCustomerId(cardInfo.get("customer_id"));
+
+        if(cardInfo.containsKey("customer_name"))
+            payShopStockCard.setCustomerName(cardInfo.get("customer_name"));
+
+        if(cardInfo.containsKey("customer_phone"))
+            payShopStockCard.setCustomerPhone(cardInfo.get("customer_phone"));
+
+        if(cardInfo.containsKey("paytime"))
+            payShopStockCard.setPaytime(new Date());
+
+        if(cardInfo.containsKey("status"))
+            payShopStockCard.setStatus(Byte.valueOf(cardInfo.get("status")));
+
+
+        return payShopStockCardMapper.updateByPrimaryKeySelective(payShopStockCard);
+    }
+    /***
+     *根据pay_shop_product更新商品库存
+     * */
+    @Override
+    public int upProductStockByPid(Map<String,String> cardInfo , ShopProductInterfaceInfo productInfo, ShopStockCardInfo shopStockCard) throws Exception{
+
+        boolean isUp = true;
+        Integer orderAmout = Integer.valueOf(cardInfo.get("orderAmount"));
+
+        //获取当前商品最后进销存统一信息   取出最后一条数据
+        PayShopStockLogExample exampledesc = new PayShopStockLogExample();
+        PayShopStockLogExample.Criteria logc = exampledesc.createCriteria();
+        exampledesc.setOrderByClause("ID DESC");
+        logc.andProductIdEqualTo(productInfo.getId());
+        List<PayShopStockLogCustom> listdesc = payShopStockLogCustomMapper.selectCustomAsc(exampledesc);
+
+        //修改商品表库存 pay_shop_product
+        Integer store = productInfo.getStored()-orderAmout;
+        PayShopProduct payShopProduct=new PayShopProduct();
+        payShopProduct.setStored(store);
+        payShopProduct.setId(productInfo.getId());
+        int isSuc = payShopProductMapper.updateByPrimaryKeySelective(payShopProduct);
+        if(isSuc != 1){
+
+            isUp = false;
+        }
+        //插入上商品log表 pay_shop_stock_log
+        PayShopStockLog payShopStockLog = new PayShopStockLog();
+        payShopStockLog.setStockOrderId(shopStockCard.getStockOrderId());
+        payShopStockLog.setStockOrderNo(shopStockCard.getStockOrderNo());
+        payShopStockLog.setProductId(shopStockCard.getProductId());
+        payShopStockLog.setProductName(shopStockCard.getProductName());
+        payShopStockLog.setCustomerId(cardInfo.get("customer_id"));
+        payShopStockLog.setCustomerName(cardInfo.get("customer_name"));
+
+        payShopStockLog.setDailyOutMoney(new BigDecimal(cardInfo.get("total_money")));//日常进货金额
+        payShopStockLog.setDailyOutAmount(orderAmout);//日常进货数量
+
+        /**
+         *
+         *当前采购商品为空   期初结存为0   期末结存为日常进货
+         *当前采购商品不为空  期初结存为当前商品最后一条的期末结存   期末结存为日常进货+期初结存
+         */
+        if(listdesc == null || listdesc.size()==0){
+
+            payShopStockLog.setInitMoney(new BigDecimal(0));
+            payShopStockLog.setInitAmount(0);
+
+            payShopStockLog.setFinalMoney(new BigDecimal(cardInfo.get("total_money")));
+            payShopStockLog.setFinalAmount(orderAmout);
+        }else{
+
+            payShopStockLog.setInitMoney(listdesc.get(0).getFinalMoney());
+            payShopStockLog.setInitAmount(listdesc.get(0).getFinalAmount());
+
+            BigDecimal finalyMoney = listdesc.get(0).getFinalMoney().subtract(new BigDecimal(cardInfo.get("total_money")));
+            payShopStockLog.setFinalMoney(finalyMoney);
+            payShopStockLog.setFinalAmount(listdesc.get(0).getFinalAmount()-orderAmout);
+        }
+        payShopStockLog.setAddtime(new Date());
+        int stockLog = payShopStockLogCustomMapper.insertSelective(payShopStockLog);
+        if(stockLog != 1){
+
+            isUp = false;
+        }
+
+        if(isUp)
+            return 1;
+        else
+            throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新库存失败");
+    }
+
+
 
     /**
      * 查找某个用户买过的卡密个数

@@ -58,15 +58,22 @@ public class DemoController {
         res.add("订单号");
         res.add("商户编号");
         res.add("企业名称");
+        res.add("添加时间");
 
         JSONArray filed = new JSONArray();
         filed.add("orderid");
         filed.add("mtsid");
         filed.add("companyname");
+        filed.add("addtime");
 
         OrderResponse orderResponse = orderServiceFacade.getOrders(orderRequest);
 
-        JSONObject excel = new ExcelDealUtils().exportExcel(response,res.toString(),filed.toString(),orderResponse.getList(),1,ConfigUtil.getValue("EXCEL_PATH"));
+        JSONObject excel = null;
+        try {
+            excel = new ExcelDealUtils().exportExcel(response,res.toString(),filed.toString(),orderResponse.getList(),2, ConfigUtil.getValue("EXCEL_PATH"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return excel;
     }
 

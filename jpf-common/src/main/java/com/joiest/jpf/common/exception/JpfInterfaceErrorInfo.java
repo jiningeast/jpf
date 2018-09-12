@@ -83,7 +83,8 @@ public enum JpfInterfaceErrorInfo {
     BRANDLIST_IS_EMPTY("50007", "无品牌信息"),
     USER_IS_FREEZE("50008", "您的帐户已被冻结"),
     USER_DOU_NOT_SUFFICIENT("50009", "帐户余额不足"),
-    ADD_STREAM_ERROR("50010", "添加流水失败");
+    ADD_STREAM_ERROR("50010", "添加流水失败"),
+    PRODUCT_CARD_TYPE("50011", "当前商品库存不足");
 
     private final String desc;
 
