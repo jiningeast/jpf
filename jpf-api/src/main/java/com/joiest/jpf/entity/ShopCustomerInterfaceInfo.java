@@ -56,6 +56,11 @@ public class ShopCustomerInterfaceInfo {
     private Byte isVerify;
 
     /**
+     * 是否是欣豆转让的买家
+     */
+    private Byte isBargainBuyer;
+
+    /**
      * 用户类型
      */
     private Byte type;
@@ -69,6 +74,11 @@ public class ShopCustomerInterfaceInfo {
      * 欣豆数量
      */
     private Integer dou;
+
+    /**
+     * 冻结的欣豆
+     */
+    private Integer freezeDou;
 
     /**
      * 充值校验码
@@ -149,6 +159,14 @@ public class ShopCustomerInterfaceInfo {
         this.idno = idno == null ? null : idno.trim();
     }
 
+    public Integer getFreezeDou() {
+        return freezeDou;
+    }
+
+    public void setFreezeDou(Integer freezeDou) {
+        this.freezeDou = freezeDou;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -163,6 +181,14 @@ public class ShopCustomerInterfaceInfo {
 
     public void setIsVerify(Byte isVerify) {
         this.isVerify = isVerify;
+    }
+
+    public Byte getIsBargainBuyer() {
+        return isBargainBuyer;
+    }
+
+    public void setIsBargainBuyer(Byte isBargainBuyer) {
+        this.isBargainBuyer = isBargainBuyer;
     }
 
     public Byte getType() {
