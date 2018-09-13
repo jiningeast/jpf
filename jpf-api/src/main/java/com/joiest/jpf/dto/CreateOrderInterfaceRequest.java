@@ -55,12 +55,12 @@ public class CreateOrderInterfaceRequest {
     /**
      * 数量
      */
-    private int amount;
+    private String amount;
 
     /**
      * 接收卡密方式
      */
-    private Byte receiveType;
+    private String receiveType;
 
     /**
      * 接收值，手机号或邮箱
@@ -131,19 +131,19 @@ public class CreateOrderInterfaceRequest {
         this.pid = pid;
     }
 
-    public int getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
-    public Byte getReceiveType() {
+    public String getReceiveType() {
         return receiveType;
     }
 
-    public void setReceiveType(Byte receiveType) {
+    public void setReceiveType(String receiveType) {
         this.receiveType = receiveType;
     }
 

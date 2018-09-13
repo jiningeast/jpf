@@ -103,7 +103,7 @@ public class OrdersController {
             request =  (CreateOrderInterfaceRequest) ClassUtil.mapToObject(requestMap, request.getClass());
         }catch (Exception e)
         {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未登录", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
         }
         //获取商品信息
         ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(request.getPid());
@@ -186,13 +186,13 @@ public class OrdersController {
 
         // 如果是卡密交易
         if ( source.equals("2") ){
-            if ( StringUtils.isNotBlank(""+request.getAmount()) && request.getAmount() > 0 ){
-                info.setAmount(request.getAmount());
+            if ( StringUtils.isNotBlank(""+request.getAmount()) && Integer.parseInt(request.getAmount()) > 0 ){
+                info.setAmount(Integer.parseInt(request.getAmount()));
             }else{
                 info.setAmount(1);
             }
             if ( StringUtils.isNotBlank(""+request.getReceiveType()) ){
-                info.setReceiveType(request.getReceiveType());
+                info.setReceiveType(Byte.valueOf(request.getReceiveType()));
             }
             if ( StringUtils.isNotBlank(""+request.getReceiveValue()) ){
                 info.setReceiveValue(request.getReceiveValue());
