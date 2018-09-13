@@ -450,7 +450,7 @@
                         } else {
                             $('#infoDiv2').window('close');
                             $('#infoDiv').window("open").window('refresh', '../merchant/paytype/add/page?id=' + mtsid).window('setTitle','配置支付类型');
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                         }
                     },
                     error: function () {

@@ -113,6 +113,21 @@ public class ShopCustomerInterfaceServiceFacadeImpl implements ShopCustomerInter
 
     }
 
+    /**
+     * 根据主键id更新用户信息
+     */
+    @Override
+    public int updateCustomerById(ShopCustomerInterfaceInfo customerInfo){
+        if ( customerInfo != null && customerInfo.getId() != null ){
+            PayShopCustomer payShopCustomer = new PayShopCustomer();
+            BeanCopier beanCopier = BeanCopier.create(ShopCustomerInterfaceInfo.class, PayShopCustomer.class, false);
+            beanCopier.copy(customerInfo, payShopCustomer, null);
+
+            return payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomer);
+        }
+        return 0;
+    }
+
     @Override
     public String addCustomer(PayShopCustomer record) {
         JpfResponseDto jpfResponseDto = new JpfResponseDto();

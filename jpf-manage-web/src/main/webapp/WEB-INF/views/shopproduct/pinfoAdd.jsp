@@ -185,7 +185,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             $('#infoDiv').window('close');
                             $('#dg').datagrid('reload');
                         }
@@ -222,7 +222,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             $("#supplierId").combobox('reload',"../param/getShopSuppliers");
                             $("#supplierName_add").textbox('setValue','');
                         }
@@ -253,7 +253,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             // $('#infoDiv').window('close');
                             // $('#dg').datagrid('reload');
                             $("#typeId").combobox('reload','../param/getShopProductType');
@@ -286,7 +286,7 @@
                         if (msg.retCode != '0000') {
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
-                            $.messager.alert('消息提示', '操作成功！', 'error');
+                            $.messager.alert('消息提示', '操作成功！', 'info');
                             // $('#infoDiv').window('close');
                             // $('#dg').datagrid('reload');
                             $("#brandId").combobox('reload','../param/getShopBrandList');

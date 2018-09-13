@@ -40,7 +40,7 @@
                                         if (msg.retCode != '0000') {
                                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']!', 'error');
                                         } else {
-                                            $.messager.alert('消息提示', '操作成功!', 'error');
+                                            $.messager.alert('消息提示', '操作成功!', 'info');
                                             $('#dg').datagrid('reload');
                                         }
                                     },
@@ -77,7 +77,7 @@
                                         if (msg.retCode != '0000') {
                                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']!', 'error');
                                         } else {
-                                            $.messager.alert('消息提示', '操作成功!', 'error');
+                                            $.messager.alert('消息提示', '操作成功!', 'info');
                                             $('#dg').datagrid('reload');
                                         }
                                     },
@@ -126,22 +126,22 @@
                 columns:[[
                     {field:'id',title:'商品ID',width:80},
                     {field:'name',title:'商品名称',width:200},
-                    {field:'bid',title:'商品进价',width:200},
-                    {field:'money',title:'商品售价',width:200},
-                    {field:'rechargeMoney',title:'充值面额(元)',width:150},
-                    {field:'dou',title:'所需豆',width:150},
-                    {field:'brandName',title:'商品品牌',width:200},
-                    {field:'supplierName',title:'供应商',width:200},
-                    {field:'typeName',title:'商品分类',width:200},
-                    {field:'stored',title:'当前库存',width:200},
+                    {field:'bid',title:'商品进价',width:50},
+                    {field:'money',title:'商品售价',width:50},
+                    {field:'rechargeMoney',title:'充值面额(元)',width:50},
+                    {field:'dou',title:'所需豆',width:50},
+                    {field:'brandName',title:'商品品牌',width:150},
+                    {field:'supplierName',title:'供应商',width:150},
+                    {field:'typeName',title:'商品分类',width:150},
+                    {field:'stored',title:'当前库存',width:50},
                     // {field:'pdpicture',title:'产品图片',width:150,
                     //     formatter:function(value,row,index){return '<img style="height:80px;width:100px;" src="'+ value +'" />';}
                     // },
-                    {field:'status',title:'商品状态',width:100,
+                    {field:'status',title:'商品状态',width:50,
                         formatter: function(value,row,index){
-                            if (value == '0'){
+                            if (value == 0){
                                 return "下架";
-                            } else if (value == '1') {
+                            } else if (value == 1) {
                                 return "上架";
                             }
                         }

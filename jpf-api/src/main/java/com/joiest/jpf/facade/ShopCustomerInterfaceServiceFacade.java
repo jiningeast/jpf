@@ -29,6 +29,11 @@ public interface ShopCustomerInterfaceServiceFacade {
     public JpfResponseDto updateCustomerByOpenId(PayShopCustomer record, String openId);
 
     /**
+     * 根据主键id更新用户信息
+     */
+    public int updateCustomerById(ShopCustomerInterfaceInfo customerInfo);
+
+    /**
      * 插入用户数据
      */
     public String addCustomer(PayShopCustomer record);

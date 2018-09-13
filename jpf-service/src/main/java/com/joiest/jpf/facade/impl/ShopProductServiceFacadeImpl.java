@@ -67,10 +67,12 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
             ShopProductInfo info = new ShopProductInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopProduct.class, ShopProductInfo.class, false);
             beanCopier.copy(one, info, null);
+
             //商品基础信息
             PayShopProductInfo pInfo = payShopProductInfoMapper.selectByPrimaryKey(one.getProductInfoId());
-            BeanCopier beanCopier_pInfo = BeanCopier.create(PayShopProductInfo.class, ShopProductInfo.class, false);
-            beanCopier_pInfo.copy(pInfo, info, null);
+            info.setBrandName(pInfo.getBrandName());
+            info.setSupplierName(pInfo.getSupplierName());
+            info.setTypeName(pInfo.getTypeName());
             resultList.add(info);
         }
         response.setList(resultList);
