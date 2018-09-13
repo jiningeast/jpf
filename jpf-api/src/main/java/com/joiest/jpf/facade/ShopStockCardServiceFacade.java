@@ -5,6 +5,7 @@ import com.joiest.jpf.entity.ShopProductInterfaceInfo;
 import com.joiest.jpf.entity.ShopStockCardInfo;
 import net.sf.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ShopStockCardServiceFacade {
@@ -23,7 +24,7 @@ public interface ShopStockCardServiceFacade {
     /**
      * 查询商品的卡密
      * */
-    public ShopStockCardInfo getShopCard(String productId,Byte status);
+    public List<ShopStockCardInfo> getShopCard(String productId, Byte status, int amount);
 
     /**
      * 通过主键更新卡密信息

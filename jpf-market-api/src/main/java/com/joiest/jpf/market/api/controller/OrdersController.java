@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -118,11 +119,10 @@ public class OrdersController {
             source = requestMap.get("source").toString();
         }
         if(source.equals("2")){
-
-            //卡密信息验证
-            ShopStockCardInfo shopStockCardInfo = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0);
-            if(shopStockCardInfo == null || productInfo.getStored()<=0) {
-
+            // 判断库存
+            int amount = Integer.parseInt(request.getAmount());
+            List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,amount);
+            if( list == null || list.isEmpty() || productInfo.getStored()<amount || list.size()<amount ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
             }
         }else{
@@ -221,7 +221,7 @@ public class OrdersController {
     @RequestMapping(value = "/pay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
 //    @Transactional
-    public String dopay(String data)
+    public String dopay(String data,HttpServletResponse Httpresponse)
     {
         //1.金额校验 2.订单用户校验 3.用户券列表 4.扣除相应的券 5.更新code
         Map<String, Object> requestMap = new HashMap<>();
@@ -282,17 +282,18 @@ public class OrdersController {
         //卡密商品信息判断
         ShopStockCardInfo shopStockCardInfo = null;
         if(productInfo.getType().toString().equals("2")){
-
-            //卡密信息验证
-            shopStockCardInfo = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0);
-            if(shopStockCardInfo == null || productInfo.getStored()<=0) {
-
+            // 判断库存
+            List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,orderInfo.getAmount());
+            if( list == null || list.isEmpty() || productInfo.getStored()<orderInfo.getAmount() || list.size()<orderInfo.getAmount() ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
-            }else{
-
-                //如果产品为卡密，则发送卡密信息给用户
-                String buySuc = this.cardRecharge(orderInfo, productInfo,shopStockCardInfo,userCouponList);
+            }else if ( orderInfo.getReceiveType() == 1 ){
+                // 如果接收方式是短信接收，则给用户发卡密
+                String buySuc = this.cardRecharge(orderInfo,productInfo,list,userCouponList);
                 return buySuc;
+            }else if ( orderInfo.getReceiveType() == 2 ){
+                Map<String,Object> map = new HashMap<>();
+                map.put("data","");
+                OkHttpUtils.postForm("/custom/sendCardEmail",map);
             }
         }else{
 
@@ -368,76 +369,77 @@ public class OrdersController {
      * 卡密信息操作
      * @param orderInfo 订单信息
      * @param productInfo 商品信息
-     * @param shopStockCardInfo 卡信息
+     * @param list 卡信息
     * */
-    private String cardRecharge(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo,ShopStockCardInfo shopStockCardInfo,GetCouponRemainResponse userCouponList){
+    private String cardRecharge(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo,List<ShopStockCardInfo> list,GetCouponRemainResponse userCouponList){
 
         Date date = new Date();
         SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        //更新卡密信息到具体的用户
-        Map<String,String> cardInfo = new HashMap<>();
-        cardInfo.put("id",shopStockCardInfo.getId());
-        cardInfo.put("customer_id",userInfo.getId());
-        cardInfo.put("customer_name",userInfo.getNickname());
-        cardInfo.put("customer_phone",userInfo.getPhone());
-        cardInfo.put("paytime","1");
-        cardInfo.put("status","1");
+        for ( ShopStockCardInfo shopStockCardInfo:list ){
+            //更新卡密信息到具体的用户
+            Map<String,String> cardInfo = new HashMap<>();
+            cardInfo.put("id",shopStockCardInfo.getId());
+            cardInfo.put("customer_id",userInfo.getId());
+            cardInfo.put("customer_name",userInfo.getNickname());
+            cardInfo.put("customer_phone",userInfo.getPhone());
+            cardInfo.put("paytime","1");
+            cardInfo.put("status","1");
 
-        int isShopSuc = shopStockCardServiceFacade.upShopCardById(cardInfo);
+            int isShopSuc = shopStockCardServiceFacade.upShopCardById(cardInfo);
 
-        cardInfo.put("orderAmount",orderInfo.getAmount().toString());
-        cardInfo.put("total_money",orderInfo.getTotalMoney().toString());
-        //商品购买日志记录 pay_shop_stock_log
-        try {
-            shopStockCardServiceFacade.upProductStockByPid(cardInfo,productInfo,shopStockCardInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
+            cardInfo.put("orderAmount",orderInfo.getAmount().toString());
+            cardInfo.put("total_money",orderInfo.getTotalMoney().toString());
+            //商品购买日志记录 pay_shop_stock_log
+            try {
+                shopStockCardServiceFacade.upProductStockByPid(cardInfo,productInfo,shopStockCardInfo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //添加通道流水 更新order状态
+            ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+            ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+            if ( isShopSuc >0 )
+            {
+                //购买成功
+                orderinfo.setStatus((byte)1);
+            }else
+            {
+                orderinfo.setStatus((byte)2);
+            }
+            //更新订单
+            orderinfo.setId(orderInfo.getId());
+            orderinfo.setPaytime(new Date());
+            orderinfo.setChargeType((byte)2);
+            orderinfo.setStockCardId(shopStockCardInfo.getId());
+
+            int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(  orderinfo);
+            if ( isShopSuc >0 )
+            {
+                String content = "您已购买中石油加油卡一张，卡号"+shopStockCardInfo.getCardNo()+"，密码"+shopStockCardInfo.getCardPass()+"，请妥善保管。";
+                Map<String,String> smsRes = SmsUtils.send(orderinfo.getReceiveValue(),content,"CardSmsLog");
+                //扣减豆操作
+                int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
+            } else
+            {
+                Map<String,String> err = new HashMap<>();
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "提交失败", null);
+            }
+
+            StringBuilder sbf = new StringBuilder();
+
+            sbf.append("\n\nTime:" + DateUtils.getCurDate());
+            sbf.append("\n产品类型:" + "卡密购买");
+            sbf.append("\n用户id:" + userInfo.getId());
+            sbf.append("\n用户手机号:" + userInfo.getPhone());
+            sbf.append("\n订单id：" + orderInfo.getId());
+            sbf.append("\n订单号：" + orderInfo.getId());
+            sbf.append("\n卡密id：" + shopStockCardInfo.getId());
+            String fileName = "CardPayLog";
+            String path = "/logs/jpf-market-api/log/";
+
+            LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         }
-        //添加通道流水 更新order状态
-        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
-        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
-        if ( isShopSuc >0 )
-        {
-            //购买成功
-            orderinfo.setStatus((byte)1);
-        }else
-        {
-            orderinfo.setStatus((byte)2);
-        }
-        //更新订单
-        orderinfo.setId(orderInfo.getId());
-        orderinfo.setPaytime(new Date());
-        orderinfo.setChargeType((byte)2);
-        orderinfo.setStockCardId(shopStockCardInfo.getId());
-
-        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(  orderinfo);
-        if ( isShopSuc >0 )
-        {
-
-            String content = "您已购买中石油加油卡一张，卡号"+shopStockCardInfo.getCardNo()+"，密码"+shopStockCardInfo.getCardPass()+"，请妥善保管。";
-            Map<String,String> smsRes= SmsUtils.send(userInfo.getPhone(),content,"CardSmsLog");
-            //扣减豆操作
-            int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
-        } else
-        {
-            Map<String,String> err = new HashMap<>();
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "提交失败", null);
-        }
-
-        StringBuilder sbf = new StringBuilder();
-
-        sbf.append("\n\nTime:" + DateUtils.getCurDate());
-        sbf.append("\n产品类型:" + "卡密购买");
-        sbf.append("\n用户id:" + userInfo.getId());
-        sbf.append("\n用户手机号:" + userInfo.getPhone());
-        sbf.append("\n订单id：" + orderInfo.getId());
-        sbf.append("\n订单号：" + orderInfo.getId());
-        sbf.append("\n卡密id：" + shopStockCardInfo.getId());
-        String fileName = "CardPayLog";
-        String path = "/logs/jpf-market-api/log/";
-
-        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "购买成功", null);
     }

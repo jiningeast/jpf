@@ -187,11 +187,11 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
     /**
      * 查询商品的卡密 一条
      * */
-    public ShopStockCardInfo getShopCard(String productId,Byte status){
+    public List<ShopStockCardInfo> getShopCard(String productId,Byte status,int amount){
 
         PayShopStockCardExample example = new PayShopStockCardExample();
         example.setPageNo(1);
-        example.setPageSize(1);
+        example.setPageSize(amount);
         PayShopStockCardExample.Criteria c = example.createCriteria();
 
         c.andProductIdEqualTo(productId);
@@ -201,14 +201,15 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
 
         if(getPayShopStockCard == null || getPayShopStockCard.isEmpty()) return null;
 
-        PayShopStockCard payShopStockCard = getPayShopStockCard.get(0);
+        List<ShopStockCardInfo> list = new ArrayList<>();
+        for ( PayShopStockCard one:getPayShopStockCard ){
+            ShopStockCardInfo shopStockCardInfo = new ShopStockCardInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopStockCard.class,ShopStockCardInfo.class,false);
+            beanCopier.copy(one,shopStockCardInfo,null);
+            list.add(shopStockCardInfo);
+        }
 
-        ShopStockCardInfo shopStockCardInfo = new ShopStockCardInfo();
-
-        BeanCopier beanCopier = BeanCopier.create(PayShopStockCard.class,ShopStockCardInfo.class,false);
-        beanCopier.copy(payShopStockCard,shopStockCardInfo,null);
-
-        return shopStockCardInfo;
+        return list;
     }
 
     /**
