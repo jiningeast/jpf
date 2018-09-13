@@ -16,6 +16,6 @@ public interface ShopProductInterfaceServiceFacade {
      * 获取商品列表 by 商品类型
      */
 
-    public List<ShopProductInterfaceInfo> getShopProductByBrandId(String brandId);
+    public List<ShopProductInterfaceInfo> getShopProductByBrandId(String brandId, String chargeType);
 
 }

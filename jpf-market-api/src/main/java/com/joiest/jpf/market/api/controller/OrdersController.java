@@ -632,9 +632,15 @@ public class OrdersController {
         }
         if ( StringUtils.isBlank(requestMap.get("bid").toString()) )
         {
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), "");
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "品牌不能为空", "");
         }
-        List<ShopProductInterfaceInfo> list = shopProductInterfaceServiceFacade.getShopProductByBrandId(requestMap.get("bid").toString());
+        if ( StringUtils.isBlank(requestMap.get("chargeType").toString()) )
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "充值类型不能为空", "");
+        }
+
+        //充值类型 0=直冲 1=代充 2=卡密 3=混合
+        List<ShopProductInterfaceInfo> list = shopProductInterfaceServiceFacade.getShopProductByBrandId(requestMap.get("bid").toString(),requestMap.get("chargeType").toString());
         if ( list.isEmpty() || list == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.GOODLIST_IS_EMPTY.getCode(), JpfInterfaceErrorInfo.GOODLIST_IS_EMPTY.getDesc(), "");
