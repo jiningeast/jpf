@@ -4,7 +4,6 @@ package com.joiest.jpf.market.api.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
-import com.joiest.jpf.common.po.PayShopInterfaceStream;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
@@ -21,7 +20,6 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,6 +61,7 @@ public class OrdersController {
 
     @Autowired
     ShopCouponRemainServiceFacade shopCouponRemainServiceFacade;
+
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
 
@@ -654,6 +653,7 @@ public class OrdersController {
             oneJson.put("name", one.getName());
             oneJson.put("faceValue", one.getRechargeMoney());   //面值
             oneJson.put("dou", one.getDou());
+            oneJson.put("stored",one.getStored());
             dataJson.add(oneJson);
         }
 
