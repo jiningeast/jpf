@@ -181,13 +181,28 @@ public class OrdersController {
         info.setProductMoney(productInfo.getMoney());
         info.setProductDou(productInfo.getDou());
         info.setProductInfoId(productInfo.getProductInfoId());
-        info.setAmount(1);
         info.setTotalMoney(productInfo.getMoney());
         info.setTotalDou(productInfo.getDou());
 
+        // 如果是卡密交易
+        if ( source.equals("2") ){
+            if ( StringUtils.isNotBlank(""+request.getAmount()) && request.getAmount() > 0 ){
+                info.setAmount(request.getAmount());
+            }else{
+                info.setAmount(1);
+            }
+            if ( StringUtils.isNotBlank(""+request.getReceiveType()) ){
+                info.setReceiveType(request.getReceiveType());
+            }
+            if ( StringUtils.isNotBlank(""+request.getReceiveValue()) ){
+                info.setReceiveValue(request.getReceiveValue());
+            }
+        }else{
+            info.setAmount(1);
+        }
+
         //充值号
         info.setChargeNo(chargeNo);
-
         info.setAddtime(new Date());
         info.setOrderType(Byte.valueOf(request.getOtype()));
         info.setRequestedContent(requestJson);

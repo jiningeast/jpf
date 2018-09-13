@@ -1,7 +1,6 @@
 package com.joiest.jpf.dto;
 
 import javax.validation.constraints.Pattern;
-import java.math.BigDecimal;
 
 /**
  * 油卡充值
@@ -50,7 +49,23 @@ public class CreateOrderInterfaceRequest {
      * 商品ID
      */
     @Pattern(regexp = "^\\d{1,9}$", message = "商品ID错误")
+
     private String pid;
+
+    /**
+     * 数量
+     */
+    private int amount;
+
+    /**
+     * 接收卡密方式
+     */
+    private Byte receiveType;
+
+    /**
+     * 接收值，手机号或邮箱
+     */
+    private String receiveValue;
 
     public String getCardno() {
         return cardno;
@@ -114,5 +129,29 @@ public class CreateOrderInterfaceRequest {
 
     public void setPid(String pid) {
         this.pid = pid;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public Byte getReceiveType() {
+        return receiveType;
+    }
+
+    public void setReceiveType(Byte receiveType) {
+        this.receiveType = receiveType;
+    }
+
+    public String getReceiveValue() {
+        return receiveValue;
+    }
+
+    public void setReceiveValue(String receiveValue) {
+        this.receiveValue = receiveValue;
     }
 }

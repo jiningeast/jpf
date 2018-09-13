@@ -78,15 +78,6 @@ public class PayShopOrderExample {
     }
 
     /**
-     * 新加的 and
-     * @param criteria
-     */
-    /*public void  and(Criteria criteria) {
-        oredCriteria.add(criteria);
-    }*/
-
-
-    /**
      *
      */
     public Criteria createCriteria() {
@@ -1855,6 +1846,136 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andReceiveTypeIsNull() {
+            addCriterion("receive_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeIsNotNull() {
+            addCriterion("receive_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeEqualTo(Byte value) {
+            addCriterion("receive_type =", value, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeNotEqualTo(Byte value) {
+            addCriterion("receive_type <>", value, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeGreaterThan(Byte value) {
+            addCriterion("receive_type >", value, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("receive_type >=", value, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeLessThan(Byte value) {
+            addCriterion("receive_type <", value, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("receive_type <=", value, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeIn(List<Byte> values) {
+            addCriterion("receive_type in", values, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeNotIn(List<Byte> values) {
+            addCriterion("receive_type not in", values, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeBetween(Byte value1, Byte value2) {
+            addCriterion("receive_type between", value1, value2, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("receive_type not between", value1, value2, "receiveType");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueIsNull() {
+            addCriterion("receive_value is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueIsNotNull() {
+            addCriterion("receive_value is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueEqualTo(String value) {
+            addCriterion("receive_value =", value, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueNotEqualTo(String value) {
+            addCriterion("receive_value <>", value, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueGreaterThan(String value) {
+            addCriterion("receive_value >", value, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueGreaterThanOrEqualTo(String value) {
+            addCriterion("receive_value >=", value, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueLessThan(String value) {
+            addCriterion("receive_value <", value, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueLessThanOrEqualTo(String value) {
+            addCriterion("receive_value <=", value, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueLike(String value) {
+            addCriterion("receive_value like", value, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueNotLike(String value) {
+            addCriterion("receive_value not like", value, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueIn(List<String> values) {
+            addCriterion("receive_value in", values, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueNotIn(List<String> values) {
+            addCriterion("receive_value not in", values, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueBetween(String value1, String value2) {
+            addCriterion("receive_value between", value1, value2, "receiveValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueNotBetween(String value1, String value2) {
+            addCriterion("receive_value not between", value1, value2, "receiveValue");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
@@ -2087,6 +2208,11 @@ public class PayShopOrderExample {
 
         public Criteria andCouponActiveIdLikeInsensitive(String value) {
             addCriterion("upper(coupon_active_id) like", value.toUpperCase(), "couponActiveId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveValueLikeInsensitive(String value) {
+            addCriterion("upper(receive_value) like", value.toUpperCase(), "receiveValue");
             return (Criteria) this;
         }
     }

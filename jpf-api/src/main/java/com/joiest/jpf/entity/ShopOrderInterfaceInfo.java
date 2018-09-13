@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class ShopOrderInterfaceInfo implements Serializable {
     /**
-     *
+     * 主键id
      */
     private String id;
 
@@ -51,32 +51,32 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private String foreignResponseContent;
 
     /**
-     *
+     * 用户id
      */
     private String customerId;
 
     /**
-     *
+     * 用户姓名
      */
     private String customerName;
 
     /**
-     *
+     * 产品id
      */
     private String productId;
 
     /**
-     *
+     * 产品名称
      */
     private String productName;
 
     /**
-     *
+     * 产品金额
      */
     private BigDecimal productMoney;
 
     /**
-     *
+     * 产品豆价格
      */
     private Integer productDou;
 
@@ -136,6 +136,16 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private String couponActiveId;
 
     /**
+     * 临时买卡密页面所需字段 接收方式 1=短信 2=邮箱
+     */
+    private Byte receiveType;
+
+    /**
+     * 临时买卡密页面所需字段 接收值 手机号或邮箱地址
+     */
+    private String receiveValue;
+
+    /**
      * 下单时间
      */
     private Date addtime;
@@ -146,7 +156,7 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private Date paytime;
 
     /**
-     *
+     * 更新时间
      */
     private Date updatetime;
 
@@ -179,8 +189,9 @@ public class ShopOrderInterfaceInfo implements Serializable {
     }
 
     public void setStockCardId(String stockCardId) {
-        this.stockCardId = stockCardId == null ? null : stockCardId.trim();
+        this.stockCardId = stockCardId;
     }
+
     public Byte getOrderType() {
         return orderType;
     }
@@ -355,6 +366,22 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setCouponActiveId(String couponActiveId) {
         this.couponActiveId = couponActiveId;
+    }
+
+    public Byte getReceiveType() {
+        return receiveType;
+    }
+
+    public void setReceiveType(Byte receiveType) {
+        this.receiveType = receiveType;
+    }
+
+    public String getReceiveValue() {
+        return receiveValue;
+    }
+
+    public void setReceiveValue(String receiveValue) {
+        this.receiveValue = receiveValue;
     }
 
     public Date getAddtime() {

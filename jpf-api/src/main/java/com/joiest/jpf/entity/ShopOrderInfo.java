@@ -160,8 +160,15 @@ public class ShopOrderInfo {
      */
     private String image;
 
+    /**
+     * 临时买卡密页面所需字段 接收方式 1=短信 2=邮箱
+     */
+    private Byte receiveType;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 临时买卡密页面所需字段 接收值 手机号或邮箱地址
+     */
+    private String receiveValue;
 
     public String getId() {
         return id;
@@ -402,6 +409,22 @@ public class ShopOrderInfo {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Byte getReceiveType() {
+        return receiveType;
+    }
+
+    public void setReceiveType(Byte receiveType) {
+        this.receiveType = receiveType;
+    }
+
+    public String getReceiveValue() {
+        return receiveValue;
+    }
+
+    public void setReceiveValue(String receiveValue) {
+        this.receiveValue = receiveValue;
     }
 
     /**

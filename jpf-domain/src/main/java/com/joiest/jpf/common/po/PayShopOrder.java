@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PayShopOrder implements Serializable {
     /**
-     * 
+     * 主键id
      */
     private String id;
 
@@ -51,32 +51,32 @@ public class PayShopOrder implements Serializable {
     private String foreignResponseContent;
 
     /**
-     * 
+     * 用户id
      */
     private String customerId;
 
     /**
-     * 
+     * 用户姓名
      */
     private String customerName;
 
     /**
-     * 
+     * 产品id
      */
     private String productId;
 
     /**
-     * 
+     * 产品名称
      */
     private String productName;
 
     /**
-     * 
+     * 产品金额
      */
     private BigDecimal productMoney;
 
     /**
-     * 
+     * 产品豆价格
      */
     private Integer productDou;
 
@@ -136,6 +136,16 @@ public class PayShopOrder implements Serializable {
     private String couponActiveId;
 
     /**
+     * 临时买卡密页面所需字段 接收方式 1=短信 2=邮箱
+     */
+    private Byte receiveType;
+
+    /**
+     * 临时买卡密页面所需字段 接收值 手机号或邮箱地址
+     */
+    private String receiveValue;
+
+    /**
      * 下单时间
      */
     private Date addtime;
@@ -146,7 +156,7 @@ public class PayShopOrder implements Serializable {
     private Date paytime;
 
     /**
-     * 
+     * 更新时间
      */
     private Date updatetime;
 
@@ -360,6 +370,22 @@ public class PayShopOrder implements Serializable {
         this.couponActiveId = couponActiveId == null ? null : couponActiveId.trim();
     }
 
+    public Byte getReceiveType() {
+        return receiveType;
+    }
+
+    public void setReceiveType(Byte receiveType) {
+        this.receiveType = receiveType;
+    }
+
+    public String getReceiveValue() {
+        return receiveValue;
+    }
+
+    public void setReceiveValue(String receiveValue) {
+        this.receiveValue = receiveValue == null ? null : receiveValue.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -419,6 +445,8 @@ public class PayShopOrder implements Serializable {
         sb.append(", rechargeStatus=").append(rechargeStatus);
         sb.append(", rechargeTime=").append(rechargeTime);
         sb.append(", couponActiveId=").append(couponActiveId);
+        sb.append(", receiveType=").append(receiveType);
+        sb.append(", receiveValue=").append(receiveValue);
         sb.append(", addtime=").append(addtime);
         sb.append(", paytime=").append(paytime);
         sb.append(", updatetime=").append(updatetime);
@@ -468,6 +496,8 @@ public class PayShopOrder implements Serializable {
             && (this.getRechargeStatus() == null ? other.getRechargeStatus() == null : this.getRechargeStatus().equals(other.getRechargeStatus()))
             && (this.getRechargeTime() == null ? other.getRechargeTime() == null : this.getRechargeTime().equals(other.getRechargeTime()))
             && (this.getCouponActiveId() == null ? other.getCouponActiveId() == null : this.getCouponActiveId().equals(other.getCouponActiveId()))
+            && (this.getReceiveType() == null ? other.getReceiveType() == null : this.getReceiveType().equals(other.getReceiveType()))
+            && (this.getReceiveValue() == null ? other.getReceiveValue() == null : this.getReceiveValue().equals(other.getReceiveValue()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -506,6 +536,8 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getRechargeStatus() == null) ? 0 : getRechargeStatus().hashCode());
         result = prime * result + ((getRechargeTime() == null) ? 0 : getRechargeTime().hashCode());
         result = prime * result + ((getCouponActiveId() == null) ? 0 : getCouponActiveId().hashCode());
+        result = prime * result + ((getReceiveType() == null) ? 0 : getReceiveType().hashCode());
+        result = prime * result + ((getReceiveValue() == null) ? 0 : getReceiveValue().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
