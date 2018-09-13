@@ -735,6 +735,146 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andIdnoIsNull() {
+            addCriterion("idno is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoIsNotNull() {
+            addCriterion("idno is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoEqualTo(String value) {
+            addCriterion("idno =", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoNotEqualTo(String value) {
+            addCriterion("idno <>", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoGreaterThan(String value) {
+            addCriterion("idno >", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoGreaterThanOrEqualTo(String value) {
+            addCriterion("idno >=", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoLessThan(String value) {
+            addCriterion("idno <", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoLessThanOrEqualTo(String value) {
+            addCriterion("idno <=", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoLike(String value) {
+            addCriterion("idno like", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoNotLike(String value) {
+            addCriterion("idno not like", value, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoIn(List<String> values) {
+            addCriterion("idno in", values, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoNotIn(List<String> values) {
+            addCriterion("idno not in", values, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoBetween(String value1, String value2) {
+            addCriterion("idno between", value1, value2, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdnoNotBetween(String value1, String value2) {
+            addCriterion("idno not between", value1, value2, "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIsNull() {
+            addCriterion("phone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIsNotNull() {
+            addCriterion("phone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneEqualTo(String value) {
+            addCriterion("phone =", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotEqualTo(String value) {
+            addCriterion("phone <>", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneGreaterThan(String value) {
+            addCriterion("phone >", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("phone >=", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLessThan(String value) {
+            addCriterion("phone <", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLessThanOrEqualTo(String value) {
+            addCriterion("phone <=", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLike(String value) {
+            addCriterion("phone like", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotLike(String value) {
+            addCriterion("phone not like", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIn(List<String> values) {
+            addCriterion("phone in", values, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotIn(List<String> values) {
+            addCriterion("phone not in", values, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneBetween(String value1, String value2) {
+            addCriterion("phone between", value1, value2, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotBetween(String value1, String value2) {
+            addCriterion("phone not between", value1, value2, "phone");
+            return (Criteria) this;
+        }
+
         public Criteria andBankIdIsNull() {
             addCriterion("bank_id is null");
             return (Criteria) this;
@@ -935,6 +1075,76 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andFindcodeIsNull() {
+            addCriterion("findcode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeIsNotNull() {
+            addCriterion("findcode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeEqualTo(String value) {
+            addCriterion("findcode =", value, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeNotEqualTo(String value) {
+            addCriterion("findcode <>", value, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeGreaterThan(String value) {
+            addCriterion("findcode >", value, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeGreaterThanOrEqualTo(String value) {
+            addCriterion("findcode >=", value, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeLessThan(String value) {
+            addCriterion("findcode <", value, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeLessThanOrEqualTo(String value) {
+            addCriterion("findcode <=", value, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeLike(String value) {
+            addCriterion("findcode like", value, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeNotLike(String value) {
+            addCriterion("findcode not like", value, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeIn(List<String> values) {
+            addCriterion("findcode in", values, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeNotIn(List<String> values) {
+            addCriterion("findcode not in", values, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeBetween(String value1, String value2) {
+            addCriterion("findcode between", value1, value2, "findcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeNotBetween(String value1, String value2) {
+            addCriterion("findcode not between", value1, value2, "findcode");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -1125,6 +1335,16 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andIdnoLikeInsensitive(String value) {
+            addCriterion("upper(idno) like", value.toUpperCase(), "idno");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLikeInsensitive(String value) {
+            addCriterion("upper(phone) like", value.toUpperCase(), "phone");
+            return (Criteria) this;
+        }
+
         public Criteria andBankBrankLikeInsensitive(String value) {
             addCriterion("upper(bank_brank) like", value.toUpperCase(), "bankBrank");
             return (Criteria) this;
@@ -1132,6 +1352,11 @@ public class PayShopBargainOrderExample {
 
         public Criteria andBankNoLikeInsensitive(String value) {
             addCriterion("upper(bank_no) like", value.toUpperCase(), "bankNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFindcodeLikeInsensitive(String value) {
+            addCriterion("upper(findcode) like", value.toUpperCase(), "findcode");
             return (Criteria) this;
         }
     }

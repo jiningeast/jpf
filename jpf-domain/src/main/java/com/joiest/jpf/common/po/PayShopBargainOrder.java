@@ -50,6 +50,16 @@ public class PayShopBargainOrder implements Serializable {
     private String realName;
 
     /**
+     * 身份证号
+     */
+    private String idno;
+
+    /**
+     * 手机号
+     */
+    private String phone;
+
+    /**
      * 银行id
      */
     private String bankId;
@@ -63,6 +73,11 @@ public class PayShopBargainOrder implements Serializable {
      * 银行卡卡号
      */
     private String bankNo;
+
+    /**
+     * 聚合所用银行编码
+     */
+    private String findcode;
 
     /**
      * 订单状态 0=未支付 1=已支付 2=取消
@@ -153,6 +168,22 @@ public class PayShopBargainOrder implements Serializable {
         this.realName = realName == null ? null : realName.trim();
     }
 
+    public String getIdno() {
+        return idno;
+    }
+
+    public void setIdno(String idno) {
+        this.idno = idno == null ? null : idno.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
     public String getBankId() {
         return bankId;
     }
@@ -175,6 +206,14 @@ public class PayShopBargainOrder implements Serializable {
 
     public void setBankNo(String bankNo) {
         this.bankNo = bankNo == null ? null : bankNo.trim();
+    }
+
+    public String getFindcode() {
+        return findcode;
+    }
+
+    public void setFindcode(String findcode) {
+        this.findcode = findcode == null ? null : findcode.trim();
     }
 
     public Byte getStatus() {
@@ -219,9 +258,12 @@ public class PayShopBargainOrder implements Serializable {
         sb.append(", minDou=").append(minDou);
         sb.append(", dou=").append(dou);
         sb.append(", realName=").append(realName);
+        sb.append(", idno=").append(idno);
+        sb.append(", phone=").append(phone);
         sb.append(", bankId=").append(bankId);
         sb.append(", bankBrank=").append(bankBrank);
         sb.append(", bankNo=").append(bankNo);
+        sb.append(", findcode=").append(findcode);
         sb.append(", status=").append(status);
         sb.append(", paytime=").append(paytime);
         sb.append(", addtime=").append(addtime);
@@ -254,9 +296,12 @@ public class PayShopBargainOrder implements Serializable {
             && (this.getMinDou() == null ? other.getMinDou() == null : this.getMinDou().equals(other.getMinDou()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
             && (this.getRealName() == null ? other.getRealName() == null : this.getRealName().equals(other.getRealName()))
+            && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
+            && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getBankId() == null ? other.getBankId() == null : this.getBankId().equals(other.getBankId()))
             && (this.getBankBrank() == null ? other.getBankBrank() == null : this.getBankBrank().equals(other.getBankBrank()))
             && (this.getBankNo() == null ? other.getBankNo() == null : this.getBankNo().equals(other.getBankNo()))
+            && (this.getFindcode() == null ? other.getFindcode() == null : this.getFindcode().equals(other.getFindcode()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
@@ -278,9 +323,12 @@ public class PayShopBargainOrder implements Serializable {
         result = prime * result + ((getMinDou() == null) ? 0 : getMinDou().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
         result = prime * result + ((getRealName() == null) ? 0 : getRealName().hashCode());
+        result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
+        result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getBankId() == null) ? 0 : getBankId().hashCode());
         result = prime * result + ((getBankBrank() == null) ? 0 : getBankBrank().hashCode());
         result = prime * result + ((getBankNo() == null) ? 0 : getBankNo().hashCode());
+        result = prime * result + ((getFindcode() == null) ? 0 : getFindcode().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
