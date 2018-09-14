@@ -197,8 +197,8 @@ public class OrdersController {
             if ( StringUtils.isNotBlank(""+request.getReceiveType()) ){
                 info.setReceiveType(Byte.valueOf(request.getReceiveType()));
             }
-            if ( StringUtils.isNotBlank(""+request.getReceiveValue()) ){
-                info.setReceiveValue(request.getReceiveValue());
+            if ( StringUtils.isNotBlank(""+request.getReveiveValue()) ){
+                info.setReceiveValue(request.getReveiveValue());
             }
         }else{
             info.setAmount(1);
