@@ -80,9 +80,24 @@ public class PayShopBargainOrder implements Serializable {
     private String findcode;
 
     /**
-     * 订单状态 0=未支付 1=已支付 2=取消
+     * 订单状态 0=未支付 1=运营已审核 2=财务打款中 3=打款成功 4=打款失败 5=取消订单
      */
     private Byte status;
+
+    /**
+     * 操作人id
+     */
+    private String operatorId;
+
+    /**
+     * 操作人姓名
+     */
+    private String operatorName;
+
+    /**
+     * 备注
+     */
+    private String memo;
 
     /**
      * 支付时间
@@ -224,6 +239,30 @@ public class PayShopBargainOrder implements Serializable {
         this.status = status;
     }
 
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId == null ? null : operatorId.trim();
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName == null ? null : operatorName.trim();
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo == null ? null : memo.trim();
+    }
+
     public Date getPaytime() {
         return paytime;
     }
@@ -265,6 +304,9 @@ public class PayShopBargainOrder implements Serializable {
         sb.append(", bankNo=").append(bankNo);
         sb.append(", findcode=").append(findcode);
         sb.append(", status=").append(status);
+        sb.append(", operatorId=").append(operatorId);
+        sb.append(", operatorName=").append(operatorName);
+        sb.append(", memo=").append(memo);
         sb.append(", paytime=").append(paytime);
         sb.append(", addtime=").append(addtime);
         sb.append("]");
@@ -303,6 +345,9 @@ public class PayShopBargainOrder implements Serializable {
             && (this.getBankNo() == null ? other.getBankNo() == null : this.getBankNo().equals(other.getBankNo()))
             && (this.getFindcode() == null ? other.getFindcode() == null : this.getFindcode().equals(other.getFindcode()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
+            && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
+            && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
     }
@@ -330,6 +375,9 @@ public class PayShopBargainOrder implements Serializable {
         result = prime * result + ((getBankNo() == null) ? 0 : getBankNo().hashCode());
         result = prime * result + ((getFindcode() == null) ? 0 : getFindcode().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
+        result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
+        result = prime * result + ((getMemo() == null) ? 0 : getMemo().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         return result;
