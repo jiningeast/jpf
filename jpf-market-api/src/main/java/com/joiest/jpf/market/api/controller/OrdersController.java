@@ -185,7 +185,12 @@ public class OrdersController {
         info.setProductDou(productInfo.getDou());
         info.setProductInfoId(productInfo.getProductInfoId());
         info.setTotalMoney(productInfo.getMoney());
-        info.setTotalDou(productInfo.getDou());
+        if ( StringUtils.isNotBlank(""+request.getAmount()) ){
+            info.setTotalDou(productInfo.getDou()*Integer.parseInt(request.getAmount()));
+        }else{
+            info.setTotalDou(productInfo.getDou());
+        }
+
 
         // 如果是卡密交易
         if ( source.equals("2") ){
