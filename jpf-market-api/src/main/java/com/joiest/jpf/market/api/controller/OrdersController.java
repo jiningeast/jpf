@@ -7,6 +7,7 @@ import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
+import com.joiest.jpf.dto.GetShopStockCardResponse;
 import com.joiest.jpf.dto.OfpayRequest;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -185,7 +187,12 @@ public class OrdersController {
         info.setProductDou(productInfo.getDou());
         info.setProductInfoId(productInfo.getProductInfoId());
         info.setTotalMoney(productInfo.getMoney());
-        info.setTotalDou(productInfo.getDou());
+        if ( StringUtils.isNotBlank(""+request.getAmount()) ){
+            info.setTotalDou(productInfo.getDou()*Integer.parseInt(request.getAmount()));
+        }else{
+            info.setTotalDou(productInfo.getDou());
+        }
+
 
         // 如果是卡密交易
         if ( source.equals("2") ){
@@ -289,26 +296,11 @@ public class OrdersController {
             List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,orderInfo.getAmount());
             if( list == null || list.isEmpty() || productInfo.getStored()<orderInfo.getAmount() || list.size()<orderInfo.getAmount() ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
-            }else if ( orderInfo.getReceiveType() == 1 ){
-                // 如果接收方式是短信接收，则给用户发卡密
-                String buySuc = this.cardRecharge(orderInfo,productInfo,list,userCouponList);
+            }else {
+                String buySuc = this.cardRecharge(orderInfo,productInfo,list,userCouponList,Httpresponse);
                 return buySuc;
-            }else if ( orderInfo.getReceiveType() == 2 ){
-                Map<String,Object> map = new HashMap<>();
-                map.put("data",orderInfo.getReceiveValue());
-                String emailRes = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/custom/sendCardEmail",map);
-
-                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
-                shopInterfaceStreamInfo.setType((byte)1);
-                shopInterfaceStreamInfo.setRequestUrl( ConfigUtil.getValue("CLOUD_API_URL")+"/custom/sendCardEmail" );
-                shopInterfaceStreamInfo.setRequestContent( ToolUtils.mapToUrl(map) );
-                shopInterfaceStreamInfo.setResponseContent(emailRes);
-                shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
-                shopInterfaceStreamInfo.setAddtime(new Date());
-                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
             }
         }else{
-
             //充值
             if ( orderInfo.getOrderType() == 3 )
             {
@@ -376,6 +368,90 @@ public class OrdersController {
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "充值成功", ManageConstants.rechargeStatusCn_map.get(game_state));
     }
+
+    // 发email
+    public String sendCardEmail(HttpServletResponse Httpresponse,String data) throws Exception {
+
+        String email= null;
+        String orderNo = null;
+        try {
+            String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+            String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+            Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
+            email = (String) requestMap.get("email");
+            orderNo = requestMap.get("orderNo").toString();
+
+            if(email==null){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+            }
+        } catch (Exception e) {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+        }
+        //判断请求参数是否合法
+        String emailpattern="^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
+        boolean isemail = Pattern.matches(emailpattern, email);
+
+        if(isemail==false){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "邮箱格式不正确", null);
+        }
+        //根据用户id查出当前用户的卡密
+        String cutomId=userInfo.getId();
+        if( org.apache.commons.lang.StringUtils.isBlank(cutomId)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "用户未登录", null);
+        }
+        GetShopStockCardResponse response=shopStockCardServiceFacade.getCardMByOrderNo(cutomId,orderNo);
+        if(response.getList().size()==0){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您还未有购买的卡密", null);
+        }
+        //如果有购买的卡密放到Excel
+//        设置excel标题以及字段
+        JSONArray res = new JSONArray();
+        res.add("卡号");
+        res.add("密码");
+        res.add("购买时间");
+
+        JSONArray filed = new JSONArray();
+        filed.add("cardNo");//卡号
+        filed.add("cardPass");
+        filed.add("paytime");
+        JSONObject excel;
+        String filepath="";
+        String filename="";
+
+        try {
+            excel = new ExcelDealUtils().exportExcelByInfo(Httpresponse,res.toString(),filed.toString(),response.getList(),2,ConfigUtil.getValue("EXCEL_PATH"));
+            filepath = excel.getJSONObject("data").get("localUrl").toString();
+            filename = excel.getJSONObject("data").get("fileName").toString();
+
+        } catch (Exception e) {
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件信息有误", null);
+        }
+        if(org.apache.commons.lang.StringUtils.isBlank(filepath)|| org.apache.commons.lang.StringUtils.isBlank(filename)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件信息有误", null);
+        }
+        // 发送邮件
+        String subject = "欣豆市场卡密";
+        String sendName = "欣享服务";
+        String recipients = email;//接收邮箱地址
+        String recipientsName = URLDecoder.decode(userInfo.getNickname(), "UTF-8");
+        ;//接收人姓名
+        String html = "<p>尊敬的客户，您好：</p>" +
+                "<p style='text-index:2em;'>附件打包文件是您的卡密。</p>" +
+                "<p style='text-index:2em; color:red;'>【请您知晓，您应妥善保管卡密信息。因泄露信息导致的损失需由您自行承担】</p>" +
+                "<p style='text-align:left;'>此文件为系统自动发送，无需回复。</p>" +
+                "<p style='text-align:left;'>欣享爱生活</p>";
+        Boolean sendStatus =SendMailUtil.sendMultipleEmail(subject,sendName,recipients,recipientsName,filepath,filename,html);
+
+        if ( !sendStatus ){
+            // 邮件发送失败
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "发送失败", null);
+        }else{
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "邮件发送成功", null);
+        }
+
+    }
+
     /**
     *
      * 卡密信息操作
@@ -383,7 +459,7 @@ public class OrdersController {
      * @param productInfo 商品信息
      * @param list 卡信息
     * */
-    private String cardRecharge(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo,List<ShopStockCardInfo> list,GetCouponRemainResponse userCouponList){
+    private String cardRecharge(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo,List<ShopStockCardInfo> list,GetCouponRemainResponse userCouponList,HttpServletResponse Httpresponse){
 
         Date date = new Date();
         SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -398,6 +474,7 @@ public class OrdersController {
             cardInfo.put("customer_phone",userInfo.getPhone());
             cardInfo.put("paytime","1");
             cardInfo.put("status","1");
+            cardInfo.put("orderNo",orderInfo.getOrderNo());
 
             int isShopSuc = shopStockCardServiceFacade.upShopCardById(cardInfo);
 
@@ -452,32 +529,56 @@ public class OrdersController {
 
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         }
-        if ( StringUtils.isNotBlank(orderInfo.getReceiveValue()) ){
-            String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
-            Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+        if ( orderInfo.getReceiveType() == 1 ){
+            if ( StringUtils.isNotBlank(orderInfo.getReceiveValue()) ){
+                String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
+                Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
 
-            // 添加短信流水
-            ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
-            shopInterfaceStreamInfo.setType((byte)1);
-            shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
-            shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
-            shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
-            shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
-            shopInterfaceStreamInfo.setAddtime(new Date());
-            shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
-        }else{
-            String content = "您已购买中石化加油卡一张，卡号"+list.get(0).getCardNo()+"，密码"+list.get(0).getCardPass()+"，请妥善保管。";
-            Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+                // 添加短信流水
+                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+                shopInterfaceStreamInfo.setType((byte)1);
+                shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+                shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+                shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+                shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+                shopInterfaceStreamInfo.setAddtime(new Date());
+                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+            }else{
+                String content = "您已购买中石化加油卡一张，卡号"+list.get(0).getCardNo()+"，密码"+list.get(0).getCardPass()+"，请妥善保管。";
+                Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
 
-            // 添加短信流水
-            ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
-            shopInterfaceStreamInfo.setType((byte)1);
-            shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
-            shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
-            shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
-            shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
-            shopInterfaceStreamInfo.setAddtime(new Date());
-            shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+                // 添加短信流水
+                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+                shopInterfaceStreamInfo.setType((byte)1);
+                shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+                shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+                shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+                shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+                shopInterfaceStreamInfo.setAddtime(new Date());
+                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+            }
+        }else if ( orderInfo.getReceiveType() == 2 ){
+            // 如果接收方式是邮件接收，则给用户发卡密邮件
+            Map<String ,String> emailRequestMap = new HashMap<>();
+            emailRequestMap.put("email",orderInfo.getReceiveValue());
+            emailRequestMap.put("orderNo",orderInfo.getOrderNo());
+            String dataValue = JsonUtils.toJson(emailRequestMap);
+            try {
+                sendCardEmail(Httpresponse,Base64CustomUtils.base64Encoder(dataValue));
+
+                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+                shopInterfaceStreamInfo.setType((byte)2);
+                shopInterfaceStreamInfo.setRequestUrl( ConfigUtil.getValue("SHOP_API_URL")+"/custom/sendCardEmail" );
+                shopInterfaceStreamInfo.setRequestContent( Base64CustomUtils.base64Encoder(dataValue) );
+                shopInterfaceStreamInfo.setResponseContent("");
+                shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+                shopInterfaceStreamInfo.setAddtime(new Date());
+                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+            }catch (Exception e){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+            }
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "购买成功", null);
         }
 
 
