@@ -305,11 +305,11 @@ public class OrdersController {
 
                 Map<String,Object> map = new HashMap<>();
                 map.put("data",Base64CustomUtils.base64Encoder(dataValue));
-                String emailRes = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/custom/sendCardEmail",map);
+                String emailRes = OkHttpUtils.postForm(ConfigUtil.getValue("SHOP_API_URL")+"/custom/sendCardEmail",map);
 
                 ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
                 shopInterfaceStreamInfo.setType((byte)1);
-                shopInterfaceStreamInfo.setRequestUrl( ConfigUtil.getValue("CLOUD_API_URL")+"/custom/sendCardEmail" );
+                shopInterfaceStreamInfo.setRequestUrl( ConfigUtil.getValue("SHOP_API_URL")+"/custom/sendCardEmail" );
                 shopInterfaceStreamInfo.setRequestContent( ToolUtils.mapToUrl(map) );
                 shopInterfaceStreamInfo.setResponseContent(emailRes);
                 shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
