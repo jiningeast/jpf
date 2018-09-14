@@ -70,8 +70,11 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
 
             //商品基础信息
             PayShopProductInfo pInfo = payShopProductInfoMapper.selectByPrimaryKey(one.getProductInfoId());
+            info.setBrandId(pInfo.getBrandId());
             info.setBrandName(pInfo.getBrandName());
+            info.setSupplierId(pInfo.getSupplierId());
             info.setSupplierName(pInfo.getSupplierName());
+            info.setTypeId(pInfo.getTypeId());
             info.setTypeName(pInfo.getTypeName());
             resultList.add(info);
         }

@@ -77,13 +77,14 @@
 
                 ajaxLoadEnd();
                 var obj = JSON.parse(msg);//转化为json对象
+                console.log(obj);
                 if(obj.code == "10000"){
 
                     // 打开新窗口显示数据
                     $('#purcaseShow').window("open").window('refresh', 'purchaseData?fileUUid='+obj.data.fileUUid+'&id='+obj.data.id).window('setTitle','确认采购商品数据');
 
                 }else{
-                    $.messager.alert('提示',obj.info,'info')
+                    $.messager.alert('提示',obj.info,'error')
                 }
             }
         });

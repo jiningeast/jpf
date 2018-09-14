@@ -375,6 +375,7 @@ public class OrdersController {
 
         Date date = new Date();
         SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        StringBuilder smsSb = new StringBuilder();
 
         for ( ShopStockCardInfo shopStockCardInfo:list ){
             //更新卡密信息到具体的用户
@@ -416,8 +417,7 @@ public class OrdersController {
             int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(  orderinfo);
             if ( isShopSuc >0 )
             {
-                String content = "您已购买中石油加油卡一张，卡号"+shopStockCardInfo.getCardNo()+"，密码"+shopStockCardInfo.getCardPass()+"，请妥善保管。";
-                Map<String,String> smsRes = SmsUtils.send(orderinfo.getReceiveValue(),content,"CardSmsLog");
+                smsSb.append("[卡号："+shopStockCardInfo.getCardNo()+"，密码：" +shopStockCardInfo.getCardPass()+ "]");
                 //扣减豆操作
                 int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
             } else
@@ -440,6 +440,14 @@ public class OrdersController {
 
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         }
+        if ( StringUtils.isNotBlank(orderInfo.getReceiveValue()) ){
+            String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
+            Map<String,String> smsRes = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+        }else{
+            String content = "您已购买中石油加油卡一张，卡号"+list.get(0).getCardNo()+"，密码"+list.get(0).getCardPass()+"，请妥善保管。";
+            Map<String,String> smsRes = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+        }
+
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "购买成功", null);
     }
