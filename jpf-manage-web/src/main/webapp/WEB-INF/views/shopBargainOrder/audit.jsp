@@ -126,16 +126,20 @@
                         <select id="status_audit" name="status" class="easyui-combobox" style="width:120px;" data-options="">
 
                             <c:if test="${type == 1 }">
+
                                 <option value="" selected="selected">请选择</option>
                                 <option value="5"  <c:if  test="${shopBargainOrderInfo.status == '5' }">selected</c:if>>取消</option>
                                 <option value="1" <c:if  test="${shopBargainOrderInfo.status == '1' }">selected</c:if> >审批</option>
+
                             </c:if>
                             <c:if test="${type == 2 }">
+
                                 <option value="" selected="selected">请选择</option>
                                 <option value="2"  <c:if  test="${shopBargainOrderInfo.status == '2' }">selected</c:if>>打款中</option>
                                 <option value="3"  <c:if  test="${shopBargainOrderInfo.status == '3' }">selected</c:if>>打款成功</option>
                                 <option value="4"  <c:if  test="${shopBargainOrderInfo.status == '4' }">selected</c:if>>打款失败</option>
                                 <option value="5"  <c:if  test="${shopBargainOrderInfo.status == '5' }">selected</c:if>>取消订单</option>
+
                             </c:if>
 
 
