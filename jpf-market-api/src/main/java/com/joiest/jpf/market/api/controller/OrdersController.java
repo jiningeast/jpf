@@ -294,8 +294,12 @@ public class OrdersController {
                 String buySuc = this.cardRecharge(orderInfo,productInfo,list,userCouponList);
                 return buySuc;
             }else if ( orderInfo.getReceiveType() == 2 ){
+                Map<String ,String> emailRequestMap = new HashMap<>();
+                emailRequestMap.put("email",orderInfo.getReceiveValue());
+                String dataValue = JsonUtils.toJson(emailRequestMap);
+
                 Map<String,Object> map = new HashMap<>();
-                map.put("data",orderInfo.getReceiveValue());
+                map.put("data",dataValue);
                 String emailRes = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/custom/sendCardEmail",map);
 
                 ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
