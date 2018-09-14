@@ -78,6 +78,9 @@ public class OrdersController {
     @Autowired
     private  ShopStockCardServiceFacade shopStockCardServiceFacade;
 
+    @Autowired
+    private ShopInterfaceStreamServiceFacade shopInterfaceStreamServiceFacade;
+
     //TODO  记录请求日志  商品类别判断
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -293,6 +296,7 @@ public class OrdersController {
             }else if ( orderInfo.getReceiveType() == 2 ){
                 Map<String,Object> map = new HashMap<>();
                 map.put("data","");
+//                JSONObject
                 OkHttpUtils.postForm("/custom/sendCardEmail",map);
             }
         }else{
@@ -442,10 +446,30 @@ public class OrdersController {
         }
         if ( StringUtils.isNotBlank(orderInfo.getReceiveValue()) ){
             String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
-            Map<String,String> smsRes = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+            Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+
+            // 添加短信流水
+            ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+            shopInterfaceStreamInfo.setType((byte)1);
+            shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+            shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+            shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+            shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+            shopInterfaceStreamInfo.setAddtime(new Date());
+            shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
         }else{
-            String content = "您已购买中石油加油卡一张，卡号"+list.get(0).getCardNo()+"，密码"+list.get(0).getCardPass()+"，请妥善保管。";
-            Map<String,String> smsRes = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+            String content = "您已购买中石化加油卡一张，卡号"+list.get(0).getCardNo()+"，密码"+list.get(0).getCardPass()+"，请妥善保管。";
+            Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+
+            // 添加短信流水
+            ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+            shopInterfaceStreamInfo.setType((byte)1);
+            shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+            shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+            shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+            shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+            shopInterfaceStreamInfo.setAddtime(new Date());
+            shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
         }
 
 
