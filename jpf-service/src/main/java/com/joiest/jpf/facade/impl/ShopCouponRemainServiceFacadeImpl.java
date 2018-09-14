@@ -228,7 +228,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             //更新信息
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
         }
-        return res_order;
+         return res_order;
     }
 
     /**
