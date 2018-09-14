@@ -65,7 +65,7 @@ public class CreateOrderInterfaceRequest {
     /**
      * 接收值，手机号或邮箱
      */
-    private String receiveValue;
+    private String reveiveValue;
 
     public String getCardno() {
         return cardno;
@@ -147,11 +147,11 @@ public class CreateOrderInterfaceRequest {
         this.receiveType = receiveType;
     }
 
-    public String getReceiveValue() {
-        return receiveValue;
+    public String getReveiveValue() {
+        return reveiveValue;
     }
 
-    public void setReceiveValue(String receiveValue) {
-        this.receiveValue = receiveValue;
+    public void setReveiveValue(String reveiveValue) {
+        this.reveiveValue = reveiveValue;
     }
 }
