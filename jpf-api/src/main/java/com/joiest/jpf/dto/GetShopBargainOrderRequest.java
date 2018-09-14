@@ -1,5 +1,6 @@
 package com.joiest.jpf.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -135,6 +136,12 @@ public class GetShopBargainOrderRequest {
      * 状态数组
      */
     private List<Byte> statusArr;
+
+
+    /**
+     * 转让价
+     */
+    private BigDecimal transferPrice;
 
     private static final long serialVersionUID = 1L;
 
@@ -348,5 +355,13 @@ public class GetShopBargainOrderRequest {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public BigDecimal getTransferPrice() {
+        return transferPrice;
+    }
+
+    public void setTransferPrice(BigDecimal transferPrice) {
+        this.transferPrice = transferPrice;
     }
 }
