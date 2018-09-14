@@ -304,7 +304,7 @@ public class OrdersController {
                 String dataValue = JsonUtils.toJson(emailRequestMap);
 
                 Map<String,Object> map = new HashMap<>();
-                map.put("data",dataValue);
+                map.put("data",Base64CustomUtils.base64Encoder(dataValue));
                 String emailRes = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/custom/sendCardEmail",map);
 
                 ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
