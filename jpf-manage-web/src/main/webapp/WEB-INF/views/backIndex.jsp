@@ -209,6 +209,7 @@
                         "menuname" : "欣豆收购订单",
                         "icon" : "icon-nav",
                         "url" : "shopBargainOrder/indexCaiwu"
+
                     }]
             },{
                 "menuid" : "7",
