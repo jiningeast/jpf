@@ -102,6 +102,7 @@
                         formatter : function(value,row,index){
 
                             return  decodeURI(value);
+
                         }
                     },
                     {field:'offRate',title:'折损率',width:'5%'},
