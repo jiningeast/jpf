@@ -97,11 +97,12 @@
                 url:'list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
-                    {field:'customerId',title:'发布人ID',width:'5%'},
+                    // {field:'customerId',title:'发布人ID',width:'5%'},
                     {field:'nickname',title:'发布人昵称',width:'8%',
                         formatter : function(value,row,index){
 
                             return  decodeURI(value);
+
                         }
                     },
                     {field:'offRate',title:'折损率',width:'5%'},
