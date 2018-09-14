@@ -507,8 +507,6 @@ public class OrdersController {
             if ( isShopSuc >0 )
             {
                 smsSb.append("[卡号："+shopStockCardInfo.getCardNo()+"，密码：" +shopStockCardInfo.getCardPass()+ "]");
-                //扣减豆操作
-                int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
             } else
             {
                 Map<String,String> err = new HashMap<>();
@@ -529,6 +527,10 @@ public class OrdersController {
 
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         }
+
+        //扣减豆操作
+        int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
+
         if ( orderInfo.getReceiveType() == 1 ){
             if ( StringUtils.isNotBlank(orderInfo.getReceiveValue()) ){
                 String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
