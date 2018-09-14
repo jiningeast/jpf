@@ -216,7 +216,7 @@ public class CustomController {
     @RequestMapping("/index")
     @ResponseBody
     public String index(){
-        // 构建返回
+        // 构建返回+
         Map<String, Object> responseDataMap = new HashMap<>();
         responseDataMap.put("type", userInfo.getType());
         String responseDataJson = JsonUtils.toJson(responseDataMap);
