@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopBargainOrder implements Serializable {
@@ -43,6 +44,11 @@ public class PayShopBargainOrder implements Serializable {
      * 使用了多少豆
      */
     private Integer dou;
+
+    /**
+     * 转让价
+     */
+    private BigDecimal transferPrice;
 
     /**
      * 收款人姓名
@@ -175,6 +181,14 @@ public class PayShopBargainOrder implements Serializable {
         this.dou = dou;
     }
 
+    public BigDecimal getTransferPrice() {
+        return transferPrice;
+    }
+
+    public void setTransferPrice(BigDecimal transferPrice) {
+        this.transferPrice = transferPrice;
+    }
+
     public String getRealName() {
         return realName;
     }
@@ -296,6 +310,7 @@ public class PayShopBargainOrder implements Serializable {
         sb.append(", offRate=").append(offRate);
         sb.append(", minDou=").append(minDou);
         sb.append(", dou=").append(dou);
+        sb.append(", transferPrice=").append(transferPrice);
         sb.append(", realName=").append(realName);
         sb.append(", idno=").append(idno);
         sb.append(", phone=").append(phone);
@@ -337,6 +352,7 @@ public class PayShopBargainOrder implements Serializable {
             && (this.getOffRate() == null ? other.getOffRate() == null : this.getOffRate().equals(other.getOffRate()))
             && (this.getMinDou() == null ? other.getMinDou() == null : this.getMinDou().equals(other.getMinDou()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
+            && (this.getTransferPrice() == null ? other.getTransferPrice() == null : this.getTransferPrice().equals(other.getTransferPrice()))
             && (this.getRealName() == null ? other.getRealName() == null : this.getRealName().equals(other.getRealName()))
             && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
@@ -367,6 +383,7 @@ public class PayShopBargainOrder implements Serializable {
         result = prime * result + ((getOffRate() == null) ? 0 : getOffRate().hashCode());
         result = prime * result + ((getMinDou() == null) ? 0 : getMinDou().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
+        result = prime * result + ((getTransferPrice() == null) ? 0 : getTransferPrice().hashCode());
         result = prime * result + ((getRealName() == null) ? 0 : getRealName().hashCode());
         result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());

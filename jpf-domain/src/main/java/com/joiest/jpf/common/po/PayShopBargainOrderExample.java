@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -662,6 +663,66 @@ public class PayShopBargainOrderExample {
 
         public Criteria andDouNotBetween(Integer value1, Integer value2) {
             addCriterion("dou not between", value1, value2, "dou");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceIsNull() {
+            addCriterion("transfer_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceIsNotNull() {
+            addCriterion("transfer_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceEqualTo(BigDecimal value) {
+            addCriterion("transfer_price =", value, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceNotEqualTo(BigDecimal value) {
+            addCriterion("transfer_price <>", value, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceGreaterThan(BigDecimal value) {
+            addCriterion("transfer_price >", value, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("transfer_price >=", value, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceLessThan(BigDecimal value) {
+            addCriterion("transfer_price <", value, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("transfer_price <=", value, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceIn(List<BigDecimal> values) {
+            addCriterion("transfer_price in", values, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceNotIn(List<BigDecimal> values) {
+            addCriterion("transfer_price not in", values, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("transfer_price between", value1, value2, "transferPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("transfer_price not between", value1, value2, "transferPrice");
             return (Criteria) this;
         }
 
