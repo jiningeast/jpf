@@ -70,6 +70,11 @@ public class ShopStockCardInfo {
     private String stockOrderNo;
 
     /**
+     * 商品订单号
+     */
+    private String orderNo;
+
+    /**
      * 客户id
      */
     private String customerId;
@@ -109,8 +114,6 @@ public class ShopStockCardInfo {
      * 支付时间格式转换
      */
     private String  paytimeCopy;
-
-    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
@@ -214,6 +217,14 @@ public class ShopStockCardInfo {
 
     public void setStockOrderNo(String stockOrderNo) {
         this.stockOrderNo = stockOrderNo == null ? null : stockOrderNo.trim();
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public String getCustomerId() {

@@ -236,6 +236,8 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
         if(cardInfo.containsKey("status"))
             payShopStockCard.setStatus(Byte.valueOf(cardInfo.get("status")));
 
+        if(cardInfo.containsKey("orderNo"))
+            payShopStockCard.setOrderNo(cardInfo.get("orderNo"));
 
         return payShopStockCardMapper.updateByPrimaryKeySelective(payShopStockCard);
     }
@@ -339,6 +341,40 @@ public class ShopStockCardServiceFacadeImpl implements ShopStockCardServiceFacad
         c.andCustomerIdEqualTo(customerId);
         c.andCardTypeEqualTo((byte)2);
         c.andStatusEqualTo((byte)1);
+        List<PayShopStockCard> list=payShopStockCardMapper.selectByExample(e);
+        List<ShopStockCardInfo>infoList= new ArrayList<>();
+        for (PayShopStockCard one : list)
+        {
+            ShopStockCardInfo info = new ShopStockCardInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopStockCard.class, ShopStockCardInfo.class, false);
+            beanCopier.copy(one, info, null);
+            //时间格式转换
+            if( info !=null){
+                Date currentTime = one.getPaytime();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateString = formatter.format(currentTime);
+                info.setPaytimeCopy(dateString);
+            }
+            infoList.add(info);
+        }
+        GetShopStockCardResponse response = new GetShopStockCardResponse();
+        response.setList(infoList);
+        int count = payShopStockCardMapper.countByExample(e);
+        response.setCount(count);
+        return response;
+    }
+
+    /**
+     * 根据订单号查找某个用户买过的卡密
+     */
+    public GetShopStockCardResponse getCardMByOrderNo(String customerId,String orderNo){
+        PayShopStockCardExample e = new PayShopStockCardExample();
+        PayShopStockCardExample.Criteria c = e.createCriteria();
+        e.setOrderByClause("ID DESC");
+        c.andCustomerIdEqualTo(customerId);
+        c.andCardTypeEqualTo((byte)2);
+        c.andStatusEqualTo((byte)1);
+        c.andOrderNoEqualTo(orderNo);
         List<PayShopStockCard> list=payShopStockCardMapper.selectByExample(e);
         List<ShopStockCardInfo>infoList= new ArrayList<>();
         for (PayShopStockCard one : list)

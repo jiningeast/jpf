@@ -46,4 +46,9 @@ public interface ShopStockCardServiceFacade {
      * 查找某个用户买过的卡密
      */
     public GetShopStockCardResponse getCardM(String customerId);
+
+    /**
+     * 根据订单号查找某个用户买过的卡密
+     */
+    public GetShopStockCardResponse getCardMByOrderNo(String customerId,String orderNo);
 }

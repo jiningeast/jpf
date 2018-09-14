@@ -71,6 +71,11 @@ public class PayShopStockCard implements Serializable {
     private String stockOrderNo;
 
     /**
+     * 商品订单号
+     */
+    private String orderNo;
+
+    /**
      * 客户id
      */
     private String customerId;
@@ -211,6 +216,14 @@ public class PayShopStockCard implements Serializable {
         this.stockOrderNo = stockOrderNo == null ? null : stockOrderNo.trim();
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
     public String getCustomerId() {
         return customerId;
     }
@@ -289,6 +302,7 @@ public class PayShopStockCard implements Serializable {
         sb.append(", bid=").append(bid);
         sb.append(", stockOrderId=").append(stockOrderId);
         sb.append(", stockOrderNo=").append(stockOrderNo);
+        sb.append(", orderNo=").append(orderNo);
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName=").append(customerName);
         sb.append(", customerPhone=").append(customerPhone);
@@ -329,6 +343,7 @@ public class PayShopStockCard implements Serializable {
             && (this.getBid() == null ? other.getBid() == null : this.getBid().equals(other.getBid()))
             && (this.getStockOrderId() == null ? other.getStockOrderId() == null : this.getStockOrderId().equals(other.getStockOrderId()))
             && (this.getStockOrderNo() == null ? other.getStockOrderNo() == null : this.getStockOrderNo().equals(other.getStockOrderNo()))
+            && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
             && (this.getCustomerName() == null ? other.getCustomerName() == null : this.getCustomerName().equals(other.getCustomerName()))
             && (this.getCustomerPhone() == null ? other.getCustomerPhone() == null : this.getCustomerPhone().equals(other.getCustomerPhone()))
@@ -358,6 +373,7 @@ public class PayShopStockCard implements Serializable {
         result = prime * result + ((getBid() == null) ? 0 : getBid().hashCode());
         result = prime * result + ((getStockOrderId() == null) ? 0 : getStockOrderId().hashCode());
         result = prime * result + ((getStockOrderNo() == null) ? 0 : getStockOrderNo().hashCode());
+        result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());
         result = prime * result + ((getCustomerName() == null) ? 0 : getCustomerName().hashCode());
         result = prime * result + ((getCustomerPhone() == null) ? 0 : getCustomerPhone().hashCode());
