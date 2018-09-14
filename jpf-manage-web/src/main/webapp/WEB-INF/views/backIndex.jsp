@@ -158,7 +158,7 @@
                     "menuname" : "欣豆市场广告管理",
                     "icon" : "icon-nav",
                     "url" : "shopAd/index"
-                },{
+                }/*,{
                         "menuid" : "508",
                         "menuname" : "欣豆市场欣豆收购管理",
                         "icon" : "icon-nav",
@@ -169,7 +169,7 @@
                         "menuname" : "欣豆收购订单管理",
                         "icon" : "icon-nav",
                         "url" : "shopBargainOrder/index"
-                    }]
+                    }*/]
             },{
                     "menuid" : "6",
                     "icon" : "icon-sys",
@@ -204,13 +204,13 @@
                         "menuname" : "欣豆市场采购审核",
                         "icon" : "icon-nav",
                         "url" : "shopStockOrder/indexCaiwu"
-                    },{
+                    }/*,{
                         "menuid" : "607",
                         "menuname" : "欣豆收购订单",
                         "icon" : "icon-nav",
                         "url" : "shopBargainOrder/indexCaiwu"
 
-                    }]
+                    }*/]
             },{
                 "menuid" : "7",
                 "icon" : "icon-sys",
