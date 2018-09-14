@@ -295,9 +295,17 @@ public class OrdersController {
                 return buySuc;
             }else if ( orderInfo.getReceiveType() == 2 ){
                 Map<String,Object> map = new HashMap<>();
-                map.put("data","");
-//                JSONObject
-                OkHttpUtils.postForm("/custom/sendCardEmail",map);
+                map.put("data",orderInfo.getReceiveValue());
+                String emailRes = OkHttpUtils.postForm(ConfigUtil.getValue("CLOUD_API_URL")+"/custom/sendCardEmail",map);
+
+                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+                shopInterfaceStreamInfo.setType((byte)1);
+                shopInterfaceStreamInfo.setRequestUrl( ConfigUtil.getValue("CLOUD_API_URL")+"/custom/sendCardEmail" );
+                shopInterfaceStreamInfo.setRequestContent( ToolUtils.mapToUrl(map) );
+                shopInterfaceStreamInfo.setResponseContent(emailRes);
+                shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+                shopInterfaceStreamInfo.setAddtime(new Date());
+                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
             }
         }else{
 
