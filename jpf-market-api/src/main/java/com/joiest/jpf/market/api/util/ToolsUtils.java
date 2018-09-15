@@ -47,4 +47,18 @@ public class ToolsUtils {
 
     }
 
+    public static boolean isInterger(String str) {
+
+        try {
+            //把字符串强制转换为数字
+            int num=Integer.valueOf(str);
+            //如果是数字，返回True
+            return true;
+        } catch (Exception e) {
+            //如果抛出异常，返回False
+            return false;
+        }
+
+    }
+
 }

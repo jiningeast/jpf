@@ -19,4 +19,5 @@
 	<bean id="ShopAdInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.ShopAdInterfaceServiceFacadeImpl"></bean>
 	<bean id="ShopStockCardServiceFacade" class="com.joiest.jpf.facade.impl.ShopStockCardServiceFacadeImpl"></bean>
 	<bean id="ShopProductServiceFacade" class="com.joiest.jpf.facade.impl.ShopProductServiceFacadeImpl"></bean>
+	<bean id="ShopBargainRequestServiceFacade" class="com.joiest.jpf.facade.impl.ShopBargainRequestServiceFacadeImpl"></bean>
 </beans>
