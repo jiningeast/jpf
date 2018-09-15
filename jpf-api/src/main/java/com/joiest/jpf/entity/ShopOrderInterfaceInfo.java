@@ -165,6 +165,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
      */
     private Date updatetime;
 
+    /**
+     * 单个订单总金额
+     */
+    private Integer rechargeMoney;
+
     public String getId() {
         return id;
     }
@@ -419,5 +424,13 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
     }
 }
