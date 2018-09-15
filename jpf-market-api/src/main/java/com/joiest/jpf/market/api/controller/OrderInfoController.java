@@ -100,7 +100,7 @@ public class OrderInfoController {
         if( response == null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "没有更多了", null);
         }
-        response.setTotalDou(userInfo.getDou()); //获取用户当前豆数量
+        response.setTotalDou(response.getTotalDou()); //获取用户当前豆数量
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
     }
 
