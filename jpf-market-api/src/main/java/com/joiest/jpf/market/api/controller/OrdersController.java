@@ -473,7 +473,6 @@ public class OrdersController {
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "邮件发送成功", null);
         }
-
     }
 
     /**

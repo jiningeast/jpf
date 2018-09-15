@@ -6,6 +6,7 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
+import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
@@ -95,11 +96,11 @@ public class OrderInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单编号不能为空", null);
         }
         request.setUid(uid); // 用户登录ID
-        ShopOrderInfoInterface response = shopOrderInfoInterfaceServiceFacade.getOne(request);
+        ShopOrderInterfaceInfo response = shopOrderInfoInterfaceServiceFacade.getOne(request);
         if( response == null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "没有更多了", null);
         }
-        response.setDouTotal(userInfo.getDou().toString()); //获取用户当前豆数量
+        response.setTotalDou(userInfo.getDou()); //获取用户当前豆数量
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
     }
 
