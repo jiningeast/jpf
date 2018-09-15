@@ -207,6 +207,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         int res = 0;
         //根据状态判断更新
         PayShopBargainOrder recordData = new PayShopBargainOrder();
+        Date date=new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         switch (request.getStatus()) {
 
@@ -226,6 +227,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                     //设置运营操作人
                     recordData.setOperatorId(request.getOperatorId());
                     recordData.setOperatorName(request.getOperatorName());
+                    recordData.setUpdatetime(date);
                     res = payShopBargainOrderMapper.updateByPrimaryKeySelective(recordData); //指定字段更新
                 }
                 break;
@@ -244,7 +246,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                     }
                     recordData.setOperatorId(request.getOperatorId());
                     recordData.setOperatorName(request.getOperatorName());
-
+                    recordData.setUpdatetime(date);
                     res = payShopBargainOrderMapper.updateByPrimaryKeySelective(recordData); //指定字段更新
                 }
 
@@ -255,17 +257,21 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                 } else if (payShopBargainOrder.getStatus() == (byte) 5) {
                     throw new JpfException(JpfErrorInfo.DAL_ERROR, "当前订单已取消");
                 } else {
+                     if(StringUtils.isBlank(request.getPayImg())){
+                         throw new JpfException(JpfErrorInfo.DAL_ERROR, "请上传付款凭证");
+                     }
+                    recordData.setPayImg(request.getPayImg());
                     recordData.setStatus(request.getStatus());
                     recordData.setId(infoId);
-                    if (request.getMemo() != null && org.apache.commons.lang3.StringUtils.isNotBlank(request.getMemo())) {
 
+                    if (request.getMemo() != null && org.apache.commons.lang3.StringUtils.isNotBlank(request.getMemo())) {
                         recordData.setMemo( request.getMemo()+"&#13;&#10;[" + df.format(new Date()) + "]");
                     } else {
                         recordData.setMemo("[" + df.format(new Date()) + "] ");
                     }
-                    recordData.setOperatorId(request.getOperatorId());
-                    recordData.setOperatorName(request.getOperatorName());
-
+                    recordData.setFinanceId(request.getOperatorId());
+                    recordData.setFinanceName(request.getOperatorName());
+                     recordData.setUpdatetime(date);
                     res = payShopBargainOrderMapper.updateByPrimaryKeySelective(recordData); //指定字段更新
                 }
                 break;
@@ -285,6 +291,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                     }
                     recordData.setOperatorId(request.getOperatorId());
                     recordData.setOperatorName(request.getOperatorName());
+                    recordData.setUpdatetime(date);
                     res = payShopBargainOrderMapper.updateByPrimaryKeySelective(recordData); //指定字段更新
                 }
                 break;
@@ -306,6 +313,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                     }
                     recordData.setOperatorId(request.getOperatorId());
                     recordData.setOperatorName(request.getOperatorName());
+                    recordData.setUpdatetime(date);
                     res = payShopBargainOrderMapper.updateByPrimaryKeySelective(recordData); //指定字段更新
                 }
                 break;
