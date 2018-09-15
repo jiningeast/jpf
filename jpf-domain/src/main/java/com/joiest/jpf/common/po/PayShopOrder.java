@@ -146,6 +146,11 @@ public class PayShopOrder implements Serializable {
     private String receiveValue;
 
     /**
+     * 发送方式为卡密时，excel文件的保存地址
+     */
+    private String ossUrl;
+
+    /**
      * 下单时间
      */
     private Date addtime;
@@ -386,6 +391,14 @@ public class PayShopOrder implements Serializable {
         this.receiveValue = receiveValue == null ? null : receiveValue.trim();
     }
 
+    public String getOssUrl() {
+        return ossUrl;
+    }
+
+    public void setOssUrl(String ossUrl) {
+        this.ossUrl = ossUrl == null ? null : ossUrl.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -447,6 +460,7 @@ public class PayShopOrder implements Serializable {
         sb.append(", couponActiveId=").append(couponActiveId);
         sb.append(", receiveType=").append(receiveType);
         sb.append(", receiveValue=").append(receiveValue);
+        sb.append(", ossUrl=").append(ossUrl);
         sb.append(", addtime=").append(addtime);
         sb.append(", paytime=").append(paytime);
         sb.append(", updatetime=").append(updatetime);
@@ -498,6 +512,7 @@ public class PayShopOrder implements Serializable {
             && (this.getCouponActiveId() == null ? other.getCouponActiveId() == null : this.getCouponActiveId().equals(other.getCouponActiveId()))
             && (this.getReceiveType() == null ? other.getReceiveType() == null : this.getReceiveType().equals(other.getReceiveType()))
             && (this.getReceiveValue() == null ? other.getReceiveValue() == null : this.getReceiveValue().equals(other.getReceiveValue()))
+            && (this.getOssUrl() == null ? other.getOssUrl() == null : this.getOssUrl().equals(other.getOssUrl()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -538,6 +553,7 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getCouponActiveId() == null) ? 0 : getCouponActiveId().hashCode());
         result = prime * result + ((getReceiveType() == null) ? 0 : getReceiveType().hashCode());
         result = prime * result + ((getReceiveValue() == null) ? 0 : getReceiveValue().hashCode());
+        result = prime * result + ((getOssUrl() == null) ? 0 : getOssUrl().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());

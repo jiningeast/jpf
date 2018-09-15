@@ -86,6 +86,21 @@ public class PayShopBargainOrderCustom implements Serializable {
     private Byte status;
 
     /**
+     * 付款凭证图片
+     */
+    private String payImg;
+
+
+    /**
+     * 财务id
+     */
+    private String financeId;
+
+    /**
+     * 财务姓名
+     */
+    private String financeName;
+    /**
      * 操作人id
      */
     private String operatorId;
@@ -292,5 +307,33 @@ public class PayShopBargainOrderCustom implements Serializable {
 
     public void setTransferPrice(BigDecimal transferPrice) {
         this.transferPrice = transferPrice;
+    }
+
+    public String getPayImg() {
+        return payImg;
+    }
+
+    public void setPayImg(String payImg) {
+        this.payImg = payImg;
+    }
+
+    public String getFinanceId() {
+        return financeId;
+    }
+
+    public void setFinanceId(String financeId) {
+        this.financeId = financeId;
+    }
+
+    public String getFinanceName() {
+        return financeName;
+    }
+
+    public void setFinanceName(String financeName) {
+        this.financeName = financeName;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 }

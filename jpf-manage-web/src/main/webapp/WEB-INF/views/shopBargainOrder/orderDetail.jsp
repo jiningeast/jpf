@@ -120,12 +120,21 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">审核人：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">运营审核人：</td>
                     <td >
                         ${shopBargainOrderInfo.operatorName}
                     </td>
                 </tr>
-
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">财务审核人：</td>
+                    <td >
+                        ${shopBargainOrderInfo.financeName}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">付款凭证：</td>
+                    <td><img src="${shopBargainOrderInfo.payImg}" width="200" height="200" /></td>
+                </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;"  >备注：</td>
                     <td  >

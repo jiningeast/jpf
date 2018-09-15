@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PayShopCouponActive implements Serializable {
     /**
-     * 
+     * 主键id
      */
     private String id;
 
@@ -91,12 +91,22 @@ public class PayShopCouponActive implements Serializable {
     private String orderNo;
 
     /**
-     * 
+     * 转让服务订单id
+     */
+    private String bargainOrderId;
+
+    /**
+     * 转让服务订单号
+     */
+    private String bargainOrderNo;
+
+    /**
+     * 添加时间
      */
     private Date addtime;
 
     /**
-     * 
+     * 更新时间
      */
     private Date updatetime;
 
@@ -238,6 +248,22 @@ public class PayShopCouponActive implements Serializable {
         this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
+    public String getBargainOrderId() {
+        return bargainOrderId;
+    }
+
+    public void setBargainOrderId(String bargainOrderId) {
+        this.bargainOrderId = bargainOrderId == null ? null : bargainOrderId.trim();
+    }
+
+    public String getBargainOrderNo() {
+        return bargainOrderNo;
+    }
+
+    public void setBargainOrderNo(String bargainOrderNo) {
+        this.bargainOrderNo = bargainOrderNo == null ? null : bargainOrderNo.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -280,6 +306,8 @@ public class PayShopCouponActive implements Serializable {
         sb.append(", expireTime=").append(expireTime);
         sb.append(", orderId=").append(orderId);
         sb.append(", orderNo=").append(orderNo);
+        sb.append(", bargainOrderId=").append(bargainOrderId);
+        sb.append(", bargainOrderNo=").append(bargainOrderNo);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -319,6 +347,8 @@ public class PayShopCouponActive implements Serializable {
             && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
+            && (this.getBargainOrderId() == null ? other.getBargainOrderId() == null : this.getBargainOrderId().equals(other.getBargainOrderId()))
+            && (this.getBargainOrderNo() == null ? other.getBargainOrderNo() == null : this.getBargainOrderNo().equals(other.getBargainOrderNo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -347,6 +377,8 @@ public class PayShopCouponActive implements Serializable {
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
+        result = prime * result + ((getBargainOrderId() == null) ? 0 : getBargainOrderId().hashCode());
+        result = prime * result + ((getBargainOrderNo() == null) ? 0 : getBargainOrderNo().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;

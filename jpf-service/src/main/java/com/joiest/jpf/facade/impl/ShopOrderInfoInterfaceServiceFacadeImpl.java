@@ -5,17 +5,17 @@ import com.joiest.jpf.common.custom.PayShopOrderCustomExample;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.*;
-import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.po.PayShopOrder;
+import com.joiest.jpf.common.po.PayShopOrderExample;
+import com.joiest.jpf.common.po.PayShopProductInfo;
+import com.joiest.jpf.common.po.PayShopProductInfoExample;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopOrderMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductInfoMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductTypeMapper;
-import com.joiest.jpf.dto.GetShopOrderRequest;
-import com.joiest.jpf.dto.GetShopOrderResponse;
 import com.joiest.jpf.dto.ShopOrderInfoInterfaceRequest;
 import com.joiest.jpf.dto.ShopOrderInfoInterfaceResponse;
-import com.joiest.jpf.entity.*;
+import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
+import com.joiest.jpf.entity.ShopProductInfoInfo;
 import com.joiest.jpf.facade.ShopOrderInfoInterfaceServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,12 +94,12 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         if( list.size() <=0 || list == null){
             return null;
         }
-        List<ShopOrderInfoInterface> infoList = new ArrayList<>();
+        List<ShopOrderInterfaceInfo> infoList = new ArrayList<>();
 
         for (PayShopOrderCustom one : list)
         {
-            ShopOrderInfoInterface info = new ShopOrderInfoInterface();
-            BeanCopier beanCopier = BeanCopier.create(PayShopOrderCustom.class, ShopOrderInfoInterface.class, false);
+            ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopOrderCustom.class, ShopOrderInterfaceInfo.class, false);
             beanCopier.copy(one, info, null);
             infoList.add(info);
         }
@@ -115,7 +115,7 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
     /**
      * 订单详情
      */
-    public ShopOrderInfoInterface getOne(ShopOrderInfoInterfaceRequest request)
+    public ShopOrderInterfaceInfo getOne(ShopOrderInfoInterfaceRequest request)
     {
         if ( StringUtils.isBlank(request.getOrderNo()))
         {
@@ -130,8 +130,8 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         if(payShopOrderCustom==null){
             return null;
         }
-        ShopOrderInfoInterface shopOrderInfoInterface = new ShopOrderInfoInterface();
-        BeanCopier beanCopier = BeanCopier.create(PayShopOrderCustom.class, ShopOrderInfoInterface.class, false);
+        ShopOrderInterfaceInfo shopOrderInfoInterface = new ShopOrderInterfaceInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayShopOrderCustom.class, ShopOrderInterfaceInfo.class, false);
         beanCopier.copy(payShopOrderCustom,shopOrderInfoInterface,null);
 
         return shopOrderInfoInterface;

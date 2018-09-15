@@ -127,6 +127,22 @@ public class ShopBargainOrderInfo {
      */
     private BigDecimal transferPrice;
 
+    /**
+     * 付款凭证图片
+     */
+    private String payImg;
+
+
+    /**
+     * 财务id
+     */
+    private String financeId;
+
+    /**
+     * 财务姓名
+     */
+    private String financeName;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -323,5 +339,29 @@ public class ShopBargainOrderInfo {
 
     public void setTransferPrice(BigDecimal transferPrice) {
         this.transferPrice = transferPrice;
+    }
+
+    public String getPayImg() {
+        return payImg;
+    }
+
+    public void setPayImg(String payImg) {
+        this.payImg = payImg;
+    }
+
+    public String getFinanceId() {
+        return financeId;
+    }
+
+    public void setFinanceId(String financeId) {
+        this.financeId = financeId;
+    }
+
+    public String getFinanceName() {
+        return financeName;
+    }
+
+    public void setFinanceName(String financeName) {
+        this.financeName = financeName;
     }
 }

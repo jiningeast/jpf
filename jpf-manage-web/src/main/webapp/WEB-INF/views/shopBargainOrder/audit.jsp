@@ -124,7 +124,20 @@
             <table cellpadding=4 class="table table-bordered">
 
                     <h2 align="center">审核订单</h2>
+            <c:if test="${type == 2 }">
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">上传付款凭证：</td>
+                    <td>
 
+                        <p>上传文件：  <input type="file" name="file" id="file1"></p>
+                        <input type="button" value="上传" onclick="doUploadY()"/>
+                        <div id="apy"></div>
+                        <input    id="payImg" name="payImg" type="hidden" style="width:150px"
+                               required="true" value=""/>
+                    </td>
+                </tr>
+            </c:if>
+                <tr>
                 <tr>
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">审核：</td>
                     <td colspan="4">
@@ -140,9 +153,9 @@
                             <c:if test="${type == 2 }">
 
                                 <option value="" selected="selected">请选择</option>
-                                <option value="2"  <c:if  test="${shopBargainOrderInfo.status == '2' }">selected</c:if>>打款中</option>
+                                <%--<option value="2"  <c:if  test="${shopBargainOrderInfo.status == '2' }">selected</c:if>>打款中</option>--%>
                                 <option value="3"  <c:if  test="${shopBargainOrderInfo.status == '3' }">selected</c:if>>打款成功</option>
-                                <option value="4"  <c:if  test="${shopBargainOrderInfo.status == '4' }">selected</c:if>>打款失败</option>
+                                <%--<option value="4"  <c:if  test="${shopBargainOrderInfo.status == '4' }">selected</c:if>>打款失败</option>--%>
                                 <option value="5"  <c:if  test="${shopBargainOrderInfo.status == '5' }">selected</c:if>>取消订单</option>
 
                             </c:if>
@@ -172,6 +185,30 @@
 
 <script>
 
+    function doUploadY() {
+
+        var formData = new FormData();
+        formData.append('file', $('#file1')[0].files[0]);
+
+        $.ajax({
+            url: '../cloudCompany/upload',
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                var yc=   '<img width="200px" height="200px" src="'+returndata+'"/>';
+                console.log(yc);
+                $("#apy").html(yc);
+                $("#payImg").val(returndata);
+            },
+            error: function (returndata) {
+                $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+            }
+        });
+    }
     $(function () {
 
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
@@ -183,6 +220,12 @@
                 var  selectVelue=$("#status_audit").combobox('getValue');
                 if (selectVelue== '') {
                     $.messager.alert('消息提示', '请选择审核状态', 'error');
+                    return;
+                }
+                //获取当前选中的值
+                var  isImg=$("#payImg").val();
+                if (isImg== ''&& selectVelue==3) {
+                    $.messager.alert('消息提示', '请上传付款凭证', 'error');
                     return;
                 }
                 var reqUrl = "audit/action";
@@ -225,6 +268,7 @@
                 $('#edit').window('close');
             }
         });
+
     })
 </script>
 </body>
