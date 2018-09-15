@@ -373,12 +373,14 @@ public class OrdersController {
 
         String email= null;
         String orderNo = null;
+        String orderId = null;
         try {
             String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
             String requestStr = Base64CustomUtils.base64Decoder(dataStr);
             Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
             email = (String) requestMap.get("email");
             orderNo = requestMap.get("orderNo").toString();
+            orderId = requestMap.get("orderId").toString();
 
             if(email==null){
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
@@ -421,9 +423,7 @@ public class OrdersController {
             excel = new ExcelDealUtils().exportExcelByInfo(Httpresponse,res.toString(),filed.toString(),response.getList(),2,ConfigUtil.getValue("EXCEL_PATH"));
             filepath = excel.getJSONObject("data").get("localUrl").toString();
             filename = excel.getJSONObject("data").get("fileName").toString();
-
         } catch (Exception e) {
-
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "文件信息有误", null);
         }
         if(org.apache.commons.lang.StringUtils.isBlank(filepath)|| org.apache.commons.lang.StringUtils.isBlank(filename)){
@@ -446,6 +446,31 @@ public class OrdersController {
             // 邮件发送失败
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "发送失败", null);
         }else{
+            // OSS上传excel文件
+            /*String savePre = ConfigUtil.getValue("EXCEL_PATH");
+            String path = PhotoUtil.saveFile(file, savePre);*/
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("path",filepath+filename);
+            String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
+            //String response = "https://yifuka.oss-cn-beijing.aliyuncs.com/clouds/1533717137872.zip";
+            String ossRes = OkHttpUtils.postForm(url,requestMap);
+
+            // 添加OSS流水
+            ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+            shopInterfaceStreamInfo.setType((byte)0);
+            shopInterfaceStreamInfo.setRequestUrl(url);
+            shopInterfaceStreamInfo.setRequestContent(filepath+filename);
+            shopInterfaceStreamInfo.setResponseContent(ossRes);
+            shopInterfaceStreamInfo.setAddtime(new Date());
+            shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+
+            // 更新订单号
+            ShopOrderInterfaceInfo shopOrderInfo = new ShopOrderInterfaceInfo();
+            shopOrderInfo.setId(orderId);
+            shopOrderInfo.setOssUrl(ossRes);
+            shopOrderInfo.setUpdatetime(new Date());
+            shopOrderInterfaceServiceFacade.updateOrder(shopOrderInfo);
+
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "邮件发送成功", null);
         }
 
@@ -563,6 +588,7 @@ public class OrdersController {
             Map<String ,String> emailRequestMap = new HashMap<>();
             emailRequestMap.put("email",orderInfo.getReceiveValue());
             emailRequestMap.put("orderNo",orderInfo.getOrderNo());
+            emailRequestMap.put("orderId",orderInfo.getId());
             String dataValue = JsonUtils.toJson(emailRequestMap);
             try {
                 sendCardEmail(Httpresponse,Base64CustomUtils.base64Encoder(dataValue));

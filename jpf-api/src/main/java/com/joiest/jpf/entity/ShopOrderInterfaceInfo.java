@@ -146,6 +146,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private String receiveValue;
 
     /**
+     * 发送方式为卡密时，excel文件的保存地址
+     */
+    private String ossUrl;
+
+    /**
      * 下单时间
      */
     private Date addtime;
@@ -382,6 +387,14 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setReceiveValue(String receiveValue) {
         this.receiveValue = receiveValue;
+    }
+
+    public String getOssUrl() {
+        return ossUrl;
+    }
+
+    public void setOssUrl(String ossUrl) {
+        this.ossUrl = ossUrl;
     }
 
     public Date getAddtime() {
