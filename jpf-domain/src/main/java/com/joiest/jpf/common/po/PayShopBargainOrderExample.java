@@ -1206,6 +1206,76 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andPayImgIsNull() {
+            addCriterion("pay_img is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgIsNotNull() {
+            addCriterion("pay_img is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgEqualTo(String value) {
+            addCriterion("pay_img =", value, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgNotEqualTo(String value) {
+            addCriterion("pay_img <>", value, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgGreaterThan(String value) {
+            addCriterion("pay_img >", value, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgGreaterThanOrEqualTo(String value) {
+            addCriterion("pay_img >=", value, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgLessThan(String value) {
+            addCriterion("pay_img <", value, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgLessThanOrEqualTo(String value) {
+            addCriterion("pay_img <=", value, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgLike(String value) {
+            addCriterion("pay_img like", value, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgNotLike(String value) {
+            addCriterion("pay_img not like", value, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgIn(List<String> values) {
+            addCriterion("pay_img in", values, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgNotIn(List<String> values) {
+            addCriterion("pay_img not in", values, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgBetween(String value1, String value2) {
+            addCriterion("pay_img between", value1, value2, "payImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayImgNotBetween(String value1, String value2) {
+            addCriterion("pay_img not between", value1, value2, "payImg");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -1393,6 +1463,136 @@ public class PayShopBargainOrderExample {
 
         public Criteria andOperatorNameNotBetween(String value1, String value2) {
             addCriterion("operator_name not between", value1, value2, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdIsNull() {
+            addCriterion("finance_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdIsNotNull() {
+            addCriterion("finance_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdEqualTo(String value) {
+            addCriterion("finance_id =", value, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdNotEqualTo(String value) {
+            addCriterion("finance_id <>", value, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdGreaterThan(String value) {
+            addCriterion("finance_id >", value, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdGreaterThanOrEqualTo(String value) {
+            addCriterion("finance_id >=", value, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdLessThan(String value) {
+            addCriterion("finance_id <", value, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdLessThanOrEqualTo(String value) {
+            addCriterion("finance_id <=", value, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdIn(List<String> values) {
+            addCriterion("finance_id in", values, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdNotIn(List<String> values) {
+            addCriterion("finance_id not in", values, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdBetween(String value1, String value2) {
+            addCriterion("finance_id between", value1, value2, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceIdNotBetween(String value1, String value2) {
+            addCriterion("finance_id not between", value1, value2, "financeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameIsNull() {
+            addCriterion("finance_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameIsNotNull() {
+            addCriterion("finance_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameEqualTo(String value) {
+            addCriterion("finance_name =", value, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameNotEqualTo(String value) {
+            addCriterion("finance_name <>", value, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameGreaterThan(String value) {
+            addCriterion("finance_name >", value, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameGreaterThanOrEqualTo(String value) {
+            addCriterion("finance_name >=", value, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameLessThan(String value) {
+            addCriterion("finance_name <", value, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameLessThanOrEqualTo(String value) {
+            addCriterion("finance_name <=", value, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameLike(String value) {
+            addCriterion("finance_name like", value, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameNotLike(String value) {
+            addCriterion("finance_name not like", value, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameIn(List<String> values) {
+            addCriterion("finance_name in", values, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameNotIn(List<String> values) {
+            addCriterion("finance_name not in", values, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameBetween(String value1, String value2) {
+            addCriterion("finance_name between", value1, value2, "financeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameNotBetween(String value1, String value2) {
+            addCriterion("finance_name not between", value1, value2, "financeName");
             return (Criteria) this;
         }
 
@@ -1586,6 +1786,66 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andUpdatetimeIsNull() {
+            addCriterion("updatetime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeIsNotNull() {
+            addCriterion("updatetime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeEqualTo(Date value) {
+            addCriterion("updatetime =", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotEqualTo(Date value) {
+            addCriterion("updatetime <>", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeGreaterThan(Date value) {
+            addCriterion("updatetime >", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("updatetime >=", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeLessThan(Date value) {
+            addCriterion("updatetime <", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeLessThanOrEqualTo(Date value) {
+            addCriterion("updatetime <=", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeIn(List<Date> values) {
+            addCriterion("updatetime in", values, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotIn(List<Date> values) {
+            addCriterion("updatetime not in", values, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeBetween(Date value1, Date value2) {
+            addCriterion("updatetime between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
+            addCriterion("updatetime not between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNoLikeInsensitive(String value) {
             addCriterion("upper(order_no) like", value.toUpperCase(), "orderNo");
             return (Criteria) this;
@@ -1621,8 +1881,18 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andPayImgLikeInsensitive(String value) {
+            addCriterion("upper(pay_img) like", value.toUpperCase(), "payImg");
+            return (Criteria) this;
+        }
+
         public Criteria andOperatorNameLikeInsensitive(String value) {
             addCriterion("upper(operator_name) like", value.toUpperCase(), "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinanceNameLikeInsensitive(String value) {
+            addCriterion("upper(finance_name) like", value.toUpperCase(), "financeName");
             return (Criteria) this;
         }
 

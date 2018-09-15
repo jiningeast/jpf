@@ -86,6 +86,11 @@ public class PayShopBargainOrder implements Serializable {
     private String findcode;
 
     /**
+     * 付款凭证图片
+     */
+    private String payImg;
+
+    /**
      * 订单状态 0=未支付 1=运营已审核 2=财务打款中 3=打款成功 4=打款失败 5=取消订单
      */
     private Byte status;
@@ -101,6 +106,16 @@ public class PayShopBargainOrder implements Serializable {
     private String operatorName;
 
     /**
+     * 财务id
+     */
+    private String financeId;
+
+    /**
+     * 财务姓名
+     */
+    private String financeName;
+
+    /**
      * 备注
      */
     private String memo;
@@ -114,6 +129,11 @@ public class PayShopBargainOrder implements Serializable {
      * 添加时间
      */
     private Date addtime;
+
+    /**
+     * 更新时间
+     */
+    private Date updatetime;
 
     private static final long serialVersionUID = 1L;
 
@@ -245,6 +265,14 @@ public class PayShopBargainOrder implements Serializable {
         this.findcode = findcode == null ? null : findcode.trim();
     }
 
+    public String getPayImg() {
+        return payImg;
+    }
+
+    public void setPayImg(String payImg) {
+        this.payImg = payImg == null ? null : payImg.trim();
+    }
+
     public Byte getStatus() {
         return status;
     }
@@ -269,6 +297,22 @@ public class PayShopBargainOrder implements Serializable {
         this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
+    public String getFinanceId() {
+        return financeId;
+    }
+
+    public void setFinanceId(String financeId) {
+        this.financeId = financeId == null ? null : financeId.trim();
+    }
+
+    public String getFinanceName() {
+        return financeName;
+    }
+
+    public void setFinanceName(String financeName) {
+        this.financeName = financeName == null ? null : financeName.trim();
+    }
+
     public String getMemo() {
         return memo;
     }
@@ -291,6 +335,14 @@ public class PayShopBargainOrder implements Serializable {
 
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 
     /**
@@ -318,12 +370,16 @@ public class PayShopBargainOrder implements Serializable {
         sb.append(", bankBrank=").append(bankBrank);
         sb.append(", bankNo=").append(bankNo);
         sb.append(", findcode=").append(findcode);
+        sb.append(", payImg=").append(payImg);
         sb.append(", status=").append(status);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
+        sb.append(", financeId=").append(financeId);
+        sb.append(", financeName=").append(financeName);
         sb.append(", memo=").append(memo);
         sb.append(", paytime=").append(paytime);
         sb.append(", addtime=").append(addtime);
+        sb.append(", updatetime=").append(updatetime);
         sb.append("]");
         return sb.toString();
     }
@@ -360,12 +416,16 @@ public class PayShopBargainOrder implements Serializable {
             && (this.getBankBrank() == null ? other.getBankBrank() == null : this.getBankBrank().equals(other.getBankBrank()))
             && (this.getBankNo() == null ? other.getBankNo() == null : this.getBankNo().equals(other.getBankNo()))
             && (this.getFindcode() == null ? other.getFindcode() == null : this.getFindcode().equals(other.getFindcode()))
+            && (this.getPayImg() == null ? other.getPayImg() == null : this.getPayImg().equals(other.getPayImg()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
+            && (this.getFinanceId() == null ? other.getFinanceId() == null : this.getFinanceId().equals(other.getFinanceId()))
+            && (this.getFinanceName() == null ? other.getFinanceName() == null : this.getFinanceName().equals(other.getFinanceName()))
             && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
 
     /**
@@ -391,12 +451,16 @@ public class PayShopBargainOrder implements Serializable {
         result = prime * result + ((getBankBrank() == null) ? 0 : getBankBrank().hashCode());
         result = prime * result + ((getBankNo() == null) ? 0 : getBankNo().hashCode());
         result = prime * result + ((getFindcode() == null) ? 0 : getFindcode().hashCode());
+        result = prime * result + ((getPayImg() == null) ? 0 : getPayImg().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
+        result = prime * result + ((getFinanceId() == null) ? 0 : getFinanceId().hashCode());
+        result = prime * result + ((getFinanceName() == null) ? 0 : getFinanceName().hashCode());
         result = prime * result + ((getMemo() == null) ? 0 : getMemo().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
+        result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
     }
 }
