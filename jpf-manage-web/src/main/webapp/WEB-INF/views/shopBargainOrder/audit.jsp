@@ -56,7 +56,12 @@
                         ${shopBargainOrderInfo.dou}
                     </td>
                 </tr>
-
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">转让价：</td>
+                    <td>
+                        ${shopBargainOrderInfo.transferPrice}
+                    </td>
+                </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">收款人姓名：</td>
                     <td>

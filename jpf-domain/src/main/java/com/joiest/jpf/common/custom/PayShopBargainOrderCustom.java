@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.custom;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopBargainOrderCustom implements Serializable {
@@ -109,6 +110,11 @@ public class PayShopBargainOrderCustom implements Serializable {
      * 添加时间
      */
     private Date addtime;
+
+    /**
+     * 转让价
+     */
+    private BigDecimal transferPrice;
 
     private static final long serialVersionUID = 1L;
 
@@ -278,5 +284,13 @@ public class PayShopBargainOrderCustom implements Serializable {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public BigDecimal getTransferPrice() {
+        return transferPrice;
+    }
+
+    public void setTransferPrice(BigDecimal transferPrice) {
+        this.transferPrice = transferPrice;
     }
 }

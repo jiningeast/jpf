@@ -70,6 +70,7 @@
                     {field:'offRate',title:'折损率',width:'5%'},
                     {field:'minDou',title:'最低限额豆数',width:'5%'},
                     {field:'dou',title:'使用豆数',width:'5%'},
+                    {field:'transferPrice',title:'转让价',width:'5%'},
                     {field:'bankNo',title:'银行卡号',width:'5%'},
                     {field:'realName',title:'收款人姓名',width:'5%'},
                     {field:'idno',title:'身份证号',width:'10%'},
