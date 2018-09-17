@@ -25,9 +25,19 @@ public class ShopBargainOrderInfo {
     private String buyerCustomerId;
 
     /**
+     * 买家昵称
+     */
+    private String buyerCustomerNickname;
+
+    /**
      * 卖家id
      */
     private String sellerCustomerId;
+
+    /**
+     * 卖家昵称
+     */
+    private String sellerCustomerNickname;
 
     /**
      * 折损率
@@ -363,5 +373,21 @@ public class ShopBargainOrderInfo {
 
     public void setFinanceName(String financeName) {
         this.financeName = financeName;
+    }
+
+    public String getBuyerCustomerNickname() {
+        return buyerCustomerNickname;
+    }
+
+    public void setBuyerCustomerNickname(String buyerCustomerNickname) {
+        this.buyerCustomerNickname = buyerCustomerNickname;
+    }
+
+    public String getSellerCustomerNickname() {
+        return sellerCustomerNickname;
+    }
+
+    public void setSellerCustomerNickname(String sellerCustomerNickname) {
+        this.sellerCustomerNickname = sellerCustomerNickname;
     }
 }

@@ -87,7 +87,10 @@ public enum JpfInterfaceErrorInfo {
     PRODUCT_CARD_TYPE("50011", "当前商品库存不足"),
 
     //银行信息匹配
-    BANK_NO_CHECK("60000","未匹配到银行信息");
+    BANK_NO_CHECK("60000","未匹配到银行信息"),
+
+    //是否为买家
+    BARGAIN_BUYER_TYPE("70000","未开通买家申请");
 
 
     private final String desc;

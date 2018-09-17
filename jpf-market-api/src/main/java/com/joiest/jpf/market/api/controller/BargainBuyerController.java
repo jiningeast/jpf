@@ -1,15 +1,20 @@
 package com.joiest.jpf.market.api.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopBargainRequest;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
+import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dto.GetShopBargainOrderRequest;
+import com.joiest.jpf.dto.GetShopBargainOrderResponse;
 import com.joiest.jpf.dto.GetShopBargainRequestRequest;
 import com.joiest.jpf.entity.ShopBargainRequestInfo;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
+import com.joiest.jpf.facade.ShopBargainOrderServiceFacade;
 import com.joiest.jpf.facade.ShopBargainRequestServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.market.api.util.ToolsUtils;
@@ -27,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/bargainBuyer")
@@ -43,6 +49,9 @@ public class BargainBuyerController {
 
     @Autowired
     private ShopBargainRequestServiceFacade shopBargainRequestServiceFacade;
+
+    @Autowired
+    private ShopBargainOrderServiceFacade shopBargainOrderServiceFacade;
 
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
@@ -66,10 +75,23 @@ public class BargainBuyerController {
     /*
     *  买家发布页面
     * */
-    @RequestMapping("/startBuyDou")
+    @RequestMapping(value = "/startBuyDou",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String startBuyDou(@NotNull(message = "折扣率不能为空") String offRate, @NotNull(message = "最低限额不能为空") String minDou, @NotNull(message = "暂停回收按钮不能为空") String status){
+    public String startBuyDou(String data){
+        if( StringUtils.isBlank(data) ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
+        }
+        String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+        String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+        Map<String,String> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, String>>(){});
 
+        //判断请求参数是否合法
+        String offRate = requestMap.get("offRate");
+        String minDou = requestMap.get("minDou");
+        String status = requestMap.get("status");
+        if( StringUtils.isBlank(offRate) || StringUtils.isBlank(minDou) || StringUtils.isBlank(status)  ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请求参数错误", null);
+        }
 
         Boolean RateFlag = ToolsUtils.isInterger(offRate);// 折扣率
         Boolean minDouFlag = ToolsUtils.isInterger(minDou);//豆
@@ -112,9 +134,14 @@ public class BargainBuyerController {
     /*
      *  查询买家发布
      * */
-    @RequestMapping("/searchBuyDou")
+    @RequestMapping(value = "/searchBuyDou",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String searchBuyDou(){
+
+        //查询是否为买家
+        if( userInfo.getIsBargainBuyer() ==null || userInfo.getIsBargainBuyer() == 0 ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.BARGAIN_BUYER_TYPE.getCode(),JpfInterfaceErrorInfo.BARGAIN_BUYER_TYPE.getDesc(),null);
+        }
 
         GetShopBargainRequestRequest request = new GetShopBargainRequestRequest();
         request.setCustomerId(uid);
@@ -137,6 +164,44 @@ public class BargainBuyerController {
 
         List<ShopBargainRequestInfo> list = shopBargainRequestServiceFacade.getBuyInfo();
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",list);
+    }
+
+    /**
+     * 我买到的（买家购买服务转让列表）
+     * */
+    @RequestMapping(value = "/buyList",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String buyList(String data){
+
+        if( StringUtils.isBlank(data) ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
+        }
+        String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
+        String requestStr = Base64CustomUtils.base64Decoder(dataStr);
+        Map<String,String> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, String>>(){});
+
+        //判断请求参数是否合法
+        String page = requestMap.get("page");
+        String type = requestMap.get("type");
+
+        if( StringUtils.isBlank(page)  || ( !type.equals("1") && !type.equals("2") ) ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "请求参数错误", null);
+        }
+
+        GetShopBargainOrderRequest bargainOrderRequest = new GetShopBargainOrderRequest();
+        // 1=我转让的   2=我买到的
+        if( type.equals("1") ){
+            bargainOrderRequest.setSellerCustomerId(uid);
+        }
+        if(type.equals("2")){
+            bargainOrderRequest.setBuyerCustomerId(uid);
+        }
+        bargainOrderRequest.setPage(Integer.parseInt(page));
+        bargainOrderRequest.setRows(10);  //默认10条
+
+        GetShopBargainOrderResponse response = shopBargainOrderServiceFacade.getFrontList(bargainOrderRequest);
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",response);
     }
 
     /**
