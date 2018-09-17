@@ -197,7 +197,7 @@ public class BargainBuyerController {
             bargainOrderRequest.setBuyerCustomerId(uid);
         }
         bargainOrderRequest.setPage(Integer.parseInt(page));
-        bargainOrderRequest.setRows(10);  //默认10条
+        //bargainOrderRequest.setRows(10);  //默认10条
 
         GetShopBargainOrderResponse response = shopBargainOrderServiceFacade.getFrontList(bargainOrderRequest);
 

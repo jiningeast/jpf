@@ -322,8 +322,7 @@ public class ShopBargainOrderInfo {
         this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
-    public String getFinanceId() {
-        return financeId;
+    public String getFinanceId() { return financeId;
     }
 
     public void setFinanceId(String financeId) {

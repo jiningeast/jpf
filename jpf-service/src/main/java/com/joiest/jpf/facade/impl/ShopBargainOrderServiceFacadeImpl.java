@@ -307,7 +307,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         }
         PayShopBargainOrderExample example = new PayShopBargainOrderExample();
         example.setPageNo(request.getPage());
-        example.setPageSize(request.getRows());
+        //example.setPageSize(request.getRows());
         example.setOrderByClause("id DESC");
 
         PayShopBargainOrderExample.Criteria c = example.createCriteria();
