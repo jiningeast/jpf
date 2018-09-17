@@ -4,6 +4,7 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopBargainRequest;
 import com.joiest.jpf.common.util.AESUtils;
+import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetShopBargainRequestRequest;
 import com.joiest.jpf.entity.ShopBargainRequestInfo;
@@ -12,6 +13,8 @@ import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopBargainRequestServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.market.api.util.ToolsUtils;
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -136,7 +139,51 @@ public class BargainBuyerController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",list);
     }
 
+    /**
+     * 获取买家发布单条信息
+     * */
+    @RequestMapping(value = "/buyInfoSigle",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String buyInfoSigle(HttpServletRequest request){
 
+        JSONObject requestParam = _filter(request.getParameter("data"));
+
+        if(requestParam.get("code").toString().equals("10008"))
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),requestParam.get("info").toString(),null);
+
+        if(StringUtils.isBlank(requestParam.get("bargainRequestId").toString()))
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"参数信息有误",null);
+
+        //获取服务发布订单
+        ShopBargainRequestInfo shopBargainRequestInfo = shopBargainRequestServiceFacade.getBargainById(requestParam.get("bargainRequestId").toString());
+        if(shopBargainRequestInfo == null)
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"未获取买家信息",null);
+
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",shopBargainRequestInfo);
+    }
+
+    /**
+     * 基础参数格式化
+     * */
+    private JSONObject _filter(String data)
+    {
+
+        JSONObject res = new JSONObject();
+        res.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+        res.put("info","信息不能为空");
+
+        if (StringUtils.isBlank(data)) return res;
+
+        String baseDecode = Base64CustomUtils.base64Decoder(data);
+        JSONObject requestParam = JSONObject.fromObject(baseDecode);
+
+        res.putAll(requestParam);
+        res.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+        res.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
+
+        return res;
+    }
 
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
