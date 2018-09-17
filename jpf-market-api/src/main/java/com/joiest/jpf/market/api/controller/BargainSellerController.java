@@ -2,6 +2,7 @@ package com.joiest.jpf.market.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 
+import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.DouTransferRequest;
 import com.joiest.jpf.entity.*;
@@ -107,6 +108,9 @@ public class BargainSellerController {
         if(!selfTranferPrice.equals(new BigDecimal(requestParam.get("transferPrice").toString())))
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "转让价有误", null);
 
+        //获取买家个人信息
+        PayShopCustomer payShopCustomer = shopCustomerServiceFacade.getCustomerById(shopBargainRequestInfo.getCustomerId());
+
         //用户信息验证 四要素鉴权
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("accountNo",douTransferRequest.getBankNo());
@@ -133,7 +137,9 @@ public class BargainSellerController {
         orderInfo.setOrderNo(orderNo);
         orderInfo.setBargainRequestId(shopBargainRequestInfo.getId());
         orderInfo.setBuyerCustomerId(shopBargainRequestInfo.getCustomerId());
+        orderInfo.setBuyerCustomerNickname(payShopCustomer.getNickname());//买家昵称
         orderInfo.setSellerCustomerId(uid);
+        orderInfo.setSellerCustomerNickname(userInfo.getNickname());//卖家昵称
         orderInfo.setOffRate(shopBargainRequestInfo.getOffRate());
         orderInfo.setMinDou(shopBargainRequestInfo.getMinDou());
         orderInfo.setDou(dou);
@@ -152,10 +158,11 @@ public class BargainSellerController {
         int isPlaceOrderSuc = shopBargainOrderServiceFacade.sellerPlaceOrder(orderInfo);
 
         //更新用户豆  冻结豆
-
         ShopCustomerInfo shopCustomerInfo = new ShopCustomerInfo();
-        shopCustomerInfo.setDou(userInfo.getDou()-dou);
+        Integer over = userInfo.getDou()-dou;
+        shopCustomerInfo.setDou(over);
         shopCustomerInfo.setId(userInfo.getId());
+        shopCustomerInfo.setCode(ToolUtils.CreateCode(over.toString(),uid));
         if(userInfo.getFreezeDou() != null && userInfo.getFreezeDou()>0){
 
             shopCustomerInfo.setFreezeDou(userInfo.getFreezeDou()+dou);
@@ -164,8 +171,10 @@ public class BargainSellerController {
             shopCustomerInfo.setFreezeDou(dou);
         }
         shopCustomerInfo.setUpdatetime(new Date());
-
         int isUpSuc = shopCustomerServiceFacade.upCustomerInfo(shopCustomerInfo);
+
+        //操作欣豆交易日志  pay_shop_coupon_active
+
 
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "转让成功", null);

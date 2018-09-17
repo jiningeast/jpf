@@ -55,6 +55,11 @@ public class ShopBargainOrderInfo {
     private Integer dou;
 
     /**
+     * 转让价
+     */
+    private BigDecimal transferPrice;
+
+    /**
      * 收款人姓名
      */
     private String realName;
@@ -90,10 +95,14 @@ public class ShopBargainOrderInfo {
     private String findcode;
 
     /**
-     * 订单状态 0=未支付 1=已支付 2=取消
+     * 付款凭证图片
+     */
+    private String payImg;
+
+    /**
+     * 订单状态 0=未支付 1=运营已审核 2=财务打款中 3=打款成功 4=打款失败 5=取消订单
      */
     private Byte status;
-
 
     /**
      * 操作人id
@@ -106,10 +115,19 @@ public class ShopBargainOrderInfo {
     private String operatorName;
 
     /**
+     * 财务id
+     */
+    private String financeId;
+
+    /**
+     * 财务姓名
+     */
+    private String financeName;
+
+    /**
      * 备注
      */
     private String memo;
-
 
     /**
      * 支付时间
@@ -121,37 +139,10 @@ public class ShopBargainOrderInfo {
      */
     private Date addtime;
 
-
     /**
-     * 买家姓名
+     * 更新时间
      */
-    private String buyName;
-
-    /**
-     * 卖家姓名
-     */
-    private String saleName;
-
-    /**
-     * 转让价
-     */
-    private BigDecimal transferPrice;
-
-    /**
-     * 付款凭证图片
-     */
-    private String payImg;
-
-
-    /**
-     * 财务id
-     */
-    private String financeId;
-
-    /**
-     * 财务姓名
-     */
-    private String financeName;
+    private Date updatetime;
 
     private static final long serialVersionUID = 1L;
 
@@ -187,12 +178,28 @@ public class ShopBargainOrderInfo {
         this.buyerCustomerId = buyerCustomerId == null ? null : buyerCustomerId.trim();
     }
 
+    public String getBuyerCustomerNickname() {
+        return buyerCustomerNickname;
+    }
+
+    public void setBuyerCustomerNickname(String buyerCustomerNickname) {
+        this.buyerCustomerNickname = buyerCustomerNickname == null ? null : buyerCustomerNickname.trim();
+    }
+
     public String getSellerCustomerId() {
         return sellerCustomerId;
     }
 
     public void setSellerCustomerId(String sellerCustomerId) {
         this.sellerCustomerId = sellerCustomerId == null ? null : sellerCustomerId.trim();
+    }
+
+    public String getSellerCustomerNickname() {
+        return sellerCustomerNickname;
+    }
+
+    public void setSellerCustomerNickname(String sellerCustomerNickname) {
+        this.sellerCustomerNickname = sellerCustomerNickname == null ? null : sellerCustomerNickname.trim();
     }
 
     public Double getOffRate() {
@@ -217,6 +224,14 @@ public class ShopBargainOrderInfo {
 
     public void setDou(Integer dou) {
         this.dou = dou;
+    }
+
+    public BigDecimal getTransferPrice() {
+        return transferPrice;
+    }
+
+    public void setTransferPrice(BigDecimal transferPrice) {
+        this.transferPrice = transferPrice;
     }
 
     public String getRealName() {
@@ -275,12 +290,60 @@ public class ShopBargainOrderInfo {
         this.findcode = findcode == null ? null : findcode.trim();
     }
 
+    public String getPayImg() {
+        return payImg;
+    }
+
+    public void setPayImg(String payImg) {
+        this.payImg = payImg == null ? null : payImg.trim();
+    }
+
     public Byte getStatus() {
         return status;
     }
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId == null ? null : operatorId.trim();
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName == null ? null : operatorName.trim();
+    }
+
+    public String getFinanceId() {
+        return financeId;
+    }
+
+    public void setFinanceId(String financeId) {
+        this.financeId = financeId == null ? null : financeId.trim();
+    }
+
+    public String getFinanceName() {
+        return financeName;
+    }
+
+    public void setFinanceName(String financeName) {
+        this.financeName = financeName == null ? null : financeName.trim();
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo == null ? null : memo.trim();
     }
 
     public Date getPaytime() {
@@ -299,95 +362,12 @@ public class ShopBargainOrderInfo {
         this.addtime = addtime;
     }
 
-    public String getBuyName() {
-        return buyName;
+    public Date getUpdatetime() {
+        return updatetime;
     }
 
-    public void setBuyName(String buyName) {
-        this.buyName = buyName;
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 
-    public String getSaleName() {
-        return saleName;
-    }
-
-    public void setSaleName(String saleName) {
-        this.saleName = saleName;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public String getOperatorId() {
-        return operatorId;
-    }
-
-    public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
-    }
-
-    public String getOperatorName() {
-        return operatorName;
-    }
-
-    public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName;
-    }
-
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
-    public BigDecimal getTransferPrice() {
-        return transferPrice;
-    }
-
-    public void setTransferPrice(BigDecimal transferPrice) {
-        this.transferPrice = transferPrice;
-    }
-
-    public String getPayImg() {
-        return payImg;
-    }
-
-    public void setPayImg(String payImg) {
-        this.payImg = payImg;
-    }
-
-    public String getFinanceId() {
-        return financeId;
-    }
-
-    public void setFinanceId(String financeId) {
-        this.financeId = financeId;
-    }
-
-    public String getFinanceName() {
-        return financeName;
-    }
-
-    public void setFinanceName(String financeName) {
-        this.financeName = financeName;
-    }
-
-    public String getBuyerCustomerNickname() {
-        return buyerCustomerNickname;
-    }
-
-    public void setBuyerCustomerNickname(String buyerCustomerNickname) {
-        this.buyerCustomerNickname = buyerCustomerNickname;
-    }
-
-    public String getSellerCustomerNickname() {
-        return sellerCustomerNickname;
-    }
-
-    public void setSellerCustomerNickname(String sellerCustomerNickname) {
-        this.sellerCustomerNickname = sellerCustomerNickname;
-    }
 }

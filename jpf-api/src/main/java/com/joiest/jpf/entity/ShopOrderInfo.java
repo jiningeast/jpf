@@ -5,12 +5,12 @@ import java.util.Date;
 
 public class ShopOrderInfo {
     /**
-     * 主键id
+     *
      */
     private String id;
 
     /**
-     * 订单号：OD+3位随机数+毫秒时间戳+3位随机数
+     *
      */
     private String orderNo;
 
@@ -20,62 +20,32 @@ public class ShopOrderInfo {
     private Byte chargeType;
 
     /**
-     * 充值类型是卡密的情况下对应的stock_card表id
-     */
-    private String stockCardId;
-
-    /**
-     * 订单类型 1:中国石化; 2中国石油; 3话费充值
-     */
-    private Byte orderType;
-
-    /**
-     * 第三方订单号
-     */
-    private String foreignOrderNo;
-
-    /**
-     * 前端创建订单的请求参数
-     */
-    private String requestedContent;
-
-    /**
-     * 第三方接口请求参数
-     */
-    private String foreignRequestContent;
-
-    /**
-     * 第三方接口返回内容
-     */
-    private String foreignResponseContent;
-
-    /**
-     * 用户id
+     *
      */
     private String customerId;
 
     /**
-     * 用户姓名
+     *
      */
     private String customerName;
 
     /**
-     * 产品id
+     *
      */
     private String productId;
 
     /**
-     * 产品名称
+     *
      */
     private String productName;
 
     /**
-     * 产品金额
+     *
      */
     private BigDecimal productMoney;
 
     /**
-     * 产品豆价格
+     *
      */
     private Integer productDou;
 
@@ -120,34 +90,9 @@ public class ShopOrderInfo {
     private Byte status;
 
     /**
-     * 充值状态
-     */
-    private String rechargeStatus;
-
-    /**
-     * 充值时间
-     */
-    private Date rechargeTime;
-
-    /**
      * 消费时关联券使用记录表的id
      */
     private String couponActiveId;
-
-    /**
-     * 临时买卡密页面所需字段 接收方式 1=短信 2=邮箱
-     */
-    private Byte receiveType;
-
-    /**
-     * 临时买卡密页面所需字段 接收值 手机号或邮箱地址
-     */
-    private String receiveValue;
-
-    /**
-     * 发送方式为卡密时，excel文件的保存地址
-     */
-    private String ossUrl;
 
     /**
      * 下单时间
@@ -160,16 +105,116 @@ public class ShopOrderInfo {
     private Date paytime;
 
     /**
-     * 更新时间
+     *
      */
     private Date updatetime;
+
+
+    /**
+     * 商品分类
+     */
+    private String typeName;
+
+    /**
+     * 供应商
+     */
+    private String supplierName;
+
+
+    /**
+     * 品牌
+     */
+    private String brandName;
+
+    /**
+     * 联系人姓名
+     */
+    private String contactName;
+
+    /**
+     *联系人手机号
+     */
+
+    private String contactPhone;
+
+    /**
+     *联系人email
+     */
+    private String contactEmail;
+
+
+    /**
+     * 客户手机号
+     */
+    private String phone;
+
+    /**
+     * 产品金额
+     */
+    private BigDecimal money;
+
+    /**
+     * 产品充值金额
+     */
+    private Integer rechargeMoney;
+
+
+    /**
+     * 商品进价
+     */
+    private BigDecimal bid;
+
+
+    /**
+     * 库存数量
+     */
+    private Integer stored;
+
+    /**
+     * 商品图片
+     */
+    private String image;
+
+    /**
+     * 充值类型是卡密的情况下对应的stock_card表id
+     */
+    private String stockCardId;
+
+    /**
+     * 订单类型 1:中国石化; 2中国石油; 3话费充值
+     */
+    private Byte orderType;
+
+    /**
+     * 第三方订单号
+     */
+    private String foreignOrderNo;
+
+    /**
+     * 前端创建订单的请求参数
+     */
+    private String requestedContent;
+
+    /**
+     * 第三方接口请求参数
+     */
+    private String foreignRequestContent;
+
+    /**
+     * 第三方接口返回内容
+     */
+    private String foreignResponseContent;
+
+
+
+    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     public String getOrderNo() {
@@ -177,63 +222,7 @@ public class ShopOrderInfo {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public Byte getChargeType() {
-        return chargeType;
-    }
-
-    public void setChargeType(Byte chargeType) {
-        this.chargeType = chargeType;
-    }
-
-    public String getStockCardId() {
-        return stockCardId;
-    }
-
-    public void setStockCardId(String stockCardId) {
-        this.stockCardId = stockCardId;
-    }
-
-    public Byte getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(Byte orderType) {
-        this.orderType = orderType;
-    }
-
-    public String getForeignOrderNo() {
-        return foreignOrderNo;
-    }
-
-    public void setForeignOrderNo(String foreignOrderNo) {
-        this.foreignOrderNo = foreignOrderNo;
-    }
-
-    public String getRequestedContent() {
-        return requestedContent;
-    }
-
-    public void setRequestedContent(String requestedContent) {
-        this.requestedContent = requestedContent;
-    }
-
-    public String getForeignRequestContent() {
-        return foreignRequestContent;
-    }
-
-    public void setForeignRequestContent(String foreignRequestContent) {
-        this.foreignRequestContent = foreignRequestContent;
-    }
-
-    public String getForeignResponseContent() {
-        return foreignResponseContent;
-    }
-
-    public void setForeignResponseContent(String foreignResponseContent) {
-        this.foreignResponseContent = foreignResponseContent;
+        this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
     public String getCustomerId() {
@@ -241,7 +230,7 @@ public class ShopOrderInfo {
     }
 
     public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+        this.customerId = customerId == null ? null : customerId.trim();
     }
 
     public String getCustomerName() {
@@ -249,7 +238,7 @@ public class ShopOrderInfo {
     }
 
     public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+        this.customerName = customerName == null ? null : customerName.trim();
     }
 
     public String getProductId() {
@@ -257,7 +246,7 @@ public class ShopOrderInfo {
     }
 
     public void setProductId(String productId) {
-        this.productId = productId;
+        this.productId = productId == null ? null : productId.trim();
     }
 
     public String getProductName() {
@@ -265,7 +254,7 @@ public class ShopOrderInfo {
     }
 
     public void setProductName(String productName) {
-        this.productName = productName;
+        this.productName = productName == null ? null : productName.trim();
     }
 
     public BigDecimal getProductMoney() {
@@ -329,7 +318,7 @@ public class ShopOrderInfo {
     }
 
     public void setChargeNo(String chargeNo) {
-        this.chargeNo = chargeNo;
+        this.chargeNo = chargeNo == null ? null : chargeNo.trim();
     }
 
     public String getCouponDetail() {
@@ -337,7 +326,7 @@ public class ShopOrderInfo {
     }
 
     public void setCouponDetail(String couponDetail) {
-        this.couponDetail = couponDetail;
+        this.couponDetail = couponDetail == null ? null : couponDetail.trim();
     }
 
     public Byte getStatus() {
@@ -348,52 +337,12 @@ public class ShopOrderInfo {
         this.status = status;
     }
 
-    public String getRechargeStatus() {
-        return rechargeStatus;
-    }
-
-    public void setRechargeStatus(String rechargeStatus) {
-        this.rechargeStatus = rechargeStatus;
-    }
-
-    public Date getRechargeTime() {
-        return rechargeTime;
-    }
-
-    public void setRechargeTime(Date rechargeTime) {
-        this.rechargeTime = rechargeTime;
-    }
-
     public String getCouponActiveId() {
         return couponActiveId;
     }
 
     public void setCouponActiveId(String couponActiveId) {
-        this.couponActiveId = couponActiveId;
-    }
-
-    public Byte getReceiveType() {
-        return receiveType;
-    }
-
-    public void setReceiveType(Byte receiveType) {
-        this.receiveType = receiveType;
-    }
-
-    public String getReceiveValue() {
-        return receiveValue;
-    }
-
-    public void setReceiveValue(String receiveValue) {
-        this.receiveValue = receiveValue;
-    }
-
-    public String getOssUrl() {
-        return ossUrl;
-    }
-
-    public void setOssUrl(String ossUrl) {
-        this.ossUrl = ossUrl;
+        this.couponActiveId = couponActiveId == null ? null : couponActiveId.trim();
     }
 
     public Date getAddtime() {
@@ -419,4 +368,87 @@ public class ShopOrderInfo {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+
+    public BigDecimal getBid() {
+        return bid;
+    }
+
+    public void setBid(BigDecimal bid) {
+        this.bid = bid;
+    }
+
+    public Integer getStored() {
+        return stored;
+    }
+
+    public void setStored(Integer stored) {
+        this.stored = stored;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }
