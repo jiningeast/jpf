@@ -294,7 +294,11 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         BeanCopier beanCopier = BeanCopier.create(ShopBargainOrderInfo.class,PayShopBargainOrder.class,false);
         beanCopier.copy(orderInfo,payShopBargainOrder,null);
 
-        return payShopBargainOrderMapper.insertSelective(payShopBargainOrder);
+        //return payShopBargainOrderMapper.insertSelective(payShopBargainOrder);
+        Integer id =  payShopBargainOrderCustomMapper.insertSelective(payShopBargainOrder);
+
+        return Integer.valueOf(payShopBargainOrder.getId());
+
     }
 
 }

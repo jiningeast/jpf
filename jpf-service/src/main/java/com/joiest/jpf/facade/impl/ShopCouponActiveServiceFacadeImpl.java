@@ -85,4 +85,13 @@ public class ShopCouponActiveServiceFacadeImpl implements ShopCouponActiveServic
         return response;
     }
 
+    /**
+     * 欣豆日志添加
+     * */
+    public int addShopCouponActive(PayShopCouponActive payShopCouponActive){
+
+        return payShopCouponActiveMapper.insertSelective(payShopCouponActive);
+    }
+
+
 }

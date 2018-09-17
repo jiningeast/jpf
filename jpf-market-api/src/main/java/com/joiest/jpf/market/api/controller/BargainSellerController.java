@@ -2,6 +2,7 @@ package com.joiest.jpf.market.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 
+import com.joiest.jpf.common.po.PayShopCouponActive;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.DouTransferRequest;
@@ -49,6 +50,9 @@ public class BargainSellerController {
 
     @Autowired
     private ShopCustomerServiceFacade shopCustomerServiceFacade;
+
+    @Autowired
+    private ShopCouponActiveServiceFacade shopCouponActiveServiceFacade;
     /**
      * 银行卡信息检查
      * **/
@@ -174,8 +178,22 @@ public class BargainSellerController {
         int isUpSuc = shopCustomerServiceFacade.upCustomerInfo(shopCustomerInfo);
 
         //操作欣豆交易日志  pay_shop_coupon_active
+        String content = "行为：转让欣豆冻结；豆数量："+dou+";转让价："+selfTranferPrice+";用户id:"+uid;
+        PayShopCouponActive active = new PayShopCouponActive();
+        active.setCustomerId(uid);
+        active.setCompanyId(0);
+        active.setCouponNo("");
+        active.setActiveCode("");
+        active.setPayWay((byte)0);
+        active.setMoney(selfTranferPrice);
+        active.setDou(dou);
+        active.setContent(content);
+        active.setType("4");
+        active.setExpireTime(new Date());
+        active.setBargainOrderId(String.valueOf(isPlaceOrderSuc));
+        active.setBargainOrderNo(orderNo);
 
-
+        int isAddSuc = shopCouponActiveServiceFacade.addShopCouponActive(active);
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "转让成功", null);
     }
