@@ -65,8 +65,8 @@
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'orderNo',title:'订单号',width:'7%'},
-                    {field:'buyName',title:'买家昵称',width:'10%'},
-                    {field:'saleName',title:'卖家昵称',width:'7%'},
+                    {field:'buyerCustomerNickname',title:'买家昵称',width:'10%'},
+                    {field:'sellerCustomerNickname',title:'卖家昵称',width:'7%'},
                     {field:'offRate',title:'折损率',width:'5%'},
                     {field:'minDou',title:'最低限额豆数',width:'5%'},
                     {field:'dou',title:'使用豆数',width:'5%'},
