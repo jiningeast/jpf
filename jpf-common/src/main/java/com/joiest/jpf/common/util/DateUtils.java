@@ -467,6 +467,7 @@ public class DateUtils {
 		SimpleDateFormat myfmt1 = new SimpleDateFormat(DATEFORMATLONG);
 		return myfmt1.format(date);
 	}
+
 	public static void main(String[] args) {
 //		System.out.println(DateUtils.getString2YmdDate("20120101").getTime());
 //		System.out.println(DateUtils.getCurrentTimeMillis());

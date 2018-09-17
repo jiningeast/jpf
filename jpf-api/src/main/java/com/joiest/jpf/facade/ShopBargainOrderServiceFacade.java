@@ -12,11 +12,21 @@ public interface ShopBargainOrderServiceFacade {
     public GetShopBargainOrderResponse getList(GetShopBargainOrderRequest request);
 
     /**
+     * 前台转让订单列表页
+     */
+    public GetShopBargainOrderResponse getFrontList(GetShopBargainOrderRequest request);
+
+    /**
      * 获取单条信息
      */
 
     public ShopBargainOrderInfo getOne(String orderNo);
 
+
+    /**
+     *卖家转让下单
+     * */
+    public int sellerPlaceOrder(ShopBargainOrderInfo orderInfo);
 
     /*
      * 审核收购订单信息

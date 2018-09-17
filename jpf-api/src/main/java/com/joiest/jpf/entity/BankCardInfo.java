@@ -42,7 +42,7 @@ public class BankCardInfo {
     /**
      * 卡长度
      */
-    private String cardlen;
+    private Integer cardlen;
 
     /**
      *
@@ -170,11 +170,11 @@ public class BankCardInfo {
         this.ispos = ispos;
     }
 
-    public String getCardlen() {
+    public Integer getCardlen() {
         return cardlen;
     }
 
-    public void setCardlen(String cardlen) {
+    public void setCardlen(Integer cardlen) {
         this.cardlen = cardlen;
     }
 

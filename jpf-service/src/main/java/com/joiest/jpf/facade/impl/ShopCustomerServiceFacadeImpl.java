@@ -3,6 +3,7 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayShopBargainOrder;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.po.PayShopCustomerExample;
 import com.joiest.jpf.common.util.DateUtils;
@@ -202,5 +203,19 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
 
         return list.get(0);
     }
+
+    /**
+     * 更新用户信息
+     * */
+    public int upCustomerInfo(ShopCustomerInfo shopCustomerInfo){
+
+       PayShopCustomer payShopCustomer = new PayShopCustomer();
+
+       BeanCopier beanCopier = BeanCopier.create(ShopCustomerInfo.class,PayShopCustomer.class,false);
+       beanCopier.copy(shopCustomerInfo,payShopCustomer,null);
+
+        return payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomer);
+    }
+
 
 }

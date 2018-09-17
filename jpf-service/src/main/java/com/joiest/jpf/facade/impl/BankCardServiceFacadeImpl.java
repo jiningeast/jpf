@@ -20,6 +20,7 @@ public class BankCardServiceFacadeImpl implements BankCardServiceFacade {
     public BankCardInfo getBankCardByCardNO(String cardNo){
 
         List<PayBankCard> list = payBankCardCustomMapper.selectByCardNo(cardNo);
+
         PayBankCard payBankCard = list.get(0);
 
         BankCardInfo bankCardInfo = new BankCardInfo();
@@ -29,4 +30,21 @@ public class BankCardServiceFacadeImpl implements BankCardServiceFacade {
         return bankCardInfo;
     }
 
+    /**
+     * 根据卡号获取
+     */
+    public BankCardInfo cloudBankCardByCardNO(String cardNo){
+
+        List<PayBankCard> list = payBankCardCustomMapper.selectByCardNo(cardNo);
+
+        if (list.isEmpty()) return null;
+
+        PayBankCard payBankCard = list.get(0);
+
+        BankCardInfo bankCardInfo = new BankCardInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayBankCard.class, BankCardInfo.class, false);
+        beanCopier.copy(payBankCard, bankCardInfo, null);
+
+        return bankCardInfo;
+    }
 }

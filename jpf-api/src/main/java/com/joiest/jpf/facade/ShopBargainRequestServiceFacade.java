@@ -5,6 +5,9 @@ import com.joiest.jpf.common.po.PayShopBargainRequest;
 import com.joiest.jpf.dto.GetShopBargainOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainRequestRequest;
 import com.joiest.jpf.dto.GetShopBargainRequestResponse;
+import com.joiest.jpf.entity.ShopBargainRequestInfo;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -19,6 +22,16 @@ public interface ShopBargainRequestServiceFacade {
      * 收购开启和关闭
      */
     public JpfResponseDto delShopBargain(String merchNo, int type);
+
+    /**
+     * 获取买家转让单信息通过主键id
+     * */
+    public ShopBargainRequestInfo getBargainById(String id);
+
+    /**
+     * 获取买家信息
+     * */
+    public List<ShopBargainRequestInfo> getBuyInfo();
 
     /*
      * 添加买家回收信息

@@ -84,7 +84,14 @@ public enum JpfInterfaceErrorInfo {
     USER_IS_FREEZE("50008", "您的帐户已被冻结"),
     USER_DOU_NOT_SUFFICIENT("50009", "帐户余额不足"),
     ADD_STREAM_ERROR("50010", "添加流水失败"),
-    PRODUCT_CARD_TYPE("50011", "当前商品库存不足");
+    PRODUCT_CARD_TYPE("50011", "当前商品库存不足"),
+
+    //银行信息匹配
+    BANK_NO_CHECK("60000","未匹配到银行信息"),
+
+    //是否为买家
+    BARGAIN_BUYER_TYPE("70000","未开通买家申请");
+
 
     private final String desc;
 

@@ -115,7 +115,7 @@ public class DemoController {
     }
     /**
      * excel上传 获取excel表中数据
-     * 普通form提交 阿加西
+     * 普通文件提交
      * */
     @RequestMapping(value = "/uploadEcelByFile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody

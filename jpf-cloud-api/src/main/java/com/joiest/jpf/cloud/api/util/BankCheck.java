@@ -74,10 +74,10 @@ public class BankCheck {
             }else {
 
                 dealFirst = JSONObject.fromObject(res);
-                dealFirst.discard("msg");
 
                 if(dealFirst.get("status").equals("01")){
 
+                    dealFirst.discard("msg");
                     dealFirst.discard("status");
                     ocrResult.put("code","10000");
                     ocrResult.put("info","验证通过");

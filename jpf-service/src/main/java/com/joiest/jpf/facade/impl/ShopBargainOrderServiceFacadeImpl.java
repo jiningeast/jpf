@@ -84,42 +84,18 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
             ShopBargainOrderInfo info = new ShopBargainOrderInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopBargainOrderCustom.class, ShopBargainOrderInfo.class, false);
             beanCopier.copy(one, info, null);
-            //卖家买家赋值
-            if (info != null) {
-                //买家
-                if (info.getBuyerCustomerId() != null) {
 
-                    PayShopCustomerExample em = new PayShopCustomerExample();
-                    PayShopCustomerExample.Criteria cm = em.createCriteria();
-                    cm.andIdEqualTo(info.getBuyerCustomerId());
-                    List<PayShopCustomer> listCos = payShopCustomerMapper.selectByExample(em);
-                    if (listCos != null && !listCos.isEmpty()) {
-                        try {
-                            sale = URLDecoder.decode(listCos.get(0).getNickname(), "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                        info.setBuyName(sale);
-                    }
-                }
-                if (info.getSellerCustomerId() != null) {
-                    //卖家
-                    PayShopCustomerExample emS = new PayShopCustomerExample();
-                    PayShopCustomerExample.Criteria cmS = emS.createCriteria();
-                    cmS.andIdEqualTo(info.getSellerCustomerId());
-                    List<PayShopCustomer> listSale = payShopCustomerMapper.selectByExample(emS);
-                    if (listSale != null && !listSale.isEmpty()) {
+            try {
+                if(StringUtils.isNotBlank(info.getBuyerCustomerNickname()))
+                    sale = URLDecoder.decode(info.getBuyerCustomerNickname(), "UTF-8");
 
-                        try {
-                            buy = URLDecoder.decode(listSale.get(0).getNickname(), "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                        info.setSaleName(buy);
-                    }
-                }
-
+                if(StringUtils.isNotBlank(info.getSellerCustomerNickname()))
+                    buy = URLDecoder.decode(info.getSellerCustomerNickname(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
+            info.setSellerCustomerNickname(buy);
+            info.setBuyerCustomerNickname(sale);
             infoList.add(info);
         }
         GetShopBargainOrderResponse response = new GetShopBargainOrderResponse();
@@ -152,37 +128,19 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         String buy = "";
         String sale = "";
         //查询出卖家买家信息
-        if (shopBargainOrderInfo.getBuyerCustomerId() != null) {
+        try {
+            if(StringUtils.isNotBlank(shopBargainOrderInfo.getBuyerCustomerNickname()))
+                sale = URLDecoder.decode(shopBargainOrderInfo.getBuyerCustomerNickname(), "UTF-8");
 
-            PayShopCustomerExample em = new PayShopCustomerExample();
-            PayShopCustomerExample.Criteria cm = em.createCriteria();
-            cm.andIdEqualTo(shopBargainOrderInfo.getBuyerCustomerId());
-            List<PayShopCustomer> listCos = payShopCustomerMapper.selectByExample(em);
-            if (listCos != null && !listCos.isEmpty()) {
-                try {
-                    sale = URLDecoder.decode(listCos.get(0).getNickname(), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                shopBargainOrderInfo.setBuyName(sale);
-            }
-        }
-        if (shopBargainOrderInfo.getSellerCustomerId() != null) {
-            //卖家
-            PayShopCustomerExample emS = new PayShopCustomerExample();
-            PayShopCustomerExample.Criteria cmS = emS.createCriteria();
-            cmS.andIdEqualTo(shopBargainOrderInfo.getSellerCustomerId());
-            List<PayShopCustomer> listSale = payShopCustomerMapper.selectByExample(emS);
-            if (listSale != null && !listSale.isEmpty()) {
+            if(StringUtils.isNotBlank(shopBargainOrderInfo.getSellerCustomerNickname()))
+                buy = URLDecoder.decode(shopBargainOrderInfo.getSellerCustomerNickname(), "UTF-8");
 
-                try {
-                    buy = URLDecoder.decode(listSale.get(0).getNickname(), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                shopBargainOrderInfo.setSaleName(buy);
-            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+        shopBargainOrderInfo.setSellerCustomerNickname(buy);
+        shopBargainOrderInfo.setBuyerCustomerNickname(sale);
+
         return shopBargainOrderInfo;
     }
 
@@ -324,6 +282,60 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
             throw new JpfException(JpfErrorInfo.DAL_ERROR, "更新失败");
         }
         return new JpfResponseDto();
+    }
+
+    /**
+     *卖家转让下单
+     * */
+    public int sellerPlaceOrder(ShopBargainOrderInfo orderInfo){
+
+        PayShopBargainOrder payShopBargainOrder = new PayShopBargainOrder();
+
+        BeanCopier beanCopier = BeanCopier.create(ShopBargainOrderInfo.class,PayShopBargainOrder.class,false);
+        beanCopier.copy(orderInfo,payShopBargainOrder,null);
+
+        //return payShopBargainOrderMapper.insertSelective(payShopBargainOrder);
+        Integer id =  payShopBargainOrderCustomMapper.insertSelective(payShopBargainOrder);
+
+        return Integer.valueOf(payShopBargainOrder.getId());
+
+    }
+
+    /**
+     * 前台转让订单列表页
+     */
+    @Override
+    public GetShopBargainOrderResponse getFrontList(GetShopBargainOrderRequest request) {
+        if (request.getPage() <= 1) {
+            request.setPage(1);
+        }
+        PayShopBargainOrderExample example = new PayShopBargainOrderExample();
+        example.setPageNo(request.getPage());
+        //example.setPageSize(request.getRows());
+        example.setOrderByClause("id DESC");
+
+        PayShopBargainOrderExample.Criteria c = example.createCriteria();
+        //查询搜索条件数据
+        if (request.getBuyerCustomerId() != null ) {
+            c.andBuyerCustomerIdEqualTo(request.getBuyerCustomerId());
+        }
+
+        List<PayShopBargainOrder> list = payShopBargainOrderMapper.selectByExample(example);
+
+        List<ShopBargainOrderInfo> infoList = new ArrayList<>();
+
+        for (PayShopBargainOrder one : list) {
+            ShopBargainOrderInfo info = new ShopBargainOrderInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopBargainOrder.class, ShopBargainOrderInfo.class, false);
+            beanCopier.copy(one, info, null);
+
+            infoList.add(info);
+        }
+        GetShopBargainOrderResponse response = new GetShopBargainOrderResponse();
+        response.setList(infoList);
+        int count = payShopBargainOrderCustomMapper.countByExample(example);
+        response.setCount(count);
+        return response;
     }
 
 }
