@@ -102,7 +102,19 @@ public class OrderInfoController {
         }
         response.setUserDou(userInfo.getDou());  //获取用户当前豆数量
         response.setTotalDou(response.getTotalDou());
-        response.setTypeName("订单详情");
+        switch (response.getOrderType()){
+            case 1:
+                response.setTypeName("中石化充值");
+                break;
+
+            case 2:
+                response.setTypeName("中石油充值");
+                break;
+
+            case 3:
+                response.setTypeName("话费充值");
+                break;
+        }
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
     }
