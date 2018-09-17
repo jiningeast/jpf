@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ShopBargainRequestServiceFacadeImpl implements ShopBargainRequestServiceFacade {
@@ -158,4 +159,61 @@ public class ShopBargainRequestServiceFacadeImpl implements ShopBargainRequestSe
 
         return infoList;
     }
+    /**
+     * 查询 买家信息
+     */
+    @Override
+    public List<PayShopBargainRequest> getOne(GetShopBargainRequestRequest request)
+    {
+        if (StringUtils.isBlank(request.getCustomerId()) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "用户编号不能为空");
+        }
+        //查询当前添加的是否存在
+        PayShopBargainRequestExample example= new PayShopBargainRequestExample();
+        PayShopBargainRequestExample.Criteria c = example.createCriteria();
+        c.andCustomerIdEqualTo(request.getCustomerId());
+
+        List<PayShopBargainRequest> payShopBrainList = payShopBargainRequestMapper.selectByExample(example);
+        if(payShopBrainList.isEmpty() || payShopBrainList==null){
+            return null;
+        }
+
+        return payShopBrainList;
+    }
+
+    /**
+     * 添加卖家信息
+     */
+    @Override
+    public JpfResponseDto add(GetShopBargainRequestRequest request)
+    {
+
+        //查询当前添加的是否存在
+        PayShopBargainRequestExample example= new PayShopBargainRequestExample();
+        PayShopBargainRequestExample.Criteria c = example.createCriteria();
+        c.andCustomerIdEqualTo(request.getCustomerId());
+
+        PayShopBargainRequest record = new PayShopBargainRequest();
+        record.setCustomerId(request.getCustomerId());
+        record.setOffRate(request.getOffRate());
+        record.setMinDou(request.getMinDou());
+        record.setStatus(request.getStatus());
+
+        int count = 0;
+        // 更新买家信息
+        if(request.getId() !=null && StringUtils.isNotBlank(request.getId())){
+            record.setId(request.getId());
+            count = payShopBargainRequestMapper.updateByPrimaryKeySelective(record);
+        }else{// 添加买家信息
+            record.setAddtime(new Date());
+            count = payShopBargainRequestMapper.insertSelective(record);
+        }
+        if( count !=1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "操作失败");
+        }
+
+        return new JpfResponseDto();
+    }
+
 }
