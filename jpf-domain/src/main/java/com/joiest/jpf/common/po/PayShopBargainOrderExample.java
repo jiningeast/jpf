@@ -426,6 +426,76 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andBuyerCustomerNicknameIsNull() {
+            addCriterion("buyer_customer_nickname is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameIsNotNull() {
+            addCriterion("buyer_customer_nickname is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameEqualTo(String value) {
+            addCriterion("buyer_customer_nickname =", value, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameNotEqualTo(String value) {
+            addCriterion("buyer_customer_nickname <>", value, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameGreaterThan(String value) {
+            addCriterion("buyer_customer_nickname >", value, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameGreaterThanOrEqualTo(String value) {
+            addCriterion("buyer_customer_nickname >=", value, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameLessThan(String value) {
+            addCriterion("buyer_customer_nickname <", value, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameLessThanOrEqualTo(String value) {
+            addCriterion("buyer_customer_nickname <=", value, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameLike(String value) {
+            addCriterion("buyer_customer_nickname like", value, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameNotLike(String value) {
+            addCriterion("buyer_customer_nickname not like", value, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameIn(List<String> values) {
+            addCriterion("buyer_customer_nickname in", values, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameNotIn(List<String> values) {
+            addCriterion("buyer_customer_nickname not in", values, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameBetween(String value1, String value2) {
+            addCriterion("buyer_customer_nickname between", value1, value2, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameNotBetween(String value1, String value2) {
+            addCriterion("buyer_customer_nickname not between", value1, value2, "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
         public Criteria andSellerCustomerIdIsNull() {
             addCriterion("seller_customer_id is null");
             return (Criteria) this;
@@ -483,6 +553,76 @@ public class PayShopBargainOrderExample {
 
         public Criteria andSellerCustomerIdNotBetween(String value1, String value2) {
             addCriterion("seller_customer_id not between", value1, value2, "sellerCustomerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameIsNull() {
+            addCriterion("seller_customer_nickname is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameIsNotNull() {
+            addCriterion("seller_customer_nickname is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameEqualTo(String value) {
+            addCriterion("seller_customer_nickname =", value, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameNotEqualTo(String value) {
+            addCriterion("seller_customer_nickname <>", value, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameGreaterThan(String value) {
+            addCriterion("seller_customer_nickname >", value, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameGreaterThanOrEqualTo(String value) {
+            addCriterion("seller_customer_nickname >=", value, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameLessThan(String value) {
+            addCriterion("seller_customer_nickname <", value, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameLessThanOrEqualTo(String value) {
+            addCriterion("seller_customer_nickname <=", value, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameLike(String value) {
+            addCriterion("seller_customer_nickname like", value, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameNotLike(String value) {
+            addCriterion("seller_customer_nickname not like", value, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameIn(List<String> values) {
+            addCriterion("seller_customer_nickname in", values, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameNotIn(List<String> values) {
+            addCriterion("seller_customer_nickname not in", values, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameBetween(String value1, String value2) {
+            addCriterion("seller_customer_nickname between", value1, value2, "sellerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameNotBetween(String value1, String value2) {
+            addCriterion("seller_customer_nickname not between", value1, value2, "sellerCustomerNickname");
             return (Criteria) this;
         }
 
@@ -1848,6 +1988,16 @@ public class PayShopBargainOrderExample {
 
         public Criteria andOrderNoLikeInsensitive(String value) {
             addCriterion("upper(order_no) like", value.toUpperCase(), "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyerCustomerNicknameLikeInsensitive(String value) {
+            addCriterion("upper(buyer_customer_nickname) like", value.toUpperCase(), "buyerCustomerNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellerCustomerNicknameLikeInsensitive(String value) {
+            addCriterion("upper(seller_customer_nickname) like", value.toUpperCase(), "sellerCustomerNickname");
             return (Criteria) this;
         }
 
