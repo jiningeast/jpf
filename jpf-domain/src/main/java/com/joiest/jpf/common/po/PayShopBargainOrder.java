@@ -26,9 +26,19 @@ public class PayShopBargainOrder implements Serializable {
     private String buyerCustomerId;
 
     /**
+     * 买家昵称
+     */
+    private String buyerCustomerNickname;
+
+    /**
      * 卖家id
      */
     private String sellerCustomerId;
+
+    /**
+     * 卖家昵称
+     */
+    private String sellerCustomerNickname;
 
     /**
      * 折损率
@@ -169,12 +179,28 @@ public class PayShopBargainOrder implements Serializable {
         this.buyerCustomerId = buyerCustomerId == null ? null : buyerCustomerId.trim();
     }
 
+    public String getBuyerCustomerNickname() {
+        return buyerCustomerNickname;
+    }
+
+    public void setBuyerCustomerNickname(String buyerCustomerNickname) {
+        this.buyerCustomerNickname = buyerCustomerNickname == null ? null : buyerCustomerNickname.trim();
+    }
+
     public String getSellerCustomerId() {
         return sellerCustomerId;
     }
 
     public void setSellerCustomerId(String sellerCustomerId) {
         this.sellerCustomerId = sellerCustomerId == null ? null : sellerCustomerId.trim();
+    }
+
+    public String getSellerCustomerNickname() {
+        return sellerCustomerNickname;
+    }
+
+    public void setSellerCustomerNickname(String sellerCustomerNickname) {
+        this.sellerCustomerNickname = sellerCustomerNickname == null ? null : sellerCustomerNickname.trim();
     }
 
     public Double getOffRate() {
@@ -358,7 +384,9 @@ public class PayShopBargainOrder implements Serializable {
         sb.append(", orderNo=").append(orderNo);
         sb.append(", bargainRequestId=").append(bargainRequestId);
         sb.append(", buyerCustomerId=").append(buyerCustomerId);
+        sb.append(", buyerCustomerNickname=").append(buyerCustomerNickname);
         sb.append(", sellerCustomerId=").append(sellerCustomerId);
+        sb.append(", sellerCustomerNickname=").append(sellerCustomerNickname);
         sb.append(", offRate=").append(offRate);
         sb.append(", minDou=").append(minDou);
         sb.append(", dou=").append(dou);
@@ -404,7 +432,9 @@ public class PayShopBargainOrder implements Serializable {
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getBargainRequestId() == null ? other.getBargainRequestId() == null : this.getBargainRequestId().equals(other.getBargainRequestId()))
             && (this.getBuyerCustomerId() == null ? other.getBuyerCustomerId() == null : this.getBuyerCustomerId().equals(other.getBuyerCustomerId()))
+            && (this.getBuyerCustomerNickname() == null ? other.getBuyerCustomerNickname() == null : this.getBuyerCustomerNickname().equals(other.getBuyerCustomerNickname()))
             && (this.getSellerCustomerId() == null ? other.getSellerCustomerId() == null : this.getSellerCustomerId().equals(other.getSellerCustomerId()))
+            && (this.getSellerCustomerNickname() == null ? other.getSellerCustomerNickname() == null : this.getSellerCustomerNickname().equals(other.getSellerCustomerNickname()))
             && (this.getOffRate() == null ? other.getOffRate() == null : this.getOffRate().equals(other.getOffRate()))
             && (this.getMinDou() == null ? other.getMinDou() == null : this.getMinDou().equals(other.getMinDou()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
@@ -439,7 +469,9 @@ public class PayShopBargainOrder implements Serializable {
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getBargainRequestId() == null) ? 0 : getBargainRequestId().hashCode());
         result = prime * result + ((getBuyerCustomerId() == null) ? 0 : getBuyerCustomerId().hashCode());
+        result = prime * result + ((getBuyerCustomerNickname() == null) ? 0 : getBuyerCustomerNickname().hashCode());
         result = prime * result + ((getSellerCustomerId() == null) ? 0 : getSellerCustomerId().hashCode());
+        result = prime * result + ((getSellerCustomerNickname() == null) ? 0 : getSellerCustomerNickname().hashCode());
         result = prime * result + ((getOffRate() == null) ? 0 : getOffRate().hashCode());
         result = prime * result + ((getMinDou() == null) ? 0 : getMinDou().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
