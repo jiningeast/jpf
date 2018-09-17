@@ -301,4 +301,41 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
 
     }
 
+    /**
+     * 前台转让订单列表页
+     */
+    @Override
+    public GetShopBargainOrderResponse getFrontList(GetShopBargainOrderRequest request) {
+        if (request.getPage() <= 1) {
+            request.setPage(1);
+        }
+        PayShopBargainOrderExample example = new PayShopBargainOrderExample();
+        example.setPageNo(request.getPage());
+        //example.setPageSize(request.getRows());
+        example.setOrderByClause("id DESC");
+
+        PayShopBargainOrderExample.Criteria c = example.createCriteria();
+        //查询搜索条件数据
+        if (request.getBuyerCustomerId() != null ) {
+            c.andBuyerCustomerIdEqualTo(request.getBuyerCustomerId());
+        }
+
+        List<PayShopBargainOrder> list = payShopBargainOrderMapper.selectByExample(example);
+
+        List<ShopBargainOrderInfo> infoList = new ArrayList<>();
+
+        for (PayShopBargainOrder one : list) {
+            ShopBargainOrderInfo info = new ShopBargainOrderInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopBargainOrder.class, ShopBargainOrderInfo.class, false);
+            beanCopier.copy(one, info, null);
+
+            infoList.add(info);
+        }
+        GetShopBargainOrderResponse response = new GetShopBargainOrderResponse();
+        response.setList(infoList);
+        int count = payShopBargainOrderCustomMapper.countByExample(example);
+        response.setCount(count);
+        return response;
+    }
+
 }
