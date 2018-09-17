@@ -50,11 +50,10 @@ public abstract class ValidatorUtils {
 //		}
 		Set<ConstraintViolation<T>> constraintViolations = validator.validate(target);
 		if (constraintViolations != null && !constraintViolations.isEmpty()) {
-			ConstraintViolation<T> convi = constraintViolations.iterator()
-					.next();
+
+			ConstraintViolation<T> convi = constraintViolations.iterator().next();
 			logger.info("#Param Validator throw exception: < "+convi.getMessage()+" >");
-			throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(),
-					convi.getMessage());
+			throw new JpfInterfaceException(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), convi.getMessage());
 		}
 	}
 

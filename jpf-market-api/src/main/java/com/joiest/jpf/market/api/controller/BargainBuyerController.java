@@ -3,14 +3,17 @@ package com.joiest.jpf.market.api.controller;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.entity.ShopBargainRequestInfo;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
+import com.joiest.jpf.facade.ShopBargainRequestServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +36,9 @@ public class BargainBuyerController {
 
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
+
+    @Autowired
+    private ShopBargainRequestServiceFacade shopBargainRequestServiceFacade;
 
     @RequestMapping("/becomeBuyer")
     @ResponseBody
@@ -58,6 +64,21 @@ public class BargainBuyerController {
         return "";
     }
 
+
+
+    /**
+     *买家发布信息
+     * */
+    @RequestMapping(value = "/buyInfo",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String buyInfo(HttpServletRequest request){
+
+        List<ShopBargainRequestInfo> list = shopBargainRequestServiceFacade.getBuyInfo();
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",list);
+    }
+
+
+
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
@@ -72,4 +93,5 @@ public class BargainBuyerController {
             }
         }
     }
+
 }

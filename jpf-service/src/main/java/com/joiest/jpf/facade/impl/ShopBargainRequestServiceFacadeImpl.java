@@ -117,5 +117,45 @@ public class ShopBargainRequestServiceFacadeImpl implements ShopBargainRequestSe
         payShopBargainRequestMapper.updateByExampleSelective(payShopBargainRequest,example);
         return new JpfResponseDto();
     }
+    /**
+     * 获取买家转让单信息通过主键id
+     * */
+    public ShopBargainRequestInfo getBargainById(String id){
 
+        PayShopBargainRequest payShopBargainRequest = payShopBargainRequestMapper.selectByPrimaryKey(id);
+
+        if (payShopBargainRequest == null) return null;
+
+        ShopBargainRequestInfo shopBargainRequestInfo = new ShopBargainRequestInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayShopBargainRequest.class,ShopBargainRequestInfo.class,false);
+        beanCopier.copy(payShopBargainRequest,shopBargainRequestInfo,null);
+
+        return shopBargainRequestInfo;
+    }
+
+    /**
+     * 获取买家信息
+     * */
+    public List<ShopBargainRequestInfo> getBuyInfo(){
+
+        PayShopBargainRequestExample example = new PayShopBargainRequestExample();
+        PayShopBargainRequestExample.Criteria c = example.createCriteria();
+        c.andStatusEqualTo((byte)1);
+
+        List<PayShopBargainRequest> payShopBargainRequest = payShopBargainRequestMapper.selectByExample(example);
+
+        List<ShopBargainRequestInfo> infoList = new ArrayList<>();
+        for (PayShopBargainRequest one : payShopBargainRequest) {
+
+            ShopBargainRequestInfo info = new ShopBargainRequestInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopBargainRequest.class, ShopBargainRequestInfo.class, false);
+            beanCopier.copy(one, info, null);
+
+            infoList.add(info);
+        }
+        int count = payShopBargainRequestMapper.countByExample(example);
+
+        return infoList;
+    }
 }

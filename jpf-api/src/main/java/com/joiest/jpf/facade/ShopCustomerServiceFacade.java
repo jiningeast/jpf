@@ -4,6 +4,7 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.dto.GetShopCustomerRequest;
 import com.joiest.jpf.dto.GetShopCustomerResponse;
+import com.joiest.jpf.entity.ShopCustomerInfo;
 
 public interface ShopCustomerServiceFacade {
 
@@ -31,5 +32,10 @@ public interface ShopCustomerServiceFacade {
      * 更新主键获取用户信息
      */
     public PayShopCustomer getCustomerById(String id);
+
+    /**
+     * 更新用户信息
+     * */
+    public int upCustomerInfo(ShopCustomerInfo shopCustomerInfo);
 
 }

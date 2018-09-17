@@ -18,6 +18,11 @@ public interface ShopBargainOrderServiceFacade {
     public ShopBargainOrderInfo getOne(String orderNo);
 
 
+    /**
+     *卖家转让下单
+     * */
+    public int sellerPlaceOrder(ShopBargainOrderInfo orderInfo);
+
     /*
      * 审核收购订单信息
      * */

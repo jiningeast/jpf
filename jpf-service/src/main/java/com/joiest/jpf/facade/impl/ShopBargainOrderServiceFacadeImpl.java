@@ -326,4 +326,17 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         return new JpfResponseDto();
     }
 
+    /**
+     *卖家转让下单
+     * */
+    public int sellerPlaceOrder(ShopBargainOrderInfo orderInfo){
+
+        PayShopBargainOrder payShopBargainOrder = new PayShopBargainOrder();
+
+        BeanCopier beanCopier = BeanCopier.create(ShopBargainOrderInfo.class,PayShopBargainOrder.class,false);
+        beanCopier.copy(orderInfo,payShopBargainOrder,null);
+
+        return payShopBargainOrderMapper.insertSelective(payShopBargainOrder);
+    }
+
 }

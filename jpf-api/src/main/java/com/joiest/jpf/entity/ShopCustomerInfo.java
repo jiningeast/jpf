@@ -65,6 +65,11 @@ public class ShopCustomerInfo {
     private Integer dou;
 
     /**
+     * 冻结欣豆
+     */
+    private Integer freezeDou;
+
+    /**
      * 充值校验码
      */
     private String code;
@@ -167,6 +172,14 @@ public class ShopCustomerInfo {
 
     public void setDou(Integer dou) {
         this.dou = dou;
+    }
+
+    public Integer getFreezeDou() {
+        return freezeDou;
+    }
+
+    public void setFreezeDou(Integer freezeDou) {
+        this.freezeDou = freezeDou;
     }
 
     public String getCode() {
