@@ -4,24 +4,28 @@ import com.joiest.jpf.common.custom.PayShopBargainOrderCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayShopBargainOrder;
-import com.joiest.jpf.common.po.PayShopBargainOrderExample;
-import com.joiest.jpf.common.po.PayShopCustomer;
-import com.joiest.jpf.common.po.PayShopCustomerExample;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBargainOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBargainOrderMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponActiveMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
+import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.dto.GetShopBargainOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainOrderResponse;
 import com.joiest.jpf.entity.ShopBargainOrderInfo;
+import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.ShopBargainOrderServiceFacade;
+import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,6 +43,11 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
     @Autowired
     private PayShopBargainOrderMapper payShopBargainOrderMapper;
 
+    @Autowired
+    ShopCouponRemainServiceFacade shopCouponRemainServiceFacade;
+
+    @Autowired
+    private PayShopCouponActiveMapper payShopCouponActiveMapper;
     /**
      * 运营采购订单列表---后台
      */
@@ -78,9 +87,10 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         List<PayShopBargainOrderCustom> list = payShopBargainOrderCustomMapper.selectJoin(example);
 
         List<ShopBargainOrderInfo> infoList = new ArrayList<>();
-        String buy = "";
-        String sale = "";
+
         for (PayShopBargainOrderCustom one : list) {
+            String buy = "";
+            String sale = "";
             ShopBargainOrderInfo info = new ShopBargainOrderInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopBargainOrderCustom.class, ShopBargainOrderInfo.class, false);
             beanCopier.copy(one, info, null);
@@ -89,7 +99,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                 if(StringUtils.isNotBlank(info.getBuyerCustomerNickname()))
                     sale = URLDecoder.decode(info.getBuyerCustomerNickname(), "UTF-8");
 
-                if(StringUtils.isNotBlank(info.getSellerCustomerNickname()))
+                if(StringUtils.isNotBlank(info.getSellerCustomerNickname())&& info.getSellerCustomerNickname()!=null)
                     buy = URLDecoder.decode(info.getSellerCustomerNickname(), "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -159,7 +169,14 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         }
         PayShopBargainOrder payShopBargainOrder = payShopBargainOrderMapper.selectByPrimaryKey(infoId);
         if (payShopBargainOrder == null) {
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到相关信息");
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "获取订单信息失败");
+        }
+        ShopBargainOrderInfo shopBargainOrderInfo = new ShopBargainOrderInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayShopBargainOrder.class, ShopBargainOrderInfo.class, false);
+        beanCopier.copy(payShopBargainOrder,shopBargainOrderInfo, null);
+        PayShopCustomer  payShopCustomer   =payShopCustomerMapper.selectByPrimaryKey(payShopBargainOrder.getSellerCustomerId());
+        if(payShopCustomer==null){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "获取卖家信息失败");
         }
         //审核判断
         int res = 0;
@@ -172,6 +189,8 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
             case 1://审核操作
                 if (payShopBargainOrder.getStatus() == (byte) 1) {
                     throw new JpfException(JpfErrorInfo.DAL_ERROR, "当前已为审核状态");
+                }else if(payShopBargainOrder.getStatus() == (byte) 5){
+                    throw new JpfException(JpfErrorInfo.DAL_ERROR, "当前订单已取消不可审核");
                 } else {
                     recordData.setStatus(request.getStatus());
                     recordData.setId(infoId);
@@ -218,6 +237,27 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                      if(StringUtils.isBlank(request.getPayImg())){
                          throw new JpfException(JpfErrorInfo.DAL_ERROR, "请上传付款凭证");
                      }
+                     //买家金额校验
+                     String custemID=payShopCustomer.getId();
+                     String code=payShopCustomer.getCode();
+                     String dou=payShopCustomer.getDou().toString();
+                     Boolean isYes= ToolUtils.ValidateCode(code,custemID,dou);
+                     if(!isYes){
+                         throw new JpfException(JpfErrorInfo.DAL_ERROR, "卖家金额校验失败");
+                     }
+                     //拼出扣豆卖家的参数
+                     ShopCustomerInterfaceInfo shopCustomerInterfaceInfo = new ShopCustomerInterfaceInfo();
+                     BeanCopier beanCopierCutem = BeanCopier.create(PayShopCustomer.class, ShopCustomerInterfaceInfo.class, false);
+                     beanCopierCutem.copy(payShopCustomer,shopCustomerInterfaceInfo, null);
+                     //用户可用券列表
+                     GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(custemID);
+                     if ( userCouponList == null || userCouponList.getCount() == 0)
+                     {
+                         throw new JpfException(JpfErrorInfo.DAL_ERROR, "卖家无可用欣豆");
+                     }
+                     //执行扣豆操作、
+                    shopCouponRemainServiceFacade.CouponAttorn(userCouponList.getList(), shopBargainOrderInfo, shopCustomerInterfaceInfo);
+
                     recordData.setPayImg(request.getPayImg());
                     recordData.setStatus(request.getStatus());
                     recordData.setId(infoId);
@@ -259,7 +299,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                     throw new JpfException(JpfErrorInfo.DAL_ERROR, "当前已为取消状态");
                 } else if (payShopBargainOrder.getStatus() == (byte) 3) {
                     throw new JpfException(JpfErrorInfo.DAL_ERROR, "当前订单已打款成功不可取消");
-                } else {
+                }else {
                     recordData.setStatus(request.getStatus());
                     recordData.setId(infoId);
                     if (request.getMemo() != null && org.apache.commons.lang3.StringUtils.isNotBlank(request.getMemo())) {
@@ -269,6 +309,48 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                         recordData.setMemo("[" + df.format(new Date()) + "] ");
 
                     }
+                    //取消转让修改豆
+                    // 客户总豆数量减去一部分pay_shop_customer
+                    PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
+                    int dou = payShopCustomer.getDou() + payShopBargainOrder.getDou();
+                    String code = ToolUtils.CreateCode(String.valueOf(dou),payShopBargainOrder.getSellerCustomerId());
+                    payShopCustomerUpdate.setId(payShopBargainOrder.getSellerCustomerId());
+                    payShopCustomerUpdate.setDou(dou);
+                    payShopCustomerUpdate.setFreezeDou(payShopCustomer.getFreezeDou()-payShopBargainOrder.getDou());
+                    payShopCustomerUpdate.setCode(code);
+                    payShopCustomerUpdate.setUpdatetime(new Date());
+                    int res_updateCustomCode = payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
+
+
+                    if ( res_updateCustomCode < 1 )
+                    {
+                        throw new Exception("退还豆失败");
+                    }
+                    //active 表中添加一条取消的数据
+                    PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+                    payShopCouponActive.setCustomerId(payShopBargainOrder.getSellerCustomerId());
+                    //payShopCouponActive.setCustomerName(orderInfo.getCustomerName());
+                    payShopCouponActive.setCompanyId(Integer.parseInt("0"));
+                    //payShopCouponActive.setCompanyName(payShopCompany.getCompanyName());
+                    //payShopCouponActive.setBatchId(Integer.parseInt(payShopBatch.getId()));
+                    //payShopCouponActive.setBatchNo(payShopBatch.getBatchNo());
+                    payShopCouponActive.setCouponNo("");
+                    payShopCouponActive.setActiveCode("");
+                    payShopCouponActive.setPayWay((byte)0);
+                    payShopCouponActive.setMoney(new BigDecimal("0"));
+                    payShopCouponActive.setDou(payShopBargainOrder.getDou());     //消费豆数量
+                    payShopCouponActive.setContent("行为:取消;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";取消转让:" + payShopBargainOrder.getDou() + ";bargain_order_id:" + payShopBargainOrder.getId());
+                    payShopCouponActive.setType("6");
+                    payShopCouponActive.setExpireTime(new Date());
+                    payShopCouponActive.setAddtime(new Date());
+                    payShopCouponActive.setBargainOrderId(payShopBargainOrder.getId());
+                    payShopCouponActive.setBargainOrderNo(payShopBargainOrder.getOrderNo());
+                    int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
+                    if ( res_couponActive < 1 )
+                    {
+                        throw new Exception("添加券记录失败");
+                    }
+                  // === ==end======
                     recordData.setOperatorId(request.getOperatorId());
                     recordData.setOperatorName(request.getOperatorName());
                     recordData.setUpdatetime(date);
@@ -336,6 +418,29 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         int count = payShopBargainOrderCustomMapper.countByExample(example);
         response.setCount(count);
         return response;
+    }
+
+    /**
+     * 获取订单详情
+     * */
+    public ShopBargainOrderInfo getBargainOrderByNo(String orderNo){
+
+        PayShopBargainOrderExample example = new PayShopBargainOrderExample();
+        PayShopBargainOrderExample.Criteria c = example.createCriteria();
+        c.andOrderNoEqualTo(orderNo);
+
+        List<PayShopBargainOrder> getPayShopBargainOrder = payShopBargainOrderMapper.selectByExample(example);
+
+        if(getPayShopBargainOrder.isEmpty()) return null;
+
+        PayShopBargainOrder payShopBargainOrder = getPayShopBargainOrder.get(0);
+
+        ShopBargainOrderInfo shopBargainOrderInfo = new ShopBargainOrderInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayShopBargainOrder.class,ShopBargainOrderInfo.class,false);
+        beanCopier.copy(payShopBargainOrder,shopBargainOrderInfo,null);
+
+        return shopBargainOrderInfo;
     }
 
 }

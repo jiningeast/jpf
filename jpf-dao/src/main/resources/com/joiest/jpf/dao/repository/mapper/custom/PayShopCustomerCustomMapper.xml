@@ -15,6 +15,7 @@
     <result column="idno" jdbcType="VARCHAR" property="idno" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="is_verify" jdbcType="TINYINT" property="isVerify" />
+    <result column="is_bargain_buyer" jdbcType="TINYINT" property="isBargainBuyer" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="dou" jdbcType="INTEGER" property="dou" />

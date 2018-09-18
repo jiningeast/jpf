@@ -130,7 +130,7 @@
                 url:'list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
-                    {field:'phone',title:'注册号',width:'10%',
+                    {field:'phone',title:'注册号',width:'8%',
                         formatter : function(value,row,index){
 
                             return  "<a onclick='goActive("+row['id']+","+row['phone']+","+row['dou']+")'>"+value+" </a>";
@@ -143,24 +143,24 @@
                             return  decodeURI(value);
                         }
                     },
-                    {field:'dou',title:'欣豆数量',width:'10%'},
+                    {field:'dou',title:'欣豆数量',width:'6%'},
                     // {field:'companyId',title:'所属公司id',width:'10%'},
                     // {field:'companyName',title:'注册所属公司',width:'15%'},
-                    {field:'status',title:'登录状态',width:'8%',
+                    {field:'status',title:'登录状态',width:'5%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '正常'}
                             else{return '已冻结'}
                         },styler: function (value, row, index) {
                             return 'color:red';
                         }
-                    },{field:'isVerify',title:'实名认证',width:'8%',
+                    },{field:'isVerify',title:'实名认证',width:'7%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '已实名认证'}
                             else{return '未实名认证'}
                         },styler: function (value, row, index) {
                             return 'color:red';
                         }
-                    },{field:'type',title:'用户类型',width:'8%',
+                    },{field:'type',title:'用户类型',width:'7%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '特殊用户'}
                             else{return '正常用户'}
@@ -168,9 +168,9 @@
                             return 'color:red';
                         }
                     },
-                    {field:'addtime',title:'注册时间',width:'15%',formatter: formatDateStr},
+                    {field:'addtime',title:'注册时间',width:'12%',formatter: formatDateStr},
 
-                    {field:'updatetime',title:'修改时间',width:'15%',formatter: formatDateStr},
+                    {field:'updatetime',title:'修改时间',width:'12%',formatter: formatDateStr},
 
                 ]]
             });

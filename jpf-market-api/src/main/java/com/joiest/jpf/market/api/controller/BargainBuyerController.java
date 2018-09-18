@@ -4,19 +4,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopBargainRequest;
-import com.joiest.jpf.common.util.AESUtils;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.po.PayShopCustomer;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.GetShopBargainOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainOrderResponse;
 import com.joiest.jpf.dto.GetShopBargainRequestRequest;
+import com.joiest.jpf.entity.ShopBargainOrderInfo;
 import com.joiest.jpf.entity.ShopBargainRequestInfo;
+import com.joiest.jpf.entity.ShopCustomerInfo;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
-import com.joiest.jpf.facade.RedisCustomServiceFacade;
-import com.joiest.jpf.facade.ShopBargainOrderServiceFacade;
-import com.joiest.jpf.facade.ShopBargainRequestServiceFacade;
-import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.util.ToolsUtils;
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
@@ -55,6 +52,9 @@ public class BargainBuyerController {
 
     @Autowired
     private RedisCustomServiceFacade redisCustomServiceFacade;
+
+    @Autowired
+    private ShopCustomerServiceFacade shopCustomerServiceFacade;
 
     @RequestMapping("/becomeBuyer")
     @ResponseBody
@@ -166,6 +166,31 @@ public class BargainBuyerController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",list);
     }
 
+
+    /**
+     * 获取买家发布单条信息
+     * */
+    @RequestMapping(value = "/buyInfoSigle",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String buyInfoSigle(HttpServletRequest request){
+
+        JSONObject requestParam = _filter(request.getParameter("data"));
+
+        if(requestParam.get("code").toString().equals("10008"))
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),requestParam.get("info").toString(),null);
+
+        if(StringUtils.isBlank(requestParam.get("bargainRequestId").toString()))
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"参数信息有误",null);
+
+        //获取服务发布订单
+        ShopBargainRequestInfo shopBargainRequestInfo = shopBargainRequestServiceFacade.getBargainById(requestParam.get("bargainRequestId").toString());
+        if(shopBargainRequestInfo == null)
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"未获取买家信息",null);
+
+
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",shopBargainRequestInfo);
+    }
+
     /**
      * 我买到的（买家购买服务转让列表）
      * */
@@ -203,31 +228,34 @@ public class BargainBuyerController {
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",response);
     }
-
     /**
-     * 获取买家发布单条信息
+     * 订单详情
      * */
-    @RequestMapping(value = "/buyInfoSigle",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/orderDetail",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String buyInfoSigle(HttpServletRequest request){
+    public String orderDetail(HttpServletRequest request){
 
         JSONObject requestParam = _filter(request.getParameter("data"));
+        JSONObject responsParam = new JSONObject();
 
         if(requestParam.get("code").toString().equals("10008"))
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),requestParam.get("info").toString(),null);
 
-        if(StringUtils.isBlank(requestParam.get("bargainRequestId").toString()))
+        if(StringUtils.isBlank(requestParam.get("orderNo").toString()))
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"参数信息有误",null);
 
-        //获取服务发布订单
-        ShopBargainRequestInfo shopBargainRequestInfo = shopBargainRequestServiceFacade.getBargainById(requestParam.get("bargainRequestId").toString());
-        if(shopBargainRequestInfo == null)
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"未获取买家信息",null);
+        ShopBargainOrderInfo shopBargainOrderInfo = shopBargainOrderServiceFacade.getBargainOrderByNo(requestParam.get("orderNo").toString());
+        if(shopBargainOrderInfo == null)
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"未获取到此单信息，请检查订单号是否正确",null);
 
-
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",shopBargainRequestInfo);
+        responsParam = JSONObject.fromObject(shopBargainOrderInfo);
+        responsParam.put("paytime", DateUtils.dateToString(shopBargainOrderInfo.getPaytime()));
+        responsParam.put("addtime", DateUtils.dateToString(shopBargainOrderInfo.getAddtime()));
+        responsParam.put("updatetime", DateUtils.dateToString(shopBargainOrderInfo.getUpdatetime()));
+        //PayShopCustomer buyerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getBuyerCustomerId());
+        //PayShopCustomer sellerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getSellerCustomerId());
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",responsParam);
     }
-
     /**
      * 基础参数格式化
      * */

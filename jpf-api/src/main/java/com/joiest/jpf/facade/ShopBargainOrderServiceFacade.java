@@ -32,4 +32,11 @@ public interface ShopBargainOrderServiceFacade {
      * 审核收购订单信息
      * */
     public JpfResponseDto AuditOrder(GetShopBargainOrderRequest request) throws Exception;
+
+
+    /**
+     * 获取订单详情
+     * */
+    public ShopBargainOrderInfo getBargainOrderByNo(String orderNo);
+
 }

@@ -29,13 +29,13 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">买家昵称：</td>
                     <td>
-                        ${shopBargainOrderInfo.buyName}
+                        ${shopBargainOrderInfo.buyerCustomerNickname}
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">卖家昵称：</td>
                     <td>
-                        ${shopBargainOrderInfo.saleName}
+                        ${shopBargainOrderInfo.sellerCustomerNickname}
                     </td>
                 </tr>
                 <tr>

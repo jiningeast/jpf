@@ -37,7 +37,7 @@
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm1" method="post">
                 <input id="customerId" type="hidden" name="customerId"  value="${id}"/>
-                <table cellpadding="5" >
+                <table  cellpadding="5" width="75%">
                     <tr>
                         <td>内容:</td>
                         <td><input id="content" name="content" class="easyui-textbox" type="text" /></td>
@@ -52,14 +52,25 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>消费单号:</td>
+                        <td><input id="orderNo" name="orderNo" class="easyui-textbox" type="text" /></td>
+
+                        <td>转让单号:</td>
+                        <td><input id="bargainOrderNo" name="bargainOrderNo" class="easyui-textbox" type="text" /></td>
+                    </tr>
+
+                    <tr>
                         <td>类型:</td>
                         <td>
-                            <select id="type" name="type" class="easyui-combobox">
+                            <select id="type" name="type" class="easyui-combobox" style="width:60px;">
                                 <option value="">全部</option>
                                 <option value="0">激活</option>
                                 <option value="1">消费</option>
                                 <option value="2">退豆</option>
                                 <option value="3">过期</option>
+                                <option value="4">冻结</option>
+                                <option value="5">转让</option>
+                                <option value="6">取消</option>
                             </select>
                         </td>
                         <td colspan="2"></td>
@@ -91,32 +102,35 @@
             url:'listCouponList?id='+${id},
             columns:[[
                 {field:'id',title:'ID',width:'3%'},
-                {field:'customerName',title:'顾客姓名',width:'5%'},
-                {field:'companyName',title:'企业名称',width:'8%'},
-                {field:'batchNo',title:'批次号',width:'8%'},
-                {field:'couponNo',title:'券号',width:'10%'},
-                {field:'money',title:'面值',width:'10%'},
-                {field:'dou',title:'豆数量',width:'10%',
+                {field:'orderNo',title:'消费单号',width:'12%'},
+                {field:'bargainOrderNo',title:'转让单号',width:'12%'},
+                {field:'batchNo',title:'批次号',width:'20%'},
+                {field:'couponNo',title:'券号',width:'12%'},
+                {field:'money',title:'面值',width:'6%'},
+                {field:'dou',title:'豆数量',width:'8%',
                     formatter : function(value,row,index){
 
-                        if(row['type']==1|| row['type']==3 ){
+                        if(row['type']==1|| row['type']==3 || row['type']==4 || row['type']==5){
                             return "<span style='color: #FF2F2F;' >-"+value+"</span>";
                         }else{
                             return "<span >+"+value+"</span>";
                         }
                     }},
                 {field:'content',title:'内容',width:'10%'},
-                {field:'payWay',title:'方式',width:'8%',
+                {field:'payWay',title:'方式',width:'6%',
                     formatter : function(value,row,index){
                         if(value=='0'){return '欣豆'}
                         else if(value=="1"){return '微信'}
                     }
-                },{field:'type',title:'类型',width:'8%',
+                },{field:'type',title:'类型',width:'6%',
                     formatter : function(value,row,index){
                         if(value=='0'){return '激活'}
                         else if(value=="1"){return '消费'}
                         else if(value=="2"){return '退豆'}
                         else if(value=="3"){return '过期'}
+                        else if(value=="4"){return '冻结'}
+                        else if(value=="5"){return '转让'}
+                        else if(value=="6"){return '取消'}
                     },styler: function (value, row, index) {
                         if(value=='1' || value=='3'){
                             return 'color:red';
