@@ -180,6 +180,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
      */
     private String typeName;
 
+    /**
+     * 商品图片
+     */
+    private String image;
+
     public String getId() {
         return id;
     }
@@ -458,5 +463,13 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
