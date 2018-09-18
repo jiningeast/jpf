@@ -420,4 +420,27 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         return response;
     }
 
+    /**
+     * 获取订单详情
+     * */
+    public ShopBargainOrderInfo getBargainOrderByNo(String orderNo){
+
+        PayShopBargainOrderExample example = new PayShopBargainOrderExample();
+        PayShopBargainOrderExample.Criteria c = example.createCriteria();
+        c.andOrderNoEqualTo(orderNo);
+
+        List<PayShopBargainOrder> getPayShopBargainOrder = payShopBargainOrderMapper.selectByExample(example);
+
+        if(getPayShopBargainOrder.isEmpty()) return null;
+
+        PayShopBargainOrder payShopBargainOrder = getPayShopBargainOrder.get(0);
+
+        ShopBargainOrderInfo shopBargainOrderInfo = new ShopBargainOrderInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayShopBargainOrder.class,ShopBargainOrderInfo.class,false);
+        beanCopier.copy(payShopBargainOrder,shopBargainOrderInfo,null);
+
+        return shopBargainOrderInfo;
+    }
+
 }
