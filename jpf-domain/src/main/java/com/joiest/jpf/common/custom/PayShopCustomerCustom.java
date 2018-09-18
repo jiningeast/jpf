@@ -55,6 +55,11 @@ public class PayShopCustomerCustom implements Serializable {
     private Byte isVerify;
 
     /**
+     * 是否是欣豆交易的买家 0=不是 1=是
+     */
+    private Byte isBargainBuyer;
+
+    /**
      * 用户类型
      */
     private Byte type;
@@ -311,5 +316,13 @@ public class PayShopCustomerCustom implements Serializable {
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getMpid() == null) ? 0 : getMpid().hashCode());
         return result;
+    }
+
+    public Byte getIsBargainBuyer() {
+        return isBargainBuyer;
+    }
+
+    public void setIsBargainBuyer(Byte isBargainBuyer) {
+        this.isBargainBuyer = isBargainBuyer;
     }
 }
