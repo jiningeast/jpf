@@ -451,6 +451,7 @@ public class ShopStockOrderController {
 
             fileData.put("sucessData",shopStockCardSuccess);
         }
+        // 保存缓存文件
         LogsCustomUtils2.writeIntoFile(fileData.toString(),ConfigUtil.getValue("CACHE_PATH")+fileUUid+".txt",false);
 
         // OSS上传excel文件
