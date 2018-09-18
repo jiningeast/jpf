@@ -26,6 +26,7 @@ public class ShopCouponActiveServiceFacadeImpl implements ShopCouponActiveServic
     /**
      * 客户欣豆行为列表
      */
+    @Override
     public GetShopCouponActiveResponse getList(GetShopCouponActiveRequest request,String id)
     {
         if ( request.getRows() <= 0 )
@@ -41,7 +42,7 @@ public class ShopCouponActiveServiceFacadeImpl implements ShopCouponActiveServic
         PayShopCouponActiveExample example = new PayShopCouponActiveExample();
         example.setPageNo(request.getPage());
         example.setPageSize(request.getRows());
-        example.setOrderByClause("addtime DESC");
+        example.setOrderByClause("ID DESC");
 
         PayShopCouponActiveExample.Criteria c = example.createCriteria();
 
@@ -61,6 +62,14 @@ public class ShopCouponActiveServiceFacadeImpl implements ShopCouponActiveServic
         //判断是否有用户id
         if(StringUtils.isNotBlank(request.getCustomerId())){
             c.andCustomerIdEqualTo(request.getCustomerId());
+        }
+        //单号搜索
+        if(StringUtils.isNotBlank(request.getOrderNo())){
+            c.andOrderNoEqualTo(request.getOrderNo());
+        }
+        if(StringUtils.isNotBlank(request.getBargainOrderNo())){
+
+            c.andBargainOrderNoEqualTo(request.getBargainOrderNo());
         }
         if(StringUtils.isNotBlank(id)){
             c.andCustomerIdEqualTo(id);
@@ -88,6 +97,7 @@ public class ShopCouponActiveServiceFacadeImpl implements ShopCouponActiveServic
     /**
      * 欣豆日志添加
      * */
+    @Override
     public int addShopCouponActive(PayShopCouponActive payShopCouponActive){
 
         return payShopCouponActiveMapper.insertSelective(payShopCouponActive);

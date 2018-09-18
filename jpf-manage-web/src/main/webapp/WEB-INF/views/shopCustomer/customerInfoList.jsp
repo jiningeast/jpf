@@ -37,7 +37,7 @@
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm1" method="post">
                 <input id="customerId" type="hidden" name="customerId"  value="${id}"/>
-                <table cellpadding="5" >
+                <table  cellpadding="5" width="75%">
                     <tr>
                         <td>内容:</td>
                         <td><input id="content" name="content" class="easyui-textbox" type="text" /></td>
@@ -51,6 +51,14 @@
                                    onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
                         </td>
                     </tr>
+                    <tr>
+                        <td>消费单号:</td>
+                        <td><input id="orderNo" name="orderNo" class="easyui-textbox" type="text" /></td>
+
+                        <td>转让单号:</td>
+                        <td><input id="bargainOrderNo" name="bargainOrderNo" class="easyui-textbox" type="text" /></td>
+                    </tr>
+
                     <tr>
                         <td>类型:</td>
                         <td>
@@ -94,8 +102,8 @@
             url:'listCouponList?id='+${id},
             columns:[[
                 {field:'id',title:'ID',width:'3%'},
-                /*{field:'customerName',title:'顾客姓名',width:'5%'},
-                {field:'companyName',title:'企业名称',width:'8%'},*/
+                {field:'orderNo',title:'消费单号',width:'12%'},
+                {field:'bargainOrderNo',title:'转让单号',width:'12%'},
                 {field:'batchNo',title:'批次号',width:'20%'},
                 {field:'couponNo',title:'券号',width:'12%'},
                 {field:'money',title:'面值',width:'6%'},
