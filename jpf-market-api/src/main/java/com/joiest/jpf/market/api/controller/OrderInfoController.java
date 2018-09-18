@@ -100,7 +100,16 @@ public class OrderInfoController {
         if( response == null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "没有更多了", null);
         }
-        response.setTotalDou(response.getTotalDou()); //获取用户当前豆数量
+        response.setUserDou(userInfo.getDou());  //获取用户当前豆数量
+        response.setTotalDou(response.getTotalDou());
+        if ( response.getOrderType() == 1 ){
+            response.setTypeName("中石化充值");
+        }else if ( response.getOrderType() == 2 ){
+            response.setTypeName("中石油充值");
+        }else if ( response.getOrderType() == 3 ) {
+            response.setTypeName("话费充值");
+        }
+
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
     }
 

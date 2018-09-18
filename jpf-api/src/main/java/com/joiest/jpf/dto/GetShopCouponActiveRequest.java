@@ -80,6 +80,28 @@ public class GetShopCouponActiveRequest {
      */
     private Date expireTime;
 
+
+    /**
+     * 消费时对应订单表的id
+     */
+    private String orderId;
+
+    /**
+     * 消费或退款等对应的订单号
+     */
+    private String orderNo;
+
+    /**
+     * 转让服务订单id
+     */
+    private String bargainOrderId;
+
+    /**
+     * 转让服务订单号
+     */
+    private String bargainOrderNo;
+
+
     /**
      *
      */
@@ -319,6 +341,42 @@ public class GetShopCouponActiveRequest {
 
     public void setRows(int rows) {
         this.rows = rows;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getBargainOrderId() {
+        return bargainOrderId;
+    }
+
+    public void setBargainOrderId(String bargainOrderId) {
+        this.bargainOrderId = bargainOrderId;
+    }
+
+    public String getBargainOrderNo() {
+        return bargainOrderNo;
+    }
+
+    public void setBargainOrderNo(String bargainOrderNo) {
+        this.bargainOrderNo = bargainOrderNo;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     /**

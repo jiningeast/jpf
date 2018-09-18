@@ -1,11 +1,15 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.dto.GetShopBargainOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainOrderResponse;
 import com.joiest.jpf.entity.ShopBargainOrderInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.ShopBargainOrderServiceFacade;
+import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
+import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
+import com.joiest.jpf.facade.ShopCustomerServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +32,12 @@ public class ShopBargainOrderController {
 
     @Autowired
     private ShopBargainOrderServiceFacade    shopBargainOrderServiceFacade;
+
+    @Autowired
+    private ShopCustomerServiceFacade shopCustomerServiceFacade;
+
+    @Autowired
+    ShopCouponRemainServiceFacade shopCouponRemainServiceFacade;
 
     @RequestMapping("/index")
     public String index(){

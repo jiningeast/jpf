@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.dto.GetCouponRemainResponse;
+import com.joiest.jpf.entity.ShopBargainOrderInfo;
 import com.joiest.jpf.entity.ShopCouponRemainInfo;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
@@ -29,4 +30,9 @@ public interface ShopCouponRemainServiceFacade {
      */
     public int CouponHandler(List<ShopCouponRemainInfo> list, ShopOrderInterfaceInfo orderInfo, ShopCustomerInterfaceInfo userInfo);
 
+
+    /**
+     * 转让欣豆
+     */
+    public int CouponAttorn(List<ShopCouponRemainInfo> list, ShopBargainOrderInfo orderInfo, ShopCustomerInterfaceInfo userInfo);
 }

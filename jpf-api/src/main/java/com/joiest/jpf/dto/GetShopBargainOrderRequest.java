@@ -159,6 +159,12 @@ public class GetShopBargainOrderRequest {
      */
     private String financeName;
 
+
+    /**
+     * 更新时间
+     */
+    private Date updatetime;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -403,5 +409,13 @@ public class GetShopBargainOrderRequest {
 
     public void setFinanceName(String financeName) {
         this.financeName = financeName;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 }

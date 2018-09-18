@@ -86,6 +86,22 @@ public class ShopCouponActiveInfo {
     private String orderId;
 
     /**
+     * 消费或退款等对应的订单号
+     */
+    private String orderNo;
+
+    /**
+     * 转让服务订单id
+     */
+    private String bargainOrderId;
+
+    /**
+     * 转让服务订单号
+     */
+    private String bargainOrderNo;
+
+
+    /**
      *
      */
     private Date addtime;
@@ -239,6 +255,34 @@ public class ShopCouponActiveInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getBargainOrderId() {
+        return bargainOrderId;
+    }
+
+    public void setBargainOrderId(String bargainOrderId) {
+        this.bargainOrderId = bargainOrderId;
+    }
+
+    public String getBargainOrderNo() {
+        return bargainOrderNo;
+    }
+
+    public void setBargainOrderNo(String bargainOrderNo) {
+        this.bargainOrderNo = bargainOrderNo;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     /**

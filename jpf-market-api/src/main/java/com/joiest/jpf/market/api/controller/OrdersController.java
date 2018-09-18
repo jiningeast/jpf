@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -88,22 +89,17 @@ public class OrdersController {
     @ResponseBody
     public String createOrder(String data)
     {
-        /*if ( StringUtils.isBlank(data) )
+        // 获取参数
+        if ( StringUtils.isBlank(data) )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
         }
-        String dataStr = data.replaceAll("\\\\","").replaceAll("\r","").replaceAll("\n","").replaceAll(" ","+");
-        String requestStr = Base64CustomUtils.base64Decoder(dataStr);
-        Map<String,Object> requestMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});*/
-        Map<String, Object> requestMap = new HashMap<>();
-        requestMap = _filter(data);
-
+        Map<String, Object>requestMap = _filter(data);
         String requestJson = JsonUtils.toJson(requestMap);
         if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
         }
-
         CreateOrderInterfaceRequest request = new CreateOrderInterfaceRequest();
         try{
             request =  (CreateOrderInterfaceRequest) ClassUtil.mapToObject(requestMap, request.getClass());
@@ -111,6 +107,7 @@ public class OrdersController {
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
         }
+
         //获取商品信息
         ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(request.getPid());
         if ( productInfo == null )
@@ -118,23 +115,25 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getCode(), JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getDesc(), "");
         }
 
-        String source = "1";
+        // 验证传入的信息
+        String source = "1";    // 1=直充 2=卡密
         String chargeNo = "";
         if(requestMap.containsKey("source")){
             source = requestMap.get("source").toString();
         }
         if(source.equals("2")){
-            // 判断库存
+            // 卡密订单，判断库存
             int amount = Integer.parseInt(request.getAmount());
             List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,amount);
             if( list == null || list.isEmpty() || productInfo.getStored()<amount || list.size()<amount ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
             }
+            if ( list.size() <= productInfo.getStoredSafe() ){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
+            }
         }else{
-
-            //油卡充值
-            if ( request.getOtype().equals("1") || request.getOtype().equals("2") )
-            {
+            // 油卡充值
+            if ( request.getOtype().equals("1") || request.getOtype().equals("2") ) {
                 if ( !request.getCardno().equals(request.getCardnumber()) )
                 {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "油卡卡号不一致");
@@ -146,8 +145,7 @@ public class OrdersController {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "油卡卡号错误");
                 }
                 chargeNo = request.getCardnumber();
-            } else if ( request.getOtype().equals("3") )
-            {
+            } else if ( request.getOtype().equals("3") ) {
                 //话费充值
                 Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(request.getPhone()).matches();
                 if ( !phoneIsTrue )
@@ -163,52 +161,49 @@ public class OrdersController {
                 {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码不一致");
                 }
-
                 chargeNo = request.getPhone();
             }
         }
         ValidatorUtils.validateInterface(request);
-
+        /*
+        // 充值金额与付款金额必须一致
         if ( !request.getMoney().equals(request.getPaymoney()) )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDERMONEY_DIFF.getCode(), JpfInterfaceErrorInfo.MK_ORDERMONEY_DIFF.getDesc(), "");
         }
+        */
 
-        //创建订单
+        // 创建订单
         String orderno = ToolsUtils.createOrderid();
         ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
-
         info.setOrderNo(orderno);
         info.setCustomerId(userInfo.getId());
-        info.setCustomerName(userInfo.getName());
+        info.setCustomerName(userInfo.getNickname());
         info.setProductId(productInfo.getId());
         info.setProductName(productInfo.getName());
         info.setProductMoney(productInfo.getMoney());
         info.setProductDou(productInfo.getDou());
         info.setProductInfoId(productInfo.getProductInfoId());
-        info.setTotalMoney(productInfo.getMoney());
-        if ( StringUtils.isNotBlank(""+request.getAmount()) ){
+        if ( request.getAmount() != null && StringUtils.isNotBlank(""+request.getAmount()) ){
+            // 如果参数中有数量
+            info.setTotalMoney(new BigDecimal(productInfo.getMoney().doubleValue()*Integer.parseInt(request.getAmount())));
             info.setTotalDou(productInfo.getDou()*Integer.parseInt(request.getAmount()));
+            info.setAmount(Integer.parseInt(request.getAmount()));
         }else{
+            // 如果参数中没有数量
+            info.setTotalMoney(productInfo.getMoney());
             info.setTotalDou(productInfo.getDou());
+            info.setAmount(1);
         }
-
 
         // 如果是卡密交易
         if ( source.equals("2") ){
-            if ( StringUtils.isNotBlank(""+request.getAmount()) && Integer.parseInt(request.getAmount()) > 0 ){
-                info.setAmount(Integer.parseInt(request.getAmount()));
-            }else{
-                info.setAmount(1);
-            }
             if ( StringUtils.isNotBlank(""+request.getReceiveType()) ){
                 info.setReceiveType(Byte.valueOf(request.getReceiveType()));
             }
             if ( StringUtils.isNotBlank(""+request.getReveiveValue()) ){
                 info.setReceiveValue(request.getReveiveValue());
             }
-        }else{
-            info.setAmount(1);
         }
 
         //充值号
@@ -233,9 +228,14 @@ public class OrdersController {
 //    @Transactional
     public String dopay(String data,HttpServletResponse Httpresponse)
     {
-        //1.金额校验 2.订单用户校验 3.用户券列表 4.扣除相应的券 5.更新code
-        Map<String, Object> requestMap = new HashMap<>();
-        requestMap = _filter(data);
+         /*
+         1.金额校验
+         2.订单用户校验
+         3.用户券列表
+         4.扣除相应的券
+         5.更新code
+         */
+        Map<String, Object> requestMap = _filter(data);
         if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
@@ -249,32 +249,29 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "支付方式不能为空", "");
         }
 
-        //是否冻结
+        // 是否冻结
         if ( userInfo.getStatus() != 1 )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_IS_FREEZE.getCode(), JpfInterfaceErrorInfo.USER_IS_FREEZE.getDesc(), "");
         }
-
+        // 查询订单
         ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderOne(requestMap.get("orderNo").toString(),uid);
         if ( orderInfo == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getCode(), JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getDesc(), "");
         }
-
-        //校验码验证
+        // 校验码验证
         Boolean codeIsTrue = ToolUtils.ValidateCode(userInfo.getCode(), uid, userInfo.getDou().toString());
         if ( !codeIsTrue )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getCode(), JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getDesc(), "");
         }
-
         //过期券处理
         int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
 
         //用户可用券列表
         GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(uid);
-        if ( userCouponList == null || userCouponList.getCount() == 0)
-        {
+        if ( userCouponList == null || userCouponList.getCount() == 0) {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
         }
         int orderDou = orderInfo.getTotalDou();
@@ -291,47 +288,41 @@ public class OrdersController {
 
         //卡密商品信息判断
         ShopStockCardInfo shopStockCardInfo = null;
-        if(productInfo.getType().toString().equals("2")){
+        if (productInfo.getType().toString().equals("2")){
             // 判断库存
             List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,orderInfo.getAmount());
             if( list == null || list.isEmpty() || productInfo.getStored()<orderInfo.getAmount() || list.size()<orderInfo.getAmount() ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
-            }else {
-                String buySuc = this.cardRecharge(orderInfo,productInfo,list,userCouponList,Httpresponse);
-                return buySuc;
+            }else if( list.size() <= productInfo.getStoredSafe() ) {
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
+            } else {
+                return this.cardRecharge(orderInfo,productInfo,list,userCouponList,Httpresponse);
             }
         }else{
             //充值
-            if ( orderInfo.getOrderType() == 3 )
-            {
-                //话费充值
+            if ( orderInfo.getOrderType() == 3 ) {
+                // 话费充值
                 resultMap = this.phoneRecharge(orderInfo, productInfo);
-
-            }else if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 )
-            {
-                //油卡充值 1:中国石化 2:中国石油
+            } else if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 ) {
+                // 油卡充值 1:中国石化 2:中国石油
                 resultMap = this.gasRecharge(orderInfo, productInfo);
             }
         }
         //添加通道流水 更新order状态
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
-        if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") )
-        {
+        if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ) {
             //充值成功
             String foreign_orderid = resultMap.getOrDefault("orderid", "");     //接口订单id
             orderinfo.setForeignOrderNo(foreign_orderid);
             orderinfo.setStatus((byte)1);
-        }else
-        {
+        }else {
             orderinfo.setStatus((byte)2);
         }
         byte rechargeType = 0;
-        if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 )
-        {
+        if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 ) {
             rechargeType = 6;
-        } else if ( orderInfo.getOrderType() == 3 )
-        {
+        } else if ( orderInfo.getOrderType() == 3 ) {
             rechargeType = 4;
         }
         stream.setType(rechargeType);
@@ -356,12 +347,10 @@ public class OrdersController {
         orderinfo.setForeignResponseContent(responseJson);
         int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
 
-        if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") )
-        {
+        if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ) {
             //扣减豆操作
             int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
-        } else
-        {
+        } else {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "提交失败", null);
         }
 
