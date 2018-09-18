@@ -252,6 +252,14 @@ public class BargainBuyerController {
         responsParam.put("paytime", DateUtils.dateToString(shopBargainOrderInfo.getPaytime()));
         responsParam.put("addtime", DateUtils.dateToString(shopBargainOrderInfo.getAddtime()));
         responsParam.put("updatetime", DateUtils.dateToString(shopBargainOrderInfo.getUpdatetime()));
+
+        String aa = ToolUtils.getStarString2(shopBargainOrderInfo.getRealName(),1,0);
+
+        responsParam.put("realName",ToolUtils.getStarString2(shopBargainOrderInfo.getRealName(),1,0));
+        responsParam.put("bankNo",ToolUtils.getStarString2(shopBargainOrderInfo.getBankNo(),4,3));
+        responsParam.put("phone",ToolUtils.getStarString2(shopBargainOrderInfo.getPhone(),1,0));
+        responsParam.put("idno",ToolUtils.getStarString2(shopBargainOrderInfo.getIdno(),3,3));
+        responsParam.put("bankBrank",ToolUtils.getStarString2(shopBargainOrderInfo.getBankBrank(),4,2));
         //PayShopCustomer buyerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getBuyerCustomerId());
         //PayShopCustomer sellerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getSellerCustomerId());
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",responsParam);
