@@ -160,13 +160,13 @@
                     "url" : "shopAd/index"
                 },{
                         "menuid" : "508",
-                        "menuname" : "欣豆市场欣豆收购管理",
+                        "menuname" : "欣豆收购管理",
                         "icon" : "icon-nav",
                         "url" : "shopBargainRequest/index"
                     },
                     {
                         "menuid" : "509",
-                        "menuname" : "欣豆收购订单管理",
+                        "menuname" : "欣豆转让订单管理",
                         "icon" : "icon-nav",
                         "url" : "shopBargainOrder/index"
                     }]

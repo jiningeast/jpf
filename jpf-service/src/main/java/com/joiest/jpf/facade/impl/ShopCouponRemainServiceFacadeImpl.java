@@ -7,6 +7,7 @@ import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
+import com.joiest.jpf.entity.ShopBargainOrderInfo;
 import com.joiest.jpf.entity.ShopCouponRemainInfo;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
@@ -41,6 +42,9 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
     @Autowired
     private PayShopOrderMapper payShopOrderMapper;
+
+    @Autowired
+    private PayShopBargainOrderMapper payShopBargainOrderMapper;
 
     /**
      * 处理过期的券
@@ -230,6 +234,146 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         }
          return res_order;
     }
+    /**
+     * 转让操作
+     */
+    @Override
+    @Transactional
+    public int CouponAttorn(List<ShopCouponRemainInfo> list, ShopBargainOrderInfo orderInfo, ShopCustomerInterfaceInfo userInfo)
+    {
+        int orderBlance = orderInfo.getDou();  //订单总额
+
+        List<Map<String,String>> coupon_detail = new ArrayList<>();
+        Map<String,String> map = new HashMap<>();
+
+        //1:用完  0未用完
+        for ( ShopCouponRemainInfo one : list)
+        {
+            Map<String,String> mapJosn = new HashMap<>();
+            mapJosn.put("remainId", list.get(0).getId());
+            mapJosn.put("couponId", list.get(0).getCouponId());
+            mapJosn.put("couponNo", list.get(0).getCouponNo());
+
+            if ( orderBlance > one.getCouponDouLeft() )
+            {
+                //全部扣除
+                one.setStatus((byte)4);
+                Boolean isTrue = doCouponAttorn(one, one.getCouponDouLeft(), orderInfo);      //用完
+
+                orderBlance = orderBlance - one.getCouponDouLeft();     //订单余额金额
+
+                mapJosn.put("deduct", one.getCouponDouLeft().toString());   //此券扣减豆的数量  = 此券数量
+                int douBlance = 0;      //本券剩余豆数量
+                mapJosn.put("remainDou", String.valueOf(douBlance));   //  全部扣除
+            } else if( orderBlance <= one.getCouponDouLeft() )
+            {
+                byte status = 3;
+                if ( orderBlance < one.getCouponDouLeft() )
+                {
+                    status = 3;    //未扣完
+                } else if ( orderBlance == one.getCouponDouLeft() )
+                {
+                    status = 4;    //全部扣除
+                }
+                one.setStatus(status);
+                Boolean isTrue = doCouponAttorn(one, orderBlance, orderInfo);     //未用完
+
+                int douBlance = one.getCouponDouLeft() - orderBlance;       //本券剩余豆数量
+
+                mapJosn.put("deduct", String.valueOf(orderBlance));         //此券扣减豆的数量 = 订单金额
+                mapJosn.put("remainDou", String.valueOf(douBlance));
+
+                orderBlance = 0;    //订单余额金额
+            }
+            coupon_detail.add(mapJosn);
+            if ( orderBlance == 0 ) break;
+        }
+        String json_couponDetail = JsonUtils.toJson(coupon_detail);
+        //更新订单状态
+        orderInfo.setPaytime(new Date());
+        int res_order = updateBargainOrder(orderInfo);
+        if ( res_order < 1 )
+        {
+            //更新信息
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
+        }
+        return res_order;
+    }
+
+    /**
+     * @param remainInfo
+     * @param deduct    转让需要扣除的豆
+     */
+//    @Transactional
+    public Boolean doCouponAttorn(ShopCouponRemainInfo remainInfo, int deduct, ShopBargainOrderInfo orderInfo)
+    {
+        //1.remain减去金额 2.active log 3.customer减去金额 & code生成
+        try{
+            PayShopCustomer payShopCustomer = payShopCustomerMapper.selectByPrimaryKey(remainInfo.getCustomerId());
+            PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(remainInfo.getCouponId());
+            PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(payShopBatchCoupon.getCompanyId());
+            PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(payShopBatchCoupon.getBatchId());
+
+            //更新批次余额表pay_shop_coupon_remain
+            PayShopCouponRemain payShopCouponRemain = new PayShopCouponRemain();
+            BeanCopier beanCopier = BeanCopier.create(ShopCouponRemainInfo.class, PayShopCouponRemain.class, false);
+            beanCopier.copy(remainInfo, payShopCouponRemain, null);
+            int remain = payShopCouponRemain.getCouponDouLeft() - deduct;
+            payShopCouponRemain.setCouponDouLeft(remain);
+            payShopCouponRemain.setUpdatetime(new Date());
+            int res_couponRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
+            if ( res_couponRemain < 1 )
+            {
+                throw new Exception("扣除券余额失败");
+            }
+
+            // 新增日志表一条记录pay_shop_coupon_active
+            PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+            payShopCouponActive.setCustomerId(orderInfo.getSellerCustomerId());
+            //根据id查出昵称
+            //payShopCouponActive.setCustomerName(orderInfo.getCustomerName());
+            payShopCouponActive.setCompanyId(Integer.parseInt(payShopCompany.getId()));
+            payShopCouponActive.setCompanyName(payShopCompany.getCompanyName());
+            payShopCouponActive.setBatchId(Integer.parseInt(payShopBatch.getId()));
+            payShopCouponActive.setBatchNo(payShopBatch.getBatchNo());
+            payShopCouponActive.setCouponNo(payShopBatchCoupon.getCouponNo());
+            payShopCouponActive.setActiveCode(payShopBatchCoupon.getActiveCode());
+            payShopCouponActive.setPayWay((byte)0);
+            payShopCouponActive.setMoney(new BigDecimal("0"));
+            payShopCouponActive.setDou(deduct);     //消费豆数量
+            payShopCouponActive.setContent("行为:消费;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";欣豆转让:" + deduct + ";orderId:" + orderInfo.getId() + ";剩余豆:" + remain);
+            payShopCouponActive.setType("5");
+            payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
+            payShopCouponActive.setAddtime(new Date());
+            payShopCouponActive.setBargainOrderId(orderInfo.getId());
+            payShopCouponActive.setBargainOrderNo(orderInfo.getOrderNo());
+            int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
+            if ( res_couponActive < 1 )
+            {
+                throw new Exception("添加券记录失败");
+            }
+
+            // 客户总豆数量减去一部分pay_shop_customer
+            PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
+            int dou = payShopCustomer.getFreezeDou() - deduct;
+           // String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
+            payShopCustomerUpdate.setId(orderInfo.getSellerCustomerId());
+            payShopCustomerUpdate.setFreezeDou(dou);
+            //payShopCustomerUpdate.setCode(code);
+            payShopCustomerUpdate.setUpdatetime(new Date());
+            int res_updateCustomCode = payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
+            if ( res_updateCustomCode < 1 )
+            {
+                throw new Exception("更新用户余额失败");
+            }
+
+            return true;
+        }catch (Exception e)
+        {
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), e.getMessage());
+        }
+
+    }
 
     /**
      * @param remainInfo
@@ -324,5 +468,19 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         return res_upOrder;
     }
 
+    /**
+     * 更新转让订单信息
+     * @param orderInfo
+     * @return
+     */
+    public int updateBargainOrder(ShopBargainOrderInfo orderInfo)
+    {
+        PayShopBargainOrder payShopBargainOrder = new PayShopBargainOrder();
+        payShopBargainOrder.setStatus((byte)3);
+        payShopBargainOrder.setId(orderInfo.getId());
+        payShopBargainOrder.setPaytime(new Date());
+        int res_upOrder = payShopBargainOrderMapper.updateByPrimaryKeySelective(payShopBargainOrder);
+        return res_upOrder;
+    }
 
 }
