@@ -131,20 +131,12 @@ public class BargainBuyerController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",null);
     }
 
-    public String searchCustom(){
-        //查询是否为买家
-        if( userInfo.getIsBargainBuyer() ==null || userInfo.getIsBargainBuyer() == 0 ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.BARGAIN_BUYER_TYPE.getCode(),JpfInterfaceErrorInfo.BARGAIN_BUYER_TYPE.getDesc(),null);
-        }else{
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",null);
-        }
-    }
     /*
      *  查询买家发布
      * */
-    @RequestMapping(value = "/searchBuyDou",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/searchCustom",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String searchBuyDou(){
+    public String searchCustom(){
 
         //查询是否为买家
         if( userInfo.getIsBargainBuyer() ==null || userInfo.getIsBargainBuyer() == 0 ){
