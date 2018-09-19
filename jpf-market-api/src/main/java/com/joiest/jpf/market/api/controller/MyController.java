@@ -5,10 +5,7 @@ import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
-import com.joiest.jpf.facade.RedisCustomServiceFacade;
-import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopOrderInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopStockCardServiceFacade;
+import com.joiest.jpf.facade.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +33,9 @@ public class MyController {
     @Autowired
     private ShopStockCardServiceFacade shopStockCardServiceFacade;
 
+    @Autowired
+    private ShopBargainOrderServiceFacade shopBargainOrderServiceFacade;
+
     private String uid;
 
     private String openId;
@@ -45,14 +45,17 @@ public class MyController {
     @RequestMapping("/index")
     @ResponseBody
     public String index(HttpServletRequest httpRequest){
+
         getUserInfo(httpRequest);
         int count = shopOrderInterfaceServiceFacade.getOrdersCount(uid);
+        String transCount = shopBargainOrderServiceFacade.getBargainOrderCountByCustomId(uid,"1");
 
         Map<String,Object> responseMap = new HashMap<>();
         responseMap.put("phone",userInfo.getPhone());
         responseMap.put("dou",userInfo.getDou());
         responseMap.put("avatar",userInfo.getAvatar());
         responseMap.put("ordersCount",count);
+        responseMap.put("transOrdersCount",transCount);
         responseMap.put("customerServicePhone","010-67077608");
         responseMap.put("complainEmail","service@xinxiangfuwu.com");
         responseMap.put("servicePeriod","9：00-18：00 工作日");

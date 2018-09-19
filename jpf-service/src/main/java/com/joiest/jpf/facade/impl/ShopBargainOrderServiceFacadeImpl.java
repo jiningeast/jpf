@@ -447,4 +447,25 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
         return shopBargainOrderInfo;
     }
 
+    /**
+     * 获取
+     * */
+    public String getBargainOrderCountByCustomId(String customId,String type){
+
+        if(StringUtils.isBlank(type)) return null;
+
+        PayShopBargainOrderExample example = new PayShopBargainOrderExample();
+        PayShopBargainOrderExample.Criteria c = example.createCriteria();
+
+        if(type.equals("1"))
+            c.andSellerCustomerIdEqualTo(customId);
+
+        if(type.equals("2"))
+            c.andBuyerCustomerIdEqualTo(customId);
+
+        int count = payShopBargainOrderMapper.countByExample(example);
+
+        return String.valueOf(count);
+
+    }
 }
