@@ -253,7 +253,7 @@ public class BargainBuyerController {
         if (requestParam.containsKey("type") && requestParam.get("type").toString().equals("1")){
 
             //判断订单是否隶属于当前用户
-            if(!shopBargainOrderInfo.getBuyerCustomerId().equals(uid)){
+            if(!shopBargainOrderInfo.getSellerCustomerId().equals(uid)){
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"卖家信息不匹配",null);
             }
@@ -266,7 +266,7 @@ public class BargainBuyerController {
             //PayShopCustomer sellerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getSellerCustomerId());
         }else if(requestParam.containsKey("type") && requestParam.get("type").toString().equals("2")){
             //判断订单是否隶属于当前用户
-            if(!shopBargainOrderInfo.getSellerCustomerId().equals(uid)){
+            if(!shopBargainOrderInfo.getBuyerCustomerId().equals(uid)){
 
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"买家信息不匹配",null);
             }
