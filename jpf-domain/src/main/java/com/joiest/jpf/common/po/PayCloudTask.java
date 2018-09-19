@@ -36,6 +36,11 @@ public class PayCloudTask implements Serializable {
     private String agentNo;
 
     /**
+     * 代理商户名称
+     */
+    private String agentName;
+
+    /**
      * 商户号
      */
     private String merchNo;
@@ -76,7 +81,7 @@ public class PayCloudTask implements Serializable {
     private String ossPath;
 
     /**
-     * 处理状态 0=未处理 1=处理中 2=完成 3=失败
+     * 处理状态 0=未处理 1=部分失败 2=全部失败 3=全部成功
      */
     private Byte status;
 
@@ -143,6 +148,14 @@ public class PayCloudTask implements Serializable {
 
     public void setAgentNo(String agentNo) {
         this.agentNo = agentNo == null ? null : agentNo.trim();
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName == null ? null : agentName.trim();
     }
 
     public String getMerchNo() {
@@ -256,6 +269,7 @@ public class PayCloudTask implements Serializable {
         sb.append(", companyId=").append(companyId);
         sb.append(", companyName=").append(companyName);
         sb.append(", agentNo=").append(agentNo);
+        sb.append(", agentName=").append(agentName);
         sb.append(", merchNo=").append(merchNo);
         sb.append(", companyType=").append(companyType);
         sb.append(", batchno=").append(batchno);
@@ -294,6 +308,7 @@ public class PayCloudTask implements Serializable {
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getAgentNo() == null ? other.getAgentNo() == null : this.getAgentNo().equals(other.getAgentNo()))
+            && (this.getAgentName() == null ? other.getAgentName() == null : this.getAgentName().equals(other.getAgentName()))
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
             && (this.getCompanyType() == null ? other.getCompanyType() == null : this.getCompanyType().equals(other.getCompanyType()))
             && (this.getBatchno() == null ? other.getBatchno() == null : this.getBatchno().equals(other.getBatchno()))
@@ -321,6 +336,7 @@ public class PayCloudTask implements Serializable {
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getAgentNo() == null) ? 0 : getAgentNo().hashCode());
+        result = prime * result + ((getAgentName() == null) ? 0 : getAgentName().hashCode());
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
         result = prime * result + ((getCompanyType() == null) ? 0 : getCompanyType().hashCode());
         result = prime * result + ((getBatchno() == null) ? 0 : getBatchno().hashCode());

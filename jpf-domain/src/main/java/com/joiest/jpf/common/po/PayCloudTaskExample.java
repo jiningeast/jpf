@@ -566,6 +566,76 @@ public class PayCloudTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andAgentNameIsNull() {
+            addCriterion("agent_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameIsNotNull() {
+            addCriterion("agent_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameEqualTo(String value) {
+            addCriterion("agent_name =", value, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameNotEqualTo(String value) {
+            addCriterion("agent_name <>", value, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameGreaterThan(String value) {
+            addCriterion("agent_name >", value, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameGreaterThanOrEqualTo(String value) {
+            addCriterion("agent_name >=", value, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameLessThan(String value) {
+            addCriterion("agent_name <", value, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameLessThanOrEqualTo(String value) {
+            addCriterion("agent_name <=", value, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameLike(String value) {
+            addCriterion("agent_name like", value, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameNotLike(String value) {
+            addCriterion("agent_name not like", value, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameIn(List<String> values) {
+            addCriterion("agent_name in", values, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameNotIn(List<String> values) {
+            addCriterion("agent_name not in", values, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameBetween(String value1, String value2) {
+            addCriterion("agent_name between", value1, value2, "agentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameNotBetween(String value1, String value2) {
+            addCriterion("agent_name not between", value1, value2, "agentName");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchNoIsNull() {
             addCriterion("merch_no is null");
             return (Criteria) this;
@@ -1348,6 +1418,11 @@ public class PayCloudTaskExample {
 
         public Criteria andAgentNoLikeInsensitive(String value) {
             addCriterion("upper(agent_no) like", value.toUpperCase(), "agentNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andAgentNameLikeInsensitive(String value) {
+            addCriterion("upper(agent_name) like", value.toUpperCase(), "agentName");
             return (Criteria) this;
         }
 
