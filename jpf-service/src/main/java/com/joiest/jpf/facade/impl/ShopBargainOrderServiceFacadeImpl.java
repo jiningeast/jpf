@@ -398,8 +398,12 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
 
         PayShopBargainOrderExample.Criteria c = example.createCriteria();
         //查询搜索条件数据
+        // 1=我转让的
         if (request.getBuyerCustomerId() != null ) {
             c.andBuyerCustomerIdEqualTo(request.getBuyerCustomerId());
+        }
+        if( request.getSellerCustomerId() != null ){
+            c.andSellerCustomerIdEqualTo(request.getSellerCustomerId());
         }
 
         List<PayShopBargainOrder> list = payShopBargainOrderMapper.selectByExample(example);

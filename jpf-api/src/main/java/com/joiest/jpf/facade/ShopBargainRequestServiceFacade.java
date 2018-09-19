@@ -41,6 +41,6 @@ public interface ShopBargainRequestServiceFacade {
     /*
      * 查询当前买家 用户发布信息
      * */
-    public List<PayShopBargainRequest> getOne(GetShopBargainRequestRequest request);
+    public ShopBargainRequestInfo getOne(GetShopBargainRequestRequest request);
 
 }
