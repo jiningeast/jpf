@@ -450,9 +450,9 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
     /**
      * 获取
      * */
-    public String getBargainOrderCountByCustomId(String customId,String type){
+    public int getBargainOrderCountByCustomId(String customId,String type){
 
-        if(StringUtils.isBlank(type)) return null;
+        if(StringUtils.isBlank(type)) return 0;
 
         PayShopBargainOrderExample example = new PayShopBargainOrderExample();
         PayShopBargainOrderExample.Criteria c = example.createCriteria();
@@ -465,7 +465,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
 
         int count = payShopBargainOrderMapper.countByExample(example);
 
-        return String.valueOf(count);
+        return count;
 
     }
 }
