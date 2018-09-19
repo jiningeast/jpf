@@ -86,7 +86,7 @@ public class BargainSellerController {
         if (requestParam.get("code").toString().equals("10008"))
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), requestParam.get("info").toString(), null);
 
-        if(!userInfo.getStatus().equals("0"))
+        if(userInfo.getStatus().equals("0"))
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "抱歉，您的账号已冻结", null);
 
         DouTransferRequest douTransferRequest = (DouTransferRequest) JSONObject.toBean(requestParam, DouTransferRequest.class);
