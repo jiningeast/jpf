@@ -117,9 +117,9 @@ public class BargainBuyerController {
 
 
         //先查询当前用户是否发布
-        List<PayShopBargainRequest> infos = shopBargainRequestServiceFacade.getOne(request);
-        if( infos!=null && infos.size() > 0  ){
-            request.setId(infos.get(0).getId());
+        ShopBargainRequestInfo infos =shopBargainRequestServiceFacade.getOne(request);
+        if( infos!=null  ){
+            request.setId(infos.getId());
         }
 
         //添加 或更新 买家信息
@@ -147,8 +147,8 @@ public class BargainBuyerController {
         request.setCustomerId(uid);
 
         //先查询当前用户发布信息
-        List<PayShopBargainRequest> infos = shopBargainRequestServiceFacade.getOne(request);
-        if( infos!=null && infos.size() > 0){
+        ShopBargainRequestInfo infos = shopBargainRequestServiceFacade.getOne(request);
+        if( infos!=null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",infos);
         }
 

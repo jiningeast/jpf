@@ -163,7 +163,7 @@ public class ShopBargainRequestServiceFacadeImpl implements ShopBargainRequestSe
      * 查询 买家信息
      */
     @Override
-    public List<PayShopBargainRequest> getOne(GetShopBargainRequestRequest request)
+    public ShopBargainRequestInfo getOne(GetShopBargainRequestRequest request)
     {
         if (StringUtils.isBlank(request.getCustomerId()) )
         {
@@ -179,7 +179,12 @@ public class ShopBargainRequestServiceFacadeImpl implements ShopBargainRequestSe
             return null;
         }
 
-        return payShopBrainList;
+        ShopBargainRequestInfo info = new ShopBargainRequestInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayShopBargainRequest.class, ShopBargainRequestInfo.class, false);
+        beanCopier.copy(payShopBrainList.get(0), info, null);
+
+
+        return info;
     }
 
     /**

@@ -31,7 +31,7 @@ import java.util.Map;
 public class ShopBargainOrderController {
 
     @Autowired
-    private ShopBargainOrderServiceFacade    shopBargainOrderServiceFacade;
+    private ShopBargainOrderServiceFacade shopBargainOrderServiceFacade;
 
     @Autowired
     private ShopCustomerServiceFacade shopCustomerServiceFacade;
