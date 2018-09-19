@@ -253,7 +253,7 @@ public class BargainBuyerController {
         responsParam.put("addtime", DateUtils.dateToString(shopBargainOrderInfo.getAddtime()));
         responsParam.put("updatetime", DateUtils.dateToString(shopBargainOrderInfo.getUpdatetime()));
 
-        if (requestParam.get("type").toString().equals("2")){
+        if (requestParam.containsKey("type") && requestParam.get("type").toString().equals("1")){
 
             responsParam.put("realName",ToolUtils.getStarString2(shopBargainOrderInfo.getRealName(),1,0));
             responsParam.put("bankNo",ToolUtils.getStarString2(shopBargainOrderInfo.getBankNo(),4,3));
@@ -262,7 +262,7 @@ public class BargainBuyerController {
             responsParam.put("bankBrank",ToolUtils.getStarString2(shopBargainOrderInfo.getBankBrank(),4,2));
             //PayShopCustomer buyerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getBuyerCustomerId());
             //PayShopCustomer sellerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getSellerCustomerId());
-
+        
         }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",responsParam);
     }
