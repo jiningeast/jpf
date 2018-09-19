@@ -141,18 +141,19 @@ public class BargainBuyerController {
         //查询是否为买家
         if( userInfo.getIsBargainBuyer() ==null || userInfo.getIsBargainBuyer() == 0 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.BARGAIN_BUYER_TYPE.getCode(),JpfInterfaceErrorInfo.BARGAIN_BUYER_TYPE.getDesc(),null);
+        }else{//买家信息
+
+            GetShopBargainRequestRequest request = new GetShopBargainRequestRequest();
+            request.setCustomerId(uid);
+
+            //先查询当前用户发布信息
+            ShopBargainRequestInfo infos = shopBargainRequestServiceFacade.getOne(request);
+            if( infos!=null ){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",infos);
+            }
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.BARGAIN_BUYER_NOINFO.getCode(),"未添加记录",null);
         }
-
-        GetShopBargainRequestRequest request = new GetShopBargainRequestRequest();
-        request.setCustomerId(uid);
-
-        //先查询当前用户发布信息
-        ShopBargainRequestInfo infos = shopBargainRequestServiceFacade.getOne(request);
-        if( infos!=null ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",infos);
-        }
-
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"操作失败",null);
     }
 
     /**
