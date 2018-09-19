@@ -48,14 +48,15 @@ public class MyController {
 
         getUserInfo(httpRequest);
         int count = shopOrderInterfaceServiceFacade.getOrdersCount(uid);
-        String transCount = shopBargainOrderServiceFacade.getBargainOrderCountByCustomId(uid,"1");
+        int transSellerCount = shopBargainOrderServiceFacade.getBargainOrderCountByCustomId(uid,"1");
+        int transBuyerCount = shopBargainOrderServiceFacade.getBargainOrderCountByCustomId(uid,"2");
 
         Map<String,Object> responseMap = new HashMap<>();
         responseMap.put("phone",userInfo.getPhone());
         responseMap.put("dou",userInfo.getDou());
         responseMap.put("avatar",userInfo.getAvatar());
         responseMap.put("ordersCount",count);
-        responseMap.put("transOrdersCount",transCount);
+        responseMap.put("transOrdersCount",transBuyerCount+transSellerCount);
         responseMap.put("customerServicePhone","010-67077608");
         responseMap.put("complainEmail","service@xinxiangfuwu.com");
         responseMap.put("servicePeriod","9：00-18：00 工作日");
