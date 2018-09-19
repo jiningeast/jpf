@@ -249,12 +249,45 @@ public class BargainBuyerController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"未获取到此单信息，请检查订单号是否正确",null);
 
         responsParam = JSONObject.fromObject(shopBargainOrderInfo);
-        responsParam.put("paytime", DateUtils.dateToString(shopBargainOrderInfo.getPaytime()));
+
+        if (requestParam.containsKey("type") && requestParam.get("type").toString().equals("1")){
+
+            //判断订单是否隶属于当前用户
+            if(!shopBargainOrderInfo.getBuyerCustomerId().equals(uid)){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"卖家信息不匹配",null);
+            }
+            responsParam.put("realName",ToolUtils.getStarString2(shopBargainOrderInfo.getRealName(),1,0));
+            responsParam.put("bankNo",ToolUtils.getStarString2(shopBargainOrderInfo.getBankNo(),4,3));
+            responsParam.put("phone",ToolUtils.getStarString2(shopBargainOrderInfo.getPhone(),1,0));
+            responsParam.put("idno",ToolUtils.getStarString2(shopBargainOrderInfo.getIdno(),3,3));
+            responsParam.put("bankBrank",ToolUtils.getStarString2(shopBargainOrderInfo.getBankBrank(),4,2));
+            //PayShopCustomer buyerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getBuyerCustomerId());
+            //PayShopCustomer sellerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getSellerCustomerId());
+        }else if(requestParam.containsKey("type") && requestParam.get("type").toString().equals("2")){
+            //判断订单是否隶属于当前用户
+            if(!shopBargainOrderInfo.getSellerCustomerId().equals(uid)){
+
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"买家信息不匹配",null);
+            }
+        }
         responsParam.put("addtime", DateUtils.dateToString(shopBargainOrderInfo.getAddtime()));
-        responsParam.put("updatetime", DateUtils.dateToString(shopBargainOrderInfo.getUpdatetime()));
-        //PayShopCustomer buyerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getBuyerCustomerId());
-        //PayShopCustomer sellerInfo = shopCustomerServiceFacade.getCustomerById(shopBargainOrderInfo.getSellerCustomerId());
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",responsParam);
+        if(shopBargainOrderInfo.getPaytime()!=null)
+            responsParam.put("paytime", DateUtils.dateToString(shopBargainOrderInfo.getPaytime()));
+
+        if(shopBargainOrderInfo.getUpdatetime()!=null)
+            responsParam.put("updatetime", DateUtils.dateToString(shopBargainOrderInfo.getUpdatetime()));
+
+
+        JSONObject allRespon = new JSONObject();
+        allRespon.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+        allRespon.put("info","SUCCESS");
+        allRespon.put("data",responsParam);
+
+        String base64Str = Base64CustomUtils.base64Encoder(allRespon.toString());
+        base64Str = base64Str.replaceAll("\r","");
+        base64Str = base64Str.replaceAll("\n","");
+        return base64Str;
     }
     /**
      * 基础参数格式化
