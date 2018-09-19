@@ -33,6 +33,7 @@ public class ToolUtils {
         }
         //String jsonStr = JsonUtils.toJson(responseMap).replaceAll("\\\\","");
         String jsonStr = JsonUtils.toJson(responseMap);
+
         String base64Str = Base64CustomUtils.base64Encoder(jsonStr);
         base64Str = base64Str.replaceAll("\r","");
         base64Str = base64Str.replaceAll("\n","");

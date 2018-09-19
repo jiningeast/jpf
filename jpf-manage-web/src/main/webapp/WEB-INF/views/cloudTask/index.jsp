@@ -66,13 +66,14 @@
                 remoteSort: false, // 服务端排序
                 url:'list',
                 columns:[[
-                    {field:'id',title:'任务Id',width:"10%"},
-                    {field:'opratorName',title:'操作人',width:"10%"},
-                    {field:'companyName',title:'企业名称',width:"10%"},
-                    {field:'agentNo',title:'代理号',width:"10%"},
-                    {field:'merchNo',title:'商户号',width:"10%"},
-                    {field:'batchno',title:'批次号',width:"10%"},
-                    {field:'status',title:'状态',width:"10%",
+                    {field:'id',title:'任务Id',width:"5%"},
+                    {field:'opratorName',title:'操作人',width:"5%"},
+                    {field:'merchNo',title:'业务商户号',width:"10%"},
+                    {field:'companyName',title:'业务商户名称',width:"15%"},
+                    {field:'agentNo',title:'代理商户号',width:"10%"},
+                    {field:'agentName',title:'代理商户名称',width:"15%"},
+                    {field:'batchno',title:'批次号',width:"15%"},
+                    {field:'status',title:'状态',width:"5%",
                         formatter:function (value,row,index) {
                             if ( value == 0 ){
                                 return "未处理";
@@ -84,7 +85,7 @@
                                 return "全部成功";
                             }
                         }},
-                    {field:'isLock',title:'锁定',width:"10%",
+                    {field:'isLock',title:'锁定',width:"5%",
                         formatter:function (value,row,index) {
                             if ( value == 0 ){
                                 return "未锁定";

@@ -453,17 +453,21 @@ public class CloudTaskController {
 
         // 新建任务记录
         String agentNo;
-        if ( httpRequest.getRequestURI().indexOf("xinxiangfuwu.com") > 0 ){
+        /*if ( httpRequest.getRequestURI().indexOf("xinxiangfuwu.com") > 0 ){
             agentNo = ConfigUtil.getValue("XINXIANG_AGENT_NO");
         }else{
             agentNo = ConfigUtil.getValue("ZHENXIANG_AGENT_NO");
-        }
+        }*/
+        agentNo = ConfigUtil.getValue("XINXIANG_AGENT_NO");
+        // 查找代理商户的商户名称
+        CloudCompanyInfo cloudCompanyInfo = cloudCompanyServiceFacade.getRecByMerchNo(agentNo);
         CloudTaskInfo cloudTaskInfo = new CloudTaskInfo();
         cloudTaskInfo.setOpratorId(""+userInfo.getId());
         cloudTaskInfo.setOpratorName(userInfo.getUserName());
         cloudTaskInfo.setCompanyId(companyInfo.getId());
         cloudTaskInfo.setCompanyName(companyInfo.getName());
         cloudTaskInfo.setAgentNo(agentNo);
+        cloudTaskInfo.setAgentName(cloudCompanyInfo.getName());
         cloudTaskInfo.setMerchNo(companyInfo.getMerchNo());
         cloudTaskInfo.setCompanyType(companyInfo.getType());
         cloudTaskInfo.setBatchno(batchNo);

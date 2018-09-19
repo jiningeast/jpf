@@ -35,6 +35,11 @@ public class CloudTaskInfo {
     private String agentNo;
 
     /**
+     * 代理商户名称
+     */
+    private String agentName;
+
+    /**
      * 商户号
      */
     private String merchNo;
@@ -140,6 +145,14 @@ public class CloudTaskInfo {
 
     public void setAgentNo(String agentNo) {
         this.agentNo = agentNo;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 
     public String getMerchNo() {
