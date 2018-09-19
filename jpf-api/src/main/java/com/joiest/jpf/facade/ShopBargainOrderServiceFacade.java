@@ -39,4 +39,9 @@ public interface ShopBargainOrderServiceFacade {
      * */
     public ShopBargainOrderInfo getBargainOrderByNo(String orderNo);
 
+    /**
+     * 获取
+     * */
+    public String getBargainOrderCountByCustomId(String customId,String type);
+
 }
