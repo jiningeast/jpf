@@ -2046,6 +2046,196 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andSourceIsNull() {
+            addCriterion("source is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceIsNotNull() {
+            addCriterion("source is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceEqualTo(Byte value) {
+            addCriterion("source =", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotEqualTo(Byte value) {
+            addCriterion("source <>", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceGreaterThan(Byte value) {
+            addCriterion("source >", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceGreaterThanOrEqualTo(Byte value) {
+            addCriterion("source >=", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceLessThan(Byte value) {
+            addCriterion("source <", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceLessThanOrEqualTo(Byte value) {
+            addCriterion("source <=", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceIn(List<Byte> values) {
+            addCriterion("source in", values, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotIn(List<Byte> values) {
+            addCriterion("source not in", values, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceBetween(Byte value1, Byte value2) {
+            addCriterion("source between", value1, value2, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotBetween(Byte value1, Byte value2) {
+            addCriterion("source not between", value1, value2, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdIsNull() {
+            addCriterion("bargain_order_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdIsNotNull() {
+            addCriterion("bargain_order_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdEqualTo(String value) {
+            addCriterion("bargain_order_id =", value, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdNotEqualTo(String value) {
+            addCriterion("bargain_order_id <>", value, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdGreaterThan(String value) {
+            addCriterion("bargain_order_id >", value, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdGreaterThanOrEqualTo(String value) {
+            addCriterion("bargain_order_id >=", value, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdLessThan(String value) {
+            addCriterion("bargain_order_id <", value, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdLessThanOrEqualTo(String value) {
+            addCriterion("bargain_order_id <=", value, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdIn(List<String> values) {
+            addCriterion("bargain_order_id in", values, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdNotIn(List<String> values) {
+            addCriterion("bargain_order_id not in", values, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdBetween(String value1, String value2) {
+            addCriterion("bargain_order_id between", value1, value2, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderIdNotBetween(String value1, String value2) {
+            addCriterion("bargain_order_id not between", value1, value2, "bargainOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoIsNull() {
+            addCriterion("bargain_order_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoIsNotNull() {
+            addCriterion("bargain_order_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoEqualTo(String value) {
+            addCriterion("bargain_order_no =", value, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoNotEqualTo(String value) {
+            addCriterion("bargain_order_no <>", value, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoGreaterThan(String value) {
+            addCriterion("bargain_order_no >", value, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("bargain_order_no >=", value, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoLessThan(String value) {
+            addCriterion("bargain_order_no <", value, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("bargain_order_no <=", value, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoLike(String value) {
+            addCriterion("bargain_order_no like", value, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoNotLike(String value) {
+            addCriterion("bargain_order_no not like", value, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoIn(List<String> values) {
+            addCriterion("bargain_order_no in", values, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoNotIn(List<String> values) {
+            addCriterion("bargain_order_no not in", values, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoBetween(String value1, String value2) {
+            addCriterion("bargain_order_no between", value1, value2, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoNotBetween(String value1, String value2) {
+            addCriterion("bargain_order_no not between", value1, value2, "bargainOrderNo");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
@@ -2288,6 +2478,11 @@ public class PayShopOrderExample {
 
         public Criteria andOssUrlLikeInsensitive(String value) {
             addCriterion("upper(oss_url) like", value.toUpperCase(), "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andBargainOrderNoLikeInsensitive(String value) {
+            addCriterion("upper(bargain_order_no) like", value.toUpperCase(), "bargainOrderNo");
             return (Criteria) this;
         }
     }

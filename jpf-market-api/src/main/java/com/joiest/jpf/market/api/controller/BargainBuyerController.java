@@ -99,11 +99,11 @@ public class BargainBuyerController {
         if( !RateFlag  ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"折扣率需填写整数",null);
         }
-        if( Integer.parseInt(offRate) <= 0 || Integer.parseInt(offRate) >= 100 ){
+        if( Integer.parseInt(offRate) < 0 || Integer.parseInt(offRate) >= 100 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"折扣率需大于0且小于100",null);
         }
-        if( !minDouFlag || Integer.valueOf(minDou) <= 0   ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"最低限额需填写整数且大于0",null);
+        if( !minDouFlag || Integer.valueOf(minDou)%10 !=0 || Integer.valueOf(minDou) <= 0   ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"最低限额需大于0且必须为10的整数倍",null);
         }
         Byte statusNew = Byte.valueOf( status); //回收状态
         if( !statusFlag || (statusNew !=0 && statusNew !=1)   ){
@@ -134,25 +134,26 @@ public class BargainBuyerController {
     /*
      *  查询买家发布
      * */
-    @RequestMapping(value = "/searchBuyDou",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/searchCustom",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String searchBuyDou(){
+    public String searchCustom(){
 
         //查询是否为买家
         if( userInfo.getIsBargainBuyer() ==null || userInfo.getIsBargainBuyer() == 0 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.BARGAIN_BUYER_TYPE.getCode(),JpfInterfaceErrorInfo.BARGAIN_BUYER_TYPE.getDesc(),null);
+        }else{//买家信息
+
+            GetShopBargainRequestRequest request = new GetShopBargainRequestRequest();
+            request.setCustomerId(uid);
+
+            //先查询当前用户发布信息
+            ShopBargainRequestInfo infos = shopBargainRequestServiceFacade.getOne(request);
+            if( infos!=null ){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",infos);
+            }
+
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.BARGAIN_BUYER_NOINFO.getCode(),"未添加记录",null);
         }
-
-        GetShopBargainRequestRequest request = new GetShopBargainRequestRequest();
-        request.setCustomerId(uid);
-
-        //先查询当前用户发布信息
-        ShopBargainRequestInfo infos = shopBargainRequestServiceFacade.getOne(request);
-        if( infos!=null ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"操作成功",infos);
-        }
-
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"操作失败",null);
     }
 
     /**

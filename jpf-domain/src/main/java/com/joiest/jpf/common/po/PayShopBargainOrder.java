@@ -106,6 +106,11 @@ public class PayShopBargainOrder implements Serializable {
     private Byte status;
 
     /**
+     * 0:未匹配完成 1:匹配完成
+     */
+    private Byte isSuccess;
+
+    /**
      * 操作人id
      */
     private String operatorId;
@@ -307,6 +312,14 @@ public class PayShopBargainOrder implements Serializable {
         this.status = status;
     }
 
+    public Byte getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(Byte isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
     public String getOperatorId() {
         return operatorId;
     }
@@ -400,6 +413,7 @@ public class PayShopBargainOrder implements Serializable {
         sb.append(", findcode=").append(findcode);
         sb.append(", payImg=").append(payImg);
         sb.append(", status=").append(status);
+        sb.append(", isSuccess=").append(isSuccess);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
         sb.append(", financeId=").append(financeId);
@@ -448,6 +462,7 @@ public class PayShopBargainOrder implements Serializable {
             && (this.getFindcode() == null ? other.getFindcode() == null : this.getFindcode().equals(other.getFindcode()))
             && (this.getPayImg() == null ? other.getPayImg() == null : this.getPayImg().equals(other.getPayImg()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getIsSuccess() == null ? other.getIsSuccess() == null : this.getIsSuccess().equals(other.getIsSuccess()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
             && (this.getFinanceId() == null ? other.getFinanceId() == null : this.getFinanceId().equals(other.getFinanceId()))
@@ -485,6 +500,7 @@ public class PayShopBargainOrder implements Serializable {
         result = prime * result + ((getFindcode() == null) ? 0 : getFindcode().hashCode());
         result = prime * result + ((getPayImg() == null) ? 0 : getPayImg().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getIsSuccess() == null) ? 0 : getIsSuccess().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
         result = prime * result + ((getFinanceId() == null) ? 0 : getFinanceId().hashCode());
