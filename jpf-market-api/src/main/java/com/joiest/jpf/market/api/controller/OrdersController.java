@@ -211,6 +211,7 @@ public class OrdersController {
         info.setAddtime(new Date());
         info.setOrderType(Byte.valueOf(request.getOtype()));
         info.setRequestedContent(requestJson);
+        info.setSource((byte)0);
         int res = shopOrderInterfaceServiceFacade.addOrder(info);
         if ( res >= 0 )
         {
