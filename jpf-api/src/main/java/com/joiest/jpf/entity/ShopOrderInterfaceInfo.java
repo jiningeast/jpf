@@ -151,6 +151,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private String ossUrl;
 
     /**
+     * 订单来源 0=自平台 1=敬恒
+     */
+    private Byte source;
+
+    /**
      * 下单时间
      */
     private Date addtime;
@@ -445,6 +450,7 @@ public class ShopOrderInterfaceInfo implements Serializable {
         return rechargeMoney;
     }
 
+
     public void setRechargeMoney(Integer rechargeMoney) {
         this.rechargeMoney = rechargeMoney;
     }
@@ -471,5 +477,13 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Byte getSource() {
+        return source;
+    }
+
+    public void setSource(Byte source) {
+        this.source = source;
     }
 }
