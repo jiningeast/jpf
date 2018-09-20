@@ -476,6 +476,7 @@
     <if test="_parameter != null">
       AND i.brand_id = #{brandId,jdbcType=INTEGER}
       AND p.type = #{type,jdbcType=INTEGER}
+      AND p.status = 1
     </if>
     ORDER BY p.dou ASC
   </select>
