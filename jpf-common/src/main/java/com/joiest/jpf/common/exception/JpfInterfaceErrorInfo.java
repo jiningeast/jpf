@@ -90,7 +90,8 @@ public enum JpfInterfaceErrorInfo {
     BANK_NO_CHECK("60000","未匹配到银行信息"),
 
     //是否为买家
-    BARGAIN_BUYER_TYPE("70000","未开通买家申请");
+    BARGAIN_BUYER_TYPE("70000","未开通买家申请"),
+    BARGAIN_BUYER_NOINFO("70001","未添加记录");
 
 
     private final String desc;

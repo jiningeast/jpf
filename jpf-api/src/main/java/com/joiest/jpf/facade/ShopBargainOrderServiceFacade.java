@@ -42,6 +42,6 @@ public interface ShopBargainOrderServiceFacade {
     /**
      * 获取
      * */
-    public String getBargainOrderCountByCustomId(String customId,String type);
+    public int getBargainOrderCountByCustomId(String customId,String type);
 
 }
