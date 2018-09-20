@@ -15,7 +15,7 @@
     <div region="center" border="false"
          style="padding: 10px; background: #fff; border: 1px solid #ccc;">
         <form id="auditForm" method="post">
-            <input type="hidden" id="id_audit" name="id" value="${shopStockOrderInfo.id}">
+            <input type="hidden" id="id_audit" name="auid" value="${shopStockOrderInfo.id}">
             <table cellpadding=3 class="table table-bordered">
                 <tr>
                     <th>采购订单详细信息</th>
@@ -168,7 +168,6 @@
                 }
                 var queryArray = $('#auditForm').serializeArray();
                 var postData = parsePostData(queryArray);
-
                     $.ajax({
                         type: 'post',
                         url: reqUrl ,

@@ -22,14 +22,16 @@
                 height:'500px',
                 closed:true,
                 modal:true,
+                singleSelect: true
                 // maximized:true,//弹出窗口最大化
             });
             $('#viewWindow').window({
-                title:'审核',
+                title:'详情',
                 width:'80%',
                 height:'500px',
                 closed:true,
                 modal:true,
+                singleSelect: true
                 // maximized:true,//弹出窗口最大化
             });
             var toolbar = [
