@@ -99,11 +99,11 @@ public class BargainBuyerController {
         if( !RateFlag  ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"折扣率需填写整数",null);
         }
-        if( Integer.parseInt(offRate) <= 0 || Integer.parseInt(offRate) >= 100 ){
+        if( Integer.parseInt(offRate) < 0 || Integer.parseInt(offRate) >= 100 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"折扣率需大于0且小于100",null);
         }
-        if( !minDouFlag || Integer.valueOf(minDou) <= 0   ){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"最低限额需填写整数且大于0",null);
+        if( !minDouFlag || Integer.valueOf(minDou)%10 !=0 || Integer.valueOf(minDou) <= 0   ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"最低限额需大于0且必须为10的整数倍",null);
         }
         Byte statusNew = Byte.valueOf( status); //回收状态
         if( !statusFlag || (statusNew !=0 && statusNew !=1)   ){
