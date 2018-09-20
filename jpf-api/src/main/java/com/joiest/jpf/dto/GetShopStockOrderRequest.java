@@ -13,6 +13,10 @@ public class GetShopStockOrderRequest {
     private String id;
 
     /**
+     * 审核id
+     */
+    private String auid;
+    /**
      * 采购订单号
      */
     private String orderNo;
@@ -442,5 +446,13 @@ public class GetShopStockOrderRequest {
 
     public void setCountProducts(Integer countProducts) {
         this.countProducts = countProducts;
+    }
+
+    public String getAuid() {
+        return auid;
+    }
+
+    public void setAuid(String auid) {
+        this.auid = auid;
     }
 }

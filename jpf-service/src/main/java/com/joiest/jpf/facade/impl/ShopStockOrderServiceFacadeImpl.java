@@ -371,10 +371,10 @@ public class ShopStockOrderServiceFacadeImpl implements ShopStockOrderServiceFac
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })//事务处理
     public JpfResponseDto AuditOrder(GetShopStockOrderRequest request) throws Exception{
 
-        String  infoId = request.getId();
+        String  infoId = request.getAuid();
         String memo = request.getMemo();
         Byte infoStatus = request.getStatus();
-        if( infoId == null || StringUtils.isBlank(request.getId())){
+        if( infoId == null || StringUtils.isBlank(request.getAuid())){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
         }
         PayShopStockOrder payShopStockOrder = payShopStockOrderMapper.selectByPrimaryKey(infoId);
