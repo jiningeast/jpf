@@ -686,7 +686,9 @@ public class UserInfoController {
         //userInfo.put("content",jsonContent);//合同内容
         userInfo.put("compact_active",cloudCompactStaffInterfaceCustomInfo.getCompactActive().toString());//用户状态
         userInfo.put("ticketContent",cloudCompactStaffInterfaceCustomInfo.getTicketcontent());//服务内容
+        userInfo.put("ticketId",cloudCompactStaffInterfaceCustomInfo.getTicketid().toString());//服务id
         userInfo.put("entryName",cloudCompactStaffInterfaceCustomInfo.getEntryname());//项目名称
+        userInfo.put("entryId",cloudCompactStaffInterfaceCustomInfo.getEntryid());//项目id
         userInfo.put("commoney",cloudDfMoneyInterfaceInfo.getCommoney().toString());//发放金额
 
         Date date = new Date();
