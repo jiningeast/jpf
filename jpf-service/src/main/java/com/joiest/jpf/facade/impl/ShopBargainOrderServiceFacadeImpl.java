@@ -4,12 +4,12 @@ import com.joiest.jpf.common.custom.PayShopBargainOrderCustom;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBargainOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBargainOrderMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopBargainRechargeViewMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponActiveMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
@@ -48,6 +48,10 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
 
     @Autowired
     private PayShopCouponActiveMapper payShopCouponActiveMapper;
+
+    @Autowired
+
+    private PayShopBargainRechargeViewMapper  payShopBargainRechargeViewMapper;
     /**
      * 运营采购订单列表---后台
      */
@@ -269,8 +273,20 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                     }
                     recordData.setFinanceId(request.getOperatorId());
                     recordData.setFinanceName(request.getOperatorName());
-                     recordData.setUpdatetime(date);
+                    recordData.setUpdatetime(date);
                     res = payShopBargainOrderMapper.updateByPrimaryKeySelective(recordData); //指定字段更新
+
+                    //服务转让表中插入数据
+                     PayShopBargainRechargeView payShopBargainRechargeView=new PayShopBargainRechargeView();
+                     payShopBargainRechargeView.setBoid(Long.valueOf(payShopBargainOrder.getId()));
+                     payShopBargainRechargeView.setOrderNo(payShopBargainOrder.getOrderNo());
+                     payShopBargainRechargeView.setStatus(1);
+                     payShopBargainRechargeView.setTransferPrice(new BigDecimal(payShopBargainOrder.getDou()));
+                     payShopBargainRechargeView.setAlreadyPrice(new BigDecimal("0.00"));
+                     payShopBargainRechargeView.setRemainPrice(new BigDecimal(payShopBargainOrder.getDou()));
+                     payShopBargainRechargeView.setAddtime(new Date());
+                     payShopBargainRechargeViewMapper.insertSelective(payShopBargainRechargeView);
+
                 }
                 break;
             case 4:
@@ -369,6 +385,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
     /**
      *卖家转让下单
      * */
+    @Override
     public int sellerPlaceOrder(ShopBargainOrderInfo orderInfo){
 
         PayShopBargainOrder payShopBargainOrder = new PayShopBargainOrder();
@@ -427,6 +444,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
     /**
      * 获取订单详情
      * */
+    @Override
     public ShopBargainOrderInfo getBargainOrderByNo(String orderNo){
 
         PayShopBargainOrderExample example = new PayShopBargainOrderExample();
@@ -450,6 +468,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
     /**
      * 获取
      * */
+    @Override
     public int getBargainOrderCountByCustomId(String customId,String type){
 
         if(StringUtils.isBlank(type)) return 0;
