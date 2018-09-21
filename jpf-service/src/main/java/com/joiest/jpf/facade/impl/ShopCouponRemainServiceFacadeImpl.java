@@ -341,7 +341,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             payShopCouponActive.setPayWay((byte)0);
             payShopCouponActive.setMoney(new BigDecimal("0"));
             payShopCouponActive.setDou(deduct);     //消费豆数量
-            payShopCouponActive.setContent("行为:消费;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";欣豆转让:" + deduct + ";orderId:" + orderInfo.getId() + ";剩余豆:" + remain);
+            payShopCouponActive.setContent("行为:欣豆转让;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";欣豆转让:" + deduct + ";orderId:" + orderInfo.getId() + ";剩余豆:" + remain);
             payShopCouponActive.setType("5");
             payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
             payShopCouponActive.setAddtime(new Date());
