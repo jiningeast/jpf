@@ -6,7 +6,6 @@ import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.ModifyBrangainRechargeorderRequest;
 import com.joiest.jpf.entity.ModifyBrangainRechargeorderInfo;
 import com.joiest.jpf.entity.ShopBargainRechargeViewInfo;
-import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
 import com.joiest.jpf.entity.ShopProductInterfaceInfo;
 import com.joiest.jpf.facade.ShopBrangainRechargeOrderServiceFacade;
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +23,7 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
     private static final Logger logger = LogManager.getLogger(ShopBrangainRechargeOrderServiceFacadeImpl.class);
 
     @Autowired
-    private PayShopBrangainRechargeOrderMapper payShopBrangainRechargeOrderMapper;
+    private PayShopBargainRechargeOrderMapper payShopBargainRechargeOrderMapper;
 
     @Autowired
     private PayShopBargainRechargeViewMapper payShopBargainRechargeViewMapper;
@@ -41,11 +40,11 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
     //数据入库
     public JpfResponseDto insertInfo(ModifyBrangainRechargeorderRequest rechargeorderRequest)
     {
-        PayShopBrangainRechargeOrder info = new PayShopBrangainRechargeOrder();
-        BeanCopier beanCopier = BeanCopier.create(ModifyBrangainRechargeorderRequest.class, PayShopBrangainRechargeOrder.class, false);
+        PayShopBargainRechargeOrder info = new PayShopBargainRechargeOrder();
+        BeanCopier beanCopier = BeanCopier.create(ModifyBrangainRechargeorderRequest.class, PayShopBargainRechargeOrder.class, false);
         beanCopier.copy(rechargeorderRequest, info, null);
 
-        payShopBrangainRechargeOrderMapper.insertSelective(info);
+        payShopBargainRechargeOrderMapper.insertSelective(info);
         return new JpfResponseDto();
     }
 
@@ -76,20 +75,20 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
     @Override
     public List<ModifyBrangainRechargeorderInfo> getDataList() {
 
-        PayShopBrangainRechargeOrderExample example = new PayShopBrangainRechargeOrderExample();
+        PayShopBargainRechargeOrderExample example = new PayShopBargainRechargeOrderExample();
         example.setOrderByClause("face_price DESC");
-        PayShopBrangainRechargeOrderExample.Criteria c = example.createCriteria();
+        PayShopBargainRechargeOrderExample.Criteria c = example.createCriteria();
         c.andInfoStatusEqualTo(1);
-        List<PayShopBrangainRechargeOrder> list = payShopBrangainRechargeOrderMapper.selectByExample(example);
+        List<PayShopBargainRechargeOrder> list = payShopBargainRechargeOrderMapper.selectByExample(example);
         if ( list == null || list.isEmpty() )
         {
             return null;
         }
         List<ModifyBrangainRechargeorderInfo> resultList = new ArrayList<>();
-        for (PayShopBrangainRechargeOrder one : list)
+        for (PayShopBargainRechargeOrder one : list)
         {
             ModifyBrangainRechargeorderInfo info = new ModifyBrangainRechargeorderInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayShopBrangainRechargeOrder.class, ModifyBrangainRechargeorderInfo.class, false);
+            BeanCopier beanCopier = BeanCopier.create(PayShopBargainRechargeOrder.class, ModifyBrangainRechargeorderInfo.class, false);
             beanCopier.copy(one, info, null);
             resultList.add(info);
         }
@@ -172,14 +171,14 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
         logger.info("更新view订单，订单id: {}, already_price:{} ; remain_price: {}", viewInfo.getId(), viewInfo.getAlreadyPrice(), viewInfo.getRemainPrice());
         payShopBargainRechargeViewMapper.updateByPrimaryKeySelective(view);
 
-        PayShopBrangainRechargeOrder order = new PayShopBrangainRechargeOrder();
+        PayShopBargainRechargeOrder order = new PayShopBargainRechargeOrder();
         order.setId(orderInfo.getId());
         order.setOrderNo(viewInfo.getOrderNo());
         order.setBoid(viewInfo.getBoid());
         order.setInfoStatus(2);
         order.setUpdatetime(new Date());
         logger.info("更新bargain_recharge_order订单绑定状态，绑定金额为{}，pay_shop_bargain_order.id: {}, pay_shop_bargain_order.order_no", orderInfo.getFacePrice(), viewInfo.getId(), viewInfo.getOrderNo());
-        payShopBrangainRechargeOrderMapper.updateByPrimaryKeySelective(order);
+        payShopBargainRechargeOrderMapper.updateByPrimaryKeySelective(order);
 
         //获取订单信息
         PayShopBargainOrder bargainOrder = getOrderOne(viewInfo.getBoid().toString());
