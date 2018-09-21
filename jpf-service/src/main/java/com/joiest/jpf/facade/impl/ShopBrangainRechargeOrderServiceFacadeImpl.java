@@ -237,7 +237,7 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
         payShopOrder.setPaytime(orderInfo.getUpdatetime());
         payShopOrder.setBargainOrderId(viewInfo.getBoid().toString());
         payShopOrder.setBargainOrderNo(viewInfo.getOrderNo());
-        payShopOrder.setSource((byte)2);
+        payShopOrder.setSource((byte)1);
         payShopOrderMapper.insertSelective(payShopOrder);
 
         return true;
