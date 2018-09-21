@@ -115,20 +115,19 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
             System.out.println(order_remain.compareTo(BigDecimal.ZERO));
             if ( order_remain.compareTo(BigDecimal.ZERO) == 0 )
             {
-                logger.info("订单未绑定余额为0, 订单id: {}, 订单编号: {}", view.getBoid(), view.getOrderNo());
+                logger.info("订单被过滤掉：订单未绑定余额为0, 订单id: {}, 订单编号: {}", view.getBoid(), view.getOrderNo());
                 continue;
             }
             List<ModifyBrangainRechargeorderInfo> list_order = getDataList();
             if ( list_order == null || list_order.isEmpty() )
             {
-                logger.info("没有原始数据可供绑定, 订单id: {}, 订单编号: {}", view.getBoid(), view.getOrderNo());
+                logger.info("没有原始数据可供使用, 订单id: {}, 订单编号: {}", view.getBoid(), view.getOrderNo());
                 return -1;  //没有数据可执行
             }
             for (ModifyBrangainRechargeorderInfo orderInfo : orderList) {
                 System.out.println("order_remain.compareTo(orderInfo.getFacePrice()) : " + order_remain.compareTo(orderInfo.getFacePrice()));
                 if (order_remain.compareTo(orderInfo.getFacePrice()) == 1) //大于
                 {
-                    //绑定此条data
                     order_remain = order_remain.subtract(orderInfo.getFacePrice());
                     order_already = order_already.add(orderInfo.getFacePrice());
                     view.setAlreadyPrice(order_already);
@@ -161,7 +160,7 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
                 }
             }
         }
-        logger.info("crontab 执行完成");
+        logger.info("crontab 执行完成， 订单共计 {} 条", viewList.size());
         return 1;
     }
 
@@ -189,8 +188,7 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
         PayShopBargainOrder bargainOrder = getOrderOne(viewInfo.getBoid().toString());
         if ( bargainOrder == null )
         {
-            logger.info("未找到bargain订单，pay_shop_bargain_order.id: {}", viewInfo.getBoid().toString());
-            logger.info("pay_shop_order 添加订单失败, bargain_order_id: {}", viewInfo.getBoid().toString());
+            logger.info("未找到bargain订单, pay_shop_order 添加订单失败; pay_shop_bargain_order.id: {}", viewInfo.getBoid().toString());
             return false;
         }
         //匹配商品信息

@@ -20,12 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
 @ResponseBody
-@RequestMapping(value = "/demo")
+@RequestMapping(value = "/jingheng")
 public class JingHengController {
 
     private static final Logger logger = LogManager.getLogger(JingHengController.class);
@@ -104,14 +105,25 @@ public class JingHengController {
     @Autowired
     private ShopBrangainRechargeOrderServiceFacade shopBrangainRechargeOrderServiceFacade;
 
+    private String JH_REQUEST_URL = "http://47.99.130.76:8165/api/queryBizOrder.do";
+
     @RequestMapping(value = "/queryBizOrder")
     @ResponseBody
     public String queryBizOrder()
     {
-        String requestUrl = "http://47.99.130.76:8165/api/queryBizOrder.do";
+        String requestUrl = JH_REQUEST_URL;
+        //时间查询
+        DateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date yesterday = calendar.getTime();
+        String defaultStartDate = dateFmt.format(yesterday);
+        String start = defaultStartDate.substring(0,10) + " 00:00:00";
+        String end = defaultStartDate.substring(0,10) + " 23:23:59";
+
         Map<String, Object> requestParam = new HashMap<>();
-        requestParam.put("startGmtCreate", "2018-09-01 00:00:00");
-        requestParam.put("endGmtCreate", "2018-10-30 23:59:59");
+        requestParam.put("startGmtCreate", start);
+        requestParam.put("endGmtCreate", end);
         requestParam.put("pageSize", "500");
         requestParam.put("currentPage", "1");
         TreeMap<String, Object> treeMap = new TreeMap<>();
@@ -132,17 +144,28 @@ public class JingHengController {
 
         String paramStr = StringUtils.stripEnd(tmpStr, "&");
         String url = requestUrl + "?" +paramStr;
+        logger.info("-------------- 敬恒 拉取数据，start --------------");
         String result = OkHttpUtils.get(url);     //todo 打开注释
+        logger.info("-------------- 敬恒 拉取数据，end --------------");
 //        String result = this.result;
         JSONObject resultJosn = JSONObject.fromObject(result);
         JSONArray module = null;
+        int valid_count = 0;
         if ( resultJosn.containsKey("module") )
         {
             module = JSONArray.fromObject(resultJosn.get("module"));
+            logger.info("拉到数据，共计：{}条", module.size());
             if( module.size() != 0 ){
                 int size = module.size();
                 for (int i=0; i<size; i++){
                     JSONObject one = module.getJSONObject(i);
+
+                    //过滤充值失败的订单
+                    if ( one.containsKey("status") && !one.get("status").equals("2") )
+                    {
+                        continue;
+                    }
+                    valid_count++;
                     ModifyBrangainRechargeorderRequest request = new ModifyBrangainRechargeorderRequest();
 
                     //订单编号
@@ -211,10 +234,9 @@ public class JingHengController {
                     JpfResponseDto res = shopBrangainRechargeOrderServiceFacade.insertInfo(request);
                     System.out.println(res.toString());
                 }
-                logger.info("拉取数据，入库成功，共：{}条", size);
             }
         }
-
+        logger.info("数据入库成功，有效数据共：{}条", valid_count);
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -222,14 +244,15 @@ public class JingHengController {
         sbf.append("\n请求地址：" + url);
         sbf.append("\n接口参数：" + requestParam);
         sbf.append("\n回调信息：\n" + result);
-        String fileName = "queryBizOrder";
+        String fileName = "queryBizOrder-1";
         String path = "/logs/manage-web/log/";
+
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
-        return "";
+        return "执行完成--拉取数据";
     }
 
-    @RequestMapping("/dobingdata")
+    @RequestMapping(value = "/dobingdata", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String doBingData(){
 
@@ -239,14 +262,14 @@ public class JingHengController {
             return "没有订单可执行";
         }
         List<ModifyBrangainRechargeorderInfo> list_order = shopBrangainRechargeOrderServiceFacade.getDataList();
-        if ( list_view == null || list_view.isEmpty() )
+        if ( list_order == null || list_order.isEmpty() )
         {
             return "没有数据可执行";
         }
         System.out.println("开始执行");
         int res = shopBrangainRechargeOrderServiceFacade.doBingOrderData(list_view, list_order);
 
-        return "执行完成";
+        return "执行完成---bindData";
     }
 
 
