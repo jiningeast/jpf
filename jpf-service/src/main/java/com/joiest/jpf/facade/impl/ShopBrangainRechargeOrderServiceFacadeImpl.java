@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -233,8 +230,18 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
         payShopOrder.setChargeNo(orderInfo.getChargeNo());
         payShopOrder.setStatus((byte)1);
         payShopOrder.setSource((byte)1);
-        payShopOrder.setAddtime(orderInfo.getAddtime());
-        payShopOrder.setPaytime(orderInfo.getUpdatetime());
+
+        int random = getRandomInt(5,20);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(bargainOrder.getPaytime());
+        calendar.add(Calendar.MINUTE, random);
+        Date addtime = calendar.getTime();
+        int random_second = getRandomInt(5,60);
+        calendar.add(Calendar.SECOND, random_second);
+        Date paytime = calendar.getTime();
+
+        payShopOrder.setAddtime(addtime);
+        payShopOrder.setPaytime(paytime);
         payShopOrder.setBargainOrderId(viewInfo.getBoid().toString());
         payShopOrder.setBargainOrderNo(viewInfo.getOrderNo());
         payShopOrder.setSource((byte)1);
