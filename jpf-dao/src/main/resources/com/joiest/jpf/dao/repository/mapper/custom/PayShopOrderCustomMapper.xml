@@ -26,6 +26,10 @@
     <result column="coupon_detail" jdbcType="VARCHAR" property="couponDetail" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="coupon_active_id" jdbcType="BIGINT" property="couponActiveId" />
+    <result column="receive_type" jdbcType="TINYINT" property="receiveType" />
+    <result column="receive_value" jdbcType="VARCHAR" property="receiveValue" />
+    <result column="oss_url" jdbcType="VARCHAR" property="ossUrl" />
+    <result column="source" jdbcType="TINYINT" property="source" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="paytime" jdbcType="TIMESTAMP" property="paytime" />
     <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
