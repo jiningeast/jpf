@@ -247,7 +247,7 @@ public class ofpayUtils {
      * 获取油卡充值签名
      */
     public String getOilSign(Map<String,Object> map){
-        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("cardid") + map.get("cardnum") + map.get("sporder_id") + map.get("sporder_time") + map.get("game_userid") + "OFCARD";
+        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("cardid") + map.get("cardnum") + map.get("sporder_id") + map.get("sporder_time") + map.get("game_userid") + ConfigUtil.getValue("keystr");
         String sign = Md5Encrypt.md5(myPackage).toUpperCase();
 
         return sign;
@@ -257,7 +257,7 @@ public class ofpayUtils {
      * 获取加油卡卡号信息查询
      */
     public String getGasQuerySign(Map<String,Object> map){
-        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("game_userid") + "OFCARD";
+        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("game_userid") + ConfigUtil.getValue("keystr");
         String sign = Md5Encrypt.md5(myPackage).toUpperCase();
 
         return sign;
