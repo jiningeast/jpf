@@ -57,7 +57,12 @@
                     {field:'amount',title:'数量',width:'5%'},
                     {field:'totalMoney',title:'总金额',width:'7%'},
                     {field:'totalDou',title:'总欣豆',width:'7%'},
-                    {field:'customerName',title:'客户名字',width:'8%'},
+                    {field:'customerName',title:'微信昵称',width:'8%',
+                        formatter : function(value,row,index){
+
+                            return  decodeURI(value);
+                        }
+                    },
                     {field:'addtime',title:'下单时间',width:'12%',formatter: formatDateStr},
                     {field:'paytime',title:'支付时间',width:'12%',formatter: formatDateStr},
                     {field:'status',title:'状态',width:'6%',

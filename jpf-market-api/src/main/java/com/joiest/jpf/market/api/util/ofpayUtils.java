@@ -51,7 +51,7 @@ public class ofpayUtils {
     public Map<String, String> telquery(Map<String,String> queryMap){
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid", userid);       // 商户号
-        requestMap.put("userpws", userpws);     // 商户密码
+        requestMap.put("userpws", Md5Encrypt.md5(userpws));     // 商户密码
         requestMap.put("phoneno", queryMap.get("phoneno") );        // 手机号码
         requestMap.put("pervalue", queryMap.get("pervalue") );      // 面值
 //        requestMap.put("mctype", "" );
@@ -150,7 +150,7 @@ public class ofpayUtils {
     public Map<String, String> gasQuery(Map<String,String> queryMap){
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid", userid);       // 商户号
-        requestMap.put("userpws", userpws);     // 商户密码
+        requestMap.put("userpws", Md5Encrypt.md5(userpws));     // 商户密码
         requestMap.put("game_userid", queryMap.get("game_userid") );    // 加油卡号
         requestMap.put("version", version_phone );
         requestMap.put("md5_str", getGasQuerySign(requestMap));         //签名串
@@ -191,7 +191,7 @@ public class ofpayUtils {
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyyMMddHHmmss");
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid", userid);           // 商户号
-        requestMap.put("userpws", userpws);         // 商户密码
+        requestMap.put("userpws", Md5Encrypt.md5(userpws));         // 商户密码
         requestMap.put("cardid", rechargeMap.get("cardid"));                            // 商品编号以产品部门提供的为准
 //        requestMap.put("cardid", "64127500");                            // 商品编号以产品部门提供的为准
         requestMap.put("cardnum",rechargeMap.get("cardnum").toString());                // 1.任意充需要待充值面值（1的整数倍) 2.卡充充值这里表示数量
@@ -247,7 +247,7 @@ public class ofpayUtils {
      * 获取油卡充值签名
      */
     public String getOilSign(Map<String,Object> map){
-        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("cardid") + map.get("cardnum") + map.get("sporder_id") + map.get("sporder_time") + map.get("game_userid") + "OFCARD";
+        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("cardid") + map.get("cardnum") + map.get("sporder_id") + map.get("sporder_time") + map.get("game_userid") + ConfigUtil.getValue("keystr");
         String sign = Md5Encrypt.md5(myPackage).toUpperCase();
 
         return sign;
@@ -257,7 +257,7 @@ public class ofpayUtils {
      * 获取加油卡卡号信息查询
      */
     public String getGasQuerySign(Map<String,Object> map){
-        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("game_userid") + "OFCARD";
+        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("game_userid") + ConfigUtil.getValue("keystr");
         String sign = Md5Encrypt.md5(myPackage).toUpperCase();
 
         return sign;
