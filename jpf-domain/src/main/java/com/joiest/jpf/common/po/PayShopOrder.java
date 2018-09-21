@@ -156,6 +156,16 @@ public class PayShopOrder implements Serializable {
     private Byte source;
 
     /**
+     * 转让订单表的主id
+     */
+    private String bargainOrderId;
+
+    /**
+     * 转让订单表的订单号
+     */
+    private String bargainOrderNo;
+
+    /**
      * 下单时间
      */
     private Date addtime;
@@ -412,6 +422,22 @@ public class PayShopOrder implements Serializable {
         this.source = source;
     }
 
+    public String getBargainOrderId() {
+        return bargainOrderId;
+    }
+
+    public void setBargainOrderId(String bargainOrderId) {
+        this.bargainOrderId = bargainOrderId == null ? null : bargainOrderId.trim();
+    }
+
+    public String getBargainOrderNo() {
+        return bargainOrderNo;
+    }
+
+    public void setBargainOrderNo(String bargainOrderNo) {
+        this.bargainOrderNo = bargainOrderNo == null ? null : bargainOrderNo.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -475,6 +501,8 @@ public class PayShopOrder implements Serializable {
         sb.append(", receiveValue=").append(receiveValue);
         sb.append(", ossUrl=").append(ossUrl);
         sb.append(", source=").append(source);
+        sb.append(", bargainOrderId=").append(bargainOrderId);
+        sb.append(", bargainOrderNo=").append(bargainOrderNo);
         sb.append(", addtime=").append(addtime);
         sb.append(", paytime=").append(paytime);
         sb.append(", updatetime=").append(updatetime);
@@ -528,6 +556,8 @@ public class PayShopOrder implements Serializable {
             && (this.getReceiveValue() == null ? other.getReceiveValue() == null : this.getReceiveValue().equals(other.getReceiveValue()))
             && (this.getOssUrl() == null ? other.getOssUrl() == null : this.getOssUrl().equals(other.getOssUrl()))
             && (this.getSource() == null ? other.getSource() == null : this.getSource().equals(other.getSource()))
+            && (this.getBargainOrderId() == null ? other.getBargainOrderId() == null : this.getBargainOrderId().equals(other.getBargainOrderId()))
+            && (this.getBargainOrderNo() == null ? other.getBargainOrderNo() == null : this.getBargainOrderNo().equals(other.getBargainOrderNo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -570,6 +600,8 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getReceiveValue() == null) ? 0 : getReceiveValue().hashCode());
         result = prime * result + ((getOssUrl() == null) ? 0 : getOssUrl().hashCode());
         result = prime * result + ((getSource() == null) ? 0 : getSource().hashCode());
+        result = prime * result + ((getBargainOrderId() == null) ? 0 : getBargainOrderId().hashCode());
+        result = prime * result + ((getBargainOrderNo() == null) ? 0 : getBargainOrderNo().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
