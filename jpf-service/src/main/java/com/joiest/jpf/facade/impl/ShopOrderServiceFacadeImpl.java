@@ -62,6 +62,9 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         if(request.getStatus()!=null && request.getStatus().toString()!=""){
             c.andStatusEqualTo(request.getStatus());
         }
+        if(request.getSource()!=null && request.getSource().toString()!=""){
+            c.andSourceEqualTo(request.getSource());
+        }
         // 添加时间搜索
         if (StringUtils.isNotBlank(request.getAddtimeStart()))
         {

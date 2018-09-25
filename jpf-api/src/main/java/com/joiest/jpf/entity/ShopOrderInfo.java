@@ -95,6 +95,36 @@ public class ShopOrderInfo {
     private String couponActiveId;
 
     /**
+     * 临时买卡密页面所需字段 接收方式 1=短信 2=邮箱
+     */
+    private Byte receiveType;
+
+    /**
+     * 临时买卡密页面所需字段 接收值 手机号或邮箱地址
+     */
+    private String receiveValue;
+
+    /**
+     * 发送方式为卡密时，excel文件的保存地址
+     */
+    private String ossUrl;
+
+    /**
+     * 订单来源 0=自平台 1=敬恒
+     */
+    private Byte source;
+
+    /**
+     * 转让订单表的主id
+     */
+    private String bargainOrderId;
+
+    /**
+     * 转让订单表的订单号
+     */
+    private String bargainOrderNo;
+
+    /**
      * 下单时间
      */
     private Date addtime;
@@ -451,4 +481,127 @@ public class ShopOrderInfo {
         this.image = image;
     }
 
+    public Byte getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(Byte chargeType) {
+        this.chargeType = chargeType;
+    }
+
+    public Byte getReceiveType() {
+        return receiveType;
+    }
+
+    public void setReceiveType(Byte receiveType) {
+        this.receiveType = receiveType;
+    }
+
+    public String getReceiveValue() {
+        return receiveValue;
+    }
+
+    public void setReceiveValue(String receiveValue) {
+        this.receiveValue = receiveValue;
+    }
+
+    public String getOssUrl() {
+        return ossUrl;
+    }
+
+    public void setOssUrl(String ossUrl) {
+        this.ossUrl = ossUrl;
+    }
+
+    public Byte getSource() {
+        return source;
+    }
+
+    public void setSource(Byte source) {
+        this.source = source;
+    }
+
+    public String getBargainOrderId() {
+        return bargainOrderId;
+    }
+
+    public void setBargainOrderId(String bargainOrderId) {
+        this.bargainOrderId = bargainOrderId;
+    }
+
+    public String getBargainOrderNo() {
+        return bargainOrderNo;
+    }
+
+    public void setBargainOrderNo(String bargainOrderNo) {
+        this.bargainOrderNo = bargainOrderNo;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public Integer getRechargeMoney() {
+        return rechargeMoney;
+    }
+
+    public void setRechargeMoney(Integer rechargeMoney) {
+        this.rechargeMoney = rechargeMoney;
+    }
+
+    public String getStockCardId() {
+        return stockCardId;
+    }
+
+    public void setStockCardId(String stockCardId) {
+        this.stockCardId = stockCardId;
+    }
+
+    public Byte getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Byte orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getForeignOrderNo() {
+        return foreignOrderNo;
+    }
+
+    public void setForeignOrderNo(String foreignOrderNo) {
+        this.foreignOrderNo = foreignOrderNo;
+    }
+
+    public String getRequestedContent() {
+        return requestedContent;
+    }
+
+    public void setRequestedContent(String requestedContent) {
+        this.requestedContent = requestedContent;
+    }
+
+    public String getForeignRequestContent() {
+        return foreignRequestContent;
+    }
+
+    public void setForeignRequestContent(String foreignRequestContent) {
+        this.foreignRequestContent = foreignRequestContent;
+    }
+
+    public String getForeignResponseContent() {
+        return foreignResponseContent;
+    }
+
+    public void setForeignResponseContent(String foreignResponseContent) {
+        this.foreignResponseContent = foreignResponseContent;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 }

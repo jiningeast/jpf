@@ -74,6 +74,15 @@
                         },styler: function (value, row, index) {
                             return 'color:red';
                         }
+                    },
+                    {field:'source',title:'订单来源',width:'6%',
+                        formatter : function(value,row,index){
+                            if(value=='0'){return '自平台'}
+                            else if(value=="1"){return '敬恒'}
+
+                        },styler: function (value, row, index) {
+                            return 'color:red';
+                        }
                     }
 
                 ]]
@@ -173,6 +182,16 @@
                                 <option value="1">已支付</option>
                                 <option value="2">支付失败</option>
                                 <option value="3">已取消</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>订单来源:</td>
+                        <td>
+                            <select id="source" name="source" class="easyui-combobox">
+                                <option value="">全部</option>
+                                <option value="0">自平台</option>
+                                <option value="1">敬恒</option>
                             </select>
                         </td>
                     </tr>
