@@ -53,9 +53,9 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         {
             c.andProductNameLike("%"+ request.getProductName() +"%" );
         }
-        if( StringUtils.isNotBlank(request.getCustomerName())){
+     /*   if( StringUtils.isNotBlank(request.getCustomerName())){
             c.andCustomerNameLike( "%"+ request.getCustomerName() +"%" );
-        }
+        }*/
         if( StringUtils.isNotBlank(request.getOrderNo())){
             c.andOrderNoEqualTo(request.getOrderNo());
         }

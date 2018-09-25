@@ -144,9 +144,17 @@
                     <tr>
                         <td>产品名称:</td>
                         <td><input id="productName" name="productName" class="easyui-textbox" type="text" /></td>
-                        <td>客户名称:</td>
+                    <%--    <td>客户名称:</td>
                         <td><input id="customerName" name="customerName" class="easyui-textbox" type="text" /></td>
-                        </tr>
+                        </tr>--%>
+                        <td>订单来源:</td>
+                        <td>
+                            <select id="source" name="source" class="easyui-combobox" style="width: 70px;">
+                                <option value="">全部</option>
+                                <option value="0">自平台</option>
+                                <option value="1">敬恒</option>
+                            </select>
+                        </td>
                     <tr>
                         <td>订单号:</td>
                         <td><input id="orderNo" name="orderNo" class="easyui-textbox" type="text" /></td>
@@ -185,16 +193,7 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
-                        <td>订单来源:</td>
-                        <td>
-                            <select id="source" name="source" class="easyui-combobox" style="width: 70px;">
-                                <option value="">全部</option>
-                                <option value="0">自平台</option>
-                                <option value="1">敬恒</option>
-                            </select>
-                        </td>
-                    </tr>
+
                 </table>
             </form>
         </div>
