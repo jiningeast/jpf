@@ -47,7 +47,7 @@
                 url:'list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
-                    {field:'orderNo',title:'订单号',width:'15%',
+                    {field:'orderNo',title:'订单号',width:'12%',
                      /*   formatter : function(value,row,index){
                             return  "<a onclick=\"goActiveOrder('"+value+" ')\">"+value+" </a>";
                         }*/
@@ -57,7 +57,12 @@
                     {field:'amount',title:'数量',width:'5%'},
                     {field:'totalMoney',title:'总金额',width:'7%'},
                     {field:'totalDou',title:'总欣豆',width:'7%'},
-                    {field:'customerName',title:'客户名字',width:'8%'},
+                    {field:'customerName',title:'微信昵称',width:'8%',
+                        formatter : function(value,row,index){
+
+                            return  decodeURI(value);
+                        }
+                    },
                     {field:'addtime',title:'下单时间',width:'12%',formatter: formatDateStr},
                     {field:'paytime',title:'支付时间',width:'12%',formatter: formatDateStr},
                     {field:'status',title:'状态',width:'6%',
@@ -66,6 +71,15 @@
                             else if(value=="1"){return '已支付'}
                             else if(value=="2"){return '支付失败'}
                             else if(value=="3"){return '已取消'}
+                        },styler: function (value, row, index) {
+                            return 'color:red';
+                        }
+                    },
+                    {field:'source',title:'订单来源',width:'6%',
+                        formatter : function(value,row,index){
+                            if(value=='0'){return '自平台'}
+                            else if(value=="1"){return '敬恒'}
+
                         },styler: function (value, row, index) {
                             return 'color:red';
                         }
@@ -130,9 +144,17 @@
                     <tr>
                         <td>产品名称:</td>
                         <td><input id="productName" name="productName" class="easyui-textbox" type="text" /></td>
-                        <td>客户名称:</td>
+                    <%--    <td>客户名称:</td>
                         <td><input id="customerName" name="customerName" class="easyui-textbox" type="text" /></td>
-                        </tr>
+                        </tr>--%>
+                        <td>订单来源:</td>
+                        <td>
+                            <select id="source" name="source" class="easyui-combobox" style="width: 70px;">
+                                <option value="">全部</option>
+                                <option value="0">自平台</option>
+                                <option value="1">敬恒</option>
+                            </select>
+                        </td>
                     <tr>
                         <td>订单号:</td>
                         <td><input id="orderNo" name="orderNo" class="easyui-textbox" type="text" /></td>
@@ -171,6 +193,7 @@
                             </select>
                         </td>
                     </tr>
+
                 </table>
             </form>
         </div>

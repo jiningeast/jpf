@@ -16,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,14 +53,17 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         {
             c.andProductNameLike("%"+ request.getProductName() +"%" );
         }
-        if( StringUtils.isNotBlank(request.getCustomerName())){
+     /*   if( StringUtils.isNotBlank(request.getCustomerName())){
             c.andCustomerNameLike( "%"+ request.getCustomerName() +"%" );
-        }
+        }*/
         if( StringUtils.isNotBlank(request.getOrderNo())){
             c.andOrderNoEqualTo(request.getOrderNo());
         }
         if(request.getStatus()!=null && request.getStatus().toString()!=""){
             c.andStatusEqualTo(request.getStatus());
+        }
+        if(request.getSource()!=null && request.getSource().toString()!=""){
+            c.andSourceEqualTo(request.getSource());
         }
         // 添加时间搜索
         if (StringUtils.isNotBlank(request.getAddtimeStart()))
@@ -120,7 +125,13 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         ShopOrderInfo shopOrderInfo = new ShopOrderInfo();
         BeanCopier beanCopier = BeanCopier.create(PayShopOrderCustom.class, ShopOrderInfo.class, false);
         beanCopier.copy(payShopOrderCustom,shopOrderInfo,null);
-
+        String urlName="";
+        try {
+             urlName=URLDecoder.decode(shopOrderInfo.getCustomerName(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        shopOrderInfo.setCustomerName(urlName);
         return shopOrderInfo;
     }
 

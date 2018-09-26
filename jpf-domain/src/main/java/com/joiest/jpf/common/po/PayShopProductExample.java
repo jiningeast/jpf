@@ -1246,6 +1246,186 @@ public class PayShopProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andCmccProductIdIsNull() {
+            addCriterion("cmcc_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdIsNotNull() {
+            addCriterion("cmcc_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdEqualTo(Integer value) {
+            addCriterion("cmcc_product_id =", value, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdNotEqualTo(Integer value) {
+            addCriterion("cmcc_product_id <>", value, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdGreaterThan(Integer value) {
+            addCriterion("cmcc_product_id >", value, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cmcc_product_id >=", value, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdLessThan(Integer value) {
+            addCriterion("cmcc_product_id <", value, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdLessThanOrEqualTo(Integer value) {
+            addCriterion("cmcc_product_id <=", value, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdIn(List<Integer> values) {
+            addCriterion("cmcc_product_id in", values, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdNotIn(List<Integer> values) {
+            addCriterion("cmcc_product_id not in", values, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdBetween(Integer value1, Integer value2) {
+            addCriterion("cmcc_product_id between", value1, value2, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCmccProductIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("cmcc_product_id not between", value1, value2, "cmccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdIsNull() {
+            addCriterion("cucc_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdIsNotNull() {
+            addCriterion("cucc_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdEqualTo(Integer value) {
+            addCriterion("cucc_product_id =", value, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdNotEqualTo(Integer value) {
+            addCriterion("cucc_product_id <>", value, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdGreaterThan(Integer value) {
+            addCriterion("cucc_product_id >", value, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cucc_product_id >=", value, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdLessThan(Integer value) {
+            addCriterion("cucc_product_id <", value, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdLessThanOrEqualTo(Integer value) {
+            addCriterion("cucc_product_id <=", value, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdIn(List<Integer> values) {
+            addCriterion("cucc_product_id in", values, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdNotIn(List<Integer> values) {
+            addCriterion("cucc_product_id not in", values, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdBetween(Integer value1, Integer value2) {
+            addCriterion("cucc_product_id between", value1, value2, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCuccProductIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("cucc_product_id not between", value1, value2, "cuccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdIsNull() {
+            addCriterion("ctc_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdIsNotNull() {
+            addCriterion("ctc_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdEqualTo(Integer value) {
+            addCriterion("ctc_product_id =", value, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdNotEqualTo(Integer value) {
+            addCriterion("ctc_product_id <>", value, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdGreaterThan(Integer value) {
+            addCriterion("ctc_product_id >", value, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("ctc_product_id >=", value, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdLessThan(Integer value) {
+            addCriterion("ctc_product_id <", value, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdLessThanOrEqualTo(Integer value) {
+            addCriterion("ctc_product_id <=", value, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdIn(List<Integer> values) {
+            addCriterion("ctc_product_id in", values, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdNotIn(List<Integer> values) {
+            addCriterion("ctc_product_id not in", values, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdBetween(Integer value1, Integer value2) {
+            addCriterion("ctc_product_id between", value1, value2, "ctcProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCtcProductIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("ctc_product_id not between", value1, value2, "ctcProductId");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;

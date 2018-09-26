@@ -156,6 +156,16 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private Byte source;
 
     /**
+     * 转让订单表的主id
+     */
+    private String bargainOrderId;
+
+    /**
+     * 转让订单表的订单号
+     */
+    private String bargainOrderNo;
+
+    /**
      * 下单时间
      */
     private Date addtime;
@@ -485,5 +495,21 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setSource(Byte source) {
         this.source = source;
+    }
+
+    public String getBargainOrderId() {
+        return bargainOrderId;
+    }
+
+    public void setBargainOrderId(String bargainOrderId) {
+        this.bargainOrderId = bargainOrderId;
+    }
+
+    public String getBargainOrderNo() {
+        return bargainOrderNo;
+    }
+
+    public void setBargainOrderNo(String bargainOrderNo) {
+        this.bargainOrderNo = bargainOrderNo;
     }
 }

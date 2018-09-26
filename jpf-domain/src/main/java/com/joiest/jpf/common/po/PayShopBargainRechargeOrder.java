@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PayShopBrangainRechargeOrder implements Serializable {
+public class PayShopBargainRechargeOrder implements Serializable {
     /**
      * 主键id
      */
@@ -287,7 +287,7 @@ public class PayShopBrangainRechargeOrder implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        PayShopBrangainRechargeOrder other = (PayShopBrangainRechargeOrder) that;
+        PayShopBargainRechargeOrder other = (PayShopBargainRechargeOrder) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getBoid() == null ? other.getBoid() == null : this.getBoid().equals(other.getBoid()))

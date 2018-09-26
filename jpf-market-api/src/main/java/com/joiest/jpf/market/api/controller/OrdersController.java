@@ -637,6 +637,10 @@ public class OrdersController {
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "购买成功", null);
     }
+
+    /**
+     * 话费直充
+     */
     private Map<String, String> phoneRecharge(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo)
     {
         Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(orderInfo.getChargeNo()).matches();
@@ -682,6 +686,9 @@ public class OrdersController {
         return resultMap;
     }
 
+    /**
+     * 油卡充值
+     */
     private Map<String, String> gasRecharge(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo)
     {
         Boolean gasIsTrue = Pattern.compile(res_gas).matcher(orderInfo.getChargeNo()).matches();
@@ -715,11 +722,11 @@ public class OrdersController {
             throw new JpfInterfaceException( JpfInterfaceErrorInfo.FAIL.getCode(), queryGasResponseMap.get("err_msg"));
         }
 
-        //话费充值
+        //油卡直充
         Map<String, Object> rechargeMap = new HashMap<>();
         Map<String, String> resultMap = new HashMap<>();
 
-        rechargeMap.put("cardnum", productInfo.getRechargeMoney().toString());
+        rechargeMap.put("cardnum", 1);  // 直充时这里表示数量
         rechargeMap.put("cardid", productInfo.getCardid());
         rechargeMap.put("sporder_id", orderInfo.getOrderNo());
         rechargeMap.put("sporder_time", orderInfo.getAddtime());

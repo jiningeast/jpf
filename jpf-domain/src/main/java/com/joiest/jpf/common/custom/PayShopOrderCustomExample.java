@@ -1,5 +1,7 @@
 package com.joiest.jpf.common.custom;
 
+import com.joiest.jpf.common.custom.PayShopOrderCustomExample;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,7 +12,7 @@ public class PayShopOrderCustomExample {
 
     protected boolean distinct;
 
-    protected List<Criteria> oredCriteria;
+    protected List<PayShopOrderCustomExample.Criteria> oredCriteria;
 
     protected long pageNo;
 
@@ -20,7 +22,7 @@ public class PayShopOrderCustomExample {
      *
      */
     public PayShopOrderCustomExample() {
-        oredCriteria = new ArrayList<Criteria>();
+        oredCriteria = new ArrayList<PayShopOrderCustomExample.Criteria>();
     }
 
     /**
@@ -56,7 +58,7 @@ public class PayShopOrderCustomExample {
     /**
      *
      */
-    public List<Criteria> getOredCriteria() {
+    public List<PayShopOrderCustomExample.Criteria> getOredCriteria() {
         return oredCriteria;
     }
 
@@ -68,14 +70,15 @@ public class PayShopOrderCustomExample {
         oredCriteria.add(criteria);
     }
 
+
     /**
      *
+     * @param criteria
      */
-    public Criteria or() {
-        Criteria criteria = createCriteriaInternal();
+  /*  public void or(Criteria criteria) {
         oredCriteria.add(criteria);
-        return criteria;
-    }
+    }*/
+
 
     /**
      * 新加的 and
@@ -84,13 +87,20 @@ public class PayShopOrderCustomExample {
     public void  and(Criteria criteria) {
         oredCriteria.add(criteria);
     }
-
+    /**
+     *
+     */
+    public PayShopOrderCustomExample.Criteria or() {
+        PayShopOrderCustomExample.Criteria criteria = createCriteriaInternal();
+        oredCriteria.add(criteria);
+        return criteria;
+    }
 
     /**
      *
      */
-    public Criteria createCriteria() {
-        Criteria criteria = createCriteriaInternal();
+    public PayShopOrderCustomExample.Criteria createCriteria() {
+        PayShopOrderCustomExample.Criteria criteria = createCriteriaInternal();
         if (oredCriteria.size() == 0) {
             oredCriteria.add(criteria);
         }
@@ -100,8 +110,8 @@ public class PayShopOrderCustomExample {
     /**
      *
      */
-    protected Criteria createCriteriaInternal() {
-        Criteria criteria = new Criteria();
+    protected PayShopOrderCustomExample.Criteria createCriteriaInternal() {
+        PayShopOrderCustomExample.Criteria criteria = new PayShopOrderCustomExample.Criteria();
         return criteria;
     }
 
@@ -145,22 +155,22 @@ public class PayShopOrderCustomExample {
     }
 
     protected abstract static class GeneratedCriteria {
-        protected List<Criterion> criteria;
+        protected List<PayShopOrderCustomExample.Criterion> criteria;
 
         protected GeneratedCriteria() {
             super();
-            criteria = new ArrayList<Criterion>();
+            criteria = new ArrayList<PayShopOrderCustomExample.Criterion>();
         }
 
         public boolean isValid() {
             return criteria.size() > 0;
         }
 
-        public List<Criterion> getAllCriteria() {
+        public List<PayShopOrderCustomExample.Criterion> getAllCriteria() {
             return criteria;
         }
 
-        public List<Criterion> getCriteria() {
+        public List<PayShopOrderCustomExample.Criterion> getCriteria() {
             return criteria;
         }
 
@@ -168,1930 +178,2335 @@ public class PayShopOrderCustomExample {
             if (condition == null) {
                 throw new RuntimeException("Value for condition cannot be null");
             }
-            criteria.add(new Criterion(condition));
+            criteria.add(new PayShopOrderCustomExample.Criterion(condition));
         }
 
         protected void addCriterion(String condition, Object value, String property) {
             if (value == null) {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
-            criteria.add(new Criterion(condition, value));
+            criteria.add(new PayShopOrderCustomExample.Criterion(condition, value));
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
-            criteria.add(new Criterion(condition, value1, value2));
+            criteria.add(new PayShopOrderCustomExample.Criterion(condition, value1, value2));
         }
 
-        public Criteria andIdIsNull() {
+        public PayShopOrderCustomExample.Criteria andIdIsNull() {
             addCriterion("id is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andIdIsNotNull() {
             addCriterion("id is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andIdEqualTo(String value) {
             addCriterion("id =", value, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andIdNotEqualTo(String value) {
             addCriterion("id <>", value, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andIdGreaterThan(String value) {
             addCriterion("id >", value, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andIdGreaterThanOrEqualTo(String value) {
             addCriterion("id >=", value, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andIdLessThan(String value) {
             addCriterion("id <", value, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andIdLessThanOrEqualTo(String value) {
             addCriterion("id <=", value, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andIdIn(List<String> values) {
             addCriterion("id in", values, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andIdNotIn(List<String> values) {
             addCriterion("id not in", values, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andIdBetween(String value1, String value2) {
             addCriterion("id between", value1, value2, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andIdNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoIsNull() {
+        public PayShopOrderCustomExample.Criteria andOrderNoIsNull() {
             addCriterion("order_no is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andOrderNoIsNotNull() {
             addCriterion("order_no is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoEqualTo(String value) {
             addCriterion("order_no =", value, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoNotEqualTo(String value) {
             addCriterion("order_no <>", value, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoGreaterThan(String value) {
             addCriterion("order_no >", value, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoGreaterThanOrEqualTo(String value) {
             addCriterion("order_no >=", value, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoLessThan(String value) {
             addCriterion("order_no <", value, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoLessThanOrEqualTo(String value) {
             addCriterion("order_no <=", value, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoLike(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoLike(String value) {
             addCriterion("order_no like", value, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoNotLike(String value) {
             addCriterion("order_no not like", value, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andOrderNoIn(List<String> values) {
             addCriterion("order_no in", values, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andOrderNoNotIn(List<String> values) {
             addCriterion("order_no not in", values, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andOrderNoBetween(String value1, String value2) {
             addCriterion("order_no between", value1, value2, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andOrderNoNotBetween(String value1, String value2) {
             addCriterion("order_no not between", value1, value2, "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeIsNull() {
+        public PayShopOrderCustomExample.Criteria andChargeTypeIsNull() {
             addCriterion("charge_type is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andChargeTypeIsNotNull() {
             addCriterion("charge_type is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeEqualTo(Byte value) {
             addCriterion("charge_type =", value, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeNotEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeNotEqualTo(Byte value) {
             addCriterion("charge_type <>", value, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeGreaterThan(Byte value) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeGreaterThan(Byte value) {
             addCriterion("charge_type >", value, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeGreaterThanOrEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeGreaterThanOrEqualTo(Byte value) {
             addCriterion("charge_type >=", value, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeLessThan(Byte value) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeLessThan(Byte value) {
             addCriterion("charge_type <", value, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeLessThanOrEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeLessThanOrEqualTo(Byte value) {
             addCriterion("charge_type <=", value, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeIn(List<Byte> values) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeIn(List<Byte> values) {
             addCriterion("charge_type in", values, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeNotIn(List<Byte> values) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeNotIn(List<Byte> values) {
             addCriterion("charge_type not in", values, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeBetween(Byte value1, Byte value2) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeBetween(Byte value1, Byte value2) {
             addCriterion("charge_type between", value1, value2, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeTypeNotBetween(Byte value1, Byte value2) {
+        public PayShopOrderCustomExample.Criteria andChargeTypeNotBetween(Byte value1, Byte value2) {
             addCriterion("charge_type not between", value1, value2, "chargeType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdIsNull() {
+        public PayShopOrderCustomExample.Criteria andStockCardIdIsNull() {
             addCriterion("stock_card_id is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andStockCardIdIsNotNull() {
             addCriterion("stock_card_id is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdEqualTo(String value) {
             addCriterion("stock_card_id =", value, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdNotEqualTo(String value) {
             addCriterion("stock_card_id <>", value, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdGreaterThan(String value) {
             addCriterion("stock_card_id >", value, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdGreaterThanOrEqualTo(String value) {
             addCriterion("stock_card_id >=", value, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdLessThan(String value) {
             addCriterion("stock_card_id <", value, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdLessThanOrEqualTo(String value) {
             addCriterion("stock_card_id <=", value, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdIn(List<String> values) {
             addCriterion("stock_card_id in", values, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdNotIn(List<String> values) {
             addCriterion("stock_card_id not in", values, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdBetween(String value1, String value2) {
             addCriterion("stock_card_id between", value1, value2, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStockCardIdNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andStockCardIdNotBetween(String value1, String value2) {
             addCriterion("stock_card_id not between", value1, value2, "stockCardId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeIsNull() {
+        public PayShopOrderCustomExample.Criteria andOrderTypeIsNull() {
             addCriterion("order_type is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andOrderTypeIsNotNull() {
             addCriterion("order_type is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeEqualTo(Byte value) {
             addCriterion("order_type =", value, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeNotEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeNotEqualTo(Byte value) {
             addCriterion("order_type <>", value, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeGreaterThan(Byte value) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeGreaterThan(Byte value) {
             addCriterion("order_type >", value, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeGreaterThanOrEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeGreaterThanOrEqualTo(Byte value) {
             addCriterion("order_type >=", value, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeLessThan(Byte value) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeLessThan(Byte value) {
             addCriterion("order_type <", value, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeLessThanOrEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeLessThanOrEqualTo(Byte value) {
             addCriterion("order_type <=", value, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeIn(List<Byte> values) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeIn(List<Byte> values) {
             addCriterion("order_type in", values, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeNotIn(List<Byte> values) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeNotIn(List<Byte> values) {
             addCriterion("order_type not in", values, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeBetween(Byte value1, Byte value2) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeBetween(Byte value1, Byte value2) {
             addCriterion("order_type between", value1, value2, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderTypeNotBetween(Byte value1, Byte value2) {
+        public PayShopOrderCustomExample.Criteria andOrderTypeNotBetween(Byte value1, Byte value2) {
             addCriterion("order_type not between", value1, value2, "orderType");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoIsNull() {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoIsNull() {
             addCriterion("foreign_order_no is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoIsNotNull() {
             addCriterion("foreign_order_no is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoEqualTo(String value) {
             addCriterion("foreign_order_no =", value, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoNotEqualTo(String value) {
             addCriterion("foreign_order_no <>", value, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoGreaterThan(String value) {
             addCriterion("foreign_order_no >", value, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoGreaterThanOrEqualTo(String value) {
             addCriterion("foreign_order_no >=", value, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoLessThan(String value) {
             addCriterion("foreign_order_no <", value, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoLessThanOrEqualTo(String value) {
             addCriterion("foreign_order_no <=", value, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoLike(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoLike(String value) {
             addCriterion("foreign_order_no like", value, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoNotLike(String value) {
             addCriterion("foreign_order_no not like", value, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoIn(List<String> values) {
             addCriterion("foreign_order_no in", values, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoNotIn(List<String> values) {
             addCriterion("foreign_order_no not in", values, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoBetween(String value1, String value2) {
             addCriterion("foreign_order_no between", value1, value2, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoNotBetween(String value1, String value2) {
             addCriterion("foreign_order_no not between", value1, value2, "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentIsNull() {
+        public PayShopOrderCustomExample.Criteria andRequestedContentIsNull() {
             addCriterion("requested_content is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andRequestedContentIsNotNull() {
             addCriterion("requested_content is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentEqualTo(String value) {
             addCriterion("requested_content =", value, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentNotEqualTo(String value) {
             addCriterion("requested_content <>", value, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentGreaterThan(String value) {
             addCriterion("requested_content >", value, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentGreaterThanOrEqualTo(String value) {
             addCriterion("requested_content >=", value, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentLessThan(String value) {
             addCriterion("requested_content <", value, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentLessThanOrEqualTo(String value) {
             addCriterion("requested_content <=", value, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentLike(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentLike(String value) {
             addCriterion("requested_content like", value, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentNotLike(String value) {
             addCriterion("requested_content not like", value, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentIn(List<String> values) {
             addCriterion("requested_content in", values, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentNotIn(List<String> values) {
             addCriterion("requested_content not in", values, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentBetween(String value1, String value2) {
             addCriterion("requested_content between", value1, value2, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentNotBetween(String value1, String value2) {
             addCriterion("requested_content not between", value1, value2, "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentIsNull() {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentIsNull() {
             addCriterion("foreign_request_content is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentIsNotNull() {
             addCriterion("foreign_request_content is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentEqualTo(String value) {
             addCriterion("foreign_request_content =", value, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentNotEqualTo(String value) {
             addCriterion("foreign_request_content <>", value, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentGreaterThan(String value) {
             addCriterion("foreign_request_content >", value, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentGreaterThanOrEqualTo(String value) {
             addCriterion("foreign_request_content >=", value, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentLessThan(String value) {
             addCriterion("foreign_request_content <", value, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentLessThanOrEqualTo(String value) {
             addCriterion("foreign_request_content <=", value, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentLike(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentLike(String value) {
             addCriterion("foreign_request_content like", value, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentNotLike(String value) {
             addCriterion("foreign_request_content not like", value, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentIn(List<String> values) {
             addCriterion("foreign_request_content in", values, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentNotIn(List<String> values) {
             addCriterion("foreign_request_content not in", values, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentBetween(String value1, String value2) {
             addCriterion("foreign_request_content between", value1, value2, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentNotBetween(String value1, String value2) {
             addCriterion("foreign_request_content not between", value1, value2, "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentIsNull() {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentIsNull() {
             addCriterion("foreign_response_content is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentIsNotNull() {
             addCriterion("foreign_response_content is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentEqualTo(String value) {
             addCriterion("foreign_response_content =", value, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentNotEqualTo(String value) {
             addCriterion("foreign_response_content <>", value, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentGreaterThan(String value) {
             addCriterion("foreign_response_content >", value, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentGreaterThanOrEqualTo(String value) {
             addCriterion("foreign_response_content >=", value, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentLessThan(String value) {
             addCriterion("foreign_response_content <", value, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentLessThanOrEqualTo(String value) {
             addCriterion("foreign_response_content <=", value, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentLike(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentLike(String value) {
             addCriterion("foreign_response_content like", value, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentNotLike(String value) {
             addCriterion("foreign_response_content not like", value, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentIn(List<String> values) {
             addCriterion("foreign_response_content in", values, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentNotIn(List<String> values) {
             addCriterion("foreign_response_content not in", values, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentBetween(String value1, String value2) {
             addCriterion("foreign_response_content between", value1, value2, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentNotBetween(String value1, String value2) {
             addCriterion("foreign_response_content not between", value1, value2, "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdIsNull() {
+        public PayShopOrderCustomExample.Criteria andCustomerIdIsNull() {
             addCriterion("customer_id is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andCustomerIdIsNotNull() {
             addCriterion("customer_id is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdEqualTo(String value) {
             addCriterion("customer_id =", value, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdNotEqualTo(String value) {
             addCriterion("customer_id <>", value, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdGreaterThan(String value) {
             addCriterion("customer_id >", value, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdGreaterThanOrEqualTo(String value) {
             addCriterion("customer_id >=", value, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdLessThan(String value) {
             addCriterion("customer_id <", value, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdLessThanOrEqualTo(String value) {
             addCriterion("customer_id <=", value, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdIn(List<String> values) {
             addCriterion("customer_id in", values, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdNotIn(List<String> values) {
             addCriterion("customer_id not in", values, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdBetween(String value1, String value2) {
             addCriterion("customer_id between", value1, value2, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerIdNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andCustomerIdNotBetween(String value1, String value2) {
             addCriterion("customer_id not between", value1, value2, "customerId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameIsNull() {
+        public PayShopOrderCustomExample.Criteria andCustomerNameIsNull() {
             addCriterion("customer_name is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andCustomerNameIsNotNull() {
             addCriterion("customer_name is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameEqualTo(String value) {
             addCriterion("customer_name =", value, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameNotEqualTo(String value) {
             addCriterion("customer_name <>", value, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameGreaterThan(String value) {
             addCriterion("customer_name >", value, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameGreaterThanOrEqualTo(String value) {
             addCriterion("customer_name >=", value, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameLessThan(String value) {
             addCriterion("customer_name <", value, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameLessThanOrEqualTo(String value) {
             addCriterion("customer_name <=", value, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameLike(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameLike(String value) {
             addCriterion("customer_name like", value, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameNotLike(String value) {
             addCriterion("customer_name not like", value, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameIn(List<String> values) {
             addCriterion("customer_name in", values, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameNotIn(List<String> values) {
             addCriterion("customer_name not in", values, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameBetween(String value1, String value2) {
             addCriterion("customer_name between", value1, value2, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameNotBetween(String value1, String value2) {
             addCriterion("customer_name not between", value1, value2, "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdIsNull() {
+        public PayShopOrderCustomExample.Criteria andProductIdIsNull() {
             addCriterion("product_id is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andProductIdIsNotNull() {
             addCriterion("product_id is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andProductIdEqualTo(String value) {
             addCriterion("product_id =", value, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andProductIdNotEqualTo(String value) {
             addCriterion("product_id <>", value, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andProductIdGreaterThan(String value) {
             addCriterion("product_id >", value, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andProductIdGreaterThanOrEqualTo(String value) {
             addCriterion("product_id >=", value, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andProductIdLessThan(String value) {
             addCriterion("product_id <", value, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andProductIdLessThanOrEqualTo(String value) {
             addCriterion("product_id <=", value, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andProductIdIn(List<String> values) {
             addCriterion("product_id in", values, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andProductIdNotIn(List<String> values) {
             addCriterion("product_id not in", values, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andProductIdBetween(String value1, String value2) {
             addCriterion("product_id between", value1, value2, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductIdNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andProductIdNotBetween(String value1, String value2) {
             addCriterion("product_id not between", value1, value2, "productId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameIsNull() {
+        public PayShopOrderCustomExample.Criteria andProductNameIsNull() {
             addCriterion("product_name is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andProductNameIsNotNull() {
             addCriterion("product_name is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameEqualTo(String value) {
             addCriterion("product_name =", value, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameNotEqualTo(String value) {
             addCriterion("product_name <>", value, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameGreaterThan(String value) {
             addCriterion("product_name >", value, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameGreaterThanOrEqualTo(String value) {
             addCriterion("product_name >=", value, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameLessThan(String value) {
             addCriterion("product_name <", value, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameLessThanOrEqualTo(String value) {
             addCriterion("product_name <=", value, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameLike(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameLike(String value) {
             addCriterion("product_name like", value, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameNotLike(String value) {
             addCriterion("product_name not like", value, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andProductNameIn(List<String> values) {
             addCriterion("product_name in", values, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andProductNameNotIn(List<String> values) {
             addCriterion("product_name not in", values, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andProductNameBetween(String value1, String value2) {
             addCriterion("product_name between", value1, value2, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andProductNameNotBetween(String value1, String value2) {
             addCriterion("product_name not between", value1, value2, "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyIsNull() {
+        public PayShopOrderCustomExample.Criteria andProductMoneyIsNull() {
             addCriterion("product_money is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andProductMoneyIsNotNull() {
             addCriterion("product_money is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyEqualTo(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyEqualTo(BigDecimal value) {
             addCriterion("product_money =", value, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyNotEqualTo(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyNotEqualTo(BigDecimal value) {
             addCriterion("product_money <>", value, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyGreaterThan(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyGreaterThan(BigDecimal value) {
             addCriterion("product_money >", value, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyGreaterThanOrEqualTo(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("product_money >=", value, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyLessThan(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyLessThan(BigDecimal value) {
             addCriterion("product_money <", value, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyLessThanOrEqualTo(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyLessThanOrEqualTo(BigDecimal value) {
             addCriterion("product_money <=", value, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyIn(List<BigDecimal> values) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyIn(List<BigDecimal> values) {
             addCriterion("product_money in", values, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyNotIn(List<BigDecimal> values) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyNotIn(List<BigDecimal> values) {
             addCriterion("product_money not in", values, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyBetween(BigDecimal value1, BigDecimal value2) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("product_money between", value1, value2, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+        public PayShopOrderCustomExample.Criteria andProductMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("product_money not between", value1, value2, "productMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouIsNull() {
+        public PayShopOrderCustomExample.Criteria andProductDouIsNull() {
             addCriterion("product_dou is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andProductDouIsNotNull() {
             addCriterion("product_dou is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductDouEqualTo(Integer value) {
             addCriterion("product_dou =", value, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouNotEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductDouNotEqualTo(Integer value) {
             addCriterion("product_dou <>", value, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouGreaterThan(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductDouGreaterThan(Integer value) {
             addCriterion("product_dou >", value, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouGreaterThanOrEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductDouGreaterThanOrEqualTo(Integer value) {
             addCriterion("product_dou >=", value, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouLessThan(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductDouLessThan(Integer value) {
             addCriterion("product_dou <", value, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouLessThanOrEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductDouLessThanOrEqualTo(Integer value) {
             addCriterion("product_dou <=", value, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouIn(List<Integer> values) {
+        public PayShopOrderCustomExample.Criteria andProductDouIn(List<Integer> values) {
             addCriterion("product_dou in", values, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouNotIn(List<Integer> values) {
+        public PayShopOrderCustomExample.Criteria andProductDouNotIn(List<Integer> values) {
             addCriterion("product_dou not in", values, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouBetween(Integer value1, Integer value2) {
+        public PayShopOrderCustomExample.Criteria andProductDouBetween(Integer value1, Integer value2) {
             addCriterion("product_dou between", value1, value2, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductDouNotBetween(Integer value1, Integer value2) {
+        public PayShopOrderCustomExample.Criteria andProductDouNotBetween(Integer value1, Integer value2) {
             addCriterion("product_dou not between", value1, value2, "productDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdIsNull() {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdIsNull() {
             addCriterion("product_info_id is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdIsNotNull() {
             addCriterion("product_info_id is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdEqualTo(Integer value) {
             addCriterion("product_info_id =", value, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdNotEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdNotEqualTo(Integer value) {
             addCriterion("product_info_id <>", value, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdGreaterThan(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdGreaterThan(Integer value) {
             addCriterion("product_info_id >", value, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdGreaterThanOrEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("product_info_id >=", value, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdLessThan(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdLessThan(Integer value) {
             addCriterion("product_info_id <", value, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdLessThanOrEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdLessThanOrEqualTo(Integer value) {
             addCriterion("product_info_id <=", value, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdIn(List<Integer> values) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdIn(List<Integer> values) {
             addCriterion("product_info_id in", values, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdNotIn(List<Integer> values) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdNotIn(List<Integer> values) {
             addCriterion("product_info_id not in", values, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdBetween(Integer value1, Integer value2) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdBetween(Integer value1, Integer value2) {
             addCriterion("product_info_id between", value1, value2, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductInfoIdNotBetween(Integer value1, Integer value2) {
+        public PayShopOrderCustomExample.Criteria andProductInfoIdNotBetween(Integer value1, Integer value2) {
             addCriterion("product_info_id not between", value1, value2, "productInfoId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountIsNull() {
+        public PayShopOrderCustomExample.Criteria andAmountIsNull() {
             addCriterion("amount is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andAmountIsNotNull() {
             addCriterion("amount is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andAmountEqualTo(Integer value) {
             addCriterion("amount =", value, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountNotEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andAmountNotEqualTo(Integer value) {
             addCriterion("amount <>", value, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountGreaterThan(Integer value) {
+        public PayShopOrderCustomExample.Criteria andAmountGreaterThan(Integer value) {
             addCriterion("amount >", value, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountGreaterThanOrEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andAmountGreaterThanOrEqualTo(Integer value) {
             addCriterion("amount >=", value, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountLessThan(Integer value) {
+        public PayShopOrderCustomExample.Criteria andAmountLessThan(Integer value) {
             addCriterion("amount <", value, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountLessThanOrEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andAmountLessThanOrEqualTo(Integer value) {
             addCriterion("amount <=", value, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountIn(List<Integer> values) {
+        public PayShopOrderCustomExample.Criteria andAmountIn(List<Integer> values) {
             addCriterion("amount in", values, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountNotIn(List<Integer> values) {
+        public PayShopOrderCustomExample.Criteria andAmountNotIn(List<Integer> values) {
             addCriterion("amount not in", values, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountBetween(Integer value1, Integer value2) {
+        public PayShopOrderCustomExample.Criteria andAmountBetween(Integer value1, Integer value2) {
             addCriterion("amount between", value1, value2, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAmountNotBetween(Integer value1, Integer value2) {
+        public PayShopOrderCustomExample.Criteria andAmountNotBetween(Integer value1, Integer value2) {
             addCriterion("amount not between", value1, value2, "amount");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyIsNull() {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyIsNull() {
             addCriterion("total_money is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyIsNotNull() {
             addCriterion("total_money is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyEqualTo(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyEqualTo(BigDecimal value) {
             addCriterion("total_money =", value, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyNotEqualTo(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyNotEqualTo(BigDecimal value) {
             addCriterion("total_money <>", value, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyGreaterThan(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyGreaterThan(BigDecimal value) {
             addCriterion("total_money >", value, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyGreaterThanOrEqualTo(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("total_money >=", value, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyLessThan(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyLessThan(BigDecimal value) {
             addCriterion("total_money <", value, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyLessThanOrEqualTo(BigDecimal value) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyLessThanOrEqualTo(BigDecimal value) {
             addCriterion("total_money <=", value, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyIn(List<BigDecimal> values) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyIn(List<BigDecimal> values) {
             addCriterion("total_money in", values, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyNotIn(List<BigDecimal> values) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyNotIn(List<BigDecimal> values) {
             addCriterion("total_money not in", values, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyBetween(BigDecimal value1, BigDecimal value2) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_money between", value1, value2, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+        public PayShopOrderCustomExample.Criteria andTotalMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_money not between", value1, value2, "totalMoney");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouIsNull() {
+        public PayShopOrderCustomExample.Criteria andTotalDouIsNull() {
             addCriterion("total_dou is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andTotalDouIsNotNull() {
             addCriterion("total_dou is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andTotalDouEqualTo(Integer value) {
             addCriterion("total_dou =", value, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouNotEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andTotalDouNotEqualTo(Integer value) {
             addCriterion("total_dou <>", value, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouGreaterThan(Integer value) {
+        public PayShopOrderCustomExample.Criteria andTotalDouGreaterThan(Integer value) {
             addCriterion("total_dou >", value, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouGreaterThanOrEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andTotalDouGreaterThanOrEqualTo(Integer value) {
             addCriterion("total_dou >=", value, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouLessThan(Integer value) {
+        public PayShopOrderCustomExample.Criteria andTotalDouLessThan(Integer value) {
             addCriterion("total_dou <", value, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouLessThanOrEqualTo(Integer value) {
+        public PayShopOrderCustomExample.Criteria andTotalDouLessThanOrEqualTo(Integer value) {
             addCriterion("total_dou <=", value, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouIn(List<Integer> values) {
+        public PayShopOrderCustomExample.Criteria andTotalDouIn(List<Integer> values) {
             addCriterion("total_dou in", values, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouNotIn(List<Integer> values) {
+        public PayShopOrderCustomExample.Criteria andTotalDouNotIn(List<Integer> values) {
             addCriterion("total_dou not in", values, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouBetween(Integer value1, Integer value2) {
+        public PayShopOrderCustomExample.Criteria andTotalDouBetween(Integer value1, Integer value2) {
             addCriterion("total_dou between", value1, value2, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andTotalDouNotBetween(Integer value1, Integer value2) {
+        public PayShopOrderCustomExample.Criteria andTotalDouNotBetween(Integer value1, Integer value2) {
             addCriterion("total_dou not between", value1, value2, "totalDou");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayIsNull() {
+        public PayShopOrderCustomExample.Criteria andPayWayIsNull() {
             addCriterion("pay_way is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andPayWayIsNotNull() {
             addCriterion("pay_way is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andPayWayEqualTo(Byte value) {
             addCriterion("pay_way =", value, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayNotEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andPayWayNotEqualTo(Byte value) {
             addCriterion("pay_way <>", value, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayGreaterThan(Byte value) {
+        public PayShopOrderCustomExample.Criteria andPayWayGreaterThan(Byte value) {
             addCriterion("pay_way >", value, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayGreaterThanOrEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andPayWayGreaterThanOrEqualTo(Byte value) {
             addCriterion("pay_way >=", value, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayLessThan(Byte value) {
+        public PayShopOrderCustomExample.Criteria andPayWayLessThan(Byte value) {
             addCriterion("pay_way <", value, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayLessThanOrEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andPayWayLessThanOrEqualTo(Byte value) {
             addCriterion("pay_way <=", value, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayIn(List<Byte> values) {
+        public PayShopOrderCustomExample.Criteria andPayWayIn(List<Byte> values) {
             addCriterion("pay_way in", values, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayNotIn(List<Byte> values) {
+        public PayShopOrderCustomExample.Criteria andPayWayNotIn(List<Byte> values) {
             addCriterion("pay_way not in", values, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayBetween(Byte value1, Byte value2) {
+        public PayShopOrderCustomExample.Criteria andPayWayBetween(Byte value1, Byte value2) {
             addCriterion("pay_way between", value1, value2, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPayWayNotBetween(Byte value1, Byte value2) {
+        public PayShopOrderCustomExample.Criteria andPayWayNotBetween(Byte value1, Byte value2) {
             addCriterion("pay_way not between", value1, value2, "payWay");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoIsNull() {
+        public PayShopOrderCustomExample.Criteria andChargeNoIsNull() {
             addCriterion("charge_no is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andChargeNoIsNotNull() {
             addCriterion("charge_no is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoEqualTo(String value) {
             addCriterion("charge_no =", value, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoNotEqualTo(String value) {
             addCriterion("charge_no <>", value, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoGreaterThan(String value) {
             addCriterion("charge_no >", value, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoGreaterThanOrEqualTo(String value) {
             addCriterion("charge_no >=", value, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoLessThan(String value) {
             addCriterion("charge_no <", value, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoLessThanOrEqualTo(String value) {
             addCriterion("charge_no <=", value, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoLike(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoLike(String value) {
             addCriterion("charge_no like", value, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoNotLike(String value) {
             addCriterion("charge_no not like", value, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andChargeNoIn(List<String> values) {
             addCriterion("charge_no in", values, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andChargeNoNotIn(List<String> values) {
             addCriterion("charge_no not in", values, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andChargeNoBetween(String value1, String value2) {
             addCriterion("charge_no between", value1, value2, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andChargeNoNotBetween(String value1, String value2) {
             addCriterion("charge_no not between", value1, value2, "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailIsNull() {
+        public PayShopOrderCustomExample.Criteria andCouponDetailIsNull() {
             addCriterion("coupon_detail is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andCouponDetailIsNotNull() {
             addCriterion("coupon_detail is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailEqualTo(String value) {
             addCriterion("coupon_detail =", value, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailNotEqualTo(String value) {
             addCriterion("coupon_detail <>", value, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailGreaterThan(String value) {
             addCriterion("coupon_detail >", value, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailGreaterThanOrEqualTo(String value) {
             addCriterion("coupon_detail >=", value, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailLessThan(String value) {
             addCriterion("coupon_detail <", value, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailLessThanOrEqualTo(String value) {
             addCriterion("coupon_detail <=", value, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailLike(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailLike(String value) {
             addCriterion("coupon_detail like", value, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailNotLike(String value) {
             addCriterion("coupon_detail not like", value, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailIn(List<String> values) {
             addCriterion("coupon_detail in", values, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailNotIn(List<String> values) {
             addCriterion("coupon_detail not in", values, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailBetween(String value1, String value2) {
             addCriterion("coupon_detail between", value1, value2, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailNotBetween(String value1, String value2) {
             addCriterion("coupon_detail not between", value1, value2, "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusIsNull() {
+        public PayShopOrderCustomExample.Criteria andStatusIsNull() {
             addCriterion("status is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andStatusIsNotNull() {
             addCriterion("status is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andStatusEqualTo(Byte value) {
             addCriterion("status =", value, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andStatusNotEqualTo(Byte value) {
             addCriterion("status <>", value, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Byte value) {
+        public PayShopOrderCustomExample.Criteria andStatusGreaterThan(Byte value) {
             addCriterion("status >", value, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andStatusGreaterThanOrEqualTo(Byte value) {
             addCriterion("status >=", value, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Byte value) {
+        public PayShopOrderCustomExample.Criteria andStatusLessThan(Byte value) {
             addCriterion("status <", value, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Byte value) {
+        public PayShopOrderCustomExample.Criteria andStatusLessThanOrEqualTo(Byte value) {
             addCriterion("status <=", value, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Byte> values) {
+        public PayShopOrderCustomExample.Criteria andStatusIn(List<Byte> values) {
             addCriterion("status in", values, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Byte> values) {
+        public PayShopOrderCustomExample.Criteria andStatusNotIn(List<Byte> values) {
             addCriterion("status not in", values, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusBetween(Byte value1, Byte value2) {
+        public PayShopOrderCustomExample.Criteria andStatusBetween(Byte value1, Byte value2) {
             addCriterion("status between", value1, value2, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
+        public PayShopOrderCustomExample.Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusIsNull() {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusIsNull() {
             addCriterion("recharge_status is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusIsNotNull() {
             addCriterion("recharge_status is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusEqualTo(String value) {
             addCriterion("recharge_status =", value, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusNotEqualTo(String value) {
             addCriterion("recharge_status <>", value, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusGreaterThan(String value) {
             addCriterion("recharge_status >", value, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusGreaterThanOrEqualTo(String value) {
             addCriterion("recharge_status >=", value, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusLessThan(String value) {
             addCriterion("recharge_status <", value, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusLessThanOrEqualTo(String value) {
             addCriterion("recharge_status <=", value, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusLike(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusLike(String value) {
             addCriterion("recharge_status like", value, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusNotLike(String value) {
             addCriterion("recharge_status not like", value, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusIn(List<String> values) {
             addCriterion("recharge_status in", values, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusNotIn(List<String> values) {
             addCriterion("recharge_status not in", values, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusBetween(String value1, String value2) {
             addCriterion("recharge_status between", value1, value2, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusNotBetween(String value1, String value2) {
             addCriterion("recharge_status not between", value1, value2, "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeIsNull() {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeIsNull() {
             addCriterion("recharge_time is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeIsNotNull() {
             addCriterion("recharge_time is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeEqualTo(Date value) {
             addCriterion("recharge_time =", value, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeNotEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeNotEqualTo(Date value) {
             addCriterion("recharge_time <>", value, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeGreaterThan(Date value) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeGreaterThan(Date value) {
             addCriterion("recharge_time >", value, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeGreaterThanOrEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeGreaterThanOrEqualTo(Date value) {
             addCriterion("recharge_time >=", value, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeLessThan(Date value) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeLessThan(Date value) {
             addCriterion("recharge_time <", value, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeLessThanOrEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeLessThanOrEqualTo(Date value) {
             addCriterion("recharge_time <=", value, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeIn(List<Date> values) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeIn(List<Date> values) {
             addCriterion("recharge_time in", values, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeNotIn(List<Date> values) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeNotIn(List<Date> values) {
             addCriterion("recharge_time not in", values, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeBetween(Date value1, Date value2) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeBetween(Date value1, Date value2) {
             addCriterion("recharge_time between", value1, value2, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeTimeNotBetween(Date value1, Date value2) {
+        public PayShopOrderCustomExample.Criteria andRechargeTimeNotBetween(Date value1, Date value2) {
             addCriterion("recharge_time not between", value1, value2, "rechargeTime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdIsNull() {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdIsNull() {
             addCriterion("coupon_active_id is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdIsNotNull() {
             addCriterion("coupon_active_id is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdEqualTo(String value) {
             addCriterion("coupon_active_id =", value, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdNotEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdNotEqualTo(String value) {
             addCriterion("coupon_active_id <>", value, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdGreaterThan(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdGreaterThan(String value) {
             addCriterion("coupon_active_id >", value, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdGreaterThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdGreaterThanOrEqualTo(String value) {
             addCriterion("coupon_active_id >=", value, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdLessThan(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdLessThan(String value) {
             addCriterion("coupon_active_id <", value, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdLessThanOrEqualTo(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdLessThanOrEqualTo(String value) {
             addCriterion("coupon_active_id <=", value, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdLike(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdLike(String value) {
             addCriterion("coupon_active_id like", value, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdNotLike(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdNotLike(String value) {
             addCriterion("coupon_active_id not like", value, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdIn(List<String> values) {
             addCriterion("coupon_active_id in", values, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdNotIn(List<String> values) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdNotIn(List<String> values) {
             addCriterion("coupon_active_id not in", values, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdBetween(String value1, String value2) {
             addCriterion("coupon_active_id between", value1, value2, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdNotBetween(String value1, String value2) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdNotBetween(String value1, String value2) {
             addCriterion("coupon_active_id not between", value1, value2, "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeIsNull() {
+        public PayShopOrderCustomExample.Criteria andReceiveTypeIsNull() {
+            addCriterion("receive_type is null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeIsNotNull() {
+            addCriterion("receive_type is not null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeEqualTo(Byte value) {
+            addCriterion("receive_type =", value, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeNotEqualTo(Byte value) {
+            addCriterion("receive_type <>", value, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeGreaterThan(Byte value) {
+            addCriterion("receive_type >", value, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("receive_type >=", value, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeLessThan(Byte value) {
+            addCriterion("receive_type <", value, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("receive_type <=", value, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeIn(List<Byte> values) {
+            addCriterion("receive_type in", values, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeNotIn(List<Byte> values) {
+            addCriterion("receive_type not in", values, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeBetween(Byte value1, Byte value2) {
+            addCriterion("receive_type between", value1, value2, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("receive_type not between", value1, value2, "receiveType");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueIsNull() {
+            addCriterion("receive_value is null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueIsNotNull() {
+            addCriterion("receive_value is not null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueEqualTo(String value) {
+            addCriterion("receive_value =", value, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueNotEqualTo(String value) {
+            addCriterion("receive_value <>", value, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueGreaterThan(String value) {
+            addCriterion("receive_value >", value, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueGreaterThanOrEqualTo(String value) {
+            addCriterion("receive_value >=", value, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueLessThan(String value) {
+            addCriterion("receive_value <", value, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueLessThanOrEqualTo(String value) {
+            addCriterion("receive_value <=", value, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueLike(String value) {
+            addCriterion("receive_value like", value, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueNotLike(String value) {
+            addCriterion("receive_value not like", value, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueIn(List<String> values) {
+            addCriterion("receive_value in", values, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueNotIn(List<String> values) {
+            addCriterion("receive_value not in", values, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueBetween(String value1, String value2) {
+            addCriterion("receive_value between", value1, value2, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueNotBetween(String value1, String value2) {
+            addCriterion("receive_value not between", value1, value2, "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlIsNull() {
+            addCriterion("oss_url is null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlIsNotNull() {
+            addCriterion("oss_url is not null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlEqualTo(String value) {
+            addCriterion("oss_url =", value, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlNotEqualTo(String value) {
+            addCriterion("oss_url <>", value, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlGreaterThan(String value) {
+            addCriterion("oss_url >", value, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("oss_url >=", value, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlLessThan(String value) {
+            addCriterion("oss_url <", value, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlLessThanOrEqualTo(String value) {
+            addCriterion("oss_url <=", value, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlLike(String value) {
+            addCriterion("oss_url like", value, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlNotLike(String value) {
+            addCriterion("oss_url not like", value, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlIn(List<String> values) {
+            addCriterion("oss_url in", values, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlNotIn(List<String> values) {
+            addCriterion("oss_url not in", values, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlBetween(String value1, String value2) {
+            addCriterion("oss_url between", value1, value2, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlNotBetween(String value1, String value2) {
+            addCriterion("oss_url not between", value1, value2, "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceIsNull() {
+            addCriterion("source is null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceIsNotNull() {
+            addCriterion("source is not null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceEqualTo(Byte value) {
+            addCriterion("source =", value, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceNotEqualTo(Byte value) {
+            addCriterion("source <>", value, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceGreaterThan(Byte value) {
+            addCriterion("source >", value, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceGreaterThanOrEqualTo(Byte value) {
+            addCriterion("source >=", value, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceLessThan(Byte value) {
+            addCriterion("source <", value, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceLessThanOrEqualTo(Byte value) {
+            addCriterion("source <=", value, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceIn(List<Byte> values) {
+            addCriterion("source in", values, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceNotIn(List<Byte> values) {
+            addCriterion("source not in", values, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceBetween(Byte value1, Byte value2) {
+            addCriterion("source between", value1, value2, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andSourceNotBetween(Byte value1, Byte value2) {
+            addCriterion("source not between", value1, value2, "source");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdIsNull() {
+            addCriterion("bargain_order_id is null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdIsNotNull() {
+            addCriterion("bargain_order_id is not null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdEqualTo(String value) {
+            addCriterion("bargain_order_id =", value, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdNotEqualTo(String value) {
+            addCriterion("bargain_order_id <>", value, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdGreaterThan(String value) {
+            addCriterion("bargain_order_id >", value, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdGreaterThanOrEqualTo(String value) {
+            addCriterion("bargain_order_id >=", value, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdLessThan(String value) {
+            addCriterion("bargain_order_id <", value, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdLessThanOrEqualTo(String value) {
+            addCriterion("bargain_order_id <=", value, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdIn(List<String> values) {
+            addCriterion("bargain_order_id in", values, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdNotIn(List<String> values) {
+            addCriterion("bargain_order_id not in", values, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdBetween(String value1, String value2) {
+            addCriterion("bargain_order_id between", value1, value2, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderIdNotBetween(String value1, String value2) {
+            addCriterion("bargain_order_id not between", value1, value2, "bargainOrderId");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoIsNull() {
+            addCriterion("bargain_order_no is null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoIsNotNull() {
+            addCriterion("bargain_order_no is not null");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoEqualTo(String value) {
+            addCriterion("bargain_order_no =", value, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoNotEqualTo(String value) {
+            addCriterion("bargain_order_no <>", value, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoGreaterThan(String value) {
+            addCriterion("bargain_order_no >", value, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("bargain_order_no >=", value, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoLessThan(String value) {
+            addCriterion("bargain_order_no <", value, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("bargain_order_no <=", value, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoLike(String value) {
+            addCriterion("bargain_order_no like", value, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoNotLike(String value) {
+            addCriterion("bargain_order_no not like", value, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoIn(List<String> values) {
+            addCriterion("bargain_order_no in", values, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoNotIn(List<String> values) {
+            addCriterion("bargain_order_no not in", values, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoBetween(String value1, String value2) {
+            addCriterion("bargain_order_no between", value1, value2, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoNotBetween(String value1, String value2) {
+            addCriterion("bargain_order_no not between", value1, value2, "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andAddtimeIsNotNull() {
             addCriterion("addtime is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andAddtimeEqualTo(Date value) {
             addCriterion("addtime =", value, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeNotEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andAddtimeNotEqualTo(Date value) {
             addCriterion("addtime <>", value, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeGreaterThan(Date value) {
+        public PayShopOrderCustomExample.Criteria andAddtimeGreaterThan(Date value) {
             addCriterion("addtime >", value, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeGreaterThanOrEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andAddtimeGreaterThanOrEqualTo(Date value) {
             addCriterion("addtime >=", value, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeLessThan(Date value) {
+        public PayShopOrderCustomExample.Criteria andAddtimeLessThan(Date value) {
             addCriterion("addtime <", value, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeLessThanOrEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andAddtimeLessThanOrEqualTo(Date value) {
             addCriterion("addtime <=", value, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeIn(List<Date> values) {
+        public PayShopOrderCustomExample.Criteria andAddtimeIn(List<Date> values) {
             addCriterion("addtime in", values, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeNotIn(List<Date> values) {
+        public PayShopOrderCustomExample.Criteria andAddtimeNotIn(List<Date> values) {
             addCriterion("addtime not in", values, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeBetween(Date value1, Date value2) {
+        public PayShopOrderCustomExample.Criteria andAddtimeBetween(Date value1, Date value2) {
             addCriterion("addtime between", value1, value2, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andAddtimeNotBetween(Date value1, Date value2) {
+        public PayShopOrderCustomExample.Criteria andAddtimeNotBetween(Date value1, Date value2) {
             addCriterion("addtime not between", value1, value2, "addtime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeIsNull() {
+        public PayShopOrderCustomExample.Criteria andPaytimeIsNull() {
             addCriterion("paytime is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andPaytimeIsNotNull() {
             addCriterion("paytime is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andPaytimeEqualTo(Date value) {
             addCriterion("paytime =", value, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeNotEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andPaytimeNotEqualTo(Date value) {
             addCriterion("paytime <>", value, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeGreaterThan(Date value) {
+        public PayShopOrderCustomExample.Criteria andPaytimeGreaterThan(Date value) {
             addCriterion("paytime >", value, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeGreaterThanOrEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andPaytimeGreaterThanOrEqualTo(Date value) {
             addCriterion("paytime >=", value, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeLessThan(Date value) {
+        public PayShopOrderCustomExample.Criteria andPaytimeLessThan(Date value) {
             addCriterion("paytime <", value, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeLessThanOrEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andPaytimeLessThanOrEqualTo(Date value) {
             addCriterion("paytime <=", value, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeIn(List<Date> values) {
+        public PayShopOrderCustomExample.Criteria andPaytimeIn(List<Date> values) {
             addCriterion("paytime in", values, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeNotIn(List<Date> values) {
+        public PayShopOrderCustomExample.Criteria andPaytimeNotIn(List<Date> values) {
             addCriterion("paytime not in", values, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeBetween(Date value1, Date value2) {
+        public PayShopOrderCustomExample.Criteria andPaytimeBetween(Date value1, Date value2) {
             addCriterion("paytime between", value1, value2, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andPaytimeNotBetween(Date value1, Date value2) {
+        public PayShopOrderCustomExample.Criteria andPaytimeNotBetween(Date value1, Date value2) {
             addCriterion("paytime not between", value1, value2, "paytime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeIsNull() {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeIsNull() {
             addCriterion("updatetime is null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeIsNotNull() {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeIsNotNull() {
             addCriterion("updatetime is not null");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeEqualTo(Date value) {
             addCriterion("updatetime =", value, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeNotEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeNotEqualTo(Date value) {
             addCriterion("updatetime <>", value, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeGreaterThan(Date value) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeGreaterThan(Date value) {
             addCriterion("updatetime >", value, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeGreaterThanOrEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeGreaterThanOrEqualTo(Date value) {
             addCriterion("updatetime >=", value, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeLessThan(Date value) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeLessThan(Date value) {
             addCriterion("updatetime <", value, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeLessThanOrEqualTo(Date value) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeLessThanOrEqualTo(Date value) {
             addCriterion("updatetime <=", value, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeIn(List<Date> values) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeIn(List<Date> values) {
             addCriterion("updatetime in", values, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeNotIn(List<Date> values) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeNotIn(List<Date> values) {
             addCriterion("updatetime not in", values, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeBetween(Date value1, Date value2) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeBetween(Date value1, Date value2) {
             addCriterion("updatetime between", value1, value2, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
+        public PayShopOrderCustomExample.Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
             addCriterion("updatetime not between", value1, value2, "updatetime");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andOrderNoLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andOrderNoLikeInsensitive(String value) {
             addCriterion("upper(order_no) like", value.toUpperCase(), "orderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignOrderNoLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignOrderNoLikeInsensitive(String value) {
             addCriterion("upper(foreign_order_no) like", value.toUpperCase(), "foreignOrderNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRequestedContentLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andRequestedContentLikeInsensitive(String value) {
             addCriterion("upper(requested_content) like", value.toUpperCase(), "requestedContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignRequestContentLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignRequestContentLikeInsensitive(String value) {
             addCriterion("upper(foreign_request_content) like", value.toUpperCase(), "foreignRequestContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andForeignResponseContentLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andForeignResponseContentLikeInsensitive(String value) {
             addCriterion("upper(foreign_response_content) like", value.toUpperCase(), "foreignResponseContent");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCustomerNameLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andCustomerNameLikeInsensitive(String value) {
             addCriterion("upper(customer_name) like", value.toUpperCase(), "customerName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andProductNameLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andProductNameLikeInsensitive(String value) {
             addCriterion("upper(product_name) like", value.toUpperCase(), "productName");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andChargeNoLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andChargeNoLikeInsensitive(String value) {
             addCriterion("upper(charge_no) like", value.toUpperCase(), "chargeNo");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponDetailLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponDetailLikeInsensitive(String value) {
             addCriterion("upper(coupon_detail) like", value.toUpperCase(), "couponDetail");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andRechargeStatusLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andRechargeStatusLikeInsensitive(String value) {
             addCriterion("upper(recharge_status) like", value.toUpperCase(), "rechargeStatus");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
         }
 
-        public Criteria andCouponActiveIdLikeInsensitive(String value) {
+        public PayShopOrderCustomExample.Criteria andCouponActiveIdLikeInsensitive(String value) {
             addCriterion("upper(coupon_active_id) like", value.toUpperCase(), "couponActiveId");
-            return (Criteria) this;
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andReceiveValueLikeInsensitive(String value) {
+            addCriterion("upper(receive_value) like", value.toUpperCase(), "receiveValue");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andOssUrlLikeInsensitive(String value) {
+            addCriterion("upper(oss_url) like", value.toUpperCase(), "ossUrl");
+            return (PayShopOrderCustomExample.Criteria) this;
+        }
+
+        public PayShopOrderCustomExample.Criteria andBargainOrderNoLikeInsensitive(String value) {
+            addCriterion("upper(bargain_order_no) like", value.toUpperCase(), "bargainOrderNo");
+            return (PayShopOrderCustomExample.Criteria) this;
         }
     }
 
-    public static class Criteria extends GeneratedCriteria {
+    public static class Criteria extends PayShopOrderCustomExample.GeneratedCriteria {
 
         protected Criteria() {
             super();

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PayShopBrangainRechargeOrderExample {
+public class PayShopBargainRechargeOrderExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -19,7 +19,7 @@ public class PayShopBrangainRechargeOrderExample {
     /**
      *
      */
-    public PayShopBrangainRechargeOrderExample() {
+    public PayShopBargainRechargeOrderExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

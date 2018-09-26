@@ -2106,6 +2106,66 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andInterfaceTypeIsNull() {
+            addCriterion("interface_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeIsNotNull() {
+            addCriterion("interface_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeEqualTo(Byte value) {
+            addCriterion("interface_type =", value, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeNotEqualTo(Byte value) {
+            addCriterion("interface_type <>", value, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeGreaterThan(Byte value) {
+            addCriterion("interface_type >", value, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("interface_type >=", value, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeLessThan(Byte value) {
+            addCriterion("interface_type <", value, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("interface_type <=", value, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeIn(List<Byte> values) {
+            addCriterion("interface_type in", values, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeNotIn(List<Byte> values) {
+            addCriterion("interface_type not in", values, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeBetween(Byte value1, Byte value2) {
+            addCriterion("interface_type between", value1, value2, "interfaceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("interface_type not between", value1, value2, "interfaceType");
+            return (Criteria) this;
+        }
+
         public Criteria andBargainOrderIdIsNull() {
             addCriterion("bargain_order_id is null");
             return (Criteria) this;
