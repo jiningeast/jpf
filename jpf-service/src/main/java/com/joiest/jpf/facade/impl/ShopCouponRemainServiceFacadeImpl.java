@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.*;
@@ -324,7 +325,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             int res_couponRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
             if ( res_couponRemain < 1 )
             {
-                throw new Exception("扣除券余额失败");
+                throw new JpfException("10007","扣除券余额失败");
             }
 
             // 新增日志表一条记录pay_shop_coupon_active
@@ -350,7 +351,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
             if ( res_couponActive < 1 )
             {
-                throw new Exception("添加券记录失败");
+                throw new JpfException("10009","添加券记录失败");
             }
 
             // 客户总豆数量减去一部分pay_shop_customer
@@ -364,7 +365,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             int res_updateCustomCode = payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
             if ( res_updateCustomCode < 1 )
             {
-                throw new Exception("更新用户余额失败");
+                throw new JpfException("10010","更新用户余额失败");
             }
 
             return true;
