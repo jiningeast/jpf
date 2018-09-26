@@ -91,6 +91,21 @@ public class PayShopProduct implements Serializable {
     private Byte status;
 
     /**
+     * 微能移动产品id
+     */
+    private Integer cmccProductId;
+
+    /**
+     * 微能联通产品id
+     */
+    private Integer cuccProductId;
+
+    /**
+     * 微能电信产品id
+     */
+    private Integer ctcProductId;
+
+    /**
      * 创建时间
      */
     private Date addtime;
@@ -238,6 +253,30 @@ public class PayShopProduct implements Serializable {
         this.status = status;
     }
 
+    public Integer getCmccProductId() {
+        return cmccProductId;
+    }
+
+    public void setCmccProductId(Integer cmccProductId) {
+        this.cmccProductId = cmccProductId;
+    }
+
+    public Integer getCuccProductId() {
+        return cuccProductId;
+    }
+
+    public void setCuccProductId(Integer cuccProductId) {
+        this.cuccProductId = cuccProductId;
+    }
+
+    public Integer getCtcProductId() {
+        return ctcProductId;
+    }
+
+    public void setCtcProductId(Integer ctcProductId) {
+        this.ctcProductId = ctcProductId;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -280,6 +319,9 @@ public class PayShopProduct implements Serializable {
         sb.append(", operatorName=").append(operatorName);
         sb.append(", type=").append(type);
         sb.append(", status=").append(status);
+        sb.append(", cmccProductId=").append(cmccProductId);
+        sb.append(", cuccProductId=").append(cuccProductId);
+        sb.append(", ctcProductId=").append(ctcProductId);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -319,6 +361,9 @@ public class PayShopProduct implements Serializable {
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getCmccProductId() == null ? other.getCmccProductId() == null : this.getCmccProductId().equals(other.getCmccProductId()))
+            && (this.getCuccProductId() == null ? other.getCuccProductId() == null : this.getCuccProductId().equals(other.getCuccProductId()))
+            && (this.getCtcProductId() == null ? other.getCtcProductId() == null : this.getCtcProductId().equals(other.getCtcProductId()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -347,6 +392,9 @@ public class PayShopProduct implements Serializable {
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getCmccProductId() == null) ? 0 : getCmccProductId().hashCode());
+        result = prime * result + ((getCuccProductId() == null) ? 0 : getCuccProductId().hashCode());
+        result = prime * result + ((getCtcProductId() == null) ? 0 : getCtcProductId().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;

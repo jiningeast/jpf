@@ -156,6 +156,11 @@ public class PayShopOrder implements Serializable {
     private Byte source;
 
     /**
+     * 接口类型 0=欧非 1=威能
+     */
+    private Byte interfaceType;
+
+    /**
      * 转让订单表的主id
      */
     private String bargainOrderId;
@@ -422,6 +427,14 @@ public class PayShopOrder implements Serializable {
         this.source = source;
     }
 
+    public Byte getInterfaceType() {
+        return interfaceType;
+    }
+
+    public void setInterfaceType(Byte interfaceType) {
+        this.interfaceType = interfaceType;
+    }
+
     public String getBargainOrderId() {
         return bargainOrderId;
     }
@@ -501,6 +514,7 @@ public class PayShopOrder implements Serializable {
         sb.append(", receiveValue=").append(receiveValue);
         sb.append(", ossUrl=").append(ossUrl);
         sb.append(", source=").append(source);
+        sb.append(", interfaceType=").append(interfaceType);
         sb.append(", bargainOrderId=").append(bargainOrderId);
         sb.append(", bargainOrderNo=").append(bargainOrderNo);
         sb.append(", addtime=").append(addtime);
@@ -556,6 +570,7 @@ public class PayShopOrder implements Serializable {
             && (this.getReceiveValue() == null ? other.getReceiveValue() == null : this.getReceiveValue().equals(other.getReceiveValue()))
             && (this.getOssUrl() == null ? other.getOssUrl() == null : this.getOssUrl().equals(other.getOssUrl()))
             && (this.getSource() == null ? other.getSource() == null : this.getSource().equals(other.getSource()))
+            && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
             && (this.getBargainOrderId() == null ? other.getBargainOrderId() == null : this.getBargainOrderId().equals(other.getBargainOrderId()))
             && (this.getBargainOrderNo() == null ? other.getBargainOrderNo() == null : this.getBargainOrderNo().equals(other.getBargainOrderNo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
@@ -600,6 +615,7 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getReceiveValue() == null) ? 0 : getReceiveValue().hashCode());
         result = prime * result + ((getOssUrl() == null) ? 0 : getOssUrl().hashCode());
         result = prime * result + ((getSource() == null) ? 0 : getSource().hashCode());
+        result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
         result = prime * result + ((getBargainOrderId() == null) ? 0 : getBargainOrderId().hashCode());
         result = prime * result + ((getBargainOrderNo() == null) ? 0 : getBargainOrderNo().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
