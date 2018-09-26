@@ -63,6 +63,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/orders/ofpayNotifyUrl");
                 add("/certificate/activation");     //用户激活券url
                 add("/shopAd/index");     //广告位图片调取
+                add("/orders/wnProduct");     //广告位图片调取
             }
         };
         System.out.println(ServletUtils.getIpAddr(request));

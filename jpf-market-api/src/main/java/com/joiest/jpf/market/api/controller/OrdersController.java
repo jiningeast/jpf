@@ -12,10 +12,7 @@ import com.joiest.jpf.dto.OfpayRequest;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.constant.ManageConstants;
-import com.joiest.jpf.market.api.util.ServletUtils;
-import com.joiest.jpf.market.api.util.SmsUtils;
-import com.joiest.jpf.market.api.util.ToolsUtils;
-import com.joiest.jpf.market.api.util.ofpayUtils;
+import com.joiest.jpf.market.api.util.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -219,7 +216,47 @@ public class OrdersController {
         }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
     }
+    /**
+     * 微能获取产品信息
+     * */
+    @RequestMapping(value = "/wnProduct", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String getWnProduct(HttpServletRequest request){
 
+        String dateTime = request.getParameter("dateTime");
+        String carrier = request.getParameter("carrier");
+        String sign = request.getParameter("sign");
+        JSONObject responsPa = new JSONObject();
+
+        Map<String ,String> bankFouePa = new HashMap<>();
+        bankFouePa.put("carrier", carrier);
+        bankFouePa.put("dateTime", dateTime);
+
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(bankFouePa);
+
+        String respos = ToolUtils.mapToUrl(treeMap);
+        String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n请求地址："+request.getRequestURL().toString());
+        sbf.append("\n接口参数：" + respos+"&sign="+sign);
+        sbf.append("\n生成签名：" + selfSign);
+        String fileName = "WnApi";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", fileName,true);
+
+        if(!selfSign.equals(sign)){
+
+            responsPa.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+            responsPa.put("info","签名有误");
+            return responsPa.toString();
+        }
+        WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+        String wnProduct = wnpayUtils.getProduct(carrier);
+
+        return wnProduct;
+    }
     /**
      * 支付
      * 0:欣豆支付 1:微信支付
