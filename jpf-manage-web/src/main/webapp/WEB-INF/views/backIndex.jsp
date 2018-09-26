@@ -118,11 +118,11 @@
                     "icon" : "icon-nav",
                     "url" : "shopOrder/index"
                 },{
-                        "menuid" : "403",
-                        "menuname" : "欣豆转让订单管理",
-                        "icon" : "icon-nav",
-                        "url" : "shopBargainOrder/index"
-                    }
+                    "menuid" : "403",
+                    "menuname" : "欣豆转让订单管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopBargainOrder/index"
+                }
                 ]
             },{
                 "menuid" : "5",
@@ -164,10 +164,10 @@
                     "icon" : "icon-nav",
                     "url" : "shopAd/index"
                 },{
-                        "menuid" : "508",
-                        "menuname" : "欣豆收购管理",
-                        "icon" : "icon-nav",
-                        "url" : "shopBargainRequest/index"
+                    "menuid" : "508",
+                    "menuname" : "欣豆市场收购管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopBargainRequest/index"
                 }]
             },{
                     "menuid" : "6",

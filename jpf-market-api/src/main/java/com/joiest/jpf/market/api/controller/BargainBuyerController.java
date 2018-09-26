@@ -3,19 +3,15 @@ package com.joiest.jpf.market.api.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
-import com.joiest.jpf.common.po.PayShopBargainRequest;
-import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.GetShopBargainOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainOrderResponse;
 import com.joiest.jpf.dto.GetShopBargainRequestRequest;
 import com.joiest.jpf.entity.ShopBargainOrderInfo;
 import com.joiest.jpf.entity.ShopBargainRequestInfo;
-import com.joiest.jpf.entity.ShopCustomerInfo;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.util.ToolsUtils;
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +56,10 @@ public class BargainBuyerController {
     public String becomeBuyer(){
         if ( userInfo.getIsBargainBuyer() == 1 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"您已经是买家了",null);
+        }
+        String buyerSwitch = ConfigUtil.getValue("BECOME_BUYER_SWITCH");
+        if ( buyerSwitch.equals("0") ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"买家数量已满，请稍后再试",null);
         }
         userInfo.setIsBargainBuyer((byte)1);
         userInfo.setUpdatetime(new Date());

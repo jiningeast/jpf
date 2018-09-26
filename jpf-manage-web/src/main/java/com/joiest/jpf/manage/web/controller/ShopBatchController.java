@@ -40,6 +40,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Controller
@@ -102,6 +103,33 @@ public class ShopBatchController {
     @RequestMapping("/submitBatch")
     @ResponseBody
     public JpfResponseDto submitBatch(ShopBatchRequest request, HttpServletRequest httpRequest, HttpServletResponse httpResponse){
+
+        // 查询商户信息
+        ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(request.getCompanyId());
+        if ( shopCompanyInfo.getStatus() != 1 ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("商户已停用，无法继续操作");
+        }
+
+        // 计算总价
+        String couponsJSON = request.getCoupons();
+        List<Map<String,String>> list = JsonUtils.toObject(couponsJSON,ArrayList.class);
+        int totalMoney = 0;
+        for ( Map<String,String> single:list ){
+            Integer singgleTotal = Integer.parseInt( single.get("money") ) * Integer.parseInt( single.get("amount") );
+            totalMoney += singgleTotal;
+        }
+
+        // 判断该企业有没有这些券的总余额
+        if ( shopCompanyInfo.getMoney().compareTo(new BigDecimal(totalMoney)) < 0 ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("商户余额不足");
+
+            return jpfResponseDto;
+        }
+
         // 查询操作人id和姓名
         HttpSession session = httpRequest.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);

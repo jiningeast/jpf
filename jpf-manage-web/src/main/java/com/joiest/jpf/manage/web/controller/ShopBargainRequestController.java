@@ -3,21 +3,12 @@ package com.joiest.jpf.manage.web.controller;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.dto.GetShopBargainRequestRequest;
 import com.joiest.jpf.dto.GetShopBargainRequestResponse;
-import com.joiest.jpf.dto.GetShopCompanyRequest;
-import com.joiest.jpf.dto.GetShopCompanyResponse;
-import com.joiest.jpf.entity.ShopCompanyInfo;
-import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.ShopBargainRequestServiceFacade;
-import com.joiest.jpf.facade.ShopCompanyServiceFacade;
-import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 

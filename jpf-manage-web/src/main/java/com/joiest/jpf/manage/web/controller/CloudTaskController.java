@@ -28,15 +28,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.*;
 
 @Controller
@@ -205,16 +205,16 @@ public class CloudTaskController {
                         staffInfo.setCity(singlePerson.get(3));
                     }
                     if ( StringUtils.isNotBlank(singlePerson.get(4)) ){
-                        staffInfo.setBankNo(singlePerson.get(4));
+                        staffInfo.setBankNo(StringUtils.trim(singlePerson.get(4)));
                     }
                     if ( StringUtils.isNotBlank(singlePerson.get(5)) ){
                         staffInfo.setName(singlePerson.get(5));
                     }
                     if ( StringUtils.isNotBlank(singlePerson.get(6)) ){
-                        staffInfo.setIDNo(singlePerson.get(6));
+                        staffInfo.setIDNo(StringUtils.trim(singlePerson.get(6)));
                     }
                     if ( StringUtils.isNotBlank(singlePerson.get(7)) ){
-                        staffInfo.setPhone(singlePerson.get(7));
+                        staffInfo.setPhone(StringUtils.trim(singlePerson.get(7)));
                     }
                     if ( StringUtils.isNotBlank(singlePerson.get(8)) ){
                         staffInfo.setMoney(new BigDecimal(singlePerson.get(8)));

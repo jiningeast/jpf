@@ -40,19 +40,17 @@ public class CloudCompanyController {
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
     @Autowired
-    private BankCardServiceFacade bankCardServiceFacade;
-    @Autowired
     private CloudCompanyBankServiceFacade cloudCompanyBankServiceFacade;
+
     @Autowired
     private BankServiceFacade bankServiceFacade;
 
     @Autowired
     private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
+
     @RequestMapping("/index")
     public String index() {
-
         return "cloudCompany/agentlist";
-
     }
 
     //代理公司列表
@@ -63,14 +61,13 @@ public class CloudCompanyController {
         Map<String, Object> map = new HashMap<>();
         map.put("total", response.getCount());
         map.put("rows", response.getList());
+
         return map;
     }
 
     @RequestMapping("/indexSale")
     public String indexSale() {
-
         return "cloudCompany/salelist";
-
     }
 
     //列表
@@ -81,69 +78,62 @@ public class CloudCompanyController {
         Map<String, Object> map = new HashMap<>();
         map.put("total", response.getCount());
         map.put("rows", response.getList());
+
         return map;
     }
 
     //添加公司
     @RequestMapping("/add")
     @ResponseBody
-    public JpfResponseDto add(GetCloudCompanyRequest request, HttpSession httpSession,HttpServletRequest serRequest) throws Exception {
+    public JpfResponseDto add(GetCloudCompanyRequest request, HttpSession httpSession, HttpServletRequest serRequest) throws Exception {
 
         //获取登录帐号
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
         int account = userInfo.getId();
-        String ipAddress= ToolUtils.getIpAddr(serRequest);
+        String ipAddress = ToolUtils.getIpAddr(serRequest);
+
         // 根据卡号查询银行编码
         //获取银行信息
         BankInfo bankInfos = bankServiceFacade.getBankInfo(request.getBankid());
+        Date date = new Date();
+        JpfResponseDto redDto = cloudCompanyServiceFacade.addCloudCompany(request, account, ipAddress, bankInfos);
 
-
-        Date date =new Date();
-        JpfResponseDto redDto =  cloudCompanyServiceFacade.addCloudCompany(request, account,ipAddress,bankInfos);
         //根据卡号获取银行卡所属信息
-
-
-
         //发送短信
-        if(redDto.getRetCode().equals("10002")){
-            String passlogin =redDto.getRemark();//获取登录密码
+        if (redDto.getRetCode().equals("10002")) {
+            String passlogin = redDto.getRemark();//获取登录密码
             String mobile = request.getPhone();
-            String content ="尊敬的用户您的账号已经开通：账号为"+request.getLinkemail()+"密码为"+passlogin;
+            String content = "尊敬的用户您的账号已经开通：账号为" + request.getLinkemail() + "密码为" + passlogin;
             String dateTime = date.toString();
-            Map<String,Object> map = new HashMap<>();
-            map.put("mobile",mobile);
-            map.put("content",content);
-            map.put("dateTime",dateTime);
+            Map<String, Object> map = new HashMap<>();
+            map.put("mobile", mobile);
+            map.put("content", content);
+            map.put("dateTime", dateTime);
 
             //排序转换
-            Map<String,Object> treeMap = new TreeMap<>();
+            Map<String, Object> treeMap = new TreeMap<>();
             treeMap.putAll(map);
-
             String respos = ToolUtils.mapToUrl(treeMap);
 
             //调用配置文件ConfigUtil.getValue("API_SECRET")
-
-            String selfSign = Md5Encrypt.md5(respos+ com.joiest.jpf.common.util.ConfigUtil.getValue("API_SECRET")).toUpperCase();
-
-            map.put("sign",selfSign);
-
-            String response = OkHttpUtils.postForm(com.joiest.jpf.common.util.ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi",map);
+            String selfSign = Md5Encrypt.md5(respos + com.joiest.jpf.common.util.ConfigUtil.getValue("API_SECRET")).toUpperCase();
+            map.put("sign", selfSign);
+            String response = OkHttpUtils.postForm(com.joiest.jpf.common.util.ConfigUtil.getValue("CLOUD_API_URL") + "/toolcate/sendSmsApi", map);
 
             //json---转换代码---
-            Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
-            String result=responseMap.get("code");
+            Map<String, String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {
+            });
+            String result = responseMap.get("code");
 
             // 增加==短信接口流水==
-               CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
-               cloudInterfaceStreamInfo.setType((byte)0);
-               cloudInterfaceStreamInfo.setRequestUrl(ConfigUtil.getValue("CLOUD_API_URL")+"/toolcate/sendSmsApi");
-               cloudInterfaceStreamInfo.setRequestContent(respos);
-               cloudInterfaceStreamInfo.setResponseContent(result);
-               cloudInterfaceStreamInfo.setAddtime(new Date());
-               cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
-
+            CloudInterfaceStreamInfo cloudInterfaceStreamInfo = new CloudInterfaceStreamInfo();
+            cloudInterfaceStreamInfo.setType((byte) 0);
+            cloudInterfaceStreamInfo.setRequestUrl(ConfigUtil.getValue("CLOUD_API_URL") + "/toolcate/sendSmsApi");
+            cloudInterfaceStreamInfo.setRequestContent(respos);
+            cloudInterfaceStreamInfo.setResponseContent(result);
+            cloudInterfaceStreamInfo.setAddtime(new Date());
+            cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
         }
-
 
         return new JpfResponseDto();
     }
@@ -169,12 +159,12 @@ public class CloudCompanyController {
         String allpath = PhotoUtil.saveFile(file, savePre);
 
         // OSS上传excel文件
-        Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("path",allpath);
-        String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
-        String response = OkHttpUtils.postForm(url,requestMap);
-        response = StringUtils.strip(response,"\"");
-        response = StringUtils.stripEnd(response,"\"");
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("path", allpath);
+        String url = ConfigUtil.getValue("CLOUD_API_URL") + "/oss/upload";
+        String response = OkHttpUtils.postForm(url, requestMap);
+        response = StringUtils.strip(response, "\"");
+        response = StringUtils.stripEnd(response, "\"");
 
         return response;
     }
@@ -187,11 +177,11 @@ public class CloudCompanyController {
         //取出当前公司的信息
         CloudCompanyInfo cloudCompanyInfo = cloudCompanyServiceFacade.getCompanyOne(id, type);
         if (type == 1) {
-            cloudCompanyInfo.setType((byte)1);
+            cloudCompanyInfo.setType((byte) 1);
         } else {
-            cloudCompanyInfo.setType((byte)0);
+            cloudCompanyInfo.setType((byte) 0);
         }
-        String Merchno=cloudCompanyInfo.getMerchNo();
+        String Merchno = cloudCompanyInfo.getMerchNo();
         //商户对公帐户信息
         CloudCompanyBankInfo cloudCompanyBankInfo = cloudCompanyBankServiceFacade.getCompanyBankInfoByMerchNo(Merchno);
         modelMap.addAttribute("cloudCompanyInfo", cloudCompanyInfo);
@@ -204,14 +194,15 @@ public class CloudCompanyController {
      */
     @RequestMapping("/getCompanys")
     @ResponseBody
-    public Map<String, Object> getCompanys(GetCloudCompanysRequest request){
+    public Map<String, Object> getCompanys(GetCloudCompanysRequest request) {
         GetCloudCompanysResponse response = cloudCompanyServiceFacade.getAllCompanys(request);
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("total", response.getCount());
         map.put("rows", response.getList());
 
         return map;
     }
+
     /**
      * 修改公司-提交
      */
@@ -219,14 +210,13 @@ public class CloudCompanyController {
     @ResponseBody
     public JpfResponseDto edit(GetCloudCompanyRequest request, HttpSession httpSession) throws Exception {
         //获取登录帐号
-
         UserInfo userInfo = (UserInfo) httpSession.getAttribute(ManageConstants.USERINFO_SESSION);
         int account = userInfo.getId();
         // 根据卡号查询银行编码
         //获取银行信息
         BankInfo bankInfos = bankServiceFacade.getBankInfo(request.getBankid());
 
-        return cloudCompanyServiceFacade.editCloudCompany(request, account,bankInfos);
+        return cloudCompanyServiceFacade.editCloudCompany(request, account, bankInfos);
     }
 
     /**
@@ -235,7 +225,6 @@ public class CloudCompanyController {
     @RequestMapping("delCompany")
     @ResponseBody
     public JpfResponseDto delCompany(String merchNo, int type) {
-
         return cloudCompanyServiceFacade.delCompany(merchNo, type);
     }
 }
