@@ -1206,6 +1206,66 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andWnProductIdIsNull() {
+            addCriterion("wn_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdIsNotNull() {
+            addCriterion("wn_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdEqualTo(String value) {
+            addCriterion("wn_product_id =", value, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdNotEqualTo(String value) {
+            addCriterion("wn_product_id <>", value, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdGreaterThan(String value) {
+            addCriterion("wn_product_id >", value, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdGreaterThanOrEqualTo(String value) {
+            addCriterion("wn_product_id >=", value, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdLessThan(String value) {
+            addCriterion("wn_product_id <", value, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdLessThanOrEqualTo(String value) {
+            addCriterion("wn_product_id <=", value, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdIn(List<String> values) {
+            addCriterion("wn_product_id in", values, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdNotIn(List<String> values) {
+            addCriterion("wn_product_id not in", values, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdBetween(String value1, String value2) {
+            addCriterion("wn_product_id between", value1, value2, "wnProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductIdNotBetween(String value1, String value2) {
+            addCriterion("wn_product_id not between", value1, value2, "wnProductId");
+            return (Criteria) this;
+        }
+
         public Criteria andAmountIsNull() {
             addCriterion("amount is null");
             return (Criteria) this;
