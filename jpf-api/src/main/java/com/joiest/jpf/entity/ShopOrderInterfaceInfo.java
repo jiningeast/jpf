@@ -86,6 +86,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private Integer productInfoId;
 
     /**
+     * 威能端产品id
+     */
+    private String wnProductId;
+
+    /**
      * 商品数量
      */
     private Integer amount;
@@ -154,6 +159,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
      * 订单来源 0=自平台 1=敬恒
      */
     private Byte source;
+
+    /**
+     * 接口类型 0=欧非 1=威能
+     */
+    private Byte interfaceType;
 
     /**
      * 转让订单表的主id
@@ -328,6 +338,14 @@ public class ShopOrderInterfaceInfo implements Serializable {
         this.productInfoId = productInfoId;
     }
 
+    public String getWnProductId() {
+        return wnProductId;
+    }
+
+    public void setWnProductId(String wnProductId) {
+        this.wnProductId = wnProductId == null ? null : wnProductId.trim();
+    }
+
     public Integer getAmount() {
         return amount;
     }
@@ -495,6 +513,15 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setSource(Byte source) {
         this.source = source;
+    }
+
+
+    public Byte getInterfaceType() {
+        return interfaceType;
+    }
+
+    public void setInterfaceType(Byte interfaceType) {
+        this.interfaceType = interfaceType;
     }
 
     public String getBargainOrderId() {
