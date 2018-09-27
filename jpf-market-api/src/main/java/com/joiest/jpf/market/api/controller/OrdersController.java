@@ -1050,27 +1050,59 @@ public class OrdersController {
      * */
     @RequestMapping(value = "flowReport",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
-    public void flowReport(HttpServletRequest request){
-/*
+    public String flowReport(){
+
         WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
         String responseP = wnpayUtils.flowReport();
 
         JSONObject actualDeal = JSONObject.fromObject(responseP);
+        String content = null;
+        String infoErrorOrder = null;
+        String sucOrder = "";
+        String faildOrder = "";
         if(actualDeal.get("code").equals("10000")){
 
+            content = "是";
             JSONArray dataDeal = JSONArray.fromObject(actualDeal.get("data"));
             if(dataDeal.size()>0){
 
                 for(int i=0;i<dataDeal.size();i++){
 
                     JSONObject job = dataDeal.getJSONObject(i);
+                    ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderByOrderNo(job.get("outOrderId").toString());
+                    if (orderInfo ==null){
+                        infoErrorOrder+= job.get("outOrderId").toString()+",";
+                        continue;
+                    }
+                    // 查询订单
+                    ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+                    orderinfo.setId(orderInfo.getId());
+                    orderinfo.setUpdatetime(new Date());
+                    if (job.get("reportStatus").toString().equals("0")){
 
+                        sucOrder+=orderInfo.getOrderNo()+",";
+                        orderinfo.setRechargeStatus("1");
+                    }else{
+
+                        faildOrder+=orderInfo.getOrderNo()+",";
+                        orderinfo.setRechargeStatus("9");
+                    }
+                    shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
                 }
             }
-
         }else{
+            content = "否";
+        }
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n接口名称：微能获取订单状态");
+        sbf.append("\n是否有待处理订单："+content);
+        sbf.append("\n充值成功："+sucOrder);
+        sbf.append("\n充值失败："+faildOrder);
+        sbf.append("\n订单信息错误：" + infoErrorOrder);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnReportApi",true);
 
-        }*/
+        return "1";
     }
     /**
      * 微能接口测试

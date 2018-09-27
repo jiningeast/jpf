@@ -21,6 +21,12 @@ public interface ShopOrderInterfaceServiceFacade {
      */
     public ShopOrderInterfaceInfo getOrder(String orderNo);
 
+
+    /**
+     * 获取单条订单信息 by uid
+     */
+    public ShopOrderInterfaceInfo getOrderByOrderNo(String orderNo);
+
     /**
      * 获取用户订单数量，已取消的不统计
      */

@@ -107,7 +107,7 @@ public class WnpayUtils {
         //上线需打开
         String resposePa = OkHttpUtils.postJson(this.url+"flowOrder",requestParam.toString());
         JSONObject flowOrder = JSONObject.fromObject(resposePa);
-        
+
         StringBuilder sbf = new StringBuilder();
         sbf.append("\n\nTime:" + DateUtils.getCurDate());
         sbf.append("\n请求地址：" + this.url+"flowOrder");
@@ -193,8 +193,8 @@ public class WnpayUtils {
         String sign = Md5Encrypt.md5(this.account+this.md5Password+curDate,"utf-8");
         requestParam.put("sign",sign);
 
-        String resposePa = "[{\"id\":25,\"outOrderId\":\"11111111\",\"dest\":\"13812345678\",\"reportStatus\":1,\"reportDetail\":\"购买成功\"},{\"id\":26,\"outOrderId\":\"22222222\",\"dest\":\"13812345678\",\"reportStatus\":2,\"reportDetail\":\"购买失败\"}]";
-        //String resposePa = OkHttpUtils.postJson(this.url+"flowReport",requestParam.toString());
+        //String resposePa = "[{\"id\":14737109,\"outOrderId\":\"1801538029705317286\",\"dest\":\"17600067853\",\"reportStatus\":1,\"reportDetail\":\"购买成功\"},{\"id\":14737109,\"outOrderId\":\"1021538028887285722\",\"dest\":\"17600067853\",\"reportStatus\":2,\"reportDetail\":\"购买失败\"}]";
+        String resposePa = OkHttpUtils.postJson(this.url+"flowReport",requestParam.toString());
 
         StringBuilder sbf = new StringBuilder();
         sbf.append("\n\nTime:" + DateUtils.getCurDate());
