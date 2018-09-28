@@ -1556,6 +1556,266 @@ public class PayCloudCompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andAdvanceMoneyIsNull() {
+            addCriterion("advance_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyIsNotNull() {
+            addCriterion("advance_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyEqualTo(BigDecimal value) {
+            addCriterion("advance_money =", value, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("advance_money <>", value, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyGreaterThan(BigDecimal value) {
+            addCriterion("advance_money >", value, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("advance_money >=", value, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyLessThan(BigDecimal value) {
+            addCriterion("advance_money <", value, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("advance_money <=", value, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyIn(List<BigDecimal> values) {
+            addCriterion("advance_money in", values, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("advance_money not in", values, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("advance_money between", value1, value2, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("advance_money not between", value1, value2, "advanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeIsNull() {
+            addCriterion("advance_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeIsNotNull() {
+            addCriterion("advance_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeEqualTo(String value) {
+            addCriterion("advance_code =", value, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeNotEqualTo(String value) {
+            addCriterion("advance_code <>", value, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeGreaterThan(String value) {
+            addCriterion("advance_code >", value, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("advance_code >=", value, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeLessThan(String value) {
+            addCriterion("advance_code <", value, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeLessThanOrEqualTo(String value) {
+            addCriterion("advance_code <=", value, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeLike(String value) {
+            addCriterion("advance_code like", value, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeNotLike(String value) {
+            addCriterion("advance_code not like", value, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeIn(List<String> values) {
+            addCriterion("advance_code in", values, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeNotIn(List<String> values) {
+            addCriterion("advance_code not in", values, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeBetween(String value1, String value2) {
+            addCriterion("advance_code between", value1, value2, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeNotBetween(String value1, String value2) {
+            addCriterion("advance_code not between", value1, value2, "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyIsNull() {
+            addCriterion("freeze_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyIsNotNull() {
+            addCriterion("freeze_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyEqualTo(BigDecimal value) {
+            addCriterion("freeze_money =", value, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("freeze_money <>", value, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyGreaterThan(BigDecimal value) {
+            addCriterion("freeze_money >", value, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("freeze_money >=", value, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyLessThan(BigDecimal value) {
+            addCriterion("freeze_money <", value, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("freeze_money <=", value, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyIn(List<BigDecimal> values) {
+            addCriterion("freeze_money in", values, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("freeze_money not in", values, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("freeze_money between", value1, value2, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("freeze_money not between", value1, value2, "freezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeIsNull() {
+            addCriterion("freeze_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeIsNotNull() {
+            addCriterion("freeze_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeEqualTo(String value) {
+            addCriterion("freeze_code =", value, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeNotEqualTo(String value) {
+            addCriterion("freeze_code <>", value, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeGreaterThan(String value) {
+            addCriterion("freeze_code >", value, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("freeze_code >=", value, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeLessThan(String value) {
+            addCriterion("freeze_code <", value, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeLessThanOrEqualTo(String value) {
+            addCriterion("freeze_code <=", value, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeLike(String value) {
+            addCriterion("freeze_code like", value, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeNotLike(String value) {
+            addCriterion("freeze_code not like", value, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeIn(List<String> values) {
+            addCriterion("freeze_code in", values, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeNotIn(List<String> values) {
+            addCriterion("freeze_code not in", values, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeBetween(String value1, String value2) {
+            addCriterion("freeze_code between", value1, value2, "freezeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeNotBetween(String value1, String value2) {
+            addCriterion("freeze_code not between", value1, value2, "freezeCode");
+            return (Criteria) this;
+        }
+
         public Criteria andCloudpaypwdIsNull() {
             addCriterion("cloudpaypwd is null");
             return (Criteria) this;
@@ -2163,6 +2423,16 @@ public class PayCloudCompanyExample {
 
         public Criteria andCloudcodeLikeInsensitive(String value) {
             addCriterion("upper(cloudcode) like", value.toUpperCase(), "cloudcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceCodeLikeInsensitive(String value) {
+            addCriterion("upper(advance_code) like", value.toUpperCase(), "advanceCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeCodeLikeInsensitive(String value) {
+            addCriterion("upper(freeze_code) like", value.toUpperCase(), "freezeCode");
             return (Criteria) this;
         }
 
