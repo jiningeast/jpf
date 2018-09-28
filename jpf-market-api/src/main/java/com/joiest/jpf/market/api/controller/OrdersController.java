@@ -15,6 +15,7 @@ import com.joiest.jpf.market.api.constant.ManageConstants;
 import com.joiest.jpf.market.api.util.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.util.JSONTokener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -135,7 +136,6 @@ public class OrdersController {
                 {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "油卡卡号不一致");
                 }
-                //TODO 油卡卡号校验
                 Boolean gasIsTrue = Pattern.compile(res_gas).matcher(request.getCardnumber()).matches();
                 if ( !gasIsTrue )
                 {
@@ -158,6 +158,24 @@ public class OrdersController {
                 {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码不一致");
                 }
+                if(!requestMap.containsKey("carrier") || StringUtils.isBlank(requestMap.get("carrier").toString())){
+
+                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "运营商信息错误");
+                }
+                //移动cmcc，联通:cucc，电信:ctc，
+                List<String> carrierList = new ArrayList<String>(){
+                    {
+                        add("cmcc");
+                        add("cucc");
+                        add("ctc");
+                    }
+                };
+                if(!carrierList.contains(requestMap.get("carrier").toString()))
+                {
+                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "运营商信息错误");
+
+                }
+
                 chargeNo = request.getPhone();
             }
         }
@@ -181,6 +199,39 @@ public class OrdersController {
         info.setProductMoney(productInfo.getMoney());
         info.setProductDou(productInfo.getDou());
         info.setProductInfoId(productInfo.getProductInfoId());
+
+        if(requestMap.containsKey("carrier") && request.getOtype().equals("3")){
+
+            //移动cmcc，联通:cucc，电信:ctc，
+            switch(requestMap.get("carrier").toString()){
+                case "cmcc":
+
+                    if(productInfo.getCmccProductId()!=null){
+
+                        info.setWnProductId(productInfo.getCmccProductId().toString());
+                        info.setInterfaceType((byte)1);
+                    }
+                    break;
+                case "cucc":
+                    if(productInfo.getCuccProductId()!=null){
+
+                        info.setWnProductId(productInfo.getCuccProductId().toString());
+                        info.setInterfaceType((byte)1);
+                    }
+                    break;
+                case "ctc":
+                    if(productInfo.getCtcProductId()!=null){
+
+                        info.setWnProductId(productInfo.getCtcProductId().toString());
+                        info.setInterfaceType((byte)1);
+                    }
+                    break;
+                default:
+                    info.setInterfaceType((byte)0);
+                    break;
+            }
+
+        }
         if ( request.getAmount() != null && StringUtils.isNotBlank(""+request.getAmount()) ){
             // 如果参数中有数量
             info.setTotalMoney(new BigDecimal(productInfo.getMoney().doubleValue()*Integer.parseInt(request.getAmount())));
@@ -215,47 +266,6 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), orderno);
         }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
-    }
-    /**
-     * 微能获取产品信息
-     * */
-    @RequestMapping(value = "/wnProduct", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public String getWnProduct(HttpServletRequest request){
-
-        String dateTime = request.getParameter("dateTime");
-        String carrier = request.getParameter("carrier");
-        String sign = request.getParameter("sign");
-        JSONObject responsPa = new JSONObject();
-
-        Map<String ,String> bankFouePa = new HashMap<>();
-        bankFouePa.put("carrier", carrier);
-        bankFouePa.put("dateTime", dateTime);
-
-        Map<String,Object> treeMap = new TreeMap<>();
-        treeMap.putAll(bankFouePa);
-
-        String respos = ToolUtils.mapToUrl(treeMap);
-        String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
-
-        StringBuilder sbf = new StringBuilder();
-        sbf.append("\n\nTime:" + DateUtils.getCurDate());
-        sbf.append("\n请求地址："+request.getRequestURL().toString());
-        sbf.append("\n接口参数：" + respos+"&sign="+sign);
-        sbf.append("\n生成签名：" + selfSign);
-        String fileName = "WnApi";
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", fileName,true);
-
-        if(!selfSign.equals(sign)){
-
-            responsPa.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
-            responsPa.put("info","签名有误");
-            return responsPa.toString();
-        }
-        WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
-        String wnProduct = wnpayUtils.getProduct(carrier);
-
-        return wnProduct;
     }
     /**
      * 支付
@@ -339,8 +349,16 @@ public class OrdersController {
         }else{
             //充值
             if ( orderInfo.getOrderType() == 3 ) {
+
                 // 话费充值
-                resultMap = this.phoneRecharge(orderInfo, productInfo);
+                //微能
+                if(orderInfo.getInterfaceType().equals((byte)1)){
+
+                    resultMap = this.phoneRechargeWn(orderInfo, productInfo);
+                }else{//欧非
+
+                    resultMap = this.phoneRechargeOf(orderInfo, productInfo);
+                }
             } else if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 ) {
                 // 油卡充值 1:中国石化 2:中国石油
                 resultMap = this.gasRecharge(orderInfo, productInfo);
@@ -371,7 +389,7 @@ public class OrdersController {
         String requestParam = resultMap.get("requestParam");
         resultMap.remove("requestUrl");
         resultMap.remove("requestParam");
-        String responseJson = JsonUtils.toJson(resultMap);
+        String responseJson = orderInfo.getInterfaceType().equals((byte)1)?resultMap.get("responseParam"):JsonUtils.toJson(resultMap);
         stream.setResponseContent(responseJson);
         stream.setAddtime(new Date());
         int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
@@ -391,7 +409,6 @@ public class OrdersController {
         } else {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "提交失败", null);
         }
-
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "充值成功", ManageConstants.rechargeStatusCn_map.get(game_state));
     }
 
@@ -639,9 +656,44 @@ public class OrdersController {
     }
 
     /**
-     * 话费直充
+     * 话费直充 微能
      */
-    private Map<String, String> phoneRecharge(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo)
+    private Map<String, String> phoneRechargeWn(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo)
+    {
+
+        Map<String, String> resultMap = new HashMap<>();
+        //充值接口
+        JSONObject requestParam = new JSONObject();
+        requestParam.put("mobile",orderInfo.getChargeNo());
+        requestParam.put("productId",orderInfo.getWnProductId());
+        requestParam.put("outOrderId",orderInfo.getOrderNo());
+
+        WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+        String wnProduct = wnpayUtils.flowOrder(requestParam);
+
+        JSONObject responseDeal = JSONObject.fromObject(wnProduct);
+        JSONObject actualDeal = JSONObject.fromObject(responseDeal.get("data").toString());
+
+        resultMap.put("orderid",actualDeal.get("wnorderid").toString());
+        resultMap.put("requestUrl",actualDeal.get("requestUrl").toString());
+        resultMap.put("requestParam",actualDeal.get("requestParam").toString());
+        resultMap.put("responseParam",actualDeal.get("responseParam").toString());
+
+        if(responseDeal.get("code").toString().equals("10000")){
+
+            resultMap.put("retcode","1");
+            resultMap.put("game_state","0");
+        }else{
+
+            resultMap.put("retcode","0");
+            resultMap.put("game_state","9");
+        }
+        return resultMap;
+    }
+    /**
+     * 话费直充 欧非
+     */
+    private Map<String, String> phoneRechargeOf(ShopOrderInterfaceInfo orderInfo, ShopProductInterfaceInfo productInfo)
     {
         Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(orderInfo.getChargeNo()).matches();
         if ( !phoneIsTrue )
@@ -796,6 +848,7 @@ public class OrdersController {
         orderinfo.setId(orderInfo.getId());
         orderinfo.setRechargeStatus(request.getRet_code());     //0充值中 1充值成功 9充值失败
         orderinfo.setUpdatetime(new Date());
+        orderinfo.setInterfaceType((byte)0);
         int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
 
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
@@ -898,6 +951,178 @@ public class OrdersController {
         }
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), resultList);
+    }
+
+
+    /**
+     * 微能查询余额、状态报告获取
+     * */
+    @RequestMapping(value = "flowbalance",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String flowBalance(HttpServletRequest request){
+
+        String dateTime = request.getParameter("dateTime");
+        String sign = request.getParameter("sign");
+        String type = request.getParameter("type"); // 1 余额查询  2 状态报告
+        JSONObject responsPa = new JSONObject();
+
+        Map<String ,String> bankFouePa = new HashMap<>();
+        bankFouePa.put("dateTime", dateTime);
+        bankFouePa.put("type", type);
+
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(bankFouePa);
+
+        String respos = ToolUtils.mapToUrl(treeMap);
+        String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n请求地址："+request.getRequestURL().toString());
+        sbf.append("\n接口名称：微能查询余额参数验证");
+        sbf.append("\n接口参数：" + respos+"&sign="+sign);
+        sbf.append("\n生成签名：" + selfSign);
+        String fileName = "WnApi";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", fileName,true);
+
+        if(!selfSign.equals(sign)){
+
+            responsPa.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+            responsPa.put("info","签名有误");
+            return responsPa.toString();
+        }
+        WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+        String responseP = null;
+        if(type.equals("1")){
+
+            responseP = wnpayUtils.flowBalance();
+        }else if (type.equals("2")){
+
+            responseP = wnpayUtils.flowReport();
+        }
+
+        return responseP;
+    }
+    /**
+     * 微能获取产品信息
+     * */
+    @RequestMapping(value = "/wnProduct", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String getWnProduct(HttpServletRequest request){
+
+        String dateTime = request.getParameter("dateTime");
+        String carrier = request.getParameter("carrier");
+        String sign = request.getParameter("sign");
+        JSONObject responsPa = new JSONObject();
+
+        Map<String ,String> bankFouePa = new HashMap<>();
+        bankFouePa.put("carrier", carrier);
+        bankFouePa.put("dateTime", dateTime);
+
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(bankFouePa);
+
+        String respos = ToolUtils.mapToUrl(treeMap);
+        String selfSign = Md5Encrypt.md5(respos+ConfigUtil.getValue("API_SECRET")).toUpperCase();
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n请求地址："+request.getRequestURL().toString());
+        sbf.append("\n接口名称：微能获取产品信息接口参数验证");
+        sbf.append("\n接口参数：" + respos+"&sign="+sign);
+        sbf.append("\n生成签名：" + selfSign);
+        String fileName = "WnApi";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", fileName,true);
+
+        if(!selfSign.equals(sign)){
+
+            responsPa.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
+            responsPa.put("info","签名有误");
+            return responsPa.toString();
+        }
+        WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+        String wnProduct = wnpayUtils.getProduct(carrier);
+
+        return wnProduct;
+    }
+    /**
+     * 微能查询余额、状态报告获取
+     * */
+    @RequestMapping(value = "flowReport",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String flowReport(){
+
+        WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+        String responseP = wnpayUtils.flowReport();
+
+        JSONObject actualDeal = JSONObject.fromObject(responseP);
+        String content = null;
+        String infoErrorOrder = null;
+        String sucOrder = "";
+        String faildOrder = "";
+        if(actualDeal.get("code").equals("10000")){
+
+            content = "是";
+            JSONArray dataDeal = JSONArray.fromObject(actualDeal.get("data"));
+            if(dataDeal.size()>0){
+
+                for(int i=0;i<dataDeal.size();i++){
+
+                    JSONObject job = dataDeal.getJSONObject(i);
+                    ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderByOrderNo(job.get("outOrderId").toString());
+                    if (orderInfo ==null){
+                        infoErrorOrder+= job.get("outOrderId").toString()+",";
+                        continue;
+                    }
+                    // 查询订单
+                    ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+                    orderinfo.setId(orderInfo.getId());
+                    orderinfo.setUpdatetime(new Date());
+                    if (job.get("reportStatus").toString().equals("0")){
+
+                        sucOrder+=orderInfo.getOrderNo()+",";
+                        orderinfo.setRechargeStatus("1");
+                    }else{
+
+                        faildOrder+=orderInfo.getOrderNo()+",";
+                        orderinfo.setRechargeStatus("9");
+                    }
+                    shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+                }
+            }
+        }else{
+            content = "否";
+        }
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n接口名称：微能获取订单状态");
+        sbf.append("\n是否有待处理订单："+content);
+        sbf.append("\n充值成功："+sucOrder);
+        sbf.append("\n充值失败："+faildOrder);
+        sbf.append("\n订单信息错误：" + infoErrorOrder);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnReportApi",true);
+
+        return "1";
+    }
+    /**
+     * 微能接口测试
+     * */
+    @RequestMapping(value = "wntest",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String wnTest(HttpServletRequest request){
+        /*
+            //充值接口
+            JSONObject requestParam = new JSONObject();
+            requestParam.put("mobile","18311171705");
+            requestParam.put("productId","40000010");
+            requestParam.put("outOrderId",DateUtils.getDate2YmdhmsString(new Date()));
+
+            WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+            String wnProduct = wnpayUtils.flowOrder(requestParam);
+
+         */
+
+        return null;// wnProduct;
     }
 
     private Map<String,Object> _filter(String data)

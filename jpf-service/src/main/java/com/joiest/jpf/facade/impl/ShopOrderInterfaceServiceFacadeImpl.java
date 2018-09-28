@@ -85,6 +85,28 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
     }
 
     /**
+     * 获取单条订单信息 by uid
+     */
+    @Override
+    public ShopOrderInterfaceInfo getOrderByOrderNo(String orderNo){
+
+        PayShopOrderExample example = new PayShopOrderExample();
+        PayShopOrderExample.Criteria c = example.createCriteria();
+        c.andOrderNoEqualTo(orderNo);
+        List<PayShopOrder> list = payShopOrderMapper.selectByExample(example);
+        if ( list == null || list.isEmpty() )
+        {
+            return null;
+        }
+        ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayShopOrder.class, ShopOrderInterfaceInfo.class, false);
+        beanCopier.copy(list.get(0), info, null);
+
+        return info;
+    }
+
+
+    /**
      * 获取用户订单数量，已取消的不统计
      */
     @Override

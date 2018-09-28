@@ -97,6 +97,21 @@ public class ShopProductInterfaceInfo {
     private Date addtime;
 
     /**
+     * 微能移动产品id
+     */
+    private Integer cmccProductId;
+
+    /**
+     * 微能联通产品id
+     */
+    private Integer cuccProductId;
+
+    /**
+     * 微能电信产品id
+     */
+    private Integer ctcProductId;
+
+    /**
      *
      */
     private Date updatetime;
@@ -237,6 +252,29 @@ public class ShopProductInterfaceInfo {
         this.type = type;
     }
 
+    public Integer getCmccProductId() {
+        return cmccProductId;
+    }
+
+    public void setCmccProductId(Integer cmccProductId) {
+        this.cmccProductId = cmccProductId;
+    }
+
+    public Integer getCuccProductId() {
+        return cuccProductId;
+    }
+
+    public void setCuccProductId(Integer cuccProductId) {
+        this.cuccProductId = cuccProductId;
+    }
+
+    public Integer getCtcProductId() {
+        return ctcProductId;
+    }
+
+    public void setCtcProductId(Integer ctcProductId) {
+        this.ctcProductId = ctcProductId;
+    }
 
     public Date getAddtime() {
         return addtime;
