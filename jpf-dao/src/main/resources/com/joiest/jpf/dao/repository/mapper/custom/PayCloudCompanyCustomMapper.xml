@@ -27,6 +27,10 @@
     <result column="created" jdbcType="TIMESTAMP" property="created" />
     <result column="cloudmoney" jdbcType="DECIMAL" property="cloudmoney" />
     <result column="cloudcode" jdbcType="VARCHAR" property="cloudcode" />
+    <result column="advance_money" jdbcType="DECIMAL" property="advanceMoney" />
+    <result column="advance_code" jdbcType="VARCHAR" property="advanceCode" />
+    <result column="freeze_money" jdbcType="DECIMAL" property="freezeMoney" />
+    <result column="freeze_code" jdbcType="VARCHAR" property="freezeCode" />
     <result column="cloudpaypwd" jdbcType="VARCHAR" property="cloudpaypwd" />
     <result column="updated" jdbcType="TIMESTAMP" property="updated" />
     <result column="certificate" jdbcType="VARCHAR" property="certificate" />
