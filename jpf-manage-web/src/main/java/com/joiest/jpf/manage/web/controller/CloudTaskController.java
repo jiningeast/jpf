@@ -309,6 +309,7 @@ public class CloudTaskController {
             cloudInterfaceStreamInfo.setRequestContent(path);
             cloudInterfaceStreamInfo.setResponseContent(response);
             cloudInterfaceStreamInfo.setAddtime(new Date());
+            cloudInterfaceStreamInfo.setBatchNo(Batchno);
             cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
 
             // 写入缓存文件
@@ -554,7 +555,7 @@ public class CloudTaskController {
             companyMoneyId = cloudCompanyMoneyInfo1.getId();
         }
 
-        // 鉴权信息数据入库，此代码段暂存在此处
+        // 鉴权信息数据入库
         Map<String,List< LinkedHashMap<String,String> >> jsonMapData = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > personsList = jsonMapData.get("data");
         CloudCompanyStaffInfo cloudCompanyStaffInfo = new CloudCompanyStaffInfo();
@@ -562,10 +563,13 @@ public class CloudTaskController {
         for ( LinkedHashMap<String,String> singlePerson:personsList ){
             // 通过身份证号和手机号先判断企业有没有这个员工
             CloudCompanyStaffInfo info = new CloudCompanyStaffInfo();
+            info.setNickname(singlePerson.get("name"));
             info.setIdcard(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
             info.setMobile(singlePerson.get("phone"));
+            info.setMerchNo(singlePerson.get("bankNo"));
             info.setStatus((byte)1);
-            CloudCompanyStaffInfo existStaff = cloudCompanyStaffServiceFacade.getStaffByInfo(info);
+            CloudCompanyStaffInfo existStaff = cloudCompanyStaffServiceFacade.getOneStaff(info);
+//            CloudCompanyStaffInfo existStaff = cloudCompanyStaffServiceFacade.getStaffByInfo(info);
             int staffId;
             if ( existStaff.getId() == null ){
                 // 插入员工信息

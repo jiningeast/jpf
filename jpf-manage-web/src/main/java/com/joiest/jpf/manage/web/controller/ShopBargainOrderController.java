@@ -1,14 +1,12 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.dto.GetShopBargainOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainOrderResponse;
 import com.joiest.jpf.entity.ShopBargainOrderInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.ShopBargainOrderServiceFacade;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
-import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +101,7 @@ public class ShopBargainOrderController {
         return new ModelAndView("shopBargainOrder/orderDetail", modelMap);
 
     }
+
     /**
      * 审核页
      */
@@ -120,6 +119,7 @@ public class ShopBargainOrderController {
         return new ModelAndView("shopBargainOrder/audit", modelMap);
 
     }
+
     /**
      * 审核操作
      */

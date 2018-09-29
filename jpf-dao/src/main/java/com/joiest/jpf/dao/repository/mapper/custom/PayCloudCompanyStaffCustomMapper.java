@@ -84,4 +84,9 @@ public interface PayCloudCompanyStaffCustomMapper {
      * @param record
      */
     int updateByPrimaryKey(PayCloudCompanyStaff record);
+
+    /**
+     * 根据姓名、银行卡号、身份证号、手机号查询一个人的鉴权记录
+     */
+    PayCloudCompanyStaff selectOneStaff(PayCloudCompanyStaff payCloudCompanyStaff);
 }

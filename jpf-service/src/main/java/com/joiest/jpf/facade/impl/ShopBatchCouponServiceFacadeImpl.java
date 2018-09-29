@@ -119,7 +119,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             String phone = singlePerson.get("phone").toString();
             String value = singlePerson.get("dou").toString();
             String idno = singlePerson.get("idno") == null ? "" : singlePerson.get("idno").toString();
-            ShopCustomerInfo sendedCustomerInfo = sendCouponToPerson(name,phone,idno,value,companyId,companyName,batchNo);
+            ShopCustomerInfo sendedCustomerInfo = sendCouponToPersonAndActive(name,phone,idno,value,companyId,companyName,batchNo);
             sendedList.add(sendedCustomerInfo);
             if ( sendedCustomerInfo.getStatus() != 1 ){
                 allSuccess = false;
@@ -170,13 +170,13 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
     }
 
     /**
-     * 将一个欣券发给某个人
+     * 将一个欣券发给某个人并激活
      */
     @Override
     @Transactional
-    public ShopCustomerInfo sendCouponToPerson(String name, String phone, String idno, String dou, String companyId, String companyName, String batchNo){
-        // 充值失败的用户集合
-        ShopCustomerInfo failCustomer = new ShopCustomerInfo();
+    public ShopCustomerInfo sendCouponToPersonAndActive(String name, String phone, String idno, String dou, String companyId, String companyName, String batchNo){
+        // 充值成功的用户集合
+        ShopCustomerInfo chargedCustomer = new ShopCustomerInfo();
 
         // 判断数据库有没有这个顾客，没有就添加
         PayShopCustomerExample payShopCustomerExample = new PayShopCustomerExample();
@@ -204,10 +204,11 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             String newCode = ToolUtils.CreateCode(dou,customerInsert.getId());      // dou校验码
             PayShopCustomer customerUpdate = new PayShopCustomer();
             customerUpdate.setCode(newCode);
+            customerUpdate.setUpdatetime(new Date());
             payShopCustomerMapper.updateByExampleSelective(customerUpdate,customerExample);
 
             payShopCustomer = customerInsert;
-            failCustomer.setPhone(phone);
+            chargedCustomer.setPhone(phone);
         }else{
             // 充值豆
             payShopCustomer = customerList.get(0);
@@ -217,7 +218,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             payShopCustomer.setCode(newCode);
             payShopCustomer.setUpdatetime(new Date());
             payShopCustomerMapper.updateByPrimaryKey(payShopCustomer);
-            failCustomer.setPhone(payShopCustomer.getPhone());
+            chargedCustomer.setPhone(payShopCustomer.getPhone());
         }
 
         // 查找充值面值的一张券
@@ -291,8 +292,89 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             throw new JpfException("10001","未查到豆数量为"+dou+"的可用的券");
         }
 
-        failCustomer.setStatus((byte)1);
-        return failCustomer;
+        chargedCustomer.setStatus((byte)1);
+        return chargedCustomer;
+    }
+
+    /**
+     * 获取对应面值的若干欣券
+     */
+    @Override
+    @Transactional
+    public List<ShopBatchCouponInfo> getCoupons(List<LinkedHashMap<String,Object>> list, String companyId, String batchNo, String excelLocalUrl){
+        // OSS上传excel文件
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("path",excelLocalUrl);
+        String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
+        String response = OkHttpUtils.postForm(url,requestMap);
+
+        // 增加==OSS接口流水==
+        PayCloudInterfaceStream payCloudInterfaceStream = new PayCloudInterfaceStream();
+        payCloudInterfaceStream.setType((byte)0);
+        payCloudInterfaceStream.setRequestUrl(url);
+        payCloudInterfaceStream.setRequestContent(ToolUtils.mapToUrl(requestMap));
+        payCloudInterfaceStream.setResponseContent(response);
+        payCloudInterfaceStream.setAddtime(new Date());
+        payCloudInterfaceStreamMapper.insertSelective(payCloudInterfaceStream);
+
+        // 更新批次表相关字段
+        PayShopBatchExample batchExample = new PayShopBatchExample();
+        PayShopBatchExample.Criteria batchCriteria = batchExample.createCriteria();
+        batchCriteria.andBatchNoEqualTo(batchNo);
+        List<PayShopBatch> batchList = payShopBatchMapper.selectByExample(batchExample);
+        String batchId = batchList.get(0).getId();
+        PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(batchId);
+
+        String newExcelUrl;
+        if ( StringUtils.isNotBlank(payShopBatch.getExcelUrl()) ){
+            newExcelUrl = payShopBatch.getExcelUrl() +','+ response;
+        }else{
+            newExcelUrl = response;
+        }
+
+        PayShopBatch payShopBatchUpdate = new PayShopBatch();
+        payShopBatchUpdate.setId(batchId);
+        payShopBatchUpdate.setExcelUrl(newExcelUrl);
+        payShopBatchUpdate.setSendTime(new Date());
+        payShopBatchUpdate.setSendType((byte)1);
+        payShopBatchUpdate.setUpdatetime(new Date());
+        payShopBatchMapper.updateByPrimaryKeySelective(payShopBatchUpdate);
+
+        // 获取待发券的个人
+        List<ShopBatchCouponInfo> couponsList = new ArrayList<>();
+        for ( int i=0; i<list.size(); i++){
+            // 获取手机号
+            LinkedHashMap<String,Object> singlePerson = list.get(i);
+            ShopBatchCouponInfo shopBatchCouponInfo = new ShopBatchCouponInfo();
+            shopBatchCouponInfo.setActivePhone(singlePerson.get("phone").toString());
+
+            // 获取充值面值的一张券
+            PayShopBatchCouponExample couponExample = new PayShopBatchCouponExample();
+            PayShopBatchCouponExample.Criteria couponCriteria = couponExample.createCriteria();
+            couponCriteria.andCompanyIdEqualTo(companyId);
+            couponCriteria.andDouEqualTo(Integer.parseInt(singlePerson.get("dou").toString()));
+            couponCriteria.andBatchNoEqualTo(batchNo);
+            couponCriteria.andIsActiveEqualTo((byte)0);
+            couponCriteria.andIsExpiredEqualTo((byte)0);
+            List<PayShopBatchCoupon> findCoupons = payShopBatchCouponMapper.selectByExample(couponExample);
+            if ( !list.isEmpty() ){
+                // 将找到的券分配给个人
+                PayShopBatchCoupon findCoupon = findCoupons.get(0);
+                shopBatchCouponInfo.setActiveCode(findCoupon.getActiveCode());
+                couponsList.add(shopBatchCouponInfo);
+
+                // 将个人的手机号更新到该券的信息中
+                findCoupon.setActivePhone(singlePerson.get("phone").toString());
+                findCoupon.setSendTime(new Date());
+                findCoupon.setSendType((byte)3);
+                findCoupon.setUpdatetime(new Date());
+                payShopBatchCouponMapper.updateByPrimaryKeySelective(findCoupon);
+            }else{
+                throw new JpfException("10001","未查到豆数量为"+singlePerson.get("dou")+"的可用的券");
+            }
+        }
+
+        return couponsList;
     }
 
     /**

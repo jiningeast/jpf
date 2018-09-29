@@ -40,12 +40,14 @@
                     }},
                 {field:'activeTime',title:'激活时间',width:"11%",formatter:formatDateStr},
                 {field:'expireTime',title:'过期时间',width:"11%",formatter:formatDateStr},
-                {field:'sendType',title:'发送方式',width:"6%",formatter:function (value,row,index) {
+                {field:'sendType',title:'发送方式',width:"10%",formatter:function (value,row,index) {
                         if ( value == 0 ){
                             return "<font style='color: #0e90d2'>Email发送</font>";
                         }else if (value == 1){
-                            return "<font style='color: #0e90d2'>群发给个人<font>";
-                        }else {
+                            return "<font style='color: #0e90d2'>群发给个人并激活<font>";
+                        }else if (value == 2){
+                            return "<font style='color: #0e90d2'>群发给个人不激活<font>";
+                        } else {
                             return "未发送";
                         }
                     }},

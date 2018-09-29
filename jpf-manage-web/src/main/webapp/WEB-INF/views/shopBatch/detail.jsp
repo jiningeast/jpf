@@ -27,7 +27,7 @@
                     param["couponIds"] = "";
                     if (r){
                         for (var i = 0; i < rows.length; i++) {
-                            if ( rows[i].isActive == 0 ){
+                            if ( !rows[i].activePhone ){
                                 $.messager.alert('消息提示','请选择已经发送过短信的用户进行重发','info');
                                 return false;
                             }
@@ -89,8 +89,10 @@
                         if ( value == 0 ){
                             return "<font style='color: #0e90d2'>Email发送</font>";
                         }else if (value == 1){
-                            return "<font style='color: #0e90d2'>群发给个人<font>";
-                        }else {
+                            return "<font style='color: #0e90d2'>群发给个人并激活<font>";
+                        }else if (value == 2){
+                            return "<font style='color: #0e90d2'>群发给个人不激活<font>";
+                        } else {
                             return "未发送";
                         }
                     }},
