@@ -84,8 +84,6 @@ public class ShopCustomerInfo {
      */
     private Date updatetime;
 
-    private static final long serialVersionUID = 1L;
-
     public String getId() {
         return id;
     }

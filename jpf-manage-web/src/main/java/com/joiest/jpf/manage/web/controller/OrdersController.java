@@ -5,7 +5,6 @@ import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetOrdersRequest;
 import com.joiest.jpf.dto.GetOrdersResponse;
-import com.joiest.jpf.dto.OrderYinjiaApiResponse;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import org.apache.commons.lang3.StringUtils;
@@ -18,9 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 
-import static com.joiest.jpf.manage.web.constant.ManageConstants.PAY_DETAIL;
-import static com.joiest.jpf.manage.web.constant.ManageConstants.REFUND_STATUS;
-import static com.joiest.jpf.manage.web.constant.ManageConstants.USER_OPERATE_STATUS;
+import static com.joiest.jpf.manage.web.constant.ManageConstants.*;
 
 @Controller
 @RequestMapping("/orders")

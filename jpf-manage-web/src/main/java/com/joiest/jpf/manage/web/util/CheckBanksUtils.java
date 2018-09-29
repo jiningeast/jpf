@@ -5,9 +5,11 @@ import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.CheckBanksRequest;
+import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
 import com.joiest.jpf.entity.CloudTaskInfo;
+import com.joiest.jpf.facade.CloudCompanyStaffServiceFacade;
 import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
 import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
 import com.joiest.jpf.facade.CloudTaskServiceFacade;
@@ -26,6 +28,8 @@ public class CheckBanksUtils implements Runnable {
     private CloudInterfaceStreamServiceFacade cloudInterfaceStreamServiceFacade;
 
     private CloudTaskServiceFacade cloudTaskServiceFacade;
+
+    private CloudCompanyStaffServiceFacade cloudCompanyStaffServiceFacade;
 
     private String cacheFileName;
 
@@ -118,6 +122,25 @@ public class CheckBanksUtils implements Runnable {
                 }else {
                     // 鉴权失败
                     logger.info("[鉴权失败][" + checkBanksRequest.getStaffId() + "][" + checkBanksRequest.getName() + "][" + checkBanksRequest.getMobile() + "]");
+
+                    // 更新员工状态为鉴权失败
+                    CloudCompanyStaffInfo info = new CloudCompanyStaffInfo();
+                    info.setNickname(checkBanksRequest.getName());
+                    info.setMobile(checkBanksRequest.getMobile());
+                    info.setIdcard(checkBanksRequest.getIdCard());
+                    info.setMerchNo(checkBanksRequest.getAccountNo());
+                    CloudCompanyStaffInfo existInfo = cloudCompanyStaffServiceFacade.getOneStaff(info);
+                    existInfo.setStatus((byte)-3);
+                    existInfo.setUpdated(new Date());
+                    int companyStaffupdateRes = cloudCompanyStaffServiceFacade.upCloudCompanyStaffById(existInfo);
+                    if ( companyStaffupdateRes > 0 ){
+                        // 更新成功
+                        logger.info("[更新员工为鉴权失败操作成功][" + checkBanksRequest.getStaffId() + "][" + checkBanksRequest.getName() + "][" + checkBanksRequest.getMobile() + "]");
+                    }else{
+                        // 更新失败
+                        logger.info("[更新员工为鉴权失败操作成功][" + checkBanksRequest.getStaffId() + "][" + checkBanksRequest.getName() + "][" + checkBanksRequest.getMobile() + "]");
+                    }
+
                 }
             }
         }

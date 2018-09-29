@@ -1,6 +1,5 @@
 package com.joiest.jpf.entity;
 
-import java.math.BigInteger;
 import java.util.Date;
 
 public class CloudCompanyStaffInfo {

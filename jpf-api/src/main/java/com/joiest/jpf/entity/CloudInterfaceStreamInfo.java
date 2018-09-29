@@ -34,6 +34,11 @@ public class CloudInterfaceStreamInfo {
     private String taskId;
 
     /**
+     * 批次号（excel的文件名）
+     */
+    private String batchNo;
+
+    /**
      * 员工id
      */
     private String staffId;
@@ -99,6 +104,14 @@ public class CloudInterfaceStreamInfo {
 
     public void setTaskId(String taskId) {
         this.taskId = taskId;
+    }
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
     }
 
     public String getStaffId() {

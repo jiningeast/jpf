@@ -1,7 +1,6 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.MessageUtil;
-import com.joiest.jpf.cloud.api.util.ToolsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.entity.TextMessageInfo;
@@ -12,9 +11,6 @@ import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
-
-import java.io.PrintWriter;
-import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +25,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
