@@ -481,7 +481,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
             }else{
                 // 30004 提交单条数据到接口由于支付限制 接口无返回data参数
                 if(code.equals("30004")){
-
+ 
                     if(  realPayMapData.containsKey(dfIds)  ){//存在限制代付ID 删除
                         CloudDfMoneyInfo cloudInfos = realPayMapData.get(dfIds);
                         applyFailMoney.add(cloudInfos.getCommoney());

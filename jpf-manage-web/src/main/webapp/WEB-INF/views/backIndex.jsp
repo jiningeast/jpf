@@ -229,7 +229,12 @@
                     "menuname" : "欣券客户管理",
                     "icon" : "icon-nav",
                     "url" : "shopCustomer/index"
-                }]
+                },{
+                        "menuid" : "802",
+                        "menuname" : "云账户用户限额管理",
+                        "icon" : "icon-nav",
+                        "url" : "cloudStaffMonthTotal/index"
+                    }]
             },{
                 "menuid" : "9",
                 "icon" : "icon-sys",
