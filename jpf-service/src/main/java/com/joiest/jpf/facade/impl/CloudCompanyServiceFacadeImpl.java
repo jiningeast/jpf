@@ -438,6 +438,24 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
         return  res;
     }
 
+    public Boolean checkCompanyAdvanceVerify(String id){
+
+        PayCloudCompany payCloudCompany= payCloudCompanyMapper.selectByPrimaryKey(id);
+        CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayCloudCompany.class,CloudCompanyInfo.class,false);
+        beanCopier.copy(payCloudCompany,cloudCompanyInfo,null);
+
+        //金额校验
+        String advanceMoney = cloudCompanyInfo.getAdvanceMoney().toString();
+        String advanceCode = cloudCompanyInfo.getAdvanceCode();
+
+        String newCloudCode = Md5Encrypt.md5(id+advanceMoney+"test","UTF-8");   //加密规则：  id+金额+key
+        Boolean res = advanceCode.equals(newCloudCode); //校验加密是否一致
+
+        return  res;
+    }
+
     /**
      * 云账户公司修改
      */
@@ -739,6 +757,7 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
      * 根据主键id 更新表字段信息
      */
     @Override
+    @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
     public int updateSetiveById(PayCloudCompany payCloudCompany){
         if( payCloudCompany == null ){
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "未获取到公司信息");

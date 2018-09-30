@@ -1,8 +1,15 @@
 package com.joiest.jpf.manage.web.controller;
 
 
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayCloudCompany;
 import com.joiest.jpf.common.po.PayCloudCompanyMoney;
+import com.joiest.jpf.common.po.PayCloudDfMoneyFreeze;
 import com.joiest.jpf.common.util.LogsCustomUtils;
+import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyFreezeMapper;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
@@ -23,6 +30,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -54,10 +62,19 @@ public class CloudCompanyMoneyController {
     @Autowired
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
+    @Autowired
+    private CloudDfMoneyFreezeServiceFacade cloudDfMoneyFreezeServiceFacade;
+
     @RequestMapping("/index")
     public String index(){
         return "cloudCompanyMoney/companyList";
     }
+
+    @Autowired
+    private PayCloudCompanyMapper payCloudCompanyMapper;
+
+    @Autowired
+    private PayCloudDfMoneyFreezeMapper payCloudDfMoneyFreezeMapper;
 
     /**
      * 批次管理页
@@ -298,8 +315,6 @@ public class CloudCompanyMoneyController {
 
             for (int i = 0; i < companyMoneyInfoList.size() ; i++) {
 
-
-
                 logContent = new StringBuilder(); //初始化日志变量
 
                 String companyMoneyId = companyMoneyInfoList.get(i).getId();
@@ -322,6 +337,26 @@ public class CloudCompanyMoneyController {
                 if( dfRets.size() > 0 ){
 
                     for (int m = 0; m < dfRets.size() ; m++) {
+
+                        //查询公司账号信息
+                        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(dfRets.get(i).getUid().toString());
+                        if( companyInfo == null ){
+                            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到公司信息");
+                        }
+                        String companyId = companyInfo.getId(); //公司ID
+                        BigDecimal cloudMoney = companyInfo.getCloudmoney(); //账户金额
+                        String cloudcode = companyInfo.getCloudcode(); //金额校验码
+                        BigDecimal advanceMoney = companyInfo.getAdvanceMoney();    //预付款
+                        String advanceCode = companyInfo.getAdvanceCode();
+                        BigDecimal freezeMoney = companyInfo.getFreezeMoney();      //冻结款
+                        String freezeCode = companyInfo.getFreezeCode();
+
+
+                        Boolean checkMoneyVerify = cloudCompanyServiceFacade.checkCompanyMoneyVerify(companyId);
+                        if( !checkMoneyVerify ){
+                            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "金额校验失败");
+                        }
+
 
                         logCloudContent = new StringBuilder(); //初始化日志变量
 
@@ -427,7 +462,64 @@ public class CloudCompanyMoneyController {
 
                                 }
 
+                                BigDecimal afterAdvanceMoney = advanceMoney.subtract(dfRets.get(i).getCommoney());  //预付款
+                                String afterAdvanceCode = ToolUtils.CreateCode(afterAdvanceMoney.toString(), dfRets.get(i).getUid().toString());
+                                PayCloudCompany paycloudcompnay = new PayCloudCompany();
+                                paycloudcompnay.setAdvanceMoney(afterAdvanceMoney); //预付款
+                                paycloudcompnay.setAdvanceCode(afterAdvanceCode);
 
+                                if( code.equals("10000") ){
+                                    if( responseMap.has("data") && StringUtils.isNotBlank(responseMap.get("data").toString()) ){
+                                        JSONObject data = JSONObject.fromObject(responseMap.getString("data"));
+                                       /* 代付状态 00 提交申请，01 审核通过，02 申请被拒绝，03 已打批次，04 提交到渠道，05 代付成功，06 代付失败*/
+                                        String orderStatus = data.get("orderStatus").toString();
+
+                                        if( orderStatus.equals("02") || orderStatus.equals("03") || orderStatus.equals("06")){
+                                            //失败: 扣除预付款 至 冻结
+                                            BigDecimal afterFreezeMoney = freezeMoney.add(dfRets.get(i).getCommoney()); //冻结
+                                            String afterFreezeCode = ToolUtils.CreateCode(afterFreezeMoney.toString(), dfRets.get(i).getUid().toString());
+                                            paycloudcompnay.setFreezeMoney(afterFreezeMoney);
+                                            paycloudcompnay.setFreezeCode(afterFreezeCode);
+
+                                            //添加冻结记录
+//                                            PayCloudDfMoneyFreeze freeInfo = new PayCloudDfMoneyFreeze();
+                                            CloudDfMoneyFreezeInfo freeInfo = new CloudDfMoneyFreezeInfo();
+                                            freeInfo.setCompanyMoneyId(Long.valueOf(dfRets.get(i).getCompanyMoneyId()));
+                                            freeInfo.setDfMoneyId(dfRets.get(i).getId());
+                                            freeInfo.setOrderid(dfRets.get(i).getOrderid());
+                                            freeInfo.setMoney(dfRets.get(i).getCommoney());
+                                            freeInfo.setContent(response);
+                                            freeInfo.setStatus(1);
+                                            freeInfo.setMoneyStatus(1);
+                                            freeInfo.setAddtime(new Date());
+                                            cloudDfMoneyFreezeServiceFacade.add(freeInfo);
+                                        }
+                                        paycloudcompnay.setId(dfRets.get(i).getUid().toString());
+                                        cloudCompanyServiceFacade.updateSetiveById(paycloudcompnay);
+                                    }
+                                } else if ( code.equals("10008") )
+                                {
+                                    //扣除预付款 至 冻结
+                                    BigDecimal afterFreezeMoney = freezeMoney.add(dfRets.get(i).getCommoney()); //冻结
+                                    String afterFreezeCode = ToolUtils.CreateCode(afterFreezeMoney.toString(), dfRets.get(i).getUid().toString());
+                                    paycloudcompnay.setFreezeMoney(afterFreezeMoney);
+                                    paycloudcompnay.setFreezeCode(afterFreezeCode);
+
+                                    //添加冻结记录
+                                    CloudDfMoneyFreezeInfo freeInfo = new CloudDfMoneyFreezeInfo();
+                                    freeInfo.setCompanyMoneyId(Long.valueOf(dfRets.get(i).getCompanyMoneyId()));
+                                    freeInfo.setDfMoneyId(dfRets.get(i).getId());
+                                    freeInfo.setOrderid(dfRets.get(i).getOrderid());
+                                    freeInfo.setMoney(dfRets.get(i).getCommoney());
+                                    freeInfo.setContent(response);
+                                    freeInfo.setStatus(1);
+                                    freeInfo.setMoneyStatus(1);
+                                    freeInfo.setAddtime(new Date());
+                                    cloudDfMoneyFreezeServiceFacade.add(freeInfo);
+
+                                    paycloudcompnay.setId(dfRets.get(i).getUid().toString());
+                                    cloudCompanyServiceFacade.updateSetiveById(paycloudcompnay);
+                                }
                             }
 
 

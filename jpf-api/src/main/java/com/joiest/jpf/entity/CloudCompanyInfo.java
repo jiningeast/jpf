@@ -110,6 +110,26 @@ public class CloudCompanyInfo {
     private String cloudcode;
 
     /**
+     * 预付款金额
+     */
+    private BigDecimal advanceMoney;
+
+    /**
+     * 预付款校验码
+     */
+    private String advanceCode;
+
+    /**
+     * 冻结金额
+     */
+    private BigDecimal freezeMoney;
+
+    /**
+     * 冻结校验码
+     */
+    private String freezeCode;
+
+    /**
      * 云账户支付密码
      */
     private String cloudpaypwd;
@@ -334,6 +354,38 @@ public class CloudCompanyInfo {
 
     public void setCloudcode(String cloudcode) {
         this.cloudcode = cloudcode;
+    }
+
+    public BigDecimal getAdvanceMoney() {
+        return advanceMoney;
+    }
+
+    public void setAdvanceMoney(BigDecimal advanceMoney) {
+        this.advanceMoney = advanceMoney;
+    }
+
+    public String getAdvanceCode() {
+        return advanceCode;
+    }
+
+    public void setAdvanceCode(String advanceCode) {
+        this.advanceCode = advanceCode;
+    }
+
+    public BigDecimal getFreezeMoney() {
+        return freezeMoney;
+    }
+
+    public void setFreezeMoney(BigDecimal freezeMoney) {
+        this.freezeMoney = freezeMoney;
+    }
+
+    public String getFreezeCode() {
+        return freezeCode;
+    }
+
+    public void setFreezeCode(String freezeCode) {
+        this.freezeCode = freezeCode;
     }
 
     public String getCloudpaypwd() {
