@@ -3,7 +3,6 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.po.PayCloudStaffBanks;
 import com.joiest.jpf.common.po.PayCloudStaffBanksExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudStaffBanksMapper;
-import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 import com.joiest.jpf.entity.CloudStaffBanksInfo;
 import com.joiest.jpf.facade.CloudStaffBanksServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;

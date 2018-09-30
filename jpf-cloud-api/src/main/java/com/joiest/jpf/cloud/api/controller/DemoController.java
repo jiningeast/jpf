@@ -11,6 +11,7 @@ import com.joiest.jpf.facade.OrderServiceFacade;
 import net.lingala.zip4j.exception.ZipException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -190,5 +191,14 @@ public class DemoController {
         idno = idno.toUpperCase();
 
         return idno;
+    }
+
+    @RequestMapping("test2")
+    @ResponseBody
+    public String test2(){
+        String str = "1";
+        String lastNum = StringUtils.substring(String.valueOf(str),-1,String.valueOf(str).length());
+
+        return lastNum;
     }
 }

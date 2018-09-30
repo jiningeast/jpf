@@ -105,11 +105,37 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
         }
 
+        // 判断用户是否已禁用
+        if ( userInfo.getStatus() == 0 ){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_IS_FREEZE.getCode(), JpfInterfaceErrorInfo.USER_IS_FREEZE.getDesc(), "");
+        }
+
         //获取商品信息
         ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(request.getPid());
         if ( productInfo == null )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getCode(), JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getDesc(), "");
+        }
+
+        // 先创建一个空订单，待更新
+        ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
+        String orderno = ToolsUtils.createOrderid();
+        info.setOrderNo(orderno);
+        info.setCustomerId(userInfo.getId());
+        info.setCustomerName(userInfo.getNickname());
+        info.setProductId(productInfo.getId());
+        info.setProductName(productInfo.getName());
+        info.setProductMoney(productInfo.getMoney());
+        info.setProductDou(productInfo.getDou());
+        info.setProductInfoId(productInfo.getProductInfoId());
+        info.setAddtime(new Date());
+        int orderId = shopOrderInterfaceServiceFacade.addOrder(info);
+        // 获取orderid的个位数，0,1时用欧非接口，2-9用威能接口
+        String lastNum = StringUtils.substring(String.valueOf(orderId),-1,String.valueOf(orderId).length());
+        if ( Integer.parseInt(lastNum) <= 1 ){
+            info.setInterfaceType((byte)1);     // 0=欧非 1=威能
+        }else {
+            info.setInterfaceType((byte)0);
         }
 
         // 验证传入的信息
@@ -144,21 +170,17 @@ public class OrdersController {
             } else if ( request.getOtype().equals("3") ) {
                 //话费充值
                 Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(request.getPhone()).matches();
-                if ( !phoneIsTrue )
-                {
+                if ( !phoneIsTrue ) {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码错误");
                 }
                 Boolean mobileIsTrue =  Pattern.compile(reg_phone).matcher(request.getMobile()).matches();
-                if ( !mobileIsTrue )
-                {
+                if ( !mobileIsTrue ) {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码错误");
                 }
-                if ( !request.getPhone().equals(request.getMobile()) )
-                {
+                if ( !request.getPhone().equals(request.getMobile()) ) {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码不一致");
                 }
                 if(!requestMap.containsKey("carrier") || StringUtils.isBlank(requestMap.get("carrier").toString())){
-
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "运营商信息错误");
                 }
                 //移动cmcc，联通:cucc，电信:ctc，
@@ -172,7 +194,6 @@ public class OrdersController {
                 if(!carrierList.contains(requestMap.get("carrier").toString()))
                 {
                     throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "运营商信息错误");
-
                 }
 
                 chargeNo = request.getPhone();
@@ -187,49 +208,29 @@ public class OrdersController {
         }
         */
 
-        // 创建订单
-        String orderno = ToolsUtils.createOrderid();
-        ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
-        info.setOrderNo(orderno);
-        info.setCustomerId(userInfo.getId());
-        info.setCustomerName(userInfo.getNickname());
-        info.setProductId(productInfo.getId());
-        info.setProductName(productInfo.getName());
-        info.setProductMoney(productInfo.getMoney());
-        info.setProductDou(productInfo.getDou());
-        info.setProductInfoId(productInfo.getProductInfoId());
-
-        if(requestMap.containsKey("carrier") && request.getOtype().equals("3")){
-
+        // 构建订单信息
+        if( requestMap.containsKey("carrier") && request.getOtype().equals("3") && info.getInterfaceType()==1 ){
             //移动cmcc，联通:cucc，电信:ctc，
             switch(requestMap.get("carrier").toString()){
                 case "cmcc":
-
                     if(productInfo.getCmccProductId()!=null){
-
                         info.setWnProductId(productInfo.getCmccProductId().toString());
-                        info.setInterfaceType((byte)1);
                     }
                     break;
                 case "cucc":
                     if(productInfo.getCuccProductId()!=null){
-
                         info.setWnProductId(productInfo.getCuccProductId().toString());
-                        info.setInterfaceType((byte)1);
                     }
                     break;
                 case "ctc":
                     if(productInfo.getCtcProductId()!=null){
-
                         info.setWnProductId(productInfo.getCtcProductId().toString());
-                        info.setInterfaceType((byte)1);
                     }
                     break;
                 default:
                     info.setInterfaceType((byte)0);
                     break;
             }
-
         }
         if ( request.getAmount() != null && StringUtils.isNotBlank(""+request.getAmount()) ){
             // 如果参数中有数量
@@ -253,13 +254,13 @@ public class OrdersController {
             }
         }
 
-        //充值号
+        // 更新订单信息
         info.setChargeNo(chargeNo);
-        info.setAddtime(new Date());
         info.setOrderType(Byte.valueOf(request.getOtype()));
         info.setRequestedContent(requestJson);
-        info.setSource((byte)0);
-        int res = shopOrderInterfaceServiceFacade.addOrder(info);
+        info.setSource((byte)0);    // 0=自平台 1=敬恒
+        info.setUpdatetime(new Date());
+        int res = shopOrderInterfaceServiceFacade.updateOrder(info);
         if ( res >= 0 )
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), orderno);
@@ -330,11 +331,8 @@ public class OrdersController {
         //商品信息
         ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(orderInfo.getProductId());
 
-        Map<String, Object> rechargeMap = new HashMap<>();
-        Map<String, String> resultMap = new HashMap<>();
-
         //卡密商品信息判断
-        ShopStockCardInfo shopStockCardInfo = null;
+        Map<String, String> resultMap = new HashMap<>();
         if (productInfo.getType().toString().equals("2")){
             // 判断库存
             List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,orderInfo.getAmount());
@@ -348,14 +346,11 @@ public class OrdersController {
         }else{
             //充值
             if ( orderInfo.getOrderType() == 3 ) {
-
-                // 话费充值
-                //微能
                 if(orderInfo.getInterfaceType().equals((byte)1)){
-
+                    // 微能话费充值
                     resultMap = this.phoneRechargeWn(orderInfo, productInfo);
-                }else{//欧非
-
+                }else{
+                    // 欧非话费充值
                     resultMap = this.phoneRechargeOf(orderInfo, productInfo);
                 }
             } else if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 ) {
@@ -366,14 +361,25 @@ public class OrdersController {
         //添加通道流水 更新order状态
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
-        if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ) {
-            //充值成功
-            String foreign_orderid = resultMap.getOrDefault("orderid", "");     //接口订单id
-            orderinfo.setForeignOrderNo(foreign_orderid);
-            orderinfo.setStatus((byte)1);
-        }else {
-            orderinfo.setStatus((byte)2);
+        if ( orderinfo.getInterfaceType() == 0 ){
+            // 欧飞接口返回处理
+            if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ) {
+                //充值成功
+                String foreign_orderid = resultMap.getOrDefault("orderid", "");     //接口订单id
+                orderinfo.setForeignOrderNo(foreign_orderid);
+                orderinfo.setStatus((byte)1);   // 已支付
+            } else {
+                orderinfo.setStatus((byte)2);   // 支付失败
+            }
+        }else if ( orderinfo.getInterfaceType() == 1 ){
+            // 威能接口返回处理
+            if ( resultMap.containsKey("message") && resultMap.get("message").equals("成功") ){
+                orderinfo.setStatus((byte)1);   // 已支付
+            }else{
+                orderinfo.setStatus((byte)2);   // 支付失败
+            }
         }
+
         byte rechargeType = 0;
         if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 ) {
             rechargeType = 6;

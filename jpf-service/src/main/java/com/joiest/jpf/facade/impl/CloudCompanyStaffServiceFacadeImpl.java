@@ -33,6 +33,7 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
 
         PayCloudCompanyStaffExample.Criteria c = example.createCriteria();
         c.andIdcardEqualTo(cardNo);
+        c.andStatusEqualTo((byte)1);
 
         List<PayCloudCompanyStaff> getCompanyStaff = payCloudCompanyStaffMapper.selectByExample(example);
         if(getCompanyStaff == null || getCompanyStaff.isEmpty()){
@@ -58,6 +59,7 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
         PayCloudCompanyStaffExample example = new PayCloudCompanyStaffExample();
         PayCloudCompanyStaffExample.Criteria c = example.createCriteria();
         c.andIdcardEqualTo(idcard);
+        c.andStatusEqualTo((byte)1);
 
         PayCloudCompanyStaff staff = new PayCloudCompanyStaff();
 
@@ -127,6 +129,7 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
         if ( cloudCompanyStaffInfo.getMobile()!= null ){
             c.andMobileEqualTo(cloudCompanyStaffInfo.getMobile());
         }
+        c.andStatusEqualTo((byte)1);
         List<PayCloudCompanyStaff> list = payCloudCompanyStaffMapper.selectByExample(e);
 
         CloudCompanyStaffInfo cloudCompanyStaffInfo1 = new CloudCompanyStaffInfo();
