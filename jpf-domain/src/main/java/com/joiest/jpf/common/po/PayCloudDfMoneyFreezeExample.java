@@ -186,52 +186,52 @@ public class PayCloudDfMoneyFreezeExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Long value) {
+        public Criteria andIdEqualTo(String value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Long value) {
+        public Criteria andIdNotEqualTo(String value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Long value) {
+        public Criteria andIdGreaterThan(String value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Long value) {
+        public Criteria andIdLessThan(String value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Long value) {
+        public Criteria andIdLessThanOrEqualTo(String value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Long> values) {
+        public Criteria andIdIn(List<String> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Long> values) {
+        public Criteria andIdNotIn(List<String> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Long value1, Long value2) {
+        public Criteria andIdBetween(String value1, String value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Long value1, Long value2) {
+        public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -246,52 +246,52 @@ public class PayCloudDfMoneyFreezeExample {
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidEqualTo(Integer value) {
+        public Criteria andCompanyidEqualTo(String value) {
             addCriterion("companyid =", value, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidNotEqualTo(Integer value) {
+        public Criteria andCompanyidNotEqualTo(String value) {
             addCriterion("companyid <>", value, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidGreaterThan(Integer value) {
+        public Criteria andCompanyidGreaterThan(String value) {
             addCriterion("companyid >", value, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andCompanyidGreaterThanOrEqualTo(String value) {
             addCriterion("companyid >=", value, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidLessThan(Integer value) {
+        public Criteria andCompanyidLessThan(String value) {
             addCriterion("companyid <", value, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidLessThanOrEqualTo(Integer value) {
+        public Criteria andCompanyidLessThanOrEqualTo(String value) {
             addCriterion("companyid <=", value, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidIn(List<Integer> values) {
+        public Criteria andCompanyidIn(List<String> values) {
             addCriterion("companyid in", values, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidNotIn(List<Integer> values) {
+        public Criteria andCompanyidNotIn(List<String> values) {
             addCriterion("companyid not in", values, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidBetween(Integer value1, Integer value2) {
+        public Criteria andCompanyidBetween(String value1, String value2) {
             addCriterion("companyid between", value1, value2, "companyid");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidNotBetween(Integer value1, Integer value2) {
+        public Criteria andCompanyidNotBetween(String value1, String value2) {
             addCriterion("companyid not between", value1, value2, "companyid");
             return (Criteria) this;
         }
@@ -486,52 +486,52 @@ public class PayCloudDfMoneyFreezeExample {
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdEqualTo(Long value) {
+        public Criteria andCompanyMoneyIdEqualTo(String value) {
             addCriterion("company_money_id =", value, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdNotEqualTo(Long value) {
+        public Criteria andCompanyMoneyIdNotEqualTo(String value) {
             addCriterion("company_money_id <>", value, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdGreaterThan(Long value) {
+        public Criteria andCompanyMoneyIdGreaterThan(String value) {
             addCriterion("company_money_id >", value, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andCompanyMoneyIdGreaterThanOrEqualTo(String value) {
             addCriterion("company_money_id >=", value, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdLessThan(Long value) {
+        public Criteria andCompanyMoneyIdLessThan(String value) {
             addCriterion("company_money_id <", value, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdLessThanOrEqualTo(Long value) {
+        public Criteria andCompanyMoneyIdLessThanOrEqualTo(String value) {
             addCriterion("company_money_id <=", value, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdIn(List<Long> values) {
+        public Criteria andCompanyMoneyIdIn(List<String> values) {
             addCriterion("company_money_id in", values, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdNotIn(List<Long> values) {
+        public Criteria andCompanyMoneyIdNotIn(List<String> values) {
             addCriterion("company_money_id not in", values, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdBetween(Long value1, Long value2) {
+        public Criteria andCompanyMoneyIdBetween(String value1, String value2) {
             addCriterion("company_money_id between", value1, value2, "companyMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyMoneyIdNotBetween(Long value1, Long value2) {
+        public Criteria andCompanyMoneyIdNotBetween(String value1, String value2) {
             addCriterion("company_money_id not between", value1, value2, "companyMoneyId");
             return (Criteria) this;
         }
@@ -546,52 +546,52 @@ public class PayCloudDfMoneyFreezeExample {
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdEqualTo(Long value) {
+        public Criteria andDfMoneyIdEqualTo(String value) {
             addCriterion("df_money_id =", value, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdNotEqualTo(Long value) {
+        public Criteria andDfMoneyIdNotEqualTo(String value) {
             addCriterion("df_money_id <>", value, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdGreaterThan(Long value) {
+        public Criteria andDfMoneyIdGreaterThan(String value) {
             addCriterion("df_money_id >", value, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andDfMoneyIdGreaterThanOrEqualTo(String value) {
             addCriterion("df_money_id >=", value, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdLessThan(Long value) {
+        public Criteria andDfMoneyIdLessThan(String value) {
             addCriterion("df_money_id <", value, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdLessThanOrEqualTo(Long value) {
+        public Criteria andDfMoneyIdLessThanOrEqualTo(String value) {
             addCriterion("df_money_id <=", value, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdIn(List<Long> values) {
+        public Criteria andDfMoneyIdIn(List<String> values) {
             addCriterion("df_money_id in", values, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdNotIn(List<Long> values) {
+        public Criteria andDfMoneyIdNotIn(List<String> values) {
             addCriterion("df_money_id not in", values, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdBetween(Long value1, Long value2) {
+        public Criteria andDfMoneyIdBetween(String value1, String value2) {
             addCriterion("df_money_id between", value1, value2, "dfMoneyId");
             return (Criteria) this;
         }
 
-        public Criteria andDfMoneyIdNotBetween(Long value1, Long value2) {
+        public Criteria andDfMoneyIdNotBetween(String value1, String value2) {
             addCriterion("df_money_id not between", value1, value2, "dfMoneyId");
             return (Criteria) this;
         }

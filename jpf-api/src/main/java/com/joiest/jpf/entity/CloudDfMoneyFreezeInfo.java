@@ -8,12 +8,12 @@ public class CloudDfMoneyFreezeInfo {
     /**
      *
      */
-    private Long id;
+    private String id;
 
     /**
      * 企业ID
      */
-    private Integer companyid;
+    private String companyid;
 
     /**
      * 企业总金额
@@ -33,12 +33,12 @@ public class CloudDfMoneyFreezeInfo {
     /**
      * pay_cloud_company_money.id
      */
-    private Long companyMoneyId;
+    private String companyMoneyId;
 
     /**
      * pay_cloud_df_money.id
      */
-    private Long dfMoneyId;
+    private String dfMoneyId;
 
     /**
      * pay_cloud_df_money.orderid
@@ -110,19 +110,19 @@ public class CloudDfMoneyFreezeInfo {
      */
     private Date financeTime;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Integer getCompanyid() {
+    public String getCompanyid() {
         return companyid;
     }
 
-    public void setCompanyid(Integer companyid) {
+    public void setCompanyid(String companyid) {
         this.companyid = companyid;
     }
 
@@ -150,19 +150,19 @@ public class CloudDfMoneyFreezeInfo {
         this.companyFreezeMoney = companyFreezeMoney;
     }
 
-    public Long getCompanyMoneyId() {
+    public String getCompanyMoneyId() {
         return companyMoneyId;
     }
 
-    public void setCompanyMoneyId(Long companyMoneyId) {
+    public void setCompanyMoneyId(String companyMoneyId) {
         this.companyMoneyId = companyMoneyId;
     }
 
-    public Long getDfMoneyId() {
+    public String getDfMoneyId() {
         return dfMoneyId;
     }
 
-    public void setDfMoneyId(Long dfMoneyId) {
+    public void setDfMoneyId(String dfMoneyId) {
         this.dfMoneyId = dfMoneyId;
     }
 
