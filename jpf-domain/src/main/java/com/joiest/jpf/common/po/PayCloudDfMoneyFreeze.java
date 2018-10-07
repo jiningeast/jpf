@@ -11,6 +11,26 @@ public class PayCloudDfMoneyFreeze implements Serializable {
     private Long id;
 
     /**
+     * 企业ID
+     */
+    private Integer companyid;
+
+    /**
+     * 企业总金额
+     */
+    private BigDecimal companyCloudmoney;
+
+    /**
+     * 企业预付款金额(不包含此次冻结金额)
+     */
+    private BigDecimal companyAdvanceMoney;
+
+    /**
+     * 企业当前冻结金额(不包含此次冻结金额)
+     */
+    private BigDecimal companyFreezeMoney;
+
+    /**
      * pay_cloud_company_money.id
      */
     private Long companyMoneyId;
@@ -26,14 +46,24 @@ public class PayCloudDfMoneyFreeze implements Serializable {
     private String orderid;
 
     /**
-     * 金额
+     * 冻结金额
      */
-    private BigDecimal money;
+    private BigDecimal freezeMoney;
+
+    /**
+     * 
+     */
+    private String info;
+
+    /**
+     * 备注
+     */
+    private String remarks;
 
     /**
      * 冻结原因/返回信息
      */
-    private String content;
+    private String returnContent;
 
     /**
      * 1:冻结default 2:运营申请解冻 3:财务审核通过 4:财务拒绝
@@ -90,6 +120,38 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         this.id = id;
     }
 
+    public Integer getCompanyid() {
+        return companyid;
+    }
+
+    public void setCompanyid(Integer companyid) {
+        this.companyid = companyid;
+    }
+
+    public BigDecimal getCompanyCloudmoney() {
+        return companyCloudmoney;
+    }
+
+    public void setCompanyCloudmoney(BigDecimal companyCloudmoney) {
+        this.companyCloudmoney = companyCloudmoney;
+    }
+
+    public BigDecimal getCompanyAdvanceMoney() {
+        return companyAdvanceMoney;
+    }
+
+    public void setCompanyAdvanceMoney(BigDecimal companyAdvanceMoney) {
+        this.companyAdvanceMoney = companyAdvanceMoney;
+    }
+
+    public BigDecimal getCompanyFreezeMoney() {
+        return companyFreezeMoney;
+    }
+
+    public void setCompanyFreezeMoney(BigDecimal companyFreezeMoney) {
+        this.companyFreezeMoney = companyFreezeMoney;
+    }
+
     public Long getCompanyMoneyId() {
         return companyMoneyId;
     }
@@ -114,20 +176,36 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         this.orderid = orderid == null ? null : orderid.trim();
     }
 
-    public BigDecimal getMoney() {
-        return money;
+    public BigDecimal getFreezeMoney() {
+        return freezeMoney;
     }
 
-    public void setMoney(BigDecimal money) {
-        this.money = money;
+    public void setFreezeMoney(BigDecimal freezeMoney) {
+        this.freezeMoney = freezeMoney;
     }
 
-    public String getContent() {
-        return content;
+    public String getInfo() {
+        return info;
     }
 
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+    public void setInfo(String info) {
+        this.info = info == null ? null : info.trim();
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks == null ? null : remarks.trim();
+    }
+
+    public String getReturnContent() {
+        return returnContent;
+    }
+
+    public void setReturnContent(String returnContent) {
+        this.returnContent = returnContent == null ? null : returnContent.trim();
     }
 
     public Integer getStatus() {
@@ -212,11 +290,17 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", companyid=").append(companyid);
+        sb.append(", companyCloudmoney=").append(companyCloudmoney);
+        sb.append(", companyAdvanceMoney=").append(companyAdvanceMoney);
+        sb.append(", companyFreezeMoney=").append(companyFreezeMoney);
         sb.append(", companyMoneyId=").append(companyMoneyId);
         sb.append(", dfMoneyId=").append(dfMoneyId);
         sb.append(", orderid=").append(orderid);
-        sb.append(", money=").append(money);
-        sb.append(", content=").append(content);
+        sb.append(", freezeMoney=").append(freezeMoney);
+        sb.append(", info=").append(info);
+        sb.append(", remarks=").append(remarks);
+        sb.append(", returnContent=").append(returnContent);
         sb.append(", status=").append(status);
         sb.append(", moneyStatus=").append(moneyStatus);
         sb.append(", addtime=").append(addtime);
@@ -247,11 +331,17 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         }
         PayCloudDfMoneyFreeze other = (PayCloudDfMoneyFreeze) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getCompanyid() == null ? other.getCompanyid() == null : this.getCompanyid().equals(other.getCompanyid()))
+            && (this.getCompanyCloudmoney() == null ? other.getCompanyCloudmoney() == null : this.getCompanyCloudmoney().equals(other.getCompanyCloudmoney()))
+            && (this.getCompanyAdvanceMoney() == null ? other.getCompanyAdvanceMoney() == null : this.getCompanyAdvanceMoney().equals(other.getCompanyAdvanceMoney()))
+            && (this.getCompanyFreezeMoney() == null ? other.getCompanyFreezeMoney() == null : this.getCompanyFreezeMoney().equals(other.getCompanyFreezeMoney()))
             && (this.getCompanyMoneyId() == null ? other.getCompanyMoneyId() == null : this.getCompanyMoneyId().equals(other.getCompanyMoneyId()))
             && (this.getDfMoneyId() == null ? other.getDfMoneyId() == null : this.getDfMoneyId().equals(other.getDfMoneyId()))
             && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
-            && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
+            && (this.getFreezeMoney() == null ? other.getFreezeMoney() == null : this.getFreezeMoney().equals(other.getFreezeMoney()))
+            && (this.getInfo() == null ? other.getInfo() == null : this.getInfo().equals(other.getInfo()))
+            && (this.getRemarks() == null ? other.getRemarks() == null : this.getRemarks().equals(other.getRemarks()))
+            && (this.getReturnContent() == null ? other.getReturnContent() == null : this.getReturnContent().equals(other.getReturnContent()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getMoneyStatus() == null ? other.getMoneyStatus() == null : this.getMoneyStatus().equals(other.getMoneyStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
@@ -271,11 +361,17 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getCompanyid() == null) ? 0 : getCompanyid().hashCode());
+        result = prime * result + ((getCompanyCloudmoney() == null) ? 0 : getCompanyCloudmoney().hashCode());
+        result = prime * result + ((getCompanyAdvanceMoney() == null) ? 0 : getCompanyAdvanceMoney().hashCode());
+        result = prime * result + ((getCompanyFreezeMoney() == null) ? 0 : getCompanyFreezeMoney().hashCode());
         result = prime * result + ((getCompanyMoneyId() == null) ? 0 : getCompanyMoneyId().hashCode());
         result = prime * result + ((getDfMoneyId() == null) ? 0 : getDfMoneyId().hashCode());
         result = prime * result + ((getOrderid() == null) ? 0 : getOrderid().hashCode());
-        result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
-        result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
+        result = prime * result + ((getFreezeMoney() == null) ? 0 : getFreezeMoney().hashCode());
+        result = prime * result + ((getInfo() == null) ? 0 : getInfo().hashCode());
+        result = prime * result + ((getRemarks() == null) ? 0 : getRemarks().hashCode());
+        result = prime * result + ((getReturnContent() == null) ? 0 : getReturnContent().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getMoneyStatus() == null) ? 0 : getMoneyStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());

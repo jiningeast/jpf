@@ -11,6 +11,26 @@ public class CloudDfMoneyFreezeInfo {
     private Long id;
 
     /**
+     * 企业ID
+     */
+    private Integer companyid;
+
+    /**
+     * 企业总金额
+     */
+    private BigDecimal companyCloudmoney;
+
+    /**
+     * 企业预付款金额(不包含此次冻结金额)
+     */
+    private BigDecimal companyAdvanceMoney;
+
+    /**
+     * 企业当前冻结金额(不包含此次冻结金额)
+     */
+    private BigDecimal companyFreezeMoney;
+
+    /**
      * pay_cloud_company_money.id
      */
     private Long companyMoneyId;
@@ -26,14 +46,24 @@ public class CloudDfMoneyFreezeInfo {
     private String orderid;
 
     /**
-     * 金额
+     * 冻结金额
      */
-    private BigDecimal money;
+    private BigDecimal freezeMoney;
+
+    /**
+     *
+     */
+    private String info;
+
+    /**
+     * 备注
+     */
+    private String remarks;
 
     /**
      * 冻结原因/返回信息
      */
-    private String content;
+    private String returnContent;
 
     /**
      * 1:冻结default 2:运营申请解冻 3:财务审核通过 4:财务拒绝
@@ -88,6 +118,38 @@ public class CloudDfMoneyFreezeInfo {
         this.id = id;
     }
 
+    public Integer getCompanyid() {
+        return companyid;
+    }
+
+    public void setCompanyid(Integer companyid) {
+        this.companyid = companyid;
+    }
+
+    public BigDecimal getCompanyCloudmoney() {
+        return companyCloudmoney;
+    }
+
+    public void setCompanyCloudmoney(BigDecimal companyCloudmoney) {
+        this.companyCloudmoney = companyCloudmoney;
+    }
+
+    public BigDecimal getCompanyAdvanceMoney() {
+        return companyAdvanceMoney;
+    }
+
+    public void setCompanyAdvanceMoney(BigDecimal companyAdvanceMoney) {
+        this.companyAdvanceMoney = companyAdvanceMoney;
+    }
+
+    public BigDecimal getCompanyFreezeMoney() {
+        return companyFreezeMoney;
+    }
+
+    public void setCompanyFreezeMoney(BigDecimal companyFreezeMoney) {
+        this.companyFreezeMoney = companyFreezeMoney;
+    }
+
     public Long getCompanyMoneyId() {
         return companyMoneyId;
     }
@@ -112,20 +174,36 @@ public class CloudDfMoneyFreezeInfo {
         this.orderid = orderid;
     }
 
-    public BigDecimal getMoney() {
-        return money;
+    public BigDecimal getFreezeMoney() {
+        return freezeMoney;
     }
 
-    public void setMoney(BigDecimal money) {
-        this.money = money;
+    public void setFreezeMoney(BigDecimal freezeMoney) {
+        this.freezeMoney = freezeMoney;
     }
 
-    public String getContent() {
-        return content;
+    public String getInfo() {
+        return info;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getReturnContent() {
+        return returnContent;
+    }
+
+    public void setReturnContent(String returnContent) {
+        this.returnContent = returnContent;
     }
 
     public Integer getStatus() {

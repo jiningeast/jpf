@@ -236,6 +236,246 @@ public class PayCloudDfMoneyFreezeExample {
             return (Criteria) this;
         }
 
+        public Criteria andCompanyidIsNull() {
+            addCriterion("companyid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidIsNotNull() {
+            addCriterion("companyid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidEqualTo(Integer value) {
+            addCriterion("companyid =", value, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidNotEqualTo(Integer value) {
+            addCriterion("companyid <>", value, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidGreaterThan(Integer value) {
+            addCriterion("companyid >", value, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("companyid >=", value, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidLessThan(Integer value) {
+            addCriterion("companyid <", value, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidLessThanOrEqualTo(Integer value) {
+            addCriterion("companyid <=", value, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidIn(List<Integer> values) {
+            addCriterion("companyid in", values, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidNotIn(List<Integer> values) {
+            addCriterion("companyid not in", values, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidBetween(Integer value1, Integer value2) {
+            addCriterion("companyid between", value1, value2, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyidNotBetween(Integer value1, Integer value2) {
+            addCriterion("companyid not between", value1, value2, "companyid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyIsNull() {
+            addCriterion("company_cloudmoney is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyIsNotNull() {
+            addCriterion("company_cloudmoney is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyEqualTo(BigDecimal value) {
+            addCriterion("company_cloudmoney =", value, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyNotEqualTo(BigDecimal value) {
+            addCriterion("company_cloudmoney <>", value, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyGreaterThan(BigDecimal value) {
+            addCriterion("company_cloudmoney >", value, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("company_cloudmoney >=", value, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyLessThan(BigDecimal value) {
+            addCriterion("company_cloudmoney <", value, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("company_cloudmoney <=", value, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyIn(List<BigDecimal> values) {
+            addCriterion("company_cloudmoney in", values, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyNotIn(List<BigDecimal> values) {
+            addCriterion("company_cloudmoney not in", values, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("company_cloudmoney between", value1, value2, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCloudmoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("company_cloudmoney not between", value1, value2, "companyCloudmoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyIsNull() {
+            addCriterion("company_advance_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyIsNotNull() {
+            addCriterion("company_advance_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyEqualTo(BigDecimal value) {
+            addCriterion("company_advance_money =", value, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("company_advance_money <>", value, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyGreaterThan(BigDecimal value) {
+            addCriterion("company_advance_money >", value, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("company_advance_money >=", value, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyLessThan(BigDecimal value) {
+            addCriterion("company_advance_money <", value, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("company_advance_money <=", value, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyIn(List<BigDecimal> values) {
+            addCriterion("company_advance_money in", values, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("company_advance_money not in", values, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("company_advance_money between", value1, value2, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAdvanceMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("company_advance_money not between", value1, value2, "companyAdvanceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyIsNull() {
+            addCriterion("company_freeze_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyIsNotNull() {
+            addCriterion("company_freeze_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyEqualTo(BigDecimal value) {
+            addCriterion("company_freeze_money =", value, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("company_freeze_money <>", value, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyGreaterThan(BigDecimal value) {
+            addCriterion("company_freeze_money >", value, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("company_freeze_money >=", value, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyLessThan(BigDecimal value) {
+            addCriterion("company_freeze_money <", value, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("company_freeze_money <=", value, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyIn(List<BigDecimal> values) {
+            addCriterion("company_freeze_money in", values, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("company_freeze_money not in", values, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("company_freeze_money between", value1, value2, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyFreezeMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("company_freeze_money not between", value1, value2, "companyFreezeMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyMoneyIdIsNull() {
             addCriterion("company_money_id is null");
             return (Criteria) this;
@@ -426,133 +666,273 @@ public class PayCloudDfMoneyFreezeExample {
             return (Criteria) this;
         }
 
-        public Criteria andMoneyIsNull() {
-            addCriterion("money is null");
+        public Criteria andFreezeMoneyIsNull() {
+            addCriterion("freeze_money is null");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyIsNotNull() {
-            addCriterion("money is not null");
+        public Criteria andFreezeMoneyIsNotNull() {
+            addCriterion("freeze_money is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyEqualTo(BigDecimal value) {
-            addCriterion("money =", value, "money");
+        public Criteria andFreezeMoneyEqualTo(BigDecimal value) {
+            addCriterion("freeze_money =", value, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyNotEqualTo(BigDecimal value) {
-            addCriterion("money <>", value, "money");
+        public Criteria andFreezeMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("freeze_money <>", value, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyGreaterThan(BigDecimal value) {
-            addCriterion("money >", value, "money");
+        public Criteria andFreezeMoneyGreaterThan(BigDecimal value) {
+            addCriterion("freeze_money >", value, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("money >=", value, "money");
+        public Criteria andFreezeMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("freeze_money >=", value, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyLessThan(BigDecimal value) {
-            addCriterion("money <", value, "money");
+        public Criteria andFreezeMoneyLessThan(BigDecimal value) {
+            addCriterion("freeze_money <", value, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("money <=", value, "money");
+        public Criteria andFreezeMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("freeze_money <=", value, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyIn(List<BigDecimal> values) {
-            addCriterion("money in", values, "money");
+        public Criteria andFreezeMoneyIn(List<BigDecimal> values) {
+            addCriterion("freeze_money in", values, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyNotIn(List<BigDecimal> values) {
-            addCriterion("money not in", values, "money");
+        public Criteria andFreezeMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("freeze_money not in", values, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("money between", value1, value2, "money");
+        public Criteria andFreezeMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("freeze_money between", value1, value2, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("money not between", value1, value2, "money");
+        public Criteria andFreezeMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("freeze_money not between", value1, value2, "freezeMoney");
             return (Criteria) this;
         }
 
-        public Criteria andContentIsNull() {
-            addCriterion("content is null");
+        public Criteria andInfoIsNull() {
+            addCriterion("info is null");
             return (Criteria) this;
         }
 
-        public Criteria andContentIsNotNull() {
-            addCriterion("content is not null");
+        public Criteria andInfoIsNotNull() {
+            addCriterion("info is not null");
             return (Criteria) this;
         }
 
-        public Criteria andContentEqualTo(String value) {
-            addCriterion("content =", value, "content");
+        public Criteria andInfoEqualTo(String value) {
+            addCriterion("info =", value, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentNotEqualTo(String value) {
-            addCriterion("content <>", value, "content");
+        public Criteria andInfoNotEqualTo(String value) {
+            addCriterion("info <>", value, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentGreaterThan(String value) {
-            addCriterion("content >", value, "content");
+        public Criteria andInfoGreaterThan(String value) {
+            addCriterion("info >", value, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentGreaterThanOrEqualTo(String value) {
-            addCriterion("content >=", value, "content");
+        public Criteria andInfoGreaterThanOrEqualTo(String value) {
+            addCriterion("info >=", value, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentLessThan(String value) {
-            addCriterion("content <", value, "content");
+        public Criteria andInfoLessThan(String value) {
+            addCriterion("info <", value, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentLessThanOrEqualTo(String value) {
-            addCriterion("content <=", value, "content");
+        public Criteria andInfoLessThanOrEqualTo(String value) {
+            addCriterion("info <=", value, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentLike(String value) {
-            addCriterion("content like", value, "content");
+        public Criteria andInfoLike(String value) {
+            addCriterion("info like", value, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentNotLike(String value) {
-            addCriterion("content not like", value, "content");
+        public Criteria andInfoNotLike(String value) {
+            addCriterion("info not like", value, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentIn(List<String> values) {
-            addCriterion("content in", values, "content");
+        public Criteria andInfoIn(List<String> values) {
+            addCriterion("info in", values, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentNotIn(List<String> values) {
-            addCriterion("content not in", values, "content");
+        public Criteria andInfoNotIn(List<String> values) {
+            addCriterion("info not in", values, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentBetween(String value1, String value2) {
-            addCriterion("content between", value1, value2, "content");
+        public Criteria andInfoBetween(String value1, String value2) {
+            addCriterion("info between", value1, value2, "info");
             return (Criteria) this;
         }
 
-        public Criteria andContentNotBetween(String value1, String value2) {
-            addCriterion("content not between", value1, value2, "content");
+        public Criteria andInfoNotBetween(String value1, String value2) {
+            addCriterion("info not between", value1, value2, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksIsNull() {
+            addCriterion("remarks is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksIsNotNull() {
+            addCriterion("remarks is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksEqualTo(String value) {
+            addCriterion("remarks =", value, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksNotEqualTo(String value) {
+            addCriterion("remarks <>", value, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksGreaterThan(String value) {
+            addCriterion("remarks >", value, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksGreaterThanOrEqualTo(String value) {
+            addCriterion("remarks >=", value, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksLessThan(String value) {
+            addCriterion("remarks <", value, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksLessThanOrEqualTo(String value) {
+            addCriterion("remarks <=", value, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksLike(String value) {
+            addCriterion("remarks like", value, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksNotLike(String value) {
+            addCriterion("remarks not like", value, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksIn(List<String> values) {
+            addCriterion("remarks in", values, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksNotIn(List<String> values) {
+            addCriterion("remarks not in", values, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksBetween(String value1, String value2) {
+            addCriterion("remarks between", value1, value2, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksNotBetween(String value1, String value2) {
+            addCriterion("remarks not between", value1, value2, "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentIsNull() {
+            addCriterion("return_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentIsNotNull() {
+            addCriterion("return_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentEqualTo(String value) {
+            addCriterion("return_content =", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentNotEqualTo(String value) {
+            addCriterion("return_content <>", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentGreaterThan(String value) {
+            addCriterion("return_content >", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentGreaterThanOrEqualTo(String value) {
+            addCriterion("return_content >=", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentLessThan(String value) {
+            addCriterion("return_content <", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentLessThanOrEqualTo(String value) {
+            addCriterion("return_content <=", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentLike(String value) {
+            addCriterion("return_content like", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentNotLike(String value) {
+            addCriterion("return_content not like", value, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentIn(List<String> values) {
+            addCriterion("return_content in", values, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentNotIn(List<String> values) {
+            addCriterion("return_content not in", values, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentBetween(String value1, String value2) {
+            addCriterion("return_content between", value1, value2, "returnContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentNotBetween(String value1, String value2) {
+            addCriterion("return_content not between", value1, value2, "returnContent");
             return (Criteria) this;
         }
 
@@ -1121,8 +1501,18 @@ public class PayCloudDfMoneyFreezeExample {
             return (Criteria) this;
         }
 
-        public Criteria andContentLikeInsensitive(String value) {
-            addCriterion("upper(content) like", value.toUpperCase(), "content");
+        public Criteria andInfoLikeInsensitive(String value) {
+            addCriterion("upper(info) like", value.toUpperCase(), "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarksLikeInsensitive(String value) {
+            addCriterion("upper(remarks) like", value.toUpperCase(), "remarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnContentLikeInsensitive(String value) {
+            addCriterion("upper(return_content) like", value.toUpperCase(), "returnContent");
             return (Criteria) this;
         }
 
