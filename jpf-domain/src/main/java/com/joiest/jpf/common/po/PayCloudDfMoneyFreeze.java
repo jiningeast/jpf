@@ -13,7 +13,12 @@ public class PayCloudDfMoneyFreeze implements Serializable {
     /**
      * 企业ID
      */
-    private String companyid;
+    private String companyId;
+
+    /**
+     * 企业名称
+     */
+    private String companyName;
 
     /**
      * 企业总金额
@@ -120,12 +125,20 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getCompanyid() {
-        return companyid;
+    public String getCompanyId() {
+        return companyId;
     }
 
-    public void setCompanyid(String companyid) {
-        this.companyid = companyid == null ? null : companyid.trim();
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId == null ? null : companyId.trim();
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
     }
 
     public BigDecimal getCompanyCloudmoney() {
@@ -290,7 +303,8 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", companyid=").append(companyid);
+        sb.append(", companyId=").append(companyId);
+        sb.append(", companyName=").append(companyName);
         sb.append(", companyCloudmoney=").append(companyCloudmoney);
         sb.append(", companyAdvanceMoney=").append(companyAdvanceMoney);
         sb.append(", companyFreezeMoney=").append(companyFreezeMoney);
@@ -331,7 +345,8 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         }
         PayCloudDfMoneyFreeze other = (PayCloudDfMoneyFreeze) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getCompanyid() == null ? other.getCompanyid() == null : this.getCompanyid().equals(other.getCompanyid()))
+            && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getCompanyCloudmoney() == null ? other.getCompanyCloudmoney() == null : this.getCompanyCloudmoney().equals(other.getCompanyCloudmoney()))
             && (this.getCompanyAdvanceMoney() == null ? other.getCompanyAdvanceMoney() == null : this.getCompanyAdvanceMoney().equals(other.getCompanyAdvanceMoney()))
             && (this.getCompanyFreezeMoney() == null ? other.getCompanyFreezeMoney() == null : this.getCompanyFreezeMoney().equals(other.getCompanyFreezeMoney()))
@@ -361,7 +376,8 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getCompanyid() == null) ? 0 : getCompanyid().hashCode());
+        result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getCompanyCloudmoney() == null) ? 0 : getCompanyCloudmoney().hashCode());
         result = prime * result + ((getCompanyAdvanceMoney() == null) ? 0 : getCompanyAdvanceMoney().hashCode());
         result = prime * result + ((getCompanyFreezeMoney() == null) ? 0 : getCompanyFreezeMoney().hashCode());

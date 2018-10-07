@@ -13,7 +13,12 @@ public class CloudDfMoneyFreezeInfo {
     /**
      * 企业ID
      */
-    private String companyid;
+    private String companyId;
+
+    /**
+     * 企业名称
+     */
+    private String companyName;
 
     /**
      * 企业总金额
@@ -118,12 +123,20 @@ public class CloudDfMoneyFreezeInfo {
         this.id = id;
     }
 
-    public String getCompanyid() {
-        return companyid;
+    public String getCompanyId() {
+        return companyId;
     }
 
-    public void setCompanyid(String companyid) {
-        this.companyid = companyid;
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public BigDecimal getCompanyCloudmoney() {
