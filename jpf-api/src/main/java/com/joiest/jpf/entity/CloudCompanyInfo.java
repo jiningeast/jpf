@@ -95,6 +95,11 @@ public class CloudCompanyInfo {
     private Byte isshow;
 
     /**
+     * 是否冻结 1:未冻结 2:已冻结
+     */
+    private Byte isFreeze;
+
+    /**
      * 添加时间
      */
     private Date created;
@@ -330,6 +335,14 @@ public class CloudCompanyInfo {
 
     public void setIsshow(Byte isshow) {
         this.isshow = isshow;
+    }
+
+    public Byte getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Byte isFreeze) {
+        this.isFreeze = isFreeze;
     }
 
     public Date getCreated() {

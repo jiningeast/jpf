@@ -8,12 +8,12 @@ public class PayCloudDfMoneyFreeze implements Serializable {
     /**
      * 
      */
-    private Long id;
+    private String id;
 
     /**
      * 企业ID
      */
-    private Integer companyid;
+    private String companyid;
 
     /**
      * 企业总金额
@@ -33,12 +33,12 @@ public class PayCloudDfMoneyFreeze implements Serializable {
     /**
      * pay_cloud_company_money.id
      */
-    private Long companyMoneyId;
+    private String companyMoneyId;
 
     /**
      * pay_cloud_df_money.id
      */
-    private Long dfMoneyId;
+    private String dfMoneyId;
 
     /**
      * pay_cloud_df_money.orderid
@@ -112,20 +112,20 @@ public class PayCloudDfMoneyFreeze implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
-    public Integer getCompanyid() {
+    public String getCompanyid() {
         return companyid;
     }
 
-    public void setCompanyid(Integer companyid) {
-        this.companyid = companyid;
+    public void setCompanyid(String companyid) {
+        this.companyid = companyid == null ? null : companyid.trim();
     }
 
     public BigDecimal getCompanyCloudmoney() {
@@ -152,20 +152,20 @@ public class PayCloudDfMoneyFreeze implements Serializable {
         this.companyFreezeMoney = companyFreezeMoney;
     }
 
-    public Long getCompanyMoneyId() {
+    public String getCompanyMoneyId() {
         return companyMoneyId;
     }
 
-    public void setCompanyMoneyId(Long companyMoneyId) {
-        this.companyMoneyId = companyMoneyId;
+    public void setCompanyMoneyId(String companyMoneyId) {
+        this.companyMoneyId = companyMoneyId == null ? null : companyMoneyId.trim();
     }
 
-    public Long getDfMoneyId() {
+    public String getDfMoneyId() {
         return dfMoneyId;
     }
 
-    public void setDfMoneyId(Long dfMoneyId) {
-        this.dfMoneyId = dfMoneyId;
+    public void setDfMoneyId(String dfMoneyId) {
+        this.dfMoneyId = dfMoneyId == null ? null : dfMoneyId.trim();
     }
 
     public String getOrderid() {
