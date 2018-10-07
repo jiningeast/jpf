@@ -126,6 +126,11 @@ public class CloudDfMoneyRequest {
     private Integer isActive;
 
     /**
+     * 是否冻结 1:未冻结 2:已冻结
+     */
+    private Byte isFreeze;
+
+    /**
      * 操作信息
      */
     private String content;
@@ -372,6 +377,14 @@ public class CloudDfMoneyRequest {
 
     public void setIsActive(Integer isActive) {
         this.isActive = isActive;
+    }
+
+    public Byte getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Byte isFreeze) {
+        this.isFreeze = isFreeze;
     }
 
     public String getContent() {

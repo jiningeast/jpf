@@ -48,7 +48,8 @@ public enum JpfErrorInfo {
     EMPTY_BATCH_NO("欣券批次号为空"),
     BATCH_NOT_EXIST("批次号错误"),
     EMPTY_TOTAL_MONEY("总金额为空"),
-    ERROR_TOTAL_MONEY("总金额和各人员金额有误");
+    ERROR_TOTAL_MONEY("总金额和各人员金额有误"),
+    COMPANY_IS_FREEZE("企业帐户被冻结");
     // ===================================== 管理后台相关 end
 
     private final String desc;

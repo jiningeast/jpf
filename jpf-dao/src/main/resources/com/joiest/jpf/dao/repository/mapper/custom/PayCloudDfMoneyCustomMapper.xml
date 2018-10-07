@@ -32,6 +32,7 @@
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="vid" jdbcType="TINYINT" property="vid" />
         <result column="is_active" jdbcType="TINYINT" property="isActive" />
+        <result column="is_freeze" jdbcType="TINYINT" property="isFreeze" />
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
         <result column="operastate" jdbcType="TINYINT" property="operastate" />

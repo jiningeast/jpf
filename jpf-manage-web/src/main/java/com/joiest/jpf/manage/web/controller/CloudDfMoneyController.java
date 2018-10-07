@@ -16,6 +16,7 @@ import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
 import com.joiest.jpf.manage.web.util.ServicePayUtils;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -90,6 +91,12 @@ public class CloudDfMoneyController {
         if( companyInfo == null ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到公司信息");
         }
+
+        if ( companyInfo.getIsFreeze() == (byte)2 )
+        {
+            throw new JpfException(JpfErrorInfo.COMPANY_IS_FREEZE, "企业被冻结");
+
+        }
         String companyId = companyInfo.getId(); //公司ID
         BigDecimal cloudMoney = companyInfo.getCloudmoney(); //账户金额
         String cloudcode = companyInfo.getCloudcode(); //金额校验码
@@ -113,7 +120,7 @@ public class CloudDfMoneyController {
         for(CloudDfMoneyInfo onetimes:infos){
             Long dfMoneyId = onetimes.getId();
             BigDecimal dfCommoney = onetimes.getCommoney(); //发放金额
-            if( onetimes.getIsActive() != 1 || (onetimes.getMontype() !=1 && onetimes.getMontype() !=3) ){ //过滤已打款或 不能打款 代付信息
+            if( onetimes.getIsActive() != 1 || (onetimes.getMontype() !=1 && onetimes.getMontype() !=3) || onetimes.getIsFreeze() != (byte)1 ){ //过滤已打款或 不能打款 代付信息  添加冻结校验
                 limitData.add(dfMoneyId);
             }
 

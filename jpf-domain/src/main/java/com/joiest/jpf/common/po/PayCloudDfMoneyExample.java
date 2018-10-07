@@ -1886,6 +1886,66 @@ public class PayCloudDfMoneyExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsFreezeIsNull() {
+            addCriterion("is_freeze is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeIsNotNull() {
+            addCriterion("is_freeze is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeEqualTo(Byte value) {
+            addCriterion("is_freeze =", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotEqualTo(Byte value) {
+            addCriterion("is_freeze <>", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeGreaterThan(Byte value) {
+            addCriterion("is_freeze >", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_freeze >=", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeLessThan(Byte value) {
+            addCriterion("is_freeze <", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeLessThanOrEqualTo(Byte value) {
+            addCriterion("is_freeze <=", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeIn(List<Byte> values) {
+            addCriterion("is_freeze in", values, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotIn(List<Byte> values) {
+            addCriterion("is_freeze not in", values, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeBetween(Byte value1, Byte value2) {
+            addCriterion("is_freeze between", value1, value2, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_freeze not between", value1, value2, "isFreeze");
+            return (Criteria) this;
+        }
+
         public Criteria andContentIsNull() {
             addCriterion("content is null");
             return (Criteria) this;

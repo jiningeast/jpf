@@ -96,6 +96,11 @@ public class PayCloudCompany implements Serializable {
     private Byte isshow;
 
     /**
+     * 是否冻结 1:未冻结 2:已冻结
+     */
+    private Byte isFreeze;
+
+    /**
      * 添加时间
      */
     private Date created;
@@ -316,6 +321,14 @@ public class PayCloudCompany implements Serializable {
         this.isshow = isshow;
     }
 
+    public Byte getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Byte isFreeze) {
+        this.isFreeze = isFreeze;
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -463,6 +476,7 @@ public class PayCloudCompany implements Serializable {
         sb.append(", addadminid=").append(addadminid);
         sb.append(", editadminid=").append(editadminid);
         sb.append(", isshow=").append(isshow);
+        sb.append(", isFreeze=").append(isFreeze);
         sb.append(", created=").append(created);
         sb.append(", cloudmoney=").append(cloudmoney);
         sb.append(", cloudcode=").append(cloudcode);
@@ -516,6 +530,7 @@ public class PayCloudCompany implements Serializable {
             && (this.getAddadminid() == null ? other.getAddadminid() == null : this.getAddadminid().equals(other.getAddadminid()))
             && (this.getEditadminid() == null ? other.getEditadminid() == null : this.getEditadminid().equals(other.getEditadminid()))
             && (this.getIsshow() == null ? other.getIsshow() == null : this.getIsshow().equals(other.getIsshow()))
+            && (this.getIsFreeze() == null ? other.getIsFreeze() == null : this.getIsFreeze().equals(other.getIsFreeze()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getCloudmoney() == null ? other.getCloudmoney() == null : this.getCloudmoney().equals(other.getCloudmoney()))
             && (this.getCloudcode() == null ? other.getCloudcode() == null : this.getCloudcode().equals(other.getCloudcode()))
@@ -558,6 +573,7 @@ public class PayCloudCompany implements Serializable {
         result = prime * result + ((getAddadminid() == null) ? 0 : getAddadminid().hashCode());
         result = prime * result + ((getEditadminid() == null) ? 0 : getEditadminid().hashCode());
         result = prime * result + ((getIsshow() == null) ? 0 : getIsshow().hashCode());
+        result = prime * result + ((getIsFreeze() == null) ? 0 : getIsFreeze().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getCloudmoney() == null) ? 0 : getCloudmoney().hashCode());
         result = prime * result + ((getCloudcode() == null) ? 0 : getCloudcode().hashCode());

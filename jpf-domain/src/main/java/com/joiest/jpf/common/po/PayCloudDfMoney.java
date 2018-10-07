@@ -116,7 +116,7 @@ public class PayCloudDfMoney implements Serializable {
     private String realname;
 
     /**
-     * 打款状态0:未申请打款 1:待打款，2=打款成功 3=打款失败，4=打款中 5=支付限额
+     * 打款状态0:未申请打款 1:待打款，2=打款成功 3=打款失败，4=打款中 5=支付限额  6=冻结
      */
     private Integer montype;
 
@@ -134,6 +134,11 @@ public class PayCloudDfMoney implements Serializable {
      * 用户代付状态  0 不可代付 1  已激活
      */
     private Integer isActive;
+
+    /**
+     * 是否冻结 1:未冻结 2:已冻结
+     */
+    private Byte isFreeze;
 
     /**
      * 操作信息
@@ -400,6 +405,14 @@ public class PayCloudDfMoney implements Serializable {
         this.isActive = isActive;
     }
 
+    public Byte getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Byte isFreeze) {
+        this.isFreeze = isFreeze;
+    }
+
     public String getContent() {
         return content;
     }
@@ -523,6 +536,7 @@ public class PayCloudDfMoney implements Serializable {
         sb.append(", remark=").append(remark);
         sb.append(", vid=").append(vid);
         sb.append(", isActive=").append(isActive);
+        sb.append(", isFreeze=").append(isFreeze);
         sb.append(", content=").append(content);
         sb.append(", updatetime=").append(updatetime);
         sb.append(", operastate=").append(operastate);
@@ -580,6 +594,7 @@ public class PayCloudDfMoney implements Serializable {
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getVid() == null ? other.getVid() == null : this.getVid().equals(other.getVid()))
             && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
+            && (this.getIsFreeze() == null ? other.getIsFreeze() == null : this.getIsFreeze().equals(other.getIsFreeze()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
             && (this.getOperastate() == null ? other.getOperastate() == null : this.getOperastate().equals(other.getOperastate()))
@@ -626,6 +641,7 @@ public class PayCloudDfMoney implements Serializable {
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getVid() == null) ? 0 : getVid().hashCode());
         result = prime * result + ((getIsActive() == null) ? 0 : getIsActive().hashCode());
+        result = prime * result + ((getIsFreeze() == null) ? 0 : getIsFreeze().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getOperastate() == null) ? 0 : getOperastate().hashCode());

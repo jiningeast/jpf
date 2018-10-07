@@ -207,6 +207,10 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         if( request.getMontype() != null ){
             payCloudDfMoney.setMontype(request.getMontype());
         }
+        if ( request.getIsFreeze() != null )
+        {
+            payCloudDfMoney.setIsFreeze(request.getIsFreeze());
+        }
         payCloudDfMoney.setUpdatetime(new Date());
         payCloudDfMoney.setId(id);
 
@@ -307,6 +311,11 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         if( request.getMontype() != null ){
             c.andMontypeEqualTo(request.getMontype());
         }
+        //非冻结
+        if (request.getIsFreeze() != null )
+        {
+            c.andIsFreezeEqualTo(request.getIsFreeze());
+        }
 
         List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);
         List<CloudDfMoneyInfo> infos = new ArrayList<>();
@@ -377,6 +386,12 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         String fileName = "dfMoneyPay";
         logContent.append("\n\nTime:" + myfmt.format(date));
         logContent.append("\n接口返回信息:" + response);
+
+        if ( code.equals("30005") || code.equals("30006") )
+        {
+            LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, responseMap.getOrDefault("info", "代付限额").toString());
+        }
 
         if( code.equals("10000") || code.equals("30004") ){ //10000=代付成功  30004=无代付请求数据（支付限额）
 

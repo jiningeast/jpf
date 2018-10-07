@@ -24,6 +24,7 @@
     <result column="addadminid" jdbcType="BIGINT" property="addadminid" />
     <result column="editadminid" jdbcType="BIGINT" property="editadminid" />
     <result column="isshow" jdbcType="TINYINT" property="isshow" />
+    <result column="is_freeze" jdbcType="TINYINT" property="isFreeze" />
     <result column="created" jdbcType="TIMESTAMP" property="created" />
     <result column="cloudmoney" jdbcType="DECIMAL" property="cloudmoney" />
     <result column="cloudcode" jdbcType="VARCHAR" property="cloudcode" />

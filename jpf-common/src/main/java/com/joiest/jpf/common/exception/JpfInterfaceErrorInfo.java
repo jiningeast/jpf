@@ -71,6 +71,8 @@ public enum JpfInterfaceErrorInfo {
     DF_BATCHNO_NOTEMPTY("30002","批次号不能为空"),
     DF_INFOLIST_EMPTY("30003","待打款信息列表为空"),
     DF_LISTFILTER_EMPTY("30004","待打款列表过滤后为空"),
+    DF_ONE_ORDER_EXCEED_MAXMONEY("30005", "代付金额超过限额"),
+    DF_STAFF_EXCEED_MAXMONEY("30006", "用户该月代付已经超过限额"),
 
     //云市场 begin
     //下单
