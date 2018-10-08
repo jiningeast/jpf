@@ -134,9 +134,9 @@ public class OrdersController {
         // 获取orderid的个位数，0,1时用欧非接口，2-9用威能接口
         String lastNum = StringUtils.substring(String.valueOf(orderId),-1,String.valueOf(orderId).length());
         if ( Integer.parseInt(lastNum) <= 1 ){
-            info.setInterfaceType((byte)1);     // 0=欧非 1=威能
+            info.setInterfaceType((byte)0);     // 0=欧非 1=威能 （威能价格便宜，多用威能）
         }else {
-            info.setInterfaceType((byte)0);
+            info.setInterfaceType((byte)1);
         }
 
         // 验证传入的信息
