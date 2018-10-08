@@ -373,23 +373,22 @@ public class OrdersController {
         }
         //添加通道流水 更新order状态
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
-        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
-        if ( orderinfo.getInterfaceType() == 0 ){
+        if ( orderInfo.getInterfaceType() == 0 ){
             // 欧飞接口返回处理
             if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ) {
                 //充值成功
                 String foreign_orderid = resultMap.getOrDefault("orderid", "");     //接口订单id
-                orderinfo.setForeignOrderNo(foreign_orderid);
-                orderinfo.setStatus((byte)1);   // 已支付
+                orderInfo.setForeignOrderNo(foreign_orderid);
+                orderInfo.setStatus((byte)1);   // 已支付
             } else {
-                orderinfo.setStatus((byte)2);   // 支付失败
+                orderInfo.setStatus((byte)2);   // 支付失败
             }
-        }else if ( orderinfo.getInterfaceType() == 1 ){
+        }else if ( orderInfo.getInterfaceType() == 1 ){
             // 威能接口返回处理
             if ( resultMap.containsKey("message") && resultMap.get("message").equals("成功") ){
-                orderinfo.setStatus((byte)1);   // 已支付
+                orderInfo.setStatus((byte)1);   // 已支付
             }else{
-                orderinfo.setStatus((byte)2);   // 支付失败
+                orderInfo.setStatus((byte)2);   // 支付失败
             }
         }
 
@@ -413,13 +412,13 @@ public class OrdersController {
         int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
 
         //更新订单
-        orderinfo.setId(orderInfo.getId());
+        orderInfo.setId(orderInfo.getId());
         orderInfo.setRechargeTime(new Date());
         String game_state = resultMap.getOrDefault("game_state", "");
-        orderinfo.setRechargeStatus(game_state);     //0充值中 1充值成功 9充值失败
-        orderinfo.setForeignRequestContent(requestUrl + "?" + requestParam);
-        orderinfo.setForeignResponseContent(responseJson);
-        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+        orderInfo.setRechargeStatus(game_state);     //0充值中 1充值成功 9充值失败
+        orderInfo.setForeignRequestContent(requestUrl + "?" + requestParam);
+        orderInfo.setForeignResponseContent(responseJson);
+        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderInfo);
 
         if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ) {
             //扣减豆操作
