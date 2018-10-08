@@ -26,7 +26,7 @@
                     {field:'month',title:'月份',width:'5%'},
                     {field:'monthTotal',title:'月份总额',width:'6%'},
                     {field:'orderids',title:'订单id集合',width:'15%'},
-                    {field:'remarks',title:'备注',width:'8%'},
+                    // {field:'remarks',title:'备注',width:'8%'},
                     {field:'status',title:'状态',width:'5%',
                         formatter : function(value,row,index){
                             if(value=='0'){return '未超额'}
