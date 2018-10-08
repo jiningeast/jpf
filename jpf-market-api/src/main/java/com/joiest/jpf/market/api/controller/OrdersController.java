@@ -348,10 +348,22 @@ public class OrdersController {
             if ( orderInfo.getOrderType() == 3 ) {
                 if(orderInfo.getInterfaceType().equals((byte)1)){
                     // 微能话费充值
-                    resultMap = this.phoneRechargeWn(orderInfo, productInfo);
+                    if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
+                        // 测试环境
+                        resultMap.put("message","成功");
+                    }else if (ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("1")){
+                        // 正式环境
+                        resultMap = this.phoneRechargeWn(orderInfo, productInfo);
+                    }
                 }else{
                     // 欧非话费充值
-                    resultMap = this.phoneRechargeOf(orderInfo, productInfo);
+                    if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
+                        // 测试环境
+                        resultMap.put("retcode","1");
+                    }else if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("1") ){
+                        // 正式环境
+                        resultMap = this.phoneRechargeOf(orderInfo, productInfo);
+                    }
                 }
             } else if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 ) {
                 // 油卡充值 1:中国石化 2:中国石油
