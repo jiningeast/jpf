@@ -420,7 +420,7 @@ public class OrdersController {
         orderInfo.setForeignResponseContent(responseJson);
         int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderInfo);
 
-        if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ) {
+        if ( (resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1")) || (resultMap.containsKey("message") && resultMap.get("message").equals("成功")) ) {
             //扣减豆操作
             int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
         } else {
