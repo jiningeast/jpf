@@ -21,6 +21,36 @@ public class PayShopOrderCustom implements Serializable {
     private Byte chargeType;
 
     /**
+     * 充值类型是卡密的情况下对应的stock_card表id
+     */
+    private String stockCardId;
+
+    /**
+     * 订单类型 1:中国石化; 2中国石油; 3话费充值
+     */
+    private Byte orderType;
+
+    /**
+     * 第三方订单号
+     */
+    private String foreignOrderNo;
+
+    /**
+     * 前端创建订单的请求参数
+     */
+    private String requestedContent;
+
+    /**
+     * 第三方接口请求参数
+     */
+    private String foreignRequestContent;
+
+    /**
+     * 第三方接口返回内容
+     */
+    private String foreignResponseContent;
+
+    /**
      *
      */
     private String customerId;
@@ -54,6 +84,11 @@ public class PayShopOrderCustom implements Serializable {
      * 商品基础信息id
      */
     private Integer productInfoId;
+
+    /**
+     * 商品基础信息id
+     */
+    private String wnProductId;
 
     /**
      * 商品数量
@@ -91,6 +126,16 @@ public class PayShopOrderCustom implements Serializable {
     private Byte status;
 
     /**
+     * 充值状态 0充值中 1充值成功 9充值失败
+     */
+    private String rechargeStatus;
+
+    /**
+     * 充值时间
+     */
+    private Date rechargeTime;
+
+    /**
      * 消费时关联券使用记录表的id
      */
     private String couponActiveId;
@@ -114,6 +159,21 @@ public class PayShopOrderCustom implements Serializable {
      * 订单来源 0=自平台 1=敬恒
      */
     private Byte source;
+
+    /**
+     * 接口类型 0=欧非 1=威能
+     */
+    private Byte interfaceType;
+
+    /**
+     * 转让订单表的主id
+     */
+    private String bargainOrderId;
+
+    /**
+     * 转让订单表的订单号
+     */
+    private String bargainOrderNo;
 
     /**
      * 下单时间
@@ -196,38 +256,6 @@ public class PayShopOrderCustom implements Serializable {
      */
     private String image;
 
-    /**
-     * 充值类型是卡密的情况下对应的stock_card表id
-     */
-    private String stockCardId;
-
-    /**
-     * 订单类型 1:中国石化; 2中国石油; 3话费充值
-     */
-    private Byte orderType;
-
-    /**
-     * 第三方订单号
-     */
-    private String foreignOrderNo;
-
-    /**
-     * 前端创建订单的请求参数
-     */
-    private String requestedContent;
-
-    /**
-     * 第三方接口请求参数
-     */
-    private String foreignRequestContent;
-
-    /**
-     * 第三方接口返回内容
-     */
-    private String foreignResponseContent;
-
-
-
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -235,7 +263,7 @@ public class PayShopOrderCustom implements Serializable {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getOrderNo() {
@@ -243,7 +271,7 @@ public class PayShopOrderCustom implements Serializable {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+        this.orderNo = orderNo;
     }
 
     public String getCustomerId() {
@@ -251,7 +279,7 @@ public class PayShopOrderCustom implements Serializable {
     }
 
     public void setCustomerId(String customerId) {
-        this.customerId = customerId == null ? null : customerId.trim();
+        this.customerId = customerId;
     }
 
     public String getCustomerName() {
@@ -259,7 +287,7 @@ public class PayShopOrderCustom implements Serializable {
     }
 
     public void setCustomerName(String customerName) {
-        this.customerName = customerName == null ? null : customerName.trim();
+        this.customerName = customerName;
     }
 
     public String getProductId() {
@@ -267,7 +295,7 @@ public class PayShopOrderCustom implements Serializable {
     }
 
     public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -275,7 +303,7 @@ public class PayShopOrderCustom implements Serializable {
     }
 
     public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
+        this.productName = productName;
     }
 
     public BigDecimal getProductMoney() {
@@ -300,6 +328,14 @@ public class PayShopOrderCustom implements Serializable {
 
     public void setProductInfoId(Integer productInfoId) {
         this.productInfoId = productInfoId;
+    }
+
+    public String getWnProductId() {
+        return wnProductId;
+    }
+
+    public void setWnProductId(String wnProductId) {
+        this.wnProductId = wnProductId;
     }
 
     public Integer getAmount() {
@@ -339,7 +375,7 @@ public class PayShopOrderCustom implements Serializable {
     }
 
     public void setChargeNo(String chargeNo) {
-        this.chargeNo = chargeNo == null ? null : chargeNo.trim();
+        this.chargeNo = chargeNo;
     }
 
     public String getCouponDetail() {
@@ -347,7 +383,7 @@ public class PayShopOrderCustom implements Serializable {
     }
 
     public void setCouponDetail(String couponDetail) {
-        this.couponDetail = couponDetail == null ? null : couponDetail.trim();
+        this.couponDetail = couponDetail;
     }
 
     public Byte getStatus() {
@@ -358,12 +394,52 @@ public class PayShopOrderCustom implements Serializable {
         this.status = status;
     }
 
+    public String getRechargeStatus() {
+        return rechargeStatus;
+    }
+
+    public void setRechargeStatus(String rechargeStatus) {
+        this.rechargeStatus = rechargeStatus;
+    }
+
+    public Date getRechargeTime() {
+        return rechargeTime;
+    }
+
+    public void setRechargeTime(Date rechargeTime) {
+        this.rechargeTime = rechargeTime;
+    }
+
     public String getCouponActiveId() {
         return couponActiveId;
     }
 
     public void setCouponActiveId(String couponActiveId) {
-        this.couponActiveId = couponActiveId == null ? null : couponActiveId.trim();
+        this.couponActiveId = couponActiveId;
+    }
+
+    public Byte getInterfaceType() {
+        return interfaceType;
+    }
+
+    public void setInterfaceType(Byte interfaceType) {
+        this.interfaceType = interfaceType;
+    }
+
+    public String getBargainOrderId() {
+        return bargainOrderId;
+    }
+
+    public void setBargainOrderId(String bargainOrderId) {
+        this.bargainOrderId = bargainOrderId;
+    }
+
+    public String getBargainOrderNo() {
+        return bargainOrderNo;
+    }
+
+    public void setBargainOrderNo(String bargainOrderNo) {
+        this.bargainOrderNo = bargainOrderNo;
     }
 
     public Date getAddtime() {
@@ -389,7 +465,6 @@ public class PayShopOrderCustom implements Serializable {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
-
 
     public String getTypeName() {
         return typeName;
@@ -446,7 +521,6 @@ public class PayShopOrderCustom implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 
     public BigDecimal getBid() {
         return bid;

@@ -115,6 +115,12 @@ public class ShopOrderInfo {
     private Byte source;
 
     /**
+     * 接口类型 0=欧非 1=威能
+     */
+    private Byte interfaceType;
+
+
+    /**
      * 转让订单表的主id
      */
     private String bargainOrderId;
@@ -603,5 +609,13 @@ public class ShopOrderInfo {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public Byte getInterfaceType() {
+        return interfaceType;
+    }
+
+    public void setInterfaceType(Byte interfaceType) {
+        this.interfaceType = interfaceType;
     }
 }
