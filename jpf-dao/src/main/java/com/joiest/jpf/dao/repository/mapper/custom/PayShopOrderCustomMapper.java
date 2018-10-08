@@ -1,9 +1,8 @@
 package com.joiest.jpf.dao.repository.mapper.custom;
 
 import com.joiest.jpf.common.custom.PayShopOrderCustom;
-import com.joiest.jpf.common.po.PayShopOrder;
-import com.joiest.jpf.common.po.PayShopOrderExample;
 import com.joiest.jpf.common.custom.PayShopOrderCustomExample;
+import com.joiest.jpf.common.po.PayShopOrder;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

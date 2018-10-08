@@ -169,6 +169,7 @@ public class CloudTaskController {
             responseMap.put("info","批次号与文件名不一致请修改后上传！");
             responseMap.put("data",staffInfosFailed);
         }
+        String failReason = "";
         for ( int i=0; i<list.size(); i++){
             // 外循环为一行excel记录
             if(i >= 4){
@@ -177,14 +178,24 @@ public class CloudTaskController {
                 // 内循环为该记录的列值
                 byte flag = 1;
                 // 检查列数据的正确性
-                for ( int j=0; j<singlePerson.size()-1; j++){
+                for ( int j=0; j<singlePerson.size(); j++){
                     // 第一列类型必须是0或者1
                     if (  singlePerson.get(0) != null && !singlePerson.get(0).equals("0") && !singlePerson.get(0).equals("1") ){
                         flag = 0;
+                        failReason = "第一列类型填写错误";
+                    }else if ( j == 8 ){
+                        // 检查打款金额是否超过了限额
+                        Double monthMoneyLimit = Double.parseDouble(ConfigUtil.getValue("DFAPI_MAX"));
+                        Double singlePersonDfMoney = Double.parseDouble(singlePerson.get(j));
+                        if ( singlePersonDfMoney > monthMoneyLimit ){
+                            flag = 0;
+                            failReason = "打款金额超过了每月限额";
+                        }
                     }else{
                         // 前9列数据必填
                         if ( StringUtils.isBlank(singlePerson.get(j)) ){
                             flag = 0;
+                            failReason = "请确保打款信息完整";
                         }
                     }
                 }
@@ -250,7 +261,7 @@ public class CloudTaskController {
                                 // 合同编号为空，请检查
                                 return "-1";
                             }
-                            CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo);
+                            CloudRechargeInfo cloudRechargeInfo = cloudRechargeServiceFacade.getRecByPactno(contractNo,(byte)0);
                             if ( cloudRechargeInfo.getMerchNo() == null ){
                                 return "-4";
                             }
@@ -285,15 +296,19 @@ public class CloudTaskController {
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
         }else if ( staffInfosFailed.size() > 0 ){
-            responseMap.put("code","10001");
-            responseMap.put("info","表格存在以下错误数据，请更改后重新上传");
+            responseMap.put("code","10004");
+            responseMap.put("info","表格存在以下错误数据，原因："+failReason);
             responseMap.put("data",staffInfosFailed);
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
             return uuid.toString();
-        }else if ( companyInfo.getCloudmoney().compareTo(companyMoneyBigDecimal) == -1 ){
+        }
+        /* 上传任务时取消金额验证，改为打款前验证
+        else if ( companyInfo.getCloudmoney().compareTo(companyMoneyBigDecimal) == -1 ){
             // "该企业账户余额不足，剩余："+companyInfo.getCloudmoney()
             return "-3";
-        }else{
+        }
+        */
+        else{
             // OSS上传excel文件
             String savePre = ConfigUtil.getValue("EXCEL_PATH");
             String path = PhotoUtil.saveFile(uploadfile, savePre);
@@ -309,6 +324,7 @@ public class CloudTaskController {
             cloudInterfaceStreamInfo.setRequestContent(path);
             cloudInterfaceStreamInfo.setResponseContent(response);
             cloudInterfaceStreamInfo.setAddtime(new Date());
+            cloudInterfaceStreamInfo.setBatchNo(Batchno);
             cloudInterfaceStreamServiceFacade.insRecord(cloudInterfaceStreamInfo);
 
             // 写入缓存文件
@@ -554,7 +570,7 @@ public class CloudTaskController {
             companyMoneyId = cloudCompanyMoneyInfo1.getId();
         }
 
-        // 鉴权信息数据入库，此代码段暂存在此处
+        // 鉴权信息数据入库
         Map<String,List< LinkedHashMap<String,String> >> jsonMapData = JsonUtils.toObject(fileContent,HashMap.class);
         List< LinkedHashMap<String,String> > personsList = jsonMapData.get("data");
         CloudCompanyStaffInfo cloudCompanyStaffInfo = new CloudCompanyStaffInfo();
@@ -562,10 +578,13 @@ public class CloudTaskController {
         for ( LinkedHashMap<String,String> singlePerson:personsList ){
             // 通过身份证号和手机号先判断企业有没有这个员工
             CloudCompanyStaffInfo info = new CloudCompanyStaffInfo();
+            info.setNickname(singlePerson.get("name"));
             info.setIdcard(singlePerson.get("idno").toUpperCase()); //身份证号默认大写
             info.setMobile(singlePerson.get("phone"));
+            info.setMerchNo(singlePerson.get("bankNo"));
             info.setStatus((byte)1);
-            CloudCompanyStaffInfo existStaff = cloudCompanyStaffServiceFacade.getStaffByInfo(info);
+            CloudCompanyStaffInfo existStaff = cloudCompanyStaffServiceFacade.getOneStaff(info);
+            // CloudCompanyStaffInfo existStaff = cloudCompanyStaffServiceFacade.getStaffByInfo(info);
             int staffId;
             if ( existStaff.getId() == null ){
                 // 插入员工信息
@@ -880,7 +899,7 @@ public class CloudTaskController {
                 content = "尊敬的"+banknickname+",欢迎加入欣享服务共享经济服务平台，请在微信搜索公众号“欣享服务”进行认证签约";//短信内容
                 content += ".(请使用您的身份证号进行登录，客服热线："+hotLine+")";//短信内容
             }*/
-            if( content != "" ){
+            if( StringUtils.isNotBlank(content) ){
                 //发送短信
                 Map<String,String> retsult = SmsUtils.send(mobile,content,"xinxiang");
                 if ( retsult == null ){
@@ -911,19 +930,10 @@ public class CloudTaskController {
                     if( result.equals("10000 ")){//短信签约成功 更新为代付款状态
                         CloudDfMoneyRequest dfMoneyRequest = new CloudDfMoneyRequest();
                         int count = cloudDfMoneyServiceFacade.updateDfMoneyActiveById(dfMoneyRequest,dfMoneyId);
-
                     }
-                }else{
-
                 }
-
-                //返回值10000 代表成功
-                //短信发送是否成功  之后 如何处理 ？？？？？？？？
-
             }
-
         }
-
 
         return jpfResponseDto;
     }

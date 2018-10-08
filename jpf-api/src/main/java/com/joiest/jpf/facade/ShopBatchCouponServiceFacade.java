@@ -30,9 +30,14 @@ public interface ShopBatchCouponServiceFacade {
     public List<ShopCustomerInfo> sendCouponsToPersons(List<LinkedHashMap<String,Object>> list, String companyId, String companyName, String batchNo, String excelLocalUrl);
 
     /**
-     * 将一个欣券发给某个人
+     * 将一个欣券发给某个人并激活
      */
-    public ShopCustomerInfo sendCouponToPerson(String name, String phone, String idno, String dou, String companyId, String companyName, String batchId);
+    public ShopCustomerInfo sendCouponToPersonAndActive(String name, String phone, String idno, String dou, String companyId, String companyName, String batchId);
+
+    /**
+     * 获取对应面值的若干欣券
+     */
+    public List<ShopBatchCouponInfo> getCoupons(List<LinkedHashMap<String,Object>> list, String companyId, String batchNo, String excelLocalUrl);
 
     /**
      * 根据批次id批量更新券的发送方式

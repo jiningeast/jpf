@@ -35,6 +35,11 @@ public class PayCloudInterfaceStream implements Serializable {
     private String taskId;
 
     /**
+     * 新建打款任务时上传的exce的l批次号
+     */
+    private String batchNo;
+
+    /**
      * 员工id
      */
     private String staffId;
@@ -104,6 +109,14 @@ public class PayCloudInterfaceStream implements Serializable {
         this.taskId = taskId == null ? null : taskId.trim();
     }
 
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo == null ? null : batchNo.trim();
+    }
+
     public String getStaffId() {
         return staffId;
     }
@@ -151,6 +164,7 @@ public class PayCloudInterfaceStream implements Serializable {
         sb.append(", requestContent=").append(requestContent);
         sb.append(", responseContent=").append(responseContent);
         sb.append(", taskId=").append(taskId);
+        sb.append(", batchNo=").append(batchNo);
         sb.append(", staffId=").append(staffId);
         sb.append(", staffBanksId=").append(staffBanksId);
         sb.append(", companyMoneyId=").append(companyMoneyId);
@@ -181,6 +195,7 @@ public class PayCloudInterfaceStream implements Serializable {
             && (this.getRequestContent() == null ? other.getRequestContent() == null : this.getRequestContent().equals(other.getRequestContent()))
             && (this.getResponseContent() == null ? other.getResponseContent() == null : this.getResponseContent().equals(other.getResponseContent()))
             && (this.getTaskId() == null ? other.getTaskId() == null : this.getTaskId().equals(other.getTaskId()))
+            && (this.getBatchNo() == null ? other.getBatchNo() == null : this.getBatchNo().equals(other.getBatchNo()))
             && (this.getStaffId() == null ? other.getStaffId() == null : this.getStaffId().equals(other.getStaffId()))
             && (this.getStaffBanksId() == null ? other.getStaffBanksId() == null : this.getStaffBanksId().equals(other.getStaffBanksId()))
             && (this.getCompanyMoneyId() == null ? other.getCompanyMoneyId() == null : this.getCompanyMoneyId().equals(other.getCompanyMoneyId()))
@@ -200,6 +215,7 @@ public class PayCloudInterfaceStream implements Serializable {
         result = prime * result + ((getRequestContent() == null) ? 0 : getRequestContent().hashCode());
         result = prime * result + ((getResponseContent() == null) ? 0 : getResponseContent().hashCode());
         result = prime * result + ((getTaskId() == null) ? 0 : getTaskId().hashCode());
+        result = prime * result + ((getBatchNo() == null) ? 0 : getBatchNo().hashCode());
         result = prime * result + ((getStaffId() == null) ? 0 : getStaffId().hashCode());
         result = prime * result + ((getStaffBanksId() == null) ? 0 : getStaffBanksId().hashCode());
         result = prime * result + ((getCompanyMoneyId() == null) ? 0 : getCompanyMoneyId().hashCode());

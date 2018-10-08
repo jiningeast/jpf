@@ -61,7 +61,7 @@
                 {field:'merchNo',title:'聚合商户号',width:"20%"},
                 {field:'name',title:'企业名称',width:"10%"},
                 {field:'phonename',title:'联系人姓名',width:"10%"},
-                {field:'phone',title:'联系人手机号',width:"20%"},
+                {field:'phone',title:'联系人手机号',width:"10%"},
                 {field:'attestation',title:'认证',width:"10%",
                     formatter:function (value,row,index) {
                         if ( value == '1' ){
@@ -70,6 +70,7 @@
                             return "未认证";
                         }
                     }},
+                {field:'cloudmoney',title:'余额',width:"10%"},
                 {field:'created',title:'创建时间',width:"20%",formatter: formatDateStr}
             ]]
         });

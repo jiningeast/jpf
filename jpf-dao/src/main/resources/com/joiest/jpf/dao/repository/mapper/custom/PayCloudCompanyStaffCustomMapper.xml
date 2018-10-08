@@ -398,4 +398,16 @@
       updated = #{updated,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectOneStaff" parameterType="com.joiest.jpf.common.po.PayCloudCompanyStaff" resultMap="BaseResultMap">
+    select cs.id,cs.nickname,cs.mobile,cs.idcard,sb.bankno
+    from pay_cloud_company_staff cs
+    left join pay_cloud_staff_banks sb on cs.id=sb.staffid
+    where cs.nickname = #{nickname,jdbcType=VARCHAR} and
+    cs.mobile = #{mobile,jdbcType=VARCHAR} and
+    cs.idcard = #{idcard,jdbcType=VARCHAR} and
+    cs.status = #{status,jdbcType=TINYINT} and
+    sb.bankno = #{merchNo,jdbcType=VARCHAR}
+    LIMIT 1
+  </select>
 </mapper>

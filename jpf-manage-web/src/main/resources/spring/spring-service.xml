@@ -66,4 +66,6 @@
 	<bean id="ShopBargainRequestServiceFacade" class="com.joiest.jpf.facade.impl.ShopBargainRequestServiceFacadeImpl"></bean>
 	<bean id="ShopBargainOrderServiceFacade" class="com.joiest.jpf.facade.impl.ShopBargainOrderServiceFacadeImpl"></bean>
 	<bean id="ShopBrangainRechargeOrderServiceFacade" class="com.joiest.jpf.facade.impl.ShopBrangainRechargeOrderServiceFacadeImpl"></bean>
+	<bean id="CloudDfMoneyFreezeServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfMoneyFreezeServiceFacadeImpl"></bean>
+	<bean id="CloudStaffMonthTotalServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffMonthTotalServiceFacadeImpl"></bean>
 </beans>

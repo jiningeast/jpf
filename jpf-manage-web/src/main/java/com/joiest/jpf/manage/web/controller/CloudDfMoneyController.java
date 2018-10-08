@@ -1,42 +1,35 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayCloudCompany;
 import com.joiest.jpf.common.po.PayCloudCompanyMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
-import com.joiest.jpf.common.po.PayCloudDfMoneyExample;
-import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.common.util.ConfigUtil;
+import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
-import com.joiest.jpf.dto.GetCloudCompanyRequest;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
 import com.joiest.jpf.entity.CloudDfMoneyInfo;
-import com.joiest.jpf.entity.CloudInterfaceStreamInfo;
 import com.joiest.jpf.facade.CloudCompanyMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
-import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.joiest.jpf.manage.web.util.ServicePayUtils;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import netscape.javascript.JSObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/cloudDfMoney")
@@ -98,6 +91,12 @@ public class CloudDfMoneyController {
         if( companyInfo == null ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到公司信息");
         }
+
+        if ( companyInfo.getIsFreeze() == (byte)2 )
+        {
+            throw new JpfException(JpfErrorInfo.COMPANY_IS_FREEZE, "企业被冻结");
+
+        }
         String companyId = companyInfo.getId(); //公司ID
         BigDecimal cloudMoney = companyInfo.getCloudmoney(); //账户金额
         String cloudcode = companyInfo.getCloudcode(); //金额校验码
@@ -121,7 +120,7 @@ public class CloudDfMoneyController {
         for(CloudDfMoneyInfo onetimes:infos){
             Long dfMoneyId = onetimes.getId();
             BigDecimal dfCommoney = onetimes.getCommoney(); //发放金额
-            if( onetimes.getIsActive() != 1 || (onetimes.getMontype() !=1 && onetimes.getMontype() !=3) ){ //过滤已打款或 不能打款 代付信息
+            if( onetimes.getIsActive() != 1 || (onetimes.getMontype() !=1 && onetimes.getMontype() !=3) || onetimes.getIsFreeze() != (byte)1 ){ //过滤已打款或 不能打款 代付信息  添加冻结校验
                 limitData.add(dfMoneyId);
             }
 
@@ -156,7 +155,7 @@ public class CloudDfMoneyController {
         }
 
         //金额是否可够代付
-        if( cloudMoney.compareTo(new BigDecimal(0) ) == -1 || cloudMoney.compareTo(cloudRealPayMoney) == -1 ){
+        if( cloudMoney.compareTo(new BigDecimal(0) ) < 0 || cloudMoney.compareTo(cloudRealPayMoney) < 0 ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "账户金额不足，请先充值");
         }
 

@@ -1,9 +1,9 @@
 package com.joiest.jpf.facade.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
 import com.joiest.jpf.facade.ShopOrderInterfaceServiceFacade;
@@ -17,6 +17,9 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
 
     @Autowired
     private PayShopOrderMapper payShopOrderMapper;
+
+    @Autowired
+    private PayShopOrderCustomMapper payShopOrderCustomMapper;
 
     @Autowired
     private PayShopCouponRemainMapper payShopCouponRemainMapper;
@@ -42,7 +45,9 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
         BeanCopier beanCopier = BeanCopier.create(ShopOrderInterfaceInfo.class, PayShopOrder.class, false);
         beanCopier.copy(info, order, null);
 
-        return payShopOrderMapper.insertSelective(order);
+        payShopOrderCustomMapper.insertSelective(order);
+
+        return Integer.parseInt(order.getId());
     }
 
     @Override
@@ -124,6 +129,7 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
         PayShopOrder payShopOrder = new PayShopOrder();
         BeanCopier beanCopier = BeanCopier.create(ShopOrderInterfaceInfo.class, PayShopOrder.class, false);
         beanCopier.copy(info, payShopOrder, null);
+
         return payShopOrderMapper.updateByPrimaryKeySelective(payShopOrder);
     }
 

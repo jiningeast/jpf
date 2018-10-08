@@ -1,5 +1,7 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.dto.GetCloudStaffMonthTotalRequest;
+import com.joiest.jpf.dto.GetCloudStaffMonthTotalResponse;
 import com.joiest.jpf.dto.ModifyCloudStaffMonthTotalRequest;
 import com.joiest.jpf.entity.CloudStaffMonthTotalInterfaceInfo;
 
@@ -27,4 +29,14 @@ public interface CloudStaffMonthTotalServiceFacade {
      * @return
      */
     public int updateStaffMonthTotal(ModifyCloudStaffMonthTotalRequest request);
+
+    /**
+     * 获取列表
+     * @param request
+     * @return
+     */
+    /**
+     * 代理列表---后台
+     */
+    public GetCloudStaffMonthTotalResponse getList(GetCloudStaffMonthTotalRequest request);
 }

@@ -34,70 +34,6 @@
                         }
                         $('#infoDiv').window("open").window('refresh', 'edit/page?id='+rows[0].id+"&merchNo="+rows[0].merchNo+"&type=0").window('setTitle','编辑');
                     }
-                },
-                {
-                    text : '锁定',
-                    iconCls:'icon-no',
-                    handler : function () {
-                        var rows = $("#dg").datagrid('getSelections');
-                        if ( rows.length != 1 ) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return false;
-                        }
-                        $.messager.confirm('锁定','确认锁定操作？',function(r){
-                            if (r){
-                                $.ajax({
-                                    type : 'get',
-                                    url :'delCompany?merchNo='+rows[0].merchNo+'&type=2',
-                                    dataType:"json",
-                                    contentType:"application/json",
-                                    success : function(msg){
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                        } else {
-                                            $.messager.alert('消息提示','操作成功!','info');
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error : function () {
-                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                    }
-                                })
-                            }
-                        })
-                    }
-                },
-                {
-                    text : '恢复',
-                    iconCls:'icon-ok',
-                    handler : function () {
-                        var rows = $("#dg").datagrid('getSelections');
-                        if ( rows.length != 1 ) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return false;
-                        }
-                        $.messager.confirm('恢复','确认恢复操作？',function(r){
-                            if (r){
-                                $.ajax({
-                                    type : 'get',
-                                    url :'delCompany?merchNo='+rows[0].merchNo+'&type=1',
-                                    dataType:"json",
-                                    contentType:"application/json",
-                                    success : function(msg){
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                        } else {
-                                            $.messager.alert('消息提示','操作成功!','info');
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error : function () {
-                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                    }
-                                })
-                            }
-                        })
-                    }
                 }
             ];
 
@@ -118,28 +54,39 @@
                     {field:'merchNo',title:'商户编号',width:'10%'},
                     // {field:'merchName',title:'商户名称',width:'13%'},
                     {field:'name',title:'公司名称',width:'8%'},
-                    {field:'phonename',title:'联系人姓名',width:'10%'},
-                    {field:'phone',title:'联系电话',width:'15%'},
-                    {field:'linkemail',title:'邮箱',width:'8%'},
-                    {field:'salesRate',title:'代理平台费率',width:'10%'},
-                    {field:'userName',title:'录入管理员',width:'10%'},
-                    {field:'attestation',title:'状态',width:'8%',
+                    {field:'phonename',title:'联系人姓名',width:'5%'},
+                    {field:'phone',title:'联系电话',width:'8%'},
+                    {field:'linkemail',title:'邮箱',width:'10%'},
+                    {field:'salesRate',title:'代理平台费率',width:'5%'},
+                    {field:'userName',title:'录入管理员',width:'5%'},
+                    {field:'attestation',title:'状态',width:'5%',
                         formatter : function(value,row,index){
                             if(value=='0'){return '未认证'}
                             else if(value=='1'){return '已认证'}
                         },styler: function (value, row, index) {
-                            return 'color:red';
+                            if ( value == '1' ) { return 'color:blue'; }
+                            else if ( value == '0' ) { return 'color:red'; }
                         }
-                    },{field:'created',title:'添加时间',width:'10%',formatter: formatDateStr},
-                    {field:'status',title:'登录状态',width:'8%',
+                    },
+                    {field:'created',title:'添加时间',width:'10%',formatter: formatDateStr},
+                    {field:'status',title:'账户状态',width:'5%',
                         formatter : function(value,row,index){
                             if(value=='1'){return '正常'}
                             else if(value=='-1'){return '禁闭'}
                         },styler: function (value, row, index) {
-                            return 'color:red';
+                            if ( value == '1' ) { return 'color:blue'; }
+                            else if ( value == '-1' ) { return 'color:red'; }
+                        }
+                    },
+                    {field:'isFreeze',title:'冻结状态',width:'5%',
+                        formatter : function (value,row,index) {
+                            if ( value == '1' ){ return '未冻结'; }
+                            else if ( value == '2' ) { return '冻结'; }
+                        },styler:function (value,row,index) {
+                            if ( value == '1' ) { return 'color:blue'; }
+                            else if ( value == '2' ) { return 'color:red'; }
                         }
                     }
-
                 ]]
             });
 

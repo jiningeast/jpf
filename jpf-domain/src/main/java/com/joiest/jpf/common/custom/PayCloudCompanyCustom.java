@@ -94,6 +94,11 @@ public class PayCloudCompanyCustom {
     private Byte isshow;
 
     /**
+     * 是否冻结 1:未冻结 2:已冻结
+     */
+    private Byte isFreeze;
+
+    /**
      * 添加时间
      */
     private Date created;
@@ -107,6 +112,26 @@ public class PayCloudCompanyCustom {
      * 云账户金额校验
      */
     private String cloudcode;
+
+    /**
+     * 预付款金额
+     */
+    private BigDecimal advanceMoney;
+
+    /**
+     * 预付款校验码
+     */
+    private String advanceCode;
+
+    /**
+     * 冻结金额
+     */
+    private BigDecimal freezeMoney;
+
+    /**
+     * 冻结校验码
+     */
+    private String freezeCode;
 
     /**
      * 云账户支付密码
@@ -316,6 +341,14 @@ public class PayCloudCompanyCustom {
         this.isshow = isshow;
     }
 
+    public Byte getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Byte isFreeze) {
+        this.isFreeze = isFreeze;
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -330,6 +363,38 @@ public class PayCloudCompanyCustom {
 
     public void setCloudmoney(BigDecimal cloudmoney) {
         this.cloudmoney = cloudmoney;
+    }
+
+    public BigDecimal getAdvanceMoney() {
+        return advanceMoney;
+    }
+
+    public void setAdvanceMoney(BigDecimal advanceMoney) {
+        this.advanceMoney = advanceMoney;
+    }
+
+    public String getAdvanceCode() {
+        return advanceCode;
+    }
+
+    public void setAdvanceCode(String advanceCode) {
+        this.advanceCode = advanceCode;
+    }
+
+    public BigDecimal getFreezeMoney() {
+        return freezeMoney;
+    }
+
+    public void setFreezeMoney(BigDecimal freezeMoney) {
+        this.freezeMoney = freezeMoney;
+    }
+
+    public String getFreezeCode() {
+        return freezeCode;
+    }
+
+    public void setFreezeCode(String freezeCode) {
+        this.freezeCode = freezeCode;
     }
 
     public String getCloudcode() {

@@ -1,7 +1,6 @@
 package com.joiest.jpf.cloud.api.controller;
 
 import com.joiest.jpf.cloud.api.util.CompressUtil;
-import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ExcelDealUtils;
 import com.joiest.jpf.dto.GetValueRequest;
 import com.joiest.jpf.dto.GetValueResponse;
@@ -9,8 +8,10 @@ import com.joiest.jpf.dto.OrderRequest;
 import com.joiest.jpf.dto.OrderResponse;
 import com.joiest.jpf.facade.DemoServiceFacade;
 import com.joiest.jpf.facade.OrderServiceFacade;
+import net.lingala.zip4j.exception.ZipException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import net.lingala.zip4j.exception.ZipException;
 
 @Controller
 @RequestMapping("demo")
@@ -184,12 +184,21 @@ public class DemoController {
     /**
      *
      * */
-    @RequestMapping(value="test",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping("/test")
     @ResponseBody
     public String test(){
+        String idno = "41071119870116153x";
+        idno = idno.toUpperCase();
 
-        String fileName = "E:\\Chrysanthemum.jpg";
-        String base =  Base64CustomUtils.imageToBase(fileName);
-        return null;
+        return idno;
+    }
+
+    @RequestMapping("test2")
+    @ResponseBody
+    public String test2(){
+        String str = "1";
+        String lastNum = StringUtils.substring(String.valueOf(str),-1,String.valueOf(str).length());
+
+        return lastNum;
     }
 }

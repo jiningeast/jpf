@@ -207,6 +207,10 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         if( request.getMontype() != null ){
             payCloudDfMoney.setMontype(request.getMontype());
         }
+        if ( request.getIsFreeze() != null )
+        {
+            payCloudDfMoney.setIsFreeze(request.getIsFreeze());
+        }
         payCloudDfMoney.setUpdatetime(new Date());
         payCloudDfMoney.setId(id);
 
@@ -307,6 +311,11 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         if( request.getMontype() != null ){
             c.andMontypeEqualTo(request.getMontype());
         }
+        //非冻结
+        if (request.getIsFreeze() != null )
+        {
+            c.andIsFreezeEqualTo(request.getIsFreeze());
+        }
 
         List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);
         List<CloudDfMoneyInfo> infos = new ArrayList<>();
@@ -355,6 +364,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         String companyId = companyInfo.getId(); //公司ID
         BigDecimal cloudMoney = companyInfo.getCloudmoney(); //账户金额
         String cloudcode = companyInfo.getCloudcode(); //金额校验码
+        BigDecimal advanceMoney = companyInfo.getAdvanceMoney();
 
         // 接口数据
         String response = responseParam.get("response");  //接口返回数据
@@ -376,6 +386,12 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         String fileName = "dfMoneyPay";
         logContent.append("\n\nTime:" + myfmt.format(date));
         logContent.append("\n接口返回信息:" + response);
+
+        if ( code.equals("30005") || code.equals("30006") )
+        {
+            LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, responseMap.getOrDefault("info", "代付限额").toString());
+        }
 
         if( code.equals("10000") || code.equals("30004") ){ //10000=代付成功  30004=无代付请求数据（支付限额）
 
@@ -432,6 +448,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
                 }
 
                 BigDecimal afterloudMoney = cloudMoney; //用户账户当前金额
+                BigDecimal afterAdvanceMoney = advanceMoney; //用户账户当前金额
                 for (Long key : realPayMapData.keySet()) {
                     CloudDfMoneyInfo cloudRets = realPayMapData.get(key);
 
@@ -442,6 +459,13 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
                     payCloudCompany.setCloudcode(checkCode);
                     payCloudCompany.setCloudmoney(afterloudMoney);
                     payCloudCompany.setId(companyId);
+
+                    //放入预付款
+                    afterAdvanceMoney = afterAdvanceMoney.add(cloudRets.getCommoney());
+                    payCloudCompany.setAdvanceMoney(afterAdvanceMoney);
+                    String advanceCode = ToolUtils.CreateCode(afterAdvanceMoney.toString(), companyId);
+                    payCloudCompany.setAdvanceCode(advanceCode);
+
                     //int upCompanyCount = cloudCompanyServiceFacade.updateSetiveById(payCloudCompany);
                     int upCompanyCount = payCloudCompanyMapper.updateByPrimaryKeySelective(payCloudCompany);
                     if( upCompanyCount <=0 ){
@@ -472,7 +496,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
             }else{
                 // 30004 提交单条数据到接口由于支付限制 接口无返回data参数
                 if(code.equals("30004")){
-
+ 
                     if(  realPayMapData.containsKey(dfIds)  ){//存在限制代付ID 删除
                         CloudDfMoneyInfo cloudInfos = realPayMapData.get(dfIds);
                         applyFailMoney.add(cloudInfos.getCommoney());
@@ -512,7 +536,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
 
 
-    // 更新某批次订单号的id相关联的打款信息为可代付
+    //    // 更新某批次订单号的id相关联的打款信息为可代付
     @Override
     public int updateDfMontype(String companyMoneyId){
         PayCloudDfMoneyExample e = new PayCloudDfMoneyExample();

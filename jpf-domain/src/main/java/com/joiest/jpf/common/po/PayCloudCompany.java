@@ -96,6 +96,11 @@ public class PayCloudCompany implements Serializable {
     private Byte isshow;
 
     /**
+     * 是否冻结 1:未冻结 2:已冻结
+     */
+    private Byte isFreeze;
+
+    /**
      * 添加时间
      */
     private Date created;
@@ -109,6 +114,26 @@ public class PayCloudCompany implements Serializable {
      * 云账户金额校验
      */
     private String cloudcode;
+
+    /**
+     * 预付款金额
+     */
+    private BigDecimal advanceMoney;
+
+    /**
+     * 预付款校验码
+     */
+    private String advanceCode;
+
+    /**
+     * 冻结金额
+     */
+    private BigDecimal freezeMoney;
+
+    /**
+     * 冻结校验码
+     */
+    private String freezeCode;
 
     /**
      * 云账户支付密码
@@ -296,6 +321,14 @@ public class PayCloudCompany implements Serializable {
         this.isshow = isshow;
     }
 
+    public Byte getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Byte isFreeze) {
+        this.isFreeze = isFreeze;
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -318,6 +351,38 @@ public class PayCloudCompany implements Serializable {
 
     public void setCloudcode(String cloudcode) {
         this.cloudcode = cloudcode == null ? null : cloudcode.trim();
+    }
+
+    public BigDecimal getAdvanceMoney() {
+        return advanceMoney;
+    }
+
+    public void setAdvanceMoney(BigDecimal advanceMoney) {
+        this.advanceMoney = advanceMoney;
+    }
+
+    public String getAdvanceCode() {
+        return advanceCode;
+    }
+
+    public void setAdvanceCode(String advanceCode) {
+        this.advanceCode = advanceCode == null ? null : advanceCode.trim();
+    }
+
+    public BigDecimal getFreezeMoney() {
+        return freezeMoney;
+    }
+
+    public void setFreezeMoney(BigDecimal freezeMoney) {
+        this.freezeMoney = freezeMoney;
+    }
+
+    public String getFreezeCode() {
+        return freezeCode;
+    }
+
+    public void setFreezeCode(String freezeCode) {
+        this.freezeCode = freezeCode == null ? null : freezeCode.trim();
     }
 
     public String getCloudpaypwd() {
@@ -411,9 +476,14 @@ public class PayCloudCompany implements Serializable {
         sb.append(", addadminid=").append(addadminid);
         sb.append(", editadminid=").append(editadminid);
         sb.append(", isshow=").append(isshow);
+        sb.append(", isFreeze=").append(isFreeze);
         sb.append(", created=").append(created);
         sb.append(", cloudmoney=").append(cloudmoney);
         sb.append(", cloudcode=").append(cloudcode);
+        sb.append(", advanceMoney=").append(advanceMoney);
+        sb.append(", advanceCode=").append(advanceCode);
+        sb.append(", freezeMoney=").append(freezeMoney);
+        sb.append(", freezeCode=").append(freezeCode);
         sb.append(", cloudpaypwd=").append(cloudpaypwd);
         sb.append(", updated=").append(updated);
         sb.append(", certificate=").append(certificate);
@@ -460,9 +530,14 @@ public class PayCloudCompany implements Serializable {
             && (this.getAddadminid() == null ? other.getAddadminid() == null : this.getAddadminid().equals(other.getAddadminid()))
             && (this.getEditadminid() == null ? other.getEditadminid() == null : this.getEditadminid().equals(other.getEditadminid()))
             && (this.getIsshow() == null ? other.getIsshow() == null : this.getIsshow().equals(other.getIsshow()))
+            && (this.getIsFreeze() == null ? other.getIsFreeze() == null : this.getIsFreeze().equals(other.getIsFreeze()))
             && (this.getCreated() == null ? other.getCreated() == null : this.getCreated().equals(other.getCreated()))
             && (this.getCloudmoney() == null ? other.getCloudmoney() == null : this.getCloudmoney().equals(other.getCloudmoney()))
             && (this.getCloudcode() == null ? other.getCloudcode() == null : this.getCloudcode().equals(other.getCloudcode()))
+            && (this.getAdvanceMoney() == null ? other.getAdvanceMoney() == null : this.getAdvanceMoney().equals(other.getAdvanceMoney()))
+            && (this.getAdvanceCode() == null ? other.getAdvanceCode() == null : this.getAdvanceCode().equals(other.getAdvanceCode()))
+            && (this.getFreezeMoney() == null ? other.getFreezeMoney() == null : this.getFreezeMoney().equals(other.getFreezeMoney()))
+            && (this.getFreezeCode() == null ? other.getFreezeCode() == null : this.getFreezeCode().equals(other.getFreezeCode()))
             && (this.getCloudpaypwd() == null ? other.getCloudpaypwd() == null : this.getCloudpaypwd().equals(other.getCloudpaypwd()))
             && (this.getUpdated() == null ? other.getUpdated() == null : this.getUpdated().equals(other.getUpdated()))
             && (this.getCertificate() == null ? other.getCertificate() == null : this.getCertificate().equals(other.getCertificate()))
@@ -498,9 +573,14 @@ public class PayCloudCompany implements Serializable {
         result = prime * result + ((getAddadminid() == null) ? 0 : getAddadminid().hashCode());
         result = prime * result + ((getEditadminid() == null) ? 0 : getEditadminid().hashCode());
         result = prime * result + ((getIsshow() == null) ? 0 : getIsshow().hashCode());
+        result = prime * result + ((getIsFreeze() == null) ? 0 : getIsFreeze().hashCode());
         result = prime * result + ((getCreated() == null) ? 0 : getCreated().hashCode());
         result = prime * result + ((getCloudmoney() == null) ? 0 : getCloudmoney().hashCode());
         result = prime * result + ((getCloudcode() == null) ? 0 : getCloudcode().hashCode());
+        result = prime * result + ((getAdvanceMoney() == null) ? 0 : getAdvanceMoney().hashCode());
+        result = prime * result + ((getAdvanceCode() == null) ? 0 : getAdvanceCode().hashCode());
+        result = prime * result + ((getFreezeMoney() == null) ? 0 : getFreezeMoney().hashCode());
+        result = prime * result + ((getFreezeCode() == null) ? 0 : getFreezeCode().hashCode());
         result = prime * result + ((getCloudpaypwd() == null) ? 0 : getCloudpaypwd().hashCode());
         result = prime * result + ((getUpdated() == null) ? 0 : getUpdated().hashCode());
         result = prime * result + ((getCertificate() == null) ? 0 : getCertificate().hashCode());

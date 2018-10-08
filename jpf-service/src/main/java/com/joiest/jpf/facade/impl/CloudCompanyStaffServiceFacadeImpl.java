@@ -7,6 +7,7 @@ import com.joiest.jpf.dao.repository.mapper.custom.PayCloudCompanyStaffCustomMap
 import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyStaffMapper;
 import com.joiest.jpf.entity.CloudCompanyStaffInfo;
 import com.joiest.jpf.facade.CloudCompanyStaffServiceFacade;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -25,12 +26,14 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
     /*
      * 查询身份证信息通过身份证号
      * */
+    @Override
     public CloudCompanyStaffInfo getCloudCompanyStaffByIdcard(String cardNo){
 
         PayCloudCompanyStaffExample example = new PayCloudCompanyStaffExample();
 
         PayCloudCompanyStaffExample.Criteria c = example.createCriteria();
         c.andIdcardEqualTo(cardNo);
+        c.andStatusEqualTo((byte)1);
 
         List<PayCloudCompanyStaff> getCompanyStaff = payCloudCompanyStaffMapper.selectByExample(example);
         if(getCompanyStaff == null || getCompanyStaff.isEmpty()){
@@ -50,11 +53,13 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
     /*
      * 通过身份证号更新员工信息
      * */
+    @Override
     public int upCloudCompanyStaffByIdcard(String idcard, Map<String,String> map){
 
         PayCloudCompanyStaffExample example = new PayCloudCompanyStaffExample();
         PayCloudCompanyStaffExample.Criteria c = example.createCriteria();
         c.andIdcardEqualTo(idcard);
+        c.andStatusEqualTo((byte)1);
 
         PayCloudCompanyStaff staff = new PayCloudCompanyStaff();
 
@@ -65,9 +70,22 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
         return payCloudCompanyStaffMapper.updateByExampleSelective(staff, example);
     }
 
+    /**
+     * 通过主键id更新员工信息
+     */
+    @Override
+    public int upCloudCompanyStaffById(CloudCompanyStaffInfo cloudCompanyStaffInfo){
+        PayCloudCompanyStaff payCloudCompanyStaff = new PayCloudCompanyStaff();
+        BeanCopier beanCopier = BeanCopier.create( CloudCompanyStaffInfo.class, PayCloudCompanyStaff.class, false);
+        beanCopier.copy(cloudCompanyStaffInfo, payCloudCompanyStaff, null);
+
+        return payCloudCompanyStaffMapper.updateByPrimaryKeySelective(payCloudCompanyStaff);
+    }
+
     /*
      *获取员工信息通过id
      * */
+    @Override
     public CloudCompanyStaffInfo getCloudCompanyStaffById(String id){
 
 
@@ -111,6 +129,7 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
         if ( cloudCompanyStaffInfo.getMobile()!= null ){
             c.andMobileEqualTo(cloudCompanyStaffInfo.getMobile());
         }
+        c.andStatusEqualTo((byte)1);
         List<PayCloudCompanyStaff> list = payCloudCompanyStaffMapper.selectByExample(e);
 
         CloudCompanyStaffInfo cloudCompanyStaffInfo1 = new CloudCompanyStaffInfo();
@@ -120,5 +139,38 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
         }
 
         return cloudCompanyStaffInfo1;
+    }
+
+    /**
+     * 根据姓名、银行卡号、身份证号、手机号查询一个人的鉴权记录
+     */
+    @Override
+    public CloudCompanyStaffInfo getOneStaff(CloudCompanyStaffInfo cloudCompanyStaffInfo){
+        /*PayCloudCompanyStaffExample e = new PayCloudCompanyStaffExample();
+        PayCloudCompanyStaffExample.Criteria c = e.createCriteria();
+        c.andNicknameEqualTo(cloudCompanyStaffInfo.getNickname());
+        c.andMobileEqualTo(cloudCompanyStaffInfo.getMobile());
+        c.andIdcardEqualTo(cloudCompanyStaffInfo.getIdcard());
+        c.andMerchNoEqualTo(cloudCompanyStaffInfo.getMerchNo());
+        c.andStatusEqualTo(cloudCompanyStaffInfo.getStatus());*/
+
+        PayCloudCompanyStaff searchStaff = new PayCloudCompanyStaff();
+        searchStaff.setNickname(cloudCompanyStaffInfo.getNickname());
+        searchStaff.setMobile(cloudCompanyStaffInfo.getMobile());
+        searchStaff.setIdcard(cloudCompanyStaffInfo.getIdcard());
+        searchStaff.setMerchNo(cloudCompanyStaffInfo.getMerchNo());
+        searchStaff.setStatus(cloudCompanyStaffInfo.getStatus());
+        PayCloudCompanyStaff payCloudCompanyStaff = payCloudCompanyStaffCustomMapper.selectOneStaff(searchStaff);
+        /*if ( list != null && list.isEmpty() ){
+            payCloudCompanyStaff = list.get(0);
+        }*/
+
+        CloudCompanyStaffInfo info = new CloudCompanyStaffInfo();
+        if ( payCloudCompanyStaff != null && payCloudCompanyStaff.getId() != null && StringUtils.isNotBlank(payCloudCompanyStaff.getId()) ){
+            BeanCopier beanCopier = BeanCopier.create( PayCloudCompanyStaff.class, CloudCompanyStaffInfo.class, false);
+            beanCopier.copy(payCloudCompanyStaff, info, null);
+        }
+
+        return info;
     }
 }

@@ -48,8 +48,8 @@ public class DfUtils {
         String requestParam = ToolUtils.mapToUrl(treeMap);
         String requestUrl = this.DFPAY_URL + this.SERVICE;
 
-        String result = OkHttpUtils.postForm(requestUrl, treeMap);
-//        String result = "{\"retCode\":\"0000\",\"retMsg\":\"操作完成\",\"sign\":\"f2fa8dbf11100461e876d177b4a47284\",\"tranNo\":\"20180601154919050110009043\",\"tranAmt\":0.01,\"outOrderNo\":\"152783935800000000000046\",\"orderStatus\":\"00\"}";
+//        String result = OkHttpUtils.postForm(requestUrl, treeMap);    //TODO 2018-10-07 实际代付时打开注释
+        String result = "{\"retCode\":\"0000\",\"retMsg\":\"操作完成\",\"sign\":\"f2fa8dbf11100461e876d177b4a47284\",\"tranNo\":\"20180601154919050110009043\",\"tranAmt\":0.01,\"outOrderNo\":\"152783935800000000000046\",\"orderStatus\":\"00\"}";
 
         JSONObject resultJosn = new JSONObject();
         resultJosn.put("resultStr", result);
@@ -93,8 +93,9 @@ public class DfUtils {
         String requestParam = ToolUtils.mapToUrl(treeMap);
         String requestUrl = DFPAY_URL + SELECT_SERVICE;
 
-        String res = OkHttpUtils.postForm(requestUrl, treeMap);
-
+//        String res = OkHttpUtils.postForm(requestUrl, treeMap);       //TODO  实际代付时打开注释
+//        String res = "{\"retCode\" : \"1002\",\"retMsg\" : \"商户订单号错误或不存在:5034141273962184\",\"sign\" : \"5153ab9147d8a2109f87a3a4ef52ef84\"}";
+        String res = "{\"retCode\" : \"0000\",\"retMsg\" : \"操作完成\",\"sign\" : \"841adf62d9dab2ad5506f122d2ce9135\",\"tranNo\" : \"20180829165001050112208765\",\"tranAmt\" : 29850.00000,\"outOrderNo\" : \"7405532313931318\",\"orderStatus\" : \"02\"}";
         result.put("requestParam",treeMap);
         result.put("responseParam",res);
 

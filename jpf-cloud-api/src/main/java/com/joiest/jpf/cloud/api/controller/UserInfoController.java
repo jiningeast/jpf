@@ -229,7 +229,7 @@ public class UserInfoController {
     @ResponseBody
     public String userLogin(HttpServletRequest request) {
 
-        String idCard = request.getParameter("idCard");
+        String idCard = request.getParameter("idCard").toUpperCase();
         String verificate = request.getParameter("verificate");
         if(idCard == null || idCard.isEmpty() || verificate==null || verificate.isEmpty()){
 

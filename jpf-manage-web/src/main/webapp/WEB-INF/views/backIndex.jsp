@@ -145,26 +145,31 @@
                     "url" : "cloudTask/index"
                 },{
                     "menuid" : "504",
+                    "menuname" : "云账户冻结管理",
+                    "icon" : "icon-nav",
+                    "url" : "cloudDfMoneyFreeze/index"
+                },{
+                    "menuid" : "505",
                     "menuname" : "欣豆市场充值管理",
                     "icon" : "icon-nav",
                     "url" : "shopCompanyCharge/index"
                 },{
-                    "menuid" : "505",
+                    "menuid" : "506",
                     "menuname" : "欣豆市场欣券管理",
                     "icon" : "icon-nav",
                     "url" : "shopBatch/index"
                 },{
-                    "menuid" : "506",
+                    "menuid" : "507",
                     "menuname" : "欣豆市场采购管理",
                     "icon" : "icon-nav",
                     "url" : "shopStockOrder/index"
                 },{
-                    "menuid" : "507",
+                    "menuid" : "508",
                     "menuname" : "欣豆市场广告管理",
                     "icon" : "icon-nav",
                     "url" : "shopAd/index"
                 },{
-                    "menuid" : "508",
+                    "menuid" : "509",
                     "menuname" : "欣豆市场收购管理",
                     "icon" : "icon-nav",
                     "url" : "shopBargainRequest/index"
@@ -195,16 +200,21 @@
                         "url" : "cloudCompanyMoney/caiwu/index"
                     },{
                         "menuid" : "605",
+                        "menuname" : "云账户解冻审核",
+                        "icon" : "icon-nav",
+                        "url" : "cloudDfMoneyFreeze/caiwu/index"
+                    },{
+                        "menuid" : "606",
                         "menuname" : "欣豆市场充值审核",
                         "icon" : "icon-nav",
                         "url" : "shopCompanyCharge/caiwuIndex"
                     },{
-                        "menuid" : "606",
+                        "menuid" : "607",
                         "menuname" : "欣豆市场采购审核",
                         "icon" : "icon-nav",
                         "url" : "shopStockOrder/indexCaiwu"
                     },{
-                        "menuid" : "607",
+                        "menuid" : "608",
                         "menuname" : "欣豆市场转让审核",
                         "icon" : "icon-nav",
                         "url" : "shopBargainOrder/indexCaiwu"
@@ -229,7 +239,12 @@
                     "menuname" : "欣券客户管理",
                     "icon" : "icon-nav",
                     "url" : "shopCustomer/index"
-                }]
+                },{
+                        "menuid" : "802",
+                        "menuname" : "云账户用户限额管理",
+                        "icon" : "icon-nav",
+                        "url" : "cloudStaffMonthTotal/index"
+                    }]
             },{
                 "menuid" : "9",
                 "icon" : "icon-sys",

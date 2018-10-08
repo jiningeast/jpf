@@ -897,11 +897,13 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
      * 根据合同编号获取记录
      */
     @Override
-    public CloudRechargeInfo getRecByPactno(String pactno){
+    public CloudRechargeInfo getRecByPactno(String pactno,byte status){
         PayCloudRechargeExample e = new PayCloudRechargeExample();
         PayCloudRechargeExample.Criteria c = e.createCriteria();
         c.andPactnoEqualTo(pactno);
-        c.andStatusGreaterThanOrEqualTo((byte)4);
+        if ( status > 0 ){
+            c.andStatusGreaterThanOrEqualTo(status);
+        }
 
         List<PayCloudRecharge> list = payCloudRechargeMapper.selectByExample(e);
         CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();

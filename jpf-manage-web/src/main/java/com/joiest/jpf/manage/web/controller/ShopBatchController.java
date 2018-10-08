@@ -154,7 +154,7 @@ public class ShopBatchController {
     public ModelAndView detail(String batchId, ModelMap modelMap){
         // 查询批次信息
         ShopBatchInfo shopBatchInfo = shopBatchServiceFacade.getBatchById(batchId);
-        if ( shopBatchInfo.getSendType() != null && shopBatchInfo.getSendType() == 1 ){
+        if ( shopBatchInfo.getSendType() != null && ( shopBatchInfo.getSendType() == 1 || shopBatchInfo.getSendType() == 2 ) ){
             // 如果批次发送方式是Email发送
             modelMap.addAttribute("batchId",batchId);
             return new ModelAndView("shopBatch/detail",modelMap);
@@ -541,6 +541,9 @@ public class ShopBatchController {
     @RequestMapping("/sendCoupons")
     @ResponseBody
     public JpfResponseDto sendCoupons(String fileName){
+        // 发送欣券后是否直接激活
+        int sendAndActive = 0;
+
         // 读取暂存文件
         String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH")+fileName+".txt","UTF-8");
         Map<String,String> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
@@ -551,41 +554,75 @@ public class ShopBatchController {
         String excelLocalUrl = jsonMap.get("path");
         String totalMoney = jsonMap.get("totalMoney");
 
+        // 检查商户是否已禁用
+        ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(companyId);
+        if ( shopCompanyInfo.getStatus() == 0 ){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("该商户已禁用");
+
+            return jpfResponseDto;
+        }
+
         // 检验金额验证码的正确性
         if ( !shopCompanyServiceFacade.checkMoneyCode(companyId) ){
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
-            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetCode("10002");
             jpfResponseDto.setRetMsg("金额校验码错误");
 
             return jpfResponseDto;
         }
 
-        // 开始群发欣券
-        List<ShopCustomerInfo> sendedList = shopBatchCouponServiceFacade.sendCouponsToPersons(list,companyId,companyName,batchNo,excelLocalUrl);
+        List<ShopCustomerInfo> sendedList = new ArrayList<>();
+        List<ShopBatchCouponInfo> couponsList = new ArrayList<>();
+        if ( sendAndActive == 1 ){
+            // 开始群发欣券并激活
+            sendedList = shopBatchCouponServiceFacade.sendCouponsToPersons(list,companyId,companyName,batchNo,excelLocalUrl);     // 发送短信并直接激活
+        }else{
+            // 获取待接收激活码的人的手机号
+            couponsList = shopBatchCouponServiceFacade.getCoupons(list,companyId,batchNo,excelLocalUrl);
+        }
 
         // 扣款
         shopCompanyServiceFacade.charge(companyId,0-Double.parseDouble(totalMoney));
 
-        // 更新批次记录已激活的券数量字段
         PayShopBatch payShopBatch = shopBatchServiceFacade.getBatchByBatchNo(batchNo);
-        int newActivetedNum = payShopBatch.getActivetedNum() + sendedList.size();
-        ShopBatchInfo shopBatchInfo = new ShopBatchInfo();
-        shopBatchInfo.setId(payShopBatch.getId());
-        shopBatchInfo.setActivetedNum(newActivetedNum);
-        shopBatchServiceFacade.updateColumnById(shopBatchInfo);
+        if ( sendAndActive == 1 ){
+            // 更新批次记录已激活的券数量字段
+            int newActivetedNum = payShopBatch.getActivetedNum() + sendedList.size();
+            ShopBatchInfo shopBatchInfo = new ShopBatchInfo();
+            shopBatchInfo.setId(payShopBatch.getId());
+            shopBatchInfo.setActivetedNum(newActivetedNum);
+            shopBatchServiceFacade.updateColumnById(shopBatchInfo);
+        }else{
+            // 更新批次发送状态为“已发送给个人”
+            ShopBatchInfo shopBatchInfo = new ShopBatchInfo();
+            shopBatchInfo.setId(payShopBatch.getId());
+            shopBatchInfo.setStatus((byte)2);
+            shopBatchInfo.setSendType((byte)2);
+            shopBatchServiceFacade.updateColumnById(shopBatchInfo);
+        }
 
         // 开始发短信
-        for ( ShopCustomerInfo customerInfo:sendedList ){
-            sendToPersonsSms(customerInfo,batchNo);
+        String content;
+        if ( sendAndActive == 1 ){
+            content = "尊敬的用户，您的欣豆数量有变动，请微信搜索登录“欣享爱生活”查看。";
+            for ( ShopCustomerInfo customerInfo:sendedList ){
+                sendToPersonsSms(customerInfo.getPhone(),content,batchNo);
+            }
+        }else{
+            for ( ShopBatchCouponInfo shopBatchCouponInfo:couponsList ){
+                content = "您收到一个激活码："+shopBatchCouponInfo.getActiveCode()+"，请微信搜索“欣享爱生活”公众号登录使用。";
+                sendToPersonsSms(shopBatchCouponInfo.getActivePhone(),content,batchNo);
+            }
         }
 
         return new JpfResponseDto();
     }
 
     // 群发的短信
-    public void sendToPersonsSms(ShopCustomerInfo customerInfo,String batchNo){
-        String content = "尊敬的用户，您的欣豆数量有变动，请微信搜索登录“欣享爱生活”查看。";
-        Map<String,String> smsResMap = SmsUtils.send(customerInfo.getPhone(),content,"xinxiang");
+    public void sendToPersonsSms(String phone,String content,String batchNo){
+        Map<String,String> smsResMap = SmsUtils.send(phone,content,"xinxiang");
         Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
         if ( responseMap.get("code").equals("10000") ){
             // 添加短信流水
@@ -628,13 +665,13 @@ public class ShopBatchController {
     @RequestMapping(value = "/sendSmsAgain", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
     public JpfResponseDto sendSmsAgain(String couponIds){
+        String content;
         String[] couponIdArr = couponIds.split(",");
         for (int i=0; i<couponIdArr.length; i++) {
             ShopBatchCouponInfo shopBatchCouponInfo = shopBatchCouponServiceFacade.getCouponById(couponIdArr[i]);
-            ShopCustomerInfo shopCustomerInfo = new ShopCustomerInfo();
-            shopCustomerInfo.setName(shopBatchCouponInfo.getActiveName());
-            shopCustomerInfo.setPhone(shopBatchCouponInfo.getActivePhone());
-            sendToPersonsSms(shopCustomerInfo,shopBatchCouponInfo.getBatchNo());
+            content = "您收到一个激活码："+shopBatchCouponInfo.getActiveCode()+"，请微信搜索“欣享爱生活”公众号登录使用。";
+
+            sendToPersonsSms(shopBatchCouponInfo.getActivePhone(),content,shopBatchCouponInfo.getBatchNo());
         }
 
         return new JpfResponseDto();
