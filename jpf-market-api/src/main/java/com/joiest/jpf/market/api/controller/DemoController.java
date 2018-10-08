@@ -21,7 +21,13 @@ public class DemoController {
     @ResponseBody
     public String demo()
     {
-       return "111111";
+        if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
+            return "0";
+        }else if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("1") ){
+            return "1";
+        }
+
+        return "";
     }
 
     @RequestMapping("/chargePhone")
