@@ -1060,7 +1060,7 @@ public class OrdersController {
         String infoErrorOrder = null;
         String sucOrder = "";
         String faildOrder = "";
-        if(actualDeal.get("code").equals("10000")){
+        if(actualDeal.get("code").toString().equals("10000")){
 
             content = "是";
             JSONArray dataDeal = JSONArray.fromObject(actualDeal.get("data"));
