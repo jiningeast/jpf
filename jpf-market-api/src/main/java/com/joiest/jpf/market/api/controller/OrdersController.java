@@ -130,6 +130,7 @@ public class OrdersController {
         info.setProductInfoId(productInfo.getProductInfoId());
         info.setAddtime(new Date());
         int orderId = shopOrderInterfaceServiceFacade.addOrder(info);
+        info.setId(""+orderId);
         // 获取orderid的个位数，0,1时用欧非接口，2-9用威能接口
         String lastNum = StringUtils.substring(String.valueOf(orderId),-1,String.valueOf(orderId).length());
         if ( Integer.parseInt(lastNum) <= 1 ){
