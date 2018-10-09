@@ -146,8 +146,11 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         PayShopCouponRemainExample example = new PayShopCouponRemainExample();
         example.setOrderByClause("id ASC");
         PayShopCouponRemainExample.Criteria c = example.createCriteria();
+        PayShopCouponRemainExample.Criteria cOr = example.createCriteria();
         c.andCustomerIdEqualTo(uid);
-        c.andStatusEqualTo((byte)0);
+        cOr.andStatusEqualTo((byte)0);
+        cOr.andStatusEqualTo((byte)3);
+        example.or(cOr);
         List<PayShopCouponRemain> list = payShopCouponRemainMapper.selectByExample(example);
         if ( list.isEmpty() || list == null )
         {
