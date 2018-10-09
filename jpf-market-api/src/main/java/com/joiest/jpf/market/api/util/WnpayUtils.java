@@ -103,11 +103,11 @@ public class WnpayUtils {
         String sign = Md5Encrypt.md5(this.account+this.md5Password+curDate+param.get("mobile")+param.get("productId")+param.get("outOrderId"),"utf-8");
         requestParam.put("sign",sign);
 
-        String resposePa = "{\"data\":\"14737109\",\"status\":\"0\",\"message\":\"成功\"}";
+        //String resposePa = "{\"data\":\"14737109\",\"status\":\"0\",\"message\":\"成功\"}";
         //上线需打开
-        //String resposePa = OkHttpUtils.postJson(this.url+"flowOrder",requestParam.toString());
+        String resposePa = OkHttpUtils.postJson(this.url+"flowOrder",requestParam.toString());
         JSONObject flowOrder = JSONObject.fromObject(resposePa);
-
+        
         StringBuilder sbf = new StringBuilder();
         sbf.append("\n\nTime:" + DateUtils.getCurDate());
         sbf.append("\n请求地址：" + this.url+"flowOrder");
