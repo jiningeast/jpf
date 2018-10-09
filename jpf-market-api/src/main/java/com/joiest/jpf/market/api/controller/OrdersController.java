@@ -349,13 +349,13 @@ public class OrdersController {
             if ( orderInfo.getOrderType() == 3 ) {
                 if(orderInfo.getInterfaceType().equals((byte)1)){
                     // 微能话费充值
-                    /*if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
+                    if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
                         // 测试环境
-                        resultMap.put("message","成功");
+                        resultMap.put("retcode","1");
                     }else if (ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("1")){
                         // 正式环境
-                    }*/
-                    resultMap = this.phoneRechargeWn(orderInfo, productInfo);
+                        resultMap = this.phoneRechargeWn(orderInfo, productInfo);
+                    }
 
                 }else{
                     // 欧非话费充值
