@@ -341,7 +341,7 @@ public class CloudCompanyMoneyController {
                         if( companyInfo == null ){
                             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到公司信息");
                         }
-                        String companyId = companyInfo.getId(); //公司ID
+                        String companyId = dfRets.get(i).getFid(); //公司ID
                         BigDecimal cloudMoney = companyInfo.getCloudmoney(); //账户金额
                         String cloudcode = companyInfo.getCloudcode(); //金额校验码
                         BigDecimal advanceMoney = companyInfo.getAdvanceMoney() != null ? companyInfo.getAdvanceMoney() : new BigDecimal("0.00");    //预付款
