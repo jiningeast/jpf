@@ -121,8 +121,8 @@
 
         // 选取公司弹窗大小
         $('#companys').window({
-            width:'1024px',
-            height:'550px',
+            width:'1200px',
+            height:'600px',
             closed:true,
             modal:true
         });
