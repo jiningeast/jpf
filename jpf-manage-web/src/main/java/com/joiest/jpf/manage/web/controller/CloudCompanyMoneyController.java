@@ -372,6 +372,7 @@ public class CloudCompanyMoneyController {
 
                         //调用接口查询代付是否成功并更新代付明细数据
                         Map<String,String> responseParam = ServicePayUtils.searchPay(orderid);
+                        System.out.println("代付查询返回："+responseParam);
                         if(responseParam.size()>0){
                             // 接口数据
                             String response = responseParam.get("response");  //接口返回数据
