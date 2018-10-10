@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-<div name="contentDiv" style="width:1418px">
+<div name="contentDiv" style="margin: 10px; overflow: hidden;">
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#CompanyChargeft'">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchcompanyChargeForm" method="post">
@@ -103,17 +103,18 @@
             url:'../shopCompany/list',
             columns:[[
                 {field:'id',title:'ID',width:'3%'},
-                {field:'merchNo',title:'商户编号',width:'10%'},
-                {field:'companyName',title:'公司名称',width:'8%'},
-                {field:'contactName',title:'联系人姓名',width:'10%'},
-                {field:'contactPhone',title:'联系电话',width:'15%'},
-                {field:'receiveName',title:'接收人姓名',width:'15%'},
-                {field:'receivePhone',title:'接收人电话',width:'10%'},
+                {field:'merchNo',title:'商户编号',width:'11%'},
+                {field:'companyName',title:'公司名称',width:'10%'},
+                {field:'contactName',title:'联系人姓名',width:'8%'},
+                {field:'contactPhone',title:'联系电话',width:'8%'},
+                {field:'receiveName',title:'接收人姓名',width:'8%'},
+                {field:'receivePhone',title:'接收人电话',width:'8%'},
                 {field:'receiveEmail',title:'接收人邮箱',width:'10%'},
-                {field:'saleName',title:'所属销售名字',width:'10%'},
-                {field:'salePhone',title:'所属销售电话',width:'10%'},
+                {field:'saleName',title:'所属销售名字',width:'8%'},
+                {field:'salePhone',title:'所属销售电话',width:'8%'},
                 {field:'addtime',title:'添加时间',width:'10%',formatter: formatDateStr},
-                {field:'status',title:'登录状态',width:'8%',
+                {field:'money',title:'余额',width:"5%"},
+                {field:'status',title:'登录状态',width:'5%',
                     formatter : function(value,row,index){
                         if(value=='1'){return '启用中'}
                         else{return '已停用'}

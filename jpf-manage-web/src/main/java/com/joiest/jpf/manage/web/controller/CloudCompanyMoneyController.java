@@ -5,11 +5,8 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayCloudCompany;
 import com.joiest.jpf.common.po.PayCloudCompanyMoney;
-import com.joiest.jpf.common.po.PayCloudDfMoneyFreeze;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyFreezeMapper;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
@@ -30,7 +27,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -66,12 +62,6 @@ public class CloudCompanyMoneyController {
     public String index(){
         return "cloudCompanyMoney/companyList";
     }
-
-    @Autowired
-    private PayCloudCompanyMapper payCloudCompanyMapper;
-
-    @Autowired
-    private PayCloudDfMoneyFreezeMapper payCloudDfMoneyFreezeMapper;
 
     /**
      * 批次管理页
@@ -347,11 +337,11 @@ public class CloudCompanyMoneyController {
                     for (int m = 0; m < dfRets.size() ; m++) {
 
                         //查询公司账号信息
-                        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(dfRets.get(i).getUid().toString());
+                        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(dfRets.get(i).getFid());
                         if( companyInfo == null ){
                             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到公司信息");
                         }
-                        String companyId = companyInfo.getId(); //公司ID
+                        String companyId = dfRets.get(i).getFid(); //公司ID
                         BigDecimal cloudMoney = companyInfo.getCloudmoney(); //账户金额
                         String cloudcode = companyInfo.getCloudcode(); //金额校验码
                         BigDecimal advanceMoney = companyInfo.getAdvanceMoney() != null ? companyInfo.getAdvanceMoney() : new BigDecimal("0.00");    //预付款

@@ -119,10 +119,6 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
         }
         // 只查询未删的
         c.andIsDelEqualTo((byte)0);
-
-
-        //System.out.println(cloudRechargeRequest.getStatus());
-        //System.out.println(222222);
         e.setPageNo(cloudRechargeRequest.getPage());
         e.setPageSize(cloudRechargeRequest.getRows());
         e.setOrderByClause("id DESC");
@@ -214,6 +210,18 @@ public class CloudRechargeServiceFacadeImpl implements CloudRechargeServiceFacad
             CloudRechargeInfo cloudRechargeInfo = new CloudRechargeInfo();
             BeanCopier beanCopier = BeanCopier.create(PayCloudRecharge.class, CloudRechargeInfo.class, false);
             beanCopier.copy(payCloudRecharge, cloudRechargeInfo, null);
+            //商户信息
+            PayCloudCompanyExample example = new PayCloudCompanyExample();
+            PayCloudCompanyExample.Criteria companyC = example.createCriteria();
+            companyC.andMerchNoEqualTo(cloudRechargeInfo.getMerchNo());
+
+            List<PayCloudCompany> companyList =  payCloudCompanyMapper.selectByExample(example);
+            if( companyList != null && !companyList.isEmpty() ){
+                PayCloudCompany payCloudCompany = companyList.get(0);
+                cloudRechargeInfo.setCompanyId(payCloudCompany.getId());
+                cloudRechargeInfo.setCompanyName(payCloudCompany.getName());
+                cloudRechargeInfo.setMerchName(payCloudCompany.getMerchName());
+            }
 
             infos.add(cloudRechargeInfo);
         }

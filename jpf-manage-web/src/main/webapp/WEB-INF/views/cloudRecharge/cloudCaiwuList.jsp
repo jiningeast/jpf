@@ -41,9 +41,9 @@
                 columns : [[
                     {field:'id', title:'ID',width:'4%'},
                     {field:'fid', title:'充值单号',width:'10%'},
+                    {field:'companyName', title:'企业名称',width:'8%'},
                     {field:'agentNo', title:'代理聚合商户编号',width:'10%'},
                     {field:'merchNo', title:'到账聚合商户编号',width:'10%'},
-                    {field:'payway', title:'支付方式',width:'5%'},
                     {field:'pactno', title:'合同编号',width:'5%'},
                     {field:'money', title:'充值金额',width:'5%'},
                     {field:'realmoney', title:'实际到帐金额',width:'5%'},
@@ -116,13 +116,17 @@
         });
 
     </script>
+    <style>
+        #searchForm td:nth-child(odd) { text-align: right; }
+        #searchForm td:nth-child(even) { text-align: left; }
+    </style>
 </head>
 <body>
-<div name="contentDiv" style="width:1418px">
+<div name="contentDiv">
     <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#ft'">
         <div style="padding:10px 60px 20px 60px">
             <form id="searchForm" method="post">
-                <table cellpadding="5">
+                <table cellpadding="5" width="75%">
                     <tr>
                         <td>充值单号:</td>
                         <td><input id="fid" name="fid" class="easyui-textbox" type="text" /></td>
