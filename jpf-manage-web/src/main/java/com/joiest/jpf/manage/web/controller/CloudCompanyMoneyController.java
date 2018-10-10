@@ -337,7 +337,7 @@ public class CloudCompanyMoneyController {
                     for (int m = 0; m < dfRets.size() ; m++) {
 
                         //查询公司账号信息
-                        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(dfRets.get(i).getUid().toString());
+                        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(dfRets.get(i).getFid());
                         if( companyInfo == null ){
                             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到公司信息");
                         }
