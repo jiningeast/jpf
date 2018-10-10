@@ -471,15 +471,17 @@ public class CloudCompanyMoneyController {
                                         JSONObject data = JSONObject.fromObject(responseMap.getString("data"));
                                        /* 代付状态 00 提交申请，01 审核通过，02 申请被拒绝，03 已打批次，04 提交到渠道，05 代付成功，06 代付失败*/
                                         String orderStatus = data.get("orderStatus").toString();
-                                        String retCode = data.get("retCode").toString();
                                         Boolean dfSuccess = true;
-                                        String retCode_success = "0000";
-                                        if ( !orderStatus_successList.contains(orderStatus) )
-                                        {
-                                            //代付失败
-                                            dfSuccess = false;
+                                        if ( data.has("retCode") && StringUtils.isNotBlank(responseMap.get("retCode").toString()) ){
+                                            String retCode = data.get("retCode").toString();
+                                            String retCode_success = "0000";
+                                            if ( !retCode.equals(retCode_success) )
+                                            {
+                                                //代付失败
+                                                dfSuccess = false;
+                                            }
                                         }
-                                        if ( !retCode.equals(retCode_success) )
+                                        if ( !orderStatus_successList.contains(orderStatus) )
                                         {
                                             //代付失败
                                             dfSuccess = false;
