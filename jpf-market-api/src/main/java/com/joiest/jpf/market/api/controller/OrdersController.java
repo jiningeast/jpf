@@ -351,11 +351,12 @@ public class OrdersController {
                     // 微能话费充值
                     if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
                         // 测试环境
-                        resultMap.put("message","成功");
+                        resultMap.put("retcode","1");
                     }else if (ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("1")){
                         // 正式环境
                         resultMap = this.phoneRechargeWn(orderInfo, productInfo);
                     }
+
                 }else{
                     // 欧非话费充值
                     if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
@@ -385,7 +386,7 @@ public class OrdersController {
             }
         }else if ( orderInfo.getInterfaceType() == 1 ){
             // 威能接口返回处理
-            if ( resultMap.containsKey("message") && resultMap.get("message").equals("成功") ){
+            if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ){
                 orderInfo.setStatus((byte)1);   // 已支付
             }else{
                 orderInfo.setStatus((byte)2);   // 支付失败
@@ -1077,7 +1078,7 @@ public class OrdersController {
         String infoErrorOrder = null;
         String sucOrder = "";
         String faildOrder = "";
-        if(actualDeal.get("code").equals("10000")){
+        if(actualDeal.get("code").toString().equals("10000")){
 
             content = "是";
             JSONArray dataDeal = JSONArray.fromObject(actualDeal.get("data"));
