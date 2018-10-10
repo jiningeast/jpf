@@ -118,8 +118,10 @@ public class JingHengController {
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         Date yesterday = calendar.getTime();
         String defaultStartDate = dateFmt.format(yesterday);
-        String start = defaultStartDate.substring(0,10) + " 00:00:00";
-        String end = defaultStartDate.substring(0,10) + " 23:23:59";
+//        String start = defaultStartDate.substring(0,10) + " 00:00:00";
+//        String end = defaultStartDate.substring(0,10) + " 23:23:59";
+        String start = "2018-09-20 00:00:00";
+        String end = "2018-09-20 23:23:59";
 
         Map<String, Object> requestParam = new HashMap<>();
         requestParam.put("startGmtCreate", start);
@@ -159,7 +161,8 @@ public class JingHengController {
                 int size = module.size();
                 for (int i=0; i<size; i++){
                     JSONObject one = module.getJSONObject(i);
-
+                    logger.info("status: {}", one.get("status"));
+                    logger.info("status--type: {}", one.get("status").getClass());
                     //过滤充值失败的订单
                     if ( one.containsKey("status") && !one.get("status").equals("2") )
                     {

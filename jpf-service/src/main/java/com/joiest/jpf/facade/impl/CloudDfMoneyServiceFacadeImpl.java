@@ -247,6 +247,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         PayCloudDfMoneyExample.Criteria c = e.createCriteria();
         c.andCompanyMoneyIdEqualTo(batchId);
         c.andIsActiveEqualTo(1);
+        c.andIsFreezeEqualTo((byte)1);  //未冻结
         if ( !dfid.equals("0") )
         {
             String[] dfid_arr = dfid.split(",");
@@ -391,6 +392,21 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
         {
             LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, responseMap.getOrDefault("info", "代付限额").toString());
+        }
+        if ( code.equals("30003") )
+        {
+            LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, responseMap.getOrDefault("info", "待打款信息列表为空").toString());
+        }
+        if ( code.equals("30001") )
+        {
+            LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, responseMap.getOrDefault("info", "签名错误").toString());
+        }
+        if ( code.equals("30002") )
+        {
+            LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, responseMap.getOrDefault("info", "批次号不能为空").toString());
         }
 
         if( code.equals("10000") || code.equals("30004") ){ //10000=代付成功  30004=无代付请求数据（支付限额）

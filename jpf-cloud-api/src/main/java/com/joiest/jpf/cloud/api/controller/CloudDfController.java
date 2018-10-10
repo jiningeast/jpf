@@ -144,7 +144,7 @@ public class CloudDfController {
                 {
                     logger.info(" ======== 代付订单累计金额超过限额: orderid: " + x.getOrderid() + "dfId: " + x.getId()  + " 用户ID: " + x.getBusstaffid() );
                     error_resultJson.put("code", JpfInterfaceErrorInfo.DF_STAFF_EXCEED_MAXMONEY.getCode());
-                    error_resultJson.put("info", "合计金额已经超过限额");
+                    error_resultJson.put("info", "用户该月代付合计金额已经超过限额");
                     errData.put("dfid", x.getId().toString());
                     errData.put("orderid", x.getOrderid());
                     errData.put("money", x.getCommoney().toString());
@@ -467,6 +467,9 @@ public class CloudDfController {
                     if ( monthTotal_new.compareTo(max) >= 0 )
                     {
                         staffMonth.setStatus(1);
+                    } else
+                    {
+                        staffMonth.setStatus(0);
                     }
                     String orderids = monthTotalInfo.getOrderids() + orderid_api_remark + ",";
                     staffMonth.setOrderids(orderids);
