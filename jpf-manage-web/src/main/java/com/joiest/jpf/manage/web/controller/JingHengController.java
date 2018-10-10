@@ -53,8 +53,8 @@ public class JingHengController {
         String defaultStartDate = dateFmt.format(yesterday);
 //        String start = defaultStartDate.substring(0,10) + " 00:00:00";
 //        String end = defaultStartDate.substring(0,10) + " 23:23:59";
-        String start = "2018-09-20 00:00:00";
-        String end = "2018-09-20 23:23:59";
+        String start = "2018-10-08 00:00:00";
+        String end = "2018-10-08 23:23:59";
 
         Map<String, Object> requestParam = new HashMap<>();
         requestParam.put("startGmtCreate", start);
