@@ -11,7 +11,7 @@ public class PayChargeOrder implements Serializable {
     private String id;
 
     /**
-     * 订单号，规则：OD+3位随机数+毫秒级时间戳+3位随机数
+     * 订单号，规则：CH+3位随机数+毫秒级时间戳+3位随机数
      */
     private String orderNo;
 
@@ -69,6 +69,16 @@ public class PayChargeOrder implements Serializable {
      * 接口类型 0=欧非 1=威能
      */
     private Byte interfaceType;
+
+    /**
+     * 
+     */
+    private String notifyUrl;
+
+    /**
+     * 
+     */
+    private Date notifyTime;
 
     /**
      * 订单状态 1=订单生成成功 2=充值成功 3=充值失败
@@ -191,6 +201,22 @@ public class PayChargeOrder implements Serializable {
         this.interfaceType = interfaceType;
     }
 
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl == null ? null : notifyUrl.trim();
+    }
+
+    public Date getNotifyTime() {
+        return notifyTime;
+    }
+
+    public void setNotifyTime(Date notifyTime) {
+        this.notifyTime = notifyTime;
+    }
+
     public Byte getStatus() {
         return status;
     }
@@ -237,6 +263,8 @@ public class PayChargeOrder implements Serializable {
         sb.append(", productAmount=").append(productAmount);
         sb.append(", totalMoney=").append(totalMoney);
         sb.append(", interfaceType=").append(interfaceType);
+        sb.append(", notifyUrl=").append(notifyUrl);
+        sb.append(", notifyTime=").append(notifyTime);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
@@ -273,6 +301,8 @@ public class PayChargeOrder implements Serializable {
             && (this.getProductAmount() == null ? other.getProductAmount() == null : this.getProductAmount().equals(other.getProductAmount()))
             && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
             && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
+            && (this.getNotifyUrl() == null ? other.getNotifyUrl() == null : this.getNotifyUrl().equals(other.getNotifyUrl()))
+            && (this.getNotifyTime() == null ? other.getNotifyTime() == null : this.getNotifyTime().equals(other.getNotifyTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -298,6 +328,8 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getProductAmount() == null) ? 0 : getProductAmount().hashCode());
         result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
         result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
+        result = prime * result + ((getNotifyUrl() == null) ? 0 : getNotifyUrl().hashCode());
+        result = prime * result + ((getNotifyTime() == null) ? 0 : getNotifyTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
