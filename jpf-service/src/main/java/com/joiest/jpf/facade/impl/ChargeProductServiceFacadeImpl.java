@@ -85,16 +85,16 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
         if ( !EnumConstants.ShopProductStatus.normal.value().equals(isOnSale) && !EnumConstants.ShopProductStatus.forbid.value().equals(isOnSale) ) {
             throw new JpfException(JpfErrorInfo.STATUS_ERROR, "状态不匹配");
         }
-        PayShopProductExample example = new PayShopProductExample();
-        PayShopProductExample.Criteria c = example.createCriteria();
+        PayChargeProductExample example = new PayChargeProductExample();
+        PayChargeProductExample.Criteria c = example.createCriteria();
         c.andIdEqualTo(id);
-        PayShopProduct payShopProduct = new PayShopProduct();
-        payShopProduct.setId(id);
-        payShopProduct.setStatus(isOnSale);
-        payShopProduct.setUpdatetime(new Date());
-        payShopProduct.setOperatorId(userInfo.getId());
-        payShopProduct.setOperatorName(userInfo.getUserName());
-        int res = payShopProductMapper.updateByPrimaryKeySelective(payShopProduct);
+        PayChargeProduct payChargeProduct = new PayChargeProduct();
+        payChargeProduct.setId(id);
+        payChargeProduct.setIsOnSale(isOnSale);
+        payChargeProduct.setUpdatetime(new Date());
+        payChargeProduct.setOperatorId(userInfo.getId().toString());
+        payChargeProduct.setOperatorName(userInfo.getUserName());
+        int res = payChargeProductMapper.updateByPrimaryKeySelective(payChargeProduct);
 
         return new JpfResponseDto();
     }

@@ -1,38 +1,38 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class ChargeProductSupplierInfo  {
+public class ChargeProductTypeRequest {
+
     /**
      * 主键id
      */
     private String id;
 
     /**
-     * 供应商名称
+     * 商品类型名称
      */
-    private String supplierName;
+    private String typeName;
 
     /**
-     * 图片
+     * 图片地址
      */
     private String imgurl;
 
     /**
-     * 操作人
+     * 商品类型状态 0:显示 1:不显示
+     */
+    private Byte status;
+
+    /**
+     * 后台添加人id
      */
     private String operatorId;
 
     /**
-     * 操作人
+     * 后台添加人姓名
      */
     private String operatorName;
-
-    /**
-     * 状态 0:显示 1:不显示
-     */
-    private Byte status;
 
     /**
      * 添加时间
@@ -54,12 +54,12 @@ public class ChargeProductSupplierInfo  {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getSupplierName() {
-        return supplierName;
+    public String getTypeName() {
+        return typeName;
     }
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName == null ? null : supplierName.trim();
+    public void setTypeName(String typeName) {
+        this.typeName = typeName == null ? null : typeName.trim();
     }
 
     public String getImgurl() {
@@ -68,6 +68,14 @@ public class ChargeProductSupplierInfo  {
 
     public void setImgurl(String imgurl) {
         this.imgurl = imgurl == null ? null : imgurl.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     public String getOperatorId() {
@@ -86,14 +94,6 @@ public class ChargeProductSupplierInfo  {
         this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
     public Date getAddtime() {
         return addtime;
     }
@@ -109,6 +109,5 @@ public class ChargeProductSupplierInfo  {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
-
 
 }

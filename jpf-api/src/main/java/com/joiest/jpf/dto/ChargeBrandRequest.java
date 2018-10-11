@@ -1,31 +1,31 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class ChargeProductSupplierInfo  {
+public class ChargeBrandRequest {
+
     /**
-     * 主键id
+     * 品牌id
      */
     private String id;
 
     /**
-     * 供应商名称
+     * 品牌名称
      */
-    private String supplierName;
+    private String brandName;
 
     /**
-     * 图片
+     * 品牌图片
      */
     private String imgurl;
 
     /**
-     * 操作人
+     * 后台添加人id
      */
     private String operatorId;
 
     /**
-     * 操作人
+     * 后台添加人姓名
      */
     private String operatorName;
 
@@ -54,12 +54,12 @@ public class ChargeProductSupplierInfo  {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getSupplierName() {
-        return supplierName;
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName == null ? null : supplierName.trim();
+    public void setBrandName(String brandName) {
+        this.brandName = brandName == null ? null : brandName.trim();
     }
 
     public String getImgurl() {
@@ -109,6 +109,5 @@ public class ChargeProductSupplierInfo  {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
-
 
 }

@@ -1,9 +1,9 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class ChargeProductSupplierInfo  {
+public class ChargeSupplierRequest {
+
     /**
      * 主键id
      */
@@ -109,6 +109,5 @@ public class ChargeProductSupplierInfo  {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
-
 
 }
