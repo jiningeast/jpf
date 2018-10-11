@@ -10,9 +10,11 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductInfoMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductMapper;
 import com.joiest.jpf.dto.*;
+import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.entity.ShopProductInfo;
 import com.joiest.jpf.entity.ShopProductInfoInfo;
 import com.joiest.jpf.entity.UserInfo;
@@ -60,6 +62,9 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
     private PayShopProductMapper payShopProductMapper;
 
     @Autowired
+    private PayChargeProductMapper payChargeProductMapper;
+
+    @Autowired
     private PayShopProductInfoMapper payShopProductInfoMapper;
 
     @Override
@@ -86,41 +91,33 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
         }
 
         GetChargeProductResponse response = new GetChargeProductResponse();
-        /*List<PayShopProduct> list = payShopProductMapper.selectByExample(example);
-        int count = payShopProductMapper.countByExample(example);
+        List<PayChargeProduct> list = payChargeProductMapper.selectByExample(example);
+        int count = payChargeProductMapper.countByExample(example);
 
         response.setCount(count);
-        List<ShopProductInfo> resultList = new ArrayList<>();
-        for (PayShopProduct one : list)
+        List<ChargeProductInfo> resultList = new ArrayList<>();
+        for (PayChargeProduct one : list)
         {
-            ShopProductInfo info = new ShopProductInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayShopProduct.class, ShopProductInfo.class, false);
+            ChargeProductInfo info = new ChargeProductInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayChargeProduct.class, ChargeProductInfo.class, false);
             beanCopier.copy(one, info, null);
 
-            //商品基础信息
-            PayShopProductInfo pInfo = payShopProductInfoMapper.selectByPrimaryKey(one.getProductInfoId());
-            info.setBrandId(pInfo.getBrandId());
-            info.setBrandName(pInfo.getBrandName());
-            info.setSupplierId(pInfo.getSupplierId());
-            info.setSupplierName(pInfo.getSupplierName());
-            info.setTypeId(pInfo.getTypeId());
-            info.setTypeName(pInfo.getTypeName());
             resultList.add(info);
         }
-        response.setList(resultList);*/
+        response.setList(resultList);
 
         return response;
     }
 
     @Override
-    public JpfResponseDto upStatus(String id, Byte status,UserInfo userInfo) {
+    public JpfResponseDto upStatus(String id, Byte isOnSale,UserInfo userInfo) {
         if ( StringUtils.isBlank(id) ) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "商品id不能为空");
         }
-        if ( status == null ) {
+        if ( isOnSale == null ) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "状态不能为空");
         }
-        if ( !EnumConstants.ShopProductStatus.normal.value().equals(status) && !EnumConstants.ShopProductStatus.forbid.value().equals(status) ) {
+        if ( !EnumConstants.ShopProductStatus.normal.value().equals(isOnSale) && !EnumConstants.ShopProductStatus.forbid.value().equals(isOnSale) ) {
             throw new JpfException(JpfErrorInfo.STATUS_ERROR, "状态不匹配");
         }
         PayShopProductExample example = new PayShopProductExample();
@@ -128,7 +125,7 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
         c.andIdEqualTo(id);
         PayShopProduct payShopProduct = new PayShopProduct();
         payShopProduct.setId(id);
-        payShopProduct.setStatus(status);
+        payShopProduct.setStatus(isOnSale);
         payShopProduct.setUpdatetime(new Date());
         payShopProduct.setOperatorId(userInfo.getId());
         payShopProduct.setOperatorName(userInfo.getUserName());

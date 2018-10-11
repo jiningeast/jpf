@@ -105,7 +105,7 @@
                     "menuid" : "303",
                     "menuname" : "充值平台产品管理",
                     "icon" : "icon-nav",
-                    "url" : "shopproduct/index"
+                    "url" : "chargeProduct/index"
                 }
                 ]
             },{
