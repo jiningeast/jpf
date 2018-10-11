@@ -1066,7 +1066,7 @@ public class OrdersController {
     /**
      * 微能查询余额、状态报告获取
      * */
-    @RequestMapping(value = "flowReport",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "flowReport",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String flowReport(){
 
