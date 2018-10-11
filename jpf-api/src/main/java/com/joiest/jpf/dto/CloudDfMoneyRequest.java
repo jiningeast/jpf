@@ -187,6 +187,11 @@ public class CloudDfMoneyRequest {
 
     private List<Long> idsStr;
 
+    private String addtimeStart;
+
+    private String addtimeEnd;
+
+
     public Long getId() {
         return id;
     }
@@ -481,5 +486,21 @@ public class CloudDfMoneyRequest {
 
     public void setIdsStr(List<Long> idsStr) {
         this.idsStr = idsStr;
+    }
+
+    public String getAddtimeStart() {
+        return addtimeStart;
+    }
+
+    public void setAddtimeStart(String addtimeStart) {
+        this.addtimeStart = addtimeStart;
+    }
+
+    public String getAddtimeEnd() {
+        return addtimeEnd;
+    }
+
+    public void setAddtimeEnd(String addtimeEnd) {
+        this.addtimeEnd = addtimeEnd;
     }
 }

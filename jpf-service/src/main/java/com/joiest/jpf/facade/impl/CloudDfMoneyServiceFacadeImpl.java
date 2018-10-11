@@ -29,6 +29,8 @@ import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -318,6 +320,15 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
             c.andIsFreezeEqualTo(request.getIsFreeze());
         }
 
+        // 添加时间搜索
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andUpdatetimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andUpdatetimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
         List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);
         List<CloudDfMoneyInfo> infos = new ArrayList<>();
         for (PayCloudDfMoneyCustom payCloudDfMoneyCustom : list) {
@@ -338,6 +349,73 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
             beanCopier.copy(payCloudDfMoney,cloudDfMoneyInfo,null);
             infos.add(cloudDfMoneyInfo);
         }*/
+
+        return infos;
+
+    }
+    /*
+    * 财务报税导出
+    * */
+    @Override
+    public List<CloudDfMoneyInfo> getAllBySectiveToCaiwu(CloudDfMoneyRequest request){
+
+        PayCloudDfMoneyExample example = new PayCloudDfMoneyExample();
+        PayCloudDfMoneyExample.Criteria c = example.createCriteria();
+        if( request.getCompanyMoneyId() != null ){
+            c.andCompanyMoneyIdEqualTo(request.getCompanyMoneyId());
+        }
+        if( request.getIdsStr() != null ){
+            c.andIdIn(request.getIdsStr());
+        }
+        //状态
+        if( request.getMontype() != null ){
+            c.andMontypeEqualTo(request.getMontype());
+        }
+        //非冻结
+        if (request.getIsFreeze() != null )
+        {
+            c.andIsFreezeEqualTo(request.getIsFreeze());
+        }
+
+        // 添加时间搜索
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andUpdatetimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andUpdatetimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
+        List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);//个人单条记录
+        //List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaffCount(example);//个人汇总
+        List<CloudDfMoneyInfo> infos = new ArrayList<>();
+        for (PayCloudDfMoneyCustom payCloudDfMoneyCustom : list) {
+            CloudDfMoneyInfo cloudDfMoneyInfo = new CloudDfMoneyInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoneyCustom.class, CloudDfMoneyInfo.class, false);
+            beanCopier.copy(payCloudDfMoneyCustom, cloudDfMoneyInfo, null);
+            //计算个人所得税以及应发金额并设置信息
+            cloudDfMoneyInfo.setAproject("个人所得税");//征收项目
+            cloudDfMoneyInfo.setCollection("个体户生产经营所得");//征收品目
+            cloudDfMoneyInfo.setSubtitle("");//征收子目,
+            if(StringUtils.isNotBlank(request.getAddtimeStart())){
+
+                cloudDfMoneyInfo.setStartTime(request.getAddtimeStart());//征税起始
+            }
+            if(StringUtils.isNotBlank(request.getAddtimeEnd())){
+
+                cloudDfMoneyInfo.setEndTime(request.getAddtimeEnd());
+            }
+            BigDecimal tax=new BigDecimal("0.005");
+            BigDecimal taxMoney=cloudDfMoneyInfo.getCommoney().multiply(tax).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal realMoney=cloudDfMoneyInfo.getCommoney().add(taxMoney);
+             //计算应发金额以及税额
+            cloudDfMoneyInfo.setRealmoney(realMoney);//应发金额
+            cloudDfMoneyInfo.setTax(tax);//税率
+            cloudDfMoneyInfo.setTaxMoney(taxMoney);//应代征税额
+            cloudDfMoneyInfo.setTaxMoneyPass(taxMoney);
+            cloudDfMoneyInfo.setCollentNum(1);//代征（户）次数
+            infos.add(cloudDfMoneyInfo);
+        }
 
         return infos;
 

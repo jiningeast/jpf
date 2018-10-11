@@ -207,6 +207,19 @@ public class PayCloudDfMoneyCustom {
      */
     private String pactno;
 
+
+    /**
+     * 服务内容
+     */
+    private String ticketcontent;
+
+
+    /**
+     * 个人统计总和金额
+     */
+    private BigDecimal countMoney;
+
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -671,5 +684,21 @@ public class PayCloudDfMoneyCustom {
 
     public void setBankcode(String bankcode) {
         this.bankcode = bankcode;
+    }
+
+    public String getTicketcontent() {
+        return ticketcontent;
+    }
+
+    public void setTicketcontent(String ticketcontent) {
+        this.ticketcontent = ticketcontent;
+    }
+
+    public BigDecimal getCountMoney() {
+        return countMoney;
+    }
+
+    public void setCountMoney(BigDecimal countMoney) {
+        this.countMoney = countMoney;
     }
 }
