@@ -76,6 +76,11 @@ public class PayChargeProduct implements Serializable {
     private String typeName;
 
     /**
+     * 运营商类型 1=移动 2=联通 3=电信
+     */
+    private Byte mobileType;
+
+    /**
      * 上下架 0=下架 1=上架
      */
     private Byte isOnSale;
@@ -214,6 +219,14 @@ public class PayChargeProduct implements Serializable {
         this.typeName = typeName == null ? null : typeName.trim();
     }
 
+    public Byte getMobileType() {
+        return mobileType;
+    }
+
+    public void setMobileType(Byte mobileType) {
+        this.mobileType = mobileType;
+    }
+
     public Byte getIsOnSale() {
         return isOnSale;
     }
@@ -277,6 +290,7 @@ public class PayChargeProduct implements Serializable {
         sb.append(", supplierName=").append(supplierName);
         sb.append(", typeId=").append(typeId);
         sb.append(", typeName=").append(typeName);
+        sb.append(", mobileType=").append(mobileType);
         sb.append(", isOnSale=").append(isOnSale);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
@@ -316,6 +330,7 @@ public class PayChargeProduct implements Serializable {
             && (this.getSupplierName() == null ? other.getSupplierName() == null : this.getSupplierName().equals(other.getSupplierName()))
             && (this.getTypeId() == null ? other.getTypeId() == null : this.getTypeId().equals(other.getTypeId()))
             && (this.getTypeName() == null ? other.getTypeName() == null : this.getTypeName().equals(other.getTypeName()))
+            && (this.getMobileType() == null ? other.getMobileType() == null : this.getMobileType().equals(other.getMobileType()))
             && (this.getIsOnSale() == null ? other.getIsOnSale() == null : this.getIsOnSale().equals(other.getIsOnSale()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
@@ -344,6 +359,7 @@ public class PayChargeProduct implements Serializable {
         result = prime * result + ((getSupplierName() == null) ? 0 : getSupplierName().hashCode());
         result = prime * result + ((getTypeId() == null) ? 0 : getTypeId().hashCode());
         result = prime * result + ((getTypeName() == null) ? 0 : getTypeName().hashCode());
+        result = prime * result + ((getMobileType() == null) ? 0 : getMobileType().hashCode());
         result = prime * result + ((getIsOnSale() == null) ? 0 : getIsOnSale().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());

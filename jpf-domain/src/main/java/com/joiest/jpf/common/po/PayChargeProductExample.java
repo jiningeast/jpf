@@ -1056,6 +1056,66 @@ public class PayChargeProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andMobileTypeIsNull() {
+            addCriterion("mobile_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeIsNotNull() {
+            addCriterion("mobile_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeEqualTo(Byte value) {
+            addCriterion("mobile_type =", value, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeNotEqualTo(Byte value) {
+            addCriterion("mobile_type <>", value, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeGreaterThan(Byte value) {
+            addCriterion("mobile_type >", value, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("mobile_type >=", value, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeLessThan(Byte value) {
+            addCriterion("mobile_type <", value, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("mobile_type <=", value, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeIn(List<Byte> values) {
+            addCriterion("mobile_type in", values, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeNotIn(List<Byte> values) {
+            addCriterion("mobile_type not in", values, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeBetween(Byte value1, Byte value2) {
+            addCriterion("mobile_type between", value1, value2, "mobileType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMobileTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("mobile_type not between", value1, value2, "mobileType");
+            return (Criteria) this;
+        }
+
         public Criteria andIsOnSaleIsNull() {
             addCriterion("is_on_sale is null");
             return (Criteria) this;
