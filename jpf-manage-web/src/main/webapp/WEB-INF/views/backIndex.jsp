@@ -101,6 +101,11 @@
                     "menuname" : "欣豆市场产品管理",
                     "icon" : "icon-nav",
                     "url" : "shopproduct/index"
+                },{
+                    "menuid" : "303",
+                    "menuname" : "充值平台产品管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopproduct/index"
                 }
                 ]
             },{
