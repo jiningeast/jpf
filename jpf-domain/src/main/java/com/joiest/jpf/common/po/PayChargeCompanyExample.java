@@ -846,6 +846,126 @@ public class PayChargeCompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsFreezeIsNull() {
+            addCriterion("is_freeze is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeIsNotNull() {
+            addCriterion("is_freeze is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeEqualTo(Byte value) {
+            addCriterion("is_freeze =", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotEqualTo(Byte value) {
+            addCriterion("is_freeze <>", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeGreaterThan(Byte value) {
+            addCriterion("is_freeze >", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_freeze >=", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeLessThan(Byte value) {
+            addCriterion("is_freeze <", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeLessThanOrEqualTo(Byte value) {
+            addCriterion("is_freeze <=", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeIn(List<Byte> values) {
+            addCriterion("is_freeze in", values, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotIn(List<Byte> values) {
+            addCriterion("is_freeze not in", values, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeBetween(Byte value1, Byte value2) {
+            addCriterion("is_freeze between", value1, value2, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_freeze not between", value1, value2, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelIsNull() {
+            addCriterion("is_del is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelIsNotNull() {
+            addCriterion("is_del is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelEqualTo(Byte value) {
+            addCriterion("is_del =", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelNotEqualTo(Byte value) {
+            addCriterion("is_del <>", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelGreaterThan(Byte value) {
+            addCriterion("is_del >", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_del >=", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelLessThan(Byte value) {
+            addCriterion("is_del <", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelLessThanOrEqualTo(Byte value) {
+            addCriterion("is_del <=", value, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelIn(List<Byte> values) {
+            addCriterion("is_del in", values, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelNotIn(List<Byte> values) {
+            addCriterion("is_del not in", values, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelBetween(Byte value1, Byte value2) {
+            addCriterion("is_del between", value1, value2, "isDel");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDelNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_del not between", value1, value2, "isDel");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
