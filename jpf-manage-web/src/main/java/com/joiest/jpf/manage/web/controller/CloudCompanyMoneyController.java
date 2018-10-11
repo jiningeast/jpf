@@ -5,11 +5,8 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayCloudCompany;
 import com.joiest.jpf.common.po.PayCloudCompanyMoney;
-import com.joiest.jpf.common.po.PayCloudDfMoneyFreeze;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudCompanyMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayCloudDfMoneyFreezeMapper;
 import com.joiest.jpf.dto.CloudCompanyMoneyRequest;
 import com.joiest.jpf.dto.CloudCompanyMoneyResponse;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
@@ -30,7 +27,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -66,12 +62,6 @@ public class CloudCompanyMoneyController {
     public String index(){
         return "cloudCompanyMoney/companyList";
     }
-
-    @Autowired
-    private PayCloudCompanyMapper payCloudCompanyMapper;
-
-    @Autowired
-    private PayCloudDfMoneyFreezeMapper payCloudDfMoneyFreezeMapper;
 
     /**
      * 批次管理页
@@ -347,11 +337,11 @@ public class CloudCompanyMoneyController {
                     for (int m = 0; m < dfRets.size() ; m++) {
 
                         //查询公司账号信息
-                        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(dfRets.get(i).getUid().toString());
+                        CloudCompanyInfo companyInfo = cloudCompanyServiceFacade.getRecById(dfRets.get(m).getFid());
                         if( companyInfo == null ){
                             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未查询到公司信息");
                         }
-                        String companyId = companyInfo.getId(); //公司ID
+                        String companyId = dfRets.get(m).getFid(); //公司ID
                         BigDecimal cloudMoney = companyInfo.getCloudmoney(); //账户金额
                         String cloudcode = companyInfo.getCloudcode(); //金额校验码
                         BigDecimal advanceMoney = companyInfo.getAdvanceMoney() != null ? companyInfo.getAdvanceMoney() : new BigDecimal("0.00");    //预付款
@@ -382,6 +372,7 @@ public class CloudCompanyMoneyController {
 
                         //调用接口查询代付是否成功并更新代付明细数据
                         Map<String,String> responseParam = ServicePayUtils.searchPay(orderid);
+                        System.out.println("代付查询返回："+responseParam);
                         if(responseParam.size()>0){
                             // 接口数据
                             String response = responseParam.get("response");  //接口返回数据
@@ -469,8 +460,8 @@ public class CloudCompanyMoneyController {
 
                                 }
 
-                                BigDecimal afterAdvanceMoney = advanceMoney.subtract(dfRets.get(i).getCommoney());  //预付款
-                                String afterAdvanceCode = ToolUtils.CreateCode(afterAdvanceMoney.toString(), dfRets.get(i).getUid().toString());
+                                BigDecimal afterAdvanceMoney = advanceMoney.subtract(dfRets.get(m).getCommoney());  //预付款
+                                String afterAdvanceCode = ToolUtils.CreateCode(afterAdvanceMoney.toString(), dfRets.get(m).getFid());
                                 PayCloudCompany paycloudcompnay = new PayCloudCompany();
                                 paycloudcompnay.setAdvanceMoney(afterAdvanceMoney); //预付款
                                 paycloudcompnay.setAdvanceCode(afterAdvanceCode);
@@ -480,23 +471,25 @@ public class CloudCompanyMoneyController {
                                         JSONObject data = JSONObject.fromObject(responseMap.getString("data"));
                                        /* 代付状态 00 提交申请，01 审核通过，02 申请被拒绝，03 已打批次，04 提交到渠道，05 代付成功，06 代付失败*/
                                         String orderStatus = data.get("orderStatus").toString();
-                                        String retCode = data.get("retCode").toString();
                                         Boolean dfSuccess = true;
-                                        String retCode_success = "0000";
-                                        if ( !orderStatus_successList.contains(orderStatus) )
-                                        {
-                                            //代付失败
-                                            dfSuccess = false;
+                                        if ( data.has("retCode") && StringUtils.isNotBlank(responseMap.get("retCode").toString()) ){
+                                            String retCode = data.get("retCode").toString();
+                                            String retCode_success = "0000";
+                                            if ( !retCode.equals(retCode_success) )
+                                            {
+                                                //代付失败
+                                                dfSuccess = false;
+                                            }
                                         }
-                                        if ( !retCode.equals(retCode_success) )
+                                        if ( !orderStatus_successList.contains(orderStatus) )
                                         {
                                             //代付失败
                                             dfSuccess = false;
                                         }
                                         if( !dfSuccess ){
                                             //失败: 扣除预付款 至 冻结
-                                            BigDecimal afterFreezeMoney = freezeMoney.add(dfRets.get(i).getCommoney()); //冻结
-                                            String afterFreezeCode = ToolUtils.CreateCode(afterFreezeMoney.toString(), dfRets.get(i).getUid().toString());
+                                            BigDecimal afterFreezeMoney = freezeMoney.add(dfRets.get(m).getCommoney()); //冻结
+                                            String afterFreezeCode = ToolUtils.CreateCode(afterFreezeMoney.toString(), dfRets.get(m).getFid());
                                             paycloudcompnay.setIsFreeze((byte)2);   //企业冻结
                                             paycloudcompnay.setFreezeMoney(afterFreezeMoney);
                                             paycloudcompnay.setFreezeCode(afterFreezeCode);
@@ -508,10 +501,10 @@ public class CloudCompanyMoneyController {
                                             freeInfo.setCompanyCloudmoney(companyInfo.getCloudmoney());
                                             freeInfo.setCompanyAdvanceMoney(advanceMoney);
                                             freeInfo.setCompanyFreezeMoney(freezeMoney);
-                                            freeInfo.setCompanyMoneyId(dfRets.get(i).getCompanyMoneyId());
-                                            freeInfo.setDfMoneyId(dfRets.get(i).getId().toString());
-                                            freeInfo.setOrderid(dfRets.get(i).getOrderid());
-                                            freeInfo.setFreezeMoney(dfRets.get(i).getCommoney());
+                                            freeInfo.setCompanyMoneyId(dfRets.get(m).getCompanyMoneyId());
+                                            freeInfo.setDfMoneyId(dfRets.get(m).getId().toString());
+                                            freeInfo.setOrderid(dfRets.get(m).getOrderid());
+                                            freeInfo.setFreezeMoney(dfRets.get(m).getCommoney());
                                             freeInfo.setReturnContent(response);
                                             freeInfo.setStatus(1);
                                             freeInfo.setMoneyStatus(1);
@@ -526,14 +519,14 @@ public class CloudCompanyMoneyController {
                                             int count = cloudDfMoneyServiceFacade.updateDfMoneyActiveById(dfMoney,dfId);
                                         }
                                         //企业冻结金额
-                                        paycloudcompnay.setId(dfRets.get(i).getUid().toString());
+                                        paycloudcompnay.setId(dfRets.get(m).getFid());
                                         cloudCompanyServiceFacade.updateSetiveById(paycloudcompnay);
                                     }
                                 } else if ( code.equals("10008") )
                                 {
                                     //扣除预付款 至 冻结
-                                    BigDecimal afterFreezeMoney = freezeMoney.add(dfRets.get(i).getCommoney()); //冻结
-                                    String afterFreezeCode = ToolUtils.CreateCode(afterFreezeMoney.toString(), dfRets.get(i).getUid().toString());
+                                    BigDecimal afterFreezeMoney = freezeMoney.add(dfRets.get(m).getCommoney()); //冻结
+                                    String afterFreezeCode = ToolUtils.CreateCode(afterFreezeMoney.toString(), dfRets.get(m).getFid());
                                     paycloudcompnay.setIsFreeze((byte)2);   //企业冻结
                                     paycloudcompnay.setFreezeMoney(afterFreezeMoney);
                                     paycloudcompnay.setFreezeCode(afterFreezeCode);
@@ -545,10 +538,10 @@ public class CloudCompanyMoneyController {
                                     freeInfo.setCompanyCloudmoney(companyInfo.getCloudmoney());
                                     freeInfo.setCompanyAdvanceMoney(advanceMoney);
                                     freeInfo.setCompanyFreezeMoney(freezeMoney);
-                                    freeInfo.setCompanyMoneyId(dfRets.get(i).getCompanyMoneyId());
-                                    freeInfo.setDfMoneyId(dfRets.get(i).getId().toString());
-                                    freeInfo.setOrderid(dfRets.get(i).getOrderid());
-                                    freeInfo.setFreezeMoney(dfRets.get(i).getCommoney());
+                                    freeInfo.setCompanyMoneyId(dfRets.get(m).getCompanyMoneyId());
+                                    freeInfo.setDfMoneyId(dfRets.get(m).getId().toString());
+                                    freeInfo.setOrderid(dfRets.get(m).getOrderid());
+                                    freeInfo.setFreezeMoney(dfRets.get(m).getCommoney());
                                     freeInfo.setReturnContent(response);
                                     freeInfo.setStatus(1);
                                     freeInfo.setMoneyStatus(1);
@@ -563,7 +556,7 @@ public class CloudCompanyMoneyController {
                                     int count = cloudDfMoneyServiceFacade.updateDfMoneyActiveById(dfMoney,dfId);
 
                                     //企业冻结金额
-                                    paycloudcompnay.setId(dfRets.get(i).getUid().toString());
+                                    paycloudcompnay.setId(dfRets.get(m).getFid());
                                     int res_company_count = cloudCompanyServiceFacade.updateSetiveById(paycloudcompnay);
                                 }
                             }

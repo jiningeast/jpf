@@ -44,7 +44,6 @@
                     {field:'companyName', title:'企业名称',width:'8%'},
                     {field:'agentNo', title:'代理聚合商户编号',width:'10%'},
                     {field:'merchNo', title:'到账聚合商户编号',width:'10%'},
-                    {field:'payway', title:'支付方式',width:'5%'},
                     {field:'pactno', title:'合同编号',width:'5%'},
                     {field:'money', title:'充值金额',width:'5%'},
                     {field:'realmoney', title:'实际到帐金额',width:'5%'},

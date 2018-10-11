@@ -717,14 +717,14 @@ public class CloudCompanyServiceFacadeImpl implements CloudCompanyServiceFacade 
     public CloudCompanyInfo getRecById(String id){
         PayCloudCompanyCustom payCloudCompanyCustom = payCloudCompanyCustomMapper.selectCompanyOne(id);
         CloudCompanyInfo cloudCompanyInfo = new CloudCompanyInfo();
-        if ( StringUtils.isNotBlank(payCloudCompanyCustom.getAgentNo()) ){
+        if ( payCloudCompanyCustom != null && payCloudCompanyCustom.getAgentNo() != null && StringUtils.isNotBlank(payCloudCompanyCustom.getAgentNo()) ){
             cloudCompanyInfo.setType((byte)1);
+
+            BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyCustom.class,CloudCompanyInfo.class,false);
+            beanCopier.copy(payCloudCompanyCustom,cloudCompanyInfo,null);
         }else{
             cloudCompanyInfo.setType((byte)0);
         }
-
-        BeanCopier beanCopier = BeanCopier.create(PayCloudCompanyCustom.class,CloudCompanyInfo.class,false);
-        beanCopier.copy(payCloudCompanyCustom,cloudCompanyInfo,null);
 
         return cloudCompanyInfo;
     }

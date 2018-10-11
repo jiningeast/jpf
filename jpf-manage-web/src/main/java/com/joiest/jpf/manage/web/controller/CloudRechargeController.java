@@ -84,7 +84,6 @@ public class CloudRechargeController {
         cloudRechargeRequest.setStatusArr(statusArr);
 
         CloudRechargeResponse cloudRechargeResponse = cloudRechargeServiceFacade.getCaiwuRecords(cloudRechargeRequest);
-        ModelMap modelMap = new ModelMap();
         Map<String, Object> map = new HashMap<>();
         map.put("total", cloudRechargeResponse.getCount());
         map.put("rows", cloudRechargeResponse.getList());

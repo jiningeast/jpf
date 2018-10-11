@@ -33,74 +33,7 @@ public class JingHengController {
 //    private String privateKey = "c3c8501179fb10863aaed22147274ab12f06d8155140a968fb60dba540a5483f";
     private String privateKey = "fc5c14cf2423e8875036b57e3bce26d73c13043e60cdeb28c70cf75b8927b8d5";
 
-    private String result = "{\n" +
-            "\t\"status\": \"success\",\n" +
-            "\t\"errorMsg\": null,\n" +
-            "\t\"errorCode\": null,\n" +
-            "\t\"module\": [{\n" +
-            "\t\t\"id\": 271200,\n" +
-            "\t\t\"gmtCreate\": 1528529574000,\n" +
-            "\t\t\"gmtModify\": 1528529605000,\n" +
-            "\t\t\"status\": 3,\n" +
-            "\t\t\"payOrderId\": 311341,\n" +
-            "\t\t\"userId\": 188,\n" +
-            "\t\t\"amount\": 99000,\n" +
-            "\t\t\"amt\": 1,\n" +
-            "\t\t\"bizId\": 600,\n" +
-            "\t\t\"itemId\": 14894,\n" +
-            "\t\t\"itemName\": \"中石化100元收卡\",\n" +
-            "\t\t\"itemPrice\": 99000,\n" +
-            "\t\t\"itemFacePrice\": 100000,\n" +
-            "\t\t\"itemCategoryId\": null,\n" +
-            "\t\t\"itemUid\": \"1000113300015769029\",     \n" +
-            "\t\t\"itemExt1\": null,\n" +
-            "\t\t\"itemExt2\": null,\n" +
-            "\t\t\"itemExt3\": null,\n" +
-            "\t\t\"itemExt4\": null,\n" +
-            "\t\t\"itemExt5\": null,\n" +
-            "\t\t\"itemSupplyId\": null,\n" +
-            "\t\t\"stockId\": null,\n" +
-            "\t\t\"channel\": 2,\n" +
-            "\t\t\"upstreamMemo\": \"30_出库失败\",\n" +
-            "\t\t\"downstreamId\": null,\n" +
-            "\t\t\"downstreamName\": null,\n" +
-            "\t\t\"downstreamDate\": 1528529574000,\n" +
-            "\t\t\"downstreamSerialno\": \"1005352019386433536\",\n" +
-            "\t\t\"downstreamNotes\": null,\n" +
-            "\t\t\"memo\": null,\n" +
-            "\t\t\"lockOperId\": null,\n" +
-            "\t\t\"dealOperId\": null,\n" +
-            "\t\t\"uidAreaInfo\": \"浙江\",\n" +
-            "\t\t\"lockOperName\": null,\n" +
-            "\t\t\"dealOperName\": null,\n" +
-            "\t\t\"costTime\": null,\n" +
-            "\t\t\"supplyType\": null,\n" +
-            "\t\t\"downstreamSupplyWay\": 1,\n" +
-            "\t\t\"itemCostPrice\": 9800,\n" +
-            "\t\t\"carrierType\": null,\n" +
-            "\t\t\"provinceCode\": \"330000\",\n" +
-            "\t\t\"cityCode\": null,\n" +
-            "\t\t\"actualCost\": null,\n" +
-            "\t\t\"combineType\": null,\n" +
-            "\t\t\"supplyCount\": 1,\n" +
-            "\t\t\"supplyFilterIndex\": 0,\n" +
-            "\t\t\"receivedOrderId\": null,\n" +
-            "\t\t\"forwardOrderId\": null,\n" +
-            "\t\t\"actualCardPrice\": null,\n" +
-            "\t\t\"userName\": null,\n" +
-            "\t\t\"interceptType\": null,\n" +
-            "\t\t\"interceptId\": null,\n" +
-            "\t\t\"deputy\": false,\n" +
-            "\t\t\"forwardType\": null,\n" +
-            "\t\t\"salesArea\": null,\n" +
-            "\t\t\"itemGroupId\": 0,\n" +
-            "\t\t\"subCode\": 0,\n" +
-            "\t\t\"outorderNo\": null,\n" +
-            "\t\t\"callStatus\": 0\n" +
-            "\t}],\n" +
-            "\t\"totalItem\": 11,\n" +
-            "\t\"tmallUser\": false\n" +
-            "}";
+    private String result = "{\"status\":\"success\",\"errorMsg\":null,\"errorCode\":null,\"module\":[{\"id\":218833,\"gmtCreate\":1537439850000,\"gmtModify\":1537439947000,\"status\":2,\"payOrderId\":248509,\"userId\":254,\"amount\":1000,\"amt\":1,\"bizId\":201,\"itemId\":20002,\"itemName\":\"移动话费-测试商品1元\",\"itemPrice\":1000,\"itemFacePrice\":1000,\"itemCategoryId\":null,\"itemUid\":\"13829751360\",\"itemExt1\":null,\"itemExt2\":null,\"itemExt3\":null,\"itemExt4\":null,\"itemExt5\":null,\"itemSupplyId\":null,\"stockId\":null,\"channel\":1,\"upstreamMemo\":\" \",\"downstreamId\":null,\"downstreamName\":null,\"downstreamDate\":1537439850000,\"downstreamSerialno\":\"9283149\",\"downstreamNotes\":null,\"memo\":null,\"lockOperId\":null,\"dealOperId\":null,\"uidAreaInfo\":\"广东广州\",\"lockOperName\":null,\"dealOperName\":null,\"costTime\":97,\"supplyType\":null,\"downstreamSupplyWay\":1,\"itemCostPrice\":1000,\"carrierType\":3,\"provinceCode\":\"440000\",\"cityCode\":\"440100\",\"actualCost\":null,\"combineType\":null,\"supplyCount\":1,\"supplyFilterIndex\":0,\"receivedOrderId\":null,\"forwardOrderId\":null,\"actualCardPrice\":null,\"extendsInfo\":\"{\\\"batchId\\\":\\\"\\\",\\\"beforeSubCode\\\":0,\\\"cardList\\\":[],\\\"cardTakeStock\\\":false,\\\"construcId\\\":\\\"\\\",\\\"forwardId\\\":0,\\\"itemSupplyList\\\":[3602],\\\"jianquan\\\":false,\\\"orderBeginTime\\\":\\\"\\\",\\\"originItemId\\\":0,\\\"originItemName\\\":\\\"\\\",\\\"photoUrl\\\":\\\"\\\",\\\"voucher\\\":\\\"\\\",\\\"voucherType\\\":\\\"\\\"}\",\"userName\":null,\"interceptType\":null,\"interceptId\":null,\"deputy\":false,\"forwardType\":null,\"salesArea\":\"111111\",\"itemGroupId\":null,\"subCode\":0,\"outorderNo\":null,\"callStatus\":2},{\"id\":218832,\"gmtCreate\":1537414849000,\"gmtModify\":1537414942000,\"status\":2,\"payOrderId\":248508,\"userId\":254,\"amount\":1000,\"amt\":1,\"bizId\":201,\"itemId\":20002,\"itemName\":\"移动话费-测试商品1元\",\"itemPrice\":1000,\"itemFacePrice\":1000,\"itemCategoryId\":null,\"itemUid\":\"13829751360\",\"itemExt1\":null,\"itemExt2\":null,\"itemExt3\":null,\"itemExt4\":null,\"itemExt5\":null,\"itemSupplyId\":null,\"stockId\":null,\"channel\":1,\"upstreamMemo\":\" \",\"downstreamId\":null,\"downstreamName\":null,\"downstreamDate\":1537414849000,\"downstreamSerialno\":\"9279949\",\"downstreamNotes\":null,\"memo\":null,\"lockOperId\":null,\"dealOperId\":null,\"uidAreaInfo\":\"广东广州\",\"lockOperName\":null,\"dealOperName\":null,\"costTime\":93,\"supplyType\":null,\"downstreamSupplyWay\":1,\"itemCostPrice\":1000,\"carrierType\":3,\"provinceCode\":\"440000\",\"cityCode\":\"440100\",\"actualCost\":null,\"combineType\":null,\"supplyCount\":1,\"supplyFilterIndex\":0,\"receivedOrderId\":null,\"forwardOrderId\":null,\"actualCardPrice\":null,\"extendsInfo\":\"{\\\"batchId\\\":\\\"\\\",\\\"beforeSubCode\\\":0,\\\"cardList\\\":[],\\\"cardTakeStock\\\":false,\\\"construcId\\\":\\\"\\\",\\\"forwardId\\\":0,\\\"itemSupplyList\\\":[3602],\\\"jianquan\\\":false,\\\"orderBeginTime\\\":\\\"\\\",\\\"originItemId\\\":0,\\\"originItemName\\\":\\\"\\\",\\\"photoUrl\\\":\\\"\\\",\\\"voucher\\\":\\\"\\\",\\\"voucherType\\\":\\\"\\\"}\",\"userName\":null,\"interceptType\":null,\"interceptId\":null,\"deputy\":false,\"forwardType\":null,\"salesArea\":\"111111\",\"itemGroupId\":null,\"subCode\":0,\"outorderNo\":null,\"callStatus\":2},{\"id\":218831,\"gmtCreate\":1537414393000,\"gmtModify\":1537414393000,\"status\":3,\"payOrderId\":248507,\"userId\":254,\"amount\":1000,\"amt\":1,\"bizId\":201,\"itemId\":20002,\"itemName\":\"移动话费-测试商品1元\",\"itemPrice\":1000,\"itemFacePrice\":1000,\"itemCategoryId\":null,\"itemUid\":\"13829751360\",\"itemExt1\":null,\"itemExt2\":null,\"itemExt3\":null,\"itemExt4\":null,\"itemExt5\":null,\"itemSupplyId\":null,\"stockId\":null,\"channel\":1,\"upstreamMemo\":\"30_触发成本控制(3602:)\",\"downstreamId\":null,\"downstreamName\":null,\"downstreamDate\":1537414393000,\"downstreamSerialno\":\"9279771\",\"downstreamNotes\":null,\"memo\":null,\"lockOperId\":null,\"dealOperId\":null,\"uidAreaInfo\":\"广东广州\",\"lockOperName\":null,\"dealOperName\":null,\"costTime\":null,\"supplyType\":null,\"downstreamSupplyWay\":1,\"itemCostPrice\":null,\"carrierType\":3,\"provinceCode\":\"440000\",\"cityCode\":\"440100\",\"actualCost\":null,\"combineType\":null,\"supplyCount\":null,\"supplyFilterIndex\":null,\"receivedOrderId\":null,\"forwardOrderId\":null,\"actualCardPrice\":null,\"extendsInfo\":\"{\\\"batchId\\\":\\\"\\\",\\\"beforeSubCode\\\":0,\\\"cardList\\\":[],\\\"cardTakeStock\\\":false,\\\"construcId\\\":\\\"\\\",\\\"forwardId\\\":0,\\\"itemSupplyList\\\":[],\\\"jianquan\\\":false,\\\"orderBeginTime\\\":\\\"\\\",\\\"originItemId\\\":0,\\\"originItemName\\\":\\\"\\\",\\\"photoUrl\\\":\\\"\\\",\\\"voucher\\\":\\\"\\\",\\\"voucherType\\\":\\\"\\\"}\",\"userName\":null,\"interceptType\":null,\"interceptId\":null,\"deputy\":false,\"forwardType\":null,\"salesArea\":\"111111\",\"itemGroupId\":null,\"subCode\":0,\"outorderNo\":null,\"callStatus\":0}],\"totalItem\":3,\"tmallUser\":false}";
 
     @Autowired
     private ShopBrangainRechargeOrderServiceFacade shopBrangainRechargeOrderServiceFacade;
@@ -159,9 +92,11 @@ public class JingHengController {
                 int size = module.size();
                 for (int i=0; i<size; i++){
                     JSONObject one = module.getJSONObject(i);
-
+                    logger.info("status: {}", one.get("status"));
+                    logger.info("status--type: {}", one.get("status").getClass());
+                    logger.info("equqls--result: {}", one.get("status").toString().equals("2") );
                     //过滤充值失败的订单
-                    if ( one.containsKey("status") && !one.get("status").equals("2") )
+                    if ( one.containsKey("status") && !one.get("status").toString().equals("2") )
                     {
                         continue;
                     }
