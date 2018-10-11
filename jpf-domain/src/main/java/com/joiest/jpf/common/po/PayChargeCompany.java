@@ -56,6 +56,16 @@ public class PayChargeCompany implements Serializable {
     private String operatorName;
 
     /**
+     * 是否冻结 0=未冻结 1=冻结
+     */
+    private Byte isFreeze;
+
+    /**
+     * 是否逻辑删除 0=不删除 1=删除
+     */
+    private Byte isDel;
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -147,6 +157,22 @@ public class PayChargeCompany implements Serializable {
         this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
+    public Byte getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Byte isFreeze) {
+        this.isFreeze = isFreeze;
+    }
+
+    public Byte getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Byte isDel) {
+        this.isDel = isDel;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -182,6 +208,8 @@ public class PayChargeCompany implements Serializable {
         sb.append(", contactPhone=").append(contactPhone);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
+        sb.append(", isFreeze=").append(isFreeze);
+        sb.append(", isDel=").append(isDel);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -214,6 +242,8 @@ public class PayChargeCompany implements Serializable {
             && (this.getContactPhone() == null ? other.getContactPhone() == null : this.getContactPhone().equals(other.getContactPhone()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
+            && (this.getIsFreeze() == null ? other.getIsFreeze() == null : this.getIsFreeze().equals(other.getIsFreeze()))
+            && (this.getIsDel() == null ? other.getIsDel() == null : this.getIsDel().equals(other.getIsDel()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -235,6 +265,8 @@ public class PayChargeCompany implements Serializable {
         result = prime * result + ((getContactPhone() == null) ? 0 : getContactPhone().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
+        result = prime * result + ((getIsFreeze() == null) ? 0 : getIsFreeze().hashCode());
+        result = prime * result + ((getIsDel() == null) ? 0 : getIsDel().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
