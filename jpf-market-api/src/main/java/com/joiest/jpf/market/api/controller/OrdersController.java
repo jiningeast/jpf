@@ -1096,7 +1096,7 @@ public class OrdersController {
                     ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
                     orderinfo.setId(orderInfo.getId());
                     orderinfo.setUpdatetime(new Date());
-                    if (job.get("reportStatus").toString().equals("0")){
+                    if (job.get("reportStatus").toString().equals("1")){
 
                         sucOrder+=orderInfo.getOrderNo()+",";
                         orderinfo.setRechargeStatus("1");
