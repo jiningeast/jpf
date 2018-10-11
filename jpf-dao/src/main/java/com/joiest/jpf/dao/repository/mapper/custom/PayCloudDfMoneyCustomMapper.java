@@ -16,6 +16,13 @@ public interface PayCloudDfMoneyCustomMapper {
     List<PayCloudDfMoneyCustom> selectJoinCompanyStaff(PayCloudDfMoneyExample example);
 
     /**
+     * 根据条件查询列表统计每个人的总和
+     *
+     * @param example
+     */
+    List<PayCloudDfMoneyCustom> selectJoinCompanyStaffCount(PayCloudDfMoneyExample example);
+
+    /**
      * 插入数据库记录
      *
      * @param record

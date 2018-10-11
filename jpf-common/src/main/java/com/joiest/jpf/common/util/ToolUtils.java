@@ -1,5 +1,8 @@
 package com.joiest.jpf.common.util;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.math.RoundingMode;
@@ -438,6 +441,22 @@ public class ToolUtils {
 
     }
 
+
+    /*
+    * Json字符串(二维)转换成Map数组
+    * */
+
+    public static JSONArray JsonTOarray(String json){
+
+        JSONObject JSONlist= JSONObject.fromObject(json);
+        JSONArray arr = new JSONArray();
+        for(int i=0;i<JSONlist.size();i++){
+            JSONObject bb = JSONObject.fromObject(JSONlist.get(String.valueOf(i)));
+            arr.add(bb);
+        }
+        return arr;
+    }
+    //public satiz
     /**
      * 验证手机号
      */

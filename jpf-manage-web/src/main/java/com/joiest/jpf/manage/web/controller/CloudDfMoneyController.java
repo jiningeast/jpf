@@ -5,8 +5,10 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayCloudCompanyMoney;
 import com.joiest.jpf.common.po.PayCloudDfMoney;
+import com.joiest.jpf.common.util.ExcelDealUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.CloudDfMoneyRequest;
 import com.joiest.jpf.entity.CloudCompanyInfo;
 import com.joiest.jpf.entity.CloudCompanyMoneyInfo;
@@ -16,6 +18,7 @@ import com.joiest.jpf.facade.CloudCompanyServiceFacade;
 import com.joiest.jpf.facade.CloudDfMoneyServiceFacade;
 import com.joiest.jpf.facade.CloudInterfaceStreamServiceFacade;
 import com.joiest.jpf.manage.web.util.ServicePayUtils;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +28,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/cloudDfMoney")
@@ -195,4 +197,80 @@ public class CloudDfMoneyController {
         return jpfResponseDto;
     }
 
+    /**
+     * 财务报税列表导出
+     **/
+    @RequestMapping("/ExcelCaiwu")
+    @ResponseBody
+    public String  ExcelCaiwu(CloudDfMoneyRequest cloudDfMoneyRequest, HttpServletResponse response){
+
+        //查询出代付详细数据
+        cloudDfMoneyRequest.setMontype(2);
+
+        List<CloudDfMoneyInfo> infos = cloudDfMoneyServiceFacade.getAllBySectiveToCaiwu(cloudDfMoneyRequest);
+        if(infos.size()==0 || infos.isEmpty()){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "所筛选的数据不存在！");
+        }
+        //如果有购买的卡密放到Excel
+         //设置字段对应表头
+        JSONArray filed = new JSONArray();
+        filed.add("idno");
+        filed.add("banknickname");
+        filed.add("ticketcontent");//卡号
+        filed.add("aproject");
+        filed.add("Collection");
+        filed.add("subtitle");
+        filed.add("startTime");
+        filed.add("endTime");
+        filed.add("realmoney");
+        filed.add("tax");
+        filed.add("taxMoney");
+        filed.add("taxMoneyPass");
+        filed.add("collentNum");
+        //设置表头修改
+        SimpleDateFormat sDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String now=sDateFormat.format(new Date());
+        String startTime=cloudDfMoneyRequest.getAddtimeStart();
+        String endTime=cloudDfMoneyRequest.getAddtimeEnd();
+        String taxName="欣享科技服务有限公司";
+        String taxNumber="91632223MA758Q1EXA";
+        JSONArray headerKey = new JSONArray();
+        //设置表头第一个填的值
+        JSONObject headerValA = new JSONObject();
+        headerValA.put("row",1);//第几行
+        headerValA.put("col",1);//第几列
+        headerValA.put("value",taxNumber);//设置的值
+        headerKey.add(headerValA);
+        //第二个填的值
+        JSONObject headerValB = new JSONObject();
+        headerValB.put("row",2);
+        headerValB.put("col",1);
+        headerValB.put("value",startTime);
+        headerKey.add(headerValB);
+        //第三个填的值
+        JSONObject headerValC = new JSONObject();
+        headerValC.put("row",2);
+        headerValC.put("col",4);
+        headerValC.put("value",endTime);
+        headerKey.add(headerValC);
+        JSONObject excel;
+        //第四个填的值
+        JSONObject headerValD = new JSONObject();
+        headerValD.put("row",1);
+        headerValD.put("col",9);
+        headerValD.put("value",taxName);
+        headerKey.add(headerValD);
+        //第五个填的值
+        JSONObject headerValE= new JSONObject();
+        headerValE.put("row",2);
+        headerValE.put("col",9);
+        headerValE.put("value",now);
+        headerKey.add(headerValE);
+        try {
+            excel=new exportExcel().exportExcelcopy(response,"D:\\home\\images\\excel\\ccc.xls","财务报税导出",infos,filed.toString(),headerKey.toString());
+        } catch (Exception e) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "导出失败！");
+        }
+       return  null;
+    }
 }

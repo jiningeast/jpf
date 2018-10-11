@@ -1,6 +1,8 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.custom.PayCloudStaffMonthTotalCustom;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayCloudCompanyStaff;
 import com.joiest.jpf.common.po.PayCloudCompanyStaffExample;
 import com.joiest.jpf.common.po.PayCloudStaffMonthTotal;
@@ -139,5 +141,24 @@ public class CloudStaffMonthTotalServiceFacadeImpl implements CloudStaffMonthTot
         int count = payCloudStaffMonthTotalCustomMapper.countByExample(example);
         response.setCount(count);
         return response;
+    }
+
+    /**
+     * 公司单条记录
+     */
+    @Override
+    public CloudStaffMonthTotalInfo getOne(String id)
+    {
+        if ( StringUtils.isBlank(id))
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        PayCloudStaffMonthTotal  payCloudStaffMonthTotal= payCloudStaffMonthTotalMapper.selectByPrimaryKey(Long.valueOf(id));
+
+        CloudStaffMonthTotalInfo cloudStaffMonthTotalInfo = new CloudStaffMonthTotalInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayCloudStaffMonthTotal.class, CloudStaffMonthTotalInfo.class, false);
+        beanCopier.copy(payCloudStaffMonthTotal,cloudStaffMonthTotalInfo,null);
+
+        return cloudStaffMonthTotalInfo;
     }
 }

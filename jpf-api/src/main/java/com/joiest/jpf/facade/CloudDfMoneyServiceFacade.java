@@ -57,6 +57,9 @@ public interface CloudDfMoneyServiceFacade {
     //查询代付明细信息
     public List<CloudDfMoneyInfo> getAllBySective(CloudDfMoneyRequest request);
 
+    //财务查询报表
+    public List<CloudDfMoneyInfo> getAllBySectiveToCaiwu(CloudDfMoneyRequest request);
+
 
     //发起申请代付请求
     public JpfResponseDto dfMoneyApplyWaitPay(Map<String,String> responseParam,CloudCompanyInfo companyInfo,Map<Long,CloudDfMoneyInfo> realPayMapData, String companyMoneyId, String dfIds);
