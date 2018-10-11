@@ -204,6 +204,74 @@ public class CloudDfMoneyInfo {
      */
     private String pactno;
 
+    //财务报税报表字段
+    /**
+     * 征收项目
+     */
+    private String aproject;
+
+    /**
+     * 征收品目
+     */
+
+    private String Collection;
+
+    /**
+     * 征收子目
+     */
+    private String subtitle;
+
+    /**
+     * 税款所属起始
+     */
+    private String startTime;
+
+    /**
+     * 税款所属起止
+     */
+    private String endTime;
+
+
+    /**
+     * 应发金额
+     */
+    private BigDecimal realmoney;
+
+    /**
+     * 税率
+     */
+    private BigDecimal tax;
+
+    /**
+     * 应代征税额
+     */
+    private BigDecimal taxMoney;
+
+    /**
+     * 已代征税额
+     */
+    private BigDecimal taxMoneyPass;
+
+
+    /**
+     * 代征次数
+     */
+    private Integer collentNum;
+
+
+    //=====end=====
+    /**
+     * 服务内容
+     */
+    private String ticketcontent;
+
+    /**
+     * 个人统计总和金额
+     */
+    private BigDecimal countMoney;
+
+
+
     public Long getId() {
         return id;
     }
@@ -524,4 +592,99 @@ public class CloudDfMoneyInfo {
         this.compactStaffCompactActive = compactStaffCompactActive;
     }
 
+    public String getTicketcontent() {
+        return ticketcontent;
+    }
+
+    public void setTicketcontent(String ticketcontent) {
+        this.ticketcontent = ticketcontent;
+    }
+
+    public String getAproject() {
+        return aproject;
+    }
+
+    public void setAproject(String aproject) {
+        this.aproject = aproject;
+    }
+
+    public String getCollection() {
+        return Collection;
+    }
+
+    public void setCollection(String collection) {
+        Collection = collection;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public BigDecimal getRealmoney() {
+        return realmoney;
+    }
+
+    public void setRealmoney(BigDecimal realmoney) {
+        this.realmoney = realmoney;
+    }
+
+    public BigDecimal getTax() {
+        return tax;
+    }
+
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
+    }
+
+    public BigDecimal getTaxMoney() {
+        return taxMoney;
+    }
+
+    public void setTaxMoney(BigDecimal taxMoney) {
+        this.taxMoney = taxMoney;
+    }
+
+    public Integer getCollentNum() {
+        return collentNum;
+    }
+
+    public void setCollentNum(Integer collentNum) {
+        this.collentNum = collentNum;
+   }
+
+    public BigDecimal getTaxMoneyPass() {
+        return taxMoneyPass;
+    }
+
+    public void setTaxMoneyPass(BigDecimal taxMoneyPass) {
+        this.taxMoneyPass = taxMoneyPass;
+    }
+
+    public BigDecimal getCountMoney() {
+        return countMoney;
+    }
+
+    public void setCountMoney(BigDecimal countMoney) {
+        this.countMoney = countMoney;
+    }
 }

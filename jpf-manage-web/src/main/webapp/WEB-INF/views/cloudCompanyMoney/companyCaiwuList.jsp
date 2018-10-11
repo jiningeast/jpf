@@ -120,6 +120,21 @@
                     window.location.href = importExcelCaiwu;
                 }
             });
+            //财务报税导出excel
+            $('#ExcelCaiwu').linkbutton({
+                onClick: function(){
+
+                    /*ar remarkHasDialog = dialog({
+                        content: '正在导出，请稍等。。。',
+                        width:140,
+                        //drag:true,
+                    });//.show();*/
+
+                    var queryArray = $('#searchForm').serialize();
+                    var ExcelCaiwu = "../../cloudDfMoney/ExcelCaiwu?"+queryArray;
+                    window.location.href = ExcelCaiwu;
+                }
+            });
         })
     </script>
     <style>
@@ -172,6 +187,7 @@
             <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
             <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>&nbsp;&nbsp;
             <a id="importExcelCaiwu" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-download'">导出</a>
+            <a id="ExcelCaiwu" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-download'">报税导出</a>
         </div>
         <br/>
         <div class="easyui-panel statistics" title="汇总统计">

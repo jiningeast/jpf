@@ -8,6 +8,15 @@
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script>
         $(function() {
+
+            $('#infoDiv').window({
+                width:'1024px',
+                height:'550px',
+                closed:true,
+                modal:true
+            });
+
+
             $('#dg').datagrid({
                 title:'用户限额列表',
                 toolbar:toolbar,
@@ -26,7 +35,11 @@
                     {field:'month',title:'月份',width:'5%'},
                     {field:'monthTotal',title:'月份总额',width:'6%'},
                     {field:'orderids',title:'订单id集合',width:'15%'},
-                    // {field:'remarks',title:'备注',width:'8%'},
+                    {field:'remarks',title:'备注',width:'8%',
+                        formatter : function(value,row,index){
+                            return  "<a onclick='goDetails("+row['id']+")'>查看"+" </a>";
+                        }
+                        },
                     {field:'status',title:'状态',width:'5%',
                         formatter : function(value,row,index){
                             if(value=='0'){return '未超额'}
@@ -80,6 +93,11 @@
         function get_time() {
             return new Date().getTime();
         }
+        function goDetails(id) {
+
+            $('#infoDiv').window("open").window('refresh', 'infoRemark?id='+id).window('setTitle','打款详情');
+        }
+
     </script>
     <style>
         #searchForm table tr td:nth-child(odd) { text-align: right; }
