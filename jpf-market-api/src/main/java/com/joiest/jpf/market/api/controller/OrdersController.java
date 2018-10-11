@@ -1066,7 +1066,7 @@ public class OrdersController {
     /**
      * 微能查询余额、状态报告获取
      * */
-    @RequestMapping(value = "flowReport",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "flowReport",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String flowReport(){
 
@@ -1096,7 +1096,7 @@ public class OrdersController {
                     ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
                     orderinfo.setId(orderInfo.getId());
                     orderinfo.setUpdatetime(new Date());
-                    if (job.get("reportStatus").toString().equals("0")){
+                    if (job.get("reportStatus").toString().equals("1")){
 
                         sucOrder+=orderInfo.getOrderNo()+",";
                         orderinfo.setRechargeStatus("1");
