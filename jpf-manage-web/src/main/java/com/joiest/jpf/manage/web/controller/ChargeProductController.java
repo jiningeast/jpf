@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/shopproduct")
+@RequestMapping("/chargeProduct")
 public class ChargeProductController {
 
     @Autowired
@@ -50,7 +50,7 @@ public class ChargeProductController {
     @RequestMapping("/index")
     public ModelAndView index()
     {
-        return new ModelAndView("shopproduct/index");
+        return new ModelAndView("chargeProduct/index");
     }
 
     @RequestMapping("/list")
@@ -70,10 +70,10 @@ public class ChargeProductController {
      */
     @RequestMapping("/alertStatus")
     @ResponseBody
-    public JpfResponseDto alertStatus(String id, Byte status,HttpServletRequest request){
+    public JpfResponseDto alertStatus(String id, Byte isOnSale,HttpServletRequest request){
         HttpSession session = request.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
-        return shopProductServiceFacade.upStatus(id,status,userInfo);
+        return chargeProductServiceFacade.upStatus(id,isOnSale,userInfo);
     }
 
     /**

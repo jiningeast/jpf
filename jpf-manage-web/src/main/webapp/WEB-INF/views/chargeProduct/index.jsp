@@ -29,7 +29,7 @@
                             if (r) {
                                 var param = {};
                                 param["id"] = rows[0].id;
-                                param["status"] = '1';
+                                param["isOnSale"] = '1';
                                 $.ajax({
                                     type: 'post',
                                     url: 'alertStatus',
@@ -66,7 +66,7 @@
                             if (r) {
                                 var param = {};
                                 param["id"] = rows[0].id;
-                                param["status"] = '0';
+                                param["isOnSale"] = '0';
                                 $.ajax({
                                     type: 'post',
                                     url: 'alertStatus',
@@ -112,7 +112,7 @@
                 }];
 
             $('#dg').datagrid({
-                title:'旅游产品列表',
+                title:'充值平台产品列表',
                 toolbar:toolbar,
                 // rownumbers:true,//如果为true，则显示一个行号列。
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
@@ -124,20 +124,26 @@
                 // width:500,
                 url:'list',
                 columns:[[
-                    {field:'id',title:'商品ID',width:80},
-                    {field:'name',title:'商品名称',width:200},
-                    {field:'bid',title:'商品进价',width:50},
-                    {field:'money',title:'商品售价',width:50},
-                    {field:'rechargeMoney',title:'充值面额(元)',width:50},
-                    {field:'dou',title:'所需豆',width:50},
-                    {field:'brandName',title:'商品品牌',width:150},
-                    {field:'supplierName',title:'供应商',width:150},
-                    {field:'typeName',title:'商品分类',width:150},
-                    {field:'stored',title:'当前库存',width:50},
-                    // {field:'pdpicture',title:'产品图片',width:150,
-                    //     formatter:function(value,row,index){return '<img style="height:80px;width:100px;" src="'+ value +'" />';}
-                    // },
-                    {field:'status',title:'商品状态',width:50,
+                    {field:'id',title:'商品ID',width:"5%"},
+                    {field:'name',title:'商品名称',width:"7%"},
+                    {field:'value',title:'面值',width:"5%"},
+                    {field:'bidPrice',title:'商品进价',width:"5%"},
+                    {field:'salePrice',title:'商品售价',width:"5%"},
+                    {field:'brandName',title:'商品品牌',width:"5%"},
+                    {field:'supplierName',title:'供应商',width:"5%"},
+                    {field:'typeName',title:'商品分类',width:"5%"},
+                    {field:'mobileType',title:'运营商类型',width:"7%",
+                        formatter: function(value,row,index){
+                            if (value == 1){
+                                return "移动";
+                            } else if (value == 2) {
+                                return "联通";
+                            } else if (value == 3) {
+                                return "电信";
+                            }
+                        }
+                    },
+                    {field:'isOnSale',title:'商品状态',width:"5%",
                         formatter: function(value,row,index){
                             if (value == 0){
                                 return "下架";
@@ -146,8 +152,9 @@
                             }
                         }
                     },
-                    {field:'addtime',title:'创建时间',width:150,formatter: formatDateStr},
-                    {field:'updatetime',title:'更新时间',width:150,formatter: formatDateStr}
+
+                    {field:'addtime',title:'创建时间',width:"10%",formatter: formatDateStr},
+                    {field:'updatetime',title:'更新时间',width:"10%",formatter: formatDateStr}
                 ]],
                 onLoadSuccess: function () {   //隐藏表头的checkbox
                     $("#dg").parent().find("div .datagrid-header-check").children("input[type=\"checkbox\"]").eq(0).attr("style", "display:none;");
@@ -216,9 +223,9 @@
                 <table cellpadding="5" width="75%">
                     <tr>
                         <td>商品名称:</td>
-                        <td><input id="product_name" name="name" class="easyui-textbox" type="text" /></td>
+                        <td><input id="name" name="name" class="easyui-textbox" type="text" /></td>
                         <td>
-                            <select id="status_s" name="status" class="easyui-combobox" style="width:120px;">
+                            <select id="isOnSale" name="isOnSale" class="easyui-combobox" style="width:120px;">
                                 <option value="">全部</option>
                                 <option value="1">上架</option>
                                 <option value="0">下架</option>
