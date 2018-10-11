@@ -19,22 +19,6 @@
             });
             var toolbar = [
                 {
-                    text : '自定义菜单',
-                    iconCls : 'icon-save',
-                    id:"customMenue",
-                    /*handler : function(){
-
-                        /!*var rows = $('#dg').datagrid('getSelections');
-                        if (rows.length != 1) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return +rows[0].id
-                        }*!/
-                        window.open('weixinMp/customMenu?id=1');
-                       // location.href ='weixinMp/customMenu?id=1';
-                        //$("#infoDiv").window("open").window('refresh', '../weixinMp/customMenu?id=1').window('setTitle','自定义菜单管理');
-                    }*/
-                },
-                {
                     text : '新增',
                     iconCls : 'icon-add',
                     handler : function(){
