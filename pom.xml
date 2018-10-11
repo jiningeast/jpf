@@ -181,12 +181,6 @@
                 <artifactId>spring-integration-redis</artifactId>
                 <version>${spring-integration-redis_version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz</artifactId>
-                <version>${quartz_version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
