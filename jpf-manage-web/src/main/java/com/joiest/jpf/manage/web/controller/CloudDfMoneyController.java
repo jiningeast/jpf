@@ -267,7 +267,7 @@ public class CloudDfMoneyController {
         headerValE.put("value",now);
         headerKey.add(headerValE);
         //获取当前模板的路径
-        String path=ConfigUtil.getValue("EXCEL_PATH")+ConfigUtil.getValue("FINANCIAL_PATH");
+        String path=ConfigUtil.getValue("EXCEL_PATH")+"module/"+ConfigUtil.getValue("FINANCIAL_PATH");
         try {
             excel=new exportExcel().exportExcelcopy(response,path,"财务报税导出",infos,filed.toString(),headerKey.toString());
         } catch (Exception e) {
