@@ -4,12 +4,7 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayChargeProduct;
 import com.joiest.jpf.dto.GetChargeProductRequest;
 import com.joiest.jpf.dto.GetChargeProductResponse;
-import com.joiest.jpf.dto.ModifyShopProductRequest;
-import com.joiest.jpf.dto.ShopProductInfoRequest;
 import com.joiest.jpf.entity.ChargeProductInfo;
-import com.joiest.jpf.entity.ShopProductInfo;
-import com.joiest.jpf.entity.ShopProductInfoInfo;
-import com.joiest.jpf.entity.UserInfo;
 
 import java.util.List;
 
@@ -21,40 +16,23 @@ public interface ChargeProductServiceFacade {
     public List<ChargeProductInfo> getList(PayChargeProduct record);
 
     /**
-     * shop_product list
-     * @param request
-     * @return
+     * 查询商品列表信息，并返回数量
      */
     public GetChargeProductResponse getProductList(GetChargeProductRequest request);
 
     /**
-     * 上下架
+     * 获取商品 单个
      */
-    public JpfResponseDto upStatus(String id, Byte status, UserInfo userInfo);
-
-    /**
-     * 获取商品基础信息列表
-     */
-    public List<ShopProductInfoInfo> getProductInfoList();
+    public ChargeProductInfo getChargeProduct(String id);
 
     /**
      * 添加商品
      */
-    public JpfResponseDto addShopProduct(ModifyShopProductRequest request);
-
-    /**
-     * 获取商品 单个
-     */
-    public ShopProductInfo getShopProduct(String id);
+    public int addChargeProduct(ChargeProductInfo info);
 
     /**
      * 编辑商品
      */
-    public JpfResponseDto modifyShopProduct(ModifyShopProductRequest request);
-
-    /**
-     * 添加商品基础信息 pay_shop_product_info
-     */
-    public JpfResponseDto addShopProductInfo(ShopProductInfoRequest request);
+    public JpfResponseDto modifyChargeProduct(ChargeProductInfo chargeProductInfo);
 
 }

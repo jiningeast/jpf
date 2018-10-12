@@ -1,9 +1,9 @@
-package com.joiest.jpf.entity;
+package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class ChargeProductInfo {
+public class ModifyChargeProductRequest {
+
     /**
      * 主键id
      */
@@ -57,7 +57,7 @@ public class ChargeProductInfo {
     /**
      * 供应商id
      */
-    private String supplierId;
+    private String suppllierId;
 
     /**
      * 供应商名称
@@ -84,32 +84,16 @@ public class ChargeProductInfo {
      */
     private Byte isOnSale;
 
-    /**
-     * 后台添加人id
-     */
     private String operatorId;
 
-    /**
-     * 后台添加人姓名
-     */
     private String operatorName;
-
-    /**
-     * 添加时间
-     */
-    private Date addtime;
-
-    /**
-     * 更新时间
-     */
-    private Date updatetime;
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getName() {
@@ -117,7 +101,7 @@ public class ChargeProductInfo {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public BigDecimal getValue() {
@@ -149,7 +133,7 @@ public class ChargeProductInfo {
     }
 
     public void setWnProductId(String wnProductId) {
-        this.wnProductId = wnProductId == null ? null : wnProductId.trim();
+        this.wnProductId = wnProductId;
     }
 
     public Byte getForceInterface() {
@@ -173,7 +157,7 @@ public class ChargeProductInfo {
     }
 
     public void setBrandId(String brandId) {
-        this.brandId = brandId == null ? null : brandId.trim();
+        this.brandId = brandId;
     }
 
     public String getBrandName() {
@@ -181,15 +165,15 @@ public class ChargeProductInfo {
     }
 
     public void setBrandName(String brandName) {
-        this.brandName = brandName == null ? null : brandName.trim();
+        this.brandName = brandName;
     }
 
-    public String getSupplierId() {
-        return supplierId;
+    public String getSuppllierId() {
+        return suppllierId;
     }
 
-    public void setSupplierId(String supplierId) {
-        this.supplierId = supplierId;
+    public void setSuppllierId(String suppllierId) {
+        this.suppllierId = suppllierId;
     }
 
     public String getSupplierName() {
@@ -197,7 +181,7 @@ public class ChargeProductInfo {
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName == null ? null : supplierName.trim();
+        this.supplierName = supplierName;
     }
 
     public String getTypeId() {
@@ -205,7 +189,7 @@ public class ChargeProductInfo {
     }
 
     public void setTypeId(String typeId) {
-        this.typeId = typeId == null ? null : typeId.trim();
+        this.typeId = typeId;
     }
 
     public String getTypeName() {
@@ -213,7 +197,7 @@ public class ChargeProductInfo {
     }
 
     public void setTypeName(String typeName) {
-        this.typeName = typeName == null ? null : typeName.trim();
+        this.typeName = typeName;
     }
 
     public Byte getMobileType() {
@@ -237,7 +221,7 @@ public class ChargeProductInfo {
     }
 
     public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId == null ? null : operatorId.trim();
+        this.operatorId = operatorId;
     }
 
     public String getOperatorName() {
@@ -245,23 +229,6 @@ public class ChargeProductInfo {
     }
 
     public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName == null ? null : operatorName.trim();
+        this.operatorName = operatorName;
     }
-
-    public Date getAddtime() {
-        return addtime;
-    }
-
-    public void setAddtime(Date addtime) {
-        this.addtime = addtime;
-    }
-
-    public Date getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
-    }
-
 }
