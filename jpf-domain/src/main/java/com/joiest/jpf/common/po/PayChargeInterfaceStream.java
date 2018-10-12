@@ -35,6 +35,11 @@ public class PayChargeInterfaceStream implements Serializable {
     private String orderId;
 
     /**
+     * 订单号
+     */
+    private String orderNo;
+
+    /**
      * 
      */
     private Date addtime;
@@ -94,6 +99,14 @@ public class PayChargeInterfaceStream implements Serializable {
         this.orderId = orderId == null ? null : orderId.trim();
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -125,6 +138,7 @@ public class PayChargeInterfaceStream implements Serializable {
         sb.append(", requestParam=").append(requestParam);
         sb.append(", response=").append(response);
         sb.append(", orderId=").append(orderId);
+        sb.append(", orderNo=").append(orderNo);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -153,6 +167,7 @@ public class PayChargeInterfaceStream implements Serializable {
             && (this.getRequestParam() == null ? other.getRequestParam() == null : this.getRequestParam().equals(other.getRequestParam()))
             && (this.getResponse() == null ? other.getResponse() == null : this.getResponse().equals(other.getResponse()))
             && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
+            && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -170,6 +185,7 @@ public class PayChargeInterfaceStream implements Serializable {
         result = prime * result + ((getRequestParam() == null) ? 0 : getRequestParam().hashCode());
         result = prime * result + ((getResponse() == null) ? 0 : getResponse().hashCode());
         result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
+        result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;

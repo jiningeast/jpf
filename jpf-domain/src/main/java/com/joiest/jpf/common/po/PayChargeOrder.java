@@ -71,6 +71,11 @@ public class PayChargeOrder implements Serializable {
     private Byte interfaceType;
 
     /**
+     * 上游订单号
+     */
+    private String interfaceOrderNo;
+
+    /**
      * 请求参数
      */
     private String requestParams;
@@ -211,6 +216,14 @@ public class PayChargeOrder implements Serializable {
         this.interfaceType = interfaceType;
     }
 
+    public String getInterfaceOrderNo() {
+        return interfaceOrderNo;
+    }
+
+    public void setInterfaceOrderNo(String interfaceOrderNo) {
+        this.interfaceOrderNo = interfaceOrderNo == null ? null : interfaceOrderNo.trim();
+    }
+
     public String getRequestParams() {
         return requestParams;
     }
@@ -289,6 +302,7 @@ public class PayChargeOrder implements Serializable {
         sb.append(", productAmount=").append(productAmount);
         sb.append(", totalMoney=").append(totalMoney);
         sb.append(", interfaceType=").append(interfaceType);
+        sb.append(", interfaceOrderNo=").append(interfaceOrderNo);
         sb.append(", requestParams=").append(requestParams);
         sb.append(", notifyUrl=").append(notifyUrl);
         sb.append(", notifyParams=").append(notifyParams);
@@ -329,6 +343,7 @@ public class PayChargeOrder implements Serializable {
             && (this.getProductAmount() == null ? other.getProductAmount() == null : this.getProductAmount().equals(other.getProductAmount()))
             && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
             && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
+            && (this.getInterfaceOrderNo() == null ? other.getInterfaceOrderNo() == null : this.getInterfaceOrderNo().equals(other.getInterfaceOrderNo()))
             && (this.getRequestParams() == null ? other.getRequestParams() == null : this.getRequestParams().equals(other.getRequestParams()))
             && (this.getNotifyUrl() == null ? other.getNotifyUrl() == null : this.getNotifyUrl().equals(other.getNotifyUrl()))
             && (this.getNotifyParams() == null ? other.getNotifyParams() == null : this.getNotifyParams().equals(other.getNotifyParams()))
@@ -358,6 +373,7 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getProductAmount() == null) ? 0 : getProductAmount().hashCode());
         result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
         result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
+        result = prime * result + ((getInterfaceOrderNo() == null) ? 0 : getInterfaceOrderNo().hashCode());
         result = prime * result + ((getRequestParams() == null) ? 0 : getRequestParams().hashCode());
         result = prime * result + ((getNotifyUrl() == null) ? 0 : getNotifyUrl().hashCode());
         result = prime * result + ((getNotifyParams() == null) ? 0 : getNotifyParams().hashCode());
