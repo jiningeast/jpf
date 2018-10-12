@@ -75,7 +75,9 @@ public class ToolUtils {
         return map;
     }
 
-    //数组转换为键值
+    /**
+     * urlToMap的反向函数
+     */
     public static String mapToUrl(Map<String,Object> map){
 
         String result="";
@@ -240,7 +242,7 @@ public class ToolUtils {
 
 
     /**
-     * @商户编号生成
+     * 商户编号生成
      */
     private static byte[] lock = new byte[0];
 
@@ -259,7 +261,7 @@ public class ToolUtils {
     }
 
     /**
-     * @生成六位随机字母加数字
+     * 生成六位随机字母加数字
      */
     public static  String CreatSixNum(){
         String randomcode = "";
@@ -279,8 +281,23 @@ public class ToolUtils {
     }
 
     /**
+     * 生成商户秘钥
+     */
+    public static String createPrivateKey(int n){
+        String randomcode = "";
+        // 用字符数组的方式随机
+        String model = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        char[] m = model.toCharArray();
+        for (int j = 0; j < n; j++) {
+            char c = m[(int) (Math.random() * model.length())];
+            randomcode = randomcode + c;
+        }
+
+        return randomcode;
+    }
+
+    /**
      * 生成随机数
-     * @return
      */
     public static String createOrderid(){
 
@@ -292,7 +309,7 @@ public class ToolUtils {
         return ""+pre+middle+last;
     }
 
-    /*
+    /**
      *   生成指定范围内的随机整数
      **/
     public static int getRandomInt(int min, int max){
@@ -302,9 +319,10 @@ public class ToolUtils {
 
         return randomInt;
     }
+
     /**
      * 获取ip地址
-     * */
+     */
     public static String getIpAddr(HttpServletRequest request) {
         if (request == null) return "";
 
@@ -360,23 +378,35 @@ public class ToolUtils {
 
         return Double.parseDouble(nf.format(num));
     }
+
     /**
      * 金额校验
      */
-        public static Boolean ValidateCode(String code,String uid,String dou){
-
+    public static Boolean ValidateCode(String code,String uid,String dou){
         String newCode = Md5Encrypt.md5(uid+dou+"test","UTF-8");   //加密规则：  id+金额+key
         Boolean res = code.equals(newCode); //校验加密是否一致
 
         return res;
     }
+
+    public static Boolean ValidateCode(String code,String uid,String dou,String valiCode){
+        String newCode = Md5Encrypt.md5(uid + dou + valiCode,"UTF-8");   //加密规则：  id+金额+key
+        Boolean res = code.equals(newCode); //校验加密是否一致
+
+        return res;
+    }
+
     /**
      * 加密欣豆市场个人豆的校验码code
      */
     public static String CreateCode(String dou,String uid){
 
         return Md5Encrypt.md5(uid+dou+"test","UTF-8");
+    }
 
+    public static String CreateCode(String dou,String uid,String valiCode){
+
+        return Md5Encrypt.md5(uid + dou + valiCode,"UTF-8");
     }
 
     /**
@@ -388,7 +418,6 @@ public class ToolUtils {
      *            开始位置
      * @param end
      *            结束位置
-     * @return
      */
     public static String getStarString(String content, int begin, int end) {
 
@@ -442,9 +471,9 @@ public class ToolUtils {
     }
 
 
-    /*
+    /**
     * Json字符串(二维)转换成Map数组
-    * */
+    */
 
     public static JSONArray JsonTOarray(String json){
 
@@ -456,7 +485,7 @@ public class ToolUtils {
         }
         return arr;
     }
-    //public satiz
+
     /**
      * 验证手机号
      */
@@ -464,4 +493,9 @@ public class ToolUtils {
         String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
         return Pattern.compile(reg_phone).matcher(phone).matches();
     }
+
+    /**
+     * 生成商户秘钥
+     */
+
 }
