@@ -1,10 +1,5 @@
 package com.joiest.jpf.facade.impl;
 
-import com.joiest.jpf.common.po.PayChargeProduct;
-import com.joiest.jpf.common.po.PayChargeProductExample;
-import com.joiest.jpf.common.po.PayChargeProduct;
-import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductMapper;
 import com.joiest.jpf.common.constant.EnumConstants;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
@@ -13,7 +8,10 @@ import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductInfoMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductMapper;
-import com.joiest.jpf.dto.*;
+import com.joiest.jpf.dto.GetChargeProductRequest;
+import com.joiest.jpf.dto.GetChargeProductResponse;
+import com.joiest.jpf.dto.ModifyShopProductRequest;
+import com.joiest.jpf.dto.ShopProductInfoRequest;
 import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.entity.ShopProductInfo;
 import com.joiest.jpf.entity.ShopProductInfoInfo;
@@ -23,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
-import java.util.List;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -32,15 +29,22 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
     @Autowired
     private PayChargeProductMapper payChargeProductMapper;
 
+    @Autowired
+    private PayShopProductMapper payShopProductMapper;
+
+    @Autowired
+    private PayShopProductInfoMapper payShopProductInfoMapper;
+
     /**
-     * 欣豆日志添加
+     * 商品列表
      * */
     @Override
-    public List<PayChargeProduct> getOne(PayChargeProduct record){
+    public List<ChargeProductInfo> getList(PayChargeProduct record){
 
         PayChargeProductExample example = new PayChargeProductExample();
         PayChargeProductExample.Criteria c = example.createCriteria();
-        if( record.getMobileType() !=null && !record.getMobileType().toString().equals("") ){
+        //  getMobileType == 0 查询所有
+        if( record.getMobileType() !=null && record.getMobileType() != 0  ){
             c.andMobileTypeEqualTo(record.getMobileType());
         }
 
@@ -48,24 +52,18 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
         if( list==null || list.isEmpty() ){
             return null;
         }
-        List<PayChargeProduct> infoList = payChargeProductMapper.selectByExample(example);
-        for (PayChargeProduct one:infoList){
-            //ChargeProductInfo info = new ChargeProductInfo();
-            //BeanCopier beanCopier = BeanCopier.create(PayChargeProduct.class,ChargeProductInfo.class,false);
-            //beanCopier.copy(list,infoList,null);
+        List<ChargeProductInfo> infos = new ArrayList<>();
+        for (PayChargeProduct one:list){
+            ChargeProductInfo info = new ChargeProductInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayChargeProduct.class,ChargeProductInfo.class,false);
+            beanCopier.copy(one,info,null);
+            infos.add(info);
         }
 
-        return infoList;
+        return infos;
     }
 
 
-    private PayShopProductMapper payShopProductMapper;
-
-    @Autowired
-    private PayChargeProductMapper payChargeProductMapper;
-
-    @Autowired
-    private PayShopProductInfoMapper payShopProductInfoMapper;
 
     @Override
     public GetChargeProductResponse getProductList(GetChargeProductRequest request) {

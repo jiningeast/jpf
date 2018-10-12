@@ -5,5 +5,6 @@
 
     <bean id="ChargeCompanyServiceFacade" class="com.joiest.jpf.facade.impl.ChargeCompanyServiceFacadeImpl"></bean>
     <bean id="ChargeProductServiceFacade" class="com.joiest.jpf.facade.impl.ChargeProductServiceFacadeImpl"></bean>
+    <bean id="ChargeOrderServiceFacade" class="com.joiest.jpf.facade.impl.ChargeOrderServiceFacadeImpl"></bean>
 
 </beans>
