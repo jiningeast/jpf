@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PayChargeOrder implements Serializable {
     /**
-     * 
+     * 主键id
      */
     private String id;
 
@@ -71,12 +71,22 @@ public class PayChargeOrder implements Serializable {
     private Byte interfaceType;
 
     /**
-     * 
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
+     * 异步回调地址
      */
     private String notifyUrl;
 
     /**
-     * 
+     * 异步回调参数
+     */
+    private String notifyParams;
+
+    /**
+     * 异步回调时间
      */
     private Date notifyTime;
 
@@ -201,12 +211,28 @@ public class PayChargeOrder implements Serializable {
         this.interfaceType = interfaceType;
     }
 
+    public String getRequestParams() {
+        return requestParams;
+    }
+
+    public void setRequestParams(String requestParams) {
+        this.requestParams = requestParams == null ? null : requestParams.trim();
+    }
+
     public String getNotifyUrl() {
         return notifyUrl;
     }
 
     public void setNotifyUrl(String notifyUrl) {
         this.notifyUrl = notifyUrl == null ? null : notifyUrl.trim();
+    }
+
+    public String getNotifyParams() {
+        return notifyParams;
+    }
+
+    public void setNotifyParams(String notifyParams) {
+        this.notifyParams = notifyParams == null ? null : notifyParams.trim();
     }
 
     public Date getNotifyTime() {
@@ -263,7 +289,9 @@ public class PayChargeOrder implements Serializable {
         sb.append(", productAmount=").append(productAmount);
         sb.append(", totalMoney=").append(totalMoney);
         sb.append(", interfaceType=").append(interfaceType);
+        sb.append(", requestParams=").append(requestParams);
         sb.append(", notifyUrl=").append(notifyUrl);
+        sb.append(", notifyParams=").append(notifyParams);
         sb.append(", notifyTime=").append(notifyTime);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
@@ -301,7 +329,9 @@ public class PayChargeOrder implements Serializable {
             && (this.getProductAmount() == null ? other.getProductAmount() == null : this.getProductAmount().equals(other.getProductAmount()))
             && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
             && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
+            && (this.getRequestParams() == null ? other.getRequestParams() == null : this.getRequestParams().equals(other.getRequestParams()))
             && (this.getNotifyUrl() == null ? other.getNotifyUrl() == null : this.getNotifyUrl().equals(other.getNotifyUrl()))
+            && (this.getNotifyParams() == null ? other.getNotifyParams() == null : this.getNotifyParams().equals(other.getNotifyParams()))
             && (this.getNotifyTime() == null ? other.getNotifyTime() == null : this.getNotifyTime().equals(other.getNotifyTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
@@ -328,7 +358,9 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getProductAmount() == null) ? 0 : getProductAmount().hashCode());
         result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
         result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
+        result = prime * result + ((getRequestParams() == null) ? 0 : getRequestParams().hashCode());
         result = prime * result + ((getNotifyUrl() == null) ? 0 : getNotifyUrl().hashCode());
+        result = prime * result + ((getNotifyParams() == null) ? 0 : getNotifyParams().hashCode());
         result = prime * result + ((getNotifyTime() == null) ? 0 : getNotifyTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());

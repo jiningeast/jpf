@@ -1016,6 +1016,76 @@ public class PayChargeOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andRequestParamsIsNull() {
+            addCriterion("request_params is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsIsNotNull() {
+            addCriterion("request_params is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsEqualTo(String value) {
+            addCriterion("request_params =", value, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsNotEqualTo(String value) {
+            addCriterion("request_params <>", value, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsGreaterThan(String value) {
+            addCriterion("request_params >", value, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsGreaterThanOrEqualTo(String value) {
+            addCriterion("request_params >=", value, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsLessThan(String value) {
+            addCriterion("request_params <", value, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsLessThanOrEqualTo(String value) {
+            addCriterion("request_params <=", value, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsLike(String value) {
+            addCriterion("request_params like", value, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsNotLike(String value) {
+            addCriterion("request_params not like", value, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsIn(List<String> values) {
+            addCriterion("request_params in", values, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsNotIn(List<String> values) {
+            addCriterion("request_params not in", values, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsBetween(String value1, String value2) {
+            addCriterion("request_params between", value1, value2, "requestParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestParamsNotBetween(String value1, String value2) {
+            addCriterion("request_params not between", value1, value2, "requestParams");
+            return (Criteria) this;
+        }
+
         public Criteria andNotifyUrlIsNull() {
             addCriterion("notify_url is null");
             return (Criteria) this;
@@ -1083,6 +1153,76 @@ public class PayChargeOrderExample {
 
         public Criteria andNotifyUrlNotBetween(String value1, String value2) {
             addCriterion("notify_url not between", value1, value2, "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsIsNull() {
+            addCriterion("notify_params is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsIsNotNull() {
+            addCriterion("notify_params is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsEqualTo(String value) {
+            addCriterion("notify_params =", value, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsNotEqualTo(String value) {
+            addCriterion("notify_params <>", value, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsGreaterThan(String value) {
+            addCriterion("notify_params >", value, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsGreaterThanOrEqualTo(String value) {
+            addCriterion("notify_params >=", value, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsLessThan(String value) {
+            addCriterion("notify_params <", value, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsLessThanOrEqualTo(String value) {
+            addCriterion("notify_params <=", value, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsLike(String value) {
+            addCriterion("notify_params like", value, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsNotLike(String value) {
+            addCriterion("notify_params not like", value, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsIn(List<String> values) {
+            addCriterion("notify_params in", values, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsNotIn(List<String> values) {
+            addCriterion("notify_params not in", values, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsBetween(String value1, String value2) {
+            addCriterion("notify_params between", value1, value2, "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsNotBetween(String value1, String value2) {
+            addCriterion("notify_params not between", value1, value2, "notifyParams");
             return (Criteria) this;
         }
 
@@ -1356,8 +1496,18 @@ public class PayChargeOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andRequestParamsLikeInsensitive(String value) {
+            addCriterion("upper(request_params) like", value.toUpperCase(), "requestParams");
+            return (Criteria) this;
+        }
+
         public Criteria andNotifyUrlLikeInsensitive(String value) {
             addCriterion("upper(notify_url) like", value.toUpperCase(), "notifyUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyParamsLikeInsensitive(String value) {
+            addCriterion("upper(notify_params) like", value.toUpperCase(), "notifyParams");
             return (Criteria) this;
         }
     }
