@@ -58,7 +58,7 @@ public class PayChargeProduct implements Serializable {
     /**
      * 供应商id
      */
-    private String suppllierId;
+    private String supplierId;
 
     /**
      * 供应商名称
@@ -187,12 +187,12 @@ public class PayChargeProduct implements Serializable {
         this.brandName = brandName == null ? null : brandName.trim();
     }
 
-    public String getSuppllierId() {
-        return suppllierId;
+    public String getSupplierId() {
+        return supplierId;
     }
 
-    public void setSuppllierId(String suppllierId) {
-        this.suppllierId = suppllierId == null ? null : suppllierId.trim();
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
     }
 
     public String getSupplierName() {
@@ -286,7 +286,7 @@ public class PayChargeProduct implements Serializable {
         sb.append(", interfaceType=").append(interfaceType);
         sb.append(", brandId=").append(brandId);
         sb.append(", brandName=").append(brandName);
-        sb.append(", suppllierId=").append(suppllierId);
+        sb.append(", supplierId=").append(supplierId);
         sb.append(", supplierName=").append(supplierName);
         sb.append(", typeId=").append(typeId);
         sb.append(", typeName=").append(typeName);
@@ -326,7 +326,7 @@ public class PayChargeProduct implements Serializable {
             && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
             && (this.getBrandId() == null ? other.getBrandId() == null : this.getBrandId().equals(other.getBrandId()))
             && (this.getBrandName() == null ? other.getBrandName() == null : this.getBrandName().equals(other.getBrandName()))
-            && (this.getSuppllierId() == null ? other.getSuppllierId() == null : this.getSuppllierId().equals(other.getSuppllierId()))
+            && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
             && (this.getSupplierName() == null ? other.getSupplierName() == null : this.getSupplierName().equals(other.getSupplierName()))
             && (this.getTypeId() == null ? other.getTypeId() == null : this.getTypeId().equals(other.getTypeId()))
             && (this.getTypeName() == null ? other.getTypeName() == null : this.getTypeName().equals(other.getTypeName()))
@@ -355,7 +355,7 @@ public class PayChargeProduct implements Serializable {
         result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
         result = prime * result + ((getBrandId() == null) ? 0 : getBrandId().hashCode());
         result = prime * result + ((getBrandName() == null) ? 0 : getBrandName().hashCode());
-        result = prime * result + ((getSuppllierId() == null) ? 0 : getSuppllierId().hashCode());
+        result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
         result = prime * result + ((getSupplierName() == null) ? 0 : getSupplierName().hashCode());
         result = prime * result + ((getTypeId() == null) ? 0 : getTypeId().hashCode());
         result = prime * result + ((getTypeName() == null) ? 0 : getTypeName().hashCode());
