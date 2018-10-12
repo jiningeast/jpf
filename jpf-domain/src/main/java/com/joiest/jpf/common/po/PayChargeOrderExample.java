@@ -1016,6 +1016,76 @@ public class PayChargeOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andInterfaceOrderNoIsNull() {
+            addCriterion("interface_order_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoIsNotNull() {
+            addCriterion("interface_order_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoEqualTo(String value) {
+            addCriterion("interface_order_no =", value, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoNotEqualTo(String value) {
+            addCriterion("interface_order_no <>", value, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoGreaterThan(String value) {
+            addCriterion("interface_order_no >", value, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("interface_order_no >=", value, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoLessThan(String value) {
+            addCriterion("interface_order_no <", value, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("interface_order_no <=", value, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoLike(String value) {
+            addCriterion("interface_order_no like", value, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoNotLike(String value) {
+            addCriterion("interface_order_no not like", value, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoIn(List<String> values) {
+            addCriterion("interface_order_no in", values, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoNotIn(List<String> values) {
+            addCriterion("interface_order_no not in", values, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoBetween(String value1, String value2) {
+            addCriterion("interface_order_no between", value1, value2, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoNotBetween(String value1, String value2) {
+            addCriterion("interface_order_no not between", value1, value2, "interfaceOrderNo");
+            return (Criteria) this;
+        }
+
         public Criteria andRequestParamsIsNull() {
             addCriterion("request_params is null");
             return (Criteria) this;
@@ -1493,6 +1563,11 @@ public class PayChargeOrderExample {
 
         public Criteria andProductNameLikeInsensitive(String value) {
             addCriterion("upper(product_name) like", value.toUpperCase(), "productName");
+            return (Criteria) this;
+        }
+
+        public Criteria andInterfaceOrderNoLikeInsensitive(String value) {
+            addCriterion("upper(interface_order_no) like", value.toUpperCase(), "interfaceOrderNo");
             return (Criteria) this;
         }
 
