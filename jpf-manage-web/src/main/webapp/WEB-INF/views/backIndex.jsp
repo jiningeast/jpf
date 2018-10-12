@@ -86,6 +86,11 @@
                     "menuname" : "欣豆市场商户管理",
                     "icon" : "icon-nav",
                     "url" : "shopCompany/index"
+                },{
+                    "menuid" : "206",
+                    "menuname" : "充值平台商户管理",
+                    "icon" : "icon-nav",
+                    "url" : "chargeCompany/index"
                 }]
     		},{
                 "menuid" : "3",
@@ -127,6 +132,11 @@
                     "menuname" : "欣豆转让订单管理",
                     "icon" : "icon-nav",
                     "url" : "shopBargainOrder/index"
+                },{
+                    "menuid" : "404",
+                    "menuname" : "敬恒充值订单管理",
+                    "icon" : "icon-nav",
+                    "url" : "shopBargainRechargeOrder/index"
                 }
                 ]
             },{
