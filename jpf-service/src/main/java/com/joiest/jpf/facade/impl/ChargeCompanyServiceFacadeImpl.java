@@ -59,7 +59,7 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     }
 
     /**
-     * 欣豆日志添加
+     * 商品信息
      * */
     @Override
     public ChargeCompanyInfo getOne(ChargeCompanyInfo companyInfo){
