@@ -59,6 +59,28 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     }
 
     /**
+     * 欣豆日志添加
+     * */
+    @Override
+    public ChargeCompanyInfo getOne(ChargeCompanyInfo companyInfo){
+
+        PayChargeCompanyExample example = new PayChargeCompanyExample();
+        PayChargeCompanyExample.Criteria c = example.createCriteria();
+        if(companyInfo.getMerchNo() != null ){
+            c.andMerchNoEqualTo(companyInfo.getMerchNo());
+        }
+
+        List<PayChargeCompany> list = payChargeCompanyMapper.selectByExample(example);
+        if( list == null || list.size() <=0  ){
+            return null;
+        }
+        ChargeCompanyInfo info = new ChargeCompanyInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayChargeCompany.class,ChargeCompanyInfo.class,false);
+        beanCopier.copy(list.get(0),info,null);
+        return info;
+    }
+
+    /**
      * 根据主键id获取商户
      */
     @Override

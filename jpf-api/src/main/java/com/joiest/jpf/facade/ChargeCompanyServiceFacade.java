@@ -12,6 +12,11 @@ public interface ChargeCompanyServiceFacade {
     public GetChargeCompanyResponse getRecords(GetChargeCompanyRequest request);
 
     /**
+     * 查询商户信息
+     */
+    public ChargeCompanyInfo getOne(ChargeCompanyInfo companyInfo);
+
+    /**
      * 根据主键id获取商户
      */
     public ChargeCompanyInfo getRecordByPrimaryKey(String id);

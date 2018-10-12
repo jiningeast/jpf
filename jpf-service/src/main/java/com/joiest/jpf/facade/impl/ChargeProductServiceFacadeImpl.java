@@ -8,7 +8,10 @@ import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductInfoMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductMapper;
-import com.joiest.jpf.dto.*;
+import com.joiest.jpf.dto.GetChargeProductRequest;
+import com.joiest.jpf.dto.GetChargeProductResponse;
+import com.joiest.jpf.dto.ModifyShopProductRequest;
+import com.joiest.jpf.dto.ShopProductInfoRequest;
 import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.entity.ShopProductInfo;
 import com.joiest.jpf.entity.ShopProductInfoInfo;
@@ -24,13 +27,43 @@ import java.util.*;
 public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacade {
 
     @Autowired
-    private PayShopProductMapper payShopProductMapper;
-
-    @Autowired
     private PayChargeProductMapper payChargeProductMapper;
 
     @Autowired
+    private PayShopProductMapper payShopProductMapper;
+
+    @Autowired
     private PayShopProductInfoMapper payShopProductInfoMapper;
+
+    /**
+     * 商品列表
+     * */
+    @Override
+    public List<ChargeProductInfo> getList(PayChargeProduct record){
+
+        PayChargeProductExample example = new PayChargeProductExample();
+        PayChargeProductExample.Criteria c = example.createCriteria();
+        //  getMobileType == 0 查询所有
+        if( record.getMobileType() !=null && record.getMobileType() != 0  ){
+            c.andMobileTypeEqualTo(record.getMobileType());
+        }
+
+        List<PayChargeProduct> list = payChargeProductMapper.selectByExample(example);
+        if( list==null || list.isEmpty() ){
+            return null;
+        }
+        List<ChargeProductInfo> infos = new ArrayList<>();
+        for (PayChargeProduct one:list){
+            ChargeProductInfo info = new ChargeProductInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayChargeProduct.class,ChargeProductInfo.class,false);
+            beanCopier.copy(one,info,null);
+            infos.add(info);
+        }
+
+        return infos;
+    }
+
+
 
     @Override
     public GetChargeProductResponse getProductList(GetChargeProductRequest request) {
