@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>商户信息</title>
+    <title>添加商品</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
 </head>
@@ -19,10 +19,21 @@
                     <tr>
                         <th>添加商品</th>
                     </tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">商品类型：</td>
+                    <td width="100px">
+                        <select id="typeId" name="typeId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                        <input type="hidden" name="typeName" id="typeName" value="" />
+                    </td>
+                    <td style="text-align: right;background-color: #f1f1f1;">供应商：</td>
+                    <td width="100px">
+                        <select id="supplierId" name="supplierId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                        <input type="hidden" name="supplierName" id="supplierName" value="" />
+                    </td>
                     <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">商品基础信息：</td>
-                        <td>
-                            <select id="productInfoId" name="productInfoId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                        <td style="text-align: right;background-color: #f1f1f1;">品牌：</td>
+                        <td width="100px">
+                            <select id="brandId" name="brandId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <input type="hidden" name="brandName" id="brandName" value="" />
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">状态:</td>
                         <td>
@@ -38,10 +49,10 @@
                         <td>
                             <input id="product_name" name="name" type="text" style="width:220px" class="easyui-textbox" value="" data-options="required:true"/>
                         </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">商品编号：</td>
+                      <%--  <td style="text-align: right;background-color: #f1f1f1;">商品编号：</td>
                         <td>
                             <input id="product_cardid" name="cardid" type="text" style="width:220px" class="easyui-textbox" value="" />
-                        </td>
+                        </td>--%>
 
                         <%--<td style="text-align: right;background-color: #f1f1f1;">接口形式：</td>--%>
                         <%--<td>--%>
@@ -50,6 +61,15 @@
                                 <%--<option value="1">是</option>--%>
                             <%--</select>--%>
                         <%--</td>--%>
+                        <td style="text-align: right;background-color: #f1f1f1;">运营商类型:</td>
+                        <td>
+                            <select id="mobileType" name="mobileType" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                                <option value="1">移动</option>
+                                <option value="2">联通</option>
+                                <option value="3">电信</option>
+
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         </td>
@@ -64,37 +84,35 @@
 
                     </tr>
                     <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
+                        <td style="text-align: right;background-color: #f1f1f1;">面值：</td>
                         <td>
                             <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">欣豆：</td>
+                        <td style="text-align: right;background-color: #f1f1f1;">威能产品id：</td>
                         <td>
                             <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
                     </tr>
+
                     <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
+                        <td style="text-align: right;background-color: #f1f1f1;">强制使用某接口：</td>
                         <td>
-                            <input id="stored_safe" name="storedSafe" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
+                            <select id="forceInterface" name="forceInterface" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                                <option value="0" selected>否</option>
+                                <option value="1">是</option>
+
+                            </select>
                         </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">当前库存：</td>
+                        <td style="text-align: right;background-color: #f1f1f1;">接口类型：</td>
                         <td>
-                            <input id="stored" name="stored" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">充值类型：</td>
-                        <td>
-                            <select id="type" name="type" data-options="required:true" class="easyui-combobox" style="width:100px;">
-                                <option value="0" selected>直充</option>
-                                <option value="1">代充</option>
-                                <option value="2">卡密</option>
-                                <option value="3">混合</option>
+                            <select id="interfaceType" name="interfaceType" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                                <option value="0" selected>欧非</option>
+                                <option value="1">威能</option>
+
                             </select>
                         </td>
                     </tr>
-                    <tr>
+                   <%-- <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品描述：</td>
                         <td colspan="3">
                             <input id="intro" name="intro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="required:true,multiline:true"/>
@@ -112,7 +130,7 @@
                             <!--图片展示-->
                             <div id="imgDiv"></div>
                         </td>
-                    </tr>
+                    </tr>--%>
                 </table>
             </form>
         </div>
@@ -160,10 +178,35 @@
         //         }
         //     }
         // });
-        $("#productInfoId").combobox({
-            url : '../shopproduct/getProductInfo',
-            valueField : 'contentId',
-            textField : 'content'
+        $("#typeId").combobox({
+            url : '../chargeProduct/getChargeProductType',
+            valueField : 'id',
+            textField : 'typeName',
+            onSelect: function () {
+                var typeName = $("#typeId").combobox("getText");
+                $("#typeName").val(typeName)
+            }
+        });
+
+
+        $("#supplierId").combobox({
+            url : '../chargeProduct/getChargeSuppliers',
+            valueField : 'id',
+            textField : 'supplierName',
+            onSelect: function () {
+                var supplierName = $("#supplierId").combobox("getText");
+                $("#supplierName").val(supplierName)
+            }
+        });
+
+        $("#brandId").combobox({
+            url : '../chargeProduct/getChargeBrandList',
+            valueField : 'id',
+            textField : 'brandName',
+            onSelect: function () {
+                var brandName = $("#brandId").combobox("getText");
+                $("#brandName").val(brandName)
+            }
         });
 
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。

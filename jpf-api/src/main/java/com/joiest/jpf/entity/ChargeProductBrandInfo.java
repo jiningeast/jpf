@@ -3,7 +3,7 @@ package com.joiest.jpf.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ChargeProductBrandInfo implements Serializable {
+public class ChargeProductBrandInfo  {
     /**
      * 品牌id
      */

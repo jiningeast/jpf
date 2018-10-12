@@ -52,36 +52,6 @@
                         </td>
                         <td><a style="margin-left: 5%;" id="saveBtn_brandName" class="easyui-linkbutton" icon="icon-add" href="javascript:void(0)">新增</a></td>
                     </tr>
-                    <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">联系人：</td>
-                        <td>
-                            <input id="contactName" name="contactName" type="text" style="width:220px" class="easyui-textbox" value="" data-options="required:true" />
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">联系电话：</td>
-                        <td>
-                            <input id="contactPhone" name="contactPhone" type="text" style="width:220px" class="easyui-textbox" value="" data-options="required:true,validType:'phone'" />
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">邮箱：</td>
-                        <td>
-                            <input id="contactEmail" name="contactEmail" type="text" style="width:220px" class="easyui-textbox" value="" data-options="required:true,validType:'email'" />
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
-                        <td colspan="3">
-                            <input id="remark" name="remark" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="multiline:true"/>
-                        </td>
-                    </tr>
                 </table>
             </form>
         </div>
@@ -97,7 +67,7 @@
 <style>
 </style>
 <script>
-    //手机号码验证-------Begin
+/*    //手机号码验证-------Begin
     $.extend($.fn.validatebox.defaults.rules, {
         phone : {
             validator: function(value, param){
@@ -111,7 +81,7 @@
             },
             message : '请输入正确的邮箱'
         }
-    });
+    });*/
 
     function isEmpty(str){
         if(str == null || typeof str == "undefined" || str == ""){
@@ -135,18 +105,20 @@
     //手机号码验证-------End
 
     $(function () {
+
         $("#typeId").combobox({
-            url : '../param/getShopProductType',
-            valueField : 'pid',
-            textField : 'pname',
+            url : '../chargeProduct/getChargeProductType',
+            valueField : 'id',
+            textField : 'typeName',
             onSelect: function () {
                 var typeName = $("#typeId").combobox("getText");
                 $("#typeName").val(typeName)
             }
         });
 
+
         $("#supplierId").combobox({
-            url : '../param/getShopSuppliers',
+            url : '../chargeProduct/getChargeSuppliers',
             valueField : 'id',
             textField : 'supplierName',
             onSelect: function () {
@@ -156,7 +128,7 @@
         });
 
         $("#brandId").combobox({
-            url : '../param/getShopBrandList',
+            url : '../chargeProduct/getChargeBrandList',
             valueField : 'id',
             textField : 'brandName',
             onSelect: function () {
@@ -223,7 +195,7 @@
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', '操作成功！', 'info');
-                            $("#supplierId").combobox('reload',"../param/getShopSuppliers");
+                            $("#supplierId").combobox('reload',"../chargeProduct/getChargeSuppliers");
                             $("#supplierName_add").textbox('setValue','');
                         }
                     },
@@ -243,7 +215,7 @@
                     return false;
                 }
                 var param = {};
-                param["pname"] = typeName;
+                param["typeName"] = typeName;
                 $.ajax({
                     type: 'post',
                     url: 'producttype/add',
@@ -256,7 +228,7 @@
                             $.messager.alert('消息提示', '操作成功！', 'info');
                             // $('#infoDiv').window('close');
                             // $('#dg').datagrid('reload');
-                            $("#typeId").combobox('reload','../param/getShopProductType');
+                            $("#typeId").combobox('reload','../chargeProduct/getChargeProductType');
                             $("#typeName_add").textbox('setValue','');
                         }
                     },
@@ -289,7 +261,7 @@
                             $.messager.alert('消息提示', '操作成功！', 'info');
                             // $('#infoDiv').window('close');
                             // $('#dg').datagrid('reload');
-                            $("#brandId").combobox('reload','../param/getShopBrandList');
+                            $("#brandId").combobox('reload','../chargeProduct/getChargeBrandList');
                             $("#brandName_add").textbox('setValue','');
                         }
                     },

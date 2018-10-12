@@ -13,7 +13,7 @@
                     text:'商品基础信息添加',
                     iconCls:'icon-redo',
                     handler:function(){
-                        $('#infoDiv').window("open").window('refresh', 'pInfoAdd/page').window('setTitle','添加商品基础信息');
+                        $('#infoDiv').window("open").window('refresh', '../chargeProduct/chargeInfoPge').window('setTitle','添加商品基础信息');
                     }
                 },
                 {
@@ -32,7 +32,7 @@
                                 param["isOnSale"] = '1';
                                 $.ajax({
                                     type: 'post',
-                                    url: 'alertStatus',
+                                    url: '../chargeProduct/alertOnsale',
                                     data: param,
                                     dataType: 'json',
                                     success: function (msg) {
@@ -69,7 +69,7 @@
                                 param["isOnSale"] = '0';
                                 $.ajax({
                                     type: 'post',
-                                    url: 'alertStatus',
+                                    url: '../chargeProduct/alertOnsale',
                                     data: param,
                                     dataType: 'json',
                                     success: function (msg) {
@@ -95,7 +95,7 @@
                     iconCls:'icon-add',
                     handler:function(){
 
-                       $('#infoDiv').window("open").window('refresh', 'add/page').window('setTitle','新增');
+                       $('#infoDiv').window("open").window('refresh', '../chargeProduct/addPage').window('setTitle','新增');
                     }
                 },
                 {
