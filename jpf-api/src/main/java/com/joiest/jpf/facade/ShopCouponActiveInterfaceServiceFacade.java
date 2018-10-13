@@ -7,14 +7,14 @@ import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
 public interface ShopCouponActiveInterfaceServiceFacade {
 
     /**
-     * 获取用户激活券记录 list
+     * 获取用户激活券记录 getRecords
      * @param uid
      * @return
      */
     GetUserCouponActiveInterfaceResponse getUserCouponList(String uid);
 
     /**
-     * 欣豆明细列表 list
+     * 欣豆明细列表 getRecords
      * @param uid
      * @return
      */

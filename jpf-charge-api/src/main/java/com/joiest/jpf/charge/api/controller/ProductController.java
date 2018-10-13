@@ -135,7 +135,7 @@ public class ProductController {
             responseMap.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.FAIL.getDesc());
             return JsonUtils.toJson(responseMap);
-//            return  ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), list);
+//            return  ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), getRecords);
         }
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
@@ -162,7 +162,7 @@ public class ProductController {
         responseMap.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
         responseMap.put("data",responData);
         return JsonUtils.toJson(responseMap);
-//        return  ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), list);
+//        return  ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), getRecords);
     }
 
     /**

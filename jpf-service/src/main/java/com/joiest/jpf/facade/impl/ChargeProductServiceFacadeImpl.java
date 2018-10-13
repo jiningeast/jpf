@@ -33,6 +33,7 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
         PayChargeProductExample example = new PayChargeProductExample();
         PayChargeProductExample.Criteria c = example.createCriteria();
         //  getMobileType == 0 查询所有
+        example.setOrderByClause("id DESC");
         if( record.getMobileType() !=null && record.getMobileType() != 0  ){
             c.andMobileTypeEqualTo(record.getMobileType());
         }

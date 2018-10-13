@@ -74,4 +74,7 @@
 	<bean id="CloudStaffMonthTotalServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffMonthTotalServiceFacadeImpl"></bean>
 	<bean id="ChargeCompanyServiceFacade" class="com.joiest.jpf.facade.impl.ChargeCompanyServiceFacadeImpl"></bean>
 	<bean id="ShopBargainRechargeOrderServiceFacade" class="com.joiest.jpf.facade.impl.ShopBargainRechargeOrderServiceFacadeImpl"></bean>
+	<bean id="ChargeOrderServiceFacade" class="com.joiest.jpf.facade.impl.ChargeOrderServiceFacadeImpl"></bean>
+	<bean id="ChargeCompanyChargeServiceFacade" class="com.joiest.jpf.facade.impl.ChargeCompanyChargeServiceFacadeImpl"></bean>
+
 </beans>

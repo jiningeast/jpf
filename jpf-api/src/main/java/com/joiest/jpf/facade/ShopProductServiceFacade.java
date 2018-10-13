@@ -14,7 +14,7 @@ import java.util.List;
 public interface ShopProductServiceFacade {
 
     /**
-     * shop_product list
+     * shop_product getRecords
      * @param request
      * @return
      */

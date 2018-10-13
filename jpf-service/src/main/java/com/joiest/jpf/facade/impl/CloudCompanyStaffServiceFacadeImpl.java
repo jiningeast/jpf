@@ -161,8 +161,8 @@ public class CloudCompanyStaffServiceFacadeImpl implements CloudCompanyStaffServ
         searchStaff.setMerchNo(cloudCompanyStaffInfo.getMerchNo());
         searchStaff.setStatus(cloudCompanyStaffInfo.getStatus());
         PayCloudCompanyStaff payCloudCompanyStaff = payCloudCompanyStaffCustomMapper.selectOneStaff(searchStaff);
-        /*if ( list != null && list.isEmpty() ){
-            payCloudCompanyStaff = list.get(0);
+        /*if ( getRecords != null && getRecords.isEmpty() ){
+            payCloudCompanyStaff = getRecords.get(0);
         }*/
 
         CloudCompanyStaffInfo info = new CloudCompanyStaffInfo();

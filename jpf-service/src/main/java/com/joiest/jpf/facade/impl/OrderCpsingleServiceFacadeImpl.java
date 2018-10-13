@@ -98,7 +98,7 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             c.andAddtimeBetween(addtimeStart,addtimeEnd);
         }
 
-        //List<PayOrderCpsingle> list = payOrderCpsingleMapper.selectByExample(e);
+        //List<PayOrderCpsingle> getRecords = payOrderCpsingleMapper.selectByExample(e);
         List<PayOrderCpsingleCustom> list = payOrderCpsingleCustomMapper.selectJoinMerchants(e);
         if( list.isEmpty() || list==null ){
             throw new JpfException(JpfErrorInfo.SYSTEM_ERROR,"未查询到数据信息");
@@ -140,7 +140,7 @@ public class OrderCpsingleServiceFacadeImpl implements OrderCpsingleServiceFacad
             infos.add(orderCpsingleInfo);
         }
 
-        /*for (PayOrderCpsingle payOrderCpsingle:list){
+        /*for (PayOrderCpsingle payOrderCpsingle:getRecords){
             OrderCpsingleInfo orderCpsingleInfo = new OrderCpsingleInfo();
             BeanCopier beanCopier = BeanCopier.create(PayOrderCpsingle.class, OrderCpsingleInfo.class, false);
             beanCopier.copy(payOrderCpsingle, orderCpsingleInfo, null);

@@ -234,7 +234,7 @@ public class OrderYinjiaApiServiceFacadeImpl implements OrderYinjiaApiServiceFac
     }
 
     /**
-     * 获取 YinjinApi order list  根据pay_orders_money_detail去重
+     * 获取 YinjinApi order getRecords  根据pay_orders_money_detail去重
      */
     public OrderYinjiaApiResponse getOrderYinjiaApiDuplicateRemove(OrderYinjiaApiRequest request)
     {

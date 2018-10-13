@@ -1,6 +1,5 @@
 package com.joiest.jpf.entity;
 
-import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeOrder;
 
 import java.math.BigDecimal;
