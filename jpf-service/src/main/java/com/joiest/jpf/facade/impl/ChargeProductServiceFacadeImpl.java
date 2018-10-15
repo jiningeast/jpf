@@ -37,6 +37,7 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
         if( record.getMobileType() !=null && record.getMobileType() != 0  ){
             c.andMobileTypeEqualTo(record.getMobileType());
         }
+        c.andIsOnSaleEqualTo((byte)1);
 
         List<PayChargeProduct> list = payChargeProductMapper.selectByExample(example);
         if( list==null || list.isEmpty() ){

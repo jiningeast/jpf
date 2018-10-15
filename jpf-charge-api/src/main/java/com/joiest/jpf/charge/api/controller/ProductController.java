@@ -53,17 +53,27 @@ public class ProductController {
     @ResponseBody
     public String flowProduct(HttpServletRequest request, HttpServletResponse response){
 
+        //接口返回参数数据
+        Map<String,Object> responseMap = new HashMap<>();
+
         //商户号
         String merchNo = request.getParameter("merchNo");
         //时间戳
         String dateTime = request.getParameter("dateTime");
         //运营商类型 1=移动 2=联通 3=电信 为空返回所有运营商的套餐
-        int carrier = Integer.parseInt(request.getParameter("carrier"));
+        int carrier = 0;
+        if( request.getParameter("carrier") !=null && StringUtils.isNotBlank(request.getParameter("carrier")) && !request.getParameter("carrier").equals("null") ){
+            carrier = Integer.parseInt(request.getParameter("carrier"));
+        }else{
+            if( request.getParameter("carrier") == null || !StringUtils.isBlank(request.getParameter("carrier")) ){
+                responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
+                responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+                return JsonUtils.toJson(responseMap);
+            }
+        }
+
         //签名串
         String sign = request.getParameter("sign");
-
-        //接口返回参数数据
-        Map<String,Object> responseMap = new HashMap<>();
 
         //参数不合法
         if(StringUtils.isBlank(merchNo) || StringUtils.isBlank(dateTime)  ){
