@@ -116,10 +116,44 @@ public class ChargeCompanyChargeController {
     }
 
     /**
-     * 充值订单财务审核页
+     * 充值订单财务
      */
     @RequestMapping("indexCaiwu")
     public String indexCaiwu(){
         return "chargeCompanyCharge/indexCaiwu";
     }
+
+    /**
+     * 充值订单财务审核页
+     */
+    @RequestMapping("/caiwuAudit")
+    @ResponseBody
+    public ModelAndView caiwuAuditPage(String id,ModelMap modelMap){
+        ChargeCompanyChargeInfo chargeCompanyChargeInfo= chargeCompanyChargeServiceFacade.getOne(id);
+       // shopCompanyChargeInfo.setStatusCn(ManageConstants.COMPANYCHARGELIST.get(shopCompanyChargeInfo.getStatus().toString()));
+        modelMap.addAttribute("chargeCompanyChargeInfo",chargeCompanyChargeInfo);
+        modelMap.addAttribute("auditPageType",2);
+
+        return new ModelAndView("chargeCompanyCharge/audit", modelMap);
+    }
+    /**
+     * 财务审核功能
+     */
+    @RequestMapping("/caiwuAction")
+    @ResponseBody
+    public JpfResponseDto caiwuAction(HttpServletRequest httpRequest,GetChargeCompanyChargeRequest request){
+
+        // 查询操作人id和姓名
+        HttpSession session = httpRequest.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+        request.setCheckOperatorId(userInfo.getId().toString());
+        request.setCheckOperatorName(userInfo.getUserName());
+
+        JpfResponseDto jpfResponseDto = chargeCompanyChargeServiceFacade.caiWuCompanyCharge(request);
+
+        return jpfResponseDto;
+
+    }
+
+
 }

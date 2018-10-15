@@ -69,6 +69,13 @@ public class ChargeCompanyChargeInfo {
      */
     private Byte status;
 
+
+    /**
+     * 财务审核备注
+     */
+    private String memo;
+
+
     /**
      * 添加时间
      */
@@ -197,5 +204,13 @@ public class ChargeCompanyChargeInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 }

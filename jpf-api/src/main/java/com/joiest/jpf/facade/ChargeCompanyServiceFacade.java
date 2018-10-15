@@ -1,5 +1,7 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
@@ -30,4 +32,9 @@ public interface ChargeCompanyServiceFacade {
      * 更新商户
      */
     public int updateColumnByPrimaryKey(ChargeCompanyInfo chargeCompanyInfo);
+
+    /**
+     * 根据主键更新公司信息
+     */
+    public JpfResponseDto updateCompanyRecord(PayChargeCompany payChargeCompany);
 }

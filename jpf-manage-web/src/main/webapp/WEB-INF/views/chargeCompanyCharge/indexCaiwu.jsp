@@ -22,10 +22,10 @@
                 }
             });
 
-            $('#addWindow').window({
+            $('#editWindow').window({
                 title:'充值详情',
                 width:'800px',
-                height:'400px',
+                height:'500px',
                 closed:true,
                 modal:true
             });
@@ -34,8 +34,14 @@
                 {
                     text : '审核',
                     iconCls : 'icon-add',
-                    handler : function(){
-                        $("#addWindow").window("open").window('refresh', 'addPage').window('setTitle','新增');
+                    handler:function(){
+                        var rows = $('#dg').datagrid('getSelections');
+
+                        if (rows.length != 1) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return
+                        }
+                        $("#editWindow").window("open").window('refresh', 'caiwuAudit?id='+rows[0].id).window('setTitle','新增');
                     }
                 }
             ];
@@ -52,16 +58,16 @@
                 columns:[[
                     {field:'id',title:'ID',width:"5%"},
                     {field:'companyId',title:'商户id',width:"5%"},
-                    {field:'companyName',title:'商户名称',width:"5%"},
+                    {field:'companyName',title:'商户名称',width:"10%"},
                     {field:'operatorId',title:'发起人id',width:"5%"},
                     {field:'operatorName',title:'发起人姓名',width:"5%"},
                     {field:'rate',title:'费率',width:"5%"},
                     {field:'contractMoney',title:'合同金额',width:"5%"},
-                    {field:'money',title:'实际充值金额',width:"5%"},
+                    {field:'money',title:'实际充值金额',width:"6%"},
                     {field:'checkOperatorId',title:'财务审核人id',width:"5%"},
                     {field:'checkOperatorName',title:'财务审核人姓名',width:"5%"},
-                    {field:'checkTime',title:'财务审核时间',width:"5%"},
-                    {field:'status',title:'状态',width:"5%",
+                    {field:'checkTime',title:'财务审核时间',width:"10%",formatter: formatDateStr},
+                    {field:'status',title:'状态',width:"7%",
                         formatter:function (value, row, index) {
                             if ( value == -1 ) { return "运营取消"; }
                             if ( value == 0 ) { return "新增待审核"; }
@@ -90,6 +96,7 @@
                                 <option value="">全部</option>
                                 <option value="0">新增待审核</option>
                                 <option value="1">审核通过已充值</option>
+                                <option value="2">审核驳回</option>
                             </select>
                         </td>
                     </tr>
@@ -104,6 +111,6 @@
     <br>
     <div id="dg"></div>
 </div>
-<div id="addWindow"></div>
+<div id="editWindow"></div>
 </body>
 </html>
