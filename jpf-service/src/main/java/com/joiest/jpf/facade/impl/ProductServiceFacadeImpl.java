@@ -56,12 +56,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             c.andPnameEqualTo(request.getPname());
         }
 
-        List<PayMerchantsProduct> list = payMerchantsProductMapper.selectByExample(example);
+        List<PayMerchantsProduct> getRecords = payMerchantsProductMapper.selectByExample(example);
         example.setPageNo(0);
         example.setPageSize(0);
         int count = payMerchantsProductMapper.countByExample(example);
         List<ProductInfo> infoList = new ArrayList<>();
-        for(PayMerchantsProduct product:list){
+        for(PayMerchantsProduct product:getRecords){
             ProductInfo productInfo = new ProductInfo();
             BeanCopier beanCopier = BeanCopier.create(PayMerchantsProduct.class, ProductInfo.class, false);
             beanCopier.copy(product,productInfo,null);

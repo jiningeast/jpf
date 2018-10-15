@@ -241,7 +241,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         PayCloudDfMoneyExample.Criteria c = example.createCriteria();
         c.andCompanyMoneyIdEqualTo(companyMoneyId);
 
-        //List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(example);
+        //List<PayCloudDfMoney> getRecords = payCloudDfMoneyMapper.selectByExample(example);
         //关联查询用户签约状态
         List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);
         List<CloudDfMoneyInterfaceInfo> infos = new ArrayList<>();
@@ -254,7 +254,7 @@ public class CloudCompanyMoneyServiceFacadeImpl implements CloudCompanyMoneyServ
         }
 
         /*List<CloudDfMoneyInterfaceInfo> infos = new ArrayList<>();
-        for (PayCloudDfMoney payCloudDfMoney : list) {
+        for (PayCloudDfMoney payCloudDfMoney : getRecords) {
             CloudDfMoneyInterfaceInfo cloudDfMoneyInterfaceInfo = new CloudDfMoneyInterfaceInfo();
             BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoney.class, CloudDfMoneyInterfaceInfo.class, false);
             beanCopier.copy(payCloudDfMoney, cloudDfMoneyInterfaceInfo, null);

@@ -10,84 +10,10 @@
         $(function() {
             var toolbar = [
                 {
-                    text:'商品基础信息添加',
+                    text:'商品基础信息管理',
                     iconCls:'icon-redo',
                     handler:function(){
-                        $('#infoDiv').window("open").window('refresh', '../chargeProduct/chargeInfoPge').window('setTitle','添加商品基础信息');
-                    }
-                },
-                {
-                    text:'上架',
-                    iconCls:'icon-ok',
-                    handler:function(){
-                        var rows = $('#dg').datagrid('getSelections');
-                        if (rows.length != 1) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return
-                        }
-                        $.messager.confirm('上架', '确定上架此产品：' + rows[0].name, function (r) {
-                            if (r) {
-                                var param = {};
-                                param["id"] = rows[0].id;
-                                param["isOnSale"] = '1';
-                                $.ajax({
-                                    type: 'post',
-                                    url: '../chargeProduct/alertOnsale',
-                                    data: param,
-                                    dataType: 'json',
-                                    success: function (msg) {
-                                        //alert(msg.retCode);
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']!', 'error');
-                                        } else {
-                                            $.messager.alert('消息提示', '操作成功!', 'info');
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error: function () {
-                                        $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                                    }
-                                });
-                            }
-                        });
-
-                    }
-                },
-                {
-                    text:'下架',
-                    iconCls:'icon-no',
-                    handler:function(){
-                        var rows = $('#dg').datagrid('getSelections');
-                        if (rows.length != 1) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return
-                        }
-                        $.messager.confirm('下架', '确定下架此产品：' + rows[0].name, function (r) {
-                            if (r) {
-                                var param = {};
-                                param["id"] = rows[0].id;
-                                param["isOnSale"] = '0';
-                                $.ajax({
-                                    type: 'post',
-                                    url: '../chargeProduct/alertOnsale',
-                                    data: param,
-                                    dataType: 'json',
-                                    success: function (msg) {
-                                        //alert(msg.retCode);
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']!', 'error');
-                                        } else {
-                                            $.messager.alert('消息提示', '操作成功!', 'info');
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error: function () {
-                                        $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                                    }
-                                });
-                            }
-                        });
-
+                        $('#infoDiv').window("open").window('refresh', 'chargeInfoPage').window('setTitle','添加商品基础信息');
                     }
                 },
                 {
@@ -95,7 +21,7 @@
                     iconCls:'icon-add',
                     handler:function(){
 
-                       $('#infoDiv').window("open").window('refresh', '../chargeProduct/addPage').window('setTitle','新增');
+                       $('#infoDiv').window("open").window('refresh', 'addPage').window('setTitle','新增');
                     }
                 },
                 {
@@ -107,7 +33,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }
-                        $('#infoDiv').window("open").window('refresh', 'modify/page?id='+rows[0].id).window('setTitle','编辑');
+                        $('#infoDiv').window("open").window('refresh', 'editPage?id='+rows[0].id).window('setTitle','编辑');
                     }
                 }];
 
@@ -118,7 +44,7 @@
                 pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
                 // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
                 singleSelect:true,
-                multiselect:true,
+                multiselect:false,
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
                 // width:500,
@@ -182,7 +108,7 @@
 
             $('#infoDiv').window({
                 width:'800px',
-                height:'500px',
+                height:'400px',
                 closed:true,
                 modal:true
             });
@@ -205,10 +131,6 @@
             $("#formDiv").panel().width=1;
             $('#dg').datagrid().width=1;
         });
-
-        function get_time() {
-            return new Date().getTime();
-        }
     </script>
     <style>
         #searchForm table tr td:nth-child(odd) { text-align: right; }
@@ -246,9 +168,6 @@
 
 <div id="infoDiv"></div>
 <script>
-    function initData() {
-
-    }
     $(function () {
         $("#product_type").combobox({
             url : '../param/getShopProductType',
@@ -263,4 +182,3 @@
     });
 </script>
 </body>
-</html>

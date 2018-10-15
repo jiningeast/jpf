@@ -9,7 +9,7 @@ import java.util.List;
 public interface ShopBrandServiceFacade {
 
     /**
-     * 获取所有品牌 list
+     * 获取所有品牌 getRecords
      * @return
      */
     List<ShopBrandInfo> getShopBrandAllList();

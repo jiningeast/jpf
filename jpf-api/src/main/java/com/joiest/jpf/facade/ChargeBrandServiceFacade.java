@@ -9,7 +9,7 @@ import java.util.List;
 public interface ChargeBrandServiceFacade {
 
     /**
-     * 获取所有品牌 list
+     * 获取所有品牌 getRecords
      * @return
      */
     List<ChargeProductBrandInfo> getShopBrandAllList();

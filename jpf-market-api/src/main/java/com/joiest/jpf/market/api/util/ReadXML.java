@@ -210,7 +210,7 @@ public class ReadXML {
                 "    </book>\n" +
                 "</bookstore>");
 
-//        List<Map<String,String>> list = new ReadXML().getBooksList(file1);
+//        List<Map<String,String>> getRecords = new ReadXML().getBooksList(file1);
         List<Map<String,String>> list1 = new ReadXML().getBooksListByStr(sbf1.toString());
 
         System.out.println(list1);

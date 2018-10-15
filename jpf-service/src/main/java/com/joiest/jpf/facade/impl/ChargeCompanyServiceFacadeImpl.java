@@ -42,6 +42,18 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         }else{
             e.setPageSize(10);
         }
+        if ( request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        if ( request.getCompanyName() != null && StringUtils.isNotBlank(request.getCompanyName()) ){
+            c.andCompanyNameLike("%"+request.getCompanyName()+"%");
+        }
+        if ( request.getIsFreeze() != null && request.getIsFreeze() == 1 ){
+            c.andIsFreezeEqualTo((byte)0);
+        }else if ( request.getIsFreeze() != null && request.getIsFreeze() == 2 ){
+            c.andIsFreezeEqualTo((byte)1);
+        }
+        e.setOrderByClause("id DESC");
 
         List<PayChargeCompany> list =  payChargeCompanyMapper.selectByExample(e);
         response.setCount(payChargeCompanyMapper.countByExample(e));

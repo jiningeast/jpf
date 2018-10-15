@@ -54,7 +54,7 @@
             multiselect:false,
             selectOnCheck:true,
             remoteSort: false, // 服务端排序
-            url:'../shopCompany/list',
+            url:'../shopCompany/getRecords',
             columns:[[
                 {field:'id',title:'商户Id',width:"5%"},
                 {field:'merchNo',title:'聚合商户号',width:"10%"},
