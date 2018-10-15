@@ -1,7 +1,11 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyExample;
+import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
@@ -141,4 +145,22 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
         return payChargeCompanyMapper.updateByPrimaryKeySelective(payChargeCompany);
     }
+    /**
+     * 公司单条记录
+     */
+    @Override
+    public JpfResponseDto updateCompanyRecord(PayChargeCompany payChargeCompany)
+    {
+        if ( StringUtils.isBlank(payChargeCompany.getId()))
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        int count = payChargeCompanyMapper.updateByPrimaryKeySelective(payChargeCompany);
+        if(count != 1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "更新失败");
+        }
+
+        return new JpfResponseDto();
+    }
+
 }

@@ -19,11 +19,11 @@
                     <th>基本信息</th>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">充值公司：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;width: 30%">充值公司：</td>
                     <td>
-                        <input id="companyName" name="companyName" type="text"  data-options="required:true"
+                        <input id="companyNames" name="companyName" type="text"  data-options="required:true"
                                width="120" class="easyui-textbox"/>
-                        <input id="companyId" name="companyId" type="hidden"  />
+                        <input id="companyIds" name="companyId" type="hidden"  />
                         <a id="searchCompany" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选取商户</a>
                     </td>
                 </tr>
@@ -131,7 +131,7 @@
         // 点击确定
         $("#saveBtn_audit").linkbutton({
             onClick : function () {
-                if ( $("#companyId").val() == ""  ){
+                if ( $("#companyIds").val() == ""  ){
                     $.messager.alert('提示', '请选择公司', 'info');
                     return false;
                 }

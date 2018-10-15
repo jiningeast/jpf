@@ -38,8 +38,8 @@
         </div>
     </div>
     <div id="CompanyChargeft" style="padding:5px;">
-        <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
-        <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+        <a id="searchBtnCharge" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
+        <a id="searchRestBtnCharge" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
     </div>
     <br/>
     <table id="companyChargedg"></table>
@@ -68,8 +68,8 @@
                     $.messager.alert('消息提示','商户已冻结,无法充值！','info');
                     return false;
                 }
-                $("#companyName").textbox("setValue",rows[0].companyName);
-                $("#companyId").val(rows[0].id);
+                $("#companyNames").textbox("setValue",rows[0].companyName);
+                $("#companyIds").val(rows[0].id);
                 $("#companys").window("close");
             }
         }];
@@ -105,7 +105,7 @@
             ]]
         });
 
-        $('#searchBtn').linkbutton({
+        $('#searchBtnCharge').linkbutton({
             onClick: function(){
                 var queryArray = $('#searchcompanyChargeForm').serializeArray();
                 var postData = parsePostData(queryArray);
@@ -113,7 +113,7 @@
             }
         });
 
-        $('#searchRestBtn').linkbutton({
+        $('#searchRestBtnCharge').linkbutton({
             onClick: function(){
                 $('#searchcompanyChargeForm').form('reset');
             }
