@@ -292,6 +292,7 @@ public class ProductController {
     /**
      * 余额查询
      * merchNo  商户号
+     * dateTime  时间
      * sign     签名
      * */
     @RequestMapping(value = "/banlance",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
@@ -303,11 +304,14 @@ public class ProductController {
         //签名串
         String sign = request.getParameter("sign");
 
+        //时间戳
+        String dateTime = request.getParameter("dateTime");
+
         //接口返回参数数据
         Map<String,Object> responseMap = new HashMap<>();
 
         //参数不合法
-        if(StringUtils.isBlank(merchNo)  ){
+        if(StringUtils.isBlank(merchNo) || StringUtils.isBlank(dateTime) ){
             responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
             return JsonUtils.toJson(responseMap);
@@ -324,6 +328,7 @@ public class ProductController {
 
         Map<String,Object> map = new HashMap<>();
         map.put("merchNo",merchNo);
+        map.put("dateTime",dateTime);
 
         //排序转换
         Map<String,Object> treeMap = new TreeMap<>();
