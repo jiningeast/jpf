@@ -71,6 +71,11 @@ public class PayChargeCompanyCharge implements Serializable {
     private Byte status;
 
     /**
+     * 财务审核备注
+     */
+    private String memo;
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -186,6 +191,14 @@ public class PayChargeCompanyCharge implements Serializable {
         this.status = status;
     }
 
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo == null ? null : memo.trim();
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -224,6 +237,7 @@ public class PayChargeCompanyCharge implements Serializable {
         sb.append(", checkOperatorName=").append(checkOperatorName);
         sb.append(", checkTime=").append(checkTime);
         sb.append(", status=").append(status);
+        sb.append(", memo=").append(memo);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -259,6 +273,7 @@ public class PayChargeCompanyCharge implements Serializable {
             && (this.getCheckOperatorName() == null ? other.getCheckOperatorName() == null : this.getCheckOperatorName().equals(other.getCheckOperatorName()))
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -283,6 +298,7 @@ public class PayChargeCompanyCharge implements Serializable {
         result = prime * result + ((getCheckOperatorName() == null) ? 0 : getCheckOperatorName().hashCode());
         result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getMemo() == null) ? 0 : getMemo().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;

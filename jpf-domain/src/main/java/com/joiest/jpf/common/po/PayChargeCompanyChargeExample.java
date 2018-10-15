@@ -996,6 +996,76 @@ public class PayChargeCompanyChargeExample {
             return (Criteria) this;
         }
 
+        public Criteria andMemoIsNull() {
+            addCriterion("memo is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoIsNotNull() {
+            addCriterion("memo is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoEqualTo(String value) {
+            addCriterion("memo =", value, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoNotEqualTo(String value) {
+            addCriterion("memo <>", value, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoGreaterThan(String value) {
+            addCriterion("memo >", value, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoGreaterThanOrEqualTo(String value) {
+            addCriterion("memo >=", value, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoLessThan(String value) {
+            addCriterion("memo <", value, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoLessThanOrEqualTo(String value) {
+            addCriterion("memo <=", value, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoLike(String value) {
+            addCriterion("memo like", value, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoNotLike(String value) {
+            addCriterion("memo not like", value, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoIn(List<String> values) {
+            addCriterion("memo in", values, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoNotIn(List<String> values) {
+            addCriterion("memo not in", values, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoBetween(String value1, String value2) {
+            addCriterion("memo between", value1, value2, "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoNotBetween(String value1, String value2) {
+            addCriterion("memo not between", value1, value2, "memo");
+            return (Criteria) this;
+        }
+
         public Criteria andAddtimeIsNull() {
             addCriterion("addtime is null");
             return (Criteria) this;
@@ -1133,6 +1203,11 @@ public class PayChargeCompanyChargeExample {
 
         public Criteria andCheckOperatorNameLikeInsensitive(String value) {
             addCriterion("upper(check_operator_name) like", value.toUpperCase(), "checkOperatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemoLikeInsensitive(String value) {
+            addCriterion("upper(memo) like", value.toUpperCase(), "memo");
             return (Criteria) this;
         }
     }
