@@ -87,7 +87,7 @@ public class FlowRechargeController {
 
                 //验证签名
                 actTreeParam.remove("sign");
-                companyInfo.setMerchNo(actTreeParam.get("uniqueId").toString());
+                companyInfo.setMerchNo(actTreeParam.get("merchNo").toString());
                 companyInfo = chargeCompanyServiceFacade.getOne(companyInfo);
                 if(companyInfo==null){
 
@@ -430,12 +430,12 @@ public class FlowRechargeController {
         resParam.put("code","10008");
         resParam.put("info","parameter error");
         respond = resParam.toString();
-        if(!actParam.containsKey("uniqueId") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("phone")){
+        if(!actParam.containsKey("merchNo") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("phone")){
 
             validate = false;
             return validate;
         }
-        if(StringUtils.isBlank(actParam.get("uniqueId").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("phone").toString())){
+        if(StringUtils.isBlank(actParam.get("merchNo").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("phone").toString())){
 
             validate = false;
             return validate;
