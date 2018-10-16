@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class ChargeOrderInfo {
     /**
-     *
+     * 主键id
      */
     private String id;
 
@@ -72,12 +72,27 @@ public class ChargeOrderInfo {
     private Byte interfaceType;
 
     /**
-     *
+     * 上游订单号
+     */
+    private String interfaceOrderNo;
+
+    /**
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
+     * 异步回调地址
      */
     private String notifyUrl;
 
     /**
-     *
+     * 异步回调参数
+     */
+    private String notifyParams;
+
+    /**
+     * 异步回调时间
      */
     private Date notifyTime;
 
@@ -202,12 +217,36 @@ public class ChargeOrderInfo {
         this.interfaceType = interfaceType;
     }
 
+    public String getInterfaceOrderNo() {
+        return interfaceOrderNo;
+    }
+
+    public void setInterfaceOrderNo(String interfaceOrderNo) {
+        this.interfaceOrderNo = interfaceOrderNo == null ? null : interfaceOrderNo.trim();
+    }
+
+    public String getRequestParams() {
+        return requestParams;
+    }
+
+    public void setRequestParams(String requestParams) {
+        this.requestParams = requestParams == null ? null : requestParams.trim();
+    }
+
     public String getNotifyUrl() {
         return notifyUrl;
     }
 
     public void setNotifyUrl(String notifyUrl) {
         this.notifyUrl = notifyUrl == null ? null : notifyUrl.trim();
+    }
+
+    public String getNotifyParams() {
+        return notifyParams;
+    }
+
+    public void setNotifyParams(String notifyParams) {
+        this.notifyParams = notifyParams == null ? null : notifyParams.trim();
     }
 
     public Date getNotifyTime() {
@@ -242,98 +281,4 @@ public class ChargeOrderInfo {
         this.updatetime = updatetime;
     }
 
-    /**
-     *
-     */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", orderNo=").append(orderNo);
-        sb.append(", foreignOrderNo=").append(foreignOrderNo);
-        sb.append(", companyId=").append(companyId);
-        sb.append(", companyName=").append(companyName);
-        sb.append(", merchNo=").append(merchNo);
-        sb.append(", chargePhone=").append(chargePhone);
-        sb.append(", productId=").append(productId);
-        sb.append(", productName=").append(productName);
-        sb.append(", productPrice=").append(productPrice);
-        sb.append(", productAmount=").append(productAmount);
-        sb.append(", totalMoney=").append(totalMoney);
-        sb.append(", interfaceType=").append(interfaceType);
-        sb.append(", notifyUrl=").append(notifyUrl);
-        sb.append(", notifyTime=").append(notifyTime);
-        sb.append(", status=").append(status);
-        sb.append(", addtime=").append(addtime);
-        sb.append(", updatetime=").append(updatetime);
-        sb.append("]");
-        return sb.toString();
-    }
-
-    /**
-     *
-     * @param that
-     */
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        PayChargeOrder other = (PayChargeOrder) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
-                && (this.getForeignOrderNo() == null ? other.getForeignOrderNo() == null : this.getForeignOrderNo().equals(other.getForeignOrderNo()))
-                && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
-                && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
-                && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
-                && (this.getChargePhone() == null ? other.getChargePhone() == null : this.getChargePhone().equals(other.getChargePhone()))
-                && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
-                && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
-                && (this.getProductPrice() == null ? other.getProductPrice() == null : this.getProductPrice().equals(other.getProductPrice()))
-                && (this.getProductAmount() == null ? other.getProductAmount() == null : this.getProductAmount().equals(other.getProductAmount()))
-                && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
-                && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
-                && (this.getNotifyUrl() == null ? other.getNotifyUrl() == null : this.getNotifyUrl().equals(other.getNotifyUrl()))
-                && (this.getNotifyTime() == null ? other.getNotifyTime() == null : this.getNotifyTime().equals(other.getNotifyTime()))
-                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-                && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-                && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
-    }
-
-    /**
-     *
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
-        result = prime * result + ((getForeignOrderNo() == null) ? 0 : getForeignOrderNo().hashCode());
-        result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
-        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
-        result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
-        result = prime * result + ((getChargePhone() == null) ? 0 : getChargePhone().hashCode());
-        result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
-        result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
-        result = prime * result + ((getProductPrice() == null) ? 0 : getProductPrice().hashCode());
-        result = prime * result + ((getProductAmount() == null) ? 0 : getProductAmount().hashCode());
-        result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
-        result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
-        result = prime * result + ((getNotifyUrl() == null) ? 0 : getNotifyUrl().hashCode());
-        result = prime * result + ((getNotifyTime() == null) ? 0 : getNotifyTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
-        result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
-        return result;
-    }
 }

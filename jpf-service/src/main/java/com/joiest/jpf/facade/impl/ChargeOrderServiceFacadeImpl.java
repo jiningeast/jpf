@@ -2,6 +2,7 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
+import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeOrderMapper;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
@@ -10,6 +11,7 @@ import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,10 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     @Autowired
     private PayChargeOrderMapper payChargeOrderMapper;
 
+    @Autowired
+    private PayChargeOrderCustomMapper payChargeOrderCustomMapper;
     /**
+     * 获取订单信息
      * 查询单条信息
      * */
     @Override
@@ -50,7 +55,19 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     }
 
     /**
-     * 查询订单
+     * 生成订单
+     * */
+    public int placeOrder(ChargeOrderInfo placeOrderInfo){
+
+        PayChargeOrder payChargeOrder = new PayChargeOrder();
+        BeanCopier beanCopier = BeanCopier.create(ChargeOrderInfo.class,PayChargeOrder.class,false);
+        beanCopier.copy(placeOrderInfo,payChargeOrder,null);
+
+        int count = payChargeOrderCustomMapper.insertSelective(payChargeOrder);
+        return Integer.valueOf(payChargeOrder.getId());
+    }
+    /*
+      * 查询订单
      */
     @Override
     public GetChargeOrderResponse getRecords(GetChargeOrderRequest request){
@@ -108,5 +125,17 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
         return response;
     }
+    /**
+     * 更新订单新
+     * @param upOrderInfo 要更新的订单信息
+     * */
+    public int upOrderInfo(ChargeOrderInfo upOrderInfo){
 
+        PayChargeOrder payChargeOrder = new PayChargeOrder();
+
+        BeanCopier beanCopier = BeanCopier.create(ChargeOrderInfo.class,PayChargeOrder.class,false);
+        beanCopier.copy(upOrderInfo,payChargeOrder,null);
+
+        return payChargeOrderMapper.updateByPrimaryKeySelective(payChargeOrder);
+    }
 }

@@ -15,6 +15,15 @@ public interface ChargeOrderServiceFacade {
     public ChargeOrderInfo getOne(PayChargeOrder record);
 
     /**
+     * 生成订单
+     * */
+    public int placeOrder(ChargeOrderInfo placeOrderInfo);
+
+    /**
+     * 更新订单新
+     * */
+    public int upOrderInfo(ChargeOrderInfo upOrderInfo);
+    /*
      * 查询订单
      */
     public GetChargeOrderResponse getRecords(GetChargeOrderRequest request);

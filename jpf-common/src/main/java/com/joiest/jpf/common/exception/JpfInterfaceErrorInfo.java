@@ -93,7 +93,12 @@ public enum JpfInterfaceErrorInfo {
 
     //是否为买家
     BARGAIN_BUYER_TYPE("70000","未开通买家申请"),
-    BARGAIN_BUYER_NOINFO("70001","未添加记录");
+    BARGAIN_BUYER_NOINFO("70001","未添加记录"),
+
+    //对外话费充值 begin
+    GOODLIST_IS_MATCH("80000", "无对应商品信息"),
+    RECHARGE_SUCCESS("80001", "充值成功"),
+    RECHARGE_FAILD("80002", "充值失败");
 
 
     private final String desc;

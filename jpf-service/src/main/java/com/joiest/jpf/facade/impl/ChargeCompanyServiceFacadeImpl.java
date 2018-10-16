@@ -75,7 +75,11 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     }
 
     /**
+<<<<<<< HEAD
+     * 根据商户号获取商户
+=======
      * 商品信息
+>>>>>>> 976a76ffaf056bad1fefb16018ff8b48a2a6d3b1
      * */
     @Override
     public ChargeCompanyInfo getOne(ChargeCompanyInfo companyInfo){
