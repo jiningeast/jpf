@@ -61,8 +61,28 @@ public class FlowQueryController {
         //时间戳
         String dateTime = request.getParameter("dateTime");
         //运营商类型 1=移动 2=联通 3=电信 为空返回所有运营商的套餐
-        int carrier = 0;
-        if( request.getParameter("carrier") !=null && StringUtils.isNotBlank(request.getParameter("carrier")) && !request.getParameter("carrier").equals("null") ){
+        //int carrier = 0;
+        String carrier = request.getParameter("carrier");
+        if ( request.getParameter("carrier") == null ) {
+            responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+            return JsonUtils.toJson(responseMap);
+        }
+
+        if( carrier.equals("") || !carrier.equals("null") || ( Integer.parseInt(carrier) >=0 && Integer.parseInt(carrier) <= 3 ) ){
+            if(carrier.equals("")){
+                carrier = request.getParameter("carrier");
+            }else{
+                carrier = request.getParameter("carrier");
+            }
+        }else{
+            responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+            return JsonUtils.toJson(responseMap);
+        }
+
+
+        /*if( request.getParameter("carrier") !=null && StringUtils.isNotBlank(request.getParameter("carrier")) && !request.getParameter("carrier").equals("null") ){
             carrier = Integer.parseInt(request.getParameter("carrier"));
         }else{
             if( request.getParameter("carrier") == null || !StringUtils.isBlank(request.getParameter("carrier")) ){
@@ -70,7 +90,7 @@ public class FlowQueryController {
                 responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
                 return JsonUtils.toJson(responseMap);
             }
-        }
+        }*/
 
         //签名串
         String sign = request.getParameter("sign");
@@ -82,12 +102,12 @@ public class FlowQueryController {
             return JsonUtils.toJson(responseMap);
 //            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), null);
         }
-        if( carrier < 0 || carrier > 3 ){
-            responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
-            responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
-            return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), null);
-        }
+//        if( carrier < 0 || carrier > 3 ){
+//            responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
+//            responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+//            return JsonUtils.toJson(responseMap);
+////            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), null);
+//        }
 
         //缺少签名参数
         if( sign== null || StringUtils.isBlank(sign)){
@@ -139,7 +159,12 @@ public class FlowQueryController {
 
         //查询商品列表
         PayChargeProduct chargeProduct = new PayChargeProduct();
-        chargeProduct.setMobileType((byte)carrier);
+        if( carrier.equals("") ){
+            chargeProduct.setMobileType((byte)0);
+        }else{
+            chargeProduct.setMobileType(Byte.parseByte(carrier));
+        }
+
         List<ChargeProductInfo> list = chargeProductServiceFacade.getList(chargeProduct);
         if( list==null ||  list.isEmpty() ){
             responseMap.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
