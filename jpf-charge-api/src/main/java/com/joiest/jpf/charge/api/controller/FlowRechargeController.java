@@ -12,6 +12,8 @@ import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("flowRecharge")
@@ -40,11 +43,13 @@ public class FlowRechargeController {
     @Autowired
     private ChargeInterfaceStreamFacade chargeInterfaceStreamFacade;
 
+    private static final Logger logger = LogManager.getLogger(FlowRechargeController.class);
+
     ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
     Map<String,String> actParam = new HashMap<>();
     Map<String,Object> actTreeParam = new TreeMap<>();
-    Boolean validate = true;
-    String respond = null;
+    public static Boolean validate = true;
+    public static String respond = null;
 
     @ModelAttribute
     public String beforAction(HttpServletRequest request) throws Exception{
@@ -80,12 +85,13 @@ public class FlowRechargeController {
                 Object obj = classGet.newInstance();
                 Method method = classGet.getMethod(actParam.get("service"), Map.class);
                 Boolean valite= (Boolean) method.invoke(obj, actParam);
+                //Boolean valite= (Boolean)placeOrderVal(actParam);
             }
             if(validate.equals(true)){
 
                 //验证签名
                 actTreeParam.remove("sign");
-                companyInfo.setMerchNo(actTreeParam.get("uniqueId").toString());
+                companyInfo.setMerchNo(actTreeParam.get("merchNo").toString());
                 companyInfo = chargeCompanyServiceFacade.getOne(companyInfo);
                 if(companyInfo==null){
 
@@ -110,16 +116,16 @@ public class FlowRechargeController {
     }
 
     @RequestMapping(value = "placeOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public String placeOrder(HttpServletRequest request){
+    public String placeOrder(){
 
         if(validate.equals(false))
             return respond;
 
         JSONObject responseParam = new JSONObject();
         //接口请求参数
-        actParam = actParam;
+//        actParam = actParam;
         //商户信息
-        companyInfo = companyInfo;
+//        companyInfo = companyInfo;
 
         //商户订单验证
         PayChargeOrder record = new PayChargeOrder();
@@ -129,10 +135,11 @@ public class FlowRechargeController {
 
             responseParam.put("code","10008");
             responseParam.put("info","商户订单号请保持唯一");
-            //return responseParam.toString();
+            return responseParam.toString();
         }
         //String moneyCode = ToolUtils.CreateCode(companyInfo.getMoney().toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
         Boolean newCode = ToolUtils.ValidateCode(companyInfo.getMoneyCode(),companyInfo.getId(),companyInfo.getMoney().toString(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        logger.info("企业信息："+companyInfo);
         if(newCode.equals(false)){
 
             responseParam.put("code","10008");
@@ -428,13 +435,24 @@ public class FlowRechargeController {
         resParam.put("code","10008");
         resParam.put("info","parameter error");
         respond = resParam.toString();
-        if(!actParam.containsKey("uniqueId") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("phone")){
+        if(!actParam.containsKey("merchNo") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("phone")){
 
             validate = false;
             return validate;
         }
-        if(StringUtils.isBlank(actParam.get("uniqueId").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("phone").toString())){
+        if(StringUtils.isBlank(actParam.get("merchNo").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("phone").toString())){
 
+            validate = false;
+            return validate;
+        }
+
+        String regex = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[8|9])|(16[6]))\\d{8}$";
+
+        //手机号验证
+        boolean isMatch = Pattern.matches(regex, actParam.get("phone").toString());
+        if(!isMatch){
+            resParam.put("info","手机号格式有误");
+            this.respond = resParam.toString();
             validate = false;
             return validate;
         }
