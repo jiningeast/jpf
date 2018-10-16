@@ -137,6 +137,11 @@
                     "menuname" : "敬恒充值订单管理",
                     "icon" : "icon-nav",
                     "url" : "shopBargainRechargeOrder/index"
+                },{
+                    "menuid" : "405",
+                    "menuname" : "充值平台订单管理",
+                    "icon" : "icon-nav",
+                    "url" : "chargeOrder/index"
                 }
                 ]
             },{
@@ -188,6 +193,11 @@
                     "menuname" : "欣豆市场收购管理",
                     "icon" : "icon-nav",
                     "url" : "shopBargainRequest/index"
+                },{
+                    "menuid" : "510",
+                    "menuname" : "充值平台充值管理",
+                    "icon" : "icon-nav",
+                    "url" : "chargeCompanyCharge/index"
                 }]
             },{
                     "menuid" : "6",
@@ -233,7 +243,11 @@
                         "menuname" : "欣豆市场转让审核",
                         "icon" : "icon-nav",
                         "url" : "shopBargainOrder/indexCaiwu"
-
+                    },{
+                        "menuid" : "609",
+                        "menuname" : "充值平台充值审核",
+                        "icon" : "icon-nav",
+                        "url" : "chargeCompanyCharge/indexCaiwu"
                     }]
             },{
                 "menuid" : "7",

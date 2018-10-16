@@ -32,7 +32,7 @@
             $("#dg").datagrid({
                 title:'订单列表',
                 toolbar:toolbar,
-                url:'../orderyinjia/list',
+                url:'../orderyinjia/getRecords',
                 pagination:true,
                 singleSelect:true,
                 multiselect:false,

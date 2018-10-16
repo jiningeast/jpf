@@ -9,7 +9,7 @@ import java.util.List;
 public interface ChargeSupplierServiceFacade {
 
     /**
-     * 获取所有供应商 list
+     * 获取所有供应商 getRecords
      */
     public List<ChargeProductSupplierInfo> getShopSupplierList();
 

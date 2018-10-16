@@ -1,7 +1,11 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyExample;
+import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
@@ -42,6 +46,18 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         }else{
             e.setPageSize(10);
         }
+        if ( request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        if ( request.getCompanyName() != null && StringUtils.isNotBlank(request.getCompanyName()) ){
+            c.andCompanyNameLike("%"+request.getCompanyName()+"%");
+        }
+        if ( request.getIsFreeze() != null && request.getIsFreeze() == 1 ){
+            c.andIsFreezeEqualTo((byte)0);
+        }else if ( request.getIsFreeze() != null && request.getIsFreeze() == 2 ){
+            c.andIsFreezeEqualTo((byte)1);
+        }
+        e.setOrderByClause("id DESC");
 
         List<PayChargeCompany> list =  payChargeCompanyMapper.selectByExample(e);
         response.setCount(payChargeCompanyMapper.countByExample(e));
@@ -59,7 +75,11 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     }
 
     /**
+<<<<<<< HEAD
      * 根据商户号获取商户
+=======
+     * 商品信息
+>>>>>>> 976a76ffaf056bad1fefb16018ff8b48a2a6d3b1
      * */
     @Override
     public ChargeCompanyInfo getOne(ChargeCompanyInfo companyInfo){
@@ -129,4 +149,22 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
         return payChargeCompanyMapper.updateByPrimaryKeySelective(payChargeCompany);
     }
+    /**
+     * 公司单条记录
+     */
+    @Override
+    public JpfResponseDto updateCompanyRecord(PayChargeCompany payChargeCompany)
+    {
+        if ( StringUtils.isBlank(payChargeCompany.getId()))
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "id不能为空");
+        }
+        int count = payChargeCompanyMapper.updateByPrimaryKeySelective(payChargeCompany);
+        if(count != 1 ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "更新失败");
+        }
+
+        return new JpfResponseDto();
+    }
+
 }

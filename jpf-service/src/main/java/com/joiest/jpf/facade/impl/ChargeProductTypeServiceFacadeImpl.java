@@ -8,6 +8,7 @@ import com.joiest.jpf.common.po.PayChargeProductTypeExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductTypeMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductTypeMapper;
 import com.joiest.jpf.dto.ChargeProductTypeRequest;
+import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.entity.ChargeProductTypeInfo;
 import com.joiest.jpf.facade.ChargeProductTypeServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -64,5 +65,21 @@ public class ChargeProductTypeServiceFacadeImpl implements ChargeProductTypeServ
         info.setAddtime(new Date());
         payChargeProductTypeMapper.insertSelective(info);
         return new JpfResponseDto();
+    }
+
+    /**
+     * 根据主键ID获取商品类型
+     */
+    @Override
+    public ChargeProductTypeInfo getRecord(String id){
+        PayChargeProductType payChargeProductType = payChargeProductTypeMapper.selectByPrimaryKey(id);
+        ChargeProductTypeInfo chargeProductTypeInfo = new ChargeProductTypeInfo();
+
+        if ( payChargeProductType != null ){
+            BeanCopier beanCopier = BeanCopier.create(PayChargeProductType.class, ChargeProductTypeInfo.class, false);
+            beanCopier.copy(payChargeProductType, chargeProductTypeInfo, null);
+        }
+
+        return chargeProductTypeInfo;
     }
 }

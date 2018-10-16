@@ -4,7 +4,10 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.util.ValidatorUtils;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
-import com.joiest.jpf.facade.*;
+import com.joiest.jpf.facade.ChargeBrandServiceFacade;
+import com.joiest.jpf.facade.ChargeProductServiceFacade;
+import com.joiest.jpf.facade.ChargeProductTypeServiceFacade;
+import com.joiest.jpf.facade.ChargeSupplierServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,38 +28,24 @@ import java.util.Map;
 public class ChargeProductController {
 
     @Autowired
-    private ShopProductServiceFacade shopProductServiceFacade;
-
-    @Autowired
     private ChargeProductServiceFacade chargeProductServiceFacade;
 
-
-
-    /**
-     * 供应商
-     */
     @Autowired
     private ChargeSupplierServiceFacade chargeSupplierServiceFacade;
 
-    /**
-     * 商品分类
-     * @return
-     */
     @Autowired
     private ChargeProductTypeServiceFacade chargeProductTypeServiceFacade;
-
 
     @Autowired
     private ChargeBrandServiceFacade chargeBrandServiceFacade;
 
-
-    @RequestMapping("/index")
+    @RequestMapping("index")
     public ModelAndView index()
     {
         return new ModelAndView("chargeProduct/index");
     }
 
-    @RequestMapping("/list")
+    @RequestMapping("list")
     @ResponseBody
     public Map<String, Object> list(GetChargeProductRequest request)
     {
@@ -67,9 +57,82 @@ public class ChargeProductController {
     }
 
     /**
-     * 获取所有shop_product_type 商品类型列表
+     * 商品基础信息页面
      */
-    @RequestMapping("/getChargeProductType")
+    @RequestMapping("chargeInfoPage")
+    public ModelAndView pInfoPage()
+    {
+        return new ModelAndView("chargeProduct/pinfoAdd");
+    }
+
+    /**
+     * 添加商品页面
+     */
+    @RequestMapping("addPage")
+    public ModelAndView addView(){
+        return  new ModelAndView("chargeProduct/chargeProductAdd");
+    }
+
+    /**
+     * 添加商品动作
+     */
+    @RequestMapping("addAction")
+    @ResponseBody
+    public JpfResponseDto addAction(ChargeProductInfo info,HttpServletRequest httprequest )
+    {
+        HttpSession session = httprequest.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+        info.setOperatorId(""+userInfo.getId());
+        info.setOperatorName(userInfo.getUserName());
+        info.setAddtime(new Date());
+
+        int insertRes = chargeProductServiceFacade.addChargeProduct(info);
+        if ( insertRes > 0 ){
+            return new JpfResponseDto();
+        }else{
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10001");
+            jpfResponseDto.setRetMsg("添加失败");
+
+            return jpfResponseDto;
+        }
+    }
+
+    /**
+     * 编辑商品页面
+     */
+    @RequestMapping("editPage")
+    public ModelAndView modifyPage(String id, ModelMap modelMap)
+    {
+        //产品信息
+        ChargeProductInfo productInfo = chargeProductServiceFacade.getChargeProduct(id);
+        modelMap.addAttribute("productOne", productInfo);
+
+        return new ModelAndView("chargeProduct/chargeProductEdit", modelMap);
+    }
+
+    /**
+     * 编辑商品动作
+     */
+    @RequestMapping("editAction")
+    @ResponseBody
+    public JpfResponseDto modifyAction(ChargeProductInfo info,HttpServletRequest httprequest )
+    {
+        ValidatorUtils.validate(info);
+
+        HttpSession session = httprequest.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+        info.setOperatorId(""+userInfo.getId());
+        info.setOperatorName(userInfo.getUserName());
+        info.setUpdatetime(new Date());
+
+        return chargeProductServiceFacade.modifyChargeProduct(info);
+    }
+
+    /**
+     * 获取所有charge_product_type 商品类型列表
+     */
+    @RequestMapping("getChargeProductType")
     @ResponseBody
     public List<ChargeProductTypeInfo> getAllChargeProductTypeList()
     {
@@ -77,138 +140,28 @@ public class ChargeProductController {
     }
 
     /**
-     * 获取所有shop_product_brand  品牌列表
+     * 获取所有charge_product_brand  品牌列表
      */
-    @RequestMapping("/getChargeBrandList")
+    @RequestMapping("getChargeBrandList")
     @ResponseBody
     public List<ChargeProductBrandInfo> getAllChargeBrandList()
     {
         return chargeBrandServiceFacade.getShopBrandAllList();
     }
 
-    @RequestMapping("/getChargeSuppliers")
+    /**
+     * 获取所有charge_product_brand  供应商列表
+     */
+    @RequestMapping("getChargeSuppliers")
     @ResponseBody
     public List<ChargeProductSupplierInfo> getAllChargeSupplierList()
     {
         return chargeSupplierServiceFacade.getShopSupplierList();
     }
 
-
     /**
-     * 上下架
-     * 1: 上架; 1: 下架
+     * 类型添加
      */
-    @RequestMapping("/alertOnsale")
-    @ResponseBody
-    public JpfResponseDto alertStatus(String id, Byte isOnSale,HttpServletRequest request){
-        HttpSession session = request.getSession();
-        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
-        return chargeProductServiceFacade.upStatus(id,isOnSale,userInfo);
-    }
-
-    /**
-     * 添加商品
-     */
-    @RequestMapping("/addPage")
-    public ModelAndView addView(){
-        return  new ModelAndView("chargeProduct/shopproductAdd");
-    }
-
-    /**
-     * 获取商品基础信息
-     */
-    @RequestMapping("/getProductInfo")
-    @ResponseBody
-    public List<ShopProductInfoInfo> getProductInfoList()
-    {
-        List<ShopProductInfoInfo> list = shopProductServiceFacade.getProductInfoList();
-        if ( list.isEmpty() || list == null )
-        {
-            return null;
-        }
-        return list;
-    }
-
-    /**
-     * 添加商品
-     */
-    @RequestMapping("/add/action")
-    @ResponseBody
-    public JpfResponseDto addAction(ModifyShopProductRequest request,HttpServletRequest httprequest )
-    {
-//        ValidatorUtils.validate(request);
-
-        HttpSession session = httprequest.getSession();
-        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
-        request.setOperatorId(userInfo.getId());
-        request.setOperatorName(userInfo.getUserName());
-
-        return shopProductServiceFacade.addShopProduct(request);
-    }
-
-    @RequestMapping("modify/page")
-    public ModelAndView modifyPage(String id, ModelMap modelMap)
-    {
-        //产品信息
-        ShopProductInfo productInfo = shopProductServiceFacade.getShopProduct(id);
-        modelMap.addAttribute("productOne", productInfo);
-        return new ModelAndView("shopproduct/shopproductModify", modelMap);
-    }
-
-    /**
-     * 商品信息编辑
-     */
-    @RequestMapping("modify/action")
-    @ResponseBody
-    public JpfResponseDto modifyAction(ModifyShopProductRequest request,HttpServletRequest httprequest )
-    {
-        ValidatorUtils.validate(request);
-
-        HttpSession session = httprequest.getSession();
-        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
-        request.setOperatorId(userInfo.getId());
-        request.setOperatorName(userInfo.getUserName());
-
-        return shopProductServiceFacade.modifyShopProduct(request);
-    }
-
-    /**
-     * 商品基础信息添加
-     */
-    @RequestMapping("chargeInfoPge")
-    public ModelAndView chargeInfoPge(ModelMap modelMap)
-    {
-        return new ModelAndView("chargeProduct/pinfoAdd");
-    }
-
-    @RequestMapping("pInfoAdd/action")
-    @ResponseBody
-    public JpfResponseDto pinfoAdd(ShopProductInfoRequest request, HttpServletRequest httpRequest)
-    {
-        ValidatorUtils.validate(request);
-
-        HttpSession session = httpRequest.getSession();
-        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
-        request.setOperatorId(userInfo.getId());
-        request.setOperatorName(userInfo.getUserName());
-
-        return shopProductServiceFacade.addShopProductInfo(request);
-    }
-  //供应商添加
-    @RequestMapping("supplier/add")
-    @ResponseBody
-    public JpfResponseDto supplierAdd(ChargeSupplierRequest request, HttpServletRequest httpRequest)
-    {
-        ValidatorUtils.validate(request);
-
-        HttpSession session = httpRequest.getSession();
-        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
-        request.setOperatorId(userInfo.getId().toString());
-        request.setOperatorName(userInfo.getUserName());
-
-        return chargeSupplierServiceFacade.addShopProductSupplier(request);
-    }
-   //类型添加
     @RequestMapping("producttype/add")
     @ResponseBody
     public JpfResponseDto shopProductTypeAdd(ChargeProductTypeRequest request, HttpServletRequest httpRequest)
@@ -222,7 +175,10 @@ public class ChargeProductController {
 
         return chargeProductTypeServiceFacade.addShopProductType(request);
     }
-   //品牌添加
+
+    /**
+     * 品牌添加
+     */
     @RequestMapping("brand/add")
     @ResponseBody
     public JpfResponseDto brandAdd(ChargeBrandRequest request, HttpServletRequest httpRequest)
@@ -234,6 +190,32 @@ public class ChargeProductController {
         request.setOperatorName(userInfo.getUserName());
 
         return chargeBrandServiceFacade.addBrand(request);
+    }
+
+    /**
+     * 供应商添加
+     */
+    @RequestMapping("supplier/add")
+    @ResponseBody
+    public JpfResponseDto supplierAdd(ChargeSupplierRequest request, HttpServletRequest httpRequest)
+    {
+        ValidatorUtils.validate(request);
+
+        HttpSession session = httpRequest.getSession();
+        UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
+        request.setOperatorId(userInfo.getId().toString());
+        request.setOperatorName(userInfo.getUserName());
+
+        return chargeSupplierServiceFacade.addShopProductSupplier(request);
+    }
+
+    /**
+     * 类型获取
+     */
+    @RequestMapping("productType/get")
+    @ResponseBody
+    public ChargeProductTypeInfo getChargeProductType(String id){
+        return chargeProductTypeServiceFacade.getRecord(id);
     }
 
 }

@@ -57,8 +57,6 @@
         </div>
         <div region="south" border="false"
              style="text-align: right; height: 30px; line-height: 30px;">
-            <a id="saveBtn_m" class="easyui-linkbutton" icon="icon-ok"
-               href="javascript:void(0)">确定</a>
             <a id="cancelBtn_m" class="easyui-linkbutton" icon="icon-cancel"
                href="javascript:void(0)">取消</a>
         </div>
@@ -67,45 +65,7 @@
 <style>
 </style>
 <script>
-/*    //手机号码验证-------Begin
-    $.extend($.fn.validatebox.defaults.rules, {
-        phone : {
-            validator: function(value, param){
-                return ChecnPhone(value);
-            },
-            message: '请输入正确的手机号码'
-        },
-        email: {
-            validator : function (value, param) {
-                return checkEmail(value)
-            },
-            message : '请输入正确的邮箱'
-        }
-    });*/
-
-    function isEmpty(str){
-        if(str == null || typeof str == "undefined" || str == ""){
-            return true;
-        }
-        return false;
-    }
-
-    function ChecnPhone(z_check_value){
-        if( isEmpty(z_check_value) || z_check_value.length != 11 ){
-            return false;
-        }
-        var reg_mobile = /^(13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0-9])|19[1|8|9]|16[6]\d{8}$/;
-        return reg_mobile.test($.trim(z_check_value));
-    }
-
-    function checkEmail(z_check_value){
-        var z_reg =  /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
-        return z_reg.test($.trim(z_check_value));
-    }
-    //手机号码验证-------End
-
     $(function () {
-
         $("#typeId").combobox({
             url : '../chargeProduct/getChargeProductType',
             valueField : 'id',
@@ -138,36 +98,7 @@
         });
 
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
-        setTimeout("initData()", 500);
-
-        $("#saveBtn_m").linkbutton({
-            onClick: function () {
-                var isValid = $("#editForm").form('enableValidation').form('validate');
-                if (!isValid) {
-                    return;
-                }
-                var queryArray = $('#editForm').serializeArray();
-                var postData = parsePostData(queryArray);
-                $.ajax({
-                    type: 'post',
-                    url: 'pInfoAdd/action',
-                    data: postData,
-                    dataType: 'json',
-                    success: function (msg) {
-                        if (msg.retCode != '0000') {
-                            $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
-                        } else {
-                            $.messager.alert('消息提示', '操作成功！', 'info');
-                            $('#infoDiv').window('close');
-                            $('#dg').datagrid('reload');
-                        }
-                    },
-                    error: function () {
-                        $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
-                    }
-                });
-            }
-        });
+        // setTimeout("initData()", 500);
 
         $('#cancelBtn_m').linkbutton({
             onClick: function(){

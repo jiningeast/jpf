@@ -51,7 +51,7 @@
                 multiselect:false,
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
-                url:'../list',
+                url:'../getRecords',
                 columns:[[
                     {field:'id',title:'ID',width:'5%'},
                     {field:'companyId',title:'商户id',width:'5%'},

@@ -8,6 +8,20 @@
     <script>
         $(function () {
 
+            $('#searchBtn').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serializeArray();
+                    var postData = parsePostData(queryArray);
+                    $('#dg').datagrid('reload', postData);
+                }
+            });
+
+            $('#searchRestBtn').linkbutton({
+                onClick: function(){
+                    $('#searchForm').form('reset');
+                }
+            });
+
             $('#editCompany').window({
                 title:'商户详情',
                 width:'600px',
@@ -70,6 +84,33 @@
 </head>
 <body>
     <div id="contentDiv">
+        <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#CompanyChargeft'">
+            <div style="padding:10px 60px 20px 60px">
+                <form id="searchForm" method="post">
+                    <table cellpadding="5" width="75%">
+                        <tr>
+                            <td>商户号:</td>
+                            <td><input id="merchNo" name="merchNo" class="easyui-textbox" type="text" /></td>
+                            <td>商户名称：</td>
+                            <td><input id="companyName" name="companyName" class="easyui-textbox" type="text" /></td>
+                            <td>是否冻结：</td>
+                            <td>
+                                <select id="isFreeze" name="isFreeze" class="easyui-combobox">
+                                    <option value="">全部</option>
+                                    <option value="1">未冻结</option>
+                                    <option value="2">已冻结</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div id="CompanyChargeft" style="padding:5px;">
+            <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
+            <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+        </div>
+        <br>
         <div id="dg"></div>
     </div>
     <div id="editCompany"></div>

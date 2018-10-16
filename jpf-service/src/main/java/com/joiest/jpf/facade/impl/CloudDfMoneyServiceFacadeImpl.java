@@ -338,12 +338,12 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
 
             infos.add(cloudDfMoneyInfo);
         }
-        /*List<PayCloudDfMoney> list = payCloudDfMoneyMapper.selectByExample(example);
+        /*List<PayCloudDfMoney> getRecords = payCloudDfMoneyMapper.selectByExample(example);
         List<CloudDfMoneyInfo> infos = new ArrayList<>();
-        if(list.isEmpty() || list==null ){
+        if(getRecords.isEmpty() || getRecords==null ){
             return null;
         }
-        for(PayCloudDfMoney payCloudDfMoney:list){
+        for(PayCloudDfMoney payCloudDfMoney:getRecords){
             CloudDfMoneyInfo cloudDfMoneyInfo = new CloudDfMoneyInfo();
             BeanCopier beanCopier = BeanCopier.create(PayCloudDfMoney.class,CloudDfMoneyInfo.class,false);
             beanCopier.copy(payCloudDfMoney,cloudDfMoneyInfo,null);
@@ -387,7 +387,7 @@ public class CloudDfMoneyServiceFacadeImpl implements CloudDfMoneyServiceFacade 
             c.andUpdatetimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
         }
         List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaff(example);//个人单条记录
-        //List<PayCloudDfMoneyCustom> list = payCloudDfMoneyCustomMapper.selectJoinCompanyStaffCount(example);//个人汇总
+        //List<PayCloudDfMoneyCustom> getRecords = payCloudDfMoneyCustomMapper.selectJoinCompanyStaffCount(example);//个人汇总
         List<CloudDfMoneyInfo> infos = new ArrayList<>();
         for (PayCloudDfMoneyCustom payCloudDfMoneyCustom : list) {
             CloudDfMoneyInfo cloudDfMoneyInfo = new CloudDfMoneyInfo();

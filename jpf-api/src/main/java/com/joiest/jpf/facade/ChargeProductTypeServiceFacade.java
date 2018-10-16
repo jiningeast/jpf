@@ -18,4 +18,9 @@ public interface ChargeProductTypeServiceFacade {
      * 添加商品分类
      */
     public JpfResponseDto addShopProductType(ChargeProductTypeRequest request);
+
+    /**
+     * 根据主键ID获取商品类型
+     */
+    public ChargeProductTypeInfo getRecord(String id);
 }

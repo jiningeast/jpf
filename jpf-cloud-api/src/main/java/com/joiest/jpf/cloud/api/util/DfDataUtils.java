@@ -19,7 +19,7 @@ public class DfDataUtils extends Thread{
 
     private String dfid;
 
-    //df_money list
+    //df_money getRecords
     private List<CloudDfMoneyInterfaceInfo> list;
 
     private String batchid_self;
