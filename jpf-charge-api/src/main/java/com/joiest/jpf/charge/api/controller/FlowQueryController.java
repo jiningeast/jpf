@@ -156,7 +156,7 @@ public class FlowQueryController {
         String fileName = "FlowProduct";
         LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-charge-api/log/", fileName,true);
 
-        //返回指定字段信息
+        //返回指定字段信息J
         List<Map<String, Object>> responData = new ArrayList<Map<String, Object>>();
 
         for (int i = 0; i <list.size() ; i++) {
@@ -164,6 +164,7 @@ public class FlowQueryController {
             tmpMap.put("productId",list.get(i).getId());
             tmpMap.put("name",list.get(i).getName());
             tmpMap.put("value",list.get(i).getValue());
+            tmpMap.put("salePrice",list.get(i).getSalePrice());
             tmpMap.put("productType", ManageConstants.CHARGEPRODUCTTYPE.get(list.get(i).getMobileType().toString()));
             responData.add(tmpMap);
         }
