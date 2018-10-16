@@ -59,7 +59,6 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
     @Override
     public ChargeProductInfo getProductById(String id){
 
-<<<<<<< HEAD
         PayChargeProduct payChargeProduct = payChargeProductMapper.selectByPrimaryKey(id);
         ChargeProductInfo chargeProductInfo = new ChargeProductInfo();
         if(payChargeProduct == null)
@@ -70,11 +69,9 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
 
         return chargeProductInfo;
     }
-=======
     /**
      * 查询商品列表信息，并返回数量
      */
->>>>>>> 976a76ffaf056bad1fefb16018ff8b48a2a6d3b1
     @Override
     public GetChargeProductResponse getProductList(GetChargeProductRequest request) {
         if (request.getPage() <= 0) {
