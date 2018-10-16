@@ -6,6 +6,7 @@ import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyCharge;
 import com.joiest.jpf.common.po.PayChargeCompanyChargeExample;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyChargeMapper;
 import com.joiest.jpf.dto.GetChargeCompanyChargeRequest;
@@ -164,13 +165,13 @@ public class ChargeCompanyChargeServiceFacadeImpl implements ChargeCompanyCharge
                     Boolean flag=true;
                     BigDecimal compare=new BigDecimal("0.00");
                    if(chargeCompanyInfo.getMoney().compareTo(compare)!=0){
-                       flag= ToolUtils.ValidateCode(chargeCompanyInfo.getMoneyCode(),companyId,chargeCompanyInfo.getMoney().toString());
+                       flag= ToolUtils.ValidateCode(chargeCompanyInfo.getMoneyCode(),companyId,chargeCompanyInfo.getMoney().toString(), ConfigUtil.getValue("MERCH_VALIDE_CODE"));
                    }
                     if( flag ){
                         BigDecimal companyMoney =chargeCompanyInfo.getMoney();
                         BigDecimal afterMoney = money.add(companyMoney);
                         afterMoney =afterMoney.setScale(2,BigDecimal.ROUND_DOWN);
-                        String afterCode = ToolUtils.CreateCode(afterMoney.toString(),companyId);
+                        String afterCode = ToolUtils.CreateCode(afterMoney.toString(),companyId,ConfigUtil.getValue("MERCH_VALIDE_CODE"));
                         PayChargeCompany payChargeCompany = new PayChargeCompany();
                         payChargeCompany.setMoney(afterMoney);
                         payChargeCompany.setMoneyCode(afterCode);
