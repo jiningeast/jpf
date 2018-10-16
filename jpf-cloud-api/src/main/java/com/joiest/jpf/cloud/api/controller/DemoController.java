@@ -84,7 +84,7 @@ public class DemoController {
      * */
     @RequestMapping(value = "/uploadEcelByForm", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String uploadEcelByForm(HttpServletRequest request,@RequestParam("file") MultipartFile file) throws Exception {
+    public String uploadEcelByForm(HttpServletRequest request,@RequestParam(value="file",required = true) MultipartFile file) throws Exception {
 
         JSONObject jsonRes = new JSONObject();
         InputStream in = null;

@@ -62,9 +62,22 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
 
         return infos;
     }
+    /**
+     * 获取商品信息 单个 通过商品id
+     * */
+    @Override
+    public ChargeProductInfo getProductById(String id){
 
+        PayChargeProduct payChargeProduct = payChargeProductMapper.selectByPrimaryKey(id);
+        ChargeProductInfo chargeProductInfo = new ChargeProductInfo();
+        if(payChargeProduct == null)
+            return null;
 
+        BeanCopier beanCopier = BeanCopier.create(PayChargeProduct.class,ChargeProductInfo.class,false);
+        beanCopier.copy(payChargeProduct,chargeProductInfo,null);
 
+        return chargeProductInfo;
+    }
     @Override
     public GetChargeProductResponse getProductList(GetChargeProductRequest request) {
 

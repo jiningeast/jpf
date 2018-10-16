@@ -4,7 +4,9 @@ package com.joiest.jpf.market.api.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
+import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.common.util.WnpayUtils;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.dto.GetShopStockCardResponse;
@@ -80,6 +82,9 @@ public class OrdersController {
 
     @Autowired
     private ShopInterfaceStreamServiceFacade shopInterfaceStreamServiceFacade;
+
+    @Autowired
+    private ChargeOrderServiceFacade chargeOrderServiceFacade;
 
     //TODO  记录请求日志  商品类别判断
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -1066,7 +1071,7 @@ public class OrdersController {
     /**
      * 微能查询余额、状态报告获取
      * */
-    @RequestMapping(value = "flowReport",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "flowReport",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String flowReport(){
 
@@ -1087,25 +1092,72 @@ public class OrdersController {
                 for(int i=0;i<dataDeal.size();i++){
 
                     JSONObject job = dataDeal.getJSONObject(i);
-                    ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderByOrderNo(job.get("outOrderId").toString());
-                    if (orderInfo ==null){
-                        infoErrorOrder+= job.get("outOrderId").toString()+",";
-                        continue;
-                    }
-                    // 查询订单
-                    ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
-                    orderinfo.setId(orderInfo.getId());
-                    orderinfo.setUpdatetime(new Date());
-                    if (job.get("reportStatus").toString().equals("1")){
 
-                        sucOrder+=orderInfo.getOrderNo()+",";
-                        orderinfo.setRechargeStatus("1");
+                    String orderNo = job.get("outOrderId").toString();
+                    String orderPrefix = job.get("outOrderId").toString().substring(0,2);
+                    if(orderPrefix.equals("CH")){
+
+                        //更新订单信息
+                        PayChargeOrder payChargeOrder = new PayChargeOrder();
+                        payChargeOrder.setOrderNo(orderNo);
+                        ChargeOrderInfo orderInfo = chargeOrderServiceFacade.getOne(payChargeOrder);//request.getSporder_id()
+                        if (orderInfo ==null){
+                            infoErrorOrder+= orderNo+",";
+                            continue;
+                        }
+                        //主动通知参数
+                        Map<String,Object> sendParam = new HashMap<>();
+                        sendParam.put("outOrderNo",orderInfo.getForeignOrderNo());
+                        sendParam.put("orderNo",orderInfo.getOrderNo());
+                        sendParam.put("phone",orderInfo.getChargePhone());
+                        sendParam.put("money",orderInfo.getTotalMoney().toString());
+                        sendParam.put("productId",orderInfo.getProductId());
+
+                        ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
+                        if (job.get("reportStatus").toString().equals("1")){
+
+                            sucOrder+=orderInfo.getOrderNo()+",";
+                            upOrderInfo.setStatus((byte)2);
+
+                            sendParam.put("code",JpfInterfaceErrorInfo.RECHARGE_SUCCESS.getCode());
+                            sendParam.put("info",JpfInterfaceErrorInfo.RECHARGE_SUCCESS.getCode());
+                        }else{
+
+                            faildOrder+=orderInfo.getOrderNo()+",";
+                            upOrderInfo.setStatus((byte)3);
+
+                            sendParam.put("code",JpfInterfaceErrorInfo.RECHARGE_FAILD.getCode());
+                            sendParam.put("info",JpfInterfaceErrorInfo.RECHARGE_FAILD.getCode());
+                        }
+                        upOrderInfo.setId(orderInfo.getId());
+                        upOrderInfo.setNotifyParams(JSONObject.fromObject(sendParam).toString());
+                        upOrderInfo.setNotifyTime(new Date());
+                        upOrderInfo.setUpdatetime(new Date());
+                        chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
+
+                        OkHttpUtils.postForm(orderInfo.getNotifyUrl(),sendParam);
                     }else{
+                        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderByOrderNo(job.get("outOrderId").toString());
+                        if (orderInfo ==null){
+                            infoErrorOrder+= job.get("outOrderId").toString()+",";
+                            continue;
+                        }
 
-                        faildOrder+=orderInfo.getOrderNo()+",";
-                        orderinfo.setRechargeStatus("9");
+                        // 查询订单
+                        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+                        orderinfo.setId(orderInfo.getId());
+                        orderinfo.setUpdatetime(new Date());
+                        if (job.get("reportStatus").toString().equals("1")){
+
+                            sucOrder+=orderInfo.getOrderNo()+",";
+                            orderinfo.setRechargeStatus("1");
+                        }else{
+
+                            faildOrder+=orderInfo.getOrderNo()+",";
+                            orderinfo.setRechargeStatus("9");
+                        }
+                        shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
                     }
-                    shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
                 }
             }
         }else{

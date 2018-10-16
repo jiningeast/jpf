@@ -1,6 +1,5 @@
-package com.joiest.jpf.market.api.util;
+package com.joiest.jpf.common.util;
 
-import com.joiest.jpf.common.util.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.util.JSONTokener;
@@ -29,7 +28,7 @@ public class WnpayUtils {
     private String url;
     private String md5Password;
 
-    public WnpayUtils(String account,String password,String url){
+    public WnpayUtils(String account, String password, String url){
 
         this.account = account;
         this.password = password;
@@ -103,9 +102,9 @@ public class WnpayUtils {
         String sign = Md5Encrypt.md5(this.account+this.md5Password+curDate+param.get("mobile")+param.get("productId")+param.get("outOrderId"),"utf-8");
         requestParam.put("sign",sign);
 
-        //String resposePa = "{\"data\":\"14737109\",\"status\":\"0\",\"message\":\"成功\"}";
+        String resposePa = "{\"data\":\"14737109\",\"status\":\"0\",\"message\":\"成功\"}";
         //上线需打开
-        String resposePa = OkHttpUtils.postJson(this.url+"flowOrder",requestParam.toString());
+        //String resposePa = OkHttpUtils.postJson(this.url+"flowOrder",requestParam.toString());
         JSONObject flowOrder = JSONObject.fromObject(resposePa);
 
         StringBuilder sbf = new StringBuilder();
@@ -191,7 +190,7 @@ public class WnpayUtils {
         requestParam.put("timestamp",curDate);
 
         String sign = Md5Encrypt.md5(this.account+this.md5Password+curDate,"utf-8");
-        requestParam.put("sign",sign);//1801538029705317286
+        requestParam.put("sign",sign);
 
         String resposePa = "[{\"id\":14737109,\"outOrderId\":\"CH4769584067029375\",\"dest\":\"17600067853\",\"reportStatus\":1,\"reportDetail\":\"购买成功\"},{\"id\":14737109,\"outOrderId\":\"1021538028887285722\",\"dest\":\"17600067853\",\"reportStatus\":2,\"reportDetail\":\"购买失败\"}]";
         //String resposePa = OkHttpUtils.postJson(this.url+"flowReport",requestParam.toString());
