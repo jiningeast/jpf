@@ -139,7 +139,8 @@ public class FlowRechargeController {
         }
         //String moneyCode = ToolUtils.CreateCode(companyInfo.getMoney().toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
         Boolean newCode = ToolUtils.ValidateCode(companyInfo.getMoneyCode(),companyInfo.getId(),companyInfo.getMoney().toString(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
-        logger.info("企业信息："+companyInfo);
+        logger.info("金额码："+companyInfo.getMoneyCode()+"，id:"+companyInfo.getId()+"，金额："+companyInfo.getMoney().toString());
+        System.out.println(companyInfo);
         if(newCode.equals(false)){
 
             responseParam.put("code","10008");
