@@ -28,8 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@RequestMapping("product")
-public class ProductController {
+@RequestMapping("flowQuery")
+public class FlowQueryController {
 
     @Autowired
     private ChargeCompanyServiceFacade chargeCompanyServiceFacade;
