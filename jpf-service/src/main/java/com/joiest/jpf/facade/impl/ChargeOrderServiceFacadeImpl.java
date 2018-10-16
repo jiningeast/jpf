@@ -24,11 +24,8 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     @Autowired
     private PayChargeOrderCustomMapper payChargeOrderCustomMapper;
     /**
-<<<<<<< HEAD
      * 获取订单信息
-=======
      * 查询单条信息
->>>>>>> 976a76ffaf056bad1fefb16018ff8b48a2a6d3b1
      * */
     @Override
     public ChargeOrderInfo getOne(PayChargeOrder record){
@@ -58,14 +55,19 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     }
 
     /**
-<<<<<<< HEAD
      * 生成订单
      * */
     public int placeOrder(ChargeOrderInfo placeOrderInfo){
 
         PayChargeOrder payChargeOrder = new PayChargeOrder();
-=======
-     * 查询订单
+        BeanCopier beanCopier = BeanCopier.create(ChargeOrderInfo.class,PayChargeOrder.class,false);
+        beanCopier.copy(placeOrderInfo,payChargeOrder,null);
+
+        int count = payChargeOrderCustomMapper.insertSelective(payChargeOrder);
+        return Integer.valueOf(payChargeOrder.getId());
+    }
+    /*
+      * 查询订单
      */
     @Override
     public GetChargeOrderResponse getRecords(GetChargeOrderRequest request){
@@ -122,15 +124,6 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         response.setCount(count);
 
         return response;
-    }
->>>>>>> 976a76ffaf056bad1fefb16018ff8b48a2a6d3b1
-
-        BeanCopier beanCopier = BeanCopier.create(ChargeOrderInfo.class,PayChargeOrder.class,false);
-        beanCopier.copy(placeOrderInfo,payChargeOrder,null);
-
-        int count = payChargeOrderCustomMapper.insertSelective(payChargeOrder);
-
-        return Integer.valueOf(payChargeOrder.getId());
     }
     /**
      * 更新订单新
