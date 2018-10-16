@@ -117,9 +117,9 @@ public class FlowRechargeController {
 
         JSONObject responseParam = new JSONObject();
         //接口请求参数
-        actParam = actParam;
+//        actParam = actParam;
         //商户信息
-        companyInfo = companyInfo;
+//        companyInfo = companyInfo;
 
         //商户订单验证
         PayChargeOrder record = new PayChargeOrder();
