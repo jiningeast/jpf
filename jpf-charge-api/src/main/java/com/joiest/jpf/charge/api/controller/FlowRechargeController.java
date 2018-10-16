@@ -103,6 +103,7 @@ public class FlowRechargeController {
                     String respos = ToolUtils.mapToUrl(actTreeParam);
                     String selfSign = Md5Encrypt.md5(respos+companyInfo.getPrivateKey()).toUpperCase();
                     if(!selfSign.equals(outsign)){
+                        logger.info("自签名："+selfSign+"，传值签名："+outsign);
                         validate = false;
                         respondParam.put("info","签名有误");
                         respond = respondParam.toString();
