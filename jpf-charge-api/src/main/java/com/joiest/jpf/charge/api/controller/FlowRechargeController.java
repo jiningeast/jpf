@@ -12,6 +12,8 @@ import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,8 @@ public class FlowRechargeController {
 
     @Autowired
     private ChargeInterfaceStreamFacade chargeInterfaceStreamFacade;
+
+    private static final Logger logger = LogManager.getLogger(FlowRechargeController.class);
 
     ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
     Map<String,String> actParam = new HashMap<>();
@@ -135,6 +139,7 @@ public class FlowRechargeController {
         }
         //String moneyCode = ToolUtils.CreateCode(companyInfo.getMoney().toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
         Boolean newCode = ToolUtils.ValidateCode(companyInfo.getMoneyCode(),companyInfo.getId(),companyInfo.getMoney().toString(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        logger.info("企业信息："+companyInfo);
         if(newCode.equals(false)){
 
             responseParam.put("code","10008");
