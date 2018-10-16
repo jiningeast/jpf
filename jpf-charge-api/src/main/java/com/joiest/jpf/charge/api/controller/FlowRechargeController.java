@@ -220,7 +220,7 @@ public class FlowRechargeController {
         merRespons.put("orderNo",orderno);//自己平台的订单号
         merRespons.put("phone",actParam.get("phone"));//充值手机号
         merRespons.put("money",actParam.get("money"));//充值金额
-        merRespons.put("productId",orderno);//产品金额
+        merRespons.put("productId",actParam.get("productId"));//产品金额
 
         if(map.get("code").equals("10000")){
 
