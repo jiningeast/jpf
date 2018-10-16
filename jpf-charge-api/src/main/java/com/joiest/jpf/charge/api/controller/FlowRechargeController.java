@@ -128,6 +128,17 @@ public class FlowRechargeController {
         //商户信息
 //        companyInfo = companyInfo;
 
+        if ( !actParam.containsKey("merchNo") || StringUtils.isBlank(actParam.get("merchNo")) ){
+            responseParam.put("code","10007");
+            responseParam.put("info","商户号不能为空");
+            return responseParam.toString();
+        }
+        if ( !actParam.containsKey("outOrderNo") || StringUtils.isBlank(actParam.get("outOrderNo")) ){
+            responseParam.put("code","10007");
+            responseParam.put("info","订单号不能为空");
+            return responseParam.toString();
+        }
+
         //商户订单验证
         PayChargeOrder record = new PayChargeOrder();
         record.setForeignOrderNo(actParam.get("outOrderNo"));
