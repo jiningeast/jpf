@@ -133,9 +133,39 @@ public class FlowRechargeController {
             responseParam.put("info","商户号不能为空");
             return responseParam.toString();
         }
+        if ( !actParam.containsKey("service") || StringUtils.isBlank(actParam.get("service")) ){
+            responseParam.put("code","10007");
+            responseParam.put("info","服务名称不能为空");
+            return responseParam.toString();
+        }
+        if ( !actParam.containsKey("productId") || StringUtils.isBlank(actParam.get("productId")) ){
+            responseParam.put("code","10007");
+            responseParam.put("info","产品id不能为空");
+            return responseParam.toString();
+        }
         if ( !actParam.containsKey("outOrderNo") || StringUtils.isBlank(actParam.get("outOrderNo")) ){
             responseParam.put("code","10007");
-            responseParam.put("info","订单号不能为空");
+            responseParam.put("info","商户订单号不能为空");
+            return responseParam.toString();
+        }
+        if ( !actParam.containsKey("phone") || StringUtils.isBlank(actParam.get("phone")) ){
+            responseParam.put("code","10007");
+            responseParam.put("info","充值号码不能为空");
+            return responseParam.toString();
+        }
+        if ( !actParam.containsKey("dateTime") || StringUtils.isBlank(actParam.get("dateTime")) ){
+            responseParam.put("code","10007");
+            responseParam.put("info","时间不能为空");
+            return responseParam.toString();
+        }
+        if ( !actParam.containsKey("notifyUrl") || StringUtils.isBlank(actParam.get("notifyUrl")) ){
+            responseParam.put("code","10007");
+            responseParam.put("info","异步回调不能为空");
+            return responseParam.toString();
+        }
+        if ( !actParam.containsKey("sign") || StringUtils.isBlank(actParam.get("sign")) ){
+            responseParam.put("code","10007");
+            responseParam.put("info","签名不能为空");
             return responseParam.toString();
         }
 
