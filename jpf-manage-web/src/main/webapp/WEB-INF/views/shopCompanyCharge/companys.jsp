@@ -100,7 +100,7 @@
             selectOnCheck:true,
             remoteSort: false, // 服务端排序
             // width:500,
-            url:'../shopCompany/getRecords',
+            url:'../shopCompany/list',
             columns:[[
                 {field:'id',title:'ID',width:'3%'},
                 {field:'merchNo',title:'商户编号',width:'11%'},
