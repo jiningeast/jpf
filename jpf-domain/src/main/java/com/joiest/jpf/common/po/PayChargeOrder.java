@@ -36,9 +36,14 @@ public class PayChargeOrder implements Serializable {
     private String merchNo;
 
     /**
-     * 充值手机号
+     * 产品类型是手机则表示手机号，油卡充值表示油卡号
      */
     private String chargePhone;
+
+    /**
+     * 产品类型 0=话费充值 1=油卡充值
+     */
+    private Integer productType;
 
     /**
      * 产品id
@@ -171,6 +176,14 @@ public class PayChargeOrder implements Serializable {
 
     public void setChargePhone(String chargePhone) {
         this.chargePhone = chargePhone == null ? null : chargePhone.trim();
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
     }
 
     public String getProductId() {
@@ -309,6 +322,7 @@ public class PayChargeOrder implements Serializable {
         sb.append(", companyName=").append(companyName);
         sb.append(", merchNo=").append(merchNo);
         sb.append(", chargePhone=").append(chargePhone);
+        sb.append(", productType=").append(productType);
         sb.append(", productId=").append(productId);
         sb.append(", productName=").append(productName);
         sb.append(", productPrice=").append(productPrice);
@@ -351,6 +365,7 @@ public class PayChargeOrder implements Serializable {
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
             && (this.getChargePhone() == null ? other.getChargePhone() == null : this.getChargePhone().equals(other.getChargePhone()))
+            && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()))
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
             && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
             && (this.getProductPrice() == null ? other.getProductPrice() == null : this.getProductPrice().equals(other.getProductPrice()))
@@ -382,6 +397,7 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
         result = prime * result + ((getChargePhone() == null) ? 0 : getChargePhone().hashCode());
+        result = prime * result + ((getProductType() == null) ? 0 : getProductType().hashCode());
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
         result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
         result = prime * result + ((getProductPrice() == null) ? 0 : getProductPrice().hashCode());

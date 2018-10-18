@@ -11,6 +11,11 @@ public class PayChargeProduct implements Serializable {
     private String id;
 
     /**
+     * 产品类型 0=话费充值 1=油卡充值
+     */
+    private Integer type;
+
+    /**
      * 产品名称
      */
     private String name;
@@ -34,6 +39,11 @@ public class PayChargeProduct implements Serializable {
      * 威能产品id
      */
     private String wnProductId;
+
+    /**
+     * 欧飞油卡产品id
+     */
+    private String ofProductId;
 
     /**
      * 是否强制使用某接口 0=否 1=是
@@ -115,6 +125,14 @@ public class PayChargeProduct implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public String getName() {
         return name;
     }
@@ -153,6 +171,14 @@ public class PayChargeProduct implements Serializable {
 
     public void setWnProductId(String wnProductId) {
         this.wnProductId = wnProductId == null ? null : wnProductId.trim();
+    }
+
+    public String getOfProductId() {
+        return ofProductId;
+    }
+
+    public void setOfProductId(String ofProductId) {
+        this.ofProductId = ofProductId == null ? null : ofProductId.trim();
     }
 
     public Byte getForceInterface() {
@@ -277,11 +303,13 @@ public class PayChargeProduct implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", type=").append(type);
         sb.append(", name=").append(name);
         sb.append(", value=").append(value);
         sb.append(", bidPrice=").append(bidPrice);
         sb.append(", salePrice=").append(salePrice);
         sb.append(", wnProductId=").append(wnProductId);
+        sb.append(", ofProductId=").append(ofProductId);
         sb.append(", forceInterface=").append(forceInterface);
         sb.append(", interfaceType=").append(interfaceType);
         sb.append(", brandId=").append(brandId);
@@ -317,11 +345,13 @@ public class PayChargeProduct implements Serializable {
         }
         PayChargeProduct other = (PayChargeProduct) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getValue() == null ? other.getValue() == null : this.getValue().equals(other.getValue()))
             && (this.getBidPrice() == null ? other.getBidPrice() == null : this.getBidPrice().equals(other.getBidPrice()))
             && (this.getSalePrice() == null ? other.getSalePrice() == null : this.getSalePrice().equals(other.getSalePrice()))
             && (this.getWnProductId() == null ? other.getWnProductId() == null : this.getWnProductId().equals(other.getWnProductId()))
+            && (this.getOfProductId() == null ? other.getOfProductId() == null : this.getOfProductId().equals(other.getOfProductId()))
             && (this.getForceInterface() == null ? other.getForceInterface() == null : this.getForceInterface().equals(other.getForceInterface()))
             && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
             && (this.getBrandId() == null ? other.getBrandId() == null : this.getBrandId().equals(other.getBrandId()))
@@ -346,11 +376,13 @@ public class PayChargeProduct implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getValue() == null) ? 0 : getValue().hashCode());
         result = prime * result + ((getBidPrice() == null) ? 0 : getBidPrice().hashCode());
         result = prime * result + ((getSalePrice() == null) ? 0 : getSalePrice().hashCode());
         result = prime * result + ((getWnProductId() == null) ? 0 : getWnProductId().hashCode());
+        result = prime * result + ((getOfProductId() == null) ? 0 : getOfProductId().hashCode());
         result = prime * result + ((getForceInterface() == null) ? 0 : getForceInterface().hashCode());
         result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
         result = prime * result + ((getBrandId() == null) ? 0 : getBrandId().hashCode());
