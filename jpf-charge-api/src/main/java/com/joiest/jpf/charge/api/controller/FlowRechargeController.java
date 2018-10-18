@@ -61,7 +61,7 @@ public class FlowRechargeController {
 
             JSONObject respondParam = new JSONObject();
             respondParam.put("code","10008");
-            respondParam.put("info","parameter error");
+            respondParam.put("info","参数错误");
 
             Enumeration<String> requestParam = request.getParameterNames();
             while(requestParam.hasMoreElements()) {
@@ -113,7 +113,6 @@ public class FlowRechargeController {
 
         }
         return "1";
-
     }
 
     @RequestMapping(value = "placeOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
@@ -476,7 +475,7 @@ public class FlowRechargeController {
 
         JSONObject resParam = new JSONObject();
         resParam.put("code","10008");
-        resParam.put("info","parameter error");
+        resParam.put("info","参数错误");
         respond = resParam.toString();
         if(!actParam.containsKey("merchNo") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("phone")){
 
