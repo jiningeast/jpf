@@ -77,7 +77,7 @@
                             return 'color:red';
                         }
                     },
-                    {field:'interfaceType',title:'供应商',width:'7%',
+                    {field:'interfaceType',title:'供应商',width:'5%',
                         formatter:function (value,row,index) {
                             if ( value == 0 ) { return "欧飞";}
                             else if ( value == 1 ) { return "威能"; }
