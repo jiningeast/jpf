@@ -71,10 +71,17 @@
                             else if(value=="1"){return '已支付'}
                             else if(value=="2"){return '支付失败'}
                             else if(value=="3"){return '已取消'}
+                            else if(value=="4"){return '充值成功'}
+                            else if(value=="5"){return '充值失败'}
                         },styler: function (value, row, index) {
                             return 'color:red';
                         }
                     },
+                    {field:'interfaceType',title:'供应商',width:'7%',
+                        formatter:function (value,row,index) {
+                            if ( value == 0 ) { return "欧飞";}
+                            else if ( value == 1 ) { return "威能"; }
+                        }},
                     {field:'source',title:'订单来源',width:'6%',
                         formatter : function(value,row,index){
                             if(value=='0'){return '自平台'}
