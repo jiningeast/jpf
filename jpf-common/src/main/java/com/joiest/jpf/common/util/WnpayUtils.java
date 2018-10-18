@@ -75,7 +75,6 @@ public class WnpayUtils {
             responseParam.put("code","10000");
             responseParam.put("info",product.get("message"));
             responseParam.put("data",product.get("data"));
-
         }else{
 
             responseParam.put("code","10008");
@@ -102,19 +101,20 @@ public class WnpayUtils {
         String sign = Md5Encrypt.md5(this.account+this.md5Password+curDate+param.get("mobile")+param.get("productId")+param.get("outOrderId"),"utf-8");
         requestParam.put("sign",sign);
 
-        String resposePa = "{\"data\":\"14737109\",\"status\":\"0\",\"message\":\"成功\"}";
+        //String resposePa = "{\"data\":\"14737109\",\"status\":\"0\",\"message\":\"成功\"}";
         //上线需打开
-        //String resposePa = OkHttpUtils.postJson(this.url+"flowOrder",requestParam.toString());
+        String resposePa = OkHttpUtils.postJson(this.url+"flowOrder",requestParam.toString());
         JSONObject flowOrder = JSONObject.fromObject(resposePa);
 
         StringBuilder sbf = new StringBuilder();
         sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n接口名称：微能充值");
         sbf.append("\n请求地址：" + this.url+"flowOrder");
         sbf.append("\n请求参数：" + requestParam.toString());
         sbf.append("\n响应状态：" + flowOrder.get("status"));
         sbf.append("\n响应信息：" + flowOrder.get("message"));
         sbf.append("\n响应参数：" + flowOrder.toString());
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnApi",true);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-charge-api/log/", "WnApi",true);
 
         JSONObject actuParam = new JSONObject();
         actuParam.put("requestParam",requestParam.toString());
@@ -155,12 +155,13 @@ public class WnpayUtils {
 
         StringBuilder sbf = new StringBuilder();
         sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n接口名称：微能查询余额");
         sbf.append("\n请求地址：" + this.url+"flowBalance");
         sbf.append("\n请求参数：" + requestParam.toString());
         sbf.append("\n响应状态：" + balance.get("status"));
         sbf.append("\n响应信息：" + balance.get("message"));
         sbf.append("\n响应参数：" + balance.toString());
-        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnApi",true);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-charge-api/log/", "WnApi",true);
 
         if(balance.get("status").toString().equals("0")){
 
@@ -192,11 +193,12 @@ public class WnpayUtils {
         String sign = Md5Encrypt.md5(this.account+this.md5Password+curDate,"utf-8");
         requestParam.put("sign",sign);
 
-        String resposePa = "[{\"id\":14737109,\"outOrderId\":\"CH4769584067029375\",\"dest\":\"17600067853\",\"reportStatus\":1,\"reportDetail\":\"购买成功\"},{\"id\":14737109,\"outOrderId\":\"1021538028887285722\",\"dest\":\"17600067853\",\"reportStatus\":2,\"reportDetail\":\"购买失败\"}]";
-        //String resposePa = OkHttpUtils.postJson(this.url+"flowReport",requestParam.toString());
+        //String resposePa = "[{\"id\":14737109,\"outOrderId\":\"CH4769584067029375\",\"dest\":\"17600067853\",\"reportStatus\":1,\"reportDetail\":\"购买成功\"},{\"id\":14737109,\"outOrderId\":\"1021538028887285722\",\"dest\":\"17600067853\",\"reportStatus\":2,\"reportDetail\":\"购买失败\"}]";
+        String resposePa = OkHttpUtils.postJson(this.url+"flowReport",requestParam.toString());
 
         StringBuilder sbf = new StringBuilder();
         sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n微能状态报告：");
         sbf.append("\n请求地址：" + this.url+"flowReport");
         sbf.append("\n请求参数：" + requestParam.toString());
         sbf.append("\n响应参数：" + resposePa);

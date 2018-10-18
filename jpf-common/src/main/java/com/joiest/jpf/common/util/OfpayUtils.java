@@ -108,7 +108,7 @@ public class OfpayUtils {
         sbf.append("\n接口参数：" + requestMap);
         sbf.append("\n回调信息：" + resultXml);
 
-        String fileName = "ofpayPhone";
+        String fileName = "OfpayPhone";
         String path = "/logs/jpf-charge-api/log/";
 
         Map<String,String> map = new ReadXML().getBooksOneByStr(resultXml);
