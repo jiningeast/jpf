@@ -96,9 +96,14 @@ public class PayChargeOrder implements Serializable {
     private Date notifyTime;
 
     /**
-     * 订单状态 1=订单生成成功 2=充值成功 3=充值失败
+     * 订单状态 0=平台下单成功 1=充值中 2=上游充值成功 3=上游充值失败
      */
     private Byte status;
+
+    /**
+     * 是否删除
+     */
+    private Byte isDel;
 
     /**
      * 添加时间
@@ -106,7 +111,7 @@ public class PayChargeOrder implements Serializable {
     private Date addtime;
 
     /**
-     * 
+     * 更新时间
      */
     private Date updatetime;
 
@@ -264,6 +269,14 @@ public class PayChargeOrder implements Serializable {
         this.status = status;
     }
 
+    public Byte getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Byte isDel) {
+        this.isDel = isDel;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -308,6 +321,7 @@ public class PayChargeOrder implements Serializable {
         sb.append(", notifyParams=").append(notifyParams);
         sb.append(", notifyTime=").append(notifyTime);
         sb.append(", status=").append(status);
+        sb.append(", isDel=").append(isDel);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -349,6 +363,7 @@ public class PayChargeOrder implements Serializable {
             && (this.getNotifyParams() == null ? other.getNotifyParams() == null : this.getNotifyParams().equals(other.getNotifyParams()))
             && (this.getNotifyTime() == null ? other.getNotifyTime() == null : this.getNotifyTime().equals(other.getNotifyTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getIsDel() == null ? other.getIsDel() == null : this.getIsDel().equals(other.getIsDel()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -379,6 +394,7 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getNotifyParams() == null) ? 0 : getNotifyParams().hashCode());
         result = prime * result + ((getNotifyTime() == null) ? 0 : getNotifyTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getIsDel() == null) ? 0 : getIsDel().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
