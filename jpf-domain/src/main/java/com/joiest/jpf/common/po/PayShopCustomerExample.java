@@ -715,6 +715,76 @@ public class PayShopCustomerExample {
             return (Criteria) this;
         }
 
+        public Criteria andOilCardNoIsNull() {
+            addCriterion("oil_card_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoIsNotNull() {
+            addCriterion("oil_card_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoEqualTo(String value) {
+            addCriterion("oil_card_no =", value, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoNotEqualTo(String value) {
+            addCriterion("oil_card_no <>", value, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoGreaterThan(String value) {
+            addCriterion("oil_card_no >", value, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoGreaterThanOrEqualTo(String value) {
+            addCriterion("oil_card_no >=", value, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoLessThan(String value) {
+            addCriterion("oil_card_no <", value, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoLessThanOrEqualTo(String value) {
+            addCriterion("oil_card_no <=", value, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoLike(String value) {
+            addCriterion("oil_card_no like", value, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoNotLike(String value) {
+            addCriterion("oil_card_no not like", value, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoIn(List<String> values) {
+            addCriterion("oil_card_no in", values, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoNotIn(List<String> values) {
+            addCriterion("oil_card_no not in", values, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoBetween(String value1, String value2) {
+            addCriterion("oil_card_no between", value1, value2, "oilCardNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoNotBetween(String value1, String value2) {
+            addCriterion("oil_card_no not between", value1, value2, "oilCardNo");
+            return (Criteria) this;
+        }
+
         public Criteria andIsVerifyIsNull() {
             addCriterion("is_verify is null");
             return (Criteria) this;
@@ -1352,6 +1422,11 @@ public class PayShopCustomerExample {
 
         public Criteria andPhoneLikeInsensitive(String value) {
             addCriterion("upper(phone) like", value.toUpperCase(), "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andOilCardNoLikeInsensitive(String value) {
+            addCriterion("upper(oil_card_no) like", value.toUpperCase(), "oilCardNo");
             return (Criteria) this;
         }
 

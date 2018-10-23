@@ -45,6 +45,11 @@ public class PayShopCustomer implements Serializable {
     private String phone;
 
     /**
+     * 油卡卡号
+     */
+    private String oilCardNo;
+
+    /**
      * 是否实名认证 0=未认证 1=已认证
      */
     private Byte isVerify;
@@ -160,6 +165,14 @@ public class PayShopCustomer implements Serializable {
         this.phone = phone == null ? null : phone.trim();
     }
 
+    public String getOilCardNo() {
+        return oilCardNo;
+    }
+
+    public void setOilCardNo(String oilCardNo) {
+        this.oilCardNo = oilCardNo == null ? null : oilCardNo.trim();
+    }
+
     public Byte getIsVerify() {
         return isVerify;
     }
@@ -257,6 +270,7 @@ public class PayShopCustomer implements Serializable {
         sb.append(", openid=").append(openid);
         sb.append(", idno=").append(idno);
         sb.append(", phone=").append(phone);
+        sb.append(", oilCardNo=").append(oilCardNo);
         sb.append(", isVerify=").append(isVerify);
         sb.append(", isBargainBuyer=").append(isBargainBuyer);
         sb.append(", type=").append(type);
@@ -295,6 +309,7 @@ public class PayShopCustomer implements Serializable {
             && (this.getOpenid() == null ? other.getOpenid() == null : this.getOpenid().equals(other.getOpenid()))
             && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
+            && (this.getOilCardNo() == null ? other.getOilCardNo() == null : this.getOilCardNo().equals(other.getOilCardNo()))
             && (this.getIsVerify() == null ? other.getIsVerify() == null : this.getIsVerify().equals(other.getIsVerify()))
             && (this.getIsBargainBuyer() == null ? other.getIsBargainBuyer() == null : this.getIsBargainBuyer().equals(other.getIsBargainBuyer()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
@@ -322,6 +337,7 @@ public class PayShopCustomer implements Serializable {
         result = prime * result + ((getOpenid() == null) ? 0 : getOpenid().hashCode());
         result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
+        result = prime * result + ((getOilCardNo() == null) ? 0 : getOilCardNo().hashCode());
         result = prime * result + ((getIsVerify() == null) ? 0 : getIsVerify().hashCode());
         result = prime * result + ((getIsBargainBuyer() == null) ? 0 : getIsBargainBuyer().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
