@@ -145,6 +145,27 @@ public class OfpayUtils {
     }
 
     /**
+     * 油卡-注册
+     */
+    public void oilRegister(){
+
+    }
+
+    /**
+     * 油卡-登录
+     */
+    public void oilLogin(){
+
+    }
+
+    /**
+     * 油卡-绑卡
+     */
+    public void oilBind(){
+        
+    }
+
+    /**
      * 加油卡卡号信息查询
      */
     public Map<String, String> gasQuery(Map<String,String> queryMap){
