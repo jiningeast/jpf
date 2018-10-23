@@ -727,7 +727,7 @@ public class OrdersController {
         Map<String,String> queryMap = new HashMap<>();
         queryMap.put("phoneno", orderInfo.getChargeNo());
         queryMap.put("pervalue", productInfo.getRechargeMoney().toString());
-        Map<String, String> queryPhoneResponseMap = new ofpayUtils().telquery(queryMap);
+        Map<String, String> queryPhoneResponseMap = new OfpayUtils().telquery(queryMap);
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         stream.setType((byte)3);
@@ -757,7 +757,7 @@ public class OrdersController {
         rechargeMap.put("game_userid", orderInfo.getChargeNo());
         rechargeMap.put("buyNum", "1");     //暂定为 1
         rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
-        resultMap = new ofpayUtils().chargePhone(rechargeMap);
+        resultMap = new OfpayUtils().chargePhone(rechargeMap);
         return resultMap;
     }
 
@@ -777,7 +777,7 @@ public class OrdersController {
         queryMap.put("game_userid", orderInfo.getChargeNo());
         String chargeType = orderInfo.getOrderType() != null ? orderInfo.getOrderType().toString() : "";
         queryMap.put("chargeType", chargeType );
-        Map<String, String> queryGasResponseMap = new ofpayUtils().gasQuery(queryMap);
+        Map<String, String> queryGasResponseMap = new OfpayUtils().gasQuery(queryMap);
         //流水
         ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
         stream.setType((byte)5);    //油卡充值
@@ -810,7 +810,7 @@ public class OrdersController {
         rechargeMap.put("buyNum", "1");     //暂定为 1
         rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
 
-        resultMap = new ofpayUtils().chargeGas(rechargeMap);
+        resultMap = new OfpayUtils().chargeGas(rechargeMap);
         return resultMap;
     }
 
