@@ -50,6 +50,11 @@ public class PayShopBindOrder implements Serializable {
     private String valideCode;
 
     /**
+     * 绑定状态 0=未成功 1=成功
+     */
+    private Byte status;
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -133,6 +138,14 @@ public class PayShopBindOrder implements Serializable {
         this.valideCode = valideCode == null ? null : valideCode.trim();
     }
 
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
     public Date getAddtime() {
         return addtime;
     }
@@ -167,6 +180,7 @@ public class PayShopBindOrder implements Serializable {
         sb.append(", oilCardNo=").append(oilCardNo);
         sb.append(", phone=").append(phone);
         sb.append(", valideCode=").append(valideCode);
+        sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append("]");
@@ -198,6 +212,7 @@ public class PayShopBindOrder implements Serializable {
             && (this.getOilCardNo() == null ? other.getOilCardNo() == null : this.getOilCardNo().equals(other.getOilCardNo()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getValideCode() == null ? other.getValideCode() == null : this.getValideCode().equals(other.getValideCode()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
@@ -218,6 +233,7 @@ public class PayShopBindOrder implements Serializable {
         result = prime * result + ((getOilCardNo() == null) ? 0 : getOilCardNo().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getValideCode() == null) ? 0 : getValideCode().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
