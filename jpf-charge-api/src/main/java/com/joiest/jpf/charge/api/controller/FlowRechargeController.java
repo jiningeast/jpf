@@ -224,7 +224,7 @@ public class FlowRechargeController {
         chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
 
         JSONObject merRespons = new JSONObject();
-        merRespons.put("outOrderNo",map.get("orderid"));//上游接口订单号
+        merRespons.put("outOrderNo",actParam.get("outOrderNo"));//上游接口订单号
         merRespons.put("orderNo",orderno);//自己平台的订单号
         merRespons.put("phone",actParam.get("phone"));//充值手机号
         merRespons.put("money",actParam.get("money"));//充值金额
@@ -233,6 +233,8 @@ public class FlowRechargeController {
         if(map.get("code").equals("10000")){
 
             upOrderInfo.setStatus((byte)1);
+            upOrderInfo.setInterfaceOrderNo(map.get("orderid"));
+
             responseParam.put("code","10000");
             responseParam.put("info","充值中");
 
@@ -253,7 +255,6 @@ public class FlowRechargeController {
         }
         responseParam.put("data",merRespons);
         //修改订单信息
-        upOrderInfo.setInterfaceOrderNo(map.get("orderid"));
         upOrderInfo.setUpdatetime(new Date());
 
         chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
@@ -340,13 +341,12 @@ public class FlowRechargeController {
         JSONObject responseDeal = JSONObject.fromObject(wnProduct);
         JSONObject actualDeal = JSONObject.fromObject(responseDeal.get("data").toString());
 
-        resultMap.put("orderid",actualDeal.get("wnorderid").toString());
         resultMap.put("requestUrl",actualDeal.get("requestUrl").toString());
         resultMap.put("requestParam",actualDeal.get("requestParam").toString());
         resultMap.put("responseParam",actualDeal.get("responseParam").toString());
 
         if(responseDeal.get("code").toString().equals("10000")){
-
+            resultMap.put("orderid",actualDeal.get("wnorderid").toString());
             resultMap.put("code","10000");
         }else{
 
@@ -524,7 +524,7 @@ public class FlowRechargeController {
         placeOrderInfo.setCompanyId(companyInfo.getId());
         placeOrderInfo.setCompanyName(companyInfo.getCompanyName());
         placeOrderInfo.setMerchNo(companyInfo.getMerchNo());
-        placeOrderInfo.setChargePhone(actParam.get("gameUserId"));
+        placeOrderInfo.setChargePhone(actParam.get("cardNo"));
         placeOrderInfo.setProductId(chargeProductInfo.getId());
         placeOrderInfo.setProductName(chargeProductInfo.getName());
         placeOrderInfo.setProductPrice(chargeProductInfo.getSalePrice());
@@ -561,7 +561,7 @@ public class FlowRechargeController {
         chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
 
         JSONObject merRespons = new JSONObject();
-        merRespons.put("outOrderNo",map.get("orderid"));//上游接口订单号
+        merRespons.put("outOrderNo",actParam.get("outOrderNo"));//上游接口订单号
         merRespons.put("orderNo",orderno);//自己平台的订单号
         merRespons.put("phone",actParam.get("phone"));//充值手机号
         merRespons.put("money",actParam.get("money"));//充值金额
@@ -637,7 +637,7 @@ public class FlowRechargeController {
         rechargeMap.put("cardid", actParam.get("productId"));
         rechargeMap.put("sporder_id", actParam.get("selfOrder"));
         rechargeMap.put("sporder_time", new Date());
-        rechargeMap.put("game_userid", actParam.get("gameUserId"));
+        rechargeMap.put("game_userid", actParam.get("cardNo"));
         rechargeMap.put("chargeType", actParam.get("chargeType"));
         rechargeMap.put("buyNum", "1");//暂定为 1
         rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
@@ -666,20 +666,20 @@ public class FlowRechargeController {
         resParam.put("code","10008");
         resParam.put("info","参数错误");
         respond = resParam.toString();
-        if(!actParam.containsKey("merchNo") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("gameUserId") || !actParam.containsKey("notifyUrl")){
+        if(!actParam.containsKey("merchNo") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("cardNo") || !actParam.containsKey("notifyUrl")){
 
             validate = false;
             return validate;
         }
-        if(StringUtils.isBlank(actParam.get("merchNo").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("gameUserId").toString()) || StringUtils.isBlank(actParam.get("notifyUrl").toString())){
+        if(StringUtils.isBlank(actParam.get("merchNo").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("cardNo").toString()) || StringUtils.isBlank(actParam.get("notifyUrl").toString())){
 
             validate = false;
             return validate;
         }
         String zsh = "^(100011\\d{13})$";  //中石化：以100011开头共19位
         String zsy = "^(90\\d{14})$";      //中石油：以90开头共16位
-        Boolean zshIsTrue = Pattern.compile(zsh).matcher(actParam.get("gameUserId").toString()).matches();
-        Boolean zsyIsTrue = Pattern.compile(zsy).matcher(actParam.get("gameUserId").toString()).matches();
+        Boolean zshIsTrue = Pattern.compile(zsh).matcher(actParam.get("cardNo").toString()).matches();
+        Boolean zsyIsTrue = Pattern.compile(zsy).matcher(actParam.get("cardNo").toString()).matches();
         if (zshIsTrue){//中石化
 
             actParam.put("oilType","2");
