@@ -2,6 +2,7 @@ package com.joiest.jpf.common.util;
 
 import com.joiest.jpf.common.constant.ManageConstants;
 import net.sf.json.JSONObject;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,9 +21,18 @@ public class OfpayUtils {
 
     private String gas_requestUrl;
 
+    //登录地址
+    private String login_requestUrl;
+
+    //绑卡接口
+    private String bindCard_requestUrl;
+
     private String cardid_fast;
 
     private String version_phone;
+
+    private String aes_ecb_nopadding_pw;
+
 
     //油卡卡号查询
     private String gas_query;
@@ -33,9 +43,12 @@ public class OfpayUtils {
         this.phone_requestUrl = ConfigUtil.getValue("phone_requestUrl");
         this.phone_query = ConfigUtil.getValue("phone_query");
         this.gas_requestUrl = ConfigUtil.getValue("gas_requestUrl");
+        this.login_requestUrl = ConfigUtil.getValue("login_requestUrl");
+        this.bindCard_requestUrl = ConfigUtil.getValue("bindCard_requestUrl");
         this.cardid_fast = ConfigUtil.getValue("cardid_fast");
         this.version_phone = ConfigUtil.getValue("version_phone");
         this.gas_query = ConfigUtil.getValue("gas_query");
+        this.aes_ecb_nopadding_pw = ConfigUtil.getValue("AES_ECB_NOPADDING_PW");
     }
 
     /**
@@ -154,15 +167,131 @@ public class OfpayUtils {
     /**
      * 油卡-登录
      */
-    public void oilLogin(){
+    public Map<String, String> oilLogin(Map<String,Object> rechargeMap){
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyyMMddHHmmss");
+        Map<String,Object> requestMap = new LinkedHashMap<>();
+        requestMap.put("userid", userid);           // 商户号
+        requestMap.put("userpws", Md5Encrypt.md5(userpws));         // 商户密码
+        requestMap.put("login_name", rechargeMap.get("login_name"));                            // 商品编号以产品部门提供的为准
 
+        byte[] encrypt_data = AES_ECBUtils.encrypt(rechargeMap.get("login_pwd").toString(), aes_ecb_nopadding_pw.getBytes());
+        String loginPwdStr = Base64.encodeBase64String(encrypt_data);
+        requestMap.put("login_pwd",loginPwdStr);
+
+        String charge_type = rechargeMap.getOrDefault("charge_type","").toString();
+        if ( !charge_type.equals("") )
+        {
+            requestMap.put("charge_type", rechargeMap.get("charge_type") );               // 加油卡类型 （1:中石化、2:中石油；默认为1，不参与MD5校验）
+        }
+        requestMap.put("version", version_phone);
+        requestMap.put("md5_str", getOilLoginSign(requestMap));          // 签名串
+
+        String requestParam = ToolUtils.mapToUrl(requestMap);       //请求参数
+
+        String resultXml =  OkHttpUtils.postForm(login_requestUrl, requestMap);
+
+        requestMap.put("ret_url", login_requestUrl);// 返回地址
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n充值类型:" + "油卡登录");
+        sbf.append("\n请求地址：" + login_requestUrl);
+        sbf.append("\n接口参数：" + requestMap);
+        sbf.append("\n回调信息：" + resultXml);
+
+        String fileName = "ofpayLogin";
+        String path = "/logs/jpf-market-api/log/";
+
+        Map<String,String> map = new ReadXML().getBooksOneByStr(resultXml);
+        String orderStatus = map.getOrDefault("retcode","");
+        String orderStatus_cn = orderStatus.equals("1") ? "提交成功" : "提交失败";
+
+        String rechargeStatus_cn = "";   //如果成功将为1，澈消(充值失败)为9，充值中为0,只能当状态为9时，商户才可以退款给用户。
+        if ( orderStatus.equals("1") )
+        {
+            rechargeStatus_cn = map.getOrDefault("cardNo","");
+        } else
+        {
+            rechargeStatus_cn = map.getOrDefault("err_msg","");
+        }
+
+        sbf.append("\n提交状态码：" + orderStatus+"\t"+orderStatus_cn+"\t" + "接口返回信息:" + rechargeStatus_cn);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+        map.put("requestUrl", login_requestUrl);
+        map.put("requestParam", requestParam);
+        return map;
     }
 
     /**
      * 油卡-绑卡
      */
-    public void oilBind(){
+    public Map<String, String> oilBindCard(Map<String,Object> rechargeMap){
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyyMMddHHmmss");
+        Map<String,Object> requestMap = new LinkedHashMap<>();
+        requestMap.put("userid", userid);           // 商户号
+        requestMap.put("userpws", Md5Encrypt.md5(userpws));         // 商户密码
+        requestMap.put("login_name", rechargeMap.get("login_name"));                            // 商品编号以产品部门提供的为准
 
+        byte[] encrypt_data = AES_ECBUtils.encrypt(rechargeMap.get("login_pwd").toString(), aes_ecb_nopadding_pw.getBytes());
+        String loginPwdStr = Base64.encodeBase64String(encrypt_data);
+        requestMap.put("login_pwd",loginPwdStr);
+        byte[] name_data = AES_ECBUtils.encrypt(rechargeMap.get("name").toString(), aes_ecb_nopadding_pw.getBytes());
+        String nameStr = Base64.encodeBase64String(name_data);
+        requestMap.put("name",nameStr); //用户真实姓名
+        requestMap.put("cert_type", rechargeMap.get("cert_type") ); //证件类型，1：身份证
+        byte[] cert_no_data = AES_ECBUtils.encrypt(rechargeMap.get("name").toString(), aes_ecb_nopadding_pw.getBytes());
+        String cert_noStr = Base64.encodeBase64String(cert_no_data);
+        requestMap.put("cert_no", cert_noStr ); //证件号码
+        requestMap.put("gas_card_no", rechargeMap.get("gas_card_no") );//加油卡卡号
+        byte[] email_data = AES_ECBUtils.encrypt(rechargeMap.get("name").toString(), aes_ecb_nopadding_pw.getBytes());
+        String emailStr = Base64.encodeBase64String(email_data);
+        requestMap.put("email", emailStr );//邮箱
+        byte[] phone_no_data = AES_ECBUtils.encrypt(rechargeMap.get("name").toString(), aes_ecb_nopadding_pw.getBytes());
+        String phone_noStr = Base64.encodeBase64String(phone_no_data);
+        requestMap.put("phone_no", phone_noStr );//手机号码
+        requestMap.put("charge_type", rechargeMap.get("charge_type") );//加油卡类型1:中石化、2:中石油
+
+        requestMap.put("version", version_phone);
+        requestMap.put("md5_str", getOilBindSign(requestMap));          // 签名串
+
+        String requestParam = ToolUtils.mapToUrl(requestMap);       //请求参数
+
+        String resultXml =  OkHttpUtils.postForm(bindCard_requestUrl, requestMap);
+
+        requestMap.put("ret_url", bindCard_requestUrl);// 返回地址
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n充值类型:" + "油卡登录");
+        sbf.append("\n请求地址：" + bindCard_requestUrl);
+        sbf.append("\n接口参数：" + requestMap);
+        sbf.append("\n回调信息：" + resultXml);
+
+        String fileName = "ofpayLogin";
+        String path = "/logs/jpf-market-api/log/";
+
+        Map<String,String> map = new ReadXML().getBooksOneByStr(resultXml);
+        String orderStatus = map.getOrDefault("retcode","");
+        String orderStatus_cn = orderStatus.equals("1") ? "提交成功" : "提交失败";
+
+        String rechargeStatus_cn = "";   //如果成功将为1，澈消(充值失败)为9，充值中为0,只能当状态为9时，商户才可以退款给用户。
+        if ( orderStatus.equals("1") )
+        {
+            rechargeStatus_cn = map.getOrDefault("cardNo","");
+        } else
+        {
+            rechargeStatus_cn = map.getOrDefault("err_msg","");
+        }
+
+        sbf.append("\n提交状态码：" + orderStatus+"\t"+orderStatus_cn+"\t" + "接口返回信息:" + rechargeStatus_cn);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+        map.put("requestUrl", bindCard_requestUrl);
+        map.put("requestParam", requestParam);
+        return map;
     }
 
     /**
@@ -264,11 +393,33 @@ public class OfpayUtils {
         return map;
     }
 
+
+
     /**
      * 获取油卡充值签名
      */
     public String getOilSign(Map<String,Object> map){
         String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("cardid") + map.get("cardnum") + map.get("sporder_id") + map.get("sporder_time") + map.get("game_userid") + ConfigUtil.getValue("keystr");
+        String sign = Md5Encrypt.md5(myPackage).toUpperCase();
+
+        return sign;
+    }
+
+    /**
+     * 获取油卡登录签名
+     */
+    public String getOilLoginSign(Map<String,Object> map){
+        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("login_name") + map.get("login_pwd") + map.get("charge_type") + ConfigUtil.getValue("keystr");
+        String sign = Md5Encrypt.md5(myPackage).toUpperCase();
+
+        return sign;
+    }
+
+    /**
+     * 获取油卡登录签名
+     */
+    public String getOilBindSign(Map<String,Object> map){
+        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("login_name") + map.get("login_pwd") + map.get("name") + map.get("cert_type") + map.get("cert_no") + map.get("gas_card_no") + map.get("email") + map.get("phone_no") + map.get("charge_type") + ConfigUtil.getValue("keystr");
         String sign = Md5Encrypt.md5(myPackage).toUpperCase();
 
         return sign;
