@@ -46,12 +46,17 @@ public class FlowRechargeController {
     ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
     Map<String,String> actParam = new HashMap<>();
     Map<String,Object> actTreeParam = new TreeMap<>();
-    public static Boolean validate = true;
-    public static String respond = null;
+    public static Boolean validate;
+    public static String respond;
 
     @ModelAttribute
     public String beforAction(HttpServletRequest request) throws Exception{
 
+        companyInfo = new ChargeCompanyInfo();
+        actParam = new HashMap<>();
+        actTreeParam = new TreeMap<>();
+        validate = true;
+        respond = null;
         //需要过滤的方法执行此
         String requestURI = request.getRequestURI();
         String method_name = requestURI.substring(requestURI.lastIndexOf("/") + 1);
@@ -476,12 +481,12 @@ public class FlowRechargeController {
         resParam.put("code","10008");
         resParam.put("info","参数错误");
         respond = resParam.toString();
-        if(!actParam.containsKey("merchNo") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("phone")){
+        if(!actParam.containsKey("merchNo") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("phone") || !actParam.containsKey("notifyUrl")){
 
             validate = false;
             return validate;
         }
-        if(StringUtils.isBlank(actParam.get("merchNo").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("phone").toString())){
+        if(StringUtils.isBlank(actParam.get("merchNo").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("phone").toString()) || StringUtils.isBlank(actParam.get("notifyUrl").toString())){
 
             validate = false;
             return validate;
