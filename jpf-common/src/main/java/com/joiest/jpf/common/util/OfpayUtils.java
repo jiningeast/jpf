@@ -204,21 +204,21 @@ public class OfpayUtils {
         return resultMap;
     }
 
-
     /**
      * 加油卡充值
      */
     public Map<String, String> chargeGas(Map<String,Object> rechargeMap){
+
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyyMMddHHmmss");
         Map<String,Object> requestMap = new LinkedHashMap<>();
-        requestMap.put("userid", userid);           // 商户号
+        requestMap.put("userid", userid);                           // 商户号
         requestMap.put("userpws", Md5Encrypt.md5(userpws));         // 商户密码
-        requestMap.put("cardid", rechargeMap.get("cardid"));                            // 商品编号以产品部门提供的为准
-//        requestMap.put("cardid", "64127500");                            // 商品编号以产品部门提供的为准
-        requestMap.put("cardnum",rechargeMap.get("cardnum").toString());                // 1.任意充需要待充值面值（1的整数倍) 2.卡充充值这里表示数量
+        requestMap.put("cardid", rechargeMap.get("cardid"));        // 商品编号以产品部门提供的为准
+        //requestMap.put("cardid", "64127500");                     // 商品编号以产品部门提供的为准
+        requestMap.put("cardnum",rechargeMap.get("cardnum").toString());     // 1.任意充需要待充值面值（1的整数倍) 2.卡充充值这里表示数量
         requestMap.put("sporder_id", rechargeMap.get("sporder_id").toString());
         requestMap.put("sporder_time", myfmt.format(rechargeMap.get("sporder_time")));
-        requestMap.put("game_userid", rechargeMap.get("game_userid").toString());       // 手机号码
+        requestMap.put("game_userid", rechargeMap.get("game_userid"));       // 手机号码
         String chargeType = rechargeMap.getOrDefault("chargeType","").toString();
         if ( !chargeType.equals("") )
         {
@@ -256,11 +256,13 @@ public class OfpayUtils {
         {
             rechargeStatus_cn = map.getOrDefault("err_msg","");
         }
-
         sbf.append("\n提交状态：" + orderStatus_cn + ";充值状态:" + rechargeStatus_cn);
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
-        map.put("requestUrl", gas_requestUrl);
+
+        map.put("responseParam", JSONObject.fromObject(map).toString());
+        map.put("requestUrl", phone_requestUrl);
         map.put("requestParam", requestParam);
+
         return map;
     }
 

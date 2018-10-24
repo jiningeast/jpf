@@ -42,6 +42,11 @@ public class ChargeOrderInfo {
     private String chargePhone;
 
     /**
+     * 产品类型 0=话费充值 1=油卡充值
+     */
+    private Integer productType;
+
+    /**
      * 产品id
      */
     private String productId;
@@ -167,6 +172,14 @@ public class ChargeOrderInfo {
 
     public void setChargePhone(String chargePhone) {
         this.chargePhone = chargePhone == null ? null : chargePhone.trim();
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
     }
 
     public String getProductId() {

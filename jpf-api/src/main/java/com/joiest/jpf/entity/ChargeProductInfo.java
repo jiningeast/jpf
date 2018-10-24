@@ -35,6 +35,11 @@ public class ChargeProductInfo {
     private String wnProductId;
 
     /**
+     * 欧飞油卡产品id
+     */
+    private String ofProductId;
+
+    /**
      * 是否强制使用某接口 0=否 1=是
      */
     private Byte forceInterface;
@@ -150,6 +155,14 @@ public class ChargeProductInfo {
 
     public void setWnProductId(String wnProductId) {
         this.wnProductId = wnProductId == null ? null : wnProductId.trim();
+    }
+
+    public String getOfProductId() {
+        return ofProductId;
+    }
+
+    public void setOfProductId(String ofProductId) {
+        this.ofProductId = ofProductId == null ? null : ofProductId.trim();
     }
 
     public Byte getForceInterface() {

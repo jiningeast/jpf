@@ -2,13 +2,11 @@ package com.joiest.jpf.charge.api.controller;
 
 import com.joiest.jpf.charge.api.util.ServletUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.OfpayRequest;
-import com.joiest.jpf.entity.ChargeCompanyInfo;
-import com.joiest.jpf.entity.ChargeInterfaceStreamInfo;
-import com.joiest.jpf.entity.ChargeOrderInfo;
-import com.joiest.jpf.entity.ChargeProductInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -115,8 +113,8 @@ public class FlowRechargeController {
         return "1";
     }
 
-    @RequestMapping(value = "placeOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public String placeOrder(){
+    @RequestMapping(value = "telPlaceOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public String telPlaceOrder(){
 
         if(validate.equals(false))
             return respond;
@@ -216,7 +214,7 @@ public class FlowRechargeController {
         placeOrderInfo.setProductName(chargeProductInfo.getName());
         placeOrderInfo.setProductPrice(chargeProductInfo.getSalePrice());
         placeOrderInfo.setProductAmount((Integer) 1);
-        placeOrderInfo.setTotalMoney(new BigDecimal(actParam.get("money")));
+        placeOrderInfo.setTotalMoney(chargeProductInfo.getSalePrice());
         placeOrderInfo.setNotifyUrl(actParam.get("notifyUrl"));
         placeOrderInfo.setRequestParams(JSONObject.fromObject(actParam).toString());
         placeOrderInfo.setStatus((byte)0);
@@ -235,12 +233,13 @@ public class FlowRechargeController {
 
             type = 0;
             upOrderInfo.setInterfaceType(type);
+            upOrderInfo.setProductType(0);
             //请求欧非
             map = phoneRechargeOf(actParam);
-
         }else {
 
             upOrderInfo.setInterfaceType(type);
+            upOrderInfo.setProductType(1);
             //请求微能接口
             map = phoneRechargeWn(actParam);
         }
@@ -446,7 +445,6 @@ public class FlowRechargeController {
             sendParam.put("info",JpfInterfaceErrorInfo.RECHARGE_FAILD.getCode());
             sbf.append("\n订单状态：充值失败");
         }else{
-
             upOrderInfo.setStatus((byte)2);
             sendParam.put("code",JpfInterfaceErrorInfo.RECHARGE_SUCCESS.getCode());
             sendParam.put("info",JpfInterfaceErrorInfo.RECHARGE_SUCCESS.getCode());
@@ -473,6 +471,7 @@ public class FlowRechargeController {
     }
     public Boolean placeOrderVal(Map actParam){
 
+
         JSONObject resParam = new JSONObject();
         resParam.put("code","10008");
         resParam.put("info","参数错误");
@@ -487,7 +486,6 @@ public class FlowRechargeController {
             validate = false;
             return validate;
         }
-
         String regex = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[8|9])|(16[6]))\\d{8}$";
 
         //手机号验证
@@ -505,6 +503,235 @@ public class FlowRechargeController {
         respond = resParam.toString();
         return validate;
     }
+    @RequestMapping(value = "oilPlaceOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public String oilPlaceOrder(){
 
+        if(validate.equals(false))
+            return respond;
+
+        JSONObject responseParam = new JSONObject();
+        //商户订单验证
+        PayChargeOrder record = new PayChargeOrder();
+        record.setForeignOrderNo(actParam.get("outOrderNo"));
+        ChargeOrderInfo chargeOrderInfo = chargeOrderServiceFacade.getOne(record);
+        if(chargeOrderInfo!=null){
+
+            responseParam.put("code","10008");
+            responseParam.put("info","商户订单号请保持唯一");
+            return responseParam.toString();
+        }
+        //String moneyCode = ToolUtils.CreateCode(companyInfo.getMoney().toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        Boolean newCode = ToolUtils.ValidateCode(companyInfo.getMoneyCode(),companyInfo.getId(),companyInfo.getMoney().toString(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        logger.info("金额码："+companyInfo.getMoneyCode()+"，id:"+companyInfo.getId()+"，金额："+companyInfo.getMoney().toString()+"，校验码："+ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        System.out.println(companyInfo);
+        if(newCode.equals(false)){
+
+            responseParam.put("code","10008");
+            responseParam.put("info","商户金额校验错误");
+            return responseParam.toString();
+        }
+        //获取商品信息
+        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(actParam.get("productId"));
+        if(chargeProductInfo == null){
+
+            responseParam.put("code","10008");
+            responseParam.put("info","未获取到商品信息");
+            return responseParam.toString();
+        }
+        if(chargeProductInfo.getValue().compareTo(companyInfo.getMoney())>0){
+
+            responseParam.put("code","10008");
+            responseParam.put("info","商户余额不足，请尽快充值");
+            return responseParam.toString();
+        }
+        actParam.put("money",chargeProductInfo.getValue().toString());//充值面值
+        actParam.put("salePrice",chargeProductInfo.getValue().toString());//标准售价
+
+
+        ChargeOrderInfo placeOrderInfo = new ChargeOrderInfo();
+        String orderno = "CH"+ToolUtils.createOrderid();
+        placeOrderInfo.setOrderNo(orderno);
+        placeOrderInfo.setForeignOrderNo(actParam.get("outOrderNo"));
+        placeOrderInfo.setCompanyId(companyInfo.getId());
+        placeOrderInfo.setCompanyName(companyInfo.getCompanyName());
+        placeOrderInfo.setMerchNo(companyInfo.getMerchNo());
+        placeOrderInfo.setChargePhone(actParam.get("gameUserId"));
+        placeOrderInfo.setProductId(chargeProductInfo.getId());
+        placeOrderInfo.setProductName(chargeProductInfo.getName());
+        placeOrderInfo.setProductPrice(chargeProductInfo.getSalePrice());
+        placeOrderInfo.setProductAmount((Integer) 1);
+        placeOrderInfo.setTotalMoney(chargeProductInfo.getSalePrice());
+        placeOrderInfo.setNotifyUrl(actParam.get("notifyUrl"));
+        placeOrderInfo.setRequestParams(JSONObject.fromObject(actParam).toString());
+        placeOrderInfo.setAddtime(new Date());
+        placeOrderInfo.setProductType(Integer.valueOf(actParam.get("oilType")));
+        placeOrderInfo.setStatus((byte)0);
+        placeOrderInfo.setAddtime(new Date());
+
+        int orderId = chargeOrderServiceFacade.placeOrder(placeOrderInfo);
+
+        actParam.put("selfOrder",orderno);
+        actParam.put("productId",chargeProductInfo.getOfProductId());
+
+        ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
+        upOrderInfo.setId(""+orderId);
+        upOrderInfo.setInterfaceType((byte)0);
+
+        //请求欧非油卡充值
+        Map<String, String> map = gasRecharge(actParam);
+
+        //添加流水
+        ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
+        chargeInterfaceStreamInfo.setOrderId(""+orderId);
+        chargeInterfaceStreamInfo.setOrderNo(orderno);
+        chargeInterfaceStreamInfo.setType((byte)0);
+        chargeInterfaceStreamInfo.setRequestUrl(map.get("requestUrl"));
+        chargeInterfaceStreamInfo.setRequestParam(map.get("requestParam"));
+        chargeInterfaceStreamInfo.setResponse(map.get("responseParam"));
+        chargeInterfaceStreamInfo.setAddtime(new Date());
+        chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
+
+        JSONObject merRespons = new JSONObject();
+        merRespons.put("outOrderNo",map.get("orderid"));//上游接口订单号
+        merRespons.put("orderNo",orderno);//自己平台的订单号
+        merRespons.put("phone",actParam.get("phone"));//充值手机号
+        merRespons.put("money",actParam.get("money"));//充值金额
+        merRespons.put("productId",actParam.get("productId"));//产品金额
+
+        if(map.get("code").equals("10000")){
+
+            upOrderInfo.setStatus((byte)1);
+            responseParam.put("code","10000");
+            responseParam.put("info","充值中");
+
+            //更新商户信息  金额验证
+            BigDecimal companyMoney = companyInfo.getMoney().subtract(new BigDecimal(actParam.get("money")));
+            String moneyCode = ToolUtils.CreateCode(companyMoney.toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+            ChargeCompanyInfo comInfo = new ChargeCompanyInfo();
+            comInfo.setId(companyInfo.getId());
+            comInfo.setMoneyCode(moneyCode);
+            comInfo.setMoney(companyMoney);
+            chargeCompanyServiceFacade.updateColumnByPrimaryKey(comInfo);
+        }else{
+
+            upOrderInfo.setStatus((byte)3);
+            responseParam.put("code","10008");
+            responseParam.put("info","充值失败");
+        }
+        responseParam.put("data",merRespons);
+        //修改订单信息
+        upOrderInfo.setInterfaceOrderNo(map.get("orderid"));
+        upOrderInfo.setUpdatetime(new Date());
+
+        chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
+
+        return responseParam.toString();
+    }
+
+    /**
+     * 油卡充值
+     */
+    private Map<String, String> gasRecharge(Map actParam)
+    {
+
+        /*
+        //查询
+        Map<String,String> queryMap = new HashMap<>();
+        queryMap.put("game_userid", actParam.get("chargeNo").toString());
+        String chargeType = orderInfo.getOrderType() != null ? orderInfo.getOrderType().toString() : "";
+        queryMap.put("chargeType", chargeType );
+        Map<String, String> queryGasResponseMap = new OfpayUtils().gasQuery(queryMap);
+        //流水
+        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+        stream.setType((byte)5);    //油卡充值
+        stream.setOrderNo(actParam.get("selfOrder").toString());
+        stream.setRequestUrl(queryGasResponseMap.get("requestUrl"));
+        stream.setRequestContent(queryGasResponseMap.get("requestParam"));
+        String requestUrl = queryGasResponseMap.get("requestUrl");
+        String requestParam = queryGasResponseMap.get("requestParam");
+        queryGasResponseMap.remove("requestUrl");
+        queryGasResponseMap.remove("requestParam");
+        String responseJson = JsonUtils.toJson(queryGasResponseMap);
+        stream.setResponseContent(responseJson);
+        stream.setAddtime(new Date());
+        int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
+        if ( !queryGasResponseMap.getOrDefault("retcode","").equals("1") )
+        {
+            throw new JpfInterfaceException( JpfInterfaceErrorInfo.FAIL.getCode(), queryGasResponseMap.get("err_msg"));
+        }*/
+        //油卡直充
+        Map<String, Object> rechargeMap = new HashMap<>();
+        Map<String, String> resultMap = new HashMap<>();
+        Map<String, String> responseMap = new HashMap<>();
+
+        rechargeMap.put("cardnum", 1);  // 直充时这里表示数量
+        rechargeMap.put("cardid", actParam.get("productId"));
+        rechargeMap.put("sporder_id", actParam.get("selfOrder"));
+        rechargeMap.put("sporder_time", new Date());
+        rechargeMap.put("game_userid", actParam.get("gameUserId"));
+        rechargeMap.put("chargeType", actParam.get("chargeType"));
+        rechargeMap.put("buyNum", "1");//暂定为 1
+        rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
+
+        responseMap = new OfpayUtils().chargeGas(rechargeMap);
+
+        resultMap.put("orderid",responseMap.get("orderid"));//欧非订单号
+        resultMap.put("requestUrl",responseMap.get("requestUrl"));
+        resultMap.put("requestParam",responseMap.get("requestParam"));
+        resultMap.put("responseParam",responseMap.get("responseParam"));
+
+        // 欧飞接口返回处理
+        if ( responseMap.containsKey("retcode") && responseMap.get("retcode").equals("1") ) {
+
+            resultMap.put("code","10000");
+        } else {
+
+            resultMap.put("code","10008");
+        }
+
+        return resultMap;
+    }
+    public Boolean oilOrderVal(Map actParam){
+
+        JSONObject resParam = new JSONObject();
+        resParam.put("code","10008");
+        resParam.put("info","参数错误");
+        respond = resParam.toString();
+        if(!actParam.containsKey("merchNo") || !actParam.containsKey("sign") || !actParam.containsKey("dateTime") || !actParam.containsKey("productId") || !actParam.containsKey("outOrderNo") || !actParam.containsKey("gameUserId") || !actParam.containsKey("notifyUrl")){
+
+            validate = false;
+            return validate;
+        }
+        if(StringUtils.isBlank(actParam.get("merchNo").toString()) || StringUtils.isBlank(actParam.get("sign").toString()) || StringUtils.isBlank(actParam.get("dateTime").toString()) || StringUtils.isBlank(actParam.get("productId").toString()) || StringUtils.isBlank(actParam.get("outOrderNo").toString()) || StringUtils.isBlank(actParam.get("gameUserId").toString()) || StringUtils.isBlank(actParam.get("notifyUrl").toString())){
+
+            validate = false;
+            return validate;
+        }
+        String zsh = "^(100011\\d{13})$";  //中石化：以100011开头共19位
+        String zsy = "^(90\\d{14})$";      //中石油：以90开头共16位
+        Boolean zshIsTrue = Pattern.compile(zsh).matcher(actParam.get("gameUserId").toString()).matches();
+        Boolean zsyIsTrue = Pattern.compile(zsy).matcher(actParam.get("gameUserId").toString()).matches();
+        if (zshIsTrue){//中石化
+
+            actParam.put("oilType","2");
+            actParam.put("chargeType","1");
+        }else if (zsyIsTrue){//中石油
+
+            actParam.put("oilType","3");
+            actParam.put("chargeType","2");
+        }else{
+
+            validate = false;
+            resParam.put("info","油卡格式错误");
+            respond = resParam.toString();
+            return validate;
+        }
+        if (validate.equals(true)){
+            resParam.put("code","10000");
+            resParam.put("info","verify through");
+        }
+        respond = resParam.toString();
+        return validate;
+    }
 
 }
