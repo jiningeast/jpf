@@ -19,7 +19,6 @@
         <module>jpf-cloud-api</module>
         <module>jpf-market-api</module>
         <module>jpf-charge-api</module>
-        <module>jpf-good-api</module>
     </modules>
     <packaging>pom</packaging>
 
