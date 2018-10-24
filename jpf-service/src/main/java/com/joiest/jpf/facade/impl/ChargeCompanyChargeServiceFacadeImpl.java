@@ -44,6 +44,7 @@ public class ChargeCompanyChargeServiceFacadeImpl implements ChargeCompanyCharge
         PayChargeCompanyChargeExample.Criteria c = e.createCriteria();
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
+        e.setOrderByClause("id DESC");
         if ( request.getCompanyId() != null && StringUtils.isNotBlank(request.getCompanyId())){
             c.andCompanyIdEqualTo(request.getCompanyId());
         }
