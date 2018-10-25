@@ -236,313 +236,373 @@ public class PayChargeBalanceExample {
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceIsNull() {
-            addCriterion("wn_balance is null");
+        public Criteria andBalanceIsNull() {
+            addCriterion("balance is null");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceIsNotNull() {
-            addCriterion("wn_balance is not null");
+        public Criteria andBalanceIsNotNull() {
+            addCriterion("balance is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceEqualTo(BigDecimal value) {
-            addCriterion("wn_balance =", value, "wnBalance");
+        public Criteria andBalanceEqualTo(BigDecimal value) {
+            addCriterion("balance =", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceNotEqualTo(BigDecimal value) {
-            addCriterion("wn_balance <>", value, "wnBalance");
+        public Criteria andBalanceNotEqualTo(BigDecimal value) {
+            addCriterion("balance <>", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceGreaterThan(BigDecimal value) {
-            addCriterion("wn_balance >", value, "wnBalance");
+        public Criteria andBalanceGreaterThan(BigDecimal value) {
+            addCriterion("balance >", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("wn_balance >=", value, "wnBalance");
+        public Criteria andBalanceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("balance >=", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceLessThan(BigDecimal value) {
-            addCriterion("wn_balance <", value, "wnBalance");
+        public Criteria andBalanceLessThan(BigDecimal value) {
+            addCriterion("balance <", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("wn_balance <=", value, "wnBalance");
+        public Criteria andBalanceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("balance <=", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceIn(List<BigDecimal> values) {
-            addCriterion("wn_balance in", values, "wnBalance");
+        public Criteria andBalanceIn(List<BigDecimal> values) {
+            addCriterion("balance in", values, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceNotIn(List<BigDecimal> values) {
-            addCriterion("wn_balance not in", values, "wnBalance");
+        public Criteria andBalanceNotIn(List<BigDecimal> values) {
+            addCriterion("balance not in", values, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("wn_balance between", value1, value2, "wnBalance");
+        public Criteria andBalanceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("balance between", value1, value2, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnBalanceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("wn_balance not between", value1, value2, "wnBalance");
+        public Criteria andBalanceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("balance not between", value1, value2, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitIsNull() {
-            addCriterion("wn_alert_limit is null");
+        public Criteria andAlertLimitIsNull() {
+            addCriterion("alert_limit is null");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitIsNotNull() {
-            addCriterion("wn_alert_limit is not null");
+        public Criteria andAlertLimitIsNotNull() {
+            addCriterion("alert_limit is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitEqualTo(BigDecimal value) {
-            addCriterion("wn_alert_limit =", value, "wnAlertLimit");
+        public Criteria andAlertLimitEqualTo(BigDecimal value) {
+            addCriterion("alert_limit =", value, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitNotEqualTo(BigDecimal value) {
-            addCriterion("wn_alert_limit <>", value, "wnAlertLimit");
+        public Criteria andAlertLimitNotEqualTo(BigDecimal value) {
+            addCriterion("alert_limit <>", value, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitGreaterThan(BigDecimal value) {
-            addCriterion("wn_alert_limit >", value, "wnAlertLimit");
+        public Criteria andAlertLimitGreaterThan(BigDecimal value) {
+            addCriterion("alert_limit >", value, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("wn_alert_limit >=", value, "wnAlertLimit");
+        public Criteria andAlertLimitGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("alert_limit >=", value, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitLessThan(BigDecimal value) {
-            addCriterion("wn_alert_limit <", value, "wnAlertLimit");
+        public Criteria andAlertLimitLessThan(BigDecimal value) {
+            addCriterion("alert_limit <", value, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("wn_alert_limit <=", value, "wnAlertLimit");
+        public Criteria andAlertLimitLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("alert_limit <=", value, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitIn(List<BigDecimal> values) {
-            addCriterion("wn_alert_limit in", values, "wnAlertLimit");
+        public Criteria andAlertLimitIn(List<BigDecimal> values) {
+            addCriterion("alert_limit in", values, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitNotIn(List<BigDecimal> values) {
-            addCriterion("wn_alert_limit not in", values, "wnAlertLimit");
+        public Criteria andAlertLimitNotIn(List<BigDecimal> values) {
+            addCriterion("alert_limit not in", values, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("wn_alert_limit between", value1, value2, "wnAlertLimit");
+        public Criteria andAlertLimitBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("alert_limit between", value1, value2, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertLimitNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("wn_alert_limit not between", value1, value2, "wnAlertLimit");
+        public Criteria andAlertLimitNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("alert_limit not between", value1, value2, "alertLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchIsNull() {
-            addCriterion("wn_alert_switch is null");
+        public Criteria andAlertSwitchIsNull() {
+            addCriterion("alert_switch is null");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchIsNotNull() {
-            addCriterion("wn_alert_switch is not null");
+        public Criteria andAlertSwitchIsNotNull() {
+            addCriterion("alert_switch is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchEqualTo(Byte value) {
-            addCriterion("wn_alert_switch =", value, "wnAlertSwitch");
+        public Criteria andAlertSwitchEqualTo(Byte value) {
+            addCriterion("alert_switch =", value, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchNotEqualTo(Byte value) {
-            addCriterion("wn_alert_switch <>", value, "wnAlertSwitch");
+        public Criteria andAlertSwitchNotEqualTo(Byte value) {
+            addCriterion("alert_switch <>", value, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchGreaterThan(Byte value) {
-            addCriterion("wn_alert_switch >", value, "wnAlertSwitch");
+        public Criteria andAlertSwitchGreaterThan(Byte value) {
+            addCriterion("alert_switch >", value, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchGreaterThanOrEqualTo(Byte value) {
-            addCriterion("wn_alert_switch >=", value, "wnAlertSwitch");
+        public Criteria andAlertSwitchGreaterThanOrEqualTo(Byte value) {
+            addCriterion("alert_switch >=", value, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchLessThan(Byte value) {
-            addCriterion("wn_alert_switch <", value, "wnAlertSwitch");
+        public Criteria andAlertSwitchLessThan(Byte value) {
+            addCriterion("alert_switch <", value, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchLessThanOrEqualTo(Byte value) {
-            addCriterion("wn_alert_switch <=", value, "wnAlertSwitch");
+        public Criteria andAlertSwitchLessThanOrEqualTo(Byte value) {
+            addCriterion("alert_switch <=", value, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchIn(List<Byte> values) {
-            addCriterion("wn_alert_switch in", values, "wnAlertSwitch");
+        public Criteria andAlertSwitchIn(List<Byte> values) {
+            addCriterion("alert_switch in", values, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchNotIn(List<Byte> values) {
-            addCriterion("wn_alert_switch not in", values, "wnAlertSwitch");
+        public Criteria andAlertSwitchNotIn(List<Byte> values) {
+            addCriterion("alert_switch not in", values, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchBetween(Byte value1, Byte value2) {
-            addCriterion("wn_alert_switch between", value1, value2, "wnAlertSwitch");
+        public Criteria andAlertSwitchBetween(Byte value1, Byte value2) {
+            addCriterion("alert_switch between", value1, value2, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertSwitchNotBetween(Byte value1, Byte value2) {
-            addCriterion("wn_alert_switch not between", value1, value2, "wnAlertSwitch");
+        public Criteria andAlertSwitchNotBetween(Byte value1, Byte value2) {
+            addCriterion("alert_switch not between", value1, value2, "alertSwitch");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneIsNull() {
-            addCriterion("wn_alert_phone is null");
+        public Criteria andAlertPhoneIsNull() {
+            addCriterion("alert_phone is null");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneIsNotNull() {
-            addCriterion("wn_alert_phone is not null");
+        public Criteria andAlertPhoneIsNotNull() {
+            addCriterion("alert_phone is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneEqualTo(String value) {
-            addCriterion("wn_alert_phone =", value, "wnAlertPhone");
+        public Criteria andAlertPhoneEqualTo(String value) {
+            addCriterion("alert_phone =", value, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneNotEqualTo(String value) {
-            addCriterion("wn_alert_phone <>", value, "wnAlertPhone");
+        public Criteria andAlertPhoneNotEqualTo(String value) {
+            addCriterion("alert_phone <>", value, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneGreaterThan(String value) {
-            addCriterion("wn_alert_phone >", value, "wnAlertPhone");
+        public Criteria andAlertPhoneGreaterThan(String value) {
+            addCriterion("alert_phone >", value, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneGreaterThanOrEqualTo(String value) {
-            addCriterion("wn_alert_phone >=", value, "wnAlertPhone");
+        public Criteria andAlertPhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("alert_phone >=", value, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneLessThan(String value) {
-            addCriterion("wn_alert_phone <", value, "wnAlertPhone");
+        public Criteria andAlertPhoneLessThan(String value) {
+            addCriterion("alert_phone <", value, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneLessThanOrEqualTo(String value) {
-            addCriterion("wn_alert_phone <=", value, "wnAlertPhone");
+        public Criteria andAlertPhoneLessThanOrEqualTo(String value) {
+            addCriterion("alert_phone <=", value, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneLike(String value) {
-            addCriterion("wn_alert_phone like", value, "wnAlertPhone");
+        public Criteria andAlertPhoneLike(String value) {
+            addCriterion("alert_phone like", value, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneNotLike(String value) {
-            addCriterion("wn_alert_phone not like", value, "wnAlertPhone");
+        public Criteria andAlertPhoneNotLike(String value) {
+            addCriterion("alert_phone not like", value, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneIn(List<String> values) {
-            addCriterion("wn_alert_phone in", values, "wnAlertPhone");
+        public Criteria andAlertPhoneIn(List<String> values) {
+            addCriterion("alert_phone in", values, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneNotIn(List<String> values) {
-            addCriterion("wn_alert_phone not in", values, "wnAlertPhone");
+        public Criteria andAlertPhoneNotIn(List<String> values) {
+            addCriterion("alert_phone not in", values, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneBetween(String value1, String value2) {
-            addCriterion("wn_alert_phone between", value1, value2, "wnAlertPhone");
+        public Criteria andAlertPhoneBetween(String value1, String value2) {
+            addCriterion("alert_phone between", value1, value2, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneNotBetween(String value1, String value2) {
-            addCriterion("wn_alert_phone not between", value1, value2, "wnAlertPhone");
+        public Criteria andAlertPhoneNotBetween(String value1, String value2) {
+            addCriterion("alert_phone not between", value1, value2, "alertPhone");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitIsNull() {
-            addCriterion("wn_stop_limit is null");
+        public Criteria andStopLimitIsNull() {
+            addCriterion("stop_limit is null");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitIsNotNull() {
-            addCriterion("wn_stop_limit is not null");
+        public Criteria andStopLimitIsNotNull() {
+            addCriterion("stop_limit is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitEqualTo(BigDecimal value) {
-            addCriterion("wn_stop_limit =", value, "wnStopLimit");
+        public Criteria andStopLimitEqualTo(BigDecimal value) {
+            addCriterion("stop_limit =", value, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitNotEqualTo(BigDecimal value) {
-            addCriterion("wn_stop_limit <>", value, "wnStopLimit");
+        public Criteria andStopLimitNotEqualTo(BigDecimal value) {
+            addCriterion("stop_limit <>", value, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitGreaterThan(BigDecimal value) {
-            addCriterion("wn_stop_limit >", value, "wnStopLimit");
+        public Criteria andStopLimitGreaterThan(BigDecimal value) {
+            addCriterion("stop_limit >", value, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("wn_stop_limit >=", value, "wnStopLimit");
+        public Criteria andStopLimitGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("stop_limit >=", value, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitLessThan(BigDecimal value) {
-            addCriterion("wn_stop_limit <", value, "wnStopLimit");
+        public Criteria andStopLimitLessThan(BigDecimal value) {
+            addCriterion("stop_limit <", value, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("wn_stop_limit <=", value, "wnStopLimit");
+        public Criteria andStopLimitLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("stop_limit <=", value, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitIn(List<BigDecimal> values) {
-            addCriterion("wn_stop_limit in", values, "wnStopLimit");
+        public Criteria andStopLimitIn(List<BigDecimal> values) {
+            addCriterion("stop_limit in", values, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitNotIn(List<BigDecimal> values) {
-            addCriterion("wn_stop_limit not in", values, "wnStopLimit");
+        public Criteria andStopLimitNotIn(List<BigDecimal> values) {
+            addCriterion("stop_limit not in", values, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("wn_stop_limit between", value1, value2, "wnStopLimit");
+        public Criteria andStopLimitBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("stop_limit between", value1, value2, "stopLimit");
             return (Criteria) this;
         }
 
-        public Criteria andWnStopLimitNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("wn_stop_limit not between", value1, value2, "wnStopLimit");
+        public Criteria andStopLimitNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("stop_limit not between", value1, value2, "stopLimit");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(Boolean value) {
+            addCriterion("type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(Boolean value) {
+            addCriterion("type <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(Boolean value) {
+            addCriterion("type >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("type >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(Boolean value) {
+            addCriterion("type <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(Boolean value) {
+            addCriterion("type <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<Boolean> values) {
+            addCriterion("type in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<Boolean> values) {
+            addCriterion("type not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(Boolean value1, Boolean value2) {
+            addCriterion("type between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("type not between", value1, value2, "type");
             return (Criteria) this;
         }
 
@@ -606,8 +666,8 @@ public class PayChargeBalanceExample {
             return (Criteria) this;
         }
 
-        public Criteria andWnAlertPhoneLikeInsensitive(String value) {
-            addCriterion("upper(wn_alert_phone) like", value.toUpperCase(), "wnAlertPhone");
+        public Criteria andAlertPhoneLikeInsensitive(String value) {
+            addCriterion("upper(alert_phone) like", value.toUpperCase(), "alertPhone");
             return (Criteria) this;
         }
     }
