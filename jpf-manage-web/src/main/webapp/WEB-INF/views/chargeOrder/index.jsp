@@ -36,7 +36,8 @@
                     {field:'interfaceOrderNo',title:'上游订单号',width:"5%"},
                     {field:'status',title:'订单状态',width:"5%",
                         formatter:function (value,row,index) {
-                            if ( value == 1 ) { return "订单生成"; }
+                            if ( value == 0 ) { return "下单成功"; }
+                            if ( value == 1 ) { return "充值中"; }
                             if ( value == 2 ) { return "充值成功"; }
                             if ( value == 3 ) { return "充值失败"; }
                         }},

@@ -209,6 +209,7 @@ public class FlowRechargeController {
 
             upOrderInfo.setInterfaceType(type);
             upOrderInfo.setProductType(1);
+            actParam.put("forProductId",chargeProductInfo.getWnProductId());
             //请求微能接口
             map = phoneRechargeWn(actParam);
         }
@@ -332,7 +333,7 @@ public class FlowRechargeController {
         //充值接口
         JSONObject requestParam = new JSONObject();
         requestParam.put("mobile",actParam.get("phone"));
-        requestParam.put("productId",actParam.get("productId"));
+        requestParam.put("productId",actParam.get("forProductId"));
         requestParam.put("outOrderId",actParam.get("selfOrder"));
 
         WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
@@ -402,7 +403,11 @@ public class FlowRechargeController {
         Map<String,Object> sendParam = new HashMap<>();
         sendParam.put("outOrderNo",orderInfo.getForeignOrderNo());
         sendParam.put("orderNo",orderInfo.getOrderNo());
-        sendParam.put("phone",orderInfo.getChargePhone());
+        if ( orderInfo.getProductType() == 0 || orderInfo.getProductType() == 1 ){
+            sendParam.put("phone",orderInfo.getChargePhone());
+        }else if ( orderInfo.getProductType() == 2 || orderInfo.getProductType() == 3 ){
+            sendParam.put("cardNo",orderInfo.getChargePhone());
+        }
         sendParam.put("money",orderInfo.getTotalMoney().toString());
         sendParam.put("productId",orderInfo.getProductId());
 
