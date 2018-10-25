@@ -14,9 +14,6 @@ import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import com.joiest.jpf.facade.ChargeProductServiceFacade;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.ManagedMap;
@@ -64,7 +61,6 @@ public class FlowQueryController {
         //时间戳
         String dateTime = request.getParameter("dateTime");
         //运营商类型 1=移动 2=联通 3=电信 为空返回所有运营商的套餐
-        //int carrier = 0;
         String carrier = request.getParameter("carrier");
         if ( request.getParameter("carrier") == null ) {
             responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
@@ -84,17 +80,6 @@ public class FlowQueryController {
             return JsonUtils.toJson(responseMap);
         }
 
-
-        /*if( request.getParameter("carrier") !=null && StringUtils.isNotBlank(request.getParameter("carrier")) && !request.getParameter("carrier").equals("null") ){
-            carrier = Integer.parseInt(request.getParameter("carrier"));
-        }else{
-            if( request.getParameter("carrier") == null || !StringUtils.isBlank(request.getParameter("carrier")) ){
-                responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
-                responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
-                return JsonUtils.toJson(responseMap);
-            }
-        }*/
-
         //签名串
         String sign = request.getParameter("sign");
 
@@ -102,22 +87,16 @@ public class FlowQueryController {
         if(StringUtils.isBlank(merchNo) || StringUtils.isBlank(dateTime)  ){
             responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), null);
         }
-//        if( carrier < 0 || carrier > 3 ){
-//            responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
-//            responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
-//            return JsonUtils.toJson(responseMap);
-////            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), null);
-//        }
 
         //缺少签名参数
         if( sign== null || StringUtils.isBlank(sign)){
             responseMap.put("code",JpfInterfaceErrorInfo.NO_SIGN.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc(), null);
         }
 
         Map<String,Object> map = new HashMap<>();
@@ -139,15 +118,15 @@ public class FlowQueryController {
         if(result==null || result.getIsDel() == 1 ){
             responseMap.put("code",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc(), null);
         }
         //商户删除 或者  商户关闭服务
         if( result.getIsFreeze() == 1 ){
-            responseMap.put("code",JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getCode());
-            responseMap.put("info",JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getDesc());
+            responseMap.put("code",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getCode(), JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getDesc(), null);
         }
         String  privateKey = result.getPrivateKey();
 
@@ -156,8 +135,8 @@ public class FlowQueryController {
         if(!selfSign.equals(sign)){
             responseMap.put("code",JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode(), JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc(), null);
         }
 
         //查询商品列表
@@ -172,8 +151,8 @@ public class FlowQueryController {
         if( list==null ||  list.isEmpty() ){
             responseMap.put("code",JpfInterfaceErrorInfo.FAIL.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.FAIL.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return  ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), getRecords);
         }
         StringBuilder sbf = new StringBuilder();
         Date date = new Date();
@@ -234,16 +213,16 @@ public class FlowQueryController {
         if(StringUtils.isBlank(merchNo) || ( StringUtils.isBlank(outOrderNo) && StringUtils.isBlank(orderNo) ) ){
             responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), null);
         }
 
         //缺少签名参数
         if( sign== null || StringUtils.isBlank(sign)){
             responseMap.put("code",JpfInterfaceErrorInfo.NO_SIGN.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc(), null);
         }
 
         Map<String,Object> map = new HashMap<>();
@@ -269,15 +248,15 @@ public class FlowQueryController {
         if(result==null || result.getIsDel() == 1 ){
             responseMap.put("code",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc(), null);
         }
         //商户删除 或者  商户关闭服务
         if( result.getIsFreeze() == 1 ){
-            responseMap.put("code",JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getCode());
-            responseMap.put("info",JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getDesc());
+            responseMap.put("code",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getCode(), JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getDesc(), null);
         }
         String  privateKey = result.getPrivateKey();
 
@@ -286,8 +265,8 @@ public class FlowQueryController {
         if(!selfSign.equals(sign)){
             responseMap.put("code",JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode(), JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc(), null);
         }
 
         //查询订单信息
@@ -299,8 +278,8 @@ public class FlowQueryController {
         if( orderInfo ==null ){
             responseMap.put("code",JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getCode(), JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getDesc(), null);
         }
 
         //返回指定字段信息
@@ -314,8 +293,8 @@ public class FlowQueryController {
         responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
         responseMap.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
         responseMap.put("data",responData);
+
         return JsonUtils.toJson(responseMap);
-//        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), orderInfo);
     }
 
     /**
@@ -343,16 +322,16 @@ public class FlowQueryController {
         if(StringUtils.isBlank(merchNo) || StringUtils.isBlank(dateTime) ){
             responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+
             return JsonUtils.toJson(responseMap);
-            //return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc(), null);
         }
 
         //缺少签名参数
         if( sign== null || StringUtils.isBlank(sign)){
             responseMap.put("code",JpfInterfaceErrorInfo.NO_SIGN.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//          return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.NO_SIGN.getCode(), JpfInterfaceErrorInfo.NO_SIGN.getDesc(), null);
         }
 
         Map<String,Object> map = new HashMap<>();
@@ -373,15 +352,15 @@ public class FlowQueryController {
         if(result==null || result.getIsDel() == 1 ){
             responseMap.put("code",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode(), JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc(), null);
         }
         //商户删除 或者  商户关闭服务
         if( result.getIsFreeze() == 1 ){
-            responseMap.put("code",JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getCode());
-            responseMap.put("info",JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getDesc());
+            responseMap.put("code",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getCode(), JpfInterfaceErrorInfo.USER_COUPON_NOTBIND.getDesc(), null);
         }
         String  privateKey = result.getPrivateKey();
 
@@ -390,8 +369,8 @@ public class FlowQueryController {
         if(!selfSign.equals(sign)){
             responseMap.put("code",JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
+
             return JsonUtils.toJson(responseMap);
-//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode(), JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc(), null);
         }
 
         //返回指定字段信息
@@ -402,8 +381,8 @@ public class FlowQueryController {
         responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
         responseMap.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
         responseMap.put("data",responData);
+
         return JsonUtils.toJson(responseMap);
-//        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), result);
     }
 
     //参数拼接
