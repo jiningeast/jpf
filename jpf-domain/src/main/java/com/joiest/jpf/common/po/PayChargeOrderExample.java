@@ -1476,6 +1476,266 @@ public class PayChargeOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andOperatorIdIsNull() {
+            addCriterion("operator_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdIsNotNull() {
+            addCriterion("operator_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdEqualTo(String value) {
+            addCriterion("operator_id =", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdNotEqualTo(String value) {
+            addCriterion("operator_id <>", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdGreaterThan(String value) {
+            addCriterion("operator_id >", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdGreaterThanOrEqualTo(String value) {
+            addCriterion("operator_id >=", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdLessThan(String value) {
+            addCriterion("operator_id <", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdLessThanOrEqualTo(String value) {
+            addCriterion("operator_id <=", value, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdIn(List<String> values) {
+            addCriterion("operator_id in", values, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdNotIn(List<String> values) {
+            addCriterion("operator_id not in", values, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdBetween(String value1, String value2) {
+            addCriterion("operator_id between", value1, value2, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorIdNotBetween(String value1, String value2) {
+            addCriterion("operator_id not between", value1, value2, "operatorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameIsNull() {
+            addCriterion("operator_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameIsNotNull() {
+            addCriterion("operator_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameEqualTo(String value) {
+            addCriterion("operator_name =", value, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameNotEqualTo(String value) {
+            addCriterion("operator_name <>", value, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameGreaterThan(String value) {
+            addCriterion("operator_name >", value, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameGreaterThanOrEqualTo(String value) {
+            addCriterion("operator_name >=", value, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameLessThan(String value) {
+            addCriterion("operator_name <", value, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameLessThanOrEqualTo(String value) {
+            addCriterion("operator_name <=", value, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameLike(String value) {
+            addCriterion("operator_name like", value, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameNotLike(String value) {
+            addCriterion("operator_name not like", value, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameIn(List<String> values) {
+            addCriterion("operator_name in", values, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameNotIn(List<String> values) {
+            addCriterion("operator_name not in", values, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameBetween(String value1, String value2) {
+            addCriterion("operator_name between", value1, value2, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameNotBetween(String value1, String value2) {
+            addCriterion("operator_name not between", value1, value2, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdIsNull() {
+            addCriterion("check_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdIsNotNull() {
+            addCriterion("check_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdEqualTo(String value) {
+            addCriterion("check_id =", value, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdNotEqualTo(String value) {
+            addCriterion("check_id <>", value, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdGreaterThan(String value) {
+            addCriterion("check_id >", value, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdGreaterThanOrEqualTo(String value) {
+            addCriterion("check_id >=", value, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdLessThan(String value) {
+            addCriterion("check_id <", value, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdLessThanOrEqualTo(String value) {
+            addCriterion("check_id <=", value, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdIn(List<String> values) {
+            addCriterion("check_id in", values, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdNotIn(List<String> values) {
+            addCriterion("check_id not in", values, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdBetween(String value1, String value2) {
+            addCriterion("check_id between", value1, value2, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckIdNotBetween(String value1, String value2) {
+            addCriterion("check_id not between", value1, value2, "checkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameIsNull() {
+            addCriterion("check_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameIsNotNull() {
+            addCriterion("check_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameEqualTo(String value) {
+            addCriterion("check_name =", value, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameNotEqualTo(String value) {
+            addCriterion("check_name <>", value, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameGreaterThan(String value) {
+            addCriterion("check_name >", value, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameGreaterThanOrEqualTo(String value) {
+            addCriterion("check_name >=", value, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameLessThan(String value) {
+            addCriterion("check_name <", value, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameLessThanOrEqualTo(String value) {
+            addCriterion("check_name <=", value, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameLike(String value) {
+            addCriterion("check_name like", value, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameNotLike(String value) {
+            addCriterion("check_name not like", value, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameIn(List<String> values) {
+            addCriterion("check_name in", values, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameNotIn(List<String> values) {
+            addCriterion("check_name not in", values, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameBetween(String value1, String value2) {
+            addCriterion("check_name between", value1, value2, "checkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameNotBetween(String value1, String value2) {
+            addCriterion("check_name not between", value1, value2, "checkName");
+            return (Criteria) this;
+        }
+
         public Criteria andIsDelIsNull() {
             addCriterion("is_del is null");
             return (Criteria) this;
@@ -1703,6 +1963,16 @@ public class PayChargeOrderExample {
 
         public Criteria andNotifyParamsLikeInsensitive(String value) {
             addCriterion("upper(notify_params) like", value.toUpperCase(), "notifyParams");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatorNameLikeInsensitive(String value) {
+            addCriterion("upper(operator_name) like", value.toUpperCase(), "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckNameLikeInsensitive(String value) {
+            addCriterion("upper(check_name) like", value.toUpperCase(), "checkName");
             return (Criteria) this;
         }
     }

@@ -6,7 +6,6 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.common.util.WnpayUtils;
 import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.dto.GetShopStockCardResponse;
@@ -14,11 +13,15 @@ import com.joiest.jpf.dto.OfpayRequest;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.constant.ManageConstants;
-import com.joiest.jpf.market.api.util.*;
+import com.joiest.jpf.market.api.util.ServletUtils;
+import com.joiest.jpf.market.api.util.SmsUtils;
+import com.joiest.jpf.market.api.util.ToolsUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.util.JSONTokener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
@@ -40,6 +45,9 @@ public class OrdersController {
     private String uid;
     private String openId;
     private ShopCustomerInterfaceInfo userInfo;
+
+    @Autowired
+    private ChargeInterfaceStreamFacade chargeInterfaceStreamFacade;
 
     private String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
 
@@ -897,7 +905,7 @@ public class OrdersController {
     {
         String requestURI = request.getRequestURI();
         String method_name = requestURI.substring(requestURI.lastIndexOf("/") + 1);
-        if ( !method_name.equals("ofpayNotifyUrl"))
+        if ( !method_name.equals("ofpayNotifyUrl") && !method_name.equals("flowbalance") && !method_name.equals("weinengNotifyUrl"))
         {
             String token = request.getHeader("Token");
             String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
@@ -1177,24 +1185,144 @@ public class OrdersController {
     /**
      * 微能接口测试
      * */
-    @RequestMapping(value = "wntest",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    //@RequestMapping(value = "wntest",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value="weinengNotifyUrl",method = RequestMethod.POST)
     @ResponseBody
-    public String wnTest(HttpServletRequest request){
-        /*
-            //充值接口
-            JSONObject requestParam = new JSONObject();
-            requestParam.put("mobile","18311171705");
-            requestParam.put("productId","40000010");
-            requestParam.put("outOrderId",DateUtils.getDate2YmdhmsString(new Date()));
+    public String weinengNotifyUrl(HttpServletRequest request)throws Exception{
 
-            WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
-            String wnProduct = wnpayUtils.flowOrder(requestParam);
+        String infoErrorOrder = null;
+        String sucOrder = "";
+        String faildOrder = "";
+        //后台接收
+        InputStreamReader reader = new InputStreamReader(request.getInputStream(),"UTF-8");
+        int length=0;
+        String streamVal = null;
+        char[] buff=new char[2048];
+        while((length=reader.read(buff))!=-1){
 
-         */
+            streamVal = new String(buff,0,length);
+        }
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n接口名称：微能充值异步回调");
+        sbf.append("\n接口参数：" + streamVal);
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnApi",true);
 
-        return null;// wnProduct;
+        Object json = new JSONTokener(streamVal).nextValue();
+        if(json instanceof JSONObject){
+
+            sbf.append("\n无可处理订单");
+        }else if (json instanceof JSONArray){
+
+            JSONArray dataDeal = JSONArray.fromObject(streamVal);
+            if(dataDeal.size()>0){
+
+                for(int i=0;i<dataDeal.size();i++){
+
+                    JSONObject job = dataDeal.getJSONObject(i);
+
+                    String orderNo = job.get("outOrderId").toString();
+                    String orderPrefix = job.get("outOrderId").toString().substring(0,2);
+                    if(orderPrefix.equals("CH")){
+
+                        //更新订单信息
+                        PayChargeOrder payChargeOrder = new PayChargeOrder();
+                        payChargeOrder.setOrderNo(orderNo);
+                        ChargeOrderInfo orderInfo = chargeOrderServiceFacade.getOne(payChargeOrder);//request.getSporder_id()
+                        if (orderInfo ==null){
+                            infoErrorOrder+= orderNo+",";
+                            continue;
+                        }
+                        //添加流水
+                        ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
+                        chargeInterfaceStreamInfo.setOrderId(""+orderInfo.getId());
+                        chargeInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+                        chargeInterfaceStreamInfo.setType((byte)1);
+                        chargeInterfaceStreamInfo.setRequestUrl(request.getRequestURL().toString());
+                        chargeInterfaceStreamInfo.setRequestParam(job.toString());
+                        //chargeInterfaceStreamInfo.setResponse(job.toString());
+                        chargeInterfaceStreamInfo.setAddtime(new Date());
+                        chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
+
+                        //主动通知参数
+                        Map<String,Object> sendParam = new HashMap<>();
+                        sendParam.put("outOrderNo",orderInfo.getForeignOrderNo());
+                        sendParam.put("orderNo",orderInfo.getOrderNo());
+                        sendParam.put("phone",orderInfo.getChargePhone());
+                        sendParam.put("money",orderInfo.getTotalMoney().toString());
+                        sendParam.put("productId",orderInfo.getProductId());
+
+                        //修改订单信息 【订单状态】
+                        ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
+                        if (job.get("reportStatus").toString().equals("1")){
+
+                            sucOrder+=orderInfo.getOrderNo()+",";
+                            upOrderInfo.setStatus((byte)2);
+
+                            sendParam.put("code","10000");
+                            sendParam.put("info","充值成功");
+                        }else{
+
+                            faildOrder+=orderInfo.getOrderNo()+",";
+                            upOrderInfo.setStatus((byte)3);
+
+                            sendParam.put("code","10008");
+                            sendParam.put("info","充值失败");
+                        }
+                        upOrderInfo.setId(orderInfo.getId());
+                        upOrderInfo.setNotifyParams(JSONObject.fromObject(sendParam).toString());
+                        upOrderInfo.setNotifyTime(new Date());
+                        upOrderInfo.setUpdatetime(new Date());
+                        chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
+
+                        sbf.append("\n请求下游地址："+orderInfo.getNotifyUrl());
+                        sbf.append("\n\t请求下游参数："+JSONObject.fromObject(sendParam).toString());
+
+                        //发起下游请求
+                        OkHttpUtils.postForm(orderInfo.getNotifyUrl(),sendParam);
+                    }else{
+
+                        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderByOrderNo(job.get("outOrderId").toString());
+                        if (orderInfo ==null){
+                            infoErrorOrder+= job.get("outOrderId").toString()+",";
+                            continue;
+                        }
+                        //添加流水
+                        ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
+                        chargeInterfaceStreamInfo.setOrderId(""+orderInfo.getId());
+                        chargeInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+                        chargeInterfaceStreamInfo.setType((byte)1);
+                        chargeInterfaceStreamInfo.setRequestUrl(request.getRequestURL().toString());
+                        chargeInterfaceStreamInfo.setRequestParam(job.toString());
+                        //chargeInterfaceStreamInfo.setResponse(map.get("responseParam"));
+                        chargeInterfaceStreamInfo.setAddtime(new Date());
+                        chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
+
+                        // 查询订单
+                        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+                        orderinfo.setId(orderInfo.getId());
+                        orderinfo.setUpdatetime(new Date());
+                        if (job.get("reportStatus").toString().equals("1")){
+
+                            sucOrder+=orderInfo.getOrderNo()+",";
+                            orderinfo.setRechargeStatus("1");
+                        }else{
+
+                            faildOrder+=orderInfo.getOrderNo()+",";
+                            orderinfo.setRechargeStatus("9");
+                        }
+                        shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+                    }
+                }
+            }
+            sbf.append("\n充值成功："+sucOrder);
+            sbf.append("\n充值失败："+faildOrder);
+            sbf.append("\n订单信息错误：" + infoErrorOrder);
+            LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnReportApi",true);
+
+        }else{}
+       return "Y";
     }
-
     private Map<String,Object> _filter(String data)
     {
         Map<String,Object> resultMap = new HashMap<>();
