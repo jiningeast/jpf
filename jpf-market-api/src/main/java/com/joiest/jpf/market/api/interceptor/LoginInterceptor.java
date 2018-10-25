@@ -59,6 +59,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/custom/bind");                //绑定手机号
                 add("/custom/sendSms");             //绑定手机号
                 add("/nologin/userIndex");
+                add("/nologin/register");
                 add("/nologin/userNotBindCoupon");
                 add("/orders/ofpayNotifyUrl");
                 add("/certificate/activation");     //用户激活券url
