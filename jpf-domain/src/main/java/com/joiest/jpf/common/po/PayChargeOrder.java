@@ -41,7 +41,7 @@ public class PayChargeOrder implements Serializable {
     private String chargePhone;
 
     /**
-     * 产品类型 0=话费充值 1=油卡充值
+     * 产品类型 0=欧飞话费充值 1=微能话费充值 2=中石化油卡充值 3=中石油油卡充值
      */
     private Integer productType;
 
@@ -101,9 +101,29 @@ public class PayChargeOrder implements Serializable {
     private Date notifyTime;
 
     /**
-     * 订单状态 0=平台下单成功 1=充值中 2=上游充值成功 3=上游充值失败
+     * 订单状态 0=平台下单成功 1=充值中 2=上游充值成功 3=上游充值失败 4=申请退款 5=退款成功 6=拒绝退款
      */
     private Byte status;
+
+    /**
+     * 申请退款人id
+     */
+    private String operatorId;
+
+    /**
+     * 申请退款人姓名
+     */
+    private String operatorName;
+
+    /**
+     * 财务审核人id
+     */
+    private String checkId;
+
+    /**
+     * 财务审核人姓名
+     */
+    private String checkName;
 
     /**
      * 是否删除
@@ -282,6 +302,38 @@ public class PayChargeOrder implements Serializable {
         this.status = status;
     }
 
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId == null ? null : operatorId.trim();
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName == null ? null : operatorName.trim();
+    }
+
+    public String getCheckId() {
+        return checkId;
+    }
+
+    public void setCheckId(String checkId) {
+        this.checkId = checkId == null ? null : checkId.trim();
+    }
+
+    public String getCheckName() {
+        return checkName;
+    }
+
+    public void setCheckName(String checkName) {
+        this.checkName = checkName == null ? null : checkName.trim();
+    }
+
     public Byte getIsDel() {
         return isDel;
     }
@@ -335,6 +387,10 @@ public class PayChargeOrder implements Serializable {
         sb.append(", notifyParams=").append(notifyParams);
         sb.append(", notifyTime=").append(notifyTime);
         sb.append(", status=").append(status);
+        sb.append(", operatorId=").append(operatorId);
+        sb.append(", operatorName=").append(operatorName);
+        sb.append(", checkId=").append(checkId);
+        sb.append(", checkName=").append(checkName);
         sb.append(", isDel=").append(isDel);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
@@ -378,6 +434,10 @@ public class PayChargeOrder implements Serializable {
             && (this.getNotifyParams() == null ? other.getNotifyParams() == null : this.getNotifyParams().equals(other.getNotifyParams()))
             && (this.getNotifyTime() == null ? other.getNotifyTime() == null : this.getNotifyTime().equals(other.getNotifyTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
+            && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
+            && (this.getCheckId() == null ? other.getCheckId() == null : this.getCheckId().equals(other.getCheckId()))
+            && (this.getCheckName() == null ? other.getCheckName() == null : this.getCheckName().equals(other.getCheckName()))
             && (this.getIsDel() == null ? other.getIsDel() == null : this.getIsDel().equals(other.getIsDel()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
@@ -410,6 +470,10 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getNotifyParams() == null) ? 0 : getNotifyParams().hashCode());
         result = prime * result + ((getNotifyTime() == null) ? 0 : getNotifyTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
+        result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
+        result = prime * result + ((getCheckId() == null) ? 0 : getCheckId().hashCode());
+        result = prime * result + ((getCheckName() == null) ? 0 : getCheckName().hashCode());
         result = prime * result + ((getIsDel() == null) ? 0 : getIsDel().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
