@@ -65,6 +65,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/shopAd/index");     //广告位图片调取
                 add("/orders/wnProduct");     //获取微能产品信息
                 add("/orders/flowReport");     //微能状态报告获取
+                add("/orders/flowbalance");      // 查询微能余额
+                add("/orders/weinengNotifyUrl");      // 查询微能余额
                 add("/demo/test");              // 测试函数
             }
         };
