@@ -32,6 +32,10 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
         PayChargeOrderExample example = new PayChargeOrderExample();
         PayChargeOrderExample.Criteria c = example.createCriteria();
+        if( StringUtils.isNotBlank(record.getId()) ){
+            c.andIdEqualTo(record.getId());
+        }
+
         if( StringUtils.isNotBlank(record.getForeignOrderNo()) ){
             c.andForeignOrderNoEqualTo(record.getForeignOrderNo());
         }

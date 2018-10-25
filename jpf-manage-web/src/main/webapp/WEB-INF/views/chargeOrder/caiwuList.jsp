@@ -9,7 +9,7 @@
         $(function () {
             var toolbar = [
                 {
-                    text : '申请退款',
+                    text : '审核退款',
                     iconCls : 'icon-ok',
                     handler:function(){
                         var rows = $('#dg').datagrid('getSelections');
@@ -18,11 +18,11 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return
                         }else{
-                            $.messager.confirm('确认','是否申请退款',function(r){
+                            $.messager.confirm('确认','是否确认退款',function(r){
                                 if (r){
                                     $.ajax({
                                         type: 'post',
-                                        url: "applyTuikuan" ,
+                                        url: "auditTuikuan" ,
                                         data: "id="+rows[0].id,
                                         dataType: 'json',
                                         success: function (msg) {
@@ -54,7 +54,7 @@
                 multiselect:false,
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
-                url:'list',
+                url:'caiwuList',
                 columns:[[
                     {field:'id',title:'ID',width:"5%"},
                     {field:'orderNo',title:'订单号',width:"5%"},

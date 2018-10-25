@@ -2,7 +2,7 @@ package com.joiest.jpf.common.util;
 
 import com.joiest.jpf.common.constant.ManageConstants;
 import net.sf.json.JSONObject;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class OfpayUtils {
+
     private String userid;
 
     private String userpws;
@@ -31,6 +32,10 @@ public class OfpayUtils {
 
     private String version_phone;
 
+    private String regis_query;
+
+    private String aesKey;
+
     private String aes_ecb_nopadding_pw;
 
 
@@ -48,6 +53,8 @@ public class OfpayUtils {
         this.cardid_fast = ConfigUtil.getValue("cardid_fast");
         this.version_phone = ConfigUtil.getValue("version_phone");
         this.gas_query = ConfigUtil.getValue("gas_query");
+        this.regis_query = ConfigUtil.getValue("res_query");
+        this.aesKey = ConfigUtil.getValue("AES_ECB_NOPADDING_PW");
         this.aes_ecb_nopadding_pw = ConfigUtil.getValue("AES_ECB_NOPADDING_PW");
     }
 
@@ -160,10 +167,71 @@ public class OfpayUtils {
     /**
      * 油卡-注册
      */
-    public void oilRegister(){
+    public Map<String, String> oilRegister(Map<String,String> resMap){
 
+        Map<String,Object> requestMap = new LinkedHashMap<>();
+        requestMap.put("userid", userid);       // 商户号
+        requestMap.put("userpws", Md5Encrypt.md5(userpws));     // 商户密码
+        requestMap.put("version", version_phone );
+        requestMap.put("login_name", resMap.get("login_name") );    // 注册账号
+        String password=resMap.getOrDefault("login_pwd","");//密码
+        if(!password.equals("")){
+           String loginspwd= Base64.encodeBase64String(AES_ECBUtils.encrypt(password, aesKey.getBytes()));
+           requestMap.put("login_pwd", loginspwd );
+        }
+
+        String email=resMap.getOrDefault("email","");//电子邮件
+
+        if ( !email.equals("") )
+        {
+            String emailaes=Base64.encodeBase64String(AES_ECBUtils.encrypt(email, aesKey.getBytes()));
+            requestMap.put("email", emailaes);
+        }
+
+        String phone=resMap.getOrDefault("phone_no","");//手机号
+        if(!phone.equals("")){
+            String phoneaes=Base64.encodeBase64String(AES_ECBUtils.encrypt(phone, aesKey.getBytes()));
+            requestMap.put("phone_no",phoneaes);
+        }
+        String chargeType = resMap.getOrDefault("charge_type","");
+        if ( !chargeType.equals("") )
+        {
+
+            requestMap.put("charge_type", resMap.get("charge_type") );      // 加油卡类型 （1:中石化、2:中石油；默认为1，不参与MD5校验）
+        }
+
+        requestMap.put("md5_str", getResQuerySign(requestMap));         //签名串
+        String requestParam = ToolUtils.mapToUrl(requestMap);   //请求参数
+        String resultXml = OkHttpUtils.postForm(regis_query,requestMap);
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n注册油卡:"+  "油卡注册");
+        sbf.append("\n请求地址：" + regis_query);
+        sbf.append("\n接口参数：" + requestMap);
+        sbf.append("\n回调信息：" + resultXml);
+
+        String fileName = "ofpayRegisQuery";
+        String path = "/logs/jpf-market-api/log/";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+
+        Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
+        resultMap.put("retcode", resultMap.get("retcode"));
+        resultMap.put("err_msg", resultMap.get("err_msg"));
+        resultMap.put("event_id", resultMap.get("event_id"));
+        return resultMap;
     }
 
+    /**
+     * 油卡注册MD5
+     */
+    public String getResQuerySign(Map<String,Object> map){
+        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("login_name")+ map.get("login_pwd")+map.get("email")+ map.get("phone_no")+map.get("charge_type")+ ConfigUtil.getValue("keystr");
+        String sign = Md5Encrypt.md5(myPackage).toUpperCase();
+
+        return sign;
+    }
     /**
      * 油卡-登录
      */
