@@ -38,7 +38,7 @@ public class PayChargeBalance implements Serializable {
     /**
      * 接口商家 0=欧飞 1=威能
      */
-    private Boolean type;
+    private Byte type;
 
     /**
      * 更新时间
@@ -95,11 +95,11 @@ public class PayChargeBalance implements Serializable {
         this.stopLimit = stopLimit;
     }
 
-    public Boolean getType() {
+    public Byte getType() {
         return type;
     }
 
-    public void setType(Boolean type) {
+    public void setType(Byte type) {
         this.type = type;
     }
 
