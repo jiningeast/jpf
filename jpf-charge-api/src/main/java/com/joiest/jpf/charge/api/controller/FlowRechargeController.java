@@ -128,7 +128,7 @@ public class FlowRechargeController {
         return "1";
     }
 
-    @RequestMapping(value = "telPlaceOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "telPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     public String telPlaceOrder(){
 
         if(validate.equals(false))
@@ -358,7 +358,7 @@ public class FlowRechargeController {
     /**
      * 欧非话费充值异步回调接口
      * */
-    @RequestMapping(value = "/ofpayNotifyUrl",produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/ofpayNotifyUrl",produces = "text/plain;charset=utf-8")
     public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
     {
         //1.流水 2.订单信息 3.更新订单状态
@@ -477,7 +477,7 @@ public class FlowRechargeController {
         respond = resParam.toString();
         return validate;
     }
-    @RequestMapping(value = "oilPlaceOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "oilPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     public String oilPlaceOrder(){
 
         if(validate.equals(false))

@@ -14,6 +14,9 @@ import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import com.joiest.jpf.facade.ChargeProductServiceFacade;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.ManagedMap;
@@ -49,7 +52,7 @@ public class FlowQueryController {
      * sign     签名
      *
     * */
-    @RequestMapping(value = "/flowProduct",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/flowProduct",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String flowProduct(HttpServletRequest request, HttpServletResponse response){
 
@@ -197,8 +200,8 @@ public class FlowQueryController {
         responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
         responseMap.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
         responseMap.put("data",responData);
+
         return JsonUtils.toJson(responseMap);
-//        return  ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), getRecords);
     }
 
     /**
@@ -208,7 +211,7 @@ public class FlowQueryController {
      * orderNo     平台订单号
      * sign     签名
      * */
-    @RequestMapping(value = "/search",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/search",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String search(HttpServletRequest request, HttpServletResponse response){
 
@@ -321,7 +324,7 @@ public class FlowQueryController {
      * dateTime  时间
      * sign     签名
      * */
-    @RequestMapping(value = "/banlance",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/banlance",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String banlance(HttpServletRequest request, HttpServletResponse response){
         //商户号
@@ -404,7 +407,7 @@ public class FlowQueryController {
     }
 
     //参数拼接
-    @RequestMapping(value = "/testDemo",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/testDemo",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public void testDemo(HttpServletRequest request){
         try {
