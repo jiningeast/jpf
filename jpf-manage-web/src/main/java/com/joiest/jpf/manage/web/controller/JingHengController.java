@@ -58,7 +58,6 @@ public class JingHengController {
         requestParam.put("startGmtCreate", start);
         requestParam.put("endGmtCreate", end);
         requestParam.put("pageSize", "500");
-        requestParam.put("currentPage", "1");
         TreeMap<String, Object> treeMap = new TreeMap<>();
         treeMap.putAll(requestParam);
         Collection<Object> values = requestParam.values();
@@ -74,115 +73,121 @@ public class JingHengController {
         for (Map.Entry<String, Object> entry : treeMap.entrySet()) {
             tmpStr += entry.getKey() + "=" + entry.getValue() + "&";
         }
+        int currentPage = 1;
+        int currentPageDataSize = 1;
+        while ( currentPageDataSize > 0 ){
+            requestParam.put("currentPage", currentPage);
+            String paramStr = StringUtils.stripEnd(tmpStr, "&");
+            String url = requestUrl + "?" +paramStr;
+            logger.info("-------------- 敬恒 拉取数据第 "+requestParam.get("currentPage")+" 页 ，start --------------");
 
-        String paramStr = StringUtils.stripEnd(tmpStr, "&");
-        String url = requestUrl + "?" +paramStr;
-        logger.info("-------------- 敬恒 拉取数据，start --------------");
-        String result = OkHttpUtils.get(url);     //todo 打开注释
-        logger.info("-------------- 敬恒 拉取数据，end --------------");
+            String result = OkHttpUtils.get(url);     //todo 打开注释
+            logger.info("-------------- 敬恒 拉取数据第 "+requestParam.get("currentPage")+" 页，end --------------");
 //        String result = this.result;
-        JSONObject resultJosn = JSONObject.fromObject(result);
-        JSONArray module = null;
-        int valid_count = 0;
-        if ( resultJosn.containsKey("module") )
-        {
-            module = JSONArray.fromObject(resultJosn.get("module"));
-            logger.info("拉到数据，共计：{}条", module.size());
-            if( module.size() != 0 ){
-                int size = module.size();
-                for (int i=0; i<size; i++){
-                    JSONObject one = module.getJSONObject(i);
-                    logger.info("status: {}", one.get("status"));
-                    logger.info("status--type: {}", one.get("status").getClass());
-                    logger.info("equqls--result: {}", one.get("status").toString().equals("2") );
-                    //过滤充值失败的订单
-                    if ( one.containsKey("status") && !one.get("status").toString().equals("2") )
-                    {
-                        continue;
-                    }
-                    valid_count++;
-                    ModifyBrangainRechargeorderRequest request = new ModifyBrangainRechargeorderRequest();
+            JSONObject resultJosn = JSONObject.fromObject(result);
+            JSONArray module = null;
+            int valid_count = 0;
+            if ( resultJosn.containsKey("module") )
+            {
+                module = JSONArray.fromObject(resultJosn.get("module"));
+                logger.info("拉到数据，共计：{}条", module.size());
+                currentPageDataSize = module.size();
+                if( module.size() != 0 ){
+                    int size = module.size();
+                    for (int i=0; i<size; i++){
+                        JSONObject one = module.getJSONObject(i);
+                        logger.info("status: {}", one.get("status"));
+                        logger.info("status--type: {}", one.get("status").getClass());
+                        logger.info("equqls--result: {}", one.get("status").toString().equals("2") );
+                        //过滤充值失败的订单
+                        if ( one.containsKey("status") && !one.get("status").toString().equals("2") )
+                        {
+                            continue;
+                        }
+                        valid_count++;
+                        ModifyBrangainRechargeorderRequest request = new ModifyBrangainRechargeorderRequest();
 
-                    //订单编号
-                    if ( one.containsKey("id") && one.get("id") != null )
-                    {
-                        request.setForeignOrderNo(one.get("id").toString());
-                    }
-                    //添加时间
-                    if ( one.containsKey("gmtCreate") && one.get("gmtCreate") != null )
-                    {
-                        Date addtime = DateUtils.stampToDateRe( one.get("gmtCreate").toString());
-                        request.setAddtime(addtime);
-                    }
-                    //订单修改时间
-                    if ( one.containsKey("gmtModify") && one.get("gmtModify") != null )
-                    {
-                        Date recharge_time = DateUtils.stampToDateRe( one.get("gmtModify").toString());
-                        request.setRechargeTime(recharge_time);
-                    }
-                    //订单状态
-                    request.setStatus(1);
-                    //充值状态
-                    if ( one.containsKey("status") && one.get("status") != null )
-                    {
-                        request.setRechargeStatus(one.get("status").toString());
-                    }
-                    //充值号码
-                    if ( one.containsKey("itemUid") && one.get("itemUid") != null )
-                    {
-                        request.setChargeNo(one.get("itemUid").toString());
-                    }
-                    //商品名称
-                    if ( one.containsKey("itemName") && one.get("itemName") != null )
-                    {
-                        request.setItemName(one.get("itemName").toString());
-                    }
-                    //商品单价
-                    if ( one.containsKey("itemPrice") && one.get("itemPrice") != null )
-                    {
-                        Double itemPrice = Double.valueOf(one.get("itemPrice").toString());
-                        Double priceD = itemPrice/1000;
-                        BigDecimal price = new BigDecimal(priceD.toString());
-                        request.setPrice(price);
-                    }
-                    //商品面额
-                    if ( one.containsKey("itemFacePrice") && one.get("itemFacePrice") != null )
-                    {
-                        Double itemFacePrice = Double.valueOf(one.get("itemFacePrice").toString());
-                        Double facePrice = itemFacePrice/1000;
-                        BigDecimal price = new BigDecimal(facePrice.toString());
-                        request.setFacePrice(price);
-                    }
-                    //商品面额
-                    if ( one.containsKey("amount") && one.get("amount") != null )
-                    {
-                        Double itemFacePrice = Double.valueOf(one.get("amount").toString());
-                        Double amount = itemFacePrice/1000;
-                        BigDecimal price = new BigDecimal(amount.toString());
-                        request.setAmount(price);
-                    }
+                        //订单编号
+                        if ( one.containsKey("id") && one.get("id") != null )
+                        {
+                            request.setForeignOrderNo(one.get("id").toString());
+                        }
+                        //添加时间
+                        if ( one.containsKey("gmtCreate") && one.get("gmtCreate") != null )
+                        {
+                            Date addtime = DateUtils.stampToDateRe( one.get("gmtCreate").toString());
+                            request.setAddtime(addtime);
+                        }
+                        //订单修改时间
+                        if ( one.containsKey("gmtModify") && one.get("gmtModify") != null )
+                        {
+                            Date recharge_time = DateUtils.stampToDateRe( one.get("gmtModify").toString());
+                            request.setRechargeTime(recharge_time);
+                        }
+                        //订单状态
+                        request.setStatus(1);
+                        //充值状态
+                        if ( one.containsKey("status") && one.get("status") != null )
+                        {
+                            request.setRechargeStatus(one.get("status").toString());
+                        }
+                        //充值号码
+                        if ( one.containsKey("itemUid") && one.get("itemUid") != null )
+                        {
+                            request.setChargeNo(one.get("itemUid").toString());
+                        }
+                        //商品名称
+                        if ( one.containsKey("itemName") && one.get("itemName") != null )
+                        {
+                            request.setItemName(one.get("itemName").toString());
+                        }
+                        //商品单价
+                        if ( one.containsKey("itemPrice") && one.get("itemPrice") != null )
+                        {
+                            Double itemPrice = Double.valueOf(one.get("itemPrice").toString());
+                            Double priceD = itemPrice/1000;
+                            BigDecimal price = new BigDecimal(priceD.toString());
+                            request.setPrice(price);
+                        }
+                        //商品面额
+                        if ( one.containsKey("itemFacePrice") && one.get("itemFacePrice") != null )
+                        {
+                            Double itemFacePrice = Double.valueOf(one.get("itemFacePrice").toString());
+                            Double facePrice = itemFacePrice/1000;
+                            BigDecimal price = new BigDecimal(facePrice.toString());
+                            request.setFacePrice(price);
+                        }
+                        //商品面额
+                        if ( one.containsKey("amount") && one.get("amount") != null )
+                        {
+                            Double itemFacePrice = Double.valueOf(one.get("amount").toString());
+                            Double amount = itemFacePrice/1000;
+                            BigDecimal price = new BigDecimal(amount.toString());
+                            request.setAmount(price);
+                        }
 
-                    request.setAmt(1);
-                    request.setOrderType(3);
-                    request.setInfoStatus(1);
-                    request.setModule(one.toString());
-                    JpfResponseDto res = shopBrangainRechargeOrderServiceFacade.insertInfo(request);
-                    System.out.println(res.toString());
+                        request.setAmt(1);
+                        request.setOrderType(3);
+                        request.setInfoStatus(1);
+                        request.setModule(one.toString());
+                        JpfResponseDto res = shopBrangainRechargeOrderServiceFacade.insertInfo(request);
+                        System.out.println(res.toString());
+                    }
                 }
             }
-        }
-        logger.info("数据入库成功，有效数据共：{}条", valid_count);
-        StringBuilder sbf = new StringBuilder();
-        Date date = new Date();
-        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sbf.append("\n\nTime:" + myfmt.format(date));
-        sbf.append("\n请求地址：" + url);
-        sbf.append("\n接口参数：" + requestParam);
-        sbf.append("\n回调信息：\n" + result);
-        String fileName = "queryBizOrder-1";
-        String path = "/logs/manage-web/log/";
+            logger.info("数据入库成功，有效数据共：{}条", valid_count);
+            StringBuilder sbf = new StringBuilder();
+            Date date = new Date();
+            SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sbf.append("\n\nTime:" + myfmt.format(date));
+            sbf.append("\n请求地址：" + url);
+            sbf.append("\n接口参数：" + requestParam);
+            sbf.append("\n回调信息：\n" + result);
+            String fileName = "queryBizOrder-1";
+            String path = "/logs/manage-web/log/";
 
-        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+            LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+        }
 
         return "执行完成--拉取数据";
     }
