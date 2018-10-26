@@ -20,6 +20,9 @@ public class OfpayUtils {
     //查询接口
     private String phone_query;
 
+    //用户信息查询接口
+    private String userinfo_query;
+
     private String gas_requestUrl;
 
     //登录地址
@@ -47,6 +50,7 @@ public class OfpayUtils {
         this.userpws = ConfigUtil.getValue("userpws");
         this.phone_requestUrl = ConfigUtil.getValue("phone_requestUrl");
         this.phone_query = ConfigUtil.getValue("phone_query");
+        this.userinfo_query = ConfigUtil.getValue("userinfo_query");
         this.gas_requestUrl = ConfigUtil.getValue("gas_requestUrl");
         this.login_requestUrl = ConfigUtil.getValue("login_requestUrl");
         this.bindCard_requestUrl = ConfigUtil.getValue("bindCard_requestUrl");
@@ -86,7 +90,7 @@ public class OfpayUtils {
         sbf.append("\n接口参数：" + requestMap);
         sbf.append("\n回调信息：" + resultXml);
 
-        String fileName = "ofpayPhoneQuery";
+        String fileName = "OfpayPhoneQuery";
         String path = "/logs/jpf-charge-api/log/";
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
@@ -212,8 +216,8 @@ public class OfpayUtils {
         sbf.append("\n接口参数：" + requestMap);
         sbf.append("\n回调信息：" + resultXml);
 
-        String fileName = "ofpayRegisQuery";
-        String path = "/logs/jpf-market-api/log/";
+        String fileName = "OfpayRegisQuery";
+        String path = "/logs/jpf-charge-api/log/";
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
         Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
@@ -269,8 +273,8 @@ public class OfpayUtils {
         sbf.append("\n接口参数：" + requestMap);
         sbf.append("\n回调信息：" + resultXml);
 
-        String fileName = "ofpayLogin";
-        String path = "/logs/jpf-market-api/log/";
+        String fileName = "OfpayLogin";
+        String path = "/logs/jpf-charge-api/log/";
 
         Map<String,String> map = new ReadXML().getBooksOneByStr(resultXml);
         String orderStatus = map.getOrDefault("retcode","");
@@ -339,8 +343,8 @@ public class OfpayUtils {
         sbf.append("\n接口参数：" + requestMap);
         sbf.append("\n回调信息：" + resultXml);
 
-        String fileName = "ofpayLogin";
-        String path = "/logs/jpf-market-api/log/";
+        String fileName = "OfpayLogin";
+        String path = "/logs/jpf-charge-api/log/";
 
         Map<String,String> map = new ReadXML().getBooksOneByStr(resultXml);
         String orderStatus = map.getOrDefault("retcode","");
@@ -391,8 +395,8 @@ public class OfpayUtils {
         sbf.append("\n接口参数：" + requestMap);
         sbf.append("\n回调信息：" + resultXml);
 
-        String fileName = "ofpayGasQuery";
-        String path = "/logs/jpf-market-api/log/";
+        String fileName = "OfpayGasQuery";
+        String path = "/logs/jpf-charge-api/log/";
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
         Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
@@ -438,7 +442,7 @@ public class OfpayUtils {
         sbf.append("\n接口参数：" + requestMap);
         sbf.append("\n回调信息：" + resultXml);
 
-        String fileName = "ofpayGas";
+        String fileName = "OfpayGas";
         String path = "/logs/jpf-market-api/log/";
 
         Map<String,String> map = new ReadXML().getBooksOneByStr(resultXml);
@@ -463,7 +467,41 @@ public class OfpayUtils {
         return map;
     }
 
+    /**
+     * 余额查询接口
+     * */
+    public Map<String, String> queryUserInfo(){
 
+        Map<String,Object> requestMap = new LinkedHashMap<>();
+
+        requestMap.put("userid", userid);       // 商户号
+        requestMap.put("userpws", Md5Encrypt.md5(userpws));         // 商户密码
+        requestMap.put("version", version_phone );
+
+        String requestParam = ToolUtils.mapToUrl(requestMap);   //请求参数
+
+        String resultXml = OkHttpUtils.postForm(userinfo_query,requestMap);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n充值类型:" + "查询用户信息");
+        sbf.append("\n请求地址：" + userinfo_query);
+        sbf.append("\n接口参数：" + requestMap);
+        sbf.append("\n回调信息：" + resultXml);
+
+        String fileName = "OfUserInfoQuery";
+        String path = "/logs/jpf-charge-api/log/";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+
+        Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
+        resultMap.put("requestUrl", userinfo_query);
+        resultMap.put("requestParam", requestParam);
+        resultMap.put("responseParam", JSONObject.fromObject(resultMap).toString());
+
+        return resultMap;
+    }
 
     /**
      * 获取油卡充值签名

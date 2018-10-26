@@ -662,7 +662,6 @@ public class FlowRechargeController {
 
             resultMap.put("code","10008");
         }
-
         return resultMap;
     }
     public Boolean oilOrderVal(Map actParam){

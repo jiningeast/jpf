@@ -11,6 +11,7 @@ import com.joiest.jpf.dto.ChargeBalanceRequest;
 import com.joiest.jpf.dto.ChargeBalanceResponse;
 import com.joiest.jpf.entity.ChargeBalanceInfo;
 import com.joiest.jpf.facade.ChargeBalanceServiceFacade;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -88,7 +89,6 @@ public class ChargeBalanceServiceFacadeImpl implements ChargeBalanceServiceFacad
     /**
      * 修改余额信息
      */
-
     @Override
     public JpfResponseDto edit(ChargeBalanceRequest request){
         if(StringUtils.isBlank(request.getId()) || request.getId()==null){
@@ -117,5 +117,43 @@ public class ChargeBalanceServiceFacadeImpl implements ChargeBalanceServiceFacad
 
             return jpfResponseDto;
         }
+    }
+    /**
+     * 获取余额信息 one
+     * */
+    @Override
+    public ChargeBalanceInfo getChargeBalanceOne(JSONObject param){
+
+        PayChargeBalanceExample example = new PayChargeBalanceExample();
+        PayChargeBalanceExample.Criteria c = example.createCriteria();
+
+        if(param.containsKey("type") && StringUtils.isNotBlank(param.get("type").toString())){
+
+            byte type = Byte.valueOf(param.get("type").toString());
+            c.andTypeEqualTo(type);
+        }
+        List<PayChargeBalance> list = payChargeBalanceMapper.selectByExample(example);
+
+        if(list == null || list.size() == 0) return null;
+
+        ChargeBalanceInfo chargeBalanceInfo= new ChargeBalanceInfo();
+
+        BeanCopier beanCopier = BeanCopier.create(PayChargeBalance.class,ChargeBalanceInfo.class,false);
+        beanCopier.copy(list.get(0),chargeBalanceInfo,null);
+
+        return chargeBalanceInfo;
+    }
+    /**
+     * 根据主键修改余额信息
+     * */
+    @Override
+    public int updateBalanceById(ChargeBalanceInfo chargeBalanceInfo){
+
+        PayChargeBalance payChargeBalance = new PayChargeBalance();
+
+        BeanCopier beanCopier = BeanCopier.create(ChargeBalanceInfo.class,PayChargeBalance.class,false);
+        beanCopier.copy(chargeBalanceInfo,payChargeBalance,null);
+
+        return payChargeBalanceMapper.updateByPrimaryKeySelective(payChargeBalance);
     }
 }

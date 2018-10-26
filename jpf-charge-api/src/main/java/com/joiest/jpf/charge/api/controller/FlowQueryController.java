@@ -1,19 +1,20 @@
 package com.joiest.jpf.charge.api.controller;
 
 import com.joiest.jpf.charge.api.constant.ManageConstants;
+import com.joiest.jpf.charge.api.util.SmsUtils;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeProduct;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.LogsCustomUtils;
-import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.entity.ChargeBalanceInfo;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.entity.ChargeOrderInfo;
 import com.joiest.jpf.entity.ChargeProductInfo;
+import com.joiest.jpf.facade.ChargeBalanceServiceFacade;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import com.joiest.jpf.facade.ChargeProductServiceFacade;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.ManagedMap;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -40,7 +42,8 @@ public class FlowQueryController {
     @Autowired
     private ChargeOrderServiceFacade chargeOrderServiceFacade;
 
-
+    @Autowired
+    private ChargeBalanceServiceFacade chargeBalanceServiceFacade;
     /**
      *商品列表
      * merchNo  商户号
@@ -402,7 +405,90 @@ public class FlowQueryController {
         return JsonUtils.toJson(responseMap);
 //        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), result);
     }
+    /**
+     * 微能余额查询接口
+     * */
+    @RequestMapping("/wnBalanceDeal")
+    @ResponseBody
+    public void wnBalanceDeal(HttpServletRequest request){
 
+        JSONObject queryParam = new JSONObject();
+
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n接口名称：充值余额查询处理");
+        sbf.append("\n请求地址：" + request.getQueryString());
+
+        //=============微能余额查询及处理 start=================
+        WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+        JSONObject responseP = JSONObject.fromObject(wnpayUtils.flowBalance());
+        JSONObject wnBalance = JSONObject.fromObject(responseP.get("data"));
+        if(responseP.get("code").toString().equals("10000")){
+
+            sbf.append("\n微能余额查询状态：SUCCESS");
+            sbf.append("\n==接口返回信息："+wnBalance.toString());
+            ChargeBalanceInfo wnUpInfo = new ChargeBalanceInfo();
+            queryParam.put("type","1");
+            ChargeBalanceInfo wnInfo = chargeBalanceServiceFacade.getChargeBalanceOne(queryParam);
+            if(wnInfo != null){
+
+                sbf.append("\n\t余额信息获取状态：SUCCESS");
+                BigDecimal wnBa = new BigDecimal(wnBalance.get("data").toString()).divide(new BigDecimal("10000"));
+                wnUpInfo.setId(wnInfo.getId());
+                wnUpInfo.setBalance(wnBa);
+                int aa = wnInfo.getAlertLimit().compareTo(new BigDecimal(wnBalance.get("data").toString()));
+                if(wnInfo.getAlertLimit().compareTo(wnBa) >= 0 && wnInfo.getAlertSwitch().equals((byte)1)){
+
+                    sbf.append("\n\t余额警示提示是否发送：已发送");
+                    wnUpInfo.setAlertSwitch((byte)0);
+                    String content = "警告！微能余额已不足"+wnInfo.getAlertLimit()+"元，请及时充值。";
+                    SmsUtils.send(wnInfo.getAlertPhone().toString(),content);
+                }
+                chargeBalanceServiceFacade.updateBalanceById(wnUpInfo);
+            }else{
+                sbf.append("\n\t余额信息获取状态：未查询到相关余额信息");
+            }
+        }else{
+            sbf.append("\n微能余额查询状态：ERROR");
+            sbf.append("\n\t接口返回信息："+wnBalance.toString());
+        }
+        //=============微能余额查询及处理 end=================
+
+
+        //=============欧非余额查询及处理 start=================
+        Map<String,String> responseMap = new OfpayUtils().queryUserInfo();
+        if(responseMap.get("retcode").equals("1")){
+
+            sbf.append("\n欧非余额查询状态：SUCCESS");
+            sbf.append("\n==接口返回信息："+JSONObject.fromObject(responseMap).toString());
+            ChargeBalanceInfo ofUpInfo = new ChargeBalanceInfo();
+            queryParam.put("type","0");
+            ChargeBalanceInfo ofInfo = chargeBalanceServiceFacade.getChargeBalanceOne(queryParam);
+            if(ofInfo != null){
+                sbf.append("\n\t余额信息获取状态：SUCCESS");
+                ofUpInfo.setId(ofInfo.getId());
+                ofUpInfo.setBalance(new BigDecimal(responseMap.get("totalBalance")));
+
+                if(ofInfo.getAlertLimit().compareTo(new BigDecimal(responseMap.get("totalBalance"))) >= 0 && ofInfo.getAlertSwitch().equals((byte)1)){
+
+                    ofUpInfo.setAlertSwitch((byte)0);
+                    String content = "警告！欧非余额已不足"+ofInfo.getAlertLimit()+"元，请及时充值。";
+
+                    SmsUtils.send(ofInfo.getAlertPhone().toString(),content);
+                    sbf.append("\n\t余额警示短信是否发送：已发送");
+                }
+                chargeBalanceServiceFacade.updateBalanceById(ofUpInfo);
+            }else{
+                sbf.append("\n\t余额信息获取状态：未查询到相关余额信息");
+            }
+        }else{
+            sbf.append("\n欧非余额查询状态：ERROR");
+            sbf.append("\n\t接口返回信息："+JSONObject.fromObject(responseMap).toString());
+        }
+        //=============欧非余额查询及处理 end=================
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-charge-api/log/", "WnOfBalance",true);
+    }
     //参数拼接
     @RequestMapping(value = "/testDemo",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
