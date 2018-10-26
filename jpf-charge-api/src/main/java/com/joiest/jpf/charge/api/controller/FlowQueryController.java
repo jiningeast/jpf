@@ -289,7 +289,32 @@ public class FlowQueryController {
         responData.put("phone",orderInfo.getChargePhone());
         responData.put("money",orderInfo.getTotalMoney().toString());
         responData.put("productId",orderInfo.getProductId());
-
+        String statusCn = "";
+        switch (orderInfo.getStatus()){
+            case 0:
+                statusCn = "下单成功";
+                break;
+            case 1:
+                statusCn = "充值中";
+                break;
+            case 2:
+                statusCn = "充值成功";
+                break;
+            case 3:
+                statusCn = "充值失败";
+                break;
+            case 4:
+                statusCn = "申请退款";
+                break;
+            case 5:
+                statusCn = "退款成功";
+                break;
+            case 6:
+                statusCn = "拒绝退款";
+                break;
+        }
+        responData.put("status",""+orderInfo.getStatus());
+        responData.put("statusCn",statusCn);
         responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
         responseMap.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
         responseMap.put("data",responData);

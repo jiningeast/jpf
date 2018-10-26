@@ -423,7 +423,7 @@ public class FlowRechargeController {
         if (request.getRet_code().equals("9")){    //1成功 9失败
 
             upOrderInfo.setStatus((byte)3);
-            sendParam.put("code","10000");
+            sendParam.put("code","10001");
             sendParam.put("info","充值失败");
             sbf.append("\n订单状态：充值失败");
         }else{
