@@ -198,7 +198,12 @@
                     "menuname" : "充值平台充值管理",
                     "icon" : "icon-nav",
                     "url" : "chargeCompanyCharge/index"
-                }]
+                },{
+                        "menuid" : "511",
+                        "menuname" : "充值平台余额管理",
+                        "icon" : "icon-nav",
+                        "url" : "chargeBalance/index"
+                    }]
             },{
                     "menuid" : "6",
                     "icon" : "icon-sys",
