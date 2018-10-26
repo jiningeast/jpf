@@ -92,7 +92,7 @@
                             }else if(value=='4'){
                                 // return '打款失败'
                                 return '处理失败';
-                            }else{
+                            }else if(value=='5'){
                                 return '已取消';
                             }
                         },styler: function (value, row, index) {
