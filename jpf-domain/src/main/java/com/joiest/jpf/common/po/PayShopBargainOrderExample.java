@@ -1136,6 +1136,76 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andBankNameIsNull() {
+            addCriterion("bank_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameIsNotNull() {
+            addCriterion("bank_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameEqualTo(String value) {
+            addCriterion("bank_name =", value, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameNotEqualTo(String value) {
+            addCriterion("bank_name <>", value, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameGreaterThan(String value) {
+            addCriterion("bank_name >", value, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameGreaterThanOrEqualTo(String value) {
+            addCriterion("bank_name >=", value, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameLessThan(String value) {
+            addCriterion("bank_name <", value, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameLessThanOrEqualTo(String value) {
+            addCriterion("bank_name <=", value, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameLike(String value) {
+            addCriterion("bank_name like", value, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameNotLike(String value) {
+            addCriterion("bank_name not like", value, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameIn(List<String> values) {
+            addCriterion("bank_name in", values, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameNotIn(List<String> values) {
+            addCriterion("bank_name not in", values, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameBetween(String value1, String value2) {
+            addCriterion("bank_name between", value1, value2, "bankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameNotBetween(String value1, String value2) {
+            addCriterion("bank_name not between", value1, value2, "bankName");
+            return (Criteria) this;
+        }
+
         public Criteria andBankBrankIsNull() {
             addCriterion("bank_brank is null");
             return (Criteria) this;
@@ -2073,6 +2143,11 @@ public class PayShopBargainOrderExample {
 
         public Criteria andPhoneLikeInsensitive(String value) {
             addCriterion("upper(phone) like", value.toUpperCase(), "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankNameLikeInsensitive(String value) {
+            addCriterion("upper(bank_name) like", value.toUpperCase(), "bankName");
             return (Criteria) this;
         }
 

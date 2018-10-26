@@ -15,9 +15,7 @@
     <div region="center" border="false"
          style="padding: 10px; background: #fff; border: 1px solid #ccc;">
             <table  class="table table-bordered">
-
                     <h2 align="center" >详细信息</h2>
-
                 <tr>
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">订单号：</td>
                     <td>
@@ -75,9 +73,14 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">银行名称：</td>
                     <td >
+                        ${shopBargainOrderInfo.bankName}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">支行名称：</td>
+                    <td >
                         ${shopBargainOrderInfo.bankBrank}
                     </td>
-
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">银行卡号：</td>

@@ -81,6 +81,11 @@ public class PayShopBargainOrder implements Serializable {
     private String bankId;
 
     /**
+     * 银行名称
+     */
+    private String bankName;
+
+    /**
      * 银行分行名称
      */
     private String bankBrank;
@@ -272,6 +277,14 @@ public class PayShopBargainOrder implements Serializable {
         this.bankId = bankId == null ? null : bankId.trim();
     }
 
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName == null ? null : bankName.trim();
+    }
+
     public String getBankBrank() {
         return bankBrank;
     }
@@ -408,6 +421,7 @@ public class PayShopBargainOrder implements Serializable {
         sb.append(", idno=").append(idno);
         sb.append(", phone=").append(phone);
         sb.append(", bankId=").append(bankId);
+        sb.append(", bankName=").append(bankName);
         sb.append(", bankBrank=").append(bankBrank);
         sb.append(", bankNo=").append(bankNo);
         sb.append(", findcode=").append(findcode);
@@ -457,6 +471,7 @@ public class PayShopBargainOrder implements Serializable {
             && (this.getIdno() == null ? other.getIdno() == null : this.getIdno().equals(other.getIdno()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getBankId() == null ? other.getBankId() == null : this.getBankId().equals(other.getBankId()))
+            && (this.getBankName() == null ? other.getBankName() == null : this.getBankName().equals(other.getBankName()))
             && (this.getBankBrank() == null ? other.getBankBrank() == null : this.getBankBrank().equals(other.getBankBrank()))
             && (this.getBankNo() == null ? other.getBankNo() == null : this.getBankNo().equals(other.getBankNo()))
             && (this.getFindcode() == null ? other.getFindcode() == null : this.getFindcode().equals(other.getFindcode()))
@@ -495,6 +510,7 @@ public class PayShopBargainOrder implements Serializable {
         result = prime * result + ((getIdno() == null) ? 0 : getIdno().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getBankId() == null) ? 0 : getBankId().hashCode());
+        result = prime * result + ((getBankName() == null) ? 0 : getBankName().hashCode());
         result = prime * result + ((getBankBrank() == null) ? 0 : getBankBrank().hashCode());
         result = prime * result + ((getBankNo() == null) ? 0 : getBankNo().hashCode());
         result = prime * result + ((getFindcode() == null) ? 0 : getFindcode().hashCode());

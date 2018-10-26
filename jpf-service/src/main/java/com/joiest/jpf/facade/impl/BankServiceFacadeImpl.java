@@ -134,11 +134,13 @@ public class BankServiceFacadeImpl implements BankServiceFacade {
         PayBank payBank = payBankMapper.selectByPrimaryKey(primeId);
 
         BankInfo bankInfo = new BankInfo();
-        bankInfo.setId(payBank.getId());
-        bankInfo.setPaybankname(payBank.getPaybankname());
-        bankInfo.setBankcode(payBank.getBankcode());
-        bankInfo.setTpid(payBank.getTpid());
-        bankInfo.setCreated(payBank.getCreated());
+        if ( payBank != null ){
+            bankInfo.setId(payBank.getId());
+            bankInfo.setPaybankname(payBank.getPaybankname());
+            bankInfo.setBankcode(payBank.getBankcode());
+            bankInfo.setTpid(payBank.getTpid());
+            bankInfo.setCreated(payBank.getCreated());
+        }
 
         return  bankInfo;
     }

@@ -5,9 +5,8 @@ import com.joiest.jpf.dto.GetShopBargainOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainOrderResponse;
 import com.joiest.jpf.entity.ShopBargainOrderInfo;
 import com.joiest.jpf.entity.UserInfo;
+import com.joiest.jpf.facade.BankServiceFacade;
 import com.joiest.jpf.facade.ShopBargainOrderServiceFacade;
-import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
-import com.joiest.jpf.facade.ShopCustomerServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,10 +31,7 @@ public class ShopBargainOrderController {
     private ShopBargainOrderServiceFacade shopBargainOrderServiceFacade;
 
     @Autowired
-    private ShopCustomerServiceFacade shopCustomerServiceFacade;
-
-    @Autowired
-    ShopCouponRemainServiceFacade shopCouponRemainServiceFacade;
+    private BankServiceFacade bankServiceFacade;
 
     @RequestMapping("/index")
     public String index(){
@@ -96,7 +92,7 @@ public class ShopBargainOrderController {
     @ResponseBody
     public ModelAndView orderInfo(String orderNo, ModelMap modelMap){
         //根据订单号查出订单详细信息
-        ShopBargainOrderInfo shopBargainOrderInfo= shopBargainOrderServiceFacade.getOne(orderNo);
+        ShopBargainOrderInfo shopBargainOrderInfo = shopBargainOrderServiceFacade.getOne(orderNo);
         modelMap.addAttribute("shopBargainOrderInfo", shopBargainOrderInfo);
         return new ModelAndView("shopBargainOrder/orderDetail", modelMap);
 

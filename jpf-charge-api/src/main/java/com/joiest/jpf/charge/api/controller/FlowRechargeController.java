@@ -1,19 +1,26 @@
 package com.joiest.jpf.charge.api.controller;
 
 import com.joiest.jpf.charge.api.util.ServletUtils;
-import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
-import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.OfpayRequest;
-import com.joiest.jpf.entity.*;
-import com.joiest.jpf.facade.*;
+import com.joiest.jpf.entity.ChargeCompanyInfo;
+import com.joiest.jpf.entity.ChargeInterfaceStreamInfo;
+import com.joiest.jpf.entity.ChargeOrderInfo;
+import com.joiest.jpf.entity.ChargeProductInfo;
+import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
+import com.joiest.jpf.facade.ChargeInterfaceStreamFacade;
+import com.joiest.jpf.facade.ChargeOrderServiceFacade;
+import com.joiest.jpf.facade.ChargeProductServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -43,11 +50,11 @@ public class FlowRechargeController {
 
     private static final Logger logger = LogManager.getLogger(FlowRechargeController.class);
 
-    ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
-    Map<String,String> actParam = new HashMap<>();
-    Map<String,Object> actTreeParam = new TreeMap<>();
-    public static Boolean validate;
-    public static String respond;
+    private ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
+    private Map<String,String> actParam = new HashMap<>();
+    private Map<String,Object> actTreeParam = new TreeMap<>();
+    private static Boolean validate;
+    private static String respond;
 
     @ModelAttribute
     public String beforAction(HttpServletRequest request) throws Exception{
@@ -84,7 +91,6 @@ public class FlowRechargeController {
             String fileName = "ApiEntrance";
             String path = "/logs/jpf-charge-api/log/";
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
-
 
             if(!actParam.containsKey("service") || actParam.get("service").isEmpty()){
 
@@ -123,12 +129,12 @@ public class FlowRechargeController {
                     }
                 }
             }
-
         }
+
         return "1";
     }
 
-    @RequestMapping(value = "telPlaceOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "telPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     public String telPlaceOrder(){
 
         if(validate.equals(false))
@@ -141,8 +147,9 @@ public class FlowRechargeController {
         ChargeOrderInfo chargeOrderInfo = chargeOrderServiceFacade.getOne(record);
         if(chargeOrderInfo!=null){
 
-            responseParam.put("code","10008");
-            responseParam.put("info","商户订单号请保持唯一");
+            responseParam.put("code","10021");
+            responseParam.put("info","订单号请保持唯一");
+
             return responseParam.toString();
         }
         //String moneyCode = ToolUtils.CreateCode(companyInfo.getMoney().toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
@@ -151,21 +158,23 @@ public class FlowRechargeController {
         System.out.println(companyInfo);
         if(newCode.equals(false)){
 
-            responseParam.put("code","10008");
+            responseParam.put("code","10022");
             responseParam.put("info","商户金额校验错误");
+
             return responseParam.toString();
         }
         //获取商品信息
         ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(actParam.get("productId"));
         if(chargeProductInfo == null){
 
-            responseParam.put("code","10008");
+            responseParam.put("code","10023");
             responseParam.put("info","未获取到商品信息");
+
             return responseParam.toString();
         }
         if(chargeProductInfo.getValue().compareTo(companyInfo.getMoney())>0){
 
-            responseParam.put("code","10008");
+            responseParam.put("code","10024");
             responseParam.put("info","商户余额不足，请尽快充值");
             return responseParam.toString();
         }
@@ -237,7 +246,7 @@ public class FlowRechargeController {
             upOrderInfo.setInterfaceOrderNo(map.get("orderid"));
 
             responseParam.put("code","10000");
-            responseParam.put("info","充值中");
+            responseParam.put("info","下单成功，充值中");
 
             //更新商户信息  金额验证
             BigDecimal companyMoney = companyInfo.getMoney().subtract(new BigDecimal(actParam.get("money")));
@@ -251,7 +260,7 @@ public class FlowRechargeController {
         }else{
 
             upOrderInfo.setStatus((byte)3);
-            responseParam.put("code","10008");
+            responseParam.put("code","10025");
             responseParam.put("info","充值失败");
         }
         responseParam.put("data",merRespons);
@@ -358,7 +367,7 @@ public class FlowRechargeController {
     /**
      * 欧非话费充值异步回调接口
      * */
-    @RequestMapping(value = "/ofpayNotifyUrl",produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/ofpayNotifyUrl",produces = "text/plain;charset=utf-8")
     public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
     {
         //1.流水 2.订单信息 3.更新订单状态
@@ -414,7 +423,7 @@ public class FlowRechargeController {
         if (request.getRet_code().equals("9")){    //1成功 9失败
 
             upOrderInfo.setStatus((byte)3);
-            sendParam.put("code","10000");
+            sendParam.put("code","10001");
             sendParam.put("info","充值失败");
             sbf.append("\n订单状态：充值失败");
         }else{
@@ -475,9 +484,10 @@ public class FlowRechargeController {
             resParam.put("info","verify through");
         }
         respond = resParam.toString();
+
         return validate;
     }
-    @RequestMapping(value = "oilPlaceOrder",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "oilPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     public String oilPlaceOrder(){
 
         if(validate.equals(false))
@@ -490,8 +500,9 @@ public class FlowRechargeController {
         ChargeOrderInfo chargeOrderInfo = chargeOrderServiceFacade.getOne(record);
         if(chargeOrderInfo!=null){
 
-            responseParam.put("code","10008");
+            responseParam.put("code","10021");
             responseParam.put("info","商户订单号请保持唯一");
+
             return responseParam.toString();
         }
         //String moneyCode = ToolUtils.CreateCode(companyInfo.getMoney().toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
@@ -500,22 +511,25 @@ public class FlowRechargeController {
         System.out.println(companyInfo);
         if(newCode.equals(false)){
 
-            responseParam.put("code","10008");
+            responseParam.put("code","10022");
             responseParam.put("info","商户金额校验错误");
+
             return responseParam.toString();
         }
         //获取商品信息
         ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(actParam.get("productId"));
         if(chargeProductInfo == null){
 
-            responseParam.put("code","10008");
+            responseParam.put("code","10023");
             responseParam.put("info","未获取到商品信息");
+
             return responseParam.toString();
         }
         if(chargeProductInfo.getValue().compareTo(companyInfo.getMoney())>0){
 
-            responseParam.put("code","10008");
+            responseParam.put("code","10024");
             responseParam.put("info","商户余额不足，请尽快充值");
+
             return responseParam.toString();
         }
         actParam.put("money",chargeProductInfo.getValue().toString());//充值面值
@@ -589,7 +603,7 @@ public class FlowRechargeController {
         }else{
 
             upOrderInfo.setStatus((byte)3);
-            responseParam.put("code","10008");
+            responseParam.put("code","10025");
             responseParam.put("info","充值失败");
         }
         responseParam.put("data",merRespons);

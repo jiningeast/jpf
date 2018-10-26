@@ -78,17 +78,22 @@
                     {field:'status',title:'状态',width:'5%',
                         formatter : function(value,row,index){
                             if(value=='0'){
-                                return '未支付'
+                                // return '未支付'
+                                return '未处理';
                             }else if(value=='1'){
-                                return '已审核'
+                                // return '已审核'
+                                return '处理中';
                             }else if(value=='2'){
-                                return '打款中'
+                                // return '打款中'
+                                return '处理中';
                             }else if(value=='3'){
-                                return '打款成功'
+                                // return '打款成功'
+                                return '处理完成';
                             }else if(value=='4'){
-                                return '打款失败'
-                            }else{
-                                return '已取消'
+                                // return '打款失败'
+                                return '处理失败';
+                            }else if(value=='5'){
+                                return '已取消';
                             }
                         },styler: function (value, row, index) {
                             return 'color:red';

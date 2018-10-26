@@ -107,6 +107,31 @@ public class ChargeOrderInfo {
     private Byte status;
 
     /**
+     * 申请退款人id
+     */
+    private String operatorId;
+
+    /**
+     * 申请退款人姓名
+     */
+    private String operatorName;
+
+    /**
+     * 财务审核人id
+     */
+    private String checkId;
+
+    /**
+     * 财务审核人姓名
+     */
+    private String checkName;
+
+    /**
+     * 是否删除
+     */
+    private Byte isDel;
+
+    /**
      * 添加时间
      */
     private Date addtime;
@@ -294,4 +319,43 @@ public class ChargeOrderInfo {
         this.updatetime = updatetime;
     }
 
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    public String getCheckId() {
+        return checkId;
+    }
+
+    public void setCheckId(String checkId) {
+        this.checkId = checkId;
+    }
+
+    public String getCheckName() {
+        return checkName;
+    }
+
+    public void setCheckName(String checkName) {
+        this.checkName = checkName;
+    }
+
+    public Byte getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Byte isDel) {
+        this.isDel = isDel;
+    }
 }
