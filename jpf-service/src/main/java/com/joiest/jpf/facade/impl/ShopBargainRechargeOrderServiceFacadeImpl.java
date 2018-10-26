@@ -32,6 +32,7 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         PayShopBargainRechargeOrderExample.Criteria c = e.createCriteria();
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
+        e.setOrderByClause("id DESC");
         if (StringUtils.isNotBlank(request.getOrderNo())){
             c.andOrderNoEqualTo(request.getOrderNo());
         }

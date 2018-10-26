@@ -253,6 +253,11 @@
                         "menuname" : "充值平台充值审核",
                         "icon" : "icon-nav",
                         "url" : "chargeCompanyCharge/indexCaiwu"
+                    },{
+                        "menuid" : "610",
+                        "menuname" : "充值平台财务审核",
+                        "icon" : "icon-nav",
+                        "url" : "chargeOrder/caiwuIndex"
                     }]
             },{
                 "menuid" : "7",
