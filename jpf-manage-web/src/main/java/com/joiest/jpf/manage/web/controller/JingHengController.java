@@ -90,6 +90,19 @@ public class JingHengController {
                 module = JSONArray.fromObject(resultJosn.get("module"));
                 logger.info("拉到数据，共计：{}条", module.size());
                 currentPageDataSize = module.size();
+
+
+                StringBuilder sbf2 = new StringBuilder();
+                Date date = new Date();
+                SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                sbf2.append("\n\nTime:" + myfmt.format(date));
+                sbf2.append("\n当前页：" + currentPage);
+                sbf2.append("\n记录数：" + currentPageDataSize);
+                String fileName = "queryBizOrder";
+                String path = "/logs/jpf-manage-web/log/";
+
+                LogsCustomUtils.writeIntoFile(sbf2.toString(),path, fileName, true);
+
                 if( module.size() != 0 ){
                     int size = module.size();
                     for (int i=0; i<size; i++){
