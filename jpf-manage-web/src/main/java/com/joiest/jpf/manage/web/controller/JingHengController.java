@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,8 +43,15 @@ public class JingHengController {
 
     @RequestMapping(value = "/queryBizOrder")
     @ResponseBody
-    public String queryBizOrder()
+    public String queryBizOrder() throws Exception
     {
+
+        File file = new File("/tmp/cronLock/queryBizOrder.lock");
+        if ( file.exists() ){
+            return "该操作已上锁，不能重复执行";
+        }
+        file.createNewFile();
+
         String requestUrl = JH_REQUEST_URL;
         //时间查询
         DateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -214,6 +222,7 @@ public class JingHengController {
 
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         }
+        file.delete();
 
         return "执行完成--拉取数据";
     }
