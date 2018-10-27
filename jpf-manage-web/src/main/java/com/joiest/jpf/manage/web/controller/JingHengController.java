@@ -173,6 +173,7 @@ public class JingHengController {
                         JpfResponseDto res = shopBrangainRechargeOrderServiceFacade.insertInfo(request);
                         System.out.println(res.toString());
                     }
+                    currentPage++;
                 }
             }
             logger.info("数据入库成功，有效数据共：{}条", valid_count);
@@ -184,7 +185,7 @@ public class JingHengController {
             sbf.append("\n接口参数：" + requestParam);
             sbf.append("\n回调信息：\n" + result);
             String fileName = "queryBizOrder-1";
-            String path = "/logs/manage-web/log/";
+            String path = "/logs/jpf-manage-web/log/";
 
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         }
