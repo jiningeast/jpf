@@ -139,8 +139,8 @@ public class JingHengController {
                         //添加时间
                         if ( one.containsKey("gmtCreate") && one.get("gmtCreate") != null )
                         {
-                            Date addtime = DateUtils.stampToDateRe( one.get("gmtCreate").toString());
-                            request.setAddtime(addtime);
+                            // Date addtime = DateUtils.stampToDateRe( one.get("gmtCreate").toString());
+                            request.setAddtime(new Date());
                         }
                         //订单修改时间
                         if ( one.containsKey("gmtModify") && one.get("gmtModify") != null )
