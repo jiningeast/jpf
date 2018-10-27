@@ -61,10 +61,9 @@ public class JingHengController {
         int currentPage = 1;
         int currentPageDataSize = 1;
         while ( currentPageDataSize > 0 ){
-            requestParam.put("currentPage", currentPage);
+            requestParam.put("currentPage", 2);
             TreeMap<String, Object> treeMap = new TreeMap<>();
             treeMap.putAll(requestParam);
-            Collection<Object> values = requestParam.values();
             String signStr = "";
             for (Object v : treeMap.values()) {
                 signStr += String.valueOf(v);
@@ -185,6 +184,7 @@ public class JingHengController {
                         System.out.println(res.toString());
                     }
                 }
+                currentPageDataSize = 0;
                 currentPage++;
             }
             logger.info("数据入库成功，有效数据共：{}条", valid_count);
