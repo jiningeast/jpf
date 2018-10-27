@@ -80,12 +80,10 @@ public class JingHengController {
             String paramStr = StringUtils.stripEnd(tmpStr, "&");
             String url = requestUrl + "?" +paramStr;
             logger.info("-------------- 敬恒 拉取数据第 "+requestParam.get("currentPage")+" 页 ，start --------------");
-
             String result = OkHttpUtils.get(url);     //todo 打开注释
             logger.info("-------------- 敬恒 拉取数据第 "+requestParam.get("currentPage")+" 页，end --------------");
-//        String result = this.result;
             JSONObject resultJosn = JSONObject.fromObject(result);
-            JSONArray module = null;
+            JSONArray module;
             int valid_count = 0;
             if ( resultJosn.containsKey("module") )
             {
@@ -173,8 +171,8 @@ public class JingHengController {
                         JpfResponseDto res = shopBrangainRechargeOrderServiceFacade.insertInfo(request);
                         System.out.println(res.toString());
                     }
-                    currentPage++;
                 }
+                currentPage++;
             }
             logger.info("数据入库成功，有效数据共：{}条", valid_count);
             StringBuilder sbf = new StringBuilder();
