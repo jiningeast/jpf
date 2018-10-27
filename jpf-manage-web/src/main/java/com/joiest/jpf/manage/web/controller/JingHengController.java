@@ -69,7 +69,7 @@ public class JingHengController {
         int currentPage = 1;
 
         int currentPageDataSize = 1;
-        while ( currentPageDataSize > 0 && currentPage <= 80 ){
+        while ( currentPageDataSize > 0 ){
             if ( requestParam.containsKey("sign") ){
                 requestParam.remove("sign");
             }
