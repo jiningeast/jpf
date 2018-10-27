@@ -61,7 +61,7 @@ public class JingHengController {
         int currentPage = 1;
         int currentPageDataSize = 1;
         while ( currentPageDataSize > 0 ){
-            requestParam.put("currentPage", 2);
+            requestParam.put("currentPage", currentPage);
             TreeMap<String, Object> treeMap = new TreeMap<>();
             treeMap.putAll(requestParam);
             String signStr = "";
@@ -69,6 +69,18 @@ public class JingHengController {
                 signStr += String.valueOf(v);
             }
             signStr += privateKey;
+
+            StringBuilder sbf2 = new StringBuilder();
+            Date date2 = new Date();
+            SimpleDateFormat myfmt2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sbf2.append("\n\nTime:" + myfmt2.format(date2));
+            sbf2.append("\n当前页：" + currentPage);
+            sbf2.append("\ntreeMap：" + treeMap);
+            sbf2.append("\n签名串：" + signStr);
+            String fileName2 = "queryBizOrderSign";
+            String path2 = "/logs/jpf-manage-web/log/";
+            LogsCustomUtils.writeIntoFile(sbf2.toString(),path2, fileName2, true);
+
             String sign = Md5Encrypt.md5(signStr);
             requestParam.put("sign", sign);
             treeMap.put("sign", sign);
@@ -89,19 +101,6 @@ public class JingHengController {
                 module = JSONArray.fromObject(resultJosn.get("module"));
                 logger.info("拉到数据，共计：{}条", module.size());
                 currentPageDataSize = module.size();
-
-
-                StringBuilder sbf2 = new StringBuilder();
-                Date date = new Date();
-                SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                sbf2.append("\n\nTime:" + myfmt.format(date));
-                sbf2.append("\n当前页：" + currentPage);
-                sbf2.append("\n记录数：" + currentPageDataSize);
-                String fileName = "queryBizOrder";
-                String path = "/logs/jpf-manage-web/log/";
-
-                LogsCustomUtils.writeIntoFile(sbf2.toString(),path, fileName, true);
-
                 if( module.size() != 0 ){
                     int size = module.size();
                     for (int i=0; i<size; i++){
@@ -184,7 +183,6 @@ public class JingHengController {
                         System.out.println(res.toString());
                     }
                 }
-                currentPageDataSize = 0;
                 currentPage++;
             }
             logger.info("数据入库成功，有效数据共：{}条", valid_count);
