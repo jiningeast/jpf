@@ -48,7 +48,7 @@ public class JingHengController {
         //时间查询
         DateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        calendar.add(Calendar.DAY_OF_MONTH, -2);
         Date yesterday = calendar.getTime();
         String defaultStartDate = dateFmt.format(yesterday);
         String start = defaultStartDate.substring(0,10) + " 00:00:00";
