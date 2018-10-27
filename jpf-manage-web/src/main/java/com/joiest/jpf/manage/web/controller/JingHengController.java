@@ -61,6 +61,9 @@ public class JingHengController {
         int currentPage = 1;
         int currentPageDataSize = 1;
         while ( currentPageDataSize > 0 ){
+            if ( requestParam.containsKey("sign") ){
+                requestParam.remove("sign");
+            }
             requestParam.put("currentPage", currentPage);
             TreeMap<String, Object> treeMap = new TreeMap<>();
             treeMap.putAll(requestParam);
