@@ -59,6 +59,16 @@ public class JingHengController {
         requestParam.put("endGmtCreate", end);
         requestParam.put("pageSize", "500");
         int currentPage = 1;
+
+        StringBuilder sbf3 = new StringBuilder();
+        Date date3 = new Date();
+        SimpleDateFormat myfmt3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf3.append("\n\nTime:" + myfmt3.format(date3));
+        sbf3.append("\n\n执行了一次！");
+        String fileName3 = "queryBizOrderSign";
+        String path3 = "/logs/jpf-manage-web/log/";
+        LogsCustomUtils.writeIntoFile(sbf3.toString(),path3, fileName3, true);
+
         int currentPageDataSize = 1;
         while ( currentPageDataSize > 0 ){
             if ( requestParam.containsKey("sign") ){
@@ -189,8 +199,8 @@ public class JingHengController {
                         System.out.println(res.toString());
                     }
                 }
-                currentPage++;
             }
+            currentPage++;
             logger.info("数据入库成功，有效数据共：{}条", valid_count);
             StringBuilder sbf = new StringBuilder();
             Date date = new Date();
