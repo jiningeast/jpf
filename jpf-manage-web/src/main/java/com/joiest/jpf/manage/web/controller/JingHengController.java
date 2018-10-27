@@ -61,6 +61,7 @@ public class JingHengController {
         int currentPage = 1;
         int currentPageDataSize = 1;
         while ( currentPageDataSize > 0 ){
+            requestParam.put("currentPage", currentPage);
             TreeMap<String, Object> treeMap = new TreeMap<>();
             treeMap.putAll(requestParam);
             Collection<Object> values = requestParam.values();
@@ -76,7 +77,6 @@ public class JingHengController {
             for (Map.Entry<String, Object> entry : treeMap.entrySet()) {
                 tmpStr += entry.getKey() + "=" + entry.getValue() + "&";
             }
-            requestParam.put("currentPage", currentPage);
             String paramStr = StringUtils.stripEnd(tmpStr, "&");
             String url = requestUrl + "?" +paramStr;
             logger.info("-------------- 敬恒 拉取数据第 "+requestParam.get("currentPage")+" 页 ，start --------------");
