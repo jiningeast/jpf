@@ -45,9 +45,9 @@ public class JingHengController {
     @ResponseBody
     public String queryBizOrder() throws Exception
     {
-
         File file = new File("/tmp/cronLock/queryBizOrder.lock");
         if ( file.exists() ){
+            logger.info("该操作已上锁，不能重复执行");
             return "该操作已上锁，不能重复执行";
         }
         file.createNewFile();
@@ -56,7 +56,7 @@ public class JingHengController {
         //时间查询
         DateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -2);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
         Date yesterday = calendar.getTime();
         String defaultStartDate = dateFmt.format(yesterday);
         String start = defaultStartDate.substring(0,10) + " 00:00:00";
@@ -67,15 +67,6 @@ public class JingHengController {
         requestParam.put("endGmtCreate", end);
         requestParam.put("pageSize", "500");
         int currentPage = 1;
-
-        StringBuilder sbf3 = new StringBuilder();
-        Date date3 = new Date();
-        SimpleDateFormat myfmt3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sbf3.append("\n\nTime:" + myfmt3.format(date3));
-        sbf3.append("\n\n执行了一次！");
-        String fileName3 = "queryBizOrderSign";
-        String path3 = "/logs/jpf-manage-web/log/";
-        LogsCustomUtils.writeIntoFile(sbf3.toString(),path3, fileName3, true);
 
         int currentPageDataSize = 1;
         while ( currentPageDataSize > 0 && currentPage <= 80 ){
