@@ -102,6 +102,9 @@ public class JingHengController {
             if ( resultJosn.containsKey("module") )
             {
                 module = JSONArray.fromObject(resultJosn.get("module"));
+                if ( module.toString().equals("null") || module == null  ){
+                    return "第"+requestParam.get("currentPage")+"页数据为空";
+                }
                 logger.info("拉到数据，共计：{}条", module.size());
                 currentPageDataSize = module.size();
                 if( module.size() != 0 ){
