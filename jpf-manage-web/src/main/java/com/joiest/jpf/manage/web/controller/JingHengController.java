@@ -58,24 +58,24 @@ public class JingHengController {
         requestParam.put("startGmtCreate", start);
         requestParam.put("endGmtCreate", end);
         requestParam.put("pageSize", "500");
-        TreeMap<String, Object> treeMap = new TreeMap<>();
-        treeMap.putAll(requestParam);
-        Collection<Object> values = requestParam.values();
-        String signStr = "";
-        for (Object v : treeMap.values()) {
-            signStr += (String)v;
-        }
-        signStr += privateKey;
-        String sign = Md5Encrypt.md5(signStr);
-        requestParam.put("sign", sign);
-        treeMap.put("sign", sign);
-        String tmpStr = "";
-        for (Map.Entry<String, Object> entry : treeMap.entrySet()) {
-            tmpStr += entry.getKey() + "=" + entry.getValue() + "&";
-        }
         int currentPage = 1;
         int currentPageDataSize = 1;
         while ( currentPageDataSize > 0 ){
+            TreeMap<String, Object> treeMap = new TreeMap<>();
+            treeMap.putAll(requestParam);
+            Collection<Object> values = requestParam.values();
+            String signStr = "";
+            for (Object v : treeMap.values()) {
+                signStr += (String)v;
+            }
+            signStr += privateKey;
+            String sign = Md5Encrypt.md5(signStr);
+            requestParam.put("sign", sign);
+            treeMap.put("sign", sign);
+            String tmpStr = "";
+            for (Map.Entry<String, Object> entry : treeMap.entrySet()) {
+                tmpStr += entry.getKey() + "=" + entry.getValue() + "&";
+            }
             requestParam.put("currentPage", currentPage);
             String paramStr = StringUtils.stripEnd(tmpStr, "&");
             String url = requestUrl + "?" +paramStr;
