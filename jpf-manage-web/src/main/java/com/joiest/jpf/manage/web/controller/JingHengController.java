@@ -78,7 +78,7 @@ public class JingHengController {
         LogsCustomUtils.writeIntoFile(sbf3.toString(),path3, fileName3, true);
 
         int currentPageDataSize = 1;
-        while ( currentPageDataSize > 0 ){
+        while ( currentPageDataSize > 0 && currentPage <= 80 ){
             if ( requestParam.containsKey("sign") ){
                 requestParam.remove("sign");
             }
@@ -217,7 +217,7 @@ public class JingHengController {
             sbf.append("\n请求地址：" + url);
             sbf.append("\n接口参数：" + requestParam);
             sbf.append("\n回调信息：\n" + result);
-            String fileName = "queryBizOrder-1";
+            String fileName = "queryBizOrder";
             String path = "/logs/jpf-manage-web/log/";
 
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
