@@ -66,7 +66,7 @@ public class JingHengController {
             Collection<Object> values = requestParam.values();
             String signStr = "";
             for (Object v : treeMap.values()) {
-                signStr += (String)v;
+                signStr += String.valueOf(v);
             }
             signStr += privateKey;
             String sign = Md5Encrypt.md5(signStr);
