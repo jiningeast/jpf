@@ -220,7 +220,14 @@ public class JingHengController {
 
     @RequestMapping(value = "/dobingdata", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String doBingData(){
+    public String doBingData() throws Exception{
+
+        File file = new File("/tmp/cronLock/doBingData.lock");
+        if ( file.exists() ){
+            logger.info("该操作已上锁，不能重复执行");
+            return "该操作已上锁，不能重复执行";
+        }
+        file.createNewFile();
 
         List<ShopBargainRechargeViewInfo> list_view = shopBrangainRechargeOrderServiceFacade.getOrderView();
         if ( list_view == null || list_view.isEmpty() )
@@ -234,6 +241,7 @@ public class JingHengController {
         }
         System.out.println("开始执行");
         int res = shopBrangainRechargeOrderServiceFacade.doBingOrderData(list_view, list_order);
+        file.delete();
 
         return "执行完成---bindData";
     }
