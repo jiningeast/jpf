@@ -19,6 +19,7 @@
         <module>jpf-cloud-api</module>
         <module>jpf-market-api</module>
         <module>jpf-charge-api</module>
+        <module>jpf-charge-manage-api</module>
     </modules>
     <packaging>pom</packaging>
 
