@@ -113,6 +113,7 @@ public class JingHengController {
             if ( resultJosn.containsKey("module") )
             {
                 if ( resultJosn.get("module").equals("null") || resultJosn.get("module") == null  ){
+                    file.delete();
                     return "第"+requestParam.get("currentPage")+"页数据为空";
                 }
                 module = JSONArray.fromObject(resultJosn.get("module"));
