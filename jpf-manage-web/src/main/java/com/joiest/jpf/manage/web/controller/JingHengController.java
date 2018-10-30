@@ -59,10 +59,10 @@ public class JingHengController {
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         Date yesterday = calendar.getTime();
         String defaultStartDate = dateFmt.format(yesterday);
-//        String start = defaultStartDate.substring(0,10) + " 00:00:00";
-        String start = "2018-10-29 00:00:00";
-//        String end = defaultStartDate.substring(0,10) + " 23:23:59";
-        String end = "2018-10-29 23:23:59";
+        String start = defaultStartDate.substring(0,10) + " 00:00:00";
+//        String start = "2018-10-29 00:00:00";
+        String end = defaultStartDate.substring(0,10) + " 23:23:59";
+//        String end = "2018-10-29 23:23:59";
 
         Map<String, Object> requestParam = new HashMap<>();
         requestParam.put("startGmtCreate", start);
