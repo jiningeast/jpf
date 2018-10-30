@@ -248,5 +248,22 @@ public class JingHengController {
         return "执行完成---bindData";
     }
 
+    @RequestMapping("test")
+    @ResponseBody
+    public String test(){
+//        String response = "{status:success,errorMsg:null,errorCode:null,module:null,totalItem:9342,tmallUser:false}";
+        String response = "{\"status\":\"success\",\"errorMsg\":null,\"errorCode\":null,\"module\":null,\"totalItem\":9342,\"tmallUser\":false}";
+
+        JSONObject resultJosn = JSONObject.fromObject(response);
+        if ( resultJosn.containsKey("module") ) {
+            if (resultJosn.get("module").equals("null") || resultJosn.get("module") == null) {
+                return "empty data";
+            }
+        }else{
+            return "not empty data";
+        }
+
+        return "test";
+    }
 
 }
