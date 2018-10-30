@@ -187,7 +187,7 @@ public class DemoController {
     @RequestMapping("/test")
     @ResponseBody
     public String test(){
-        String idno = "41071119870116153x";
+        String idno = "41071119870116153xx";
         idno = idno.toUpperCase();
 
         return idno;
