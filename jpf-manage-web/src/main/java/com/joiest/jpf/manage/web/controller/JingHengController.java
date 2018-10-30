@@ -60,9 +60,9 @@ public class JingHengController {
         Date yesterday = calendar.getTime();
         String defaultStartDate = dateFmt.format(yesterday);
 //        String start = defaultStartDate.substring(0,10) + " 00:00:00";
-        String start = "2018-10-26 00:00:00";
+        String start = "2018-10-25 00:00:00";
 //        String end = defaultStartDate.substring(0,10) + " 23:23:59";
-        String end = "2018-10-26 23:23:59";
+        String end = "2018-10-25 23:23:59";
 
         Map<String, Object> requestParam = new HashMap<>();
         requestParam.put("startGmtCreate", start);
@@ -142,8 +142,8 @@ public class JingHengController {
                         //添加时间
                         if ( one.containsKey("gmtCreate") && one.get("gmtCreate") != null )
                         {
-                            // Date addtime = DateUtils.stampToDateRe( one.get("gmtCreate").toString());
-                            request.setAddtime(new Date());
+                             Date addtime = DateUtils.stampToDateRe( one.get("gmtCreate").toString());
+                            request.setAddtime(addtime);
                         }
                         //订单修改时间
                         if ( one.containsKey("gmtModify") && one.get("gmtModify") != null )
