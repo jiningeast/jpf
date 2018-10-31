@@ -20,6 +20,11 @@ public class ChargeCompanyInfo {
     private String companyName;
 
     /**
+     * 登录密码 格式：MD5(6位随机数字)
+     */
+    private String password;
+
+    /**
      * 商户秘钥
      */
     private String privateKey;
@@ -184,5 +189,13 @@ public class ChargeCompanyInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
