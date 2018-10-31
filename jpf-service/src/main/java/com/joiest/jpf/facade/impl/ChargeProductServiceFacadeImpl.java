@@ -8,7 +8,6 @@ import com.joiest.jpf.common.po.PayChargeProductExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductMapper;
 import com.joiest.jpf.dto.GetChargeProductRequest;
 import com.joiest.jpf.dto.GetChargeProductResponse;
-import com.joiest.jpf.dto.ModifyChargeProductRequest;
 import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.facade.ChargeProductServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacade {
