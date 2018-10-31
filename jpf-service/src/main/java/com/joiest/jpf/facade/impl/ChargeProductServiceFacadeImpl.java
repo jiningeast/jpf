@@ -165,6 +165,11 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
      */
     @Override
     public JpfResponseDto modifyChargeProduct(ChargeProductInfo info) {
+        String ofProductId = StringUtils.stripToNull(info.getOfProductId());
+        String wnProductId = StringUtils.stripToNull(info.getWnProductId());
+        info.setOfProductId(ofProductId);
+        info.setWnProductId(wnProductId);
+
         PayChargeProduct payChargeProduct = new PayChargeProduct();
 
         BeanCopier beanCopier = BeanCopier.create(ChargeProductInfo.class, PayChargeProduct.class, false);
