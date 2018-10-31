@@ -14,6 +14,7 @@ public class ChargeInterfaceStreamFacadeImpl implements ChargeInterfaceStreamFac
     /*
      * 添加流水
      * */
+    @Override
     public int addStream(ChargeInterfaceStreamInfo streamInfo){
 
         PayChargeInterfaceStream payChargeInterfaceStream = new PayChargeInterfaceStream();

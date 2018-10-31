@@ -10,8 +10,10 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
+import com.joiest.jpf.entity.ChargeInterfaceStreamInfo;
 import com.joiest.jpf.entity.UserInfo;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
+import com.joiest.jpf.facade.ChargeInterfaceStreamFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import com.joiest.jpf.manage.web.util.SmsUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +36,9 @@ public class ChargeCompanyController {
 
     @Autowired
     private ChargeCompanyServiceFacade chargeCompanyServiceFacade;
+
+    @Autowired
+    private ChargeInterfaceStreamFacade chargeInterfaceStreamFacade;
 
     @RequestMapping("index")
     public String index(){
@@ -125,14 +130,13 @@ public class ChargeCompanyController {
 
         Integer randPwd = ToolUtils.getRandomInt(100000,999999);
         String newPwd = Md5Encrypt.md5(randPwd.toString());
-        String content = "尊敬的"+record.getContactName()+",您的商户"+record.getCompanyName()+"已重置密码为："+randPwd+".";
+        String content = "尊敬的"+record.getContactName()+"，您的商户"+record.getCompanyName()+"已重置密码为："+randPwd+"";
 
+        Date date = new Date();
         ChargeCompanyInfo chargeCompanyInfo = new ChargeCompanyInfo();
         chargeCompanyInfo.setId(id);
-
-        chargeCompanyInfo.setPassword(randPwd.toString());
-
-        chargeCompanyInfo.setUpdatetime(new Date());
+        chargeCompanyInfo.setPassword(newPwd);
+        chargeCompanyInfo.setUpdatetime(date);
         int updateRes = chargeCompanyServiceFacade.updateColumnByPrimaryKey(chargeCompanyInfo);
         if(updateRes == 1 ){
             //发送短信并记录操作记录
@@ -144,8 +148,17 @@ public class ChargeCompanyController {
                 //json---转换代码---
                 Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
                 if( responseMap !=null && responseMap.containsKey("code") && responseMap.get("code").equals("10000")){
-
-
+                    ChargeInterfaceStreamInfo interfaceStream = new ChargeInterfaceStreamInfo();
+                    // 充值平台商户密码重置
+                    interfaceStream.setType((byte)2);
+                    interfaceStream.setRequestUrl(requestUrl);
+                    interfaceStream.setRequestParam(requestParam);
+                    interfaceStream.setResponse(response);
+                    interfaceStream.setAddtime(date);
+                    int count = chargeInterfaceStreamFacade.addStream(interfaceStream);
+                    if( count != 1 ){
+                        throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "短信日志记录失败");
+                    }
                 }else{
                     throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "短信发送失败");
                 }

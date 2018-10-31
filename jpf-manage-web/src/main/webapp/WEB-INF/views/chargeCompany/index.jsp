@@ -64,7 +64,7 @@
                                 $.ajax({
                                     type: 'post',
                                     url: "resetPwd?id="+rows[0].id,
-                                    data: postData,
+                                    data: "",
                                     dataType: 'json',
                                     success: function (msg) {
                                         if (msg.retCode != '0000') {
