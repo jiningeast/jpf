@@ -192,6 +192,10 @@ public class JingHengController {
                             BigDecimal price = new BigDecimal(amount.toString());
                             request.setAmount(price);
                         }
+                        //userid
+                        if ( one.containsKey("userid") && one.get("userid") != null ){
+                            request.setUserId(Integer.parseInt(one.get("userid").toString()));
+                        }
 
                         request.setAmt(1);
                         request.setOrderType(3);
