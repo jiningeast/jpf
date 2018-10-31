@@ -85,11 +85,11 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">欧飞产品id：</td>
                         <td>
-                            <input id="ofProductId" name="ofProductId" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="min:0,precision:0,prompt:'请输入数字'" />
+                            <input id="ofProductId" name="ofProductId" type="text" style="width:220px" class="easyui-numberbox" data-options="min:0,precision:0,prompt:'请输入数字'" value="${productOne.ofProductId}" />
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">威能产品id：</td>
                         <td>
-                            <input id="wnProductId" name="wnProductId" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="min:0,precision:0,prompt:'请输入数字'" />
+                            <input id="wnProductId" name="wnProductId" type="text" style="width:220px" class="easyui-numberbox" data-options="min:0,precision:0,prompt:'请输入数字'" value="${productOne.wnProductId}" />
                         </td>
                     </tr>
                     <%--<tr>
