@@ -49,6 +49,39 @@
                         }
                         $('#editCompany').window("open").window('refresh', 'editPage?id='+rows[0].id).window('setTitle','编辑');
                     }
+                },
+                {
+                    text:'密码重置',
+                    iconCls:'icon-edit',
+                    handler:function(){
+                        var rows = $('#dg').datagrid('getSelections');
+                        if (rows.length != 1) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return false;
+                        }
+                        $.messager.confirm('确认','重置密码',function(r){
+                            if (r){
+                                $.ajax({
+                                    type: 'post',
+                                    url: "resetPwd?id="+rows[0].id,
+                                    data: postData,
+                                    dataType: 'json',
+                                    success: function (msg) {
+                                        if (msg.retCode != '0000') {
+                                            $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
+                                        } else {
+                                            $.messager.alert('消息提示', msg.retMsg, 'info');
+                                            $('#infoDiv').window('close');
+                                            $('#dg').datagrid('reload');
+                                        }
+                                    },
+                                    error: function () {
+                                        $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             ];
 
