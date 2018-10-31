@@ -56,6 +56,8 @@
                                 <option value="1">移动</option>
                                 <option value="2">联通</option>
                                 <option value="3">电信</option>
+                                <option value="4">中石化</option>
+                                <option value="5">中石油</option>
                             </select>
                         </td>
                     </tr>
