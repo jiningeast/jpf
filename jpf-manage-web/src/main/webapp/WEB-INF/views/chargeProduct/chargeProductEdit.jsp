@@ -57,6 +57,8 @@
                                 <option value="1" <c:if  test="${productOne.mobileType == 1 }">selected</c:if> >移动</option>
                                 <option value="2" <c:if  test="${productOne.mobileType == 2 }">selected</c:if> >联通</option>
                                 <option value="3" <c:if  test="${productOne.mobileType == 3 }">selected</c:if> >电信</option>
+                                <option value="3" <c:if  test="${productOne.mobileType == 4 }">selected</c:if> >中石化</option>
+                                <option value="3" <c:if  test="${productOne.mobileType == 5 }">selected</c:if> >中石油</option>
                             </select>
                         </td>
                     </tr>
