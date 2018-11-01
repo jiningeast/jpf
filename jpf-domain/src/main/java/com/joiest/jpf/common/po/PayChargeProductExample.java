@@ -606,6 +606,66 @@ public class PayChargeProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andWnProductPriceIsNull() {
+            addCriterion("wn_product_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceIsNotNull() {
+            addCriterion("wn_product_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceEqualTo(BigDecimal value) {
+            addCriterion("wn_product_price =", value, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceNotEqualTo(BigDecimal value) {
+            addCriterion("wn_product_price <>", value, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceGreaterThan(BigDecimal value) {
+            addCriterion("wn_product_price >", value, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("wn_product_price >=", value, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceLessThan(BigDecimal value) {
+            addCriterion("wn_product_price <", value, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("wn_product_price <=", value, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceIn(List<BigDecimal> values) {
+            addCriterion("wn_product_price in", values, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceNotIn(List<BigDecimal> values) {
+            addCriterion("wn_product_price not in", values, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("wn_product_price between", value1, value2, "wnProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andWnProductPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("wn_product_price not between", value1, value2, "wnProductPrice");
+            return (Criteria) this;
+        }
+
         public Criteria andOfProductIdIsNull() {
             addCriterion("of_product_id is null");
             return (Criteria) this;
@@ -663,6 +723,66 @@ public class PayChargeProductExample {
 
         public Criteria andOfProductIdNotBetween(String value1, String value2) {
             addCriterion("of_product_id not between", value1, value2, "ofProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceIsNull() {
+            addCriterion("of_product_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceIsNotNull() {
+            addCriterion("of_product_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceEqualTo(BigDecimal value) {
+            addCriterion("of_product_price =", value, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceNotEqualTo(BigDecimal value) {
+            addCriterion("of_product_price <>", value, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceGreaterThan(BigDecimal value) {
+            addCriterion("of_product_price >", value, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("of_product_price >=", value, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceLessThan(BigDecimal value) {
+            addCriterion("of_product_price <", value, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("of_product_price <=", value, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceIn(List<BigDecimal> values) {
+            addCriterion("of_product_price in", values, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceNotIn(List<BigDecimal> values) {
+            addCriterion("of_product_price not in", values, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("of_product_price between", value1, value2, "ofProductPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andOfProductPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("of_product_price not between", value1, value2, "ofProductPrice");
             return (Criteria) this;
         }
 

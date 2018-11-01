@@ -60,7 +60,9 @@ public class JingHengController {
         Date yesterday = calendar.getTime();
         String defaultStartDate = dateFmt.format(yesterday);
         String start = defaultStartDate.substring(0,10) + " 00:00:00";
+//        String start = "2018-10-29 00:00:00";
         String end = defaultStartDate.substring(0,10) + " 23:23:59";
+//        String end = "2018-10-29 23:23:59";
 
         Map<String, Object> requestParam = new HashMap<>();
         requestParam.put("startGmtCreate", start);
@@ -110,10 +112,11 @@ public class JingHengController {
             int valid_count = 0;
             if ( resultJosn.containsKey("module") )
             {
-                module = JSONArray.fromObject(resultJosn.get("module"));
-                if ( module.toString().equals("null") || module == null  ){
+                if ( resultJosn.get("module").equals("null") || resultJosn.get("module") == null  ){
+                    file.delete();
                     return "第"+requestParam.get("currentPage")+"页数据为空";
                 }
+                module = JSONArray.fromObject(resultJosn.get("module"));
                 logger.info("拉到数据，共计：{}条", module.size());
                 currentPageDataSize = module.size();
                 if( module.size() != 0 ){
@@ -139,8 +142,8 @@ public class JingHengController {
                         //添加时间
                         if ( one.containsKey("gmtCreate") && one.get("gmtCreate") != null )
                         {
-                            // Date addtime = DateUtils.stampToDateRe( one.get("gmtCreate").toString());
-                            request.setAddtime(new Date());
+                             Date addtime = DateUtils.stampToDateRe( one.get("gmtCreate").toString());
+                            request.setAddtime(addtime);
                         }
                         //订单修改时间
                         if ( one.containsKey("gmtModify") && one.get("gmtModify") != null )
@@ -188,6 +191,10 @@ public class JingHengController {
                             Double amount = itemFacePrice/1000;
                             BigDecimal price = new BigDecimal(amount.toString());
                             request.setAmount(price);
+                        }
+                        //userid
+                        if ( one.containsKey("userid") && one.get("userid") != null ){
+                            request.setUserId(Integer.parseInt(one.get("userid").toString()));
                         }
 
                         request.setAmt(1);
@@ -246,5 +253,22 @@ public class JingHengController {
         return "执行完成---bindData";
     }
 
+    @RequestMapping("test")
+    @ResponseBody
+    public String test(){
+//        String response = "{status:success,errorMsg:null,errorCode:null,module:null,totalItem:9342,tmallUser:false}";
+        String response = "{\"status\":\"success\",\"errorMsg\":null,\"errorCode\":null,\"module\":null,\"totalItem\":9342,\"tmallUser\":false}";
+
+        JSONObject resultJosn = JSONObject.fromObject(response);
+        if ( resultJosn.containsKey("module") ) {
+            if (resultJosn.get("module").equals("null") || resultJosn.get("module") == null) {
+                return "empty data";
+            }
+        }else{
+            return "not empty data";
+        }
+
+        return "test";
+    }
 
 }

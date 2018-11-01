@@ -41,9 +41,19 @@ public class PayChargeProduct implements Serializable {
     private String wnProductId;
 
     /**
+     * 威能给我们的价格
+     */
+    private BigDecimal wnProductPrice;
+
+    /**
      * 欧飞油卡产品id
      */
     private String ofProductId;
+
+    /**
+     * 欧飞给我们的价格
+     */
+    private BigDecimal ofProductPrice;
 
     /**
      * 是否强制使用某接口 0=否 1=是
@@ -173,12 +183,28 @@ public class PayChargeProduct implements Serializable {
         this.wnProductId = wnProductId == null ? null : wnProductId.trim();
     }
 
+    public BigDecimal getWnProductPrice() {
+        return wnProductPrice;
+    }
+
+    public void setWnProductPrice(BigDecimal wnProductPrice) {
+        this.wnProductPrice = wnProductPrice;
+    }
+
     public String getOfProductId() {
         return ofProductId;
     }
 
     public void setOfProductId(String ofProductId) {
         this.ofProductId = ofProductId == null ? null : ofProductId.trim();
+    }
+
+    public BigDecimal getOfProductPrice() {
+        return ofProductPrice;
+    }
+
+    public void setOfProductPrice(BigDecimal ofProductPrice) {
+        this.ofProductPrice = ofProductPrice;
     }
 
     public Byte getForceInterface() {
@@ -309,7 +335,9 @@ public class PayChargeProduct implements Serializable {
         sb.append(", bidPrice=").append(bidPrice);
         sb.append(", salePrice=").append(salePrice);
         sb.append(", wnProductId=").append(wnProductId);
+        sb.append(", wnProductPrice=").append(wnProductPrice);
         sb.append(", ofProductId=").append(ofProductId);
+        sb.append(", ofProductPrice=").append(ofProductPrice);
         sb.append(", forceInterface=").append(forceInterface);
         sb.append(", interfaceType=").append(interfaceType);
         sb.append(", brandId=").append(brandId);
@@ -351,7 +379,9 @@ public class PayChargeProduct implements Serializable {
             && (this.getBidPrice() == null ? other.getBidPrice() == null : this.getBidPrice().equals(other.getBidPrice()))
             && (this.getSalePrice() == null ? other.getSalePrice() == null : this.getSalePrice().equals(other.getSalePrice()))
             && (this.getWnProductId() == null ? other.getWnProductId() == null : this.getWnProductId().equals(other.getWnProductId()))
+            && (this.getWnProductPrice() == null ? other.getWnProductPrice() == null : this.getWnProductPrice().equals(other.getWnProductPrice()))
             && (this.getOfProductId() == null ? other.getOfProductId() == null : this.getOfProductId().equals(other.getOfProductId()))
+            && (this.getOfProductPrice() == null ? other.getOfProductPrice() == null : this.getOfProductPrice().equals(other.getOfProductPrice()))
             && (this.getForceInterface() == null ? other.getForceInterface() == null : this.getForceInterface().equals(other.getForceInterface()))
             && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
             && (this.getBrandId() == null ? other.getBrandId() == null : this.getBrandId().equals(other.getBrandId()))
@@ -382,7 +412,9 @@ public class PayChargeProduct implements Serializable {
         result = prime * result + ((getBidPrice() == null) ? 0 : getBidPrice().hashCode());
         result = prime * result + ((getSalePrice() == null) ? 0 : getSalePrice().hashCode());
         result = prime * result + ((getWnProductId() == null) ? 0 : getWnProductId().hashCode());
+        result = prime * result + ((getWnProductPrice() == null) ? 0 : getWnProductPrice().hashCode());
         result = prime * result + ((getOfProductId() == null) ? 0 : getOfProductId().hashCode());
+        result = prime * result + ((getOfProductPrice() == null) ? 0 : getOfProductPrice().hashCode());
         result = prime * result + ((getForceInterface() == null) ? 0 : getForceInterface().hashCode());
         result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
         result = prime * result + ((getBrandId() == null) ? 0 : getBrandId().hashCode());

@@ -61,6 +61,11 @@ public class ModifyBrangainRechargeorderRequest {
     private String chargeNo;
 
     /**
+     * 敬恒的账号区分
+     */
+    private Integer userId;
+
+    /**
      * 订单状态 0=待支付 1=已支付 2=支付失败 3=已取消
      */
     private Integer status;
@@ -181,6 +186,14 @@ public class ModifyBrangainRechargeorderRequest {
 
     public void setChargeNo(String chargeNo) {
         this.chargeNo = chargeNo;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getStatus() {

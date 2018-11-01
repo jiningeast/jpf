@@ -71,7 +71,7 @@ public class FlowQueryController {
             return JsonUtils.toJson(responseMap);
         }
 
-        if( carrier.equals("") || !carrier.equals("null") || ( Integer.parseInt(carrier) >=0 && Integer.parseInt(carrier) <= 3 ) ){
+        if( carrier.equals("") || !carrier.equals("null") || ( Integer.parseInt(carrier) >=0 && Integer.parseInt(carrier) <= 5 ) ){
             if(carrier.equals("")){
                 carrier = request.getParameter("carrier");
             }else{

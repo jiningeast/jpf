@@ -1,34 +1,32 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
-import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.dto.*;
-import com.joiest.jpf.entity.*;
-import com.joiest.jpf.facade.*;
+import com.joiest.jpf.common.util.LogsCustomUtils;
+import com.joiest.jpf.common.util.OkHttpUtils;
+import com.joiest.jpf.dto.GetWeixinMpRequest;
+import com.joiest.jpf.dto.GetWeixinMpResponse;
+import com.joiest.jpf.entity.UserInfo;
+import com.joiest.jpf.entity.WeixinMenuInfo;
+import com.joiest.jpf.entity.WeixinMpInfo;
+import com.joiest.jpf.facade.WeixinMenuServiceFacade;
+import com.joiest.jpf.facade.WeixinMpServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * 代理公司管理

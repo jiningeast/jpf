@@ -11,7 +11,7 @@ public class PayChargeCompany implements Serializable {
     private String id;
 
     /**
-     * 商户号，生成规则：MC+时间戳+6位随机数
+     * 商户号，生成规则：CH+时间戳+6位随机数
      */
     private String merchNo;
 
@@ -19,6 +19,11 @@ public class PayChargeCompany implements Serializable {
      * 商户名称
      */
     private String companyName;
+
+    /**
+     * 登录密码 格式：MD5(6位随机数字)
+     */
+    private String password;
 
     /**
      * 商户秘钥
@@ -99,6 +104,14 @@ public class PayChargeCompany implements Serializable {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
     }
 
     public String getPrivateKey() {
@@ -201,6 +214,7 @@ public class PayChargeCompany implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", merchNo=").append(merchNo);
         sb.append(", companyName=").append(companyName);
+        sb.append(", password=").append(password);
         sb.append(", privateKey=").append(privateKey);
         sb.append(", money=").append(money);
         sb.append(", moneyCode=").append(moneyCode);
@@ -235,6 +249,7 @@ public class PayChargeCompany implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
+            && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
             && (this.getPrivateKey() == null ? other.getPrivateKey() == null : this.getPrivateKey().equals(other.getPrivateKey()))
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getMoneyCode() == null ? other.getMoneyCode() == null : this.getMoneyCode().equals(other.getMoneyCode()))
@@ -258,6 +273,7 @@ public class PayChargeCompany implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
+        result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
         result = prime * result + ((getPrivateKey() == null) ? 0 : getPrivateKey().hashCode());
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
         result = prime * result + ((getMoneyCode() == null) ? 0 : getMoneyCode().hashCode());
