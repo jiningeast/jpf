@@ -10,6 +10,10 @@ public class ChargeCompanyMoneyStreamInfo {
     private String id;
 
     /**
+     * 流水号 MS+时间戳+3位随机数
+     */
+    private String streamNo;
+    /**
      * 商户id
      */
     private String companyId;
@@ -88,6 +92,16 @@ public class ChargeCompanyMoneyStreamInfo {
      * 流水类型 1=充值 2=下单 3=退款
      */
     private Byte status;
+
+    /**
+     * 流水类型 0=收入 1=支出
+     */
+    private Byte streamType;
+
+    /**
+     * 变动后的余额
+     */
+    private BigDecimal newMoney;
 
     /**
      * 流水备注
@@ -303,5 +317,29 @@ public class ChargeCompanyMoneyStreamInfo {
 
     public void setStatusType(String statusType) {
         this.statusType = statusType;
+    }
+
+    public String getStreamNo() {
+        return streamNo;
+    }
+
+    public void setStreamNo(String streamNo) {
+        this.streamNo = streamNo;
+    }
+
+    public Byte getStreamType() {
+        return streamType;
+    }
+
+    public void setStreamType(Byte streamType) {
+        this.streamType = streamType;
+    }
+
+    public BigDecimal getNewMoney() {
+        return newMoney;
+    }
+
+    public void setNewMoney(BigDecimal newMoney) {
+        this.newMoney = newMoney;
     }
 }
