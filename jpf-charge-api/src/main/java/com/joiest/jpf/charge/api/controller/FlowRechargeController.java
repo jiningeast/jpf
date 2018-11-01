@@ -592,7 +592,7 @@ public class FlowRechargeController {
         int orderId = chargeOrderServiceFacade.placeOrder(placeOrderInfo);
 
         actParam.put("selfOrder",orderno);
-        actParam.put("productId",chargeProductInfo.getId());
+        actParam.put("productId",chargeProductInfo.getOfProductId());
 
         ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
         upOrderInfo.setId(""+orderId);
@@ -618,7 +618,7 @@ public class FlowRechargeController {
         merRespons.put("phone",actParam.get("phone"));//充值手机号
         merRespons.put("value",chargeProductInfo.getValue());//充值面值
         merRespons.put("salePrice",chargeProductInfo.getSalePrice());//扣商户的钱
-        merRespons.put("productId",actParam.get("productId"));//产品金额
+        merRespons.put("productId",chargeProductInfo.getId());//产品id
 
         if(map.get("code").equals("10000")){
 
