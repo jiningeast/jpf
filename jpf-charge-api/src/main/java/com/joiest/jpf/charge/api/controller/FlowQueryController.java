@@ -285,12 +285,16 @@ public class FlowQueryController {
             return JsonUtils.toJson(responseMap);
         }
 
+        //查询商品信息
+        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(orderInfo.getProductId());
+
         //返回指定字段信息
         Map<String,String> responData = new HashMap<>();
         responData.put("OrderNo",orderInfo.getOrderNo());
         responData.put("outOrderNo",orderInfo.getForeignOrderNo());
         responData.put("phone",orderInfo.getChargePhone());
-        responData.put("money",orderInfo.getTotalMoney().toString());
+        responData.put("value",chargeProductInfo.getValue().toString());
+        responData.put("salePrice",orderInfo.getProductPrice().toString());
         responData.put("productId",orderInfo.getProductId());
         String statusCn = "";
         switch (orderInfo.getStatus()){

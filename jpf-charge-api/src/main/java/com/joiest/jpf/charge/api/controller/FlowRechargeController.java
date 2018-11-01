@@ -407,6 +407,8 @@ public class FlowRechargeController {
         chargeInterfaceStreamInfo.setAddtime(new Date());
         chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
 
+        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(orderInfo.getProductId());
+
         //更新订单信息
         ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
 
@@ -418,7 +420,8 @@ public class FlowRechargeController {
         }else if ( orderInfo.getProductType() == 2 || orderInfo.getProductType() == 3 ){
             sendParam.put("cardNo",orderInfo.getChargePhone());
         }
-        sendParam.put("money",orderInfo.getTotalMoney().toString());
+        sendParam.put("value",chargeProductInfo.getValue());
+        sendParam.put("salePrice",orderInfo.getProductPrice().toString());
         sendParam.put("productId",orderInfo.getProductId());
 
         if (request.getRet_code().equals("9")){    //1成功 9失败

@@ -94,6 +94,9 @@ public class OrdersController {
     @Autowired
     private ChargeOrderServiceFacade chargeOrderServiceFacade;
 
+    @Autowired
+    private ChargeProductServiceFacade chargeProductServiceFacade;
+
     //TODO  记录请求日志  商品类别判断
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -1244,12 +1247,16 @@ public class OrdersController {
                         chargeInterfaceStreamInfo.setAddtime(new Date());
                         chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
 
+                        // 查询商品信息
+                        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(orderInfo.getProductId());
+
                         //主动通知参数
                         Map<String,Object> sendParam = new HashMap<>();
                         sendParam.put("outOrderNo",orderInfo.getForeignOrderNo());
                         sendParam.put("orderNo",orderInfo.getOrderNo());
                         sendParam.put("phone",orderInfo.getChargePhone());
-                        sendParam.put("money",orderInfo.getTotalMoney().toString());
+                        sendParam.put("value",chargeProductInfo.getValue());
+                        sendParam.put("salePrice",chargeProductInfo.getSalePrice());
                         sendParam.put("productId",orderInfo.getProductId());
 
                         //修改订单信息 【订单状态】
