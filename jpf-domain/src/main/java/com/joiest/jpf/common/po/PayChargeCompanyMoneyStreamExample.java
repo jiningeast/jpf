@@ -1246,6 +1246,126 @@ public class PayChargeCompanyMoneyStreamExample {
             return (Criteria) this;
         }
 
+        public Criteria andStreamTypeIsNull() {
+            addCriterion("stream_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeIsNotNull() {
+            addCriterion("stream_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeEqualTo(Byte value) {
+            addCriterion("stream_type =", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeNotEqualTo(Byte value) {
+            addCriterion("stream_type <>", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeGreaterThan(Byte value) {
+            addCriterion("stream_type >", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("stream_type >=", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeLessThan(Byte value) {
+            addCriterion("stream_type <", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("stream_type <=", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeIn(List<Byte> values) {
+            addCriterion("stream_type in", values, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeNotIn(List<Byte> values) {
+            addCriterion("stream_type not in", values, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeBetween(Byte value1, Byte value2) {
+            addCriterion("stream_type between", value1, value2, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("stream_type not between", value1, value2, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyIsNull() {
+            addCriterion("new_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyIsNotNull() {
+            addCriterion("new_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyEqualTo(BigDecimal value) {
+            addCriterion("new_money =", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("new_money <>", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyGreaterThan(BigDecimal value) {
+            addCriterion("new_money >", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("new_money >=", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyLessThan(BigDecimal value) {
+            addCriterion("new_money <", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("new_money <=", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyIn(List<BigDecimal> values) {
+            addCriterion("new_money in", values, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("new_money not in", values, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("new_money between", value1, value2, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("new_money not between", value1, value2, "newMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andMemoIsNull() {
             addCriterion("memo is null");
             return (Criteria) this;

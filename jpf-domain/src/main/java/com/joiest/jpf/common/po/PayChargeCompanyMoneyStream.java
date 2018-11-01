@@ -51,7 +51,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
     private BigDecimal productValue;
 
     /**
-     * 产品价格
+     * 产品成本价
      */
     private BigDecimal productBidPrice;
 
@@ -89,6 +89,16 @@ public class PayChargeCompanyMoneyStream implements Serializable {
      * 流水类型 1=充值 2=下单 3=退款
      */
     private Byte status;
+
+    /**
+     * 流水类型 0=收入 1=支出
+     */
+    private Byte streamType;
+
+    /**
+     * 变动后的余额
+     */
+    private BigDecimal newMoney;
 
     /**
      * 流水备注
@@ -248,6 +258,22 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         this.status = status;
     }
 
+    public Byte getStreamType() {
+        return streamType;
+    }
+
+    public void setStreamType(Byte streamType) {
+        this.streamType = streamType;
+    }
+
+    public BigDecimal getNewMoney() {
+        return newMoney;
+    }
+
+    public void setNewMoney(BigDecimal newMoney) {
+        this.newMoney = newMoney;
+    }
+
     public String getMemo() {
         return memo;
     }
@@ -306,6 +332,8 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         sb.append(", interfaceType=").append(interfaceType);
         sb.append(", interfaceOrderNo=").append(interfaceOrderNo);
         sb.append(", status=").append(status);
+        sb.append(", streamType=").append(streamType);
+        sb.append(", newMoney=").append(newMoney);
         sb.append(", memo=").append(memo);
         sb.append(", isDel=").append(isDel);
         sb.append(", addtime=").append(addtime);
@@ -347,6 +375,8 @@ public class PayChargeCompanyMoneyStream implements Serializable {
             && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
             && (this.getInterfaceOrderNo() == null ? other.getInterfaceOrderNo() == null : this.getInterfaceOrderNo().equals(other.getInterfaceOrderNo()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getStreamType() == null ? other.getStreamType() == null : this.getStreamType().equals(other.getStreamType()))
+            && (this.getNewMoney() == null ? other.getNewMoney() == null : this.getNewMoney().equals(other.getNewMoney()))
             && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
             && (this.getIsDel() == null ? other.getIsDel() == null : this.getIsDel().equals(other.getIsDel()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
@@ -377,6 +407,8 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
         result = prime * result + ((getInterfaceOrderNo() == null) ? 0 : getInterfaceOrderNo().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getStreamType() == null) ? 0 : getStreamType().hashCode());
+        result = prime * result + ((getNewMoney() == null) ? 0 : getNewMoney().hashCode());
         result = prime * result + ((getMemo() == null) ? 0 : getMemo().hashCode());
         result = prime * result + ((getIsDel() == null) ? 0 : getIsDel().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
