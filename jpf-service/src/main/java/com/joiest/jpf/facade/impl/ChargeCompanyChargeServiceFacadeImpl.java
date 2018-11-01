@@ -6,9 +6,11 @@ import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyCharge;
 import com.joiest.jpf.common.po.PayChargeCompanyChargeExample;
+import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyChargeMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
 import com.joiest.jpf.dto.GetChargeCompanyChargeRequest;
 import com.joiest.jpf.dto.GetChargeCompanyChargeResponse;
 import com.joiest.jpf.entity.ChargeCompanyChargeInfo;
@@ -29,6 +31,9 @@ public class ChargeCompanyChargeServiceFacadeImpl implements ChargeCompanyCharge
 
     @Autowired
     private PayChargeCompanyChargeMapper payChargeCompanyChargeMapper;
+
+    @Autowired
+    private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
 
     @Autowired
 
@@ -179,7 +184,37 @@ public class ChargeCompanyChargeServiceFacadeImpl implements ChargeCompanyCharge
                         payChargeCompany.setId(companyId);
                         JpfResponseDto jpfResponseDto = chargeCompanyServiceFacade.updateCompanyRecord(payChargeCompany);
                         if(jpfResponseDto.getRetCode().equals("0000")){ //更新成功
-                            ret = 1;
+
+                            //记录资金流水日志
+                            BigDecimal zeroNum = new BigDecimal("0");
+                            PayChargeCompanyMoneyStream streamData = new PayChargeCompanyMoneyStream();
+                            streamData.setStreamNo("MS"+ToolUtils.createOrderid());//流水号
+                            streamData.setCompanyId(companyId);//商户id
+                            streamData.setCompanyName(chargeCompanyInfo.getCompanyName());//商户名称
+                            streamData.setMerchNo(chargeCompanyInfo.getMerchNo());//商户号
+                            streamData.setOrderId(companyId);//订单id 可能是消费订单、充值订单、退款订单
+                            streamData.setOrderNo(companyId); // 订单号可能是消费订单、充值订单、退款订单
+                            streamData.setProductId("0");//产品Id
+                            streamData.setProductName("充值");//产品名称
+                            streamData.setProductValue(money); //产品面值
+                            streamData.setProductBidPrice(zeroNum);//产品成本价
+                            streamData.setProductSalePrice(null);//产品标准售价 默认null
+                            streamData.setProductInterfacePrice(zeroNum);//产品接口价
+                            streamData.setProductAmount(null);//产品数量
+                            streamData.setTotalMoney(zeroNum);//总价
+                            streamData.setInterfaceType(null);//接口类型 0=欧非 1=威能 默认null
+                            streamData.setInterfaceOrderNo(null);//接口订单号 默认null
+                            streamData.setStatus((byte)1);//流水类型 1=充值 2=下单 3=退款
+                            streamData.setStreamType((byte)0);//流水类型 0=收入 1=支出
+                            streamData.setNewMoney(afterMoney);//变动后的余额
+                            streamData.setMemo("");//流水备注
+                            streamData.setIsDel((byte)0);//删除标记 0=未删除 1=已删除
+                            streamData.setAddtime(curretDate);//添加时间
+                            streamData.setUpdatetime(curretDate);//更新时间
+                            int streamCount = payChargeCompanyMoneyStreamMapper.insertSelective(streamData);
+                            if( streamCount == 1 ){
+                                ret = 1;
+                            }
                         }
 
                     }else{

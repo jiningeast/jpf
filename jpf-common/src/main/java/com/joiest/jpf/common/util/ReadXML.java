@@ -3,9 +3,10 @@ package com.joiest.jpf.common.util;
 import org.dom4j.*;
 import org.dom4j.io.SAXReader;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.*;
-
 
 /**
  * 用DOM4J方法读取xml文件
@@ -129,6 +130,7 @@ public class ReadXML {
             Iterator storeit = bookstore.elementIterator();
 
             while(storeit.hasNext()){
+
                 Map<String,String> resultMap = new HashMap<>();
 
                 Element bookElement = (Element) storeit.next();
@@ -155,16 +157,16 @@ public class ReadXML {
 
             e.printStackTrace();
         }
-
         return resultList;
     }
+
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        File file = new File("e:\\efg.xml");
+      /*
+      File file = new File("e:\\efg.xml");
         StringBuilder sbf = new StringBuilder();
         sbf.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                 "\n" +
@@ -185,32 +187,41 @@ public class ReadXML {
 
         System.out.println(map);
         System.out.println(map.toString());
+        */
 
         File file1 = new File("e:\\abc.xml");
         StringBuilder sbf1 = new StringBuilder();
-        sbf1.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<bookstore>\n" +
-                "    <book id=\"1\">\n" +
-                "        <name>冰与火之歌</name>\n" +
-                "        <author>乔治马丁</author>\n" +
-                "        <year>2014</year>\n" +
-                "        <price>89</price>\n" +
-                "    </book>\n" +
-                "    <book id=\"2\">\n" +
-                "        <name>安徒生童话</name>\n" +
-                "        <author>安徒生</author>\n" +
-                "        <year>2004</year>\n" +
-                "        <price>77</price>\n" +
-                "    </book>\n" +
-                "    <book id=\"3\">\n" +
-                "        <name>think think think</name>\n" +
-                "        <author>aaa</author>\n" +
-                "        <year>1997</year>\n" +
-                "        <price>100</price>\n" +
-                "    </book>\n" +
-                "</bookstore>");
+        sbf1.append("<?xml version=\"1.0\" encoding=\"gb2312\"?>\n" +
+                "<cardinfo>\n" +
+                "    <err_msg></err_msg>\n" +
+                "    <retcode>1</retcode>\n" +
+                "    <ret_cardinfos>\n" +
+                "        <card>\n" +
+                "            <cardid>64157004</cardid>\n" +
+                "            <pervalue>100</pervalue>\n" +
+                "            <inprice>100.3</inprice>\n" +
+                "            <sysddprice>100</sysddprice>\n" +
+                "            <sysdd1price>100</sysdd1price>\n" +
+                "            <sysdd2price>100</sysdd2price>\n" +
+                "            <agentprice>100</agentprice>\n" +
+                "            <agentprice1>100</agentprice1>\n" +
+                "            <agentprice2>100</agentprice2>\n" +
+                "            <memberprice>100</memberprice>\n" +
+                "            <innum>30</innum>\n" +
+                "            <cardname>全国中石化加油卡直充100元</cardname>\n" +
+                "            <othername>全国中石化加油卡直充100元</othername>\n" +
+                "            <howeasy>A</howeasy>\n" +
+                "            <amounts>1-10</amounts>\n" +
+                "            <subclassid>64888</subclassid>\n" +
+                "            <classtype>2</classtype>\n" +
+                "            <fullcostsite></fullcostsite>\n" +
+                "            <caption></caption>\n" +
+                "            <lastreftime>2015-12-16 13:14:09</lastreftime>\n" +
+                "            <accountdesc></accountdesc>\n" +
+                "        </card>\n" +
+                "    </ret_cardinfos>\n" +
+                "</cardinfo> ");
 
-//        List<Map<String,String>> list = new ReadXML().getBooksList(file1);
         List<Map<String,String>> list1 = new ReadXML().getBooksListByStr(sbf1.toString());
 
         System.out.println(list1);
