@@ -236,6 +236,76 @@ public class PayChargeCompanyMoneyStreamExample {
             return (Criteria) this;
         }
 
+        public Criteria andStreamNoIsNull() {
+            addCriterion("stream_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoIsNotNull() {
+            addCriterion("stream_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoEqualTo(String value) {
+            addCriterion("stream_no =", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoNotEqualTo(String value) {
+            addCriterion("stream_no <>", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoGreaterThan(String value) {
+            addCriterion("stream_no >", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoGreaterThanOrEqualTo(String value) {
+            addCriterion("stream_no >=", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoLessThan(String value) {
+            addCriterion("stream_no <", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoLessThanOrEqualTo(String value) {
+            addCriterion("stream_no <=", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoLike(String value) {
+            addCriterion("stream_no like", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoNotLike(String value) {
+            addCriterion("stream_no not like", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoIn(List<String> values) {
+            addCriterion("stream_no in", values, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoNotIn(List<String> values) {
+            addCriterion("stream_no not in", values, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoBetween(String value1, String value2) {
+            addCriterion("stream_no between", value1, value2, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoNotBetween(String value1, String value2) {
+            addCriterion("stream_no not between", value1, value2, "streamNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyIdIsNull() {
             addCriterion("company_id is null");
             return (Criteria) this;
@@ -1613,6 +1683,11 @@ public class PayChargeCompanyMoneyStreamExample {
 
         public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
             addCriterion("updatetime not between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoLikeInsensitive(String value) {
+            addCriterion("upper(stream_no) like", value.toUpperCase(), "streamNo");
             return (Criteria) this;
         }
 

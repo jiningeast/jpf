@@ -11,6 +11,11 @@ public class PayChargeCompanyMoneyStream implements Serializable {
     private String id;
 
     /**
+     * 流水号 MS+时间戳+3位随机数
+     */
+    private String streamNo;
+
+    /**
      * 商户id
      */
     private String companyId;
@@ -128,6 +133,14 @@ public class PayChargeCompanyMoneyStream implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getStreamNo() {
+        return streamNo;
+    }
+
+    public void setStreamNo(String streamNo) {
+        this.streamNo = streamNo == null ? null : streamNo.trim();
     }
 
     public String getCompanyId() {
@@ -316,6 +329,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", streamNo=").append(streamNo);
         sb.append(", companyId=").append(companyId);
         sb.append(", companyName=").append(companyName);
         sb.append(", merchNo=").append(merchNo);
@@ -359,6 +373,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         }
         PayChargeCompanyMoneyStream other = (PayChargeCompanyMoneyStream) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getStreamNo() == null ? other.getStreamNo() == null : this.getStreamNo().equals(other.getStreamNo()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
@@ -391,6 +406,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getStreamNo() == null) ? 0 : getStreamNo().hashCode());
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
