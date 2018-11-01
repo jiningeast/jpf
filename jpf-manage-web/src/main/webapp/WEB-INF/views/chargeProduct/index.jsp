@@ -66,6 +66,10 @@
                                 return "联通";
                             } else if (value == 3) {
                                 return "电信";
+                            } else if (value == 4) {
+                                return "中石化";
+                            } else if (value == 5) {
+                                return "中石油";
                             }
                         }
                     },

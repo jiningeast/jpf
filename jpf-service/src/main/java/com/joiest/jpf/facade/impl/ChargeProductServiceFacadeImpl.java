@@ -8,7 +8,6 @@ import com.joiest.jpf.common.po.PayChargeProductExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductMapper;
 import com.joiest.jpf.dto.GetChargeProductRequest;
 import com.joiest.jpf.dto.GetChargeProductResponse;
-import com.joiest.jpf.dto.ModifyChargeProductRequest;
 import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.facade.ChargeProductServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacade {
@@ -117,6 +115,11 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
      */
     @Override
     public int addChargeProduct(ChargeProductInfo info) {
+        String ofProductId = StringUtils.stripToNull(info.getOfProductId());
+        String wnProductId = StringUtils.stripToNull(info.getWnProductId());
+        info.setOfProductId(ofProductId);
+        info.setWnProductId(wnProductId);
+
         PayChargeProduct payChargeProduct = new PayChargeProduct();
 
         BeanCopier beanCopier = BeanCopier.create(ChargeProductInfo.class, PayChargeProduct.class, false);
@@ -160,6 +163,11 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
      */
     @Override
     public JpfResponseDto modifyChargeProduct(ChargeProductInfo info) {
+        String ofProductId = StringUtils.stripToNull(info.getOfProductId());
+        String wnProductId = StringUtils.stripToNull(info.getWnProductId());
+        info.setOfProductId(ofProductId);
+        info.setWnProductId(wnProductId);
+
         PayChargeProduct payChargeProduct = new PayChargeProduct();
 
         BeanCopier beanCopier = BeanCopier.create(ChargeProductInfo.class, PayChargeProduct.class, false);

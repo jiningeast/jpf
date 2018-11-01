@@ -45,7 +45,7 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
         PayShopOrderCustomExample example = new PayShopOrderCustomExample();
         example.setPageNo(request.getPage());
         example.setPageSize(request.getRows());
-        example.setOrderByClause("addtime DESC");
+        example.setOrderByClause("id DESC");
 
         PayShopOrderCustomExample.Criteria c =example.createCriteria();
 

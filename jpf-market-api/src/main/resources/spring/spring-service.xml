@@ -26,5 +26,6 @@
 	<bean id="ShopCouponActiveServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponActiveServiceFacadeImpl"></bean>
 	<bean id="ChargeOrderServiceFacade" class="com.joiest.jpf.facade.impl.ChargeOrderServiceFacadeImpl"></bean>
 	<bean id="ChargeInterfaceStreamFacade" class="com.joiest.jpf.facade.impl.ChargeInterfaceStreamFacadeImpl"></bean>
+	<bean id="ChargeProductServiceFacade" class="com.joiest.jpf.facade.impl.ChargeProductServiceFacadeImpl"></bean>
 
 </beans>

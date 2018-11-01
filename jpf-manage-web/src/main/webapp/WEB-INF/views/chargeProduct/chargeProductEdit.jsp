@@ -57,8 +57,8 @@
                                 <option value="1" <c:if  test="${productOne.mobileType == 1 }">selected</c:if> >移动</option>
                                 <option value="2" <c:if  test="${productOne.mobileType == 2 }">selected</c:if> >联通</option>
                                 <option value="3" <c:if  test="${productOne.mobileType == 3 }">selected</c:if> >电信</option>
-                                <option value="3" <c:if  test="${productOne.mobileType == 4 }">selected</c:if> >中石化</option>
-                                <option value="3" <c:if  test="${productOne.mobileType == 5 }">selected</c:if> >中石油</option>
+                                <option value="4" <c:if  test="${productOne.mobileType == 4 }">selected</c:if> >中石化</option>
+                                <option value="5" <c:if  test="${productOne.mobileType == 5 }">selected</c:if> >中石油</option>
                             </select>
                         </td>
                     </tr>
@@ -79,9 +79,17 @@
                         <td>
                             <input id="value" name="value" type="text" style="width:220px" class="easyui-numberbox" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" value="${productOne.value}" />
                         </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">欧飞产品id：</td>
+                        <td>
+                            <input id="ofProductId" name="ofProductId" type="text" style="width:220px" class="easyui-numberbox" data-options="min:0,precision:0,prompt:'请输入数字'" value="${productOne.ofProductId}" />
+                        </td>
                         <td style="text-align: right;background-color: #f1f1f1;">威能产品id：</td>
                         <td>
-                            <input id="wnProductId" name="wnProductId" type="text" style="width:220px" class="easyui-numberbox" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" value="${productOne.wnProductId}" />
+                            <input id="wnProductId" name="wnProductId" type="text" style="width:220px" class="easyui-numberbox" data-options="min:0,precision:0,prompt:'请输入数字'" value="${productOne.wnProductId}" />
                         </td>
                     </tr>
                     <%--<tr>

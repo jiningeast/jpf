@@ -10,6 +10,11 @@ public class ChargeProductInfo {
     private String id;
 
     /**
+     * 产品类型 0=话费充值 1=油卡充值
+     */
+    private Integer type;
+
+    /**
      * 产品名称
      */
     private String name;
@@ -35,9 +40,19 @@ public class ChargeProductInfo {
     private String wnProductId;
 
     /**
+     * 威能给我们的价格
+     */
+    private BigDecimal wnProductPrice;
+
+    /**
      * 欧飞油卡产品id
      */
     private String ofProductId;
+
+    /**
+     * 欧飞给我们的价格
+     */
+    private BigDecimal ofProductPrice;
 
     /**
      * 是否强制使用某接口 0=否 1=是
@@ -114,7 +129,15 @@ public class ChargeProductInfo {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getName() {
@@ -122,7 +145,7 @@ public class ChargeProductInfo {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public BigDecimal getValue() {
@@ -154,7 +177,15 @@ public class ChargeProductInfo {
     }
 
     public void setWnProductId(String wnProductId) {
-        this.wnProductId = wnProductId == null ? null : wnProductId.trim();
+        this.wnProductId = wnProductId;
+    }
+
+    public BigDecimal getWnProductPrice() {
+        return wnProductPrice;
+    }
+
+    public void setWnProductPrice(BigDecimal wnProductPrice) {
+        this.wnProductPrice = wnProductPrice;
     }
 
     public String getOfProductId() {
@@ -162,7 +193,15 @@ public class ChargeProductInfo {
     }
 
     public void setOfProductId(String ofProductId) {
-        this.ofProductId = ofProductId == null ? null : ofProductId.trim();
+        this.ofProductId = ofProductId;
+    }
+
+    public BigDecimal getOfProductPrice() {
+        return ofProductPrice;
+    }
+
+    public void setOfProductPrice(BigDecimal ofProductPrice) {
+        this.ofProductPrice = ofProductPrice;
     }
 
     public Byte getForceInterface() {
@@ -186,7 +225,7 @@ public class ChargeProductInfo {
     }
 
     public void setBrandId(String brandId) {
-        this.brandId = brandId == null ? null : brandId.trim();
+        this.brandId = brandId;
     }
 
     public String getBrandName() {
@@ -194,7 +233,7 @@ public class ChargeProductInfo {
     }
 
     public void setBrandName(String brandName) {
-        this.brandName = brandName == null ? null : brandName.trim();
+        this.brandName = brandName;
     }
 
     public String getSupplierId() {
@@ -210,7 +249,7 @@ public class ChargeProductInfo {
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName == null ? null : supplierName.trim();
+        this.supplierName = supplierName;
     }
 
     public String getTypeId() {
@@ -218,7 +257,7 @@ public class ChargeProductInfo {
     }
 
     public void setTypeId(String typeId) {
-        this.typeId = typeId == null ? null : typeId.trim();
+        this.typeId = typeId;
     }
 
     public String getTypeName() {
@@ -226,7 +265,7 @@ public class ChargeProductInfo {
     }
 
     public void setTypeName(String typeName) {
-        this.typeName = typeName == null ? null : typeName.trim();
+        this.typeName = typeName;
     }
 
     public Byte getMobileType() {
@@ -250,7 +289,7 @@ public class ChargeProductInfo {
     }
 
     public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId == null ? null : operatorId.trim();
+        this.operatorId = operatorId;
     }
 
     public String getOperatorName() {
@@ -258,7 +297,7 @@ public class ChargeProductInfo {
     }
 
     public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName == null ? null : operatorName.trim();
+        this.operatorName = operatorName;
     }
 
     public Date getAddtime() {
@@ -276,5 +315,4 @@ public class ChargeProductInfo {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
-
 }

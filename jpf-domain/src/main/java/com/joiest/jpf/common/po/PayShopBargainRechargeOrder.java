@@ -61,6 +61,11 @@ public class PayShopBargainRechargeOrder implements Serializable {
     private String chargeNo;
 
     /**
+     * 敬恒的账号区分
+     */
+    private Integer userId;
+
+    /**
      * 订单状态 0=待支付 1=已支付 2=支付失败 3=已取消
      */
     private Integer status;
@@ -185,6 +190,14 @@ public class PayShopBargainRechargeOrder implements Serializable {
         this.chargeNo = chargeNo == null ? null : chargeNo.trim();
     }
 
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -261,6 +274,7 @@ public class PayShopBargainRechargeOrder implements Serializable {
         sb.append(", amt=").append(amt);
         sb.append(", amount=").append(amount);
         sb.append(", chargeNo=").append(chargeNo);
+        sb.append(", userId=").append(userId);
         sb.append(", status=").append(status);
         sb.append(", rechargeStatus=").append(rechargeStatus);
         sb.append(", rechargeTime=").append(rechargeTime);
@@ -299,6 +313,7 @@ public class PayShopBargainRechargeOrder implements Serializable {
             && (this.getAmt() == null ? other.getAmt() == null : this.getAmt().equals(other.getAmt()))
             && (this.getAmount() == null ? other.getAmount() == null : this.getAmount().equals(other.getAmount()))
             && (this.getChargeNo() == null ? other.getChargeNo() == null : this.getChargeNo().equals(other.getChargeNo()))
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getRechargeStatus() == null ? other.getRechargeStatus() == null : this.getRechargeStatus().equals(other.getRechargeStatus()))
             && (this.getRechargeTime() == null ? other.getRechargeTime() == null : this.getRechargeTime().equals(other.getRechargeTime()))
@@ -326,6 +341,7 @@ public class PayShopBargainRechargeOrder implements Serializable {
         result = prime * result + ((getAmt() == null) ? 0 : getAmt().hashCode());
         result = prime * result + ((getAmount() == null) ? 0 : getAmount().hashCode());
         result = prime * result + ((getChargeNo() == null) ? 0 : getChargeNo().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getRechargeStatus() == null) ? 0 : getRechargeStatus().hashCode());
         result = prime * result + ((getRechargeTime() == null) ? 0 : getRechargeTime().hashCode());
