@@ -16,7 +16,6 @@ public interface ChargeProductServiceFacade {
     public List<ChargeProductInfo> getList(PayChargeProduct record);
 
     /**
-<<<<<<< HEAD
     * 获取商品信息 单个 通过商品id
     * */
     public ChargeProductInfo getProductById(String id);
@@ -25,9 +24,7 @@ public interface ChargeProductServiceFacade {
      * shop_product list
      * @param request
      * @return
-=======
      * 查询商品列表信息，并返回数量
->>>>>>> 976a76ffaf056bad1fefb16018ff8b48a2a6d3b1
      */
     public GetChargeProductResponse getProductList(GetChargeProductRequest request);
 
