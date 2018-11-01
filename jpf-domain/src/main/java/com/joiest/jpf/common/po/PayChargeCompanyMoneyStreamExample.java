@@ -236,6 +236,76 @@ public class PayChargeCompanyMoneyStreamExample {
             return (Criteria) this;
         }
 
+        public Criteria andStreamNoIsNull() {
+            addCriterion("stream_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoIsNotNull() {
+            addCriterion("stream_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoEqualTo(String value) {
+            addCriterion("stream_no =", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoNotEqualTo(String value) {
+            addCriterion("stream_no <>", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoGreaterThan(String value) {
+            addCriterion("stream_no >", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoGreaterThanOrEqualTo(String value) {
+            addCriterion("stream_no >=", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoLessThan(String value) {
+            addCriterion("stream_no <", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoLessThanOrEqualTo(String value) {
+            addCriterion("stream_no <=", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoLike(String value) {
+            addCriterion("stream_no like", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoNotLike(String value) {
+            addCriterion("stream_no not like", value, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoIn(List<String> values) {
+            addCriterion("stream_no in", values, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoNotIn(List<String> values) {
+            addCriterion("stream_no not in", values, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoBetween(String value1, String value2) {
+            addCriterion("stream_no between", value1, value2, "streamNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoNotBetween(String value1, String value2) {
+            addCriterion("stream_no not between", value1, value2, "streamNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyIdIsNull() {
             addCriterion("company_id is null");
             return (Criteria) this;
@@ -1246,6 +1316,126 @@ public class PayChargeCompanyMoneyStreamExample {
             return (Criteria) this;
         }
 
+        public Criteria andStreamTypeIsNull() {
+            addCriterion("stream_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeIsNotNull() {
+            addCriterion("stream_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeEqualTo(Byte value) {
+            addCriterion("stream_type =", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeNotEqualTo(Byte value) {
+            addCriterion("stream_type <>", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeGreaterThan(Byte value) {
+            addCriterion("stream_type >", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("stream_type >=", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeLessThan(Byte value) {
+            addCriterion("stream_type <", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("stream_type <=", value, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeIn(List<Byte> values) {
+            addCriterion("stream_type in", values, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeNotIn(List<Byte> values) {
+            addCriterion("stream_type not in", values, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeBetween(Byte value1, Byte value2) {
+            addCriterion("stream_type between", value1, value2, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("stream_type not between", value1, value2, "streamType");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyIsNull() {
+            addCriterion("new_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyIsNotNull() {
+            addCriterion("new_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyEqualTo(BigDecimal value) {
+            addCriterion("new_money =", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("new_money <>", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyGreaterThan(BigDecimal value) {
+            addCriterion("new_money >", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("new_money >=", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyLessThan(BigDecimal value) {
+            addCriterion("new_money <", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("new_money <=", value, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyIn(List<BigDecimal> values) {
+            addCriterion("new_money in", values, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("new_money not in", values, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("new_money between", value1, value2, "newMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andNewMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("new_money not between", value1, value2, "newMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andMemoIsNull() {
             addCriterion("memo is null");
             return (Criteria) this;
@@ -1493,6 +1683,11 @@ public class PayChargeCompanyMoneyStreamExample {
 
         public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
             addCriterion("updatetime not between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStreamNoLikeInsensitive(String value) {
+            addCriterion("upper(stream_no) like", value.toUpperCase(), "streamNo");
             return (Criteria) this;
         }
 

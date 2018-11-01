@@ -11,6 +11,11 @@ public class PayChargeCompanyMoneyStream implements Serializable {
     private String id;
 
     /**
+     * 流水号 MS+时间戳+3位随机数
+     */
+    private String streamNo;
+
+    /**
      * 商户id
      */
     private String companyId;
@@ -51,7 +56,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
     private BigDecimal productValue;
 
     /**
-     * 产品价格
+     * 产品成本价
      */
     private BigDecimal productBidPrice;
 
@@ -91,6 +96,16 @@ public class PayChargeCompanyMoneyStream implements Serializable {
     private Byte status;
 
     /**
+     * 流水类型 0=收入 1=支出
+     */
+    private Byte streamType;
+
+    /**
+     * 变动后的余额
+     */
+    private BigDecimal newMoney;
+
+    /**
      * 流水备注
      */
     private String memo;
@@ -118,6 +133,14 @@ public class PayChargeCompanyMoneyStream implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getStreamNo() {
+        return streamNo;
+    }
+
+    public void setStreamNo(String streamNo) {
+        this.streamNo = streamNo == null ? null : streamNo.trim();
     }
 
     public String getCompanyId() {
@@ -248,6 +271,22 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         this.status = status;
     }
 
+    public Byte getStreamType() {
+        return streamType;
+    }
+
+    public void setStreamType(Byte streamType) {
+        this.streamType = streamType;
+    }
+
+    public BigDecimal getNewMoney() {
+        return newMoney;
+    }
+
+    public void setNewMoney(BigDecimal newMoney) {
+        this.newMoney = newMoney;
+    }
+
     public String getMemo() {
         return memo;
     }
@@ -290,6 +329,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", streamNo=").append(streamNo);
         sb.append(", companyId=").append(companyId);
         sb.append(", companyName=").append(companyName);
         sb.append(", merchNo=").append(merchNo);
@@ -306,6 +346,8 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         sb.append(", interfaceType=").append(interfaceType);
         sb.append(", interfaceOrderNo=").append(interfaceOrderNo);
         sb.append(", status=").append(status);
+        sb.append(", streamType=").append(streamType);
+        sb.append(", newMoney=").append(newMoney);
         sb.append(", memo=").append(memo);
         sb.append(", isDel=").append(isDel);
         sb.append(", addtime=").append(addtime);
@@ -331,6 +373,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         }
         PayChargeCompanyMoneyStream other = (PayChargeCompanyMoneyStream) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getStreamNo() == null ? other.getStreamNo() == null : this.getStreamNo().equals(other.getStreamNo()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getMerchNo() == null ? other.getMerchNo() == null : this.getMerchNo().equals(other.getMerchNo()))
@@ -347,6 +390,8 @@ public class PayChargeCompanyMoneyStream implements Serializable {
             && (this.getInterfaceType() == null ? other.getInterfaceType() == null : this.getInterfaceType().equals(other.getInterfaceType()))
             && (this.getInterfaceOrderNo() == null ? other.getInterfaceOrderNo() == null : this.getInterfaceOrderNo().equals(other.getInterfaceOrderNo()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getStreamType() == null ? other.getStreamType() == null : this.getStreamType().equals(other.getStreamType()))
+            && (this.getNewMoney() == null ? other.getNewMoney() == null : this.getNewMoney().equals(other.getNewMoney()))
             && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
             && (this.getIsDel() == null ? other.getIsDel() == null : this.getIsDel().equals(other.getIsDel()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
@@ -361,6 +406,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getStreamNo() == null) ? 0 : getStreamNo().hashCode());
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getMerchNo() == null) ? 0 : getMerchNo().hashCode());
@@ -377,6 +423,8 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         result = prime * result + ((getInterfaceType() == null) ? 0 : getInterfaceType().hashCode());
         result = prime * result + ((getInterfaceOrderNo() == null) ? 0 : getInterfaceOrderNo().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getStreamType() == null) ? 0 : getStreamType().hashCode());
+        result = prime * result + ((getNewMoney() == null) ? 0 : getNewMoney().hashCode());
         result = prime * result + ((getMemo() == null) ? 0 : getMemo().hashCode());
         result = prime * result + ((getIsDel() == null) ? 0 : getIsDel().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());

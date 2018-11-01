@@ -100,4 +100,12 @@ public class ManageConstants {
         }
     };
 
+    /*public static final Map<String, String> ChargeCompanyMoneyStreamStatusCn = new HashMap<String, String>(){
+        {
+            put("1","充值");
+            put("2","下单");
+            put("3","退款");
+        }
+    };*/
+
 }
