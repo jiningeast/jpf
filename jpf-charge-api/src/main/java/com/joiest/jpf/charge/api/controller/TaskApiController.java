@@ -2,15 +2,17 @@ package com.joiest.jpf.charge.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayChargeProduct;
+import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.OfpayUtils;
 import com.joiest.jpf.entity.ChargeProductInfo;
 import com.joiest.jpf.facade.ChargeProductServiceFacade;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,8 +46,18 @@ public class TaskApiController {
     *欧非具体商品信息同步接口
     * */
     @RequestMapping("/syncCard")
-    public void syncCardInfo(){
+    public void syncCardInfo(HttpServletRequest request){
 
+        StringBuilder sbf = new StringBuilder();
+
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n充值类型:" + "手机号和面值查询商品信息");
+        sbf.append("\n请求地址：" + request.getRequestURL().toString());
+
+        String fileName = "ChargeProductPrice";
+        String path = "/logs/jpf-charge-api/log/";
+        String sucPro = "";
+        String faildPro = "";
         Map<String,String> response = new HashMap<>();
         PayChargeProduct payChargeProduct= new PayChargeProduct();
         List<ChargeProductInfo> productInfo = chargeProductServiceFacade.getList(payChargeProduct);
@@ -67,7 +79,6 @@ public class TaskApiController {
                     response = telCardDeal(ConfigUtil.getValue("phone_ctc_number"),chargeProductInfo.getValue());
                     break;
                 case 4:
-
                 case 5:
                     if(StringUtils.isBlank(chargeProductInfo.getOfProductId()))
                         continue;
@@ -85,9 +96,18 @@ public class TaskApiController {
                 upCharProduct.setOfProductPrice(new BigDecimal(response.get("inprice")));
 
                 int isSuc = chargeProductServiceFacade.upChargeProduct(upCharProduct);
+
+                sucPro+= chargeProductInfo.getId()+",";
+
+            }else{
+
+                faildPro+= chargeProductInfo.getId()+",";
             }
         }
-        int a = 3;
+        sbf.append("\n成功商品：" + sucPro);
+        sbf.append("\n失败商品：" + faildPro);
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
     }
     /**
      * 话费查询
