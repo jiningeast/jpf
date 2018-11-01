@@ -447,7 +447,7 @@ public class OfpayUtils {
         sbf.append("\n回调信息：" + resultXml);
 
         String fileName = "OfpayGas";
-        String path = "/logs/jpf-market-api/log/";
+        String path = "/logs/jpf-charge-api/log/";
 
         Map<String,String> map = new ReadXML().getBooksOneByStr(resultXml);
         String orderStatus = map.getOrDefault("retcode","");

@@ -255,6 +255,38 @@ public class FlowRechargeController {
             comInfo.setMoney(companyMoney);
 
             chargeCompanyServiceFacade.updateColumnByPrimaryKey(comInfo);
+
+
+            // 新增资金流水
+            /*ChargeCompanyMoneyStreamInfo info = new ChargeCompanyMoneyStreamInfo();
+            String streamNo = "MS"+System.currentTimeMillis()+ToolUtils.getRandomInt(100,999);
+            info.setStreamNo(streamNo);
+            info.setCompanyId(companyInfo.getId());
+            info.setCompanyName(companyInfo.getCompanyName());
+            info.setMerchNo(companyInfo.getMerchNo());
+            info.setOrderId(""+orderId);
+            info.setOrderNo(orderno);
+            info.setProductId(chargeProductInfo.getId());
+            info.setProductName(chargeProductInfo.getName());
+            info.setProductValue(chargeProductInfo.getValue());
+            info.setProductBidPrice(chargeProductInfo.getBidPrice());
+            info.setProductSalePrice(chargeProductInfo.getSalePrice());
+            info.setProductInterfacePrice(chargeProductInfo.getBidPrice());
+            info.setProductAmount(1);
+            info.setTotalMoney(chargeProductInfo.getSalePrice());
+            info.setInterfaceType((byte)0);
+            info.setInterfaceOrderNo(map.get("orderid"));
+            info.setStatus((byte)2);
+            info.setStreamType((byte)1);
+            info.setNewMoney(companyMoney);
+            info.setIsDel((byte)0);
+            info.setAddtime(new Date());
+            ChargeCompanyMoneyStreamServiceFacade.insRecord(info);*/
+
+
+
+
+
         }else{
 
             upOrderInfo.setStatus((byte)3);
@@ -586,7 +618,7 @@ public class FlowRechargeController {
         merRespons.put("phone",actParam.get("phone"));//充值手机号
         merRespons.put("value",chargeProductInfo.getValue());//充值面值
         merRespons.put("salePrice",chargeProductInfo.getSalePrice());//扣商户的钱
-        merRespons.put("productId",actParam.get("productId"));//产品金额
+        merRespons.put("productId",chargeProductInfo.getId());//产品id
 
         if(map.get("code").equals("10000")){
 
