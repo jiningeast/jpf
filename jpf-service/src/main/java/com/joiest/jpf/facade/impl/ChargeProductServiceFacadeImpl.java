@@ -177,4 +177,18 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
         int res = payChargeProductMapper.updateByPrimaryKeySelective(payChargeProduct);
         return new JpfResponseDto();
     }
+
+    /**
+     * 编辑商品 上游价格
+     */
+    public int upChargeProduct(ChargeProductInfo chargeProductInfo){
+
+        PayChargeProduct payChargeProduct = new PayChargeProduct();
+
+        BeanCopier beanCopier = BeanCopier.create(ChargeProductInfo.class, PayChargeProduct.class, false);
+        beanCopier.copy(chargeProductInfo, payChargeProduct, null);
+
+        return payChargeProductMapper.updateByPrimaryKeySelective(payChargeProduct);
+    }
+
 }

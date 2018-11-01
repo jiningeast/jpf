@@ -7,6 +7,7 @@ import org.apache.commons.codec.binary.Base64;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OfpayUtils {
@@ -41,6 +42,8 @@ public class OfpayUtils {
 
     private String aes_ecb_nopadding_pw;
 
+    private String querycardinfo;
+
 
     //油卡卡号查询
     private String gas_query;
@@ -60,6 +63,7 @@ public class OfpayUtils {
         this.regis_query = ConfigUtil.getValue("res_query");
         this.aesKey = ConfigUtil.getValue("AES_ECB_NOPADDING_PW");
         this.aes_ecb_nopadding_pw = ConfigUtil.getValue("AES_ECB_NOPADDING_PW");
+        this.querycardinfo = ConfigUtil.getValue("querycardinfo");
     }
 
     /**
@@ -70,11 +74,10 @@ public class OfpayUtils {
     public Map<String, String> telquery(Map<String,String> queryMap){
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid", userid);       // 商户号
-        requestMap.put("userpws",userpws);     // 商户密码
+        requestMap.put("userpws", Md5Encrypt.md5(userpws)); // 商户密码
         //requestMap.put("userpws", Md5Encrypt.md5(userpws));     // 商户密码
         requestMap.put("phoneno", queryMap.get("phoneno") );        // 手机号码
         requestMap.put("pervalue", queryMap.get("pervalue") );      // 面值
-//        requestMap.put("mctype", "" );
         requestMap.put("version", version_phone );
 
         String requestParam = ToolUtils.mapToUrl(requestMap);   //请求参数
@@ -95,6 +98,7 @@ public class OfpayUtils {
         LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
         Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
+        resultMap.put("responseParam", JSONObject.fromObject(resultMap).toString());
         resultMap.put("requestUrl", phone_query);
         resultMap.put("requestParam", requestParam);
         return resultMap;
@@ -503,6 +507,40 @@ public class OfpayUtils {
         return resultMap;
     }
 
+    /**
+    *具体商品信息同步接口
+     * */
+    public Map<String,String> queryCardInfo(String cardid){
+
+        Map<String,Object> requestMap = new LinkedHashMap<>();
+
+        requestMap.put("userid", userid);                   // 商户号
+        requestMap.put("userpws", Md5Encrypt.md5(userpws)); // 商户密码
+        requestMap.put("cardid", cardid);                   // 商户密码
+        requestMap.put("version", version_phone );          //版本号
+        String requestParam = ToolUtils.mapToUrl(requestMap);   //请求参数
+
+        String resultXml = OkHttpUtils.postForm(querycardinfo,requestMap);
+        StringBuilder sbf = new StringBuilder();
+        sbf.append("\n\nTime:" + DateUtils.getCurDate());
+        sbf.append("\n充值类型:" + "具体商品信息同步接口");
+        sbf.append("\n请求地址：" + querycardinfo);
+        sbf.append("\n所属商品Id：" + cardid);
+        sbf.append("\n接口参数：" + requestMap);
+        sbf.append("\n回调信息：" + resultXml);
+
+        String fileName = "OfQueryCardInfo";
+        String path = "/logs/jpf-charge-api/log/";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+
+        Map<String, String> resultMap = new ReadXmlByDom().getXmlByDom(resultXml);
+        //Map<String, String> requestMa = MessageUtil.parseXml(request);
+        resultMap.put("requestUrl", userinfo_query);
+        resultMap.put("requestParam", requestParam);
+        resultMap.put("responseParam", JSONObject.fromObject(resultMap).toString());
+
+        return resultMap;
+    }
     /**
      * 获取油卡充值签名
      */

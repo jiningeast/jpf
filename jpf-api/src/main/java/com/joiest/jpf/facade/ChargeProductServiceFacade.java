@@ -43,4 +43,9 @@ public interface ChargeProductServiceFacade {
      */
     public JpfResponseDto modifyChargeProduct(ChargeProductInfo chargeProductInfo);
 
+    /**
+     * 编辑商品 上游价格
+     */
+    public int upChargeProduct(ChargeProductInfo chargeProductInfo);
+
 }
