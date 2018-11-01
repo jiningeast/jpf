@@ -4,14 +4,8 @@ import com.joiest.jpf.charge.api.util.ServletUtils;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.OfpayRequest;
-import com.joiest.jpf.entity.ChargeCompanyInfo;
-import com.joiest.jpf.entity.ChargeInterfaceStreamInfo;
-import com.joiest.jpf.entity.ChargeOrderInfo;
-import com.joiest.jpf.entity.ChargeProductInfo;
-import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
-import com.joiest.jpf.facade.ChargeInterfaceStreamFacade;
-import com.joiest.jpf.facade.ChargeOrderServiceFacade;
-import com.joiest.jpf.facade.ChargeProductServiceFacade;
+import com.joiest.jpf.entity.*;
+import com.joiest.jpf.facade.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +41,9 @@ public class FlowRechargeController {
 
     @Autowired
     private ChargeInterfaceStreamFacade chargeInterfaceStreamFacade;
+
+    @Autowired
+    private ChargeCompanyMoneyStreamServiceFacade ChargeCompanyMoneyStreamServiceFacade;
 
     private static final Logger logger = LogManager.getLogger(FlowRechargeController.class);
 
@@ -207,7 +204,7 @@ public class FlowRechargeController {
         String lastNum = StringUtils.substring(String.valueOf(orderId),-1,String.valueOf(orderId).length());
         Map<String, String> map = null;
         Byte type=1;
-        if ( Integer.parseInt(lastNum) <= 1 ){
+        if ( Integer.parseInt(lastNum) >= 0 ){
 
             type = 0;
             upOrderInfo.setInterfaceType(type);
@@ -605,6 +602,32 @@ public class FlowRechargeController {
             comInfo.setMoneyCode(moneyCode);
             comInfo.setMoney(companyMoney);
             chargeCompanyServiceFacade.updateColumnByPrimaryKey(comInfo);
+
+            // 新增资金流水
+            /*ChargeCompanyMoneyStreamInfo info = new ChargeCompanyMoneyStreamInfo();
+            String streamNo = "MS"+System.currentTimeMillis()+ToolUtils.getRandomInt(100,999);
+            info.setStreamNo(streamNo);
+            info.setCompanyId(companyInfo.getId());
+            info.setCompanyName(companyInfo.getCompanyName());
+            info.setMerchNo(companyInfo.getMerchNo());
+            info.setOrderId(""+orderId);
+            info.setOrderNo(orderno);
+            info.setProductId(chargeProductInfo.getId());
+            info.setProductName(chargeProductInfo.getName());
+            info.setProductValue(chargeProductInfo.getValue());
+            info.setProductBidPrice(chargeProductInfo.getBidPrice());
+            info.setProductSalePrice(chargeProductInfo.getSalePrice());
+            info.setProductInterfacePrice(chargeProductInfo.getBidPrice());
+            info.setProductAmount(1);
+            info.setTotalMoney(chargeProductInfo.getSalePrice());
+            info.setInterfaceType((byte)0);
+            info.setInterfaceOrderNo(map.get("orderid"));
+            info.setStatus((byte)2);
+            info.setStreamType((byte)1);
+            info.setNewMoney(companyMoney);
+            info.setIsDel((byte)0);
+            info.setAddtime(new Date());
+            ChargeCompanyMoneyStreamServiceFacade.insRecord(info);*/
         }else{
 
             upOrderInfo.setStatus((byte)3);
