@@ -255,6 +255,38 @@ public class FlowRechargeController {
             comInfo.setMoney(companyMoney);
 
             chargeCompanyServiceFacade.updateColumnByPrimaryKey(comInfo);
+
+
+            // 新增资金流水
+            /*ChargeCompanyMoneyStreamInfo info = new ChargeCompanyMoneyStreamInfo();
+            String streamNo = "MS"+System.currentTimeMillis()+ToolUtils.getRandomInt(100,999);
+            info.setStreamNo(streamNo);
+            info.setCompanyId(companyInfo.getId());
+            info.setCompanyName(companyInfo.getCompanyName());
+            info.setMerchNo(companyInfo.getMerchNo());
+            info.setOrderId(""+orderId);
+            info.setOrderNo(orderno);
+            info.setProductId(chargeProductInfo.getId());
+            info.setProductName(chargeProductInfo.getName());
+            info.setProductValue(chargeProductInfo.getValue());
+            info.setProductBidPrice(chargeProductInfo.getBidPrice());
+            info.setProductSalePrice(chargeProductInfo.getSalePrice());
+            info.setProductInterfacePrice(chargeProductInfo.getBidPrice());
+            info.setProductAmount(1);
+            info.setTotalMoney(chargeProductInfo.getSalePrice());
+            info.setInterfaceType((byte)0);
+            info.setInterfaceOrderNo(map.get("orderid"));
+            info.setStatus((byte)2);
+            info.setStreamType((byte)1);
+            info.setNewMoney(companyMoney);
+            info.setIsDel((byte)0);
+            info.setAddtime(new Date());
+            ChargeCompanyMoneyStreamServiceFacade.insRecord(info);*/
+
+
+
+
+
         }else{
 
             upOrderInfo.setStatus((byte)3);
@@ -560,7 +592,7 @@ public class FlowRechargeController {
         int orderId = chargeOrderServiceFacade.placeOrder(placeOrderInfo);
 
         actParam.put("selfOrder",orderno);
-        actParam.put("productId",chargeProductInfo.getOfProductId());
+        actParam.put("productId",chargeProductInfo.getId());
 
         ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
         upOrderInfo.setId(""+orderId);
