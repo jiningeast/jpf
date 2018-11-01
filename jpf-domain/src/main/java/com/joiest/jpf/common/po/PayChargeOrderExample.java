@@ -836,6 +836,126 @@ public class PayChargeOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductValueIsNull() {
+            addCriterion("product_value is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueIsNotNull() {
+            addCriterion("product_value is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueEqualTo(BigDecimal value) {
+            addCriterion("product_value =", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueNotEqualTo(BigDecimal value) {
+            addCriterion("product_value <>", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueGreaterThan(BigDecimal value) {
+            addCriterion("product_value >", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("product_value >=", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueLessThan(BigDecimal value) {
+            addCriterion("product_value <", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("product_value <=", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueIn(List<BigDecimal> values) {
+            addCriterion("product_value in", values, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueNotIn(List<BigDecimal> values) {
+            addCriterion("product_value not in", values, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("product_value between", value1, value2, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("product_value not between", value1, value2, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceIsNull() {
+            addCriterion("product_bid_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceIsNotNull() {
+            addCriterion("product_bid_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceEqualTo(Long value) {
+            addCriterion("product_bid_price =", value, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceNotEqualTo(Long value) {
+            addCriterion("product_bid_price <>", value, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceGreaterThan(Long value) {
+            addCriterion("product_bid_price >", value, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceGreaterThanOrEqualTo(Long value) {
+            addCriterion("product_bid_price >=", value, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceLessThan(Long value) {
+            addCriterion("product_bid_price <", value, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceLessThanOrEqualTo(Long value) {
+            addCriterion("product_bid_price <=", value, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceIn(List<Long> values) {
+            addCriterion("product_bid_price in", values, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceNotIn(List<Long> values) {
+            addCriterion("product_bid_price not in", values, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceBetween(Long value1, Long value2) {
+            addCriterion("product_bid_price between", value1, value2, "productBidPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductBidPriceNotBetween(Long value1, Long value2) {
+            addCriterion("product_bid_price not between", value1, value2, "productBidPrice");
+            return (Criteria) this;
+        }
+
         public Criteria andProductPriceIsNull() {
             addCriterion("product_price is null");
             return (Criteria) this;
