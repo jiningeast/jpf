@@ -247,7 +247,7 @@ public class FlowRechargeController {
             responseParam.put("info","下单成功，充值中");
 
             //更新商户信息  金额验证
-            BigDecimal companyMoney = companyInfo.getMoney().subtract(new BigDecimal(actParam.get("money")));
+            BigDecimal companyMoney = companyInfo.getMoney().subtract(chargeProductInfo.getSalePrice());
             String moneyCode = ToolUtils.CreateCode(companyMoney.toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
             ChargeCompanyInfo comInfo = new ChargeCompanyInfo();
             comInfo.setId(companyInfo.getId());
@@ -595,7 +595,7 @@ public class FlowRechargeController {
             responseParam.put("info","充值中");
 
             //更新商户信息  金额验证
-            BigDecimal companyMoney = companyInfo.getMoney().subtract(new BigDecimal(actParam.get("money")));
+            BigDecimal companyMoney = companyInfo.getMoney().subtract(chargeProductInfo.getSalePrice());
             String moneyCode = ToolUtils.CreateCode(companyMoney.toString(),companyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
             ChargeCompanyInfo comInfo = new ChargeCompanyInfo();
             comInfo.setId(companyInfo.getId());
