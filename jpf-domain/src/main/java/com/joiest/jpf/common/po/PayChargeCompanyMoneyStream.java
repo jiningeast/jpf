@@ -63,7 +63,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
     /**
      * 产品标准售价
      */
-    private Long productSalePrice;
+    private BigDecimal productSalePrice;
 
     /**
      * 产品接口价
@@ -215,11 +215,11 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         this.productBidPrice = productBidPrice;
     }
 
-    public Long getProductSalePrice() {
+    public BigDecimal getProductSalePrice() {
         return productSalePrice;
     }
 
-    public void setProductSalePrice(Long productSalePrice) {
+    public void setProductSalePrice(BigDecimal productSalePrice) {
         this.productSalePrice = productSalePrice;
     }
 

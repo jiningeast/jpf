@@ -896,52 +896,52 @@ public class PayChargeCompanyMoneyStreamExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceEqualTo(Long value) {
+        public Criteria andProductSalePriceEqualTo(BigDecimal value) {
             addCriterion("product_sale_price =", value, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceNotEqualTo(Long value) {
+        public Criteria andProductSalePriceNotEqualTo(BigDecimal value) {
             addCriterion("product_sale_price <>", value, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceGreaterThan(Long value) {
+        public Criteria andProductSalePriceGreaterThan(BigDecimal value) {
             addCriterion("product_sale_price >", value, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceGreaterThanOrEqualTo(Long value) {
+        public Criteria andProductSalePriceGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("product_sale_price >=", value, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceLessThan(Long value) {
+        public Criteria andProductSalePriceLessThan(BigDecimal value) {
             addCriterion("product_sale_price <", value, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceLessThanOrEqualTo(Long value) {
+        public Criteria andProductSalePriceLessThanOrEqualTo(BigDecimal value) {
             addCriterion("product_sale_price <=", value, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceIn(List<Long> values) {
+        public Criteria andProductSalePriceIn(List<BigDecimal> values) {
             addCriterion("product_sale_price in", values, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceNotIn(List<Long> values) {
+        public Criteria andProductSalePriceNotIn(List<BigDecimal> values) {
             addCriterion("product_sale_price not in", values, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceBetween(Long value1, Long value2) {
+        public Criteria andProductSalePriceBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("product_sale_price between", value1, value2, "productSalePrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductSalePriceNotBetween(Long value1, Long value2) {
+        public Criteria andProductSalePriceNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("product_sale_price not between", value1, value2, "productSalePrice");
             return (Criteria) this;
         }

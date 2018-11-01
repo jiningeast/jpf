@@ -13,6 +13,7 @@ public class ChargeCompanyMoneyStreamInfo {
      * 流水号 MS+时间戳+3位随机数
      */
     private String streamNo;
+
     /**
      * 商户id
      */
@@ -54,14 +55,14 @@ public class ChargeCompanyMoneyStreamInfo {
     private BigDecimal productValue;
 
     /**
-     * 产品价格
+     * 产品成本价
      */
     private BigDecimal productBidPrice;
 
     /**
      * 产品标准售价
      */
-    private Long productSalePrice;
+    private BigDecimal productSalePrice;
 
     /**
      * 产品接口价
@@ -123,24 +124,20 @@ public class ChargeCompanyMoneyStreamInfo {
      */
     private Date updatetime;
 
-    /**
-     * 收支类型
-     */
-    private String statusType;
-
-    /**
-     * 订单文字
-     */
-    private String statusCn;
-
-    private static final long serialVersionUID = 1L;
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
+    }
+
+    public String getStreamNo() {
+        return streamNo;
+    }
+
+    public void setStreamNo(String streamNo) {
+        this.streamNo = streamNo;
     }
 
     public String getCompanyId() {
@@ -148,7 +145,7 @@ public class ChargeCompanyMoneyStreamInfo {
     }
 
     public void setCompanyId(String companyId) {
-        this.companyId = companyId == null ? null : companyId.trim();
+        this.companyId = companyId;
     }
 
     public String getCompanyName() {
@@ -156,7 +153,7 @@ public class ChargeCompanyMoneyStreamInfo {
     }
 
     public void setCompanyName(String companyName) {
-        this.companyName = companyName == null ? null : companyName.trim();
+        this.companyName = companyName;
     }
 
     public String getMerchNo() {
@@ -164,7 +161,7 @@ public class ChargeCompanyMoneyStreamInfo {
     }
 
     public void setMerchNo(String merchNo) {
-        this.merchNo = merchNo == null ? null : merchNo.trim();
+        this.merchNo = merchNo;
     }
 
     public String getOrderId() {
@@ -172,7 +169,7 @@ public class ChargeCompanyMoneyStreamInfo {
     }
 
     public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
+        this.orderId = orderId;
     }
 
     public String getOrderNo() {
@@ -180,7 +177,7 @@ public class ChargeCompanyMoneyStreamInfo {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+        this.orderNo = orderNo;
     }
 
     public String getProductId() {
@@ -188,7 +185,7 @@ public class ChargeCompanyMoneyStreamInfo {
     }
 
     public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -196,7 +193,7 @@ public class ChargeCompanyMoneyStreamInfo {
     }
 
     public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
+        this.productName = productName;
     }
 
     public BigDecimal getProductValue() {
@@ -215,11 +212,11 @@ public class ChargeCompanyMoneyStreamInfo {
         this.productBidPrice = productBidPrice;
     }
 
-    public Long getProductSalePrice() {
+    public BigDecimal getProductSalePrice() {
         return productSalePrice;
     }
 
-    public void setProductSalePrice(Long productSalePrice) {
+    public void setProductSalePrice(BigDecimal productSalePrice) {
         this.productSalePrice = productSalePrice;
     }
 
@@ -260,7 +257,7 @@ public class ChargeCompanyMoneyStreamInfo {
     }
 
     public void setInterfaceOrderNo(String interfaceOrderNo) {
-        this.interfaceOrderNo = interfaceOrderNo == null ? null : interfaceOrderNo.trim();
+        this.interfaceOrderNo = interfaceOrderNo;
     }
 
     public Byte getStatus() {
@@ -271,12 +268,28 @@ public class ChargeCompanyMoneyStreamInfo {
         this.status = status;
     }
 
+    public Byte getStreamType() {
+        return streamType;
+    }
+
+    public void setStreamType(Byte streamType) {
+        this.streamType = streamType;
+    }
+
+    public BigDecimal getNewMoney() {
+        return newMoney;
+    }
+
+    public void setNewMoney(BigDecimal newMoney) {
+        this.newMoney = newMoney;
+    }
+
     public String getMemo() {
         return memo;
     }
 
     public void setMemo(String memo) {
-        this.memo = memo == null ? null : memo.trim();
+        this.memo = memo;
     }
 
     public Byte getIsDel() {
@@ -301,45 +314,5 @@ public class ChargeCompanyMoneyStreamInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
-    }
-
-    public String getStatusCn() {
-        return statusCn;
-    }
-
-    public void setStatusCn(String statusCn) {
-        this.statusCn = statusCn;
-    }
-
-    public String getStatusType() {
-        return statusType;
-    }
-
-    public void setStatusType(String statusType) {
-        this.statusType = statusType;
-    }
-
-    public String getStreamNo() {
-        return streamNo;
-    }
-
-    public void setStreamNo(String streamNo) {
-        this.streamNo = streamNo;
-    }
-
-    public Byte getStreamType() {
-        return streamType;
-    }
-
-    public void setStreamType(Byte streamType) {
-        this.streamType = streamType;
-    }
-
-    public BigDecimal getNewMoney() {
-        return newMoney;
-    }
-
-    public void setNewMoney(BigDecimal newMoney) {
-        this.newMoney = newMoney;
     }
 }

@@ -78,16 +78,16 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
                 ChargeCompanyMoneyStreamInfo chargeCompanyMoneyStreamInfo = new ChargeCompanyMoneyStreamInfo();
                 BeanCopier beanCopier = BeanCopier.create(PayChargeCompanyMoneyStream.class,ChargeCompanyMoneyStreamInfo.class,false);
                 beanCopier.copy(one,chargeCompanyMoneyStreamInfo,null);
-                chargeCompanyMoneyStreamInfo.setStatusCn("");
+//                chargeCompanyMoneyStreamInfo.setStatusCn("");
                 if( request.getStatusCnArr() !=null && request.getStatusCnArr().containsKey(chargeCompanyMoneyStreamInfo.getStatus())){
-                    chargeCompanyMoneyStreamInfo.setStatusCn(request.getStatusCnArr().get(chargeCompanyMoneyStreamInfo.getStatus()));
+//                    chargeCompanyMoneyStreamInfo.setStatusCn(request.getStatusCnArr().get(chargeCompanyMoneyStreamInfo.getStatus()));
                 }
-                chargeCompanyMoneyStreamInfo.setStatusType("");
+//                chargeCompanyMoneyStreamInfo.setStatusType("");
                 if( chargeCompanyMoneyStreamInfo.getStatus() == 1 || chargeCompanyMoneyStreamInfo.getStatus() == 2 ){
-                    chargeCompanyMoneyStreamInfo.setStatusType("入账");
+//                    chargeCompanyMoneyStreamInfo.setStatusType("入账");
                 }
                 if( chargeCompanyMoneyStreamInfo.getStatus() == 3){
-                    chargeCompanyMoneyStreamInfo.setStatusType("出账");
+//                    chargeCompanyMoneyStreamInfo.setStatusType("出账");
                 }
                 infos.add(chargeCompanyMoneyStreamInfo);
             }
@@ -98,5 +98,17 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         return response;
     }
 
+    /**
+     * 新增流水
+     */
+    @Override
+    public int insRecord(ChargeCompanyMoneyStreamInfo info){
+        PayChargeCompanyMoneyStream payChargeCompanyMoneyStream = new PayChargeCompanyMoneyStream();
+
+        BeanCopier beanCopier = BeanCopier.create(ChargeCompanyMoneyStreamInfo.class,PayChargeCompanyMoneyStream.class,false);
+        beanCopier.copy(info,payChargeCompanyMoneyStream,null);
+
+        return payChargeCompanyMoneyStreamMapper.insert(payChargeCompanyMoneyStream);
+    }
 
 }
