@@ -199,11 +199,16 @@
                     "icon" : "icon-nav",
                     "url" : "chargeCompanyCharge/index"
                 },{
-                        "menuid" : "511",
-                        "menuname" : "充值平台余额管理",
-                        "icon" : "icon-nav",
-                        "url" : "chargeBalance/index"
-                    }]
+                    "menuid" : "511",
+                    "menuname" : "充值平台余额管理",
+                    "icon" : "icon-nav",
+                    "url" : "chargeBalance/index"
+                },{
+                    "menuid" : "512",
+                    "menuname" : "充值平台流水管理",
+                    "icon" : "icon-nav",
+                    "url" : "chargeMoneyStream/index"
+                }]
             },{
                     "menuid" : "6",
                     "icon" : "icon-sys",
