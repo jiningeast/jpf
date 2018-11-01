@@ -63,7 +63,7 @@ public class PayChargeOrder implements Serializable {
     /**
      * 进价，取接口的进价，即产品表的ofProductPrice或wnProductPrice
      */
-    private Long productBidPrice;
+    private BigDecimal productBidPrice;
 
     /**
      * 产品售价，即产品表的sale_price
@@ -240,11 +240,11 @@ public class PayChargeOrder implements Serializable {
         this.productValue = productValue;
     }
 
-    public Long getProductBidPrice() {
+    public BigDecimal getProductBidPrice() {
         return productBidPrice;
     }
 
-    public void setProductBidPrice(Long productBidPrice) {
+    public void setProductBidPrice(BigDecimal productBidPrice) {
         this.productBidPrice = productBidPrice;
     }
 
