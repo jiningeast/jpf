@@ -56,7 +56,17 @@ public class PayChargeOrder implements Serializable {
     private String productName;
 
     /**
-     * 产品单价
+     * 产品面值
+     */
+    private BigDecimal productValue;
+
+    /**
+     * 进价，取接口的进价，即产品表的ofProductPrice或wnProductPrice
+     */
+    private BigDecimal productBidPrice;
+
+    /**
+     * 产品售价，即产品表的sale_price
      */
     private BigDecimal productPrice;
 
@@ -126,7 +136,7 @@ public class PayChargeOrder implements Serializable {
     private String checkName;
 
     /**
-     * 是否删除
+     * 是否删除 0=不删除 1=删除
      */
     private Byte isDel;
 
@@ -220,6 +230,22 @@ public class PayChargeOrder implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName == null ? null : productName.trim();
+    }
+
+    public BigDecimal getProductValue() {
+        return productValue;
+    }
+
+    public void setProductValue(BigDecimal productValue) {
+        this.productValue = productValue;
+    }
+
+    public BigDecimal getProductBidPrice() {
+        return productBidPrice;
+    }
+
+    public void setProductBidPrice(BigDecimal productBidPrice) {
+        this.productBidPrice = productBidPrice;
     }
 
     public BigDecimal getProductPrice() {
@@ -377,6 +403,8 @@ public class PayChargeOrder implements Serializable {
         sb.append(", productType=").append(productType);
         sb.append(", productId=").append(productId);
         sb.append(", productName=").append(productName);
+        sb.append(", productValue=").append(productValue);
+        sb.append(", productBidPrice=").append(productBidPrice);
         sb.append(", productPrice=").append(productPrice);
         sb.append(", productAmount=").append(productAmount);
         sb.append(", totalMoney=").append(totalMoney);
@@ -424,6 +452,8 @@ public class PayChargeOrder implements Serializable {
             && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()))
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
             && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
+            && (this.getProductValue() == null ? other.getProductValue() == null : this.getProductValue().equals(other.getProductValue()))
+            && (this.getProductBidPrice() == null ? other.getProductBidPrice() == null : this.getProductBidPrice().equals(other.getProductBidPrice()))
             && (this.getProductPrice() == null ? other.getProductPrice() == null : this.getProductPrice().equals(other.getProductPrice()))
             && (this.getProductAmount() == null ? other.getProductAmount() == null : this.getProductAmount().equals(other.getProductAmount()))
             && (this.getTotalMoney() == null ? other.getTotalMoney() == null : this.getTotalMoney().equals(other.getTotalMoney()))
@@ -460,6 +490,8 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getProductType() == null) ? 0 : getProductType().hashCode());
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
         result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
+        result = prime * result + ((getProductValue() == null) ? 0 : getProductValue().hashCode());
+        result = prime * result + ((getProductBidPrice() == null) ? 0 : getProductBidPrice().hashCode());
         result = prime * result + ((getProductPrice() == null) ? 0 : getProductPrice().hashCode());
         result = prime * result + ((getProductAmount() == null) ? 0 : getProductAmount().hashCode());
         result = prime * result + ((getTotalMoney() == null) ? 0 : getTotalMoney().hashCode());
