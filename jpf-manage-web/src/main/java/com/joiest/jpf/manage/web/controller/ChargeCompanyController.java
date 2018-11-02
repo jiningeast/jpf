@@ -165,6 +165,9 @@ public class ChargeCompanyController {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
         }
         String concatPhone = record.getContactPhone();
+        if(!ToolUtils.checkPhone(concatPhone)){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "手机号["+concatPhone+"]验证失败");
+        }
 
         Integer randPwd = ToolUtils.getRandomInt(100000,999999);
         String newPwd = Md5Encrypt.md5(randPwd.toString());

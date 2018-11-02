@@ -45,7 +45,7 @@
                     <td style="text-align: right;background-color: #f1f1f1; width: 7%">联系人电话：</td>
                     <td>
                         <input id="contactPhone" name="contactPhone" type="text" style="width:150px" class="easyui-textbox"
-                               value="" data-options="required:true"/>
+                               value="" data-options="required:true,validType:'phoneRex'"/>
                     </td>
                 </tr>
                 <tr>
@@ -85,14 +85,15 @@
     $.extend($.fn.validatebox.defaults.rules, {
         phoneRex: {
             validator: function (value) {
-                var rex = /^1[3-8]+\d{9}$/;
+                var rex = /^1[3-9]\d{9}$/;
                 //var rex=/^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
                 //区号：前面一个0，后面跟2-3位数字 ： 0\d{2,3}
                 //电话号码：7-8位数字： \d{7,8
                 //分机号：一般都是3位数字： \d{3,}
                 //这样连接起来就是验证电话的正则表达式了：/^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/
                 var rex2 = /^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
-                if (rex.test(value) || rex2.test(value)) {
+                //if (rex.test(value) || rex2.test(value)) {
+                if (rex.test(value) ) {
                     // alert('t'+value);
                     return true;
                 } else {
@@ -101,7 +102,8 @@
                 }
 
             },
-            message: '请输入正确电话或手机格式'
+            //message: '请输入正确电话或手机格式'
+            message: '请输入正确的手机号码'
         },
         intOrFloat: {// 验证整数或小数
             validator: function (value) {
