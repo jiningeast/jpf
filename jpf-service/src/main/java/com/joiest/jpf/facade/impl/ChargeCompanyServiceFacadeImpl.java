@@ -6,7 +6,9 @@ import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyExample;
 import com.joiest.jpf.common.po.PayShopCompany;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayChargeCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
@@ -25,6 +27,9 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
     @Autowired
     private PayChargeCompanyMapper payChargeCompanyMapper;
+
+    @Autowired
+    private PayChargeCompanyCustomMapper payChargeCompanyCustomMapper;
 
     /**
      * 获取商户列表
@@ -128,8 +133,27 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         payChargeCompany.setMoney(new BigDecimal(0));
         payChargeCompany.setIsDel((byte)0);
         payChargeCompany.setAddtime(new Date());
+        payChargeCompanyCustomMapper.insertSelective(payChargeCompany);
+        int ret = 0;
+        if( StringUtils.isNotBlank(payChargeCompany.getId()) ){
+            //初始化金额校验码
+            String keyStr = ConfigUtil.getValue("MERCH_VALIDE_CODE");
+            BigDecimal money = new BigDecimal("0.00");
+            String newCode = ToolUtils.CreateCode(money.toString(),payChargeCompany.getId(),keyStr);
+            PayChargeCompany chargeCompany = new PayChargeCompany();
+            chargeCompany.setMoneyCode(newCode);
+            chargeCompany.setId(payChargeCompany.getId());
+            int upCou = payChargeCompanyMapper.updateByPrimaryKeySelective(chargeCompany);
+            if( upCou != 1 ){
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "操作失败");
+            }else{
+                ret = 1;
+            }
+        }else{
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "操作异常");
+        }
 
-        return payChargeCompanyMapper.insertSelective(payChargeCompany);
+        return ret;
     }
 
     /**

@@ -64,20 +64,54 @@ public class ChargeCompanyController {
 
     @RequestMapping("addAction")
     @ResponseBody
-    public JpfResponseDto addAction(String companyName, String contactName, String contactPhone, byte isFreeze, HttpServletRequest httpRequest){
+    public JpfResponseDto addAction(String companyName, String contactName, String contactPhone, byte isFreeze,String password, HttpServletRequest httpRequest){
         // 查询操作人id和姓名
         HttpSession session = httpRequest.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(ManageConstants.USERINFO_SESSION);
 
         ChargeCompanyInfo chargeCompanyInfo = new ChargeCompanyInfo();
         chargeCompanyInfo.setCompanyName(companyName);
+        String pwdStr = Md5Encrypt.md5(password);
+        chargeCompanyInfo.setPassword(pwdStr);
         chargeCompanyInfo.setContactName(contactName);
         chargeCompanyInfo.setContactPhone(contactPhone);
         chargeCompanyInfo.setOperatorId(""+userInfo.getId());
         chargeCompanyInfo.setOperatorName(userInfo.getUserName());
         chargeCompanyInfo.setIsFreeze(isFreeze);
-        chargeCompanyServiceFacade.addRecord(chargeCompanyInfo);
+        int record = chargeCompanyServiceFacade.addRecord(chargeCompanyInfo);
+        if(record ==1 ){
+            int flag = 0; //屏蔽短信接口
+            if( flag == 1 ){
+                //发送短信并记录操作记录 短信内容需要调整 目前仅测试使用 ???????????????????????????
+                String content = "尊敬的"+contactName+"，您的商户"+companyName+"已重置密码为："+password+"";
+                Map<String,String> responParan = SmsUtils.send(contactPhone,content);
+                if(responParan != null && responParan.size()>0){
+                    String requestUrl = responParan.get("requestUrl"); //请求的地址
+                    String requestParam = responParan.get("requestParam"); //请求的参数
+                    String response =  responParan.get("response");//返回的数据
+                    //json---转换代码---
+                    Map<String,String> responseMap = JsonUtils.toCollection(response, new TypeReference<Map<String, String>>() {});
+                    if( responseMap !=null && responseMap.containsKey("code") && responseMap.get("code").equals("10000")){
+                        ChargeInterfaceStreamInfo interfaceStream = new ChargeInterfaceStreamInfo();
+                        // 充值平台商户密码重置
+                        interfaceStream.setType((byte)2);
+                        interfaceStream.setRequestUrl(requestUrl);
+                        interfaceStream.setRequestParam(requestParam);
+                        interfaceStream.setResponse(response);
+                        interfaceStream.setAddtime(new Date());
+                        int count = chargeInterfaceStreamFacade.addStream(interfaceStream);
+                        if( count != 1 ){
+                            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "短信日志记录失败");
+                        }
+                    }else{
+                        throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "短信发送失败");
+                    }
 
+                }else{
+                    throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "短信发送异常");
+                }
+            }
+        }
         return new JpfResponseDto();
     }
 
@@ -93,11 +127,15 @@ public class ChargeCompanyController {
 
     @RequestMapping("editAction")
     @ResponseBody
-    public JpfResponseDto editAction(String id,String companyName, String contactName, String contactPhone, byte isFreeze, byte isDel){
+    public JpfResponseDto editAction(String id,String companyName, String contactName, String contactPhone, byte isFreeze, byte isDel,String password){
         ChargeCompanyInfo chargeCompanyInfo = new ChargeCompanyInfo();
         chargeCompanyInfo.setId(id);
         chargeCompanyInfo.setCompanyName(companyName);
         chargeCompanyInfo.setContactName(contactName);
+        if(StringUtils.isNotBlank(password)){
+            String pwdStr = Md5Encrypt.md5(password);
+            chargeCompanyInfo.setPassword(pwdStr);
+        }
         chargeCompanyInfo.setContactPhone(contactPhone);
         chargeCompanyInfo.setIsFreeze(isFreeze);
         chargeCompanyInfo.setIsDel(isDel);

@@ -15,7 +15,7 @@
          style="padding: 10px; background: #fff; border: 1px solid #ccc;">
         <form id="editForm" method="post" enctype="multipart/form-data"
               accept="image/gif, image/jpeg,image/jpg, image/png">
-            <h2 align="center">添加基本信息</h2>
+            <h2 align="center">修改基本信息</h2>
             <table cellpadding=3 class="table table-bordered" align="center">
                 <tr>
                     <td style="text-align: right;width:40%" bgcolor="#f1f1f1">公司名称：</td>
@@ -24,6 +24,13 @@
                                style="width:150px" class="easyui-textbox"
                                required="true" value="${chargeCompanyInfo.companyName}"/>
                         <input type="hidden" name="id" value="${chargeCompanyInfo.id}">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;width:30%" bgcolor="#f1f1f1">登录密码：</td>
+                    <td>
+                        <input id="password" name="password" data-options="validType:'pwdLength'"  type="password" style="width:150px" class="easyui-textbox"
+                                value=""/>(为空默认不修改密码)
                     </td>
                 </tr>
                 <tr>
@@ -101,6 +108,17 @@
                 return /^\d+(\.\d+)?$/i.test(value);
             },
             message: '请输入数字，并确保格式正确'
+        },
+        pwdLength: {// 密码长度
+            validator: function (value) {
+                if( value ){
+                    var len = $.trim(value).length;
+                    if(len < 6 || len > 16 ){
+                        return false;
+                    }else return true;
+                }
+            },
+            message: '密码必须为6到16位长度'
         },
         chinese: {// 验证中文
             validator: function (value) {
