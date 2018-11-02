@@ -38,8 +38,10 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
 
         PayChargeCompanyMoneyStreamExample e = new PayChargeCompanyMoneyStreamExample();
         PayChargeCompanyMoneyStreamExample.Criteria c = e.createCriteria();
-        e.setPageNo(request.getPage());
-        e.setPageSize(request.getRows());
+        if( request.getPage() > 0 && request.getRows() > 0 ){
+            e.setPageNo(request.getPage());
+            e.setPageSize(request.getRows());
+        }
         e.setOrderByClause("id DESC");
         // 添加时间搜索
         if (org.apache.commons.lang.StringUtils.isNotBlank(request.getAddtimeStart()))
@@ -61,16 +63,8 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
             c.andStatusEqualTo(request.getStatus());
         }
         //收支类型
-        if ( StringUtils.isNotBlank(request.getStatusType())){
-            List<Byte> statusArr = new ArrayList<>();
-            if(request.getStatusType().equals("1")){ //入账
-                statusArr.add((byte)1); //1=充值
-                statusArr.add((byte)3);//3=退款
-            }
-            if(request.getStatusType().equals("2")){ //出账
-                statusArr.add((byte)2);//2=下单
-            }
-            c.andStatusIn(statusArr);
+        if ( request.getStreamType() !=null && StringUtils.isNotBlank(request.getStreamType().toString())){
+            c.andStreamTypeEqualTo(request.getStreamType());
         }
 
         
@@ -82,16 +76,21 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
                 ChargeCompanyMoneyStreamInfo chargeCompanyMoneyStreamInfo = new ChargeCompanyMoneyStreamInfo();
                 BeanCopier beanCopier = BeanCopier.create(PayChargeCompanyMoneyStream.class,ChargeCompanyMoneyStreamInfo.class,false);
                 beanCopier.copy(one,chargeCompanyMoneyStreamInfo,null);
-//                chargeCompanyMoneyStreamInfo.setStatusCn("");
-                if( request.getStatusCnArr() !=null && request.getStatusCnArr().containsKey(chargeCompanyMoneyStreamInfo.getStatus())){
-//                    chargeCompanyMoneyStreamInfo.setStatusCn(request.getStatusCnArr().get(chargeCompanyMoneyStreamInfo.getStatus()));
+                chargeCompanyMoneyStreamInfo.setStatusCn("");
+                if( request.getStatusCnArr() !=null && request.getStatusCnArr().containsKey(chargeCompanyMoneyStreamInfo.getStatus().toString())){
+                    chargeCompanyMoneyStreamInfo.setStatusCn(request.getStatusCnArr().get(chargeCompanyMoneyStreamInfo.getStatus().toString()));
                 }
-//                chargeCompanyMoneyStreamInfo.setStatusType("");
-                if( chargeCompanyMoneyStreamInfo.getStatus() == 1 || chargeCompanyMoneyStreamInfo.getStatus() == 2 ){
-//                    chargeCompanyMoneyStreamInfo.setStatusType("入账");
+                chargeCompanyMoneyStreamInfo.setStreamReturn("");
+                if( chargeCompanyMoneyStreamInfo.getStreamType() == 1 ){
+                    chargeCompanyMoneyStreamInfo.setStreamReturn("支出");
+                }else{
+                    chargeCompanyMoneyStreamInfo.setStreamReturn("收入");
                 }
-                if( chargeCompanyMoneyStreamInfo.getStatus() == 3){
-//                    chargeCompanyMoneyStreamInfo.setStatusType("出账");
+                chargeCompanyMoneyStreamInfo.setIsDelCn("");
+                if( chargeCompanyMoneyStreamInfo.getIsDel() == 0 ){
+                    chargeCompanyMoneyStreamInfo.setIsDelCn("正常");
+                }else{
+                    chargeCompanyMoneyStreamInfo.setIsDelCn("删除");
                 }
                 infos.add(chargeCompanyMoneyStreamInfo);
             }
