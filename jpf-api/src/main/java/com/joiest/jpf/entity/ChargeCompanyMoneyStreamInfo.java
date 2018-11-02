@@ -124,6 +124,34 @@ public class ChargeCompanyMoneyStreamInfo {
      */
     private Date updatetime;
 
+    /**
+     * 收支类型
+     */
+    private String statusType;
+
+    /**
+     * 订单文字
+     */
+    private String statusCn;
+
+    /**
+     * 收支类型转换
+     */
+    private String streamReturn;
+
+    /**
+     * 接口类型转换
+     */
+    private String interfaceReturn;
+
+    /**
+     * 流水类型转换
+     */
+    private String statusReturn;
+
+
+    private static final long serialVersionUID = 1L;
+
     public String getId() {
         return id;
     }
@@ -314,5 +342,45 @@ public class ChargeCompanyMoneyStreamInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getStatusCn() {
+        return statusCn;
+    }
+
+    public void setStatusCn(String statusCn) {
+        this.statusCn = statusCn;
+    }
+
+    public String getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(String statusType) {
+        this.statusType = statusType;
+    }
+
+    public String getStreamReturn() {
+        return streamReturn;
+    }
+
+    public void setStreamReturn(String streamReturn) {
+        this.streamReturn = streamReturn;
+    }
+
+    public String getInterfaceReturn() {
+        return interfaceReturn;
+    }
+
+    public void setInterfaceReturn(String interfaceReturn) {
+        this.interfaceReturn = interfaceReturn;
+    }
+
+    public String getStatusReturn() {
+        return statusReturn;
+    }
+
+    public void setStatusReturn(String statusReturn) {
+        this.statusReturn = statusReturn;
     }
 }

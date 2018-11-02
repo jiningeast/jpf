@@ -2,8 +2,10 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeOrderMapper;
+import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
 import com.joiest.jpf.entity.ChargeOrderInfo;
@@ -11,10 +13,11 @@ import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
@@ -75,6 +78,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
      */
     @Override
     public GetChargeOrderResponse getRecords(GetChargeOrderRequest request){
+
         GetChargeOrderResponse response = new GetChargeOrderResponse();
 
         PayChargeOrderExample e = new PayChargeOrderExample();
@@ -130,6 +134,117 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
         return response;
     }
+
+    /*
+     * 接口查询订单
+     */
+    @Override
+    public GetChargeOrderResponse getRecordsInterface(ChargeOrderInterfaceRequest request){
+
+        GetChargeOrderResponse response = new GetChargeOrderResponse();
+
+        if ( request.getPageSize() ==null || Long.parseLong(request.getPageSize()) <= 0 || Long.parseLong(request.getPageSize()) > 10 )
+        {
+            request.setPageSize("10");
+        }else{
+            request.setPageSize(request.getPageSize());
+        }
+
+        if ( request.getPage() ==null || Long.parseLong(request.getPage()) <= 0 )
+        {
+            request.setPage("1");
+        }
+
+        PayChargeOrderExample e = new PayChargeOrderExample();
+        PayChargeOrderExample.Criteria c = e.createCriteria();
+        if ( request.getOrderNo() != null && StringUtils.isNotBlank(request.getOrderNo()) ){
+            c.andOrderNoEqualTo(request.getOrderNo());
+        }
+        if ( request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        if ( request.getStatus() != null && StringUtils.isNotBlank(""+request.getStatus()) ){
+            c.andStatusEqualTo(Byte.valueOf(request.getStatus()));
+        }
+        if ( request.getProductType() != null && StringUtils.isNotBlank(""+request.getProductType()) ){
+            c.andProductTypeEqualTo(Integer.parseInt(request.getProductType()));
+        }
+           // 添加时间搜索
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
+        e.setPageNo(Long.parseLong(request.getPage()));
+        e.setPageSize(Long.parseLong(request.getPageSize()));
+        e.setOrderByClause("id DESC");
+        c.andIsDelEqualTo((byte)0);
+        List<ChargeOrderInfo> infos = new ArrayList<>();
+        List<PayChargeOrder> list = payChargeOrderCustomMapper.selectByExample(e);
+        int count = payChargeOrderCustomMapper.countByExample(e);
+        if ( list != null && !list.isEmpty() ){
+            for ( PayChargeOrder one:list ){
+                ChargeOrderInfo info = new ChargeOrderInfo();
+
+                BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class,ChargeOrderInfo.class,false);
+                beanCopier.copy(one,info,null);
+                infos.add(info);
+            }
+        }
+        //获取统计数据
+
+        response.setList(infos);
+        response.setCount(count);
+        return response;
+    }
+
+    // 获取统计数据查询
+    @Override
+
+    public Map<String, Object> getStatistics(ChargeOrderInterfaceRequest  request){
+
+
+        PayChargeOrderExample exampleCount = new PayChargeOrderExample();
+        PayChargeOrderExample.Criteria c = exampleCount.createCriteria();
+
+        if ( request.getOrderNo() != null && StringUtils.isNotBlank(request.getOrderNo()) ){
+            c.andOrderNoEqualTo(request.getOrderNo());
+        }
+        if ( request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        if ( request.getStatus() != null && StringUtils.isNotBlank(""+request.getStatus()) ){
+            c.andStatusEqualTo(Byte.valueOf(request.getStatus()));
+        }
+        // 添加时间搜索
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
+        // 汇总统计
+        Map<String, Object> map = new HashMap<>();
+        //查询统计数据
+
+
+        /*map.put("allOrdersCount", (long)payOrderMapper.countByExample(e));
+        BigDecimal allOrdersMoney = payOrderCustomMapper.selectOrderpriceSum(e);
+        allOrdersMoney = allOrdersMoney == null ? new BigDecimal(0) : allOrdersMoney;
+        map.put("allOrdersMoney", allOrdersMoney);
+        c.andSinglestatusEqualTo((byte)7);
+        BigDecimal allRefundMoney = payOrderCustomMapper.selectOrderpriceSum(e);
+        allRefundMoney = allRefundMoney == null ? new BigDecimal(0) : allRefundMoney;
+        map.put("allRefundMoney", allRefundMoney);*/
+
+        return map;
+    }
+
     /**
      * 更新订单新
      * @param upOrderInfo 要更新的订单信息
@@ -143,4 +258,8 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
         return payChargeOrderMapper.updateByPrimaryKeySelective(payChargeOrder);
     }
+
+
 }
+
+

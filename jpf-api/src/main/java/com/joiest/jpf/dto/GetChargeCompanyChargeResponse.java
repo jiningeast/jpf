@@ -1,12 +1,16 @@
 package com.joiest.jpf.dto;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.entity.ChargeCompanyChargeInfo;
+import com.joiest.jpf.entity.ChargeCompanyInfo;
 
 import java.util.List;
 
-public class GetChargeCompanyChargeResponse {
+public class GetChargeCompanyChargeResponse extends JpfResponseDto {
 
     private int count;
+
+    private ChargeCompanyInfo  chargeCompanyInfo;
 
     private List<ChargeCompanyChargeInfo> list;
 
@@ -24,5 +28,13 @@ public class GetChargeCompanyChargeResponse {
 
     public void setList(List<ChargeCompanyChargeInfo> list) {
         this.list = list;
+    }
+
+    public ChargeCompanyInfo getChargeCompanyInfo() {
+        return chargeCompanyInfo;
+    }
+
+    public void setChargeCompanyInfo(ChargeCompanyInfo chargeCompanyInfo) {
+        this.chargeCompanyInfo = chargeCompanyInfo;
     }
 }

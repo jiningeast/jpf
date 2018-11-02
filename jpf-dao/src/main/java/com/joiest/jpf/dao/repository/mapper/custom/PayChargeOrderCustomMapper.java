@@ -4,6 +4,7 @@ import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface PayChargeOrderCustomMapper {
@@ -84,4 +85,10 @@ public interface PayChargeOrderCustomMapper {
      * @param record
      */
     int updateByPrimaryKey(PayChargeOrder record);
+
+    /**
+     * 查询订单总金额
+     */
+    BigDecimal SuccessCount(PayChargeOrderExample example);
+
 }

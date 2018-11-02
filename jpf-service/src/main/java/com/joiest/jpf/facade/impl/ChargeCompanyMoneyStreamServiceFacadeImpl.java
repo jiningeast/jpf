@@ -5,6 +5,7 @@ import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStreamExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
+import com.joiest.jpf.dto.ChargeCompanyMoneyStreamInterfaceRequest;
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamRequest;
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamResponse;
 import com.joiest.jpf.entity.ChargeCompanyMoneyStreamInfo;
@@ -152,6 +153,98 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         beanCopier.copy(info,payChargeCompanyMoneyStream,null);
 
         return payChargeCompanyMoneyStreamMapper.insertSelective(payChargeCompanyMoneyStream);
+    }
+
+    /**
+     * 接口获取流水列表
+     */
+    @Override
+    public ChargeCompanyMoneyStreamResponse getStreamList(ChargeCompanyMoneyStreamInterfaceRequest request){
+
+
+        if ( request.getPageSize() ==null || Long.parseLong(request.getPageSize()) <= 0 || Long.parseLong(request.getPageSize()) > 10 )
+        {
+            request.setPageSize("10");
+        }else{
+            request.setPageSize(request.getPageSize());
+        }
+
+        if ( request.getPage() ==null || Long.parseLong(request.getPage()) <= 0 )
+        {
+            request.setPage("1");
+        }
+
+        ChargeCompanyMoneyStreamResponse response = new ChargeCompanyMoneyStreamResponse();
+
+        PayChargeCompanyMoneyStreamExample e = new PayChargeCompanyMoneyStreamExample();
+        PayChargeCompanyMoneyStreamExample.Criteria c = e.createCriteria();
+        e.setPageNo(Long.parseLong(request.getPage()));
+        e.setPageSize(Long.parseLong(request.getPageSize()));
+        e.setOrderByClause("id DESC");
+        // 添加时间搜索
+        if (org.apache.commons.lang.StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(), DateUtils.DATEFORMATSHORT));
+        }
+        if (org.apache.commons.lang.StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
+
+        if ( StringUtils.isNotBlank(request.getMerchNo())){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        //交易类型
+        if ( request.getStatus() !=null && StringUtils.isNotBlank(request.getStatus().toString())){
+            c.andStatusEqualTo(request.getStatus());
+        }
+        //收支类型
+        if ( request.getStreamType() !=null && StringUtils.isNotBlank(request.getStreamType().toString())){
+            c.andStreamNoEqualTo(request.getStreamType());
+        }
+        //订单号
+        if(StringUtils.isNotBlank(request.getOrderNo())){
+            c.andOrderNoEqualTo(request.getOrderNo());
+        }
+        //流水号
+        if(StringUtils.isNotBlank(request.getStreamNo())){
+            c.andStreamNoEqualTo(request.getStreamNo());
+        }
+        List<ChargeCompanyMoneyStreamInfo> infos = new ArrayList<>();
+        List<PayChargeCompanyMoneyStream> list = payChargeCompanyMoneyStreamMapper.selectByExample(e);
+        int count = payChargeCompanyMoneyStreamMapper.countByExample(e);
+        if ( list != null && !list.isEmpty() ){
+
+            for ( PayChargeCompanyMoneyStream one:list ){
+                ChargeCompanyMoneyStreamInfo chargeCompanyMoneyStreamInfo = new ChargeCompanyMoneyStreamInfo();
+                BeanCopier beanCopier = BeanCopier.create(PayChargeCompanyMoneyStream.class,ChargeCompanyMoneyStreamInfo.class,false);
+                beanCopier.copy(one,chargeCompanyMoneyStreamInfo,null);
+                if( chargeCompanyMoneyStreamInfo.getStreamType() == 1 ){
+                    chargeCompanyMoneyStreamInfo.setStreamReturn("支出");
+                }else{
+                    chargeCompanyMoneyStreamInfo.setStreamReturn("收入");
+                }
+                if(chargeCompanyMoneyStreamInfo.getStatus()==1){
+                   chargeCompanyMoneyStreamInfo.setStatusReturn("充值");
+                }
+                if(chargeCompanyMoneyStreamInfo.getStatus()==2){
+                    chargeCompanyMoneyStreamInfo.setStatusReturn("下单");
+                }
+                if(chargeCompanyMoneyStreamInfo.getStatus()==3){
+                    chargeCompanyMoneyStreamInfo.setStatusReturn("退款");
+                }
+                if(chargeCompanyMoneyStreamInfo.getInterfaceType()==1){
+                    chargeCompanyMoneyStreamInfo.setInterfaceReturn("威能");
+                }else{
+                    chargeCompanyMoneyStreamInfo.setInterfaceReturn("欧非");
+                }
+                infos.add(chargeCompanyMoneyStreamInfo);
+            }
+        }
+        response.setList(infos);
+        response.setCount(count);
+
+        return response;
     }
 
 }

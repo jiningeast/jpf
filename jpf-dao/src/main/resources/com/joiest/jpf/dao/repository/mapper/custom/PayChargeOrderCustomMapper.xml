@@ -133,6 +133,8 @@
     from pay_charge_order
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     <!--
       @mbggenerated
@@ -508,4 +510,10 @@
     updatetime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="SuccessCount" parameterType="com.joiest.jpf.common.po.PayChargeOrderExample" resultType="java.math.BigDecimal">
+    SELECT SUM(total_money) FROM pay_charge_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
 </mapper>
