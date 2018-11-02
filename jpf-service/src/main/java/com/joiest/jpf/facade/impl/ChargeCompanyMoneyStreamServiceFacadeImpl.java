@@ -145,12 +145,13 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
      */
     @Override
     public int insRecord(ChargeCompanyMoneyStreamInfo info){
+
         PayChargeCompanyMoneyStream payChargeCompanyMoneyStream = new PayChargeCompanyMoneyStream();
 
         BeanCopier beanCopier = BeanCopier.create(ChargeCompanyMoneyStreamInfo.class,PayChargeCompanyMoneyStream.class,false);
         beanCopier.copy(info,payChargeCompanyMoneyStream,null);
 
-        return payChargeCompanyMoneyStreamMapper.insert(payChargeCompanyMoneyStream);
+        return payChargeCompanyMoneyStreamMapper.insertSelective(payChargeCompanyMoneyStream);
     }
 
 }
