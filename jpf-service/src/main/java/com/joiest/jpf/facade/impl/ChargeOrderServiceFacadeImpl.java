@@ -163,10 +163,10 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         if ( request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
             c.andMerchNoEqualTo(request.getMerchNo());
         }
-        if ( request.getStatus() != null && StringUtils.isNotBlank(""+request.getStatus()) ){
+        if ( request.getStatus() != null && StringUtils.isNotBlank(request.getStatus()) ){
             c.andStatusEqualTo(Byte.valueOf(request.getStatus()));
         }
-        if ( request.getProductType() != null && StringUtils.isNotBlank(""+request.getProductType()) ){
+        if ( request.getProductType() != null && StringUtils.isNotBlank(request.getProductType()) ){
             c.andProductTypeEqualTo(Integer.parseInt(request.getProductType()));
         }
            // 添加时间搜索

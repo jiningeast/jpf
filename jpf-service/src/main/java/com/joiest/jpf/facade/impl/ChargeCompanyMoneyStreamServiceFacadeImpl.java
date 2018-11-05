@@ -194,11 +194,11 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
             c.andMerchNoEqualTo(request.getMerchNo());
         }
         //交易类型
-        if ( request.getStatus() !=null && StringUtils.isNotBlank(request.getStatus().toString())){
-            c.andStatusEqualTo(request.getStatus());
+        if ( request.getStatus() !=null && StringUtils.isNotBlank(request.getStatus())){
+            c.andStatusEqualTo(Byte.valueOf(request.getStatus()));
         }
         //收支类型
-        if ( request.getStreamType() !=null && StringUtils.isNotBlank(request.getStreamType().toString())){
+        if ( request.getStreamType() !=null && StringUtils.isNotBlank(request.getStreamType())){
             c.andStreamNoEqualTo(request.getStreamType());
         }
         //订单号

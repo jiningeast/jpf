@@ -32,7 +32,10 @@ public class ChargeProductInterfaceRequest {
     private String isOnSale;
 
 
-
+    /**
+     * 产品类型
+     */
+    private String type;
 
     public String getKeyword() {
         return keyword;
@@ -80,5 +83,13 @@ public class ChargeProductInterfaceRequest {
 
     public void setIsOnSale(String isOnSale) {
         this.isOnSale = isOnSale;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

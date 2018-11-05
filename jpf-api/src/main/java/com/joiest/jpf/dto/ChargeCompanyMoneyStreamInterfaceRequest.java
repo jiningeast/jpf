@@ -52,7 +52,7 @@ public class ChargeCompanyMoneyStreamInterfaceRequest {
     /**
      * 流水类型 1=充值 2=下单 3=退款
      */
-    private Byte status;
+    private String status;
 
     public String getPage() {
         return page;
@@ -126,11 +126,11 @@ public class ChargeCompanyMoneyStreamInterfaceRequest {
         this.streamType = streamType;
     }
 
-    public Byte getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

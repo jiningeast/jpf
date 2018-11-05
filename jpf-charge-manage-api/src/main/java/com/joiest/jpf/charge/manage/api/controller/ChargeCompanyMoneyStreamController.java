@@ -146,7 +146,7 @@ public class ChargeCompanyMoneyStreamController {
         filed.add("orderNo");
         filed.add("productName");
         filed.add("productAmount");
-        filed.add("productValue");
+        filed.add("productSalePrice");
         filed.add("interfaceReturn");
         filed.add("streamReturn");
         filed.add("statusReturn");

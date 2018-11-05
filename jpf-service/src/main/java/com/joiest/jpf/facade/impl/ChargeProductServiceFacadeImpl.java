@@ -156,6 +156,9 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
         if(request.getIsOnSale()!=null && !request.getIsOnSale().equals("")){
             c.andIsOnSaleEqualTo(Byte.valueOf(request.getIsOnSale()));
         }
+        if(request.getType()!=null && !request.getType().equals("")){
+            c.andTypeEqualTo(Integer.parseInt(request.getType()));
+        }
         GetChargeProductResponse response = new GetChargeProductResponse();
         List<PayChargeProduct> list = payChargeProductMapper.selectByExample(example);
         int count = payChargeProductMapper.countByExample(example);
