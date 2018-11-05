@@ -39,6 +39,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             {
                 add("/nologin/userIndex");//判断是否登录返回
                 add("/chargeCompany/loginMerch");//登录验证
+                add("/chargeCompany/logout");//登录验证
 
             }
         };
