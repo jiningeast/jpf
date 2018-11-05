@@ -166,8 +166,17 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         if ( request.getStatus() != null && StringUtils.isNotBlank(request.getStatus()) ){
             c.andStatusEqualTo(Byte.valueOf(request.getStatus()));
         }
-        if ( request.getProductType() != null && StringUtils.isNotBlank(request.getProductType()) ){
-            c.andProductTypeEqualTo(Integer.parseInt(request.getProductType()));
+        List<Integer>tel=new ArrayList<>();
+        tel.add(0);
+        tel.add(1);
+        List<Integer> card =new ArrayList<>();
+        card.add(3);
+        card.add(4);
+        if ( request.getProductType() != null && StringUtils.isNotBlank(request.getProductType()) && request.getProductType().equals("tel")){
+            c.andProductTypeIn(tel);
+        }
+        if ( request.getProductType() != null && StringUtils.isNotBlank(request.getProductType()) && request.getProductType().equals("card")){
+            c.andProductTypeIn(card);
         }
            // 添加时间搜索
         if (StringUtils.isNotBlank(request.getAddtimeStart()))
