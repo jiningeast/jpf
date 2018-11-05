@@ -1,25 +1,24 @@
 package com.joiest.jpf.dao.repository.mapper.custom;
 
-import com.joiest.jpf.common.po.PayChargeOrder;
-import com.joiest.jpf.common.po.PayChargeOrderExample;
+import com.joiest.jpf.common.po.PayChargeCompany;
+import com.joiest.jpf.common.po.PayChargeCompanyExample;
 import org.apache.ibatis.annotations.Param;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-public interface PayChargeOrderCustomMapper {
+public interface PayChargeCompanyCustomMapper {
     /**
      * 根据条件计数
      *
      * @param example
      */
-    int countByExample(PayChargeOrderExample example);
+    int countByExample(PayChargeCompanyExample example);
 
     /**
      *
      * @param example
      */
-    int deleteByExample(PayChargeOrderExample example);
+    int deleteByExample(PayChargeCompanyExample example);
 
     /**
      * 根据主键删除数据库的记录
@@ -33,28 +32,28 @@ public interface PayChargeOrderCustomMapper {
      *
      * @param record
      */
-    int insert(PayChargeOrder record);
+    int insert(PayChargeCompany record);
 
     /**
      * 插入数据库记录
      *
      * @param record
      */
-    int insertSelective(PayChargeOrder record);
+    int insertSelective(PayChargeCompany record);
 
     /**
      * 根据条件查询列表
      *
      * @param example
      */
-    List<PayChargeOrder> selectByExample(PayChargeOrderExample example);
+    List<PayChargeCompany> selectByExample(PayChargeCompanyExample example);
 
     /**
      * 根据主键获取一条数据库记录
      *
      * @param id
      */
-    PayChargeOrder selectByPrimaryKey(String id);
+    PayChargeCompany selectByPrimaryKey(String id);
 
     /**
      * 选择性更新数据库记录
@@ -62,7 +61,7 @@ public interface PayChargeOrderCustomMapper {
      * @param record
      * @param example
      */
-    int updateByExampleSelective(@Param("record") PayChargeOrder record, @Param("example") PayChargeOrderExample example);
+    int updateByExampleSelective(@Param("record") PayChargeCompany record, @Param("example") PayChargeCompanyExample example);
 
     /**
      * 选择性更新数据库记录
@@ -70,25 +69,19 @@ public interface PayChargeOrderCustomMapper {
      * @param record
      * @param example
      */
-    int updateByExample(@Param("record") PayChargeOrder record, @Param("example") PayChargeOrderExample example);
+    int updateByExample(@Param("record") PayChargeCompany record, @Param("example") PayChargeCompanyExample example);
 
     /**
      * 根据主键来更新部分数据库记录
      *
      * @param record
      */
-    int updateByPrimaryKeySelective(PayChargeOrder record);
+    int updateByPrimaryKeySelective(PayChargeCompany record);
 
     /**
      * 根据主键来更新数据库记录
      *
      * @param record
      */
-    int updateByPrimaryKey(PayChargeOrder record);
-
-    /**
-     * 查询订单总金额
-     */
-    BigDecimal SuccessCount(PayChargeOrderExample example);
-
+    int updateByPrimaryKey(PayChargeCompany record);
 }

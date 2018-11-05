@@ -57,6 +57,16 @@ public class ChargeOrderInfo {
     private String productName;
 
     /**
+     * 产品面值
+     */
+    private BigDecimal productValue;
+
+    /**
+     * 进价，取接口的进价，即产品表的ofProductPrice或wnProductPrice
+     */
+    private BigDecimal productBidPrice;
+
+    /**
      * 产品单价
      */
     private BigDecimal productPrice;
@@ -357,5 +367,21 @@ public class ChargeOrderInfo {
 
     public void setIsDel(Byte isDel) {
         this.isDel = isDel;
+    }
+
+    public BigDecimal getProductValue() {
+        return productValue;
+    }
+
+    public void setProductValue(BigDecimal productValue) {
+        this.productValue = productValue;
+    }
+
+    public BigDecimal getProductBidPrice() {
+        return productBidPrice;
+    }
+
+    public void setProductBidPrice(BigDecimal productBidPrice) {
+        this.productBidPrice = productBidPrice;
     }
 }

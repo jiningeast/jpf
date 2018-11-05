@@ -2,6 +2,7 @@ package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayChargeProduct;
+import com.joiest.jpf.dto.ChargeProductInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeProductRequest;
 import com.joiest.jpf.dto.GetChargeProductResponse;
 import com.joiest.jpf.entity.ChargeProductInfo;
@@ -47,5 +48,10 @@ public interface ChargeProductServiceFacade {
      * 编辑商品 上游价格
      */
     public int upChargeProduct(ChargeProductInfo chargeProductInfo);
+
+    /**
+     * 接口商品列表
+     */
+    public GetChargeProductResponse getProductListInterface(ChargeProductInterfaceRequest request);
 
 }

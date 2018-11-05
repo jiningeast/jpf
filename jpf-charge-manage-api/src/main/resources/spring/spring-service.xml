@@ -4,31 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="demoServiceFacade" class="com.joiest.jpf.facade.impl.DemoServiceFacadeImpl"></bean>
-	<bean id="ToolCateServiceFacade" class="com.joiest.jpf.facade.impl.ToolCateServiceFacadeImpl"></bean>
-	<bean id="CloudIdcardServiceFacade" class="com.joiest.jpf.facade.impl.CloudIdcardServiceFacadeImpl"></bean>
-	<bean id="CloudDfMoneyServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfMoneyServiceFacadeImpl"></bean>
-	<bean id="CloudCompanyStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyStaffServiceFacadeImpl"></bean>
-	<bean id="CloudStaffBanksServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffBanksServiceFacadeImpl"></bean>
+	<bean id="ChargeCompanyServiceFacade" class="com.joiest.jpf.facade.impl.ChargeCompanyServiceFacadeImpl"></bean>
+	<bean id="ChargeProductServiceFacade" class="com.joiest.jpf.facade.impl.ChargeProductServiceFacadeImpl"></bean>
+	<bean id="ChargeOrderServiceFacade" class="com.joiest.jpf.facade.impl.ChargeOrderServiceFacadeImpl"></bean>
+	<bean id="ChargeInterfaceStreamFacade" class="com.joiest.jpf.facade.impl.ChargeInterfaceStreamFacadeImpl"></bean>
+	<bean id="ShopInterfaceStreamServiceFacade" class="com.joiest.jpf.facade.impl.ShopInterfaceStreamServiceFacadeImpl"></bean>
+	<bean id="ChargeBalanceServiceFacade" class="com.joiest.jpf.facade.impl.ChargeBalanceServiceFacadeImpl"></bean>
 	<bean id="RedisCustomServiceFacade" class="com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl"></bean>
-	<bean id="CloudIdenauthServiceFacade" class="com.joiest.jpf.facade.impl.CloudIdenauthServiceFacadeImpl"></bean>
-	<bean id="CloudBankcheckServiceFacade" class="com.joiest.jpf.facade.impl.CloudBankcheckServiceFacadeImpl"></bean>
-	<bean id="CloudCompactStaffServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompactStaffInterfaceServiceFacadeImpl"></bean>
-	<bean id="CloudDfTaskInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfTaskInterfaceServiceFacadeImpl"></bean>
-	<bean id="CloudDfOrderInterfaceServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfOrderInterfaceServiceFacadeImpl"></bean>
-	<bean id="cloudRechargeServiceFacade" class="com.joiest.jpf.facade.impl.CloudRechargeServiceFacadeImpl"></bean>
-	<bean id="merTypeServiceFacade" class="com.joiest.jpf.facade.impl.MerTypeServiceFacadeImpl"></bean>
-	<bean id="cloudCompanyServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyServiceFacadeImpl"></bean>
-	<bean id="CloudEmployeeServiceFacade" class="com.joiest.jpf.facade.impl.CloudEmployeeServiceFacadeImpl"></bean>
-	<bean id="CloudFanSourceServiceFacade" class="com.joiest.jpf.facade.impl.CloudFanSourceServiceFacadeImpl"></bean>
-	<bean id="PcaServiceFacade" class="com.joiest.jpf.facade.impl.PcaServiceFacadeImpl"></bean>
-	<bean id="CloudDfFqwaterServiceFacade" class="com.joiest.jpf.facade.impl.CloudDfFqwaterServiceFacadeImpl"></bean>
-	<bean id="CloudCompanyAgentServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyAgentServiceFacadeImpl"></bean>
-	<bean id="CloudCompanySalesServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanySalesServiceFacadeImpl"></bean>
-	<bean id="CloudCompanyBankServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyBankServiceFacadeImpl"></bean>
-	<bean id="CloudStaffMonthTotalServiceFacade" class="com.joiest.jpf.facade.impl.CloudStaffMonthTotalServiceFacadeImpl"></bean>
-	<bean id="OrderServiceFacade" class="com.joiest.jpf.facade.impl.OrderServiceFacadeImpl"></bean>
-	<bean id="WeixinMpServiceFacade" class="com.joiest.jpf.facade.impl.WeixinMpServiceFacadeImpl"></bean>
-	<bean id="WeixinUserServiceFacade" class="com.joiest.jpf.facade.impl.WeixinUserServiceFacadeImpl"></bean>
-	<bean id="CloudCompanyMoneyServiceFacade" class="com.joiest.jpf.facade.impl.CloudCompanyMoneyServiceFacadeImpl"></bean>
-
+	<bean id="ChargeCompanyMoneyStreamServiceFacade" class="com.joiest.jpf.facade.impl.ChargeCompanyMoneyStreamServiceFacadeImpl"></bean>
 </beans>

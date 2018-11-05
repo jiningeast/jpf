@@ -256,9 +256,8 @@ public class FlowRechargeController {
 
             chargeCompanyServiceFacade.updateColumnByPrimaryKey(comInfo);
 
-
             // 新增资金流水
-            /*ChargeCompanyMoneyStreamInfo info = new ChargeCompanyMoneyStreamInfo();
+            ChargeCompanyMoneyStreamInfo info = new ChargeCompanyMoneyStreamInfo();
             String streamNo = "MS"+System.currentTimeMillis()+ToolUtils.getRandomInt(100,999);
             info.setStreamNo(streamNo);
             info.setCompanyId(companyInfo.getId());
@@ -269,23 +268,25 @@ public class FlowRechargeController {
             info.setProductId(chargeProductInfo.getId());
             info.setProductName(chargeProductInfo.getName());
             info.setProductValue(chargeProductInfo.getValue());
-            info.setProductBidPrice(chargeProductInfo.getBidPrice());
+            if(type.equals((byte)1)){
+
+                info.setProductBidPrice(chargeProductInfo.getWnProductPrice());
+            }else{
+
+                info.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+            }
             info.setProductSalePrice(chargeProductInfo.getSalePrice());
             info.setProductInterfacePrice(chargeProductInfo.getBidPrice());
             info.setProductAmount(1);
             info.setTotalMoney(chargeProductInfo.getSalePrice());
-            info.setInterfaceType((byte)0);
+            info.setInterfaceType(type);
             info.setInterfaceOrderNo(map.get("orderid"));
             info.setStatus((byte)2);
             info.setStreamType((byte)1);
             info.setNewMoney(companyMoney);
             info.setIsDel((byte)0);
             info.setAddtime(new Date());
-            ChargeCompanyMoneyStreamServiceFacade.insRecord(info);*/
-
-
-
-
+            ChargeCompanyMoneyStreamServiceFacade.insRecord(info);
 
         }else{
 
@@ -636,7 +637,7 @@ public class FlowRechargeController {
             chargeCompanyServiceFacade.updateColumnByPrimaryKey(comInfo);
 
             // 新增资金流水
-            /*ChargeCompanyMoneyStreamInfo info = new ChargeCompanyMoneyStreamInfo();
+            ChargeCompanyMoneyStreamInfo info = new ChargeCompanyMoneyStreamInfo();
             String streamNo = "MS"+System.currentTimeMillis()+ToolUtils.getRandomInt(100,999);
             info.setStreamNo(streamNo);
             info.setCompanyId(companyInfo.getId());
@@ -647,7 +648,7 @@ public class FlowRechargeController {
             info.setProductId(chargeProductInfo.getId());
             info.setProductName(chargeProductInfo.getName());
             info.setProductValue(chargeProductInfo.getValue());
-            info.setProductBidPrice(chargeProductInfo.getBidPrice());
+            info.setProductBidPrice(chargeProductInfo.getOfProductPrice());
             info.setProductSalePrice(chargeProductInfo.getSalePrice());
             info.setProductInterfacePrice(chargeProductInfo.getBidPrice());
             info.setProductAmount(1);
@@ -659,7 +660,8 @@ public class FlowRechargeController {
             info.setNewMoney(companyMoney);
             info.setIsDel((byte)0);
             info.setAddtime(new Date());
-            ChargeCompanyMoneyStreamServiceFacade.insRecord(info);*/
+            ChargeCompanyMoneyStreamServiceFacade.insRecord(info);
+
         }else{
 
             upOrderInfo.setStatus((byte)3);

@@ -12,6 +12,11 @@ public class ChargeCompanyMoneyStreamRequest {
     private String id;
 
     /**
+     * 流水号 MS+时间戳+3位随机数
+     */
+    private String streamNo;
+
+    /**
      * 商户id
      */
     private String companyId;
@@ -92,6 +97,12 @@ public class ChargeCompanyMoneyStreamRequest {
     private Byte status;
 
     /**
+     * 流水类型 0=收入 1=支出
+     */
+    private Byte streamType;
+
+
+    /**
      * 流水备注
      */
     private String memo;
@@ -110,8 +121,7 @@ public class ChargeCompanyMoneyStreamRequest {
 
     private String addtimeEnd;
 
-    private String statusType;
-
+    private String isDelCn;
     /**
      * 更新时间
      */
@@ -122,6 +132,11 @@ public class ChargeCompanyMoneyStreamRequest {
     private long rows;
 
     private Map<String, String> statusCnArr;
+
+    /**
+     * 状态中文
+     */
+    private String statusCn;
 
     private static final long serialVersionUID = 1L;
 
@@ -325,19 +340,43 @@ public class ChargeCompanyMoneyStreamRequest {
         this.addtimeEnd = addtimeEnd;
     }
 
-    public String getStatusType() {
-        return statusType;
-    }
-
-    public void setStatusType(String statusType) {
-        this.statusType = statusType;
-    }
-
     public Map<String, String> getStatusCnArr() {
         return statusCnArr;
     }
 
     public void setStatusCnArr(Map<String, String> statusCnArr) {
         this.statusCnArr = statusCnArr;
+    }
+
+    public String getStreamNo() {
+        return streamNo;
+    }
+
+    public void setStreamNo(String streamNo) {
+        this.streamNo = streamNo;
+    }
+
+    public Byte getStreamType() {
+        return streamType;
+    }
+
+    public void setStreamType(Byte streamType) {
+        this.streamType = streamType;
+    }
+
+    public String getStatusCn() {
+        return statusCn;
+    }
+
+    public void setStatusCn(String statusCn) {
+        this.statusCn = statusCn;
+    }
+
+    public String getIsDelCn() {
+        return isDelCn;
+    }
+
+    public void setIsDelCn(String isDelCn) {
+        this.isDelCn = isDelCn;
     }
 }

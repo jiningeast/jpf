@@ -55,7 +55,8 @@ public class ChargeCompanyMoneyStreamController {
         ChargeCompanyMoneyStreamStatusCn.put("3","退款");
 
         request.setStatusCnArr(ChargeCompanyMoneyStreamStatusCn);
-
+        request.setPage(0);
+        request.setRows(0);
         ChargeCompanyMoneyStreamResponse streamResponse = chargeCompanyMoneyStreamServiceFacade.getRecords(request);
         if( streamResponse.getList() == null || streamResponse.getList().isEmpty() ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
@@ -78,11 +79,11 @@ public class ChargeCompanyMoneyStreamController {
         filed.add("orderNo");//卡号
         filed.add("productName");
         filed.add("merchNo");
-        filed.add("productValue");
-        filed.add("statusType");
+        filed.add("productSalePrice");
+        filed.add("streamReturn");
         filed.add("statusCn");
         filed.add("addtime");
-        filed.add("isDel");
+        filed.add("isDelCn");
         try {
             JSONObject excel = new ExcelDealUtils().exportExcelByInfo(response, titles.toString(), filed.toString(), streamResponse.getList(), 1,path);
         } catch (Exception e) {

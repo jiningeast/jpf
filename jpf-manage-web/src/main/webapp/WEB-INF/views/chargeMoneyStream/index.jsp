@@ -62,17 +62,17 @@
                             var banlanStr = "";
                             banlanStr += "收入：";
                             //1=充值   2=退款
-                            banlanStr += (row["status"] == 1 || row["status"] == 3) ? row["productValue"]: "";
+                            banlanStr += (row["streamType"] == 0 ) ? row["productSalePrice"]: "";
                             banlanStr += "<br/>";
                             banlanStr += "支出：";
-                            banlanStr += (row["status"] == 2 ) ? row["productValue"] : "";
+                            banlanStr += (row["status"] == 1) ? row["productSalePrice"] : "";
                             banlanStr += "<br/>";
                             return banlanStr;
                         }
                     },
-                    {field:'statusType',title:'收支类型',width:'10%',formatter:function (value,row,index) {
-                            if ( row["status"] == 1 || row["status"] == 3 ) { return "入账"; }
-                            if ( row["status"] == 2 ) { return "出账"; }
+                    {field:'streamType',title:'收支类型',width:'10%',formatter:function (value,row,index) {
+                            if ( value == 1  ) { return "出账"; }
+                            if ( value == 0 ) { return "入账"; }
                         }
                     },
                     {field:'status',title:'交易类型',width:'10%',
@@ -144,10 +144,10 @@
                             </td>
                             <td>收支类型：</td>
                             <td>
-                                <select id="statusType" name="statusType" class="easyui-combobox">
+                                <select id="streamType" name="streamType" class="easyui-combobox">
                                     <option value="">全部</option>
-                                    <option value="1">入账</option>
-                                    <option value="2">出账</option>
+                                    <option value="0">入账</option>
+                                    <option value="1">出账</option>
                                 </select>
                             </td>
                         </tr>
