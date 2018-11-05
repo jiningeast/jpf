@@ -169,7 +169,7 @@
     </dependencies>
 
     <build>
-        <finalName>jpf-cloud</finalName>
+        <finalName>jpf-charge-manage-api</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources/</directory>
