@@ -25,6 +25,7 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
      */
     @Override
     public GetShopBargainRechargeOrderResponse getRecords(GetShopBargainRechargeOrderRequest request){
+
         GetShopBargainRechargeOrderResponse response = new GetShopBargainRechargeOrderResponse();
         List<ShopBargainRechargeOrderInfo> infos = new ArrayList<>();
 

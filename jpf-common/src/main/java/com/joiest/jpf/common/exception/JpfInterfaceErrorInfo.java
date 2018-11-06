@@ -21,6 +21,7 @@ public enum JpfInterfaceErrorInfo {
     INCORRECT_SIGN("10016","验签失败"),
     NO_SIGN("10017", "缺少签名参数"),
     ORDER_CLOSED("10018", "订单已关闭"),
+    IS_MAXPARAM("10042","参数超限"),
     USER_COUPON_NOTBIND("10019", "用户未激活券"),
 
     //商户信息验证失败

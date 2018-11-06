@@ -123,20 +123,17 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
     public GetChargeProductResponse getProductListInterface(ChargeProductInterfaceRequest request) {
 
 
-        if ( request.getPageSize() ==null || Long.parseLong(request.getPageSize()) <= 0 || Long.parseLong(request.getPageSize()) > 10 )
+        PayChargeProductExample example = new PayChargeProductExample();
+        if ( request.getPageSize() !=null && StringUtils.isNotBlank(request.getPageSize()) )
         {
-            request.setPageSize("10");
-        }else{
-            request.setPageSize(request.getPageSize());
+            example.setPageSize(Long.parseLong(request.getPageSize()));
         }
 
-        if ( request.getPage() ==null || Long.parseLong(request.getPage()) <= 0 )
+        if ( request.getPage() !=null && StringUtils.isNotBlank(request.getPage()) )
         {
-            request.setPage("1");
+            example.setPageNo(Long.parseLong(request.getPage()));
         }
-        PayChargeProductExample example = new PayChargeProductExample();
-        example.setPageNo(Long.parseLong(request.getPage()));
-        example.setPageSize(Long.parseLong(request.getPageSize()));
+
         example.setOrderByClause("addtime DESC");
         PayChargeProductExample.Criteria c = example.createCriteria();
 

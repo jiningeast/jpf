@@ -143,19 +143,18 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
         GetChargeOrderResponse response = new GetChargeOrderResponse();
 
-        if ( request.getPageSize() ==null || Long.parseLong(request.getPageSize()) <= 0 || Long.parseLong(request.getPageSize()) > 10 )
-        {
-            request.setPageSize("10");
-        }else{
-            request.setPageSize(request.getPageSize());
-        }
-
-        if ( request.getPage() ==null || Long.parseLong(request.getPage()) <= 0 )
-        {
-            request.setPage("1");
-        }
-
         PayChargeOrderExample e = new PayChargeOrderExample();
+
+        if ( request.getPageSize() !=null && StringUtils.isNotBlank(request.getPageSize()) )
+        {
+            e.setPageSize(Long.parseLong(request.getPageSize()));
+        }
+
+        if ( request.getPage() !=null && StringUtils.isNotBlank(request.getPage()) )
+        {
+            e.setPageNo(Long.parseLong(request.getPage()));
+        }
+
         PayChargeOrderExample.Criteria c = e.createCriteria();
         if ( request.getOrderNo() != null && StringUtils.isNotBlank(request.getOrderNo()) ){
             c.andOrderNoEqualTo(request.getOrderNo());
@@ -187,8 +186,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         {
             c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
         }
-        e.setPageNo(Long.parseLong(request.getPage()));
-        e.setPageSize(Long.parseLong(request.getPageSize()));
+
         e.setOrderByClause("id DESC");
         c.andIsDelEqualTo((byte)0);
         List<ChargeOrderInfo> infos = new ArrayList<>();
