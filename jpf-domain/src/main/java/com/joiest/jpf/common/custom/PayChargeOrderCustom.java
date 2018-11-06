@@ -42,6 +42,11 @@ public class PayChargeOrderCustom implements Serializable {
     private String chargePhone;
 
     /**
+     * 产品类型 0=欧飞话费充值 1=微能话费充值 2=中石化油卡充值 3=中石油油卡充值
+     */
+    private Integer productType;
+
+    /**
      * 产品id
      */
     private String productId;
@@ -266,6 +271,14 @@ public class PayChargeOrderCustom implements Serializable {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
     }
 
     /**
