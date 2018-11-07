@@ -199,7 +199,7 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         }
         //收支类型
         if ( request.getStreamType() !=null && StringUtils.isNotBlank(request.getStreamType())){
-            c.andStreamNoEqualTo(request.getStreamType());
+            c.andStreamTypeEqualTo(Byte.valueOf(request.getStreamType()));
         }
         //订单号
         if(StringUtils.isNotBlank(request.getOrderNo())){
