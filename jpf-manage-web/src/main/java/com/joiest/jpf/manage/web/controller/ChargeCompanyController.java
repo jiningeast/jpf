@@ -158,9 +158,7 @@ public class ChargeCompanyController {
         if(StringUtils.isBlank(id)){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "ID不能为空");
         }
-        ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
-        companyInfo.setId(id);
-        ChargeCompanyInfo record = chargeCompanyServiceFacade.getOne(companyInfo);
+        ChargeCompanyInfo record = chargeCompanyServiceFacade.getRecordByPrimaryKey(id);
         if(record == null ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
         }
