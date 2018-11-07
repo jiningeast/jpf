@@ -179,7 +179,7 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         PayChargeCompanyMoneyStreamExample.Criteria c = e.createCriteria();
         e.setPageNo(Long.parseLong(request.getPage()));
         e.setPageSize(Long.parseLong(request.getPageSize()));
-        e.setOrderByClause("id DESC");
+        e.setOrderByClause("addtime DESC");
         // 添加时间搜索
         if (org.apache.commons.lang.StringUtils.isNotBlank(request.getAddtimeStart()))
         {
