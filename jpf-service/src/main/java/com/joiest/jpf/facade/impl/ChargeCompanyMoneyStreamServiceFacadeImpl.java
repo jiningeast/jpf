@@ -232,11 +232,16 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
                 if(chargeCompanyMoneyStreamInfo.getStatus()==3){
                     chargeCompanyMoneyStreamInfo.setStatusReturn("退款");
                 }
-                if(chargeCompanyMoneyStreamInfo.getInterfaceType()==1){
-                    chargeCompanyMoneyStreamInfo.setInterfaceReturn("威能");
+                if ( chargeCompanyMoneyStreamInfo.getInterfaceType() != null ){
+                    if(chargeCompanyMoneyStreamInfo.getInterfaceType()==1){
+                        chargeCompanyMoneyStreamInfo.setInterfaceReturn("威能");
+                    }else{
+                        chargeCompanyMoneyStreamInfo.setInterfaceReturn("欧非");
+                    }
                 }else{
-                    chargeCompanyMoneyStreamInfo.setInterfaceReturn("欧非");
+                    chargeCompanyMoneyStreamInfo.setInterfaceReturn("无");
                 }
+
                 infos.add(chargeCompanyMoneyStreamInfo);
             }
         }
