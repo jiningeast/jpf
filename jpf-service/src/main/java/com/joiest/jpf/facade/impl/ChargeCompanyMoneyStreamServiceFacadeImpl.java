@@ -176,7 +176,7 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         PayChargeCompanyMoneyStreamExample.Criteria c = e.createCriteria();
         e.setPageNo(Long.parseLong(request.getPage()));
         e.setPageSize(Long.parseLong(request.getPageSize()));
-        e.setOrderByClause("id DESC");
+        e.setOrderByClause("addtime DESC");
         // 添加时间搜索
         if (org.apache.commons.lang.StringUtils.isNotBlank(request.getAddtimeStart()))
         {
@@ -196,7 +196,7 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         }
         //收支类型
         if ( request.getStreamType() !=null && StringUtils.isNotBlank(request.getStreamType())){
-            c.andStreamNoEqualTo(request.getStreamType());
+            c.andStreamTypeEqualTo(Byte.valueOf(request.getStreamType()));
         }
         //订单号
         if(StringUtils.isNotBlank(request.getOrderNo())){
