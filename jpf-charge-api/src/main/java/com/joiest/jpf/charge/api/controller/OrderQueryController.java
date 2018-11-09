@@ -1,12 +1,19 @@
 package com.joiest.jpf.charge.api.controller;
 
+import com.joiest.jpf.charge.api.thread.MatchingDataThread;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.po.PayChargePullOrder;
+import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderResponse;
+import com.joiest.jpf.dto.MarchingDataRequest;
+import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.entity.ShopBargainRechargeOrderInfo;
+import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
+import com.joiest.jpf.facade.ChargePullOrderServiceFacade;
 import com.joiest.jpf.facade.ShopBargainRechargeOrderServiceFacade;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -20,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -29,6 +37,10 @@ public class OrderQueryController {
 
     @Autowired
     private ShopBargainRechargeOrderServiceFacade shopBargainRechargeOrderServiceFacade;
+    @Autowired
+    private ChargeCompanyServiceFacade chargeCompanyServiceFacade;
+    @Autowired
+    private ChargePullOrderServiceFacade chargePullOrderServiceFacade;
 
     /**
      * 订单查询列表
@@ -240,5 +252,125 @@ public class OrderQueryController {
         //return xxx;
     }
 
+    /**
+     * 下订单
+     * @return
+     */
+    @RequestMapping(value="/payOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public String payOrder(MarchingDataRequest marchingDataRequest, HttpServletRequest request, HttpServletResponse  response){
+        Date date =new Date();
+        //商户号
+        String merchNo = request.getParameter("merchNo");
+        //金额
+        String money =request.getParameter("money");
+        //签名串
+        String sign = request.getParameter("sign");
+        Map<String,Object> resultMap = CheckData(merchNo,money,sign);
+        Map<String,Object> dataMap;
+        Map<String,Object> responseMap =new HashMap<String,Object>();
+        ChargeCompanyInfo result;
+        if(!JpfInterfaceErrorInfo.SUCCESS.getCode().equals(resultMap.get("code"))){
+            return  JsonUtils.toJson(resultMap);
+        }else {
+            //生成订单数据
+            ChargeCompanyInfo record = new ChargeCompanyInfo();
+            record.setMerchNo(merchNo);
+            result = chargeCompanyServiceFacade.getOne(record);
+            try {
+                dataMap  = chargePullOrderServiceFacade.savePayOrder(merchNo,money,result);
+            } catch (Exception e) {
+                responseMap.put("code",JpfInterfaceErrorInfo.CREATE_ORDER_FAILED.getCode());
+                responseMap.put("info",JpfInterfaceErrorInfo.CREATE_ORDER_FAILED.getDesc());
+                return JsonUtils.toJson(responseMap);
+            }
+        }
+
+        marchingDataRequest.setList((List<PayShopBargainRechargeOrder>) dataMap.get("matchData"));
+        marchingDataRequest.setCompanyName(result.getCompanyName());
+        marchingDataRequest.setMoney(result.getMoney());
+        // 使用线程
+        Thread thread = new Thread(new MatchingDataThread(marchingDataRequest,response));
+        thread.start();
+
+        PayChargePullOrder order = (PayChargePullOrder) dataMap.get("data");
+        responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+        responseMap.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
+        responseMap.put("data",order.getOrderNo());
+        responseMap.put("totalNum",order.getMatchRecordsAmount());
+        responseMap.put("totalMoney",order.getMatchMoney());
+        return JsonUtils.toJson(responseMap);
+    }
+
+    private Map<String,Object> CheckData(String merchNo,String money,String sign){
+
+        //接口返回参数数据
+        Map<String,Object> responseMap = new HashMap<>();
+        //参数不合法
+        if(StringUtils.isBlank(merchNo)){
+            responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+            return responseMap;
+        }
+        //缺少签名参数
+        if( sign== null || StringUtils.isBlank(sign)){
+            responseMap.put("code",JpfInterfaceErrorInfo.NO_SIGN.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+            return responseMap;
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("merchNo",merchNo);
+        map.put("money",money);
+
+        //排序转换
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(map);
+        String respos = ToolUtils.mapToUrl(treeMap);
+
+        //商户密码
+        ChargeCompanyInfo record = new ChargeCompanyInfo();
+        record.setMerchNo(merchNo);
+        ChargeCompanyInfo result = chargeCompanyServiceFacade.getOne(record);
+        //商户不存在
+        if(result==null || result.getIsDel() == 1 ){
+            responseMap.put("code",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+            return responseMap;
+        }
+        //商户删除 或者  商户关闭服务
+        if( result.getIsFreeze() == 1 ){
+            responseMap.put("code",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc());
+            return responseMap;
+        }
+        String  privateKey = result.getPrivateKey();
+
+        //校验来源数据是否合法
+        String selfSign = Md5Encrypt.md5(respos+privateKey).toUpperCase();
+        if(!selfSign.equals(sign)){
+            responseMap.put("code",JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
+            return responseMap;
+        }
+
+        //验证余额
+        if(!ToolUtils.ValidateCode(result.getMoneyCode(),result.getId(),money,ConfigUtil.getValue("MERCH_VALIDE_CODE"))){
+            responseMap.put("code",JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc());
+            return responseMap;
+        }
+
+        //验证数据的存储量，够不够下单的钱
+        BigDecimal moneyTotal = shopBargainRechargeOrderServiceFacade.getMoneyTotal();
+        System.out.println(moneyTotal.compareTo(new BigDecimal(money))>0);
+        if(moneyTotal.compareTo(new BigDecimal(money))<0){
+            responseMap.put("code",JpfInterfaceErrorInfo.EXCESS_DEPOSIT.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.EXCESS_DEPOSIT.getDesc());
+            return responseMap;
+        }
+        responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+        return responseMap;
+    }
 
 }

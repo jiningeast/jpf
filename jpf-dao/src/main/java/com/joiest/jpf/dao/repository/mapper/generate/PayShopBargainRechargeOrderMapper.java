@@ -2,8 +2,10 @@ package com.joiest.jpf.dao.repository.mapper.generate;
 
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrderExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 public interface PayShopBargainRechargeOrderMapper {
     /**
@@ -83,4 +85,9 @@ public interface PayShopBargainRechargeOrderMapper {
      * @param record
      */
     int updateByPrimaryKey(PayShopBargainRechargeOrder record);
+
+    /**
+     *
+     */
+    List<PayShopBargainRechargeOrder> getOrderListByNum(Map<String,Object> param);
 }

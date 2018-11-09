@@ -126,4 +126,7 @@
 		<property name="keySerializer" ref="stringRedisSerializer"/>
 		<property name="hashKeySerializer" ref="stringRedisSerializer"/>
 	</bean>
+
+	<!--增加上下文获取类初始化-->
+	<bean id="springContextUtil" class="com.joiest.jpf.charge.api.util.SpringContextUtil"  />
 </beans>

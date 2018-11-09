@@ -161,24 +161,21 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
     public ChargeCompanyMoneyStreamResponse getStreamList(ChargeCompanyMoneyStreamInterfaceRequest request){
 
 
-        if ( request.getPageSize() ==null || Long.parseLong(request.getPageSize()) <= 0 || Long.parseLong(request.getPageSize()) > 10 )
+        PayChargeCompanyMoneyStreamExample e = new PayChargeCompanyMoneyStreamExample();
+
+        if ( request.getPageSize() !=null && StringUtils.isNotBlank(request.getPageSize()) )
         {
-            request.setPageSize("10");
-        }else{
-            request.setPageSize(request.getPageSize());
+            e.setPageSize(Long.parseLong(request.getPageSize()));
         }
 
-        if ( request.getPage() ==null || Long.parseLong(request.getPage()) <= 0 )
+        if ( request.getPage() !=null && StringUtils.isNotBlank(request.getPage()) )
         {
-            request.setPage("1");
+            e.setPageNo(Long.parseLong(request.getPage()));
         }
-
         ChargeCompanyMoneyStreamResponse response = new ChargeCompanyMoneyStreamResponse();
 
-        PayChargeCompanyMoneyStreamExample e = new PayChargeCompanyMoneyStreamExample();
         PayChargeCompanyMoneyStreamExample.Criteria c = e.createCriteria();
-        e.setPageNo(Long.parseLong(request.getPage()));
-        e.setPageSize(Long.parseLong(request.getPageSize()));
+
         e.setOrderByClause("addtime DESC");
         // 添加时间搜索
         if (org.apache.commons.lang.StringUtils.isNotBlank(request.getAddtimeStart()))

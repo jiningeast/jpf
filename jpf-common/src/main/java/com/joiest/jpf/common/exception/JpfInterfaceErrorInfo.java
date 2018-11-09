@@ -99,7 +99,10 @@ public enum JpfInterfaceErrorInfo {
     //对外话费充值 begin
     GOODLIST_IS_MATCH("80000", "无对应商品信息"),
     RECHARGE_SUCCESS("80001", "充值成功"),
-    RECHARGE_FAILD("80002", "充值失败");
+    RECHARGE_FAILD("80002", "充值失败"),
+
+    EXCESS_DEPOSIT("80005","余额超限");
+
 
 
     private final String desc;
