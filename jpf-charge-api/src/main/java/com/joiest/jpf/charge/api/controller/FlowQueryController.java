@@ -44,6 +44,44 @@ public class FlowQueryController {
 
     @Autowired
     private ChargeBalanceServiceFacade chargeBalanceServiceFacade;
+
+    /**
+     * 自动对账接口_账务明细部分
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/financeQuery",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public String financeQuery(HttpServletRequest request){
+        String startTime = request.getParameter("starttime");
+        String endTime = request.getParameter("endtime");
+        String pageNum = request.getParameter("pagenum");
+        String pageSize = request.getParameter("pagesize");
+        String paymentType = request.getParameter("paymenttype");
+
+        Map<String,String> mapParam = new HashMap<String, String>();
+        mapParam.put("starttime",startTime);
+        mapParam.put("endtime",endTime);
+        mapParam.put("pagenum",pageNum);
+        mapParam.put("pagesize",pageSize);
+        mapParam.put("paymenttype",paymentType);
+
+        Map<String,String> responseMap = new OfpayUtils().financequery(mapParam);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\n\nTime:" + DateUtils.getCurDate());
+        stringBuilder.append("\n接口名称：自动对账接口_账务明细部分");
+        stringBuilder.append("\n请求地址：" + request.getQueryString());
+        if(responseMap.get("retcode").equals("1")){
+            stringBuilder.append("\n欧非账务明细查询状态：SUCCESS");
+            stringBuilder.append("\n\t接口返回信息："+JSONObject.fromObject(responseMap).toString());
+        }else{
+            stringBuilder.append("\n欧非账务明细查询状态：ERROR");
+            stringBuilder.append("\n\t接口返回信息："+JSONObject.fromObject(responseMap).toString());
+        }
+        return JsonUtils.toJson(responseMap);
+    }
+
     /**
      *商品列表
      * merchNo  商户号
