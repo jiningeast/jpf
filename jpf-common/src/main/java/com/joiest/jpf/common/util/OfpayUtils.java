@@ -44,6 +44,7 @@ public class OfpayUtils {
 
     private String querycardinfo;
 
+    private String finance_query;
 
     //油卡卡号查询
     private String gas_query;
@@ -64,6 +65,44 @@ public class OfpayUtils {
         this.aesKey = ConfigUtil.getValue("AES_ECB_NOPADDING_PW");
         this.aes_ecb_nopadding_pw = ConfigUtil.getValue("AES_ECB_NOPADDING_PW");
         this.querycardinfo = ConfigUtil.getValue("querycardinfo");
+        this.finance_query = ConfigUtil.getValue("finance_query");
+    }
+
+    /**
+     * 自动对账接口_账务明细部分
+     * @param queryMap
+     * @return
+     * @version 6.0
+     */
+    public Map<String,String> financequery(Map<String,String> queryMap){
+        Map<String,Object> requestMap = new LinkedHashMap<>();
+        requestMap.put("userid",userid); // 商户号
+        requestMap.put("userpws",Md5Encrypt.md5(userpws));  // 商户密码
+        requestMap.put("starttime",queryMap.get("starttime")); // 开始时间
+        requestMap.put("endtime",queryMap.get("endtime")); // 结束时间
+        requestMap.put("pagenum",queryMap.get("pagenum")); // 当前页码
+        requestMap.put("pagesize",queryMap.get("pagesize")); // 每页条数
+        requestMap.put("paymenttype",queryMap.get("paymenttype")); // 收支类型（0：收入 1：支出 不传默认为全部 不参与MD5验证
+        requestMap.put("md5_str", getFinanceSign(requestMap));
+        requestMap.put("version","6.0"); // 版本
+
+        String requestParam = ToolUtils.mapToUrl(requestMap); // 请求参数
+        String resultXml = OkHttpUtils.postForm(finance_query,requestMap);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        stringBuilder.append("\n\nTime:" + myfmt1.format(date));
+        stringBuilder.append("\n充值类型:" + "查询财务明细信息");
+        stringBuilder.append("\n请求地址：" + finance_query);
+        stringBuilder.append("\n接口参数：" + requestMap);
+        stringBuilder.append("\n回调信息：" + resultXml);
+
+        Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
+        resultMap.put("responseParam",JSONObject.fromObject(resultMap).toString());
+        resultMap.put("requestUrl", finance_query);
+        resultMap.put("requestParam", requestParam);
+        return resultMap;
     }
 
     /**
@@ -158,6 +197,16 @@ public class OfpayUtils {
         map.put("requestUrl", phone_requestUrl);
         map.put("requestParam", requestParam);
         return map;
+    }
+
+    /**
+     * 获取对账接口_账务明细签名
+     * @param map
+     * @return
+     */
+    private String getFinanceSign(Map<String,Object> map){
+        String myPackage = map.get("userid").toString() + map.get("userpws") + map.get("starttime") + map.get("endtime") + map.get("pagenum") + map.get("pagesize") + ConfigUtil.getValue("keystr");
+        return Md5Encrypt.md5(myPackage).toUpperCase();
     }
 
     /**
