@@ -230,7 +230,7 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
 
 
     public static void main(String[] args) {
-       String str = Md5Encrypt.md5("merchNo=MC1541126548324168863&money=20000.00imyHcZOzMmhukCqB").toUpperCase();
+       String str = Md5Encrypt.md5("merchNo=MC1541126786498921482&money=100.00ZbwJbbaeSdRuqSeb").toUpperCase();
         System.out.println(str);
 
         String a="strsss";

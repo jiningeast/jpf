@@ -259,7 +259,7 @@ public class OrderQueryController {
     @RequestMapping(value="/payOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String payOrder(MarchingDataRequest marchingDataRequest, HttpServletRequest request, HttpServletResponse  response){
-        Date date =new Date();
+
         //商户号
         String merchNo = request.getParameter("merchNo");
         //金额
@@ -354,8 +354,9 @@ public class OrderQueryController {
             return responseMap;
         }
 
+
         //验证余额
-        if(!ToolUtils.ValidateCode(result.getMoneyCode(),result.getId(),money,ConfigUtil.getValue("MERCH_VALIDE_CODE"))){
+        if(!ToolUtils.ValidateCode(result.getMoneyCode(),result.getId(),result.getMoney().toString(),ConfigUtil.getValue("MERCH_VALIDE_CODE"))){
             responseMap.put("code",JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc());
             return responseMap;
