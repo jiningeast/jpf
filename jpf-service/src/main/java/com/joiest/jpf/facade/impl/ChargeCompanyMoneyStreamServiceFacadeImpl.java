@@ -160,6 +160,7 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
     @Override
     public ChargeCompanyMoneyStreamResponse getStreamList(ChargeCompanyMoneyStreamInterfaceRequest request){
 
+
         PayChargeCompanyMoneyStreamExample e = new PayChargeCompanyMoneyStreamExample();
 
         if ( request.getPageSize() !=null && StringUtils.isNotBlank(request.getPageSize()) )
@@ -174,8 +175,7 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         ChargeCompanyMoneyStreamResponse response = new ChargeCompanyMoneyStreamResponse();
 
         PayChargeCompanyMoneyStreamExample.Criteria c = e.createCriteria();
-        e.setPageNo(Long.parseLong(request.getPage()));
-        e.setPageSize(Long.parseLong(request.getPageSize()));
+
         e.setOrderByClause("addtime DESC");
         // 添加时间搜索
         if (org.apache.commons.lang.StringUtils.isNotBlank(request.getAddtimeStart()))
