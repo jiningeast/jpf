@@ -60,8 +60,8 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
         int endNum = 500;
         String lastMoney = "0";
         //做匹配数据操作,并且保存数据库，返回匹配的数据和匹配的金额
-        String matchMoney = recursionSub(merchNo, money, companyInfo, orderNo, totalMoney,startNum,endNum,lastMoney);
-        order.setMatchMoney(new BigDecimal(matchMoney));
+        totalMoney = recursionSub(merchNo, money, companyInfo, orderNo, totalMoney,startNum,endNum,lastMoney);
+        order.setMatchMoney(new BigDecimal(totalMoney));
         order.setMatchRecordsAmount(matchaingList.size());
         payChargePullOrderCustomMapper.updateByPrimaryKeySelective(order);
 
