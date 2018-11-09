@@ -263,6 +263,11 @@
                         "menuname" : "充值平台财务审核",
                         "icon" : "icon-nav",
                         "url" : "chargeOrder/caiwuIndex"
+                    },{
+                        "menuid" : "611",
+                        "menuname" : "欧飞财务资金流水",
+                        "icon" : "icon-nav",
+                        "url" : "chargeOrder/caiwuIndex"
                     }]
             },{
                 "menuid" : "7",
