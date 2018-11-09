@@ -141,6 +141,7 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
         payShopBargainRechargeOrder.setPullCompanyId(companyInfo.getId());
         payShopBargainRechargeOrder.setPullMerchNo(merchNo);
         payShopBargainRechargeOrder.setPullOrderNo(orderNo);
+        payShopBargainRechargeOrder.setUpdatetime(new Date());
         matchaingList.add(payShopBargainRechargeOrder);
     }
 

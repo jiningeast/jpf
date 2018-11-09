@@ -560,6 +560,7 @@
           pull_company_id = #{payShopBarRecOrder.pullCompanyId},
           pull_order_no = #{payShopBarRecOrder.pullOrderNo},
           pull_merch_no = #{payShopBarRecOrder.pullMerchNo}
+          updatetime = #{payShopBarRecOrder.updatetime}
         </set>
         <where>
           id=#{payShopBarRecOrder.id}
