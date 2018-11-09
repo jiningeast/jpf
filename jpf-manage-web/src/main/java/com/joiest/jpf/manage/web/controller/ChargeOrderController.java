@@ -54,7 +54,7 @@ public class ChargeOrderController {
         map.put("total",response.getCount());
         map.put("rows",response.getList());
 
-        return  map; 
+        return  map;
     }
 
     @RequestMapping("caiwuIndex")
