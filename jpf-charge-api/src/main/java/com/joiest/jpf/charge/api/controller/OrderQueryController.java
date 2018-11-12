@@ -259,7 +259,7 @@ public class OrderQueryController {
     @RequestMapping(value="/payOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String payOrder(MarchingDataRequest marchingDataRequest, HttpServletRequest request, HttpServletResponse  response){
-
+        //Date date =new Date();
         //商户号
         String merchNo = request.getParameter("merchNo");
         //金额
@@ -300,6 +300,7 @@ public class OrderQueryController {
         data.put("orderNo",order.getOrderNo());
         data.put("totalNum",order.getMatchRecordsAmount());
         data.put("totalMoney",order.getMatchMoney());
+        //data.put("date",date+"--"+new Date());
         responseMap.put("data",data);
         return JsonUtils.toJson(responseMap);
     }
@@ -357,13 +358,19 @@ public class OrderQueryController {
         }
 
 
-        //验证余额
-        if(!ToolUtils.ValidateCode(result.getMoneyCode(),result.getId(),result.getMoney().toString(),ConfigUtil.getValue("MERCH_VALIDE_CODE"))){
+        //验证商户目前余额能够购买输入的金额
+        if(new BigDecimal(money).compareTo(result.getMoney())>0){
             responseMap.put("code",JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc());
             return responseMap;
         }
 
+        //验证余额
+        if(!ToolUtils.ValidateCode(result.getMoneyCode(),result.getId(),result.getMoney().toString(),ConfigUtil.getValue("MERCH_VALIDE_CODE"))){
+            responseMap.put("code",JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
+            return responseMap;
+        }
         //验证数据的存储量，够不够下单的钱
         BigDecimal moneyTotal = shopBargainRechargeOrderServiceFacade.getMoneyTotal();
         System.out.println(moneyTotal.compareTo(new BigDecimal(money))>0);

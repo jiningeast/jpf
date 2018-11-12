@@ -41,11 +41,15 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
     @Autowired
     private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
 
-    List<PayShopBargainRechargeOrder> matchaingList = new ArrayList<PayShopBargainRechargeOrder>();
+    private List<PayShopBargainRechargeOrder> matchaingList ;
+
+    private String totalMoney ;
 
     @Transactional(rollbackFor=Exception.class)
     @Override
     public Map<String,Object>  savePayOrder(String merchNo, String money, ChargeCompanyInfo companyInfo) {
+        matchaingList= new ArrayList<>();
+        totalMoney="0";
         PayChargePullOrder order  =new PayChargePullOrder();
         String orderNo = "PU"+System.currentTimeMillis()+ ToolUtils.getRandomInt(100000,999999);
         order.setAddtime(new Date());
@@ -55,12 +59,11 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
         order.setMatchRecordsAmount(0);
         order.setMerchNo(merchNo);
         payChargePullOrderCustomMapper.insertSelective(order);
-        String totalMoney ="0";
         int startNum = 0;
         int endNum = 500;
         String lastMoney = "0";
         //做匹配数据操作,并且保存数据库，返回匹配的数据和匹配的金额
-        totalMoney = recursionSub(merchNo, money, companyInfo, orderNo, totalMoney,startNum,endNum,lastMoney);
+        recursionSub(merchNo, money, companyInfo, orderNo,startNum,endNum,lastMoney);
         order.setMatchMoney(new BigDecimal(totalMoney));
         order.setMatchRecordsAmount(matchaingList.size());
         payChargePullOrderCustomMapper.updateByPrimaryKeySelective(order);
@@ -84,9 +87,8 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
      * @param money 商户输入金额
      * @param companyInfo 商户信息
      * @param orderNo 商户下单单号
-     * @param totalMoney 匹配的总钱数
      */
-    private String recursionSub(String merchNo, String money,  ChargeCompanyInfo companyInfo, String orderNo, String totalMoney,int startNum,int endNum,String lastMoney) {
+    private void recursionSub(String merchNo, String money,  ChargeCompanyInfo companyInfo, String orderNo,int startNum,int endNum,String lastMoney) {
         Map<String,Object> param = new HashMap<String,Object>();
         param.put("startNum",startNum);
         param.put("endNum",endNum);
@@ -120,13 +122,12 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
         //证明客户剩余的钱还大于10.必须要重新查
          if(!lastMoney.equals(money)){
              lastMoney =money;
-             recursionSub(merchNo, money,companyInfo, orderNo, totalMoney,endNum,endNum,lastMoney);
+             recursionSub(merchNo, money,companyInfo, orderNo,endNum,endNum,lastMoney);
          }else{
              //批量更新数据
              payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(matchaingList);
          }
 
-        return totalMoney;
     }
 
     /**
@@ -230,14 +231,11 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
 
 
     public static void main(String[] args) {
-       String str = Md5Encrypt.md5("merchNo=MC1541126786498921482&money=100.00ZbwJbbaeSdRuqSeb").toUpperCase();
+       String str = Md5Encrypt.md5("merchNo=MC1541126548324168863&money=50000.00imyHcZOzMmhukCqB").toUpperCase();
         System.out.println(str);
 
-        String a="strsss";
-        String b = a;
-        a="zzzzz";
-        System.out.println( a );
-        System.out.println(b);
+        String newCode = Md5Encrypt.md5("11" + "100000.00" + "Pwztib3qtekopERJ","UTF-8");
+        System.out.println(newCode);
 
     }
 }
