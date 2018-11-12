@@ -16,6 +16,7 @@ import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import com.joiest.jpf.facade.ChargeProductServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.stereotype.Controller;
@@ -44,6 +45,26 @@ public class FlowQueryController {
 
     @Autowired
     private ChargeBalanceServiceFacade chargeBalanceServiceFacade;
+
+    /**
+     * 自动对账接口_账务明细部分
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/financeQuery",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public String financeQuery(HttpServletRequest request) throws DocumentException {
+        Map<String,String> mapParam = new HashMap<String, String>();
+        mapParam.put("starttime",request.getParameter("starttime"));
+        mapParam.put("endtime",request.getParameter("endtime"));
+        mapParam.put("pagenum",request.getParameter("pagenum"));
+        mapParam.put("pagesize",request.getParameter("pagesize"));
+        mapParam.put("paymenttype",request.getParameter("paymenttype"));
+
+        Map<String,String> responseMap = new OfpayUtils().financequery(mapParam);
+        return JsonUtils.toJson(responseMap);
+    }
+
     /**
      *商品列表
      * merchNo  商户号

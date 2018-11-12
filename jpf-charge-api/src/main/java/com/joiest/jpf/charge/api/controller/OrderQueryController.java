@@ -296,9 +296,11 @@ public class OrderQueryController {
         PayChargePullOrder order = (PayChargePullOrder) dataMap.get("data");
         responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
         responseMap.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
-        responseMap.put("data",order.getOrderNo());
-        responseMap.put("totalNum",order.getMatchRecordsAmount());
-        responseMap.put("totalMoney",order.getMatchMoney());
+        Map<String,Object> data = new HashMap<String,Object>();
+        data.put("orderNo",order.getOrderNo());
+        data.put("totalNum",order.getMatchRecordsAmount());
+        data.put("totalMoney",order.getMatchMoney());
+        responseMap.put("data",data);
         return JsonUtils.toJson(responseMap);
     }
 

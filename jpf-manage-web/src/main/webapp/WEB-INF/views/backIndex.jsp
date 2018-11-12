@@ -417,7 +417,7 @@
     <div data-options="region:'south'" style="height: 30px; background: #D2E0F2; ">
         <div class="footer">CopyRight &copy; 2015-2016 北京中欣银嘉服务有限公司</div>
     </div>
-    <div data-options="region:'west',title:'导航菜单',split:true" style="width:180px;" id="west">
+    <div data-options="region:'west',title:'导航菜单11111',split:true" style="width:180px;" id="west">
 		<div id='wnav' class="easyui-accordion" fit="true" border="false">
 		<!--  导航内容 -->
 

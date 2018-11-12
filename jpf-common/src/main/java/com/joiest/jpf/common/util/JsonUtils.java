@@ -1,6 +1,8 @@
 package com.joiest.jpf.common.util;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -11,10 +13,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -80,6 +87,65 @@ public class JsonUtils {
         return null;
     }
 
+    /**
+     * xml字符串转换成json对象
+     * @param xml
+     * @return
+     * @throws DocumentException
+     */
+    public static JSONObject xmlToJson(String xml) throws DocumentException {
+        JSONObject jsonObject = new JSONObject();
+        Document document = DocumentHelper.parseText(xml);
+        Element rootElement = document.getRootElement();
+        iterator(rootElement,jsonObject);
+        return jsonObject;
+    }
+
+    /**
+     * 递归调用遍历dom树上的每一个节点
+     * @param node
+     * @param json
+     */
+    public static void iterator(Element node, JSONObject json){
+        String nodeName = node.getName();
+        if(json.containsKey(nodeName)){
+            //该元素在同级下有多个
+            Object Object = json.get(nodeName);
+            JSONArray array = null;
+            if(Object instanceof JSONArray){
+                array = (JSONArray) Object;
+            }else{
+                array = new JSONArray();
+                array.add(Object);
+            }
+            List<Element> listElement = node.elements();
+            if(listElement.isEmpty()){
+                String nodeValue = node.getTextTrim();
+                array.add(nodeValue);
+                json.put(nodeName, array);
+                return;
+            }
+            JSONObject newJson = new JSONObject();
+            for (Element e:listElement) {
+                iterator(e,newJson);
+            }
+            array.add(newJson);
+            json.put(nodeName,array);
+            return;
+        }
+        List<Element> listElement = node.elements();
+        if(listElement.isEmpty()){
+            String nodeValue = node.getTextTrim();
+            json.put(nodeName, nodeValue);
+            return ;
+        }
+        JSONObject object = new JSONObject();
+        for (Element e:listElement) {
+            iterator(e,object);
+        }
+        json.put(nodeName,object);
+        return;
+    }
     
     public static void main(String[] args){
     	Map<String,Object> map = new HashMap<String ,Object>();
