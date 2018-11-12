@@ -14,7 +14,9 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
+import com.joiest.jpf.entity.ChargeOrderInfo;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -240,5 +242,48 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         }
 
         return new JpfResponseDto();
+    }
+    /**
+     * 充值失败返还商户资金
+     * */
+    @Override
+    public JSONObject returnComfunds(ChargeOrderInfo orderInfo){
+
+        JSONObject retParam = new JSONObject();
+        retParam.put("code","10008");
+        retParam.put("info","返还商户金额失败");
+
+        ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
+        companyInfo.setMerchNo(orderInfo.getMerchNo());
+
+        ChargeCompanyInfo chargeCompanyInfo = getOne(companyInfo);
+
+        if(chargeCompanyInfo == null){
+
+            retParam.put("info","订单信息未匹配到商户信息");
+            return retParam;
+        }
+        Boolean newCode = ToolUtils.ValidateCode(chargeCompanyInfo.getMoneyCode(),chargeCompanyInfo.getId(),chargeCompanyInfo.getMoney().toString(), ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        if(newCode.equals(false)){
+
+            retParam.put("info","商户金额校验错误");
+            return retParam;
+        }
+        //充值失败将失败金额返回商户金额
+        BigDecimal companyMoney = chargeCompanyInfo.getMoney().add(orderInfo.getProductPrice());
+        String moneyCode = ToolUtils.CreateCode(companyMoney.toString(),chargeCompanyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+
+        ChargeCompanyInfo comInfo = new ChargeCompanyInfo();
+        comInfo.setId(chargeCompanyInfo.getId());
+        comInfo.setMoneyCode(moneyCode);
+        comInfo.setMoney(companyMoney);
+
+        int isUp = updateColumnByPrimaryKey(comInfo);
+        if(isUp == 1){
+
+            retParam.put("code","10000");
+            retParam.put("info","返还商户金额成功");
+        }
+        return retParam;
     }
 }

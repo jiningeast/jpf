@@ -20,15 +20,16 @@
                 selectOnCheck:true,
                 url : 'list',
                 columns : [[
-                    {field:'id', title:'编号',width:'6%'},
+                    //{field:'id', title:'编号',width:'6%'},
                     {field:'detailId', title:'流水号',width:'14%'},
-                    {field:'inOutType', title:'收支类型',width:'14%'},
-                    {field:'fundsType', title:'业务类型',width:'14%'},
-                    {field:'inComeCost', title:'收入金额',width:'14%'},
-                    {field:'expenditureCost', title:'支出金额',width:'14%'},
+                    {field:'inOutType', title:'收支类型',width:'6%'},
+                    {field:'fundsType', title:'业务类型',width:'6%'},
+                    {field:'inComeCost', title:'收入金额',width:'6%'},
+                    {field:'expenditureCost', title:'支出金额',width:'6%'},
                     {field:'leftBalance', title:'账户余额',width:'14%'},
                     {field:'billId', title:'业务单号',width:'14%'},
-                    {field:'occurTime', title:'修改时间',width:'14%',formatter: formatDateStr}
+                    {field:'occurTime', title:'修改时间',width:'14%'}
+                    //{field:'occurTime', title:'修改时间',width:'14%',formatter: formatDateStr}
                 ]]
             });
             $('#dg').datagrid().datagrid('getPager');
@@ -38,6 +39,14 @@
                 height:'200px',
                 closed:true,
                 modal:true
+            });
+
+            $('#searchBtn').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serializeArray();
+                    var postData = parsePostData(queryArray);
+                    $('#dg').datagrid('reload', postData);
+                }
             });
         })
     </script>
@@ -52,12 +61,12 @@
                             <td>创建时间：</td>
                             <td>
                                 <input type="text" class="Wdate" style="width:158px;" id="startAddTime_s"
-                                       name="startAddTime"
-                                       onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endAddTime_s\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                                       name="startAddTime" value="${starttime}"
+                                       onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endAddTime_s\');}',startDate:'%y-%M-%d',dateFmt:'yyyyMMdd'})"/>
                                 -
                                 <input type="text" class="Wdate" style="width:158px;" id="endAddTime_s"
-                                       name="endAddTime"
-                                       onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startAddTime_s\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                                       name="endAddTime"  value="${endtime}"
+                                       onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startAddTime_s\');}',startDate:'%y-%M-%d',dateFmt:'yyyyMMdd'})"/>
                             </td>
                             <td>接口商家：</td>
                             <td >
@@ -68,7 +77,7 @@
                                 </select>
                             </td>
                         </tr>
-
+                        <input type="hidden" name="page" value="1" />
                     </table>
                 </form>
             </div>

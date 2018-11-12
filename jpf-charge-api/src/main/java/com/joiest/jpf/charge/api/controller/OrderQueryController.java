@@ -56,13 +56,9 @@ public class OrderQueryController {
     public String orderList(HttpServletRequest request, HttpServletResponse response){
 
         //订单号
-        String orderNo = request.getParameter("orderNo");
-
-        //开始时间
-        String startGmtCreate = request.getParameter("startGmtCreate");
-
-        //结束时间
-        String endGmtCreate = request.getParameter("endGmtCreate");
+        String pullOrderNo = request.getParameter("pullOrderNo");
+        //商户号
+        String merchNo = request.getParameter("merchNo");
 
         //返回最大条数
         String pageSize = request.getParameter("pageSize");
@@ -77,7 +73,8 @@ public class OrderQueryController {
         Map<String,Object> responseMap = new HashMap<>();
 
         //参数不合法
-        if(StringUtils.isBlank(startGmtCreate) ||  StringUtils.isBlank(endGmtCreate) || StringUtils.isBlank(pageSize) || StringUtils.isBlank(currentPage) ){
+        if( StringUtils.isBlank(merchNo) || StringUtils.isBlank(pageSize) || StringUtils.isBlank(currentPage) || StringUtils.isBlank(pullOrderNo) ){
+
             responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
 
@@ -92,26 +89,22 @@ public class OrderQueryController {
 
             return JsonUtils.toJson(responseMap);
         }
+
         //查询订单信息
         GetShopBargainRechargeOrderRequest  requstRecgarge=new GetShopBargainRechargeOrderRequest();
         Map<String,Object> map = new HashMap<>();
 
-        if( StringUtils.isNotBlank(orderNo) ){
+        if( StringUtils.isNotBlank(pullOrderNo) ){
 
-            map.put("orderNo",orderNo);
-            requstRecgarge.setOrderNo(orderNo);
-
-        }
-        if( StringUtils.isNotBlank(startGmtCreate) ){
-
-            map.put("startGmtCreate",startGmtCreate);
-            requstRecgarge.setAddtimeStart(startGmtCreate);
+            map.put("pullOrderNo",pullOrderNo);
+            requstRecgarge.setPullOrderNo(pullOrderNo);
 
         }
-        if( StringUtils.isNotBlank(endGmtCreate) ){
+        if( StringUtils.isNotBlank(merchNo) ){
 
-            map.put("endGmtCreate",endGmtCreate);
-            requstRecgarge.setAddtimeEnd(endGmtCreate);
+            map.put("merchNo",merchNo);
+            requstRecgarge.setMerchNo(merchNo);
+
         }
         if( StringUtils.isNotBlank(pageSize) ){
 
@@ -135,17 +128,34 @@ public class OrderQueryController {
         Map<String,Object> treeMap = new TreeMap<>();
         treeMap.putAll(map);
 
-
-        //校验来源数据是否合法
-        String selfSign = getListSign(map);
-        if(!selfSign.equals(sign)){
-
-            responseMap.put("code",JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
-            responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
-
+        String respos = ToolUtils.mapToUrl(treeMap);
+        //商户密码
+        ChargeCompanyInfo record = new ChargeCompanyInfo();
+        record.setMerchNo(merchNo);
+        ChargeCompanyInfo result = chargeCompanyServiceFacade.getOne(record);
+        //商户不存在
+        if(result==null || result.getIsDel() == 1 ){
+            responseMap.put("code",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
             return JsonUtils.toJson(responseMap);
         }
+        //商户删除 或者  商户关闭服务
+        if( result.getIsFreeze() == 1 ){
 
+            responseMap.put("code",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc());
+            return JsonUtils.toJson(responseMap);
+        }
+        String  privateKey = result.getPrivateKey();
+
+        //校验来源数据是否合法
+        String selfSign = Md5Encrypt.md5(respos+privateKey).toUpperCase();
+
+        if(!selfSign.equals(sign)){
+            responseMap.put("code",JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
+            return JsonUtils.toJson(responseMap);
+        }
 
 
         GetShopBargainRechargeOrderResponse responseRecharge=shopBargainRechargeOrderServiceFacade.getRecords(requstRecgarge);
@@ -163,7 +173,7 @@ public class OrderQueryController {
         JSONObject jsonObject=new JSONObject();
         Map<String,Object> returnMap=new HashMap<>();
 
-        //金额限制
+
 
         for (ShopBargainRechargeOrderInfo one:listRecharge){
 
@@ -211,17 +221,6 @@ public class OrderQueryController {
 
         return JsonUtils.toJson(responseMap);
 
-    }
-    /**
-     * 获取订单列表签名
-     */
-    private String getListSign(Map<String,Object> map){
-
-        String aa = ConfigUtil.getValue("API_SECRET");
-        String myPackage = map.get("currentPage").toString() + map.get("endGmtCreate").toString() + map.get("pageSize").toString() + map.get("startGmtCreate").toString() + aa;
-        String sign = Md5Encrypt.md5(myPackage).toUpperCase();
-
-        return sign;
     }
 
     //参数拼接
@@ -383,4 +382,15 @@ public class OrderQueryController {
         return responseMap;
     }
 
+    public static void main(String[] args) {
+        String str = Md5Encrypt.md5("currentPage=1&merchNo=MC1541126786498921482&pageSize=10&pullOrderNo=PU1541751416887748218ZbwJbbaeSdRuqSeb").toUpperCase();
+        System.out.println(str);
+
+        String a="strsss";
+        String b = a;
+        a="zzzzz";
+        System.out.println( a );
+        System.out.println(b);
+
+    }
 }
