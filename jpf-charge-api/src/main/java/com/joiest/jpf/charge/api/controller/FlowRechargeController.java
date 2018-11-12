@@ -460,6 +460,10 @@ public class FlowRechargeController {
             sendParam.put("code","10001");
             sendParam.put("info","充值失败");
             sbf.append("\n订单状态：充值失败");
+
+            //充值失败返还商户资金
+            JSONObject isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
+            sbf.append("\n充值失败返还商户金额："+isRet.toString());
         }else{
 
             upOrderInfo.setStatus((byte)2);

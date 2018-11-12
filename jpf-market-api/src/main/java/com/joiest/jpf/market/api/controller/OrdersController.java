@@ -47,6 +47,9 @@ public class OrdersController {
     private ShopCustomerInterfaceInfo userInfo;
 
     @Autowired
+    private ChargeCompanyServiceFacade chargeCompanyServiceFacade;
+
+    @Autowired
     private ChargeInterfaceStreamFacade chargeInterfaceStreamFacade;
 
     private String reg_phone = "^((13[0-9])|(14[5|7|9])|(15([0-3]|[5-9]))|(17[0-8])|(18[0,0-9])|(19[1|8|9])|(16[6]))\\d{8}$";
@@ -1275,6 +1278,10 @@ public class OrdersController {
 
                             sendParam.put("code","10008");
                             sendParam.put("info","充值失败");
+
+                            //充值失败返还商户资金
+                            JSONObject isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
+                            sbf.append("\n充值失败返还商户金额："+isRet.toString());
                         }
                         upOrderInfo.setId(orderInfo.getId());
                         upOrderInfo.setNotifyParams(JSONObject.fromObject(sendParam).toString());

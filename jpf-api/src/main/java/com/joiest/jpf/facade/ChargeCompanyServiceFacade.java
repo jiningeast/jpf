@@ -5,6 +5,8 @@ import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
+import com.joiest.jpf.entity.ChargeOrderInfo;
+import net.sf.json.JSONObject;
 
 public interface ChargeCompanyServiceFacade {
 
@@ -37,4 +39,9 @@ public interface ChargeCompanyServiceFacade {
      * 根据主键更新公司信息
      */
     public JpfResponseDto updateCompanyRecord(PayChargeCompany payChargeCompany);
+
+    /**
+     * 充值失败返还商户资金
+     * */
+    public JSONObject returnComfunds(ChargeOrderInfo orderInfo);
 }
