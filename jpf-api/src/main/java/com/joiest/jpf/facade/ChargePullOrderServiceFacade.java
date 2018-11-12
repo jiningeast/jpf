@@ -13,7 +13,12 @@ public interface ChargePullOrderServiceFacade {
      * @param merchNo 商户号
      * @param money 拉取金额
      */
-    Map<String,Object> savePayOrder(String merchNo, String money, ChargeCompanyInfo companyInfo);
+    Map<String,Object> savePayOrder(String merchNo, String money, ChargeCompanyInfo companyInfo) throws  Exception;
 
+    /**
+     * 多线程去处理正式系统的订单和流水
+     * @param marchingDataRequest
+     * @param httpResponse
+     */
     void matchingDataByThread(MarchingDataRequest marchingDataRequest, HttpServletResponse httpResponse);
 }
