@@ -80,15 +80,6 @@ public class FlowRechargeController {
             actTreeParam.putAll(actParam);
             String outsign = actParam.get("sign");
 
-            StringBuilder sbf = new StringBuilder();
-            sbf.append("\n\nTime:" + DateUtils.getCurDate());
-            sbf.append("\n接口类型:充值入口");
-            sbf.append("\n访问地址："+request.getRequestURL().toString());
-            sbf.append("\n请求参数：" + JSONObject.fromObject(actParam).toString());
-            String fileName = "ApiEntrance";
-            String path = "/logs/jpf-charge-api/log/";
-            LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
-
             if(!actParam.containsKey("service") || actParam.get("service").isEmpty()){
 
                 validate = false;
@@ -126,6 +117,16 @@ public class FlowRechargeController {
                     }
                 }
             }
+
+            StringBuilder sbf = new StringBuilder();
+            sbf.append("\n\nTime:" + DateUtils.getCurDate());
+            sbf.append("\n接口类型:充值入口");
+            sbf.append("\n访问地址："+request.getRequestURL().toString());
+            sbf.append("\n请求参数：" + JSONObject.fromObject(actParam).toString());
+            sbf.append("\n返回："+respond);
+            String fileName = "ApiEntrance";
+            String path = "/logs/jpf-charge-api/log/";
+            LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
         }
 
         return "1";

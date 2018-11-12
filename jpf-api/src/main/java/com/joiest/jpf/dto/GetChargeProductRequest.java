@@ -109,6 +109,8 @@ public class GetChargeProductRequest implements Serializable {
 
     private long page;
 
+
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {

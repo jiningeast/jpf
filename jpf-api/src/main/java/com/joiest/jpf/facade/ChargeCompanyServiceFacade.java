@@ -26,6 +26,10 @@ public interface ChargeCompanyServiceFacade {
     public ChargeCompanyInfo getRecordByPrimaryKey(String id);
 
     /**
+     * 根据商户号获取商户
+     */
+    public ChargeCompanyInfo getRecordByMerchNo(String merchNO);
+    /**
      * 添加商户
      */
     public int addRecord(ChargeCompanyInfo chargeCompanyInfo);
@@ -44,4 +48,11 @@ public interface ChargeCompanyServiceFacade {
      * 充值失败返还商户资金
      * */
     public JSONObject returnComfunds(ChargeOrderInfo orderInfo);
+
+
+    /**
+     * 用户修改密码
+     */
+    public JpfResponseDto updatePassword(String merchNo,String oldPass,String newPass);
+
 }

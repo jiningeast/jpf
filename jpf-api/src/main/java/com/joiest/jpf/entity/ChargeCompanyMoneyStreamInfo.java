@@ -124,6 +124,34 @@ public class ChargeCompanyMoneyStreamInfo {
      */
     private Date updatetime;
 
+    /**
+     * 订单文字
+     */
+    private String statusCn;
+
+    /**
+     * 收支类型转换
+     */
+    private String streamReturn;
+
+    /**
+     * 接口类型转换
+     */
+    private String interfaceReturn;
+
+    /**
+     * 流水类型转换
+     */
+    private String statusReturn;
+
+    /**
+     * 删除标记 0=未删除 1=已删除
+     */
+    private String isDelCn;
+
+
+    private static final long serialVersionUID = 1L;
+
     public String getId() {
         return id;
     }
@@ -314,5 +342,45 @@ public class ChargeCompanyMoneyStreamInfo {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getStatusCn() {
+        return statusCn;
+    }
+
+    public void setStatusCn(String statusCn) {
+        this.statusCn = statusCn;
+    }
+
+    public String getStreamReturn() {
+        return streamReturn;
+    }
+
+    public void setStreamReturn(String streamReturn) {
+        this.streamReturn = streamReturn;
+    }
+
+    public String getInterfaceReturn() {
+        return interfaceReturn;
+    }
+
+    public void setInterfaceReturn(String interfaceReturn) {
+        this.interfaceReturn = interfaceReturn;
+    }
+
+    public String getStatusReturn() {
+        return statusReturn;
+    }
+
+    public void setStatusReturn(String statusReturn) {
+        this.statusReturn = statusReturn;
+    }
+
+    public String getIsDelCn() {
+        return isDelCn;
+    }
+
+    public void setIsDelCn(String isDelCn) {
+        this.isDelCn = isDelCn;
     }
 }

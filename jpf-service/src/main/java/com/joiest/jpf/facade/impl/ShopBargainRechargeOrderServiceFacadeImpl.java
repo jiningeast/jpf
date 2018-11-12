@@ -3,6 +3,7 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrderExample;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopBargainRechargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBargainRechargeOrderMapper;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderResponse;
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +21,15 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
 
     @Autowired
     private PayShopBargainRechargeOrderMapper payShopBargainRechargeOrderMapper;
+    @Autowired
+    private PayShopBargainRechargeOrderCustomMapper payShopBargainRechargeOrderCustomMapper;
 
     /**
      * 获取敬恒订单
      */
     @Override
     public GetShopBargainRechargeOrderResponse getRecords(GetShopBargainRechargeOrderRequest request){
+
         GetShopBargainRechargeOrderResponse response = new GetShopBargainRechargeOrderResponse();
         List<ShopBargainRechargeOrderInfo> infos = new ArrayList<>();
 
@@ -70,5 +75,10 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         response.setCount(count);
 
         return response;
+    }
+
+    @Override
+    public BigDecimal getMoneyTotal() {
+        return payShopBargainRechargeOrderCustomMapper.getTotalMoney();
     }
 }

@@ -5,9 +5,11 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyExample;
+import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayChargeCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
@@ -28,6 +30,9 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
     @Autowired
     private PayChargeCompanyMapper payChargeCompanyMapper;
+
+    @Autowired
+    private PayChargeCompanyCustomMapper payChargeCompanyCustomMapper;
 
     /**
      * 获取商户列表
@@ -98,7 +103,29 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         beanCopier.copy(list.get(0),info,null);
         return info;
     }
+    /**
+     * 根据商户号获取商户
+     * */
+    @Override
+    public ChargeCompanyInfo getRecordByMerchNo(String merchNO){
 
+        PayChargeCompanyExample example = new PayChargeCompanyExample();
+        PayChargeCompanyExample.Criteria c = example.createCriteria();
+        if(StringUtils.isNotBlank(merchNO)){
+            c.andMerchNoEqualTo(merchNO);
+        }else{
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "商户号不能为空");
+        }
+
+        List<PayChargeCompany> list = payChargeCompanyMapper.selectByExample(example);
+        if( list == null || list.size() <=0  ){
+            return null;
+        }
+        ChargeCompanyInfo info = new ChargeCompanyInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayChargeCompany.class,ChargeCompanyInfo.class,false);
+        beanCopier.copy(list.get(0),info,null);
+        return info;
+    }
     /**
      * 根据主键id获取商户
      */
@@ -131,8 +158,27 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         payChargeCompany.setMoney(new BigDecimal(0));
         payChargeCompany.setIsDel((byte)0);
         payChargeCompany.setAddtime(new Date());
+        payChargeCompanyCustomMapper.insertSelective(payChargeCompany);
+        int ret = 0;
+        if( StringUtils.isNotBlank(payChargeCompany.getId()) ){
+            //初始化金额校验码
+            String keyStr = ConfigUtil.getValue("MERCH_VALIDE_CODE");
+            BigDecimal money = new BigDecimal("0.00");
+            String newCode = ToolUtils.CreateCode(money.toString(),payChargeCompany.getId(),keyStr);
+            PayChargeCompany chargeCompany = new PayChargeCompany();
+            chargeCompany.setMoneyCode(newCode);
+            chargeCompany.setId(payChargeCompany.getId());
+            int upCou = payChargeCompanyMapper.updateByPrimaryKeySelective(chargeCompany);
+            if( upCou != 1 ){
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "操作失败");
+            }else{
+                ret = 1;
+            }
+        }else{
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "操作异常");
+        }
 
-        return payChargeCompanyMapper.insertSelective(payChargeCompany);
+        return ret;
     }
 
     /**
@@ -166,6 +212,37 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         return new JpfResponseDto();
     }
 
+    /**
+     * 修改用户密码
+     */
+    @Override
+    public JpfResponseDto updatePassword(String merchNo,String oldPass,String newPass)
+    {
+        if(StringUtils.isNotBlank(merchNo)&& StringUtils.isNotBlank(oldPass)&& StringUtils.isNotBlank(newPass)){
+           //修改数据
+           PayChargeCompanyExample example=new PayChargeCompanyExample();
+           PayChargeCompanyExample.Criteria c=example.createCriteria();
+           c.andMerchNoEqualTo(merchNo);
+           List<PayChargeCompany> listCom=payChargeCompanyMapper.selectByExample(example);
+           if(listCom==null || listCom.isEmpty()){
+               throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "此信息不存在");
+           }
+           PayChargeCompany company=new PayChargeCompany();
+           String newpass= Md5Encrypt.md5(newPass);
+           company.setPassword(newpass);
+
+           int count=payChargeCompanyMapper.updateByExampleSelective(company,example);
+
+            if(count != 1 ){
+                throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "更新失败");
+            }
+
+        }else{
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "参数错误");
+        }
+
+        return new JpfResponseDto();
+    }
     /**
      * 充值失败返还商户资金
      * */

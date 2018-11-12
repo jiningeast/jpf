@@ -5,7 +5,9 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeProduct;
 import com.joiest.jpf.common.po.PayChargeProductExample;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeProductMapper;
+import com.joiest.jpf.dto.ChargeProductInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeProductRequest;
 import com.joiest.jpf.dto.GetChargeProductResponse;
 import com.joiest.jpf.entity.ChargeProductInfo;
@@ -73,6 +75,8 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
      */
     @Override
     public GetChargeProductResponse getProductList(GetChargeProductRequest request) {
+
+
         if (request.getPage() <= 0) {
             request.setPage(1);
         }
@@ -93,6 +97,65 @@ public class ChargeProductServiceFacadeImpl implements ChargeProductServiceFacad
             c.andIsOnSaleEqualTo(request.getIsOnSale());
         }
 
+        GetChargeProductResponse response = new GetChargeProductResponse();
+        List<PayChargeProduct> list = payChargeProductMapper.selectByExample(example);
+        int count = payChargeProductMapper.countByExample(example);
+        response.setCount(count);
+        List<ChargeProductInfo> resultList = new ArrayList<>();
+        for (PayChargeProduct one : list)
+        {
+            ChargeProductInfo info = new ChargeProductInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayChargeProduct.class, ChargeProductInfo.class, false);
+            beanCopier.copy(one, info, null);
+
+            resultList.add(info);
+        }
+        response.setList(resultList);
+
+        return response;
+    }
+
+
+    /**
+     * 查询商品列表信息，并返回数量
+     */
+    @Override
+    public GetChargeProductResponse getProductListInterface(ChargeProductInterfaceRequest request) {
+
+
+        PayChargeProductExample example = new PayChargeProductExample();
+        if ( request.getPageSize() !=null && StringUtils.isNotBlank(request.getPageSize()) )
+        {
+            example.setPageSize(Long.parseLong(request.getPageSize()));
+        }
+
+        if ( request.getPage() !=null && StringUtils.isNotBlank(request.getPage()) )
+        {
+            example.setPageNo(Long.parseLong(request.getPage()));
+        }
+
+        example.setOrderByClause("addtime DESC");
+        PayChargeProductExample.Criteria c = example.createCriteria();
+
+        if ( StringUtils.isNotBlank(request.getKeyword()) )
+        {
+            c.andNameLike("%" + request.getKeyword().trim()+ "%");
+        }
+        // 添加时间搜索
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
+        if(request.getIsOnSale()!=null && !request.getIsOnSale().equals("")){
+            c.andIsOnSaleEqualTo(Byte.valueOf(request.getIsOnSale()));
+        }
+        if(request.getType()!=null && !request.getType().equals("")){
+            c.andTypeEqualTo(Integer.parseInt(request.getType()));
+        }
         GetChargeProductResponse response = new GetChargeProductResponse();
         List<PayChargeProduct> list = payChargeProductMapper.selectByExample(example);
         int count = payChargeProductMapper.countByExample(example);

@@ -81,16 +81,6 @@ public class PayShopBargainRechargeOrder implements Serializable {
     private Date rechargeTime;
 
     /**
-     * 下单时间
-     */
-    private Date addtime;
-
-    /**
-     * 更新时间
-     */
-    private Date updatetime;
-
-    /**
      * 1:未绑定; 2:已绑定
      */
     private Integer infoStatus;
@@ -99,6 +89,31 @@ public class PayShopBargainRechargeOrder implements Serializable {
      * 订单信息
      */
     private String module;
+
+    /**
+     * 拉取数据时匹配给了哪个商户id
+     */
+    private String pullCompanyId;
+
+    /**
+     * 拉取数据时匹配给了哪个商户号
+     */
+    private String pullMerchNo;
+
+    /**
+     * 拉取数据时对应的订单号
+     */
+    private String pullOrderNo;
+
+    /**
+     * 下单时间
+     */
+    private Date addtime;
+
+    /**
+     * 更新时间
+     */
+    private Date updatetime;
 
     private static final long serialVersionUID = 1L;
 
@@ -222,22 +237,6 @@ public class PayShopBargainRechargeOrder implements Serializable {
         this.rechargeTime = rechargeTime;
     }
 
-    public Date getAddtime() {
-        return addtime;
-    }
-
-    public void setAddtime(Date addtime) {
-        this.addtime = addtime;
-    }
-
-    public Date getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
-    }
-
     public Integer getInfoStatus() {
         return infoStatus;
     }
@@ -252,6 +251,46 @@ public class PayShopBargainRechargeOrder implements Serializable {
 
     public void setModule(String module) {
         this.module = module == null ? null : module.trim();
+    }
+
+    public String getPullCompanyId() {
+        return pullCompanyId;
+    }
+
+    public void setPullCompanyId(String pullCompanyId) {
+        this.pullCompanyId = pullCompanyId == null ? null : pullCompanyId.trim();
+    }
+
+    public String getPullMerchNo() {
+        return pullMerchNo;
+    }
+
+    public void setPullMerchNo(String pullMerchNo) {
+        this.pullMerchNo = pullMerchNo == null ? null : pullMerchNo.trim();
+    }
+
+    public String getPullOrderNo() {
+        return pullOrderNo;
+    }
+
+    public void setPullOrderNo(String pullOrderNo) {
+        this.pullOrderNo = pullOrderNo == null ? null : pullOrderNo.trim();
+    }
+
+    public Date getAddtime() {
+        return addtime;
+    }
+
+    public void setAddtime(Date addtime) {
+        this.addtime = addtime;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 
     /**
@@ -278,10 +317,13 @@ public class PayShopBargainRechargeOrder implements Serializable {
         sb.append(", status=").append(status);
         sb.append(", rechargeStatus=").append(rechargeStatus);
         sb.append(", rechargeTime=").append(rechargeTime);
-        sb.append(", addtime=").append(addtime);
-        sb.append(", updatetime=").append(updatetime);
         sb.append(", infoStatus=").append(infoStatus);
         sb.append(", module=").append(module);
+        sb.append(", pullCompanyId=").append(pullCompanyId);
+        sb.append(", pullMerchNo=").append(pullMerchNo);
+        sb.append(", pullOrderNo=").append(pullOrderNo);
+        sb.append(", addtime=").append(addtime);
+        sb.append(", updatetime=").append(updatetime);
         sb.append("]");
         return sb.toString();
     }
@@ -317,10 +359,13 @@ public class PayShopBargainRechargeOrder implements Serializable {
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getRechargeStatus() == null ? other.getRechargeStatus() == null : this.getRechargeStatus().equals(other.getRechargeStatus()))
             && (this.getRechargeTime() == null ? other.getRechargeTime() == null : this.getRechargeTime().equals(other.getRechargeTime()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
             && (this.getInfoStatus() == null ? other.getInfoStatus() == null : this.getInfoStatus().equals(other.getInfoStatus()))
-            && (this.getModule() == null ? other.getModule() == null : this.getModule().equals(other.getModule()));
+            && (this.getModule() == null ? other.getModule() == null : this.getModule().equals(other.getModule()))
+            && (this.getPullCompanyId() == null ? other.getPullCompanyId() == null : this.getPullCompanyId().equals(other.getPullCompanyId()))
+            && (this.getPullMerchNo() == null ? other.getPullMerchNo() == null : this.getPullMerchNo().equals(other.getPullMerchNo()))
+            && (this.getPullOrderNo() == null ? other.getPullOrderNo() == null : this.getPullOrderNo().equals(other.getPullOrderNo()))
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
     }
 
     /**
@@ -345,10 +390,13 @@ public class PayShopBargainRechargeOrder implements Serializable {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getRechargeStatus() == null) ? 0 : getRechargeStatus().hashCode());
         result = prime * result + ((getRechargeTime() == null) ? 0 : getRechargeTime().hashCode());
-        result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
-        result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getInfoStatus() == null) ? 0 : getInfoStatus().hashCode());
         result = prime * result + ((getModule() == null) ? 0 : getModule().hashCode());
+        result = prime * result + ((getPullCompanyId() == null) ? 0 : getPullCompanyId().hashCode());
+        result = prime * result + ((getPullMerchNo() == null) ? 0 : getPullMerchNo().hashCode());
+        result = prime * result + ((getPullOrderNo() == null) ? 0 : getPullOrderNo().hashCode());
+        result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
+        result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         return result;
     }
 }
