@@ -16,6 +16,7 @@ import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import com.joiest.jpf.facade.ChargeProductServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.stereotype.Controller;
@@ -52,33 +53,15 @@ public class FlowQueryController {
      */
     @RequestMapping(value = "/financeQuery",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     @ResponseBody
-    public String financeQuery(HttpServletRequest request){
-        String startTime = request.getParameter("starttime");
-        String endTime = request.getParameter("endtime");
-        String pageNum = request.getParameter("pagenum");
-        String pageSize = request.getParameter("pagesize");
-        String paymentType = request.getParameter("paymenttype");
-
+    public String financeQuery(HttpServletRequest request) throws DocumentException {
         Map<String,String> mapParam = new HashMap<String, String>();
-        mapParam.put("starttime",startTime);
-        mapParam.put("endtime",endTime);
-        mapParam.put("pagenum",pageNum);
-        mapParam.put("pagesize",pageSize);
-        mapParam.put("paymenttype",paymentType);
+        mapParam.put("starttime",request.getParameter("starttime"));
+        mapParam.put("endtime",request.getParameter("endtime"));
+        mapParam.put("pagenum",request.getParameter("pagenum"));
+        mapParam.put("pagesize",request.getParameter("pagesize"));
+        mapParam.put("paymenttype",request.getParameter("paymenttype"));
 
         Map<String,String> responseMap = new OfpayUtils().financequery(mapParam);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n\nTime:" + DateUtils.getCurDate());
-        stringBuilder.append("\n接口名称：自动对账接口_账务明细部分");
-        stringBuilder.append("\n请求地址：" + request.getQueryString());
-        if(responseMap.get("retcode").equals("1")){
-            stringBuilder.append("\n欧非账务明细查询状态：SUCCESS");
-            stringBuilder.append("\n\t接口返回信息："+JSONObject.fromObject(responseMap).toString());
-        }else{
-            stringBuilder.append("\n欧非账务明细查询状态：ERROR");
-            stringBuilder.append("\n\t接口返回信息："+JSONObject.fromObject(responseMap).toString());
-        }
         return JsonUtils.toJson(responseMap);
     }
 

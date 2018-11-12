@@ -137,7 +137,7 @@ public class ChargeOrderController {
             ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
             String companyId = chargeOrderInfo.getCompanyId();
             companyInfo.setId(companyId);
-            ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getOne(companyInfo);
+            ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(companyId);
             if( chargeCompanyInfo == null ){
                 throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到商户信息");
             }
