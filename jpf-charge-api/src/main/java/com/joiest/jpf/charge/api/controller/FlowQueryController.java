@@ -61,8 +61,10 @@ public class FlowQueryController {
         mapParam.put("pagesize",request.getParameter("pagesize"));
         mapParam.put("paymenttype",request.getParameter("paymenttype"));
 
-        Map<String,String> responseMap = new OfpayUtils().financequery(mapParam);
-        return JsonUtils.toJson(responseMap);
+        //Map<String,String> responseMap = new OfpayUtils().financequery(mapParam);
+        String responseMap = new OfpayUtils().financequery(mapParam);
+
+        return responseMap;
     }
 
     /**

@@ -267,7 +267,7 @@
                         "menuid" : "611",
                         "menuname" : "欧飞财务资金流水",
                         "icon" : "icon-nav",
-                        "url" : "chargeOrder/caiwuIndex"
+                        "url" : "ofpay/index"
                     }]
             },{
                 "menuid" : "7",

@@ -72,7 +72,7 @@ public class OfpayUtils {
      * @return
      * @version 6.0
      */
-    public Map<String,String> financequery(Map<String,String> queryMap) throws DocumentException {
+    public String financequery(Map<String,String> queryMap) throws DocumentException {
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid",userid); // 商户号
         requestMap.put("userpws",Md5Encrypt.md5(userpws));  // 商户密码
@@ -96,12 +96,13 @@ public class OfpayUtils {
         stringBuilder.append("\n接口参数：" + requestMap);
         stringBuilder.append("\n回调信息：" + resultXml);
 
-        Map<String, String> resultMap = new HashMap<>();
-        System.out.println("转换后的json字符串是：" + JsonUtils.xmlToJson(resultXml).toString());
+        //Map<String, String> resultMap = new HashMap<>();
+        JSONObject resultMap = new JSONObject();
+        //System.out.println("转换后的json字符串是：" + JsonUtils.xmlToJson(resultXml).toString());
         resultMap.put("responseParam",JsonUtils.xmlToJson(resultXml).toString());
         resultMap.put("requestUrl", finance_query);
         resultMap.put("requestParam", requestParam);
-        return resultMap;
+        return resultMap.toString();
     }
 
     /**
