@@ -3,12 +3,10 @@ package com.joiest.jpf.common.util;
 import com.joiest.jpf.common.constant.ManageConstants;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
+import org.dom4j.DocumentException;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OfpayUtils {
 
@@ -74,7 +72,7 @@ public class OfpayUtils {
      * @return
      * @version 6.0
      */
-    public Map<String,String> financequery(Map<String,String> queryMap){
+    public Map<String,String> financequery(Map<String,String> queryMap) throws DocumentException {
         Map<String,Object> requestMap = new LinkedHashMap<>();
         requestMap.put("userid",userid); // 商户号
         requestMap.put("userpws",Md5Encrypt.md5(userpws));  // 商户密码
@@ -98,8 +96,9 @@ public class OfpayUtils {
         stringBuilder.append("\n接口参数：" + requestMap);
         stringBuilder.append("\n回调信息：" + resultXml);
 
-        Map<String, String> resultMap = new ReadXML().getBooksOneByStr(resultXml);
-        resultMap.put("responseParam",JSONObject.fromObject(resultMap).toString());
+        Map<String, String> resultMap = new HashMap<>();
+        System.out.println("转换后的json字符串是：" + JsonUtils.xmlToJson(resultXml).toString());
+        resultMap.put("responseParam",JsonUtils.xmlToJson(resultXml).toString());
         resultMap.put("requestUrl", finance_query);
         resultMap.put("requestParam", requestParam);
         return resultMap;
