@@ -1,10 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.*;
-import com.joiest.jpf.common.util.ArithmeticUtils;
-import com.joiest.jpf.common.util.ConfigUtil;
-import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargePullOrderCustomMapper;
@@ -20,11 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceFacade {
-
-    @Autowired
-    private PayChargePullOrderMapper payChargePullOrderMapper;
 
     @Autowired
     private PayChargePullOrderCustomMapper payChargePullOrderCustomMapper;
@@ -41,11 +39,16 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
     @Autowired
     private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
 
-    List<PayShopBargainRechargeOrder> matchaingList = new ArrayList<PayShopBargainRechargeOrder>();
+    private volatile List<PayShopBargainRechargeOrder> matchaingList;
+
+    //用户传入的金额
+    private volatile  String incomingAmount="";
+    //匹配到的总金额
+    private volatile  String totalMoney="";
 
     @Transactional(rollbackFor=Exception.class)
     @Override
-    public Map<String,Object>  savePayOrder(String merchNo, String money, ChargeCompanyInfo companyInfo) {
+    public Map<String,Object>  savePayOrder(String merchNo, String money, ChargeCompanyInfo companyInfo) throws Exception {
         PayChargePullOrder order  =new PayChargePullOrder();
         String orderNo = "PU"+System.currentTimeMillis()+ ToolUtils.getRandomInt(100000,999999);
         order.setAddtime(new Date());
@@ -55,12 +58,17 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
         order.setMatchRecordsAmount(0);
         order.setMerchNo(merchNo);
         payChargePullOrderCustomMapper.insertSelective(order);
-        String totalMoney ="0";
-        int startNum = 0;
-        int endNum = 500;
-        String lastMoney = "0";
+        //String totalMoney ="0";
+        //int startNum = 0;
+        //int endNum = 500;
+        // String lastMoney = "0";
         //做匹配数据操作,并且保存数据库，返回匹配的数据和匹配的金额
-        totalMoney = recursionSub(merchNo, money, companyInfo, orderNo, totalMoney,startNum,endNum,lastMoney);
+        //totalMoney = recursionSub(merchNo, money, companyInfo, orderNo, totalMoney,startNum,endNum,lastMoney);
+
+        matchingDataCountDownLatch(merchNo,money,companyInfo,orderNo);
+        //批量更新数据
+        payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(matchaingList);
+        //更改定单的匹配金额和匹配的条数
         order.setMatchMoney(new BigDecimal(totalMoney));
         order.setMatchRecordsAmount(matchaingList.size());
         payChargePullOrderCustomMapper.updateByPrimaryKeySelective(order);
@@ -78,15 +86,74 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
         return map;
     }
 
+
     /**
      * 递归匹配记录
      * @param merchNo 商户号
      * @param money 商户输入金额
      * @param companyInfo 商户信息
      * @param orderNo 商户下单单号
-     * @param totalMoney 匹配的总钱数
      */
-    private String recursionSub(String merchNo, String money,  ChargeCompanyInfo companyInfo, String orderNo, String totalMoney,int startNum,int endNum,String lastMoney) {
+    private void matchingDataCountDownLatch(String merchNo, final String money,  ChargeCompanyInfo companyInfo, String orderNo) throws Exception{
+        int threadNum=Integer.valueOf(ArithmeticUtils.div(money,"10000",0));
+        if(threadNum<=0){
+            threadNum=1;
+        }
+        final CountDownLatch cdl = new CountDownLatch(threadNum);
+        matchaingList=new ArrayList<>();
+        totalMoney="0";
+        incomingAmount=money;
+        ExecutorService exec = Executors.newCachedThreadPool();
+        //开启多个子任务，每完成一个任务，调用cdl.countDown()将计数减一，当计数变为0时，被阻塞的主任务将得到执行
+        //在它的技术变为0之前，cdl.await()方法会导致当前线程一直阻塞
+        System.out.println("需要等待" + cdl.getCount() + "个子任务完成！");
+
+        for (int i = 1; i <=threadNum; i++) {
+            final int count = i;
+            exec.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Map<String,Object> param = new HashMap<String,Object>();
+                    param.put("startNum", 200*(count-1));
+                    param.put("endNum",200);
+                    List<PayShopBargainRechargeOrder> orderList = payShopBargainRechargeOrderCustomMapper.getOrderListByNum(param);
+                    for (PayShopBargainRechargeOrder payShopBargainRechargeOrder:orderList) {
+                        //如果客户的剩余额小于10元了，或者剩余的钱为0了不查了
+                        if(new BigDecimal(incomingAmount).compareTo(new BigDecimal(0))<0||new BigDecimal(incomingAmount).compareTo(new BigDecimal(0))==0){
+                            break;
+                        }
+                        //如果记录的金额小于订单的金额，表示不够
+                        if(payShopBargainRechargeOrder.getAmount().compareTo(new BigDecimal(incomingAmount))<0){
+                            //扣除金额
+                            incomingAmount = ArithmeticUtils.sub(incomingAmount,payShopBargainRechargeOrder.getAmount().toString()).toString();
+                            //匹配的金额数相加
+                            totalMoney = ArithmeticUtils.add(totalMoney,payShopBargainRechargeOrder.getAmount().toString()).toString();
+                            setPayShopBro(merchNo,companyInfo,orderNo,payShopBargainRechargeOrder);
+                            continue;
+                        }else if(payShopBargainRechargeOrder.getAmount().compareTo(new BigDecimal(money))==0){
+                            //扣除金额
+                            incomingAmount = ArithmeticUtils.sub(incomingAmount,payShopBargainRechargeOrder.getAmount().toString()).toString();
+                            //匹配的金额数相加
+                            totalMoney = ArithmeticUtils.add(totalMoney,payShopBargainRechargeOrder.getAmount().toString()).toString();
+                            //设置数据
+                            setPayShopBro(merchNo,companyInfo,orderNo,payShopBargainRechargeOrder);
+                            break;
+                        }else {
+                            //表示本次记录的值已经大于客户的剩余的值，此记录放过
+                            continue;
+                        }
+                    }
+                    System.out.println("第" + count + "个任务已经完成");
+                    cdl.countDown();
+                }
+            });
+        }
+        exec.shutdown();
+        cdl.await();
+        System.out.println("主线程允许执行，任务完成！");
+
+    }
+   /* private String recursionSub(String merchNo, String money,  ChargeCompanyInfo companyInfo, String orderNo, String totalMoney,int startNum,int endNum,String lastMoney) {
         Map<String,Object> param = new HashMap<String,Object>();
         param.put("startNum",startNum);
         param.put("endNum",endNum);
@@ -127,7 +194,7 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
          }
 
         return totalMoney;
-    }
+    }*/
 
     /**
      * 根据金额匹配数据库的记录，并且对敬恒的记录进行更新，生成订单，生成交易流水
@@ -230,14 +297,12 @@ public class ChargePullOrderServiceFacadeImpl implements ChargePullOrderServiceF
 
 
     public static void main(String[] args) {
-       String str = Md5Encrypt.md5("merchNo=MC1541126786498921482&money=100.00ZbwJbbaeSdRuqSeb").toUpperCase();
+       String str = Md5Encrypt.md5("merchNo=MC1541126548324168863&money=50000.00imyHcZOzMmhukCqB").toUpperCase();
         System.out.println(str);
-
-        String a="strsss";
-        String b = a;
-        a="zzzzz";
-        System.out.println( a );
-        System.out.println(b);
-
+        String newCode = Md5Encrypt.md5("11" + "100000.00" + "Pwztib3qtekopERJ","UTF-8");
+        System.out.println(newCode);
+        String money = "100.00";
+        String i=ArithmeticUtils.div(money,"5000",0);
+        System.out.println(i);
     }
 }

@@ -7,6 +7,8 @@ public class GetShopBargainRechargeOrderRequest {
 
     private String orderNo;
 
+    private String merchNo;
+
     private Integer orderType;
 
     private String foreignOrderNo;
@@ -21,9 +23,15 @@ public class GetShopBargainRechargeOrderRequest {
 
     private Integer infoStatus;
 
+
     private int page;
 
     private int rows;
+
+    /**
+     * 拉取数据时对应的订单号
+     */
+    private String pullOrderNo;
 
     public String getOrderNo() {
         return orderNo;
@@ -103,5 +111,21 @@ public class GetShopBargainRechargeOrderRequest {
 
     public void setRows(int rows) {
         this.rows = rows;
+    }
+
+    public String getMerchNo() {
+        return merchNo;
+    }
+
+    public void setMerchNo(String merchNo) {
+        this.merchNo = merchNo;
+    }
+
+    public String getPullOrderNo() {
+        return pullOrderNo;
+    }
+
+    public void setPullOrderNo(String pullOrderNo) {
+        this.pullOrderNo = pullOrderNo;
     }
 }
