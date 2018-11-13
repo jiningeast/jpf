@@ -90,6 +90,16 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         if ( NOTLOGINURL.contains(requestUri) ) { // 不需要过滤的地址
             return super.preHandle(request, response, handler);
         } else if( !NOTLOGINURL.contains(requestUri) ) {
+
+            String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + Token);
+            if(openId_encrypt == null){
+                //WEIXIN_LOGIN_D5D160B52E1AAE2AD843ACEEBA3B69197BD047F7C6B8CE432F416ADF77D282A3924C802B52D7D65A26FED1F08BB6B700
+                //Token = "D5D160B52E1AAE2AD843ACEEBA3B69197BD047F7C6B8CE432F416ADF77D282A3924C802B52D7D65A26FED1F08BB6B700";
+                String tokenDe = AESUtils.decrypt(Token,ConfigUtil.getValue("AES_KEY"));
+                String tokenVal = AESUtils.encrypt(StringUtils.substring(tokenDe,18), ConfigUtil.getValue("AES_KEY"));
+
+                redisCustomServiceFacade.set(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + Token, tokenVal, Long.parseLong(ConfigUtil.getValue("MARKET_USER_LOGIN_EXPIRE_30")) );
+            }
             Boolean isLogin = userIsLogin(Token);
             if ( !isLogin )
             {

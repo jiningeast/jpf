@@ -1,9 +1,6 @@
 package com.joiest.jpf.market.api.controller;
 
-import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.util.OkHttpUtils;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +18,11 @@ public class DemoController {
     @ResponseBody
     public String demo()
     {
-        if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
-            return "0";
-        }else if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("1") ){
-            return "1";
-        }
+
+        //WEIXIN_LOGIN_D5D160B52E1AAE2AD843ACEEBA3B69197BD047F7C6B8CE432F416ADF77D282A3924C802B52D7D65A26FED1F08BB6B700
+        String Token = "D5D160B52E1AAE2AD843ACEEBA3B69197BD047F7C6B8CE432F416ADF77D282A3924C802B52D7D65A26FED1F08BB6B700";
+        String tokenDe = AESUtils.decrypt(Token,ConfigUtil.getValue("AES_KEY"));
+        String tokenVal = AESUtils.encrypt(StringUtils.substring(tokenDe,18), ConfigUtil.getValue("AES_KEY"));
 
         return "";
     }
