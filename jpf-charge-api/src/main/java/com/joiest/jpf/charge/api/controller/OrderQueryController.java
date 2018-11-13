@@ -135,9 +135,11 @@ public class OrderQueryController {
         ChargeCompanyInfo result = chargeCompanyServiceFacade.getOne(record);
         //商户不存在
         if(result==null || result.getIsDel() == 1 ){
+
             responseMap.put("code",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
             return JsonUtils.toJson(responseMap);
+
         }
         //商户删除 或者  商户关闭服务
         if( result.getIsFreeze() == 1 ){
@@ -178,7 +180,9 @@ public class OrderQueryController {
         for (ShopBargainRechargeOrderInfo one:listRecharge){
 
             jsonObject.put("id",one.getId());//序号
-            jsonObject.put("orderNo",one.getOrderNo());//订单号
+            //jsonObject.put("orderNo",one.getOrderNo());//订单号
+            jsonObject.put("pullOrderNo",one.getPullOrderNo());//充值单号
+            jsonObject.put("pullMerchNo",one.getPullMerchNo());//商户号
             jsonObject.put("orderType",one.getOrderType());//订单类型
             jsonObject.put("productName",one.getItemName());//商品名称
             jsonObject.put("price",one.getPrice());//商品单价
@@ -384,7 +388,7 @@ public class OrderQueryController {
     }
 
     public static void main(String[] args) {
-        String str = Md5Encrypt.md5("currentPage=1&merchNo=MC1541126786498921482&pageSize=10&pullOrderNo=PU1541751416887748218ZbwJbbaeSdRuqSeb").toUpperCase();
+        String str = Md5Encrypt.md5("currentPage=1&merchNo=MC1541126548324168863&pageSize=10&pullOrderNo=PU1542075850171380263imyHcZOzMmhukCqB").toUpperCase();
         System.out.println(str);
 
         String a="strsss";

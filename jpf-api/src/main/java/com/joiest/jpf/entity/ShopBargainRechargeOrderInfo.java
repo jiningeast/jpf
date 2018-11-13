@@ -95,6 +95,16 @@ public class ShopBargainRechargeOrderInfo {
      */
     private String module;
 
+    /**
+     * 拉取数据时匹配给了哪个商户号
+     */
+    private String pullMerchNo;
+
+    /**
+     * 拉取数据时对应的订单号
+     */
+    private String pullOrderNo;
+
     public Long getId() {
         return id;
     }
@@ -237,5 +247,21 @@ public class ShopBargainRechargeOrderInfo {
 
     public void setModule(String module) {
         this.module = module;
+    }
+
+    public String getPullMerchNo() {
+        return pullMerchNo;
+    }
+
+    public void setPullMerchNo(String pullMerchNo) {
+        this.pullMerchNo = pullMerchNo;
+    }
+
+    public String getPullOrderNo() {
+        return pullOrderNo;
+    }
+
+    public void setPullOrderNo(String pullOrderNo) {
+        this.pullOrderNo = pullOrderNo;
     }
 }
