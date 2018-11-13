@@ -299,7 +299,8 @@ public class OrderQueryController {
         data.put("orderNo",order.getOrderNo());
         data.put("totalNum",order.getMatchRecordsAmount());
         data.put("totalMoney",order.getMatchMoney());
-        //data.put("date",date+"--"+new Date());
+       /* data.put("date",date+"--"+new Date());
+        data.put("size",marchingDataRequest.getList().size());*/
         responseMap.put("data",data);
         return JsonUtils.toJson(responseMap);
     }
