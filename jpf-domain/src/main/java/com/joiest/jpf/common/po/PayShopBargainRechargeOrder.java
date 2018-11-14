@@ -115,6 +115,11 @@ public class PayShopBargainRechargeOrder implements Serializable {
      */
     private Date updatetime;
 
+    /**
+     * 匹配的状态，0未匹配，1是匹配中，2已匹配
+     */
+    private Byte matchingStatus;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -293,6 +298,14 @@ public class PayShopBargainRechargeOrder implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public Byte getMatchingStatus() {
+        return matchingStatus;
+    }
+
+    public void setMatchingStatus(Byte matchingStatus) {
+        this.matchingStatus = matchingStatus;
+    }
+
     /**
      *
      */
@@ -324,6 +337,7 @@ public class PayShopBargainRechargeOrder implements Serializable {
         sb.append(", pullOrderNo=").append(pullOrderNo);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", matchingStatus=").append(matchingStatus);
         sb.append("]");
         return sb.toString();
     }
@@ -365,7 +379,8 @@ public class PayShopBargainRechargeOrder implements Serializable {
             && (this.getPullMerchNo() == null ? other.getPullMerchNo() == null : this.getPullMerchNo().equals(other.getPullMerchNo()))
             && (this.getPullOrderNo() == null ? other.getPullOrderNo() == null : this.getPullOrderNo().equals(other.getPullOrderNo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getMatchingStatus() == null ? other.getMatchingStatus() == null : this.getMatchingStatus().equals(other.getMatchingStatus()));
     }
 
     /**
@@ -397,6 +412,7 @@ public class PayShopBargainRechargeOrder implements Serializable {
         result = prime * result + ((getPullOrderNo() == null) ? 0 : getPullOrderNo().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getMatchingStatus() == null) ? 0 : getMatchingStatus().hashCode());
         return result;
     }
 }

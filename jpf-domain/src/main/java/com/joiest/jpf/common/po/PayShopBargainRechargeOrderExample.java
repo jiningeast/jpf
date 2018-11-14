@@ -1576,6 +1576,66 @@ public class PayShopBargainRechargeOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andMatchingStatusIsNull() {
+            addCriterion("matching_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusIsNotNull() {
+            addCriterion("matching_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusEqualTo(Byte value) {
+            addCriterion("matching_status =", value, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusNotEqualTo(Byte value) {
+            addCriterion("matching_status <>", value, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusGreaterThan(Byte value) {
+            addCriterion("matching_status >", value, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("matching_status >=", value, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusLessThan(Byte value) {
+            addCriterion("matching_status <", value, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("matching_status <=", value, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusIn(List<Byte> values) {
+            addCriterion("matching_status in", values, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusNotIn(List<Byte> values) {
+            addCriterion("matching_status not in", values, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusBetween(Byte value1, Byte value2) {
+            addCriterion("matching_status between", value1, value2, "matchingStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andMatchingStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("matching_status not between", value1, value2, "matchingStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNoLikeInsensitive(String value) {
             addCriterion("upper(order_no) like", value.toUpperCase(), "orderNo");
             return (Criteria) this;

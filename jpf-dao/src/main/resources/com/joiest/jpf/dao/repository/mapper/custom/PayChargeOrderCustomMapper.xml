@@ -35,6 +35,7 @@
     <result column="is_del" jdbcType="TINYINT" property="isDel" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="consumer_order_no" jdbcType="VARCHAR" property="consumerOrderNo" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -111,7 +112,7 @@
     product_type, product_id, product_name, product_value, product_bid_price, product_price,
     product_amount, total_money, interface_type, interface_order_no, request_params,
     notify_url, notify_params, notify_time, status, operator_id, operator_name, check_id,
-    check_name, is_del, addtime, updatetime
+    check_name, is_del, addtime, updatetime,consumer_order_no
   </sql>
   <select id="selectByExample" parameterType="com.joiest.jpf.common.po.PayChargeOrderExample" resultMap="BaseResultMap">
     <!--
@@ -175,14 +176,14 @@
     product_price, product_amount, total_money,
     interface_type, request_params, notify_url,
     notify_params, notify_time, status,
-    addtime, updatetime)
+    addtime, updatetime, consumer_order_no)
     values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{foreignOrderNo,jdbcType=VARCHAR},
     #{companyId,jdbcType=BIGINT}, #{companyName,jdbcType=VARCHAR}, #{merchNo,jdbcType=VARCHAR},
     #{chargePhone,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR},
     #{productPrice,jdbcType=DECIMAL}, #{productAmount,jdbcType=INTEGER}, #{totalMoney,jdbcType=DECIMAL},
     #{interfaceType,jdbcType=TINYINT}, #{requestParams,jdbcType=VARCHAR}, #{notifyUrl,jdbcType=VARCHAR},
     #{notifyParams,jdbcType=VARCHAR}, #{notifyTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT},
-    #{addtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+    #{addtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP},#{consumerOrderNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.joiest.jpf.common.po.PayChargeOrder">
     <!--
@@ -251,6 +252,9 @@
       <if test="updatetime != null">
         updatetime,
       </if>
+      <if test="consumerOrderNo != null">
+        consumer_order_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -312,6 +316,9 @@
       </if>
       <if test="updatetime != null">
         #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consumerOrderNo != null">
+        #{consumerOrderNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -392,6 +399,9 @@
       <if test="record.updatetime != null">
         updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.consumerOrderNo != null">
+        consumer_order_no = #{record.consumerOrderNo,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -422,7 +432,8 @@
     notify_time = #{record.notifyTime,jdbcType=TIMESTAMP},
     status = #{record.status,jdbcType=TINYINT},
     addtime = #{record.addtime,jdbcType=TIMESTAMP},
-    updatetime = #{record.updatetime,jdbcType=TIMESTAMP}
+    updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
+    consumer_order_no = #{record.consumerOrderNo,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -491,6 +502,9 @@
       <if test="updatetime != null">
         updatetime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="consumerOrderNo != null">
+        consumer_order_no = #{consumerOrderNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -518,7 +532,8 @@
     notify_time = #{notifyTime,jdbcType=TIMESTAMP},
     status = #{status,jdbcType=TINYINT},
     addtime = #{addtime,jdbcType=TIMESTAMP},
-    updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    updatetime = #{updatetime,jdbcType=TIMESTAMP},
+    consumer_order_no = #{consumerOrderNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="SuccessCount" parameterType="com.joiest.jpf.common.po.PayChargeOrderExample" resultType="java.math.BigDecimal">
