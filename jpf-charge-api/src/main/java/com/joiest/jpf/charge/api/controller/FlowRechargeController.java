@@ -457,13 +457,22 @@ public class FlowRechargeController {
 
         if (request.getRet_code().equals("9")){    //1成功 9失败
 
-            upOrderInfo.setStatus((byte)3);
             sendParam.put("code","10001");
             sendParam.put("info","充值失败");
             sbf.append("\n订单状态：充值失败");
 
             //充值失败返还商户资金
             JSONObject isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
+            if(isRet.get("code").toString().equals("10000")){
+
+                upOrderInfo.setStatus((byte)5);
+            }else{
+
+                upOrderInfo.setStatus((byte)7);
+            }
+            String remark = orderInfo.getRemark()==null || orderInfo.getRemark()==""?"["+ DateUtils.getCurDate() + "]:"+isRet.get("info"):orderInfo.getRemark()+"&#13;&#10;["+ DateUtils.getCurDate() + "]:"+isRet.get("info");
+            upOrderInfo.setRemark(remark);
+
             sbf.append("\n充值失败返还商户金额："+isRet.toString());
         }else{
 

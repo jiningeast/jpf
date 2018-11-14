@@ -151,6 +151,11 @@ public class ChargeOrderInfo {
      */
     private Date updatetime;
 
+    /**
+     * 备注
+     */
+    private String remark;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -384,4 +389,13 @@ public class ChargeOrderInfo {
     public void setProductBidPrice(BigDecimal productBidPrice) {
         this.productBidPrice = productBidPrice;
     }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+
 }

@@ -111,7 +111,7 @@ public class PayChargeOrder implements Serializable {
     private Date notifyTime;
 
     /**
-     * 订单状态 0=平台下单成功 1=充值中 2=上游充值成功 3=上游充值失败 4=申请退款 5=退款成功 6=拒绝退款
+     * 订单状态 0=平台下单成功 1=充值中 2=上游充值成功 3=上游充值失败 4=申请退款 5=退款成功 6=拒绝退款 7=退款失败
      */
     private Byte status;
 
@@ -149,6 +149,16 @@ public class PayChargeOrder implements Serializable {
      * 更新时间
      */
     private Date updatetime;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * pay_charge_consumer_order表中的订单号
+     */
+    private String consumerOrderNo;
 
     private static final long serialVersionUID = 1L;
 
@@ -384,6 +394,22 @@ public class PayChargeOrder implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getConsumerOrderNo() {
+        return consumerOrderNo;
+    }
+
+    public void setConsumerOrderNo(String consumerOrderNo) {
+        this.consumerOrderNo = consumerOrderNo == null ? null : consumerOrderNo.trim();
+    }
+
     /**
      *
      */
@@ -422,6 +448,8 @@ public class PayChargeOrder implements Serializable {
         sb.append(", isDel=").append(isDel);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", remark=").append(remark);
+        sb.append(", consumerOrderNo=").append(consumerOrderNo);
         sb.append("]");
         return sb.toString();
     }
@@ -470,7 +498,9 @@ public class PayChargeOrder implements Serializable {
             && (this.getCheckName() == null ? other.getCheckName() == null : this.getCheckName().equals(other.getCheckName()))
             && (this.getIsDel() == null ? other.getIsDel() == null : this.getIsDel().equals(other.getIsDel()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+            && (this.getConsumerOrderNo() == null ? other.getConsumerOrderNo() == null : this.getConsumerOrderNo().equals(other.getConsumerOrderNo()));
     }
 
     /**
@@ -509,6 +539,8 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getIsDel() == null) ? 0 : getIsDel().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getConsumerOrderNo() == null) ? 0 : getConsumerOrderNo().hashCode());
         return result;
     }
 }

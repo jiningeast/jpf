@@ -111,6 +111,12 @@ public class PayChargeOrderCustom implements Serializable {
      */
     private Date updatetime;
 
+
+    /**
+     * 备注
+     */
+    private String remark;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -279,6 +285,14 @@ public class PayChargeOrderCustom implements Serializable {
 
     public void setProductType(Integer productType) {
         this.productType = productType;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     /**
