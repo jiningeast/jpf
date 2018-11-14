@@ -53,6 +53,20 @@
                 }
             });
 
+            $('#searchExportBtn').linkbutton({
+                onClick: function(){
+                    if( !$("#startAddTime_s").val() || !$("#endAddTime_s").val() ){
+                        $.messager.alert('消息提示', "创建起止时间不能为空！", 'error');
+                    }else{
+                        var queryArray = $('#searchForm').serialize();
+                        //var postData = parsePostData(queryArray);
+                        console.log(queryArray);
+                        var importExcelCaiwu = "./exprot?"+queryArray;
+                        window.location.href = importExcelCaiwu;
+                    }
+                }
+            });
+
             $('#searchRestBtn').linkbutton({
                 onClick: function(){
                     $('#searchForm').form('reset');
@@ -89,6 +103,7 @@
                             </td>
                         </tr>
                         <input type="hidden" name="page" value="1" />
+                        <input type="hidden" name="page" value="1" />
                         <input type="hidden" name="isSearch" value="1" />
                     </table>
                 </form>
@@ -96,7 +111,8 @@
         </div>
         <div id="CompanyChargeft" style="padding:5px;">
             <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
-            <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+            <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>&nbsp;&nbsp;
+            <a id="searchExportBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">导出</a>&nbsp;&nbsp;
         </div>
     </div>
     <table id="dg"></table>
