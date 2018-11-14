@@ -1,9 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.joiest.jpf.common.dto.JpfResponseDto;
-import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.entity.BankInfo;
+import com.joiest.jpf.common.util.OkHttpUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.facade.BankServiceFacade;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -16,11 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static java.lang.Math.ceil;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -44,7 +41,7 @@ public class OfPayController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list( long page, long rows,HttpServletRequest request  ){
+    public Map<String, Object> list( long page, long rows,String isSearch,HttpServletRequest request  ){
 
         String starttime = request.getParameter("startAddTime");
         String endtime = request.getParameter("endAddTime");

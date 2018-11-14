@@ -43,11 +43,22 @@
 
             $('#searchBtn').linkbutton({
                 onClick: function(){
-                    var queryArray = $('#searchForm').serializeArray();
-                    var postData = parsePostData(queryArray);
-                    $('#dg').datagrid('reload', postData);
+                    if( !$("#startAddTime_s").val() || !$("#endAddTime_s").val() ){
+                        $.messager.alert('消息提示', "创建起止时间不能为空！", 'error');
+                    }else{
+                        var queryArray = $('#searchForm').serializeArray();
+                        var postData = parsePostData(queryArray);
+                        $('#dg').datagrid('reload', postData);
+                    }
                 }
             });
+
+            $('#searchRestBtn').linkbutton({
+                onClick: function(){
+                    $('#searchForm').form('reset');
+                }
+            });
+
         })
     </script>
 </head>
@@ -78,6 +89,7 @@
                             </td>
                         </tr>
                         <input type="hidden" name="page" value="1" />
+                        <input type="hidden" name="isSearch" value="1" />
                     </table>
                 </form>
             </div>
