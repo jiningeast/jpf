@@ -56,17 +56,17 @@ public class PayChargeCompanyMoneyStream implements Serializable {
     private BigDecimal productValue;
 
     /**
-     * 产品成本价
+     * 进价，取接口的进价，即产品表的ofProductPrice或wnProductPrice
      */
     private BigDecimal productBidPrice;
 
     /**
-     * 产品标准售价
+     * 实际售价，对应product的sale_price
      */
     private BigDecimal productSalePrice;
 
     /**
-     * 产品接口价
+     * 产品接口价（暂弃用）
      */
     private BigDecimal productInterfacePrice;
 
@@ -124,6 +124,11 @@ public class PayChargeCompanyMoneyStream implements Serializable {
      * 更新时间
      */
     private Date updatetime;
+
+    /**
+     * pay_charge_consumer_order表中的订单号
+     */
+    private String consumerOrderNo;
 
     private static final long serialVersionUID = 1L;
 
@@ -319,6 +324,14 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public String getConsumerOrderNo() {
+        return consumerOrderNo;
+    }
+
+    public void setConsumerOrderNo(String consumerOrderNo) {
+        this.consumerOrderNo = consumerOrderNo == null ? null : consumerOrderNo.trim();
+    }
+
     /**
      *
      */
@@ -352,6 +365,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         sb.append(", isDel=").append(isDel);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", consumerOrderNo=").append(consumerOrderNo);
         sb.append("]");
         return sb.toString();
     }
@@ -395,7 +409,8 @@ public class PayChargeCompanyMoneyStream implements Serializable {
             && (this.getMemo() == null ? other.getMemo() == null : this.getMemo().equals(other.getMemo()))
             && (this.getIsDel() == null ? other.getIsDel() == null : this.getIsDel().equals(other.getIsDel()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getConsumerOrderNo() == null ? other.getConsumerOrderNo() == null : this.getConsumerOrderNo().equals(other.getConsumerOrderNo()));
     }
 
     /**
@@ -429,6 +444,7 @@ public class PayChargeCompanyMoneyStream implements Serializable {
         result = prime * result + ((getIsDel() == null) ? 0 : getIsDel().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getConsumerOrderNo() == null) ? 0 : getConsumerOrderNo().hashCode());
         return result;
     }
 }

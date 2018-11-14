@@ -1686,6 +1686,76 @@ public class PayChargeCompanyMoneyStreamExample {
             return (Criteria) this;
         }
 
+        public Criteria andConsumerOrderNoIsNull() {
+            addCriterion("consumer_order_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoIsNotNull() {
+            addCriterion("consumer_order_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoEqualTo(String value) {
+            addCriterion("consumer_order_no =", value, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoNotEqualTo(String value) {
+            addCriterion("consumer_order_no <>", value, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoGreaterThan(String value) {
+            addCriterion("consumer_order_no >", value, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("consumer_order_no >=", value, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoLessThan(String value) {
+            addCriterion("consumer_order_no <", value, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("consumer_order_no <=", value, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoLike(String value) {
+            addCriterion("consumer_order_no like", value, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoNotLike(String value) {
+            addCriterion("consumer_order_no not like", value, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoIn(List<String> values) {
+            addCriterion("consumer_order_no in", values, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoNotIn(List<String> values) {
+            addCriterion("consumer_order_no not in", values, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoBetween(String value1, String value2) {
+            addCriterion("consumer_order_no between", value1, value2, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoNotBetween(String value1, String value2) {
+            addCriterion("consumer_order_no not between", value1, value2, "consumerOrderNo");
+            return (Criteria) this;
+        }
+
         public Criteria andStreamNoLikeInsensitive(String value) {
             addCriterion("upper(stream_no) like", value.toUpperCase(), "streamNo");
             return (Criteria) this;
@@ -1718,6 +1788,11 @@ public class PayChargeCompanyMoneyStreamExample {
 
         public Criteria andMemoLikeInsensitive(String value) {
             addCriterion("upper(memo) like", value.toUpperCase(), "memo");
+            return (Criteria) this;
+        }
+
+        public Criteria andConsumerOrderNoLikeInsensitive(String value) {
+            addCriterion("upper(consumer_order_no) like", value.toUpperCase(), "consumerOrderNo");
             return (Criteria) this;
         }
     }
