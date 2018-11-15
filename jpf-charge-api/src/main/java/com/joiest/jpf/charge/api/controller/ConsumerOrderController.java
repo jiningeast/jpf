@@ -1,6 +1,22 @@
 package com.joiest.jpf.charge.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.common.util.Md5Encrypt;
+import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
+import com.joiest.jpf.dto.GetChargeOrderResponse;
+import com.joiest.jpf.dto.GetShopBargainRechargeOrderRequest;
+import com.joiest.jpf.dto.GetShopBargainRechargeOrderResponse;
+import com.joiest.jpf.entity.ChargeCompanyInfo;
+import com.joiest.jpf.entity.ChargeConsumerOrderInfo;
+import com.joiest.jpf.entity.ChargeOrderInfo;
+import com.joiest.jpf.entity.ShopBargainRechargeOrderInfo;
+import com.joiest.jpf.facade.*;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayChargeConsumerOrder;
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
 import com.joiest.jpf.common.util.JsonUtils;
@@ -24,6 +40,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 充值记录下单，获取接口
@@ -31,15 +59,26 @@ import java.util.*;
 @Controller
 @RequestMapping("consumerOrder")
 public class ConsumerOrderController {
+
     private static final Logger logger = LogManager.getLogger(ConsumerOrderController.class);
+
     @Autowired
     private ShopBargainRechargeOrderServiceFacade shopBargainRechargeOrderServiceFacade;
+
     @Autowired
     private ChargeCompanyServiceFacade chargeCompanyServiceFacade;
+
     @Autowired
+
     private ConsumerOrderServiceFacade consumerOrderServiceFacade;
+
     @Autowired
+
     private RedisCustomServiceFacade redisCustomServiceFacade;
+
+    @Autowired
+
+    private ChargeOrderServiceFacade chargeOrderServiceFacade;
     /**
      * 下单接口
      * @param request
@@ -233,4 +272,203 @@ public class ConsumerOrderController {
 
         System.out.println(i);
     }
+
+
+
+    /**
+     * 订单查询列表
+     * orderNo  订单号
+     * startGmtCreate  开始时间
+     * endGmtCreate     结束时间
+     * pageSize     最大条数
+     * currentPage     当前页
+     * sign     签名
+     * */
+    @RequestMapping(value = "/orderList",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public String orderList(HttpServletRequest request, HttpServletResponse response){
+
+        //下单订单号
+        String pullOrderNo = request.getParameter("pullOrderNo");
+
+        //商户号
+        String merchNo = request.getParameter("merchNo");
+
+        //返回最大条数
+        String pageSize = request.getParameter("pageSize");
+
+        //当前页
+        String currentPage = request.getParameter("currentPage");
+
+        //签名串
+        String sign = request.getParameter("sign");
+
+        //接口返回参数数据
+        Map<String,Object> responseMap = new HashMap<>();
+
+        //参数不合法
+        if( StringUtils.isBlank(merchNo) || StringUtils.isBlank(pageSize) || StringUtils.isBlank(currentPage) || StringUtils.isBlank(pullOrderNo) ){
+
+            responseMap.put("code", JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.INVALID_PARAMETER.getDesc());
+
+            return JsonUtils.toJson(responseMap);
+        }
+
+        //缺少签名参数
+        if( sign == null || StringUtils.isBlank(sign)){
+
+            responseMap.put("code",JpfInterfaceErrorInfo.NO_SIGN.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.NO_SIGN.getDesc());
+
+            return JsonUtils.toJson(responseMap);
+        }
+
+        //查询订单信息
+        ChargeOrderInterfaceRequest requstRecgarge=new ChargeOrderInterfaceRequest();
+        Map<String,Object> map = new HashMap<>();
+
+        if( StringUtils.isNotBlank(pullOrderNo) ){
+
+            map.put("pullOrderNo",pullOrderNo);
+            requstRecgarge.setConsumerOrderNo(pullOrderNo);
+
+        }
+        if( StringUtils.isNotBlank(merchNo) ){
+
+            map.put("merchNo",merchNo);
+            requstRecgarge.setMerchNo(merchNo);
+
+        }
+        if( StringUtils.isNotBlank(pageSize) ){
+
+            if( Integer.valueOf(pageSize) > 500 ){
+
+                responseMap.put("code",JpfInterfaceErrorInfo.IS_MAXPARAM.getCode());
+                responseMap.put("info",JpfInterfaceErrorInfo.IS_MAXPARAM.getDesc());
+
+                return JsonUtils.toJson(responseMap);
+            }
+            map.put("pageSize",pageSize);
+            requstRecgarge.setPageSize(pageSize);
+        }
+        if( StringUtils.isNotBlank(currentPage) ){
+
+            map.put("currentPage",currentPage);
+            requstRecgarge.setPage(currentPage);
+        }
+
+        //排序转换
+        Map<String,Object> treeMap = new TreeMap<>();
+        treeMap.putAll(map);
+
+        String respos = ToolUtils.mapToUrl(treeMap);
+        //商户密码
+        ChargeCompanyInfo record = new ChargeCompanyInfo();
+        record.setMerchNo(merchNo);
+        ChargeCompanyInfo result = chargeCompanyServiceFacade.getOne(record);
+
+        //商户不存在
+        if(result == null || result.getIsDel() == 1 ){
+
+            responseMap.put("code",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MER_GETINFO_FAIL.getDesc());
+            return JsonUtils.toJson(responseMap);
+
+        }
+        //商户删除 或者  商户关闭服务
+        if( result.getIsFreeze() == 1 ){
+
+            responseMap.put("code",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc());
+            return JsonUtils.toJson(responseMap);
+        }
+        String  privateKey = result.getPrivateKey();
+
+        //校验来源数据是否合法
+        String selfSign = Md5Encrypt.md5(respos+privateKey).toUpperCase();
+
+        if( !selfSign.equals(sign) ){
+            responseMap.put("code",JpfInterfaceErrorInfo.INCORRECT_SIGN.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
+            return JsonUtils.toJson(responseMap);
+        }
+        //查询单号是否匹配完
+        ChargeConsumerOrderInfo chargeConsumerOrderInfo=consumerOrderServiceFacade.getOneByOrderNo(pullOrderNo);
+        if( chargeConsumerOrderInfo == null ){
+
+            responseMap.put("code",JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getDesc());
+
+            return JsonUtils.toJson(responseMap);
+        }
+        if( chargeConsumerOrderInfo.getStatus()!= 2 ){
+
+            responseMap.put("code",JpfInterfaceErrorInfo.ORDER_STATUS.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.ORDER_STATUS.getDesc());
+
+            return JsonUtils.toJson(responseMap);
+        }
+
+        //查询列表数据
+        GetChargeOrderResponse responseRecharge=chargeOrderServiceFacade.getRecordsInterface(requstRecgarge);
+
+        if( responseRecharge.getList() == null || responseRecharge.getList().size() < 1 ){
+
+            responseMap.put("code",JpfInterfaceErrorInfo.ORDER_STATUS.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.ORDER_STATUS.getDesc());
+
+            return JsonUtils.toJson(responseMap);
+        }
+        List<ChargeOrderInfo> listRecharge=responseRecharge.getList();
+
+        JSONArray arrayRecharge=new JSONArray();
+        JSONObject jsonObject=new JSONObject();
+        //拼装数据
+        Map<String,Object> returnMap=new HashMap<>();
+
+        for ( ChargeOrderInfo one : listRecharge ){
+
+            jsonObject.put("id",one.getId());//序号
+            jsonObject.put("orderNo",one.getOrderNo());//订单号
+            jsonObject.put("companyName",one.getCompanyName());//企业名称
+            jsonObject.put("merchNo",one.getMerchNo());//商户号
+            jsonObject.put("chargePhone",one.getChargePhone());//充值号码
+            jsonObject.put("productType",one.getProductType());//产品；类型
+            jsonObject.put("productName",one.getProductName());//商品名称
+            jsonObject.put("productPrice",one.getProductPrice());//商品价格
+            jsonObject.put("productAmount",one.getProductAmount());//商品数量
+            jsonObject.put("totalMoney",one.getTotalMoney());//订单金额
+            jsonObject.put("status",one.getStatus());//订单状态
+            jsonObject.put("consumerOrderNo",one.getConsumerOrderNo());//拉取单号
+            //时间格式转换
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String addtime= null;
+            try {
+                addtime = formatter.format(one.getAddtime());
+            } catch (Exception e) {
+                addtime="";
+            }
+            String updatetime= null;
+            try {
+                updatetime = formatter.format(one.getUpdatetime());
+            } catch (Exception e) {
+                updatetime="";
+            }
+            jsonObject.put("addtime",addtime);//下单时间
+            jsonObject.put("updatetime",updatetime);
+            arrayRecharge.add(jsonObject);
+        }
+        returnMap.put("count",responseRecharge.getList().size());
+        returnMap.put("list",arrayRecharge);
+        //返回数据
+        responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
+        responseMap.put("info",JpfInterfaceErrorInfo.SUCCESS.getDesc());
+        responseMap.put("data",returnMap);
+
+        return JsonUtils.toJson(responseMap);
+
+    }
+
+
 }

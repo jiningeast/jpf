@@ -1,5 +1,11 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.exception.JpfErrorInfo;
+import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayChargeConsumerOrder;
+import com.joiest.jpf.common.po.PayChargeConsumerOrderExample;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeConsumerOrderMapper;
+import com.joiest.jpf.entity.ChargeConsumerOrderInfo;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
@@ -9,6 +15,11 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStream
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeConsumerOrderMapper;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.facade.ConsumerOrderServiceFacade;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
+
+import java.util.List;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +33,39 @@ import java.util.List;
 public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacade {
 
     @Autowired
-    private PayChargeCompanyMapper payChargeCompanyMapper;
-    @Autowired
     private PayChargeConsumerOrderMapper payChargeConsumerOrderMapper;
+
+    /**
+     *
+     * @param orderNo
+     * @return
+     * 根据订单号获取单条订单信息
+     */
+    @Override
+    public ChargeConsumerOrderInfo getOneByOrderNo(String orderNo){
+
+        if ( StringUtils.isBlank(orderNo) ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "订单号不能为空!");
+        }
+        PayChargeConsumerOrderExample e=new PayChargeConsumerOrderExample();
+        PayChargeConsumerOrderExample.Criteria c=e.createCriteria();
+        c.andOrderNoEqualTo(orderNo);
+
+        List<PayChargeConsumerOrder> list=payChargeConsumerOrderMapper.selectByExample(e);
+
+        if( list == null || list.size() <=0  ){
+            return null;
+        }
+        ChargeConsumerOrderInfo chargeConsumerOrderInfo=new ChargeConsumerOrderInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayChargeConsumerOrder.class,ChargeConsumerOrderInfo.class,false);
+        beanCopier.copy(list.get(0),chargeConsumerOrderInfo,null);
+        return chargeConsumerOrderInfo;
+
+    }
+
+    @Autowired
+    private PayChargeCompanyMapper payChargeCompanyMapper;
+
     @Autowired
     private PayChargeOrderCustomMapper payChargeOrderCustomMapper;
     @Autowired

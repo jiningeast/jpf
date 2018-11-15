@@ -1,10 +1,17 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.entity.ChargeConsumerOrderInfo;
+
 import com.joiest.jpf.common.po.PayChargeConsumerOrder;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
 
 
 public interface ConsumerOrderServiceFacade {
+
+    /**
+     * 根据单号获取单条记录
+     */
+    public ChargeConsumerOrderInfo getOneByOrderNo(String orderNo);
     /**
      * 下单接口
      * @param merchNo 商户号

@@ -35,4 +35,6 @@ public interface RedisCustomServiceFacade {
     void lpush(String consumerOrderQueue, String toJson);
 
     String rPop(String consumerOrderQueue);
+
+
 }
