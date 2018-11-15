@@ -191,7 +191,7 @@ public class ConsumerOrderController {
     /**
      * 匹配数据
      */
-    @RequestMapping(value="/matchingDataTask",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    @RequestMapping(value="/matchingDataTask",method = RequestMethod.GET,produces = "text/plain;charset=utf-8")
     public void matchingDataTask(){
         //查询是否存在需要待执行的任务
         PayChargeConsumerOrder payChargeConsumerOrder = consumerOrderServiceFacade.selectConsumerOrderTask();
@@ -211,7 +211,7 @@ public class ConsumerOrderController {
     /**
      * 匹配数据到redis
      */
-    @RequestMapping(value="/pushDataToRedisTask",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    @RequestMapping(value="/pushDataToRedisTask",method = RequestMethod.GET,produces = "text/plain;charset=utf-8")
     public void pushDataToRedisTask(){
         logger.info("开始push数据"+new Date());
         //首先获取redis的consumerOrderQueue 队列的长度，
