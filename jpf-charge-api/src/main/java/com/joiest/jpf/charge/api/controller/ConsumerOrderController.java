@@ -6,28 +6,19 @@ import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
-import com.joiest.jpf.dto.GetShopBargainRechargeOrderRequest;
-import com.joiest.jpf.dto.GetShopBargainRechargeOrderResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.entity.ChargeConsumerOrderInfo;
 import com.joiest.jpf.entity.ChargeOrderInfo;
-import com.joiest.jpf.entity.ShopBargainRechargeOrderInfo;
 import com.joiest.jpf.facade.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
-import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayChargeConsumerOrder;
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
-import com.joiest.jpf.common.util.JsonUtils;
-import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ConsumerOrderServiceFacade;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopBargainRechargeOrderServiceFacade;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -69,15 +53,12 @@ public class ConsumerOrderController {
     private ChargeCompanyServiceFacade chargeCompanyServiceFacade;
 
     @Autowired
-
     private ConsumerOrderServiceFacade consumerOrderServiceFacade;
 
     @Autowired
-
     private RedisCustomServiceFacade redisCustomServiceFacade;
 
     @Autowired
-
     private ChargeOrderServiceFacade chargeOrderServiceFacade;
     /**
      * 下单接口

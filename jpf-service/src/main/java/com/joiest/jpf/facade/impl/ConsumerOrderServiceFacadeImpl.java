@@ -12,7 +12,6 @@ import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBargainRechargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayChargeConsumerOrderMapper;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.facade.ConsumerOrderServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -21,19 +20,27 @@ import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.List;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacade {
 
     @Autowired
     private PayChargeConsumerOrderMapper payChargeConsumerOrderMapper;
+    @Autowired
+    private PayChargeCompanyMapper payChargeCompanyMapper;
+    @Autowired
+    private PayChargeOrderCustomMapper payChargeOrderCustomMapper;
+    @Autowired
+    private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
+    @Autowired
+    private RedisCustomServiceFacade redisCustomServiceFacade;
+    @Autowired
+    private PayShopBargainRechargeOrderCustomMapper payShopBargainRechargeOrderCustomMapper;
 
     /**
      *
@@ -63,17 +70,6 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
 
     }
 
-    @Autowired
-    private PayChargeCompanyMapper payChargeCompanyMapper;
-
-    @Autowired
-    private PayChargeOrderCustomMapper payChargeOrderCustomMapper;
-    @Autowired
-    private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
-    @Autowired
-    private RedisCustomServiceFacade redisCustomServiceFacade;
-    @Autowired
-    private PayShopBargainRechargeOrderCustomMapper payShopBargainRechargeOrderCustomMapper;
 
     @Override
     public String payConsumerOrder(String merchNo, String money, ChargeCompanyInfo result) {
