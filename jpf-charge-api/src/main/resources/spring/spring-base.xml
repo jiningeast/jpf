@@ -114,7 +114,7 @@
 		<property name="poolConfig" ref="jedisPoolConfig"/>
 		<property name="hostName" value="${redis.pool.host}" />
 		<property name="port" value="${redis.pool.port}" />
-		<!--<property name="password" value="${redis.pool.pass}" />-->
+		<property name="password" value="${redis.pool.pass}" />
 	</bean>
 
 	<!-- 序列化工具 如果不使用这个 写入的key将被默认的序列化工具变成别的字符串，在命令和管理工具中看到乱码，也无法查询 -->
