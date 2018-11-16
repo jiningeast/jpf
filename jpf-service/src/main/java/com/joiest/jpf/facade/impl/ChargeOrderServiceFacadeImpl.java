@@ -166,6 +166,9 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         if ( request.getStatus() != null && StringUtils.isNotBlank(request.getStatus()) ){
             c.andStatusEqualTo(Byte.valueOf(request.getStatus()));
         }
+        if(request.getConsumerOrderNo()!=null && StringUtils.isNotBlank(request.getConsumerOrderNo())){
+            c.andConsumerOrderNoEqualTo(request.getConsumerOrderNo());
+        }
         List<Integer>tel=new ArrayList<>();
         tel.add(0);
         tel.add(1);

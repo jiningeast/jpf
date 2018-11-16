@@ -12,6 +12,7 @@ import com.joiest.jpf.facade.ShopBargainRechargeOrderServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -88,5 +89,23 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
     @Override
     public BigDecimal getMoneyTotal() {
         return payShopBargainRechargeOrderCustomMapper.getTotalMoney();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public   List<PayShopBargainRechargeOrder> pushDataToRedisTask(long querySize) {
+        PayShopBargainRechargeOrderExample example = new PayShopBargainRechargeOrderExample();
+        PayShopBargainRechargeOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andMatchingStatusEqualTo((byte)0);
+        example.setPageNo(1);
+        example.setPageSize(querySize);
+        example.setOrderByClause(" id asc ");
+        List<PayShopBargainRechargeOrder> payShopBargainRechargeOrders = payShopBargainRechargeOrderMapper.selectByExample(example);
+        for (PayShopBargainRechargeOrder payShopBargainRechargeOrder: payShopBargainRechargeOrders) {
+            payShopBargainRechargeOrder.setMatchingStatus((byte)1);
+        }
+        //批量更新数据量
+        payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(payShopBargainRechargeOrders);
+        return payShopBargainRechargeOrders;
     }
 }

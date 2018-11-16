@@ -117,6 +117,11 @@ public class PayChargeOrderCustom implements Serializable {
      */
     private String remark;
 
+    /**
+     * pay_charge_consumer_order表中的订单号
+     */
+    private String consumerOrderNo;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -293,6 +298,14 @@ public class PayChargeOrderCustom implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getConsumerOrderNo() {
+        return consumerOrderNo;
+    }
+
+    public void setConsumerOrderNo(String consumerOrderNo) {
+        this.consumerOrderNo = consumerOrderNo;
     }
 
     /**

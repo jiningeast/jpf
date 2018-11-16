@@ -46,6 +46,45 @@ public class RedisCustomServiceFacadeImpl extends RedisUtils<String , String> im
     }
 
     @Override
+    public Long getSize(final String keyId) {
+        Long result = redisTemplate.execute(new RedisCallback<Long>() {
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+                RedisSerializer<String> serializer = getRedisSerializer();
+                byte[] key = serializer.serialize(keyId) ;
+                Long size = connection.lLen(key);
+                return size;
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public void lpush(String consumerOrderQueue, String toJson) {
+        boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
+            public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
+                RedisSerializer<String> serializer = getRedisSerializer();
+                byte[] key = serializer.serialize(consumerOrderQueue) ;
+                byte[] value = serializer.serialize(toJson) ;
+                connection.lPush(key,value);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public String rPop(String consumerOrderQueue) {
+        String result = redisTemplate.execute(new RedisCallback<String>() {
+            public String doInRedis(RedisConnection connection) throws DataAccessException {
+                RedisSerializer<String> serializer = getRedisSerializer();
+                byte[] key = serializer.serialize(consumerOrderQueue) ;
+                String json = serializer.deserialize(connection.rPop(key));
+                return json;
+            }
+        });
+        return  result;
+    }
+
+    @Override
     public void remove(String key) {
         redisTemplate.delete(key) ;
     }
