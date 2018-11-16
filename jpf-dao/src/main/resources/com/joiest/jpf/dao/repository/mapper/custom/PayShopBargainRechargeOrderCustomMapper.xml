@@ -572,11 +572,21 @@
       <foreach collection="list" item="payShopBarRecOrder" index= "index" open="" close="" separator =";">
         update pay_shop_bargain_recharge_order
         <set>
-          pull_company_id = #{payShopBarRecOrder.pullCompanyId},
-          pull_order_no = #{payShopBarRecOrder.pullOrderNo},
-          pull_merch_no = #{payShopBarRecOrder.pullMerchNo},
-          updatetime = #{payShopBarRecOrder.updatetime},
-          matching_status= #{payShopBarRecOrder.matchingStatus}
+          <if test="payShopBarRecOrder.pullCompanyId!=null and payShopBarRecOrder.pullCompanyId!=''">
+            pull_company_id = #{payShopBarRecOrder.pullCompanyId},
+          </if>
+          <if test="payShopBarRecOrder.pullOrderNo!=null and payShopBarRecOrder.pullOrderNo!=''">
+            pull_order_no = #{payShopBarRecOrder.pullOrderNo},
+          </if>
+          <if test="payShopBarRecOrder.pullOrderNo!=null and payShopBarRecOrder.pullMerchNo!=''">
+            pull_merch_no = #{payShopBarRecOrder.pullMerchNo},
+          </if>
+          <if test="payShopBarRecOrder.updatetime!=null and payShopBarRecOrder.updatetime!=''">
+            updatetime = #{payShopBarRecOrder.updatetime},
+          </if>
+          <if test="payShopBarRecOrder.matchingStatus!=null and payShopBarRecOrder.matchingStatus!=''">
+            matching_status = #{payShopBarRecOrder.matchingStatus}
+          </if>
         </set>
         <where>
           id=#{payShopBarRecOrder.id}
