@@ -39,6 +39,8 @@ public class OfPayController {
 
         modelMap.addAttribute("starttime",starttime);
         modelMap.addAttribute("endtime",endtime);
+        modelMap.addAttribute("merchNo",ConfigUtil.getValue("userid"));
+
         return new ModelAndView("ofpay/list",modelMap);
     }
 

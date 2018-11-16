@@ -93,13 +93,17 @@
                                        name="endAddTime"  value="${endtime}"
                                        onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startAddTime_s\');}',startDate:'%y-%M-%d',dateFmt:'yyyyMMdd'})"/>
                             </td>
-                            <td>接口商家：</td>
+                            <td>收支类型：</td>
                             <td >
                                 <select id="paymenttype" name="paymenttype" class="easyui-combobox" style="width: 70px;">
                                     <option value="">全部</option>
                                     <option value="0">收入</option>
                                     <option value="1">支出</option>
                                 </select>
+                            </td>
+                            <td>商户号：</td>
+                            <td >
+                                ${merchNo}
                             </td>
                         </tr>
                         <input type="hidden" name="page" value="1" />
