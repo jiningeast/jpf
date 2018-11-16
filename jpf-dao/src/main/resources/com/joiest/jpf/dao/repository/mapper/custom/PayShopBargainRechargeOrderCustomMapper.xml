@@ -573,19 +573,19 @@
         update pay_shop_bargain_recharge_order
         <set>
           <if test="payShopBarRecOrder.pullCompanyId!=null and payShopBarRecOrder.pullCompanyId!=''">
-            pull_company_id = #{payShopBarRecOrder.pullCompanyId},
+            pull_company_id = #{payShopBarRecOrder.pullCompanyId,jdbcType=BIGINT},
           </if>
           <if test="payShopBarRecOrder.pullOrderNo!=null and payShopBarRecOrder.pullOrderNo!=''">
-            pull_order_no = #{payShopBarRecOrder.pullOrderNo},
+            pull_order_no = #{payShopBarRecOrder.pullOrderNo,jdbcType=VARCHAR},
           </if>
           <if test="payShopBarRecOrder.pullOrderNo!=null and payShopBarRecOrder.pullMerchNo!=''">
-            pull_merch_no = #{payShopBarRecOrder.pullMerchNo},
+            pull_merch_no = #{payShopBarRecOrder.pullMerchNo,jdbcType=VARCHAR},
           </if>
           <if test="payShopBarRecOrder.updatetime!=null and payShopBarRecOrder.updatetime!=''">
-            updatetime = #{payShopBarRecOrder.updatetime},
+            updatetime = #{payShopBarRecOrder.updatetime,jdbcType=TIMESTAMP},
           </if>
           <if test="payShopBarRecOrder.matchingStatus!=null and payShopBarRecOrder.matchingStatus!=''">
-            matching_status = #{payShopBarRecOrder.matchingStatus}
+            matching_status = #{payShopBarRecOrder.matchingStatus,jdbcType=TINYINT}
           </if>
         </set>
         <where>
