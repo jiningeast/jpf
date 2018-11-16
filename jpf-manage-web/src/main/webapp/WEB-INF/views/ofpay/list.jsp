@@ -81,28 +81,28 @@
         <div id="formDiv" class="easyui-panel" title="搜索条件" data-options="footer:'#CompanyChargeft'">
             <div style="padding:10px 60px 20px 60px">
                 <form id="searchForm" method="post">
-                    <table cellpadding="5" width="50%">
+                    <table cellpadding="5">
                         <tr>
-                            <td>创建时间：</td>
-                            <td>
-                                <input type="text" class="Wdate" style="width:158px;" id="startAddTime_s"
+                            <td style="text-align: left;">创建时间：</td>
+                            <td style="text-align: left; width: 230px">
+                                <input type="text" class="Wdate" style="width:100px;" id="startAddTime_s"
                                        name="startAddTime" value="${starttime}"
                                        onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endAddTime_s\');}',startDate:'%y-%M-%d',dateFmt:'yyyyMMdd'})"/>
                                 -
-                                <input type="text" class="Wdate" style="width:158px;" id="endAddTime_s"
+                                <input type="text" class="Wdate" style="width:100px;" id="endAddTime_s"
                                        name="endAddTime"  value="${endtime}"
                                        onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startAddTime_s\');}',startDate:'%y-%M-%d',dateFmt:'yyyyMMdd'})"/>
                             </td>
                             <td>收支类型：</td>
-                            <td >
-                                <select id="paymenttype" name="paymenttype" class="easyui-combobox" style="width: 70px;">
+                            <td style="width: 100px;">
+                                <select id="paymenttype" name="paymenttype" class="easyui-combobox" >
                                     <option value="">全部</option>
                                     <option value="0">收入</option>
                                     <option value="1">支出</option>
                                 </select>
                             </td>
                             <td>商户号：</td>
-                            <td >
+                            <td>
                                 ${merchNo}
                             </td>
                         </tr>
