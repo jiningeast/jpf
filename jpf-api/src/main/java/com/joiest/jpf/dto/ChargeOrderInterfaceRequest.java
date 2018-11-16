@@ -44,6 +44,11 @@ public class ChargeOrderInterfaceRequest {
      */
     private String productType;
 
+    /**
+     * pay_charge_consumer_order表中的订单号
+     */
+    private String consumerOrderNo;
+
 
     public String getPage() {
         return page;
@@ -107,5 +112,13 @@ public class ChargeOrderInterfaceRequest {
 
     public void setProductType(String productType) {
         this.productType = productType;
+    }
+
+    public String getConsumerOrderNo() {
+        return consumerOrderNo;
+    }
+
+    public void setConsumerOrderNo(String consumerOrderNo) {
+        this.consumerOrderNo = consumerOrderNo;
     }
 }

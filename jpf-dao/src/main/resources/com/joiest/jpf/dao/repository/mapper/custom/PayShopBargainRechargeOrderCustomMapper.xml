@@ -28,6 +28,7 @@
     <result column="pull_order_no" jdbcType="VARCHAR" property="pullOrderNo" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="matching_status" jdbcType="TINYINT" property="matchingStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -102,7 +103,7 @@
     -->
     id, order_no, boid, order_type, foreign_order_no, item_name, price, face_price, amt, 
     amount, charge_no, user_id, status, recharge_status, recharge_time, info_status, 
-    module, pull_company_id, pull_merch_no, pull_order_no, addtime, updatetime
+    module, pull_company_id, pull_merch_no, pull_order_no, addtime, updatetime,matching_status
   </sql>
   <select id="selectByExample" parameterType="com.joiest.jpf.common.po.PayShopBargainRechargeOrderExample" resultMap="BaseResultMap">
     <!--
@@ -165,7 +166,7 @@
       status, recharge_status, recharge_time, 
       info_status, module, pull_company_id, 
       pull_merch_no, pull_order_no, addtime, 
-      updatetime)
+      updatetime,matching_status)
     values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{boid,jdbcType=BIGINT}, 
       #{orderType,jdbcType=BIGINT}, #{foreignOrderNo,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
       #{price,jdbcType=DECIMAL}, #{facePrice,jdbcType=DECIMAL}, #{amt,jdbcType=INTEGER}, 
@@ -173,7 +174,7 @@
       #{status,jdbcType=BIGINT}, #{rechargeStatus,jdbcType=VARCHAR}, #{rechargeTime,jdbcType=TIMESTAMP}, 
       #{infoStatus,jdbcType=BIGINT}, #{module,jdbcType=VARCHAR}, #{pullCompanyId,jdbcType=BIGINT}, 
       #{pullMerchNo,jdbcType=VARCHAR}, #{pullOrderNo,jdbcType=VARCHAR}, #{addtime,jdbcType=TIMESTAMP}, 
-      #{updatetime,jdbcType=TIMESTAMP})
+      #{updatetime,jdbcType=TIMESTAMP}, #{matchingStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.joiest.jpf.common.po.PayShopBargainRechargeOrder">
     <!--
@@ -248,6 +249,9 @@
       <if test="updatetime != null">
         updatetime,
       </if>
+      <if test="matchingStatus != null">
+        matching_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -315,6 +319,9 @@
       </if>
       <if test="updatetime != null">
         #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="matchingStatus != null">
+        #{matchingStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -401,6 +408,9 @@
       <if test="record.updatetime != null">
         updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.matchingStatus != null">
+        matching_status = #{record.matchingStatus,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -433,7 +443,8 @@
       pull_merch_no = #{record.pullMerchNo,jdbcType=VARCHAR},
       pull_order_no = #{record.pullOrderNo,jdbcType=VARCHAR},
       addtime = #{record.addtime,jdbcType=TIMESTAMP},
-      updatetime = #{record.updatetime,jdbcType=TIMESTAMP}
+      updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
+      matching_status = #{record.matchingStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -508,6 +519,9 @@
       <if test="updatetime != null">
         updatetime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="matchingStatus != null">
+        matching_status = #{matchingStatus,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -537,7 +551,8 @@
       pull_merch_no = #{pullMerchNo,jdbcType=VARCHAR},
       pull_order_no = #{pullOrderNo,jdbcType=VARCHAR},
       addtime = #{addtime,jdbcType=TIMESTAMP},
-      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      matching_status = #{matchingStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -557,10 +572,21 @@
       <foreach collection="list" item="payShopBarRecOrder" index= "index" open="" close="" separator =";">
         update pay_shop_bargain_recharge_order
         <set>
-          pull_company_id = #{payShopBarRecOrder.pullCompanyId},
-          pull_order_no = #{payShopBarRecOrder.pullOrderNo},
-          pull_merch_no = #{payShopBarRecOrder.pullMerchNo},
-          updatetime = #{payShopBarRecOrder.updatetime}
+          <if test="payShopBarRecOrder.pullCompanyId!=null and payShopBarRecOrder.pullCompanyId!=''">
+            pull_company_id = #{payShopBarRecOrder.pullCompanyId},
+          </if>
+          <if test="payShopBarRecOrder.pullOrderNo!=null and payShopBarRecOrder.pullOrderNo!=''">
+            pull_order_no = #{payShopBarRecOrder.pullOrderNo},
+          </if>
+          <if test="payShopBarRecOrder.pullOrderNo!=null and payShopBarRecOrder.pullMerchNo!=''">
+            pull_merch_no = #{payShopBarRecOrder.pullMerchNo},
+          </if>
+          <if test="payShopBarRecOrder.updatetime!=null and payShopBarRecOrder.updatetime!=''">
+            updatetime = #{payShopBarRecOrder.updatetime},
+          </if>
+          <if test="payShopBarRecOrder.matchingStatus!=null and payShopBarRecOrder.matchingStatus!=''">
+            matching_status = #{payShopBarRecOrder.matchingStatus}
+          </if>
         </set>
         <where>
           id=#{payShopBarRecOrder.id}

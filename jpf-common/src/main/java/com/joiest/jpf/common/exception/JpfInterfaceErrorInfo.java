@@ -101,9 +101,9 @@ public enum JpfInterfaceErrorInfo {
     RECHARGE_SUCCESS("80001", "充值成功"),
     RECHARGE_FAILD("80002", "充值失败"),
 
-    EXCESS_DEPOSIT("80005","余额超限");
+    EXCESS_DEPOSIT("80005","余额超限"),
 
-
+    ORDER_STATUS("80006","订单未处理完成请等待！");
 
     private final String desc;
 

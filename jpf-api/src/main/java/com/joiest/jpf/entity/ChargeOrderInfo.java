@@ -156,6 +156,19 @@ public class ChargeOrderInfo {
      */
     private String remark;
 
+    /**
+     * pay_charge_consumer_order表中的订单号
+     */
+    private String consumerOrderNo;
+
+    public String getConsumerOrderNo() {
+        return consumerOrderNo;
+    }
+
+    public void setConsumerOrderNo(String consumerOrderNo) {
+        this.consumerOrderNo = consumerOrderNo;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {

@@ -11,6 +11,6 @@
     <bean id="ChargeBalanceServiceFacade" class="com.joiest.jpf.facade.impl.ChargeBalanceServiceFacadeImpl"></bean>
     <bean id="ChargeCompanyMoneyStreamServiceFacade" class="com.joiest.jpf.facade.impl.ChargeCompanyMoneyStreamServiceFacadeImpl"></bean>
     <bean id="ShopBargainRechargeOrderServiceFacade" class="com.joiest.jpf.facade.impl.ShopBargainRechargeOrderServiceFacadeImpl"></bean>
-    <bean id="ChargePullOrderServiceFacade" class="com.joiest.jpf.facade.impl.ChargePullOrderServiceFacadeImpl"></bean>
     <bean id="ConsumerOrderServiceFacade" class="com.joiest.jpf.facade.impl.ConsumerOrderServiceFacadeImpl"></bean>
+    <bean id="RedisCustomServiceFacade" class="com.joiest.jpf.facade.impl.RedisCustomServiceFacadeImpl"></bean>
 </beans>

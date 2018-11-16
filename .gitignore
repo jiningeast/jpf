@@ -1,3 +1,10 @@
-.*
-!.gitignore
-target
+*.iml
+*/pom.xml
+.idea/
+*/target
+.gitignore
+*rebel.xml
+/jpf-web/*.iml
+*/.rebel.xml.bak
+*.xml.bak
+*logs/
