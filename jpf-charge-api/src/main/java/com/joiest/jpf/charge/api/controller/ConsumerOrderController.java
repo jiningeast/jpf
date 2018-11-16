@@ -415,7 +415,7 @@ public class ConsumerOrderController {
             jsonObject.put("companyName",one.getCompanyName());//企业名称
             jsonObject.put("merchNo",one.getMerchNo());//商户号
             jsonObject.put("chargePhone",one.getChargePhone());//充值号码
-            jsonObject.put("productType",one.getProductType());//产品；类型
+            //jsonObject.put("productType",one.getProductType());//产品；类型
             jsonObject.put("productName",one.getProductName());//商品名称
             jsonObject.put("productPrice",one.getProductPrice());//商品价格
             jsonObject.put("productAmount",one.getProductAmount());//商品数量
