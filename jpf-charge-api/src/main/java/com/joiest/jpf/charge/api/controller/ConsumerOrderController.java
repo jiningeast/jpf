@@ -69,6 +69,15 @@ public class ConsumerOrderController {
     @RequestMapping(value="/payConsumerOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String  payConsumerOrder(HttpServletRequest request, HttpServletResponse response){
+
+        Map<String,Object> responseMap =new HashMap<String,Object>();
+
+        if(!ConfigUtil.getValue("API_IS_OPEN").equals("OPEN")){
+
+            responseMap.put("code",JpfInterfaceErrorInfo.API_IS_OPEN.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.API_IS_OPEN.getDesc());
+            return JsonUtils.toJson(responseMap);
+        }
         String merchNo = request.getParameter("merchNo");
         //金额
         String money =request.getParameter("money");
@@ -78,7 +87,7 @@ public class ConsumerOrderController {
         Map<String,Object> resultMap = CheckData(merchNo,money,sign);
 
         String orderNo="";
-        Map<String,Object> responseMap =new HashMap<String,Object>();
+
         ChargeCompanyInfo result;
         if(!JpfInterfaceErrorInfo.SUCCESS.getCode().equals(resultMap.get("code"))){
             return  JsonUtils.toJson(resultMap);
@@ -269,6 +278,16 @@ public class ConsumerOrderController {
     @ResponseBody
     public String orderList(HttpServletRequest request, HttpServletResponse response){
 
+        //接口返回参数数据
+        Map<String,Object> responseMap = new HashMap<>();
+
+        if(!ConfigUtil.getValue("API_IS_OPEN").equals("OPEN")){
+
+            responseMap.put("code",JpfInterfaceErrorInfo.API_IS_OPEN.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.API_IS_OPEN.getDesc());
+            return JsonUtils.toJson(responseMap);
+        }
+
         //下单订单号
         String pullOrderNo = request.getParameter("pullOrderNo");
 
@@ -284,8 +303,6 @@ public class ConsumerOrderController {
         //签名串
         String sign = request.getParameter("sign");
 
-        //接口返回参数数据
-        Map<String,Object> responseMap = new HashMap<>();
 
         //参数不合法
         if( StringUtils.isBlank(merchNo) || StringUtils.isBlank(pageSize) || StringUtils.isBlank(currentPage) || StringUtils.isBlank(pullOrderNo) ){

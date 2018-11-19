@@ -40,7 +40,7 @@ public enum JpfInterfaceErrorInfo {
     INCORRECT_PAYTYPE("10036", "payType值有误，请检查"),
     UNSUPPORT_PAYTYPE("10037", "商户无此支付方式"),
     MERCH_RATE_ERROR("10038", "商户费率信息错误"),
-
+    API_IS_OPEN("50010","接口未开放"),
     // H5 第一步 获取商户支付方式等信息
     INCORRECT_DATA("10040","加密信息有误"),
 
