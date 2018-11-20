@@ -458,6 +458,7 @@ public class ConsumerOrderController {
             arrayRecharge.add(jsonObject);
         }
         returnMap.put("count",responseRecharge.getList().size());
+        returnMap.put("sumMoney",chargeConsumerOrderInfo.getMatchMoney());//匹配的总金额
         returnMap.put("list",arrayRecharge);
         //返回数据
         responseMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
