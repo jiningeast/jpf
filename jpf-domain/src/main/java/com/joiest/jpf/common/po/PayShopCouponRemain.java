@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopCouponRemain implements Serializable {
@@ -40,7 +41,7 @@ public class PayShopCouponRemain implements Serializable {
     private Integer couponDouLeft;
 
     /**
-     * 此券是否已用完 0=没用完 1=消费用完 2=过期清零
+     * 此券是否已用完 0=没用完 1=消费用完 2=过期清零 3=服务转让没用完 4=服务转让用完
      */
     private Byte status;
 
@@ -58,6 +59,26 @@ public class PayShopCouponRemain implements Serializable {
      * 更新时间
      */
     private Date updatetime;
+
+    /**
+     * 可转让豆
+     */
+    private Integer saleDouYes;
+
+    /**
+     * 可转让豆剩余
+     */
+    private Integer saleDouLeft;
+
+    /**
+     * 非转让豆
+     */
+    private Integer saleDouNo;
+
+    /**
+     * 转让比例
+     */
+    private BigDecimal percent;
 
     private static final long serialVersionUID = 1L;
 
@@ -149,6 +170,38 @@ public class PayShopCouponRemain implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public Integer getSaleDouYes() {
+        return saleDouYes;
+    }
+
+    public void setSaleDouYes(Integer saleDouYes) {
+        this.saleDouYes = saleDouYes;
+    }
+
+    public Integer getSaleDouLeft() {
+        return saleDouLeft;
+    }
+
+    public void setSaleDouLeft(Integer saleDouLeft) {
+        this.saleDouLeft = saleDouLeft;
+    }
+
+    public Integer getSaleDouNo() {
+        return saleDouNo;
+    }
+
+    public void setSaleDouNo(Integer saleDouNo) {
+        this.saleDouNo = saleDouNo;
+    }
+
+    public BigDecimal getPercent() {
+        return percent;
+    }
+
+    public void setPercent(BigDecimal percent) {
+        this.percent = percent;
+    }
+
     /**
      *
      */
@@ -169,6 +222,10 @@ public class PayShopCouponRemain implements Serializable {
         sb.append(", expireTime=").append(expireTime);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", saleDouYes=").append(saleDouYes);
+        sb.append(", saleDouLeft=").append(saleDouLeft);
+        sb.append(", saleDouNo=").append(saleDouNo);
+        sb.append(", percent=").append(percent);
         sb.append("]");
         return sb.toString();
     }
@@ -199,7 +256,11 @@ public class PayShopCouponRemain implements Serializable {
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getSaleDouYes() == null ? other.getSaleDouYes() == null : this.getSaleDouYes().equals(other.getSaleDouYes()))
+            && (this.getSaleDouLeft() == null ? other.getSaleDouLeft() == null : this.getSaleDouLeft().equals(other.getSaleDouLeft()))
+            && (this.getSaleDouNo() == null ? other.getSaleDouNo() == null : this.getSaleDouNo().equals(other.getSaleDouNo()))
+            && (this.getPercent() == null ? other.getPercent() == null : this.getPercent().equals(other.getPercent()));
     }
 
     /**
@@ -220,6 +281,10 @@ public class PayShopCouponRemain implements Serializable {
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getSaleDouYes() == null) ? 0 : getSaleDouYes().hashCode());
+        result = prime * result + ((getSaleDouLeft() == null) ? 0 : getSaleDouLeft().hashCode());
+        result = prime * result + ((getSaleDouNo() == null) ? 0 : getSaleDouNo().hashCode());
+        result = prime * result + ((getPercent() == null) ? 0 : getPercent().hashCode());
         return result;
     }
 }

@@ -13,7 +13,7 @@ public class PayShopProduct implements Serializable {
     /**
      * 商品基础信息id
      */
-    private Integer productInfoId;
+    private String productInfoId;
 
     /**
      * 商品名称
@@ -130,12 +130,12 @@ public class PayShopProduct implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public Integer getProductInfoId() {
+    public String getProductInfoId() {
         return productInfoId;
     }
 
-    public void setProductInfoId(Integer productInfoId) {
-        this.productInfoId = productInfoId;
+    public void setProductInfoId(String productInfoId) {
+        this.productInfoId = productInfoId == null ? null : productInfoId.trim();
     }
 
     public String getName() {

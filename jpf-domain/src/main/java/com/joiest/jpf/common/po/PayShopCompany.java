@@ -75,6 +75,11 @@ public class PayShopCompany implements Serializable {
      */
     private Date addtime;
 
+    /**
+     * 转让百分比
+     */
+    private BigDecimal percent;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -189,6 +194,14 @@ public class PayShopCompany implements Serializable {
         this.addtime = addtime;
     }
 
+    public BigDecimal getPercent() {
+        return percent;
+    }
+
+    public void setPercent(BigDecimal percent) {
+        this.percent = percent;
+    }
+
     /**
      *
      */
@@ -212,6 +225,7 @@ public class PayShopCompany implements Serializable {
         sb.append(", money=").append(money);
         sb.append(", moneyCode=").append(moneyCode);
         sb.append(", addtime=").append(addtime);
+        sb.append(", percent=").append(percent);
         sb.append("]");
         return sb.toString();
     }
@@ -245,7 +259,8 @@ public class PayShopCompany implements Serializable {
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getMoneyCode() == null ? other.getMoneyCode() == null : this.getMoneyCode().equals(other.getMoneyCode()))
-            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
+            && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+            && (this.getPercent() == null ? other.getPercent() == null : this.getPercent().equals(other.getPercent()));
     }
 
     /**
@@ -269,6 +284,7 @@ public class PayShopCompany implements Serializable {
         result = prime * result + ((getMoney() == null) ? 0 : getMoney().hashCode());
         result = prime * result + ((getMoneyCode() == null) ? 0 : getMoneyCode().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
+        result = prime * result + ((getPercent() == null) ? 0 : getPercent().hashCode());
         return result;
     }
 }
