@@ -126,7 +126,7 @@
                     <tr>
                         <td>图标文字:</td>
                         <td><input id="title" name="title" class="easyui-textbox" type="text" /></td>
-                        <td>充值状态:</td>
+                        <td>广告类型:</td>
                         <td>
                             <select id="type_s" name="type" class="easyui-combobox">
                                 <option value="">全部</option>
