@@ -24,7 +24,7 @@ public interface PayShopProductInfoMapper {
      *
      * @param id
      */
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     /**
      * 插入数据库记录
@@ -58,7 +58,7 @@ public interface PayShopProductInfoMapper {
      *
      * @param id
      */
-    PayShopProductInfo selectByPrimaryKey(String id);
+    PayShopProductInfo selectByPrimaryKey(Integer id);
 
     /**
      * 选择性更新数据库记录
