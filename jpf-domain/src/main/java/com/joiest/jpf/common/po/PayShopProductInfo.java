@@ -7,7 +7,7 @@ public class PayShopProductInfo implements Serializable {
     /**
      * 
      */
-    private Integer id;
+    private String id;
 
     /**
      * 
@@ -55,11 +55,6 @@ public class PayShopProductInfo implements Serializable {
     private String contactEmail;
 
     /**
-     * 备注
-     */
-    private String remark;
-
-    /**
      * 操作人
      */
     private Integer operatorId;
@@ -84,14 +79,34 @@ public class PayShopProductInfo implements Serializable {
      */
     private Date updatetime;
 
+    /**
+     * 品牌名称
+     */
+    private String title;
+
+    /**
+     * 品牌图片
+     */
+    private String imgurl;
+
+    /**
+     * 价格范围区间
+     */
+    private String moneyscope;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public Integer getTypeId() {
@@ -166,14 +181,6 @@ public class PayShopProductInfo implements Serializable {
         this.contactEmail = contactEmail == null ? null : contactEmail.trim();
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
     public Integer getOperatorId() {
         return operatorId;
     }
@@ -214,6 +221,38 @@ public class PayShopProductInfo implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl == null ? null : imgurl.trim();
+    }
+
+    public String getMoneyscope() {
+        return moneyscope;
+    }
+
+    public void setMoneyscope(String moneyscope) {
+        this.moneyscope = moneyscope == null ? null : moneyscope.trim();
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+
     /**
      *
      */
@@ -233,12 +272,15 @@ public class PayShopProductInfo implements Serializable {
         sb.append(", contactName=").append(contactName);
         sb.append(", contactPhone=").append(contactPhone);
         sb.append(", contactEmail=").append(contactEmail);
-        sb.append(", remark=").append(remark);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", title=").append(title);
+        sb.append(", imgurl=").append(imgurl);
+        sb.append(", moneyscope=").append(moneyscope);
+        sb.append(", remark=").append(remark);
         sb.append("]");
         return sb.toString();
     }
@@ -269,12 +311,15 @@ public class PayShopProductInfo implements Serializable {
             && (this.getContactName() == null ? other.getContactName() == null : this.getContactName().equals(other.getContactName()))
             && (this.getContactPhone() == null ? other.getContactPhone() == null : this.getContactPhone().equals(other.getContactPhone()))
             && (this.getContactEmail() == null ? other.getContactEmail() == null : this.getContactEmail().equals(other.getContactEmail()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
+            && (this.getImgurl() == null ? other.getImgurl() == null : this.getImgurl().equals(other.getImgurl()))
+            && (this.getMoneyscope() == null ? other.getMoneyscope() == null : this.getMoneyscope().equals(other.getMoneyscope()))
+            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()));
     }
 
     /**
@@ -294,12 +339,15 @@ public class PayShopProductInfo implements Serializable {
         result = prime * result + ((getContactName() == null) ? 0 : getContactName().hashCode());
         result = prime * result + ((getContactPhone() == null) ? 0 : getContactPhone().hashCode());
         result = prime * result + ((getContactEmail() == null) ? 0 : getContactEmail().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
+        result = prime * result + ((getImgurl() == null) ? 0 : getImgurl().hashCode());
+        result = prime * result + ((getMoneyscope() == null) ? 0 : getMoneyscope().hashCode());
+        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         return result;
     }
 }

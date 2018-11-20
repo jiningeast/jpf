@@ -1546,6 +1546,66 @@ public class PayShopProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductContentIdIsNull() {
+            addCriterion("product_content_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdIsNotNull() {
+            addCriterion("product_content_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdEqualTo(String value) {
+            addCriterion("product_content_id =", value, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdNotEqualTo(String value) {
+            addCriterion("product_content_id <>", value, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdGreaterThan(String value) {
+            addCriterion("product_content_id >", value, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdGreaterThanOrEqualTo(String value) {
+            addCriterion("product_content_id >=", value, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdLessThan(String value) {
+            addCriterion("product_content_id <", value, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdLessThanOrEqualTo(String value) {
+            addCriterion("product_content_id <=", value, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdIn(List<String> values) {
+            addCriterion("product_content_id in", values, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdNotIn(List<String> values) {
+            addCriterion("product_content_id not in", values, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdBetween(String value1, String value2) {
+            addCriterion("product_content_id between", value1, value2, "productContentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductContentIdNotBetween(String value1, String value2) {
+            addCriterion("product_content_id not between", value1, value2, "productContentId");
+            return (Criteria) this;
+        }
+
         public Criteria andNameLikeInsensitive(String value) {
             addCriterion("upper(name) like", value.toUpperCase(), "name");
             return (Criteria) this;
