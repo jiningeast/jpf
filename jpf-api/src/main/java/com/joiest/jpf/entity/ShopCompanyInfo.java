@@ -75,6 +75,11 @@ public class ShopCompanyInfo {
      */
     private String moneyCode;
 
+    /**
+     * 转让百分比
+     */
+    private BigDecimal percent;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -264,5 +269,13 @@ public class ShopCompanyInfo {
 
     public void setMoneyCode(String moneyCode) {
         this.moneyCode = moneyCode;
+    }
+
+    public BigDecimal getPercent() {
+        return percent;
+    }
+
+    public void setPercent(BigDecimal percent) {
+        this.percent = percent;
     }
 }

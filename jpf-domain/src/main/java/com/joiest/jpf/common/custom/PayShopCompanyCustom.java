@@ -75,6 +75,11 @@ public class PayShopCompanyCustom implements Serializable {
      */
     private Date addtime;
 
+    /**
+     * 转让百分比
+     */
+    private BigDecimal percent;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -187,6 +192,14 @@ public class PayShopCompanyCustom implements Serializable {
 
     public void setAddtime(Date addtime) {
         this.addtime = addtime;
+    }
+
+    public BigDecimal getPercent() {
+        return percent;
+    }
+
+    public void setPercent(BigDecimal percent) {
+        this.percent = percent;
     }
 
     /**

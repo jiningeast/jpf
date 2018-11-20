@@ -87,6 +87,12 @@ public class GetShopCompanyRequest {
      */
     private String moneyCode;
 
+    /**
+     * 转让百分比
+     */
+    private BigDecimal percent;
+
+
     public String getId() {
         return id;
     }
@@ -303,5 +309,13 @@ public class GetShopCompanyRequest {
 
     public void setMoneyCode(String moneyCode) {
         this.moneyCode = moneyCode;
+    }
+
+    public BigDecimal getPercent() {
+        return percent;
+    }
+
+    public void setPercent(BigDecimal percent) {
+        this.percent = percent;
     }
 }
