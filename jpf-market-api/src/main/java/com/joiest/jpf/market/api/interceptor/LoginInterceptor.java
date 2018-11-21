@@ -69,6 +69,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/orders/flowbalance");      // 查询微能余额
                 add("/orders/weinengNotifyUrl");      // 查询微能余额
                 add("/demo/test");              // 测试函数
+                add("/travel/proInfo"); // 获取商品服务列表
             }
         };
         System.out.println(ServletUtils.getIpAddr(request));
