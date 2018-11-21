@@ -127,6 +127,8 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
 
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不能为空");
 
+        }else if(request.getPercent().equals("")){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须填写转让百分比");
         }
         String pattern = "^[1][3,4,5,7,8][0-9]{9}$";
 
@@ -212,6 +214,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         payShopCompany.setReceiveEmail(request.getReceiveEmail());
         payShopCompany.setSaleName(request.getSaleName());
         payShopCompany.setSalePhone(request.getSalePhone());
+        payShopCompany.setPercent(request.getPercent());
         BigDecimal loanAmount = new BigDecimal("0.00");
         String accountReturn=loanAmount.toString();
         payShopCompany.setMoney(loanAmount);
@@ -285,6 +288,8 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
 
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不能为空");
 
+        }else if(request.getPercent().equals("")){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须填写转让百分比");
         }
         String pattern = "^[1][3,4,5,7,8][0-9]{9}$";
 
@@ -357,7 +362,8 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         payShopCompany.setReceiveEmail(request.getReceiveEmail());
         payShopCompany.setSaleName(request.getSaleName());
         payShopCompany.setSalePhone(request.getSalePhone());
-
+        payShopCompany.setPercent(request.getPercent());
+        
         //修改基本信息表
         String sprimatkey = request.getId();
         PayShopCompanyExample exampleup= new PayShopCompanyExample();

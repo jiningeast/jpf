@@ -209,6 +209,9 @@
       <if test="addtime != null">
         addtime,
       </if>
+      <if test="percent != null">
+        percent,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -252,6 +255,9 @@
       </if>
       <if test="addtime != null">
         #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="percent != null">
+        #{percent,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
