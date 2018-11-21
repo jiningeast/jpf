@@ -28,5 +28,6 @@
 	<bean id="ChargeInterfaceStreamFacade" class="com.joiest.jpf.facade.impl.ChargeInterfaceStreamFacadeImpl"></bean>
 	<bean id="ChargeProductServiceFacade" class="com.joiest.jpf.facade.impl.ChargeProductServiceFacadeImpl"></bean>
 	<bean id="ChargeCompanyServiceFacade" class="com.joiest.jpf.facade.impl.ChargeCompanyServiceFacadeImpl"></bean>
+	<bean id="ShopProductInfoServicefacade" class="com.joiest.jpf.facade.impl.ShopProductInfoServicefacadeImpl"></bean>
 
 </beans>
