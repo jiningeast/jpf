@@ -101,6 +101,16 @@ public class ShopProductInfo {
      */
     private Date updatetime;
 
+    /**
+     * 商品详情ID
+     */
+    private String productContentId;
+
+    /**
+     * 商品详情
+     */
+    private String productContent;
+
     public String getId() {
         return id;
     }
@@ -396,6 +406,22 @@ public class ShopProductInfo {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getProductContentId() {
+        return productContentId;
+    }
+
+    public void setProductContentId(String productContentId) {
+        this.productContentId = productContentId;
+    }
+
+    public String getProductContent() {
+        return productContent;
+    }
+
+    public void setProductContent(String productContent) {
+        this.productContent = productContent;
     }
 
     //================ 自定义字段 end ================

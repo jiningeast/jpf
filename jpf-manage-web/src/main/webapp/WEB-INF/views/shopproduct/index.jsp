@@ -174,8 +174,8 @@
             });
 
             $('#infoDiv').window({
-                width:'800px',
-                height:'500px',
+                width:'1000px',
+                height:'700px',
                 closed:true,
                 modal:true
             });

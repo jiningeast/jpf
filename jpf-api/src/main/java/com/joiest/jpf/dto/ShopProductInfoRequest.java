@@ -81,6 +81,21 @@ public class ShopProductInfoRequest {
     private String operatorName;
 
     /**
+     * 品牌名称
+     */
+    private String title;
+
+    /**
+     * 品牌图片
+     */
+    private String imgurl;
+
+    /**
+     * 价格范围区间
+     */
+    private String moneyscope;
+
+    /**
      * 状态 0:显示 1:不显示
      */
     private Byte status;
@@ -195,5 +210,29 @@ public class ShopProductInfoRequest {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
+    public String getMoneyscope() {
+        return moneyscope;
+    }
+
+    public void setMoneyscope(String moneyscope) {
+        this.moneyscope = moneyscope;
     }
 }
