@@ -80,6 +80,21 @@ public class PayShopCompany implements Serializable {
      */
     private BigDecimal percent;
 
+    /**
+     * 欣享用户的登录名称
+     */
+    private String loginName;
+
+    /**
+     * 欣享用户的登录密码
+     */
+    private String loginPwd;
+
+    /**
+     * 是否是第一次登录
+     */
+    private Byte isFirstLogin;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -202,6 +217,30 @@ public class PayShopCompany implements Serializable {
         this.percent = percent;
     }
 
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName == null ? null : loginName.trim();
+    }
+
+    public String getLoginPwd() {
+        return loginPwd;
+    }
+
+    public void setLoginPwd(String loginPwd) {
+        this.loginPwd = loginPwd == null ? null : loginPwd.trim();
+    }
+
+    public Byte getIsFirstLogin() {
+        return isFirstLogin;
+    }
+
+    public void setIsFirstLogin(Byte isFirstLogin) {
+        this.isFirstLogin = isFirstLogin;
+    }
+
     /**
      *
      */
@@ -226,6 +265,9 @@ public class PayShopCompany implements Serializable {
         sb.append(", moneyCode=").append(moneyCode);
         sb.append(", addtime=").append(addtime);
         sb.append(", percent=").append(percent);
+        sb.append(", loginName=").append(loginName);
+        sb.append(", loginPwd=").append(loginPwd);
+        sb.append(", isFirstLogin=").append(isFirstLogin);
         sb.append("]");
         return sb.toString();
     }
@@ -260,7 +302,10 @@ public class PayShopCompany implements Serializable {
             && (this.getMoney() == null ? other.getMoney() == null : this.getMoney().equals(other.getMoney()))
             && (this.getMoneyCode() == null ? other.getMoneyCode() == null : this.getMoneyCode().equals(other.getMoneyCode()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getPercent() == null ? other.getPercent() == null : this.getPercent().equals(other.getPercent()));
+            && (this.getPercent() == null ? other.getPercent() == null : this.getPercent().equals(other.getPercent()))
+            && (this.getLoginName() == null ? other.getLoginName() == null : this.getLoginName().equals(other.getLoginName()))
+            && (this.getLoginPwd() == null ? other.getLoginPwd() == null : this.getLoginPwd().equals(other.getLoginPwd()))
+            && (this.getIsFirstLogin() == null ? other.getIsFirstLogin() == null : this.getIsFirstLogin().equals(other.getIsFirstLogin()));
     }
 
     /**
@@ -285,6 +330,9 @@ public class PayShopCompany implements Serializable {
         result = prime * result + ((getMoneyCode() == null) ? 0 : getMoneyCode().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getPercent() == null) ? 0 : getPercent().hashCode());
+        result = prime * result + ((getLoginName() == null) ? 0 : getLoginName().hashCode());
+        result = prime * result + ((getLoginPwd() == null) ? 0 : getLoginPwd().hashCode());
+        result = prime * result + ((getIsFirstLogin() == null) ? 0 : getIsFirstLogin().hashCode());
         return result;
     }
 }
