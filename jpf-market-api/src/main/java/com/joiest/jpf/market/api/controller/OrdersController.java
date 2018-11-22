@@ -335,6 +335,7 @@ public class OrdersController {
         //过期券处理
         int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
 
+
         //用户可用券列表
         GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(uid);
         if ( userCouponList == null || userCouponList.getCount() == 0) {
