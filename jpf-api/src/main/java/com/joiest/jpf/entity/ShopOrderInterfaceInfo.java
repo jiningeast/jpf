@@ -210,6 +210,19 @@ public class ShopOrderInterfaceInfo implements Serializable {
      */
     private String image;
 
+    /**
+     * 当前系统时间
+     */
+    private Date currentSystemTime;
+
+    public Date getCurrentSystemTime() {
+        return currentSystemTime;
+    }
+
+    public void setCurrentSystemTime(Date currentSystemTime) {
+        this.currentSystemTime = currentSystemTime;
+    }
+
     public String getId() {
         return id;
     }
