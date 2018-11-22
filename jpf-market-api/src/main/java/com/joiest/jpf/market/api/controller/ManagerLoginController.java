@@ -63,9 +63,11 @@ public class ManagerLoginController {
                 map.put("companyName",company.getCompanyName());
                 map.put("merchNo",company.getMerchNo());
                 map.put("token",token);
-               // map.put("isFirst",company.get)
+                map.put("isFirst",company.getIsFirstLogin());
                 redisCustomServiceFacade.set(ConfigUtil.getValue("MARKETMANGER_LOGIN_KEY") + token, value,30*60);
                 //更新登录的状态值
+                company.setIsFirstLogin((byte)1);
+                shopCompanyServiceFacade.updateCompanyRecord(company);
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),map);
             }
         }
@@ -98,6 +100,7 @@ public class ManagerLoginController {
         if(StringUtils.equals(SHA1.getInstance().getMySHA1Code(Base64CustomUtils.base64Decoder(oldPass)),company.getLoginPwd())){
             //判断密码
             company.setLoginPwd(SHA1.getInstance().getMySHA1Code(Base64CustomUtils.base64Decoder(newPass)));
+            company.setIsFirstLogin((byte)1);
             shopCompanyServiceFacade.updateCompanyRecord(company);
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),null);
         }else{
