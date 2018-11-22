@@ -5,11 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayChargeOrder;
+import com.joiest.jpf.common.po.PayShopCouponRemain;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
-import com.joiest.jpf.dto.GetCouponRemainResponse;
-import com.joiest.jpf.dto.GetShopStockCardResponse;
-import com.joiest.jpf.dto.OfpayRequest;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.constant.ManageConstants;
@@ -366,6 +364,7 @@ public class OrdersController {
         //过期券处理
         int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
 
+
         //用户可用券列表
         GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(uid);
         if ( userCouponList == null || userCouponList.getCount() == 0) {
@@ -472,6 +471,7 @@ public class OrdersController {
         if ( (resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1")) || (resultMap.containsKey("message") && resultMap.get("message").equals("成功")) ) {
             //扣减豆操作
             int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
+
         } else {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "提交失败", null);
         }
@@ -1208,7 +1208,7 @@ public class OrdersController {
         return resultMap;
     }
 
-    @RequestMapping("/ofpayNotifyUrl")
+  /*  @RequestMapping("/ofpayNotifyUrl")
     @ResponseBody
     public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
     {
@@ -1251,11 +1251,86 @@ public class OrdersController {
         {
             //支付失败 取消豆
             res_cancelDouMap = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
-
             int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(orderInfo.getCustomerId());
 
             sbf.append("\n订单状态：充值失败");
             sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","豆退还操作信息为空"));
+
+        } else
+        {
+            sbf.append("\n订单状态：充值成功");
+            sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","更新订单成功"));
+        }
+        orderinfo.setId(orderInfo.getId());
+        orderinfo.setRechargeStatus(request.getRet_code());     //0充值中 1充值成功 9充值失败
+        orderinfo.setUpdatetime(new Date());
+        orderinfo.setInterfaceType((byte)0);
+        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+        return "Y";
+    }*/
+
+    /**
+     * 服务转让改版
+     */
+    @RequestMapping("/ofpayNotifyUrl")
+    @ResponseBody
+    public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
+    {
+//        String sign =
+
+        //1.流水 2.订单信息 3.更新订单状态
+        Map<String, Object> map = ClassUtil.requestToMap(request);
+        String json = JsonUtils.toJson(map);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n充值类型:" + "充值回调");
+        sbf.append("\n访问地址：" + ServletUtils.getIpAddr(httpRequest));
+        sbf.append("\n访问参数：" + map);
+
+        String fileName = "ofpayNotify";
+        String path = "/logs/jpf-market-api/log/";
+
+        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrder(request.getSporder_id());
+        if ( orderInfo == null )
+        {
+            sbf.append("\n描述： 订单ID：" + request.getSporder_id() + "不存在");
+            LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+            return "N";
+        }
+
+        //流水
+        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+        stream.setType((byte)7);
+        stream.setBatchId(orderInfo.getOrderNo());
+        stream.setResponseContent(json);
+        stream.setAddtime(new Date());
+        int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
+        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+        String rechargeStatus = "0";
+        Map<String,String> res_cancelDouMap = new HashMap<>();
+        Map<String,String> res_cancelDouMap_sale = new HashMap<>();
+        if ( request.getRet_code().equals("9") )    //1成功 9失败
+        {
+            //如果订单非转让都不为空退非转让部分并记录日志
+            if(StringUtils.isNotBlank(orderInfo.getCouponDetail()) && orderInfo.getCouponDetail()!=null){
+                res_cancelDouMap = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
+                sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","豆退还操作信息为空"));
+            }
+            //如果转让部分不为空扣除转让部分并记录日志
+            if(StringUtils.isNotBlank(orderInfo.getCouponDetail()) && orderInfo.getCouponDetailSale()!=null ){
+                res_cancelDouMap_sale = shopOrderInterfaceServiceFacade.cancelOrderDouSale(orderInfo.getOrderNo());
+                sbf.append("\n转让部分退出描述：" + res_cancelDouMap_sale.getOrDefault("douJson","转让部分豆退还操作信息为空"));
+            }
+            //支付失败 取消豆
+            int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(orderInfo.getCustomerId());
+
+            sbf.append("\n订单状态：充值失败");
+
 
         } else
         {
@@ -1740,6 +1815,32 @@ public class OrdersController {
         resultMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
         resultMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
         return resultMap;
+    }
+
+    /**
+     * 模拟支付流程匹配欣券
+     */
+    @RequestMapping(value="test",method = RequestMethod.POST)
+    @ResponseBody
+    public String  test(){
+        //根据订单信息模拟数据
+        String orderNo="102123132";
+     /*   ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderOne(orderNo,uid);
+        //开始匹配欣券
+        int res_uporder = shopCouponRemainServiceFacade.CouponHandlerAll( orderInfo, userInfo);
+        if(res_uporder==1){
+            return "yes";
+        }else{
+            return "No";
+        }*/
+        //模拟转让操作
+        //.dealCustomerExpiredCoupon("16");
+        //模拟退还非转让部分
+        Map<String,String> res_cancelDouMap = new HashMap<>();
+        Map<String,String> res_cancelDouMapSale = new HashMap<>();
+        res_cancelDouMap=shopOrderInterfaceServiceFacade.cancelOrderDou(orderNo);
+        res_cancelDouMapSale=shopOrderInterfaceServiceFacade.cancelOrderDouSale(orderNo);
+        return "";
     }
 
 }

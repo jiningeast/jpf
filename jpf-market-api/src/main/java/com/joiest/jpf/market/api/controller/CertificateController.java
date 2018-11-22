@@ -47,6 +47,7 @@ public class CertificateController {
    public String activation(String data)
    {
 
+
        //判断当前用户是否锁定
        if(userInfo.getStatus()==0 && userInfo.getStatus()!=null){
 
