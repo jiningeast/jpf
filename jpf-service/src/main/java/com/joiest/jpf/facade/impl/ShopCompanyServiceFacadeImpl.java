@@ -5,10 +5,7 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.po.PayShopCompanyExample;
-import com.joiest.jpf.common.util.ConfigUtil;
-import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
 import com.joiest.jpf.dto.GetShopCompanyRequest;
@@ -497,6 +494,8 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     public PayShopCompany getCompanyByUserNamnAndPasswd(String userName, String password) {
         PayShopCompanyExample e = new PayShopCompanyExample();
         PayShopCompanyExample.Criteria criteria = e.createCriteria();
+        criteria.andLoginNameEqualTo(userName);
+        criteria.andLoginPwdEqualTo(SHA1.getInstance().getMySHA1Code(password));
         List<PayShopCompany> list = payShopCompanyMapper.selectByExample(e);
         if (list!=null&&list.size()!=0){
             return list.get(0);

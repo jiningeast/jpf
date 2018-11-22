@@ -4,6 +4,7 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.util.AESUtils;
 import com.joiest.jpf.common.util.Base64CustomUtils;
+import com.joiest.jpf.common.util.SHA1;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCompanyServiceFacade;
@@ -93,8 +94,27 @@ public class ManagerLoginController {
         String companyId= request.getParameter("companyId");
         String oldPass= request.getParameter("oldPass");
         String newPass= request.getParameter("newPass");
-        PayShopCompany company = shopCompanyServiceFacade.getById(companyId);
-        //判断密码
-        return "";
+        PayShopCompany company = shopCompanyServiceFacade.getById(Base64CustomUtils.base64Decoder(companyId));
+        if(StringUtils.equals(SHA1.getInstance().getMySHA1Code(Base64CustomUtils.base64Decoder(oldPass)),company.getLoginPwd())){
+            //判断密码
+            company.setLoginPwd(SHA1.getInstance().getMySHA1Code(Base64CustomUtils.base64Decoder(newPass)));
+            shopCompanyServiceFacade.updateCompanyRecord(company);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),null);
+        }else{
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.OLDPASSERROR.getCode(),JpfInterfaceErrorInfo.OLDPASSERROR.getDesc(),null);
+        }
+    }
+
+    /**
+     * 登出接口
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="logout",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String logout(HttpServletRequest request){
+        String token = request.getParameter("token");
+        redisCustomServiceFacade.remove(ConfigUtil.getValue("MARKETMANGER_LOGIN_KEY") + token);
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.LOGOUT.getCode(),JpfInterfaceErrorInfo.LOGOUT.getDesc(),null);
     }
 }
