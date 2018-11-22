@@ -491,4 +491,22 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
 
         return list.get(0);
     }
+
+
+    @Override
+    public PayShopCompany getCompanyByUserNamnAndPasswd(String userName, String password) {
+        PayShopCompanyExample e = new PayShopCompanyExample();
+        PayShopCompanyExample.Criteria criteria = e.createCriteria();
+        List<PayShopCompany> list = payShopCompanyMapper.selectByExample(e);
+        if (list!=null&&list.size()!=0){
+            return list.get(0);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public PayShopCompany getById(String companyId) {
+        return payShopCompanyMapper.selectByPrimaryKey(companyId);
+    }
 }

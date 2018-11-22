@@ -57,4 +57,20 @@ public interface ShopCompanyServiceFacade {
      * 通过企业名称获取企业
      */
     public PayShopCompany getCompanyByName(String companyName);
+
+    /**
+     * 根据用户名密码查询用户信息
+     * @param userName
+     * @param password
+     * @return
+     */
+    PayShopCompany getCompanyByUserNamnAndPasswd(String userName, String password);
+
+    /**
+     * 根据id查询商户信息
+     * @param companyId
+     * @return
+     */
+    PayShopCompany getById(String companyId);
+
 }

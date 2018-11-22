@@ -72,9 +72,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/travel/proInfo"); // 获取商品服务列表
             }
         };
+        List<String> marageLoginUrl = new ArrayList<String>() {
+            {
+                add("/market-manager/loginIn");                //绑定手机号
+            }
+        };
         System.out.println(ServletUtils.getIpAddr(request));
         String contextPath = request.getContextPath();
         String requestURI = request.getRequestURI();
+        String login_type =request.getParameter("login_type");
         String accessLink = "";
         if (StringUtils.isNotBlank(contextPath)) {
             accessLink = requestURI.replace(
@@ -88,40 +94,41 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         String requestUri = uri.replace( contextPath, "");
         String Token = request.getHeader("Token");
         logger.info("========Token：" + Token);
-        if ( NOTLOGINURL.contains(requestUri) ) { // 不需要过滤的地址
+        if(NOTLOGINURL.contains(requestUri)){ // 不需要过滤的地址
             return super.preHandle(request, response, handler);
-        } else if( !NOTLOGINURL.contains(requestUri) ) {
-
+        }else if(!NOTLOGINURL.contains(requestUri)&&StringUtils.isBlank(login_type)){//微信端的验证
             String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + Token);
             if(openId_encrypt == null){
-
                 logger.info("========redis未获取到token: "+openId_encrypt);
                 //WEIXIN_LOGIN_D5D160B52E1AAE2AD843ACEEBA3B69197BD047F7C6B8CE432F416ADF77D282A3924C802B52D7D65A26FED1F08BB6B700
                 //Token = "D5D160B52E1AAE2AD843ACEEBA3B69197BD047F7C6B8CE432F416ADF77D282A3924C802B52D7D65A26FED1F08BB6B700";
                 String tokenDe = AESUtils.decrypt(Token,ConfigUtil.getValue("AES_KEY"));
                 String tokenVal = AESUtils.encrypt(StringUtils.substring(tokenDe,18), ConfigUtil.getValue("AES_KEY"));
-
                 logger.info("========动态存储redis Token: "+tokenDe);
                 logger.info("========动态存储redis TokenValue: "+tokenVal);
-
                 redisCustomServiceFacade.set(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + Token, tokenVal, Long.parseLong(ConfigUtil.getValue("MARKET_USER_LOGIN_EXPIRE_30")) );
             }
-            Boolean isLogin = userIsLogin(Token);
-            if ( !isLogin )
-            {
+            if (!userIsLogin(Token)){
                 logger.info("========跳转到未登录处理的方法地址: /nologin/userIndex");
                 request.getRequestDispatcher("/nologin/userIndex").forward(request,response);
                 return false;
             }
-            Boolean isBindCoupon = userIsBindCoupon();
-            if ( !isBindCoupon )
-            {
+            if (!userIsBindCoupon()){
                 logger.info("========跳转到未绑定券的处理的方法地址: /nologin/userNotBindCoupon");
                 request.getRequestDispatcher("/nologin/userNotBindCoupon").forward(request,response);
                 return false;
             }
             return super.preHandle(request, response, handler);
-        } else {
+        } else  if(!marageLoginUrl.contains(requestUri)&&StringUtils.equals("manager",login_type)){
+            //验证redis
+            String marketManagerLoginKey=redisCustomServiceFacade.get(ConfigUtil.getValue("MARKETMANGER_LOGIN_KEY")+Token);
+            if(StringUtils.isNotBlank(marketManagerLoginKey)){
+               return true;
+            }else{
+                request.getRequestDispatcher("/market-manager/managerLogin/loginFail").forward(request,response);
+                return false;
+            }
+        }else{
             return false;
         }
     }
