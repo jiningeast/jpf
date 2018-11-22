@@ -306,4 +306,39 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
 
         return new JpfResponseDto();
     }
+
+    /**
+     * 商品列表页
+     */
+    @Override
+    public GetShopProductResponse getList(GetShopProductRequest request){
+
+        PayShopProductExample example = new PayShopProductExample();
+        PayShopProductExample.Criteria c = example.createCriteria();
+        c.andProductInfoIdEqualTo(Integer.valueOf(request.getProductInfoId()));
+        //商品状态：0=下架 1=上架
+        c.andStatusEqualTo((byte)1);
+        example.setOrderByClause("recharge_money ASC");
+
+        List<PayShopProductCustom> list = payShopProductCustomMapper.selectContentByPid(example);
+        if( list == null || list.size() < 0 ){
+            return null;
+        }
+
+        GetShopProductResponse response = new GetShopProductResponse();
+        List<ShopProductInfo> infos = new ArrayList<>();
+        for(PayShopProductCustom one:list){
+            ShopProductInfo shopProductInfo = new ShopProductInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopProductCustom.class,ShopProductInfo.class,false);
+            beanCopier.copy(one,shopProductInfo,null);
+            infos.add(shopProductInfo);
+        }
+        response.setList(infos);
+        response.setCount(infos.size());
+        return response;
+
+    }
+
+
+
 }

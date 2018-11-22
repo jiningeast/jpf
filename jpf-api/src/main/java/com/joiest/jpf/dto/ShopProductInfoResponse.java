@@ -2,8 +2,10 @@ package com.joiest.jpf.dto;
 
 public class ShopProductInfoResponse {
     
+    private String id;
+
     private String title;
-    
+
     private String moneyscope;
     
     private String imgUrl;
@@ -30,5 +32,13 @@ public class ShopProductInfoResponse {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

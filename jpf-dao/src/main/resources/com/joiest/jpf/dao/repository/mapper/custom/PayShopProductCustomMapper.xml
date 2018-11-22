@@ -570,6 +570,9 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
   </select>
 
   <!--自定义查询 end -->
