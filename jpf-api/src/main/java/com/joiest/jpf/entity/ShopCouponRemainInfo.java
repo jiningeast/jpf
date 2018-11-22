@@ -79,6 +79,11 @@ public class ShopCouponRemainInfo {
      */
     private BigDecimal percent;
 
+    /**
+     * 转让状态:0没用完;1已用完;2过期清零
+     */
+    private Byte salestatus;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -199,5 +204,13 @@ public class ShopCouponRemainInfo {
 
     public void setPercent(BigDecimal percent) {
         this.percent = percent;
+    }
+
+    public Byte getSalestatus() {
+        return salestatus;
+    }
+
+    public void setSalestatus(Byte salestatus) {
+        this.salestatus = salestatus;
     }
 }
