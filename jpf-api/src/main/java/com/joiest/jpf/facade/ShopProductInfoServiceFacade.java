@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 欣豆市场-商品服务信息Service
- * @author admin 
+ * @author admin
  */
 public interface ShopProductInfoServiceFacade {
 
@@ -23,4 +23,5 @@ public interface ShopProductInfoServiceFacade {
      * @return
      */
     int getProductInfoCount(String decoderPayShopSupplierId);
+
 }

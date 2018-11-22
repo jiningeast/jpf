@@ -50,4 +50,11 @@ public interface ShopProductServiceFacade {
      */
     public JpfResponseDto addShopProductInfo(ShopProductInfoRequest request);
 
+    /**
+     * shop_product getRecords
+     * @param request
+     * @return
+     */
+    public GetShopProductResponse getList(GetShopProductRequest request);
+
 }

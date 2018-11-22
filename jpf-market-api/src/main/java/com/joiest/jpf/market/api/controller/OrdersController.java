@@ -5,11 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayChargeOrder;
+import com.joiest.jpf.common.po.PayShopCouponRemain;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.dto.CreateOrderInterfaceRequest;
-import com.joiest.jpf.dto.GetCouponRemainResponse;
-import com.joiest.jpf.dto.GetShopStockCardResponse;
-import com.joiest.jpf.dto.OfpayRequest;
+import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.constant.ManageConstants;
@@ -113,6 +111,7 @@ public class OrdersController {
         Map<String, Object>requestMap = _filter(data);
         String requestJson = JsonUtils.toJson(requestMap);
         if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
         }
@@ -287,6 +286,7 @@ public class OrdersController {
         }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
     }
+
     /**
      * 支付
      * 0:欣豆支付 1:微信支付
@@ -328,6 +328,33 @@ public class OrdersController {
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getCode(), JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getDesc(), "");
         }
+
+        //携程生活订单
+        if( orderInfo.getOrderType() == 4 ){
+            if( StringUtils.isBlank(requestMap.get("phone").toString()) ){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "手机号不能为空", "");
+            }
+            if( !ToolUtils.checkPhone(requestMap.get("phone").toString()) ){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "手机号格式错误", "");
+            }
+            // 接收短信手机号必须为当前登录账号
+            if( !requestMap.get("phone").toString().equals(userInfo.getPhone()) ){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "登录账号与接受短信手机号不一致", "");
+            }
+        }
+
+        //携程生活订单 存储用户收货手机号
+        if ( orderInfo.getOrderType() == 4  ) {
+            ShopOrderInterfaceInfo shopOrderInterfaceInfo = new ShopOrderInterfaceInfo();
+            shopOrderInterfaceInfo.setChargeNo(requestMap.get("phone").toString().trim());
+            shopOrderInterfaceInfo.setId(orderInfo.getId());
+            shopOrderInterfaceInfo.setUpdatetime(new Date());
+            int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(shopOrderInterfaceInfo);
+            if( res_upOrder != 1 ){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "手机号更新失败，请从新提交", "");
+            }
+        }
+
         // 校验码验证
         Boolean codeIsTrue = ToolUtils.ValidateCode(userInfo.getCode(), uid, userInfo.getDou().toString());
         if ( !codeIsTrue )
@@ -336,6 +363,7 @@ public class OrdersController {
         }
         //过期券处理
         int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
+
 
         //用户可用券列表
         GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(uid);
@@ -443,11 +471,363 @@ public class OrdersController {
         if ( (resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1")) || (resultMap.containsKey("message") && resultMap.get("message").equals("成功")) ) {
             //扣减豆操作
             int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
+
         } else {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "提交失败", null);
         }
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "充值成功", ManageConstants.rechargeStatusCn_map.get(game_state));
     }
+
+    //TODO  记录请求日志  商品类别判断
+//    @RequestMapping(value = "/createOrder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//    @ResponseBody
+//    public String createOrder(String data)
+//    {
+//        // 获取参数
+//        if ( StringUtils.isBlank(data) )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
+//        }
+//        Map<String, Object>requestMap = _filter(data);
+//        String requestJson = JsonUtils.toJson(requestMap);
+//        if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+//
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
+//        }
+//        CreateOrderInterfaceRequest request = new CreateOrderInterfaceRequest();
+//        try{
+//            request =  (CreateOrderInterfaceRequest) ClassUtil.mapToObject(requestMap, request.getClass());
+//        }catch (Exception e)
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+//        }
+//
+//        // 判断用户是否已禁用
+//        if ( userInfo.getStatus() == 0 ){
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_IS_FREEZE.getCode(), JpfInterfaceErrorInfo.USER_IS_FREEZE.getDesc(), "");
+//        }
+//
+//        //获取商品信息
+//        ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(request.getPid());
+//        if ( productInfo == null )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getCode(), JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getDesc(), "");
+//        }
+//
+//        // 先创建一个空订单，待更新
+//        ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
+//        String orderno = ToolsUtils.createOrderid();
+//        info.setOrderNo(orderno);
+//        info.setCustomerId(userInfo.getId());
+//        info.setCustomerName(userInfo.getNickname());
+//        info.setProductId(productInfo.getId());
+//        info.setProductName(productInfo.getName());
+//        info.setProductMoney(productInfo.getMoney());
+//        info.setProductDou(productInfo.getDou());
+//        info.setProductInfoId(productInfo.getProductInfoId());
+//        info.setAddtime(new Date());
+//        int orderId = shopOrderInterfaceServiceFacade.addOrder(info);
+//        info.setId(""+orderId);
+//        // 获取orderid的个位数，0,1时用欧非接口，2-9用威能接口
+//        String lastNum = StringUtils.substring(String.valueOf(orderId),-1,String.valueOf(orderId).length());
+//        if ( Integer.parseInt(lastNum) <= 1 ){
+//            info.setInterfaceType((byte)0);     // 0=欧非 1=威能 （威能价格便宜，多用威能）
+//        }else {
+//            info.setInterfaceType((byte)1);
+//        }
+//
+//        // 验证传入的信息
+//        String source = "1";    // 1=直充 2=卡密
+//        String chargeNo = "";
+//        if(requestMap.containsKey("source")){
+//            source = requestMap.get("source").toString();
+//        }
+//        if(source.equals("2")){
+//            // 卡密订单，判断库存
+//            int amount = Integer.parseInt(request.getAmount());
+//            List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,amount);
+//            if( list == null || list.isEmpty() || productInfo.getStored()<amount || list.size()<amount ) {
+//                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
+//            }
+//            if ( list.size() <= productInfo.getStoredSafe() ){
+//                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
+//            }
+//        }else{
+//            // 油卡充值
+//            if ( request.getOtype().equals("1") || request.getOtype().equals("2") ) {
+//                if ( !request.getCardno().equals(request.getCardnumber()) )
+//                {
+//                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "油卡卡号不一致");
+//                }
+//                Boolean gasIsTrue = Pattern.compile(res_gas).matcher(request.getCardnumber()).matches();
+//                if ( !gasIsTrue )
+//                {
+//                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "油卡卡号错误");
+//                }
+//                chargeNo = request.getCardnumber();
+//            } else if ( request.getOtype().equals("3") ) {
+//                //话费充值
+//                Boolean phoneIsTrue = Pattern.compile(reg_phone).matcher(request.getPhone()).matches();
+//                if ( !phoneIsTrue ) {
+//                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码错误");
+//                }
+//                Boolean mobileIsTrue =  Pattern.compile(reg_phone).matcher(request.getMobile()).matches();
+//                if ( !mobileIsTrue ) {
+//                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码错误");
+//                }
+//                if ( !request.getPhone().equals(request.getMobile()) ) {
+//                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "手机号码不一致");
+//                }
+//                if(!requestMap.containsKey("carrier") || StringUtils.isBlank(requestMap.get("carrier").toString())){
+//                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "运营商信息错误");
+//                }
+//                //移动cmcc，联通:cucc，电信:ctc，
+//                List<String> carrierList = new ArrayList<String>(){
+//                    {
+//                        add("cmcc");
+//                        add("cucc");
+//                        add("ctc");
+//                    }
+//                };
+//                if(!carrierList.contains(requestMap.get("carrier").toString()))
+//                {
+//                    throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL, "运营商信息错误");
+//                }
+//
+//                chargeNo = request.getPhone();
+//            }
+//        }
+//        ValidatorUtils.validateInterface(request);
+//        /*
+//        // 充值金额与付款金额必须一致
+//        if ( !request.getMoney().equals(request.getPaymoney()) )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDERMONEY_DIFF.getCode(), JpfInterfaceErrorInfo.MK_ORDERMONEY_DIFF.getDesc(), "");
+//        }
+//        */
+//
+//        // 构建订单信息
+//        if( requestMap.containsKey("carrier") && request.getOtype().equals("3") && info.getInterfaceType()==1 ){
+//            //移动cmcc，联通:cucc，电信:ctc，
+//            switch(requestMap.get("carrier").toString()){
+//                case "cmcc":
+//                    if(productInfo.getCmccProductId()!=null){
+//                        info.setWnProductId(productInfo.getCmccProductId().toString());
+//                    }
+//                    break;
+//                case "cucc":
+//                    if(productInfo.getCuccProductId()!=null){
+//                        info.setWnProductId(productInfo.getCuccProductId().toString());
+//                    }
+//                    break;
+//                case "ctc":
+//                    if(productInfo.getCtcProductId()!=null){
+//                        info.setWnProductId(productInfo.getCtcProductId().toString());
+//                    }
+//                    break;
+//                default:
+//                    info.setInterfaceType((byte)0);
+//                    break;
+//            }
+//        }
+//        if ( request.getAmount() != null && StringUtils.isNotBlank(""+request.getAmount()) ){
+//            // 如果参数中有数量
+//            info.setTotalMoney(new BigDecimal(productInfo.getMoney().doubleValue()*Integer.parseInt(request.getAmount())));
+//            info.setTotalDou(productInfo.getDou()*Integer.parseInt(request.getAmount()));
+//            info.setAmount(Integer.parseInt(request.getAmount()));
+//        }else{
+//            // 如果参数中没有数量
+//            info.setTotalMoney(productInfo.getMoney());
+//            info.setTotalDou(productInfo.getDou());
+//            info.setAmount(1);
+//        }
+//
+//        // 如果是卡密交易
+//        if ( source.equals("2") ){
+//            if ( StringUtils.isNotBlank(""+request.getReceiveType()) ){
+//                info.setReceiveType(Byte.valueOf(request.getReceiveType()));
+//            }
+//            if ( StringUtils.isNotBlank(""+request.getReveiveValue()) ){
+//                info.setReceiveValue(request.getReveiveValue());
+//            }
+//        }
+//
+//        // 更新订单信息
+//        info.setChargeNo(chargeNo);
+//        info.setOrderType(Byte.valueOf(request.getOtype()));
+//        info.setRequestedContent(requestJson);
+//        info.setSource((byte)0);    // 0=自平台 1=敬恒
+//        info.setUpdatetime(new Date());
+//        int res = shopOrderInterfaceServiceFacade.updateOrder(info);
+//        if ( res >= 0 )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), orderno);
+//        }
+//        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), JpfInterfaceErrorInfo.FAIL.getDesc(), null);
+//    }
+
+    /**
+     * 支付
+     * 0:欣豆支付 1:微信支付
+     */
+//    @RequestMapping(value = "/pay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//    @ResponseBody
+////    @Transactional
+//    public String dopay(String data,HttpServletResponse Httpresponse)
+//    {
+//         /*
+//         1.金额校验
+//         2.订单用户校验
+//         3.用户券列表
+//         4.扣除相应的券
+//         5.更新code
+//         */
+//        Map<String, Object> requestMap = _filter(data);
+//        if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
+//        }
+//        if ( StringUtils.isBlank(requestMap.get("orderNo").toString()) )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "订单号不能为空", "");
+//        }
+//        if ( StringUtils.isBlank(requestMap.get("payway").toString()) )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "支付方式不能为空", "");
+//        }
+//
+//        // 是否冻结
+//        if ( userInfo.getStatus() != 1 )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_IS_FREEZE.getCode(), JpfInterfaceErrorInfo.USER_IS_FREEZE.getDesc(), "");
+//        }
+//        // 查询订单
+//        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderOne(requestMap.get("orderNo").toString(),uid);
+//        if ( orderInfo == null )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getCode(), JpfInterfaceErrorInfo.MK_ORDER_NOT_EXIST.getDesc(), "");
+//        }
+//        // 校验码验证
+//        Boolean codeIsTrue = ToolUtils.ValidateCode(userInfo.getCode(), uid, userInfo.getDou().toString());
+//        if ( !codeIsTrue )
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getCode(), JpfInterfaceErrorInfo.USER_DOU_CODE_ERROR.getDesc(), "");
+//        }
+//        //过期券处理
+//        int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(uid);
+//
+//        //用户可用券列表
+//        GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(uid);
+//        if ( userCouponList == null || userCouponList.getCount() == 0) {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
+//        }
+//        int orderDou = orderInfo.getTotalDou();
+//        if ( orderDou > userInfo.getDou() || orderDou > userCouponList.getDouTotal())
+//        {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(), JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(), "");
+//        }
+//
+//        //商品信息
+//        ShopProductInterfaceInfo productInfo = shopProductInterfaceServiceFacade.getShopProduct(orderInfo.getProductId());
+//
+//        //卡密商品信息判断
+//        Map<String, String> resultMap = new HashMap<>();
+//        if (productInfo.getType().toString().equals("2")){
+//            // 判断库存
+//            List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,orderInfo.getAmount());
+//            if( list == null || list.isEmpty() || productInfo.getStored()<orderInfo.getAmount() || list.size()<orderInfo.getAmount() ) {
+//                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
+//            }else if( list.size() <= productInfo.getStoredSafe() ) {
+//                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
+//            } else {
+//                return this.cardRecharge(orderInfo,productInfo,list,userCouponList,Httpresponse);
+//            }
+//        }else{
+//            //充值
+//            if ( orderInfo.getOrderType() == 3 ) {
+//                if(orderInfo.getInterfaceType().equals((byte)1)){
+//                    // 微能话费充值
+//                    if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
+//                        // 测试环境
+//                        resultMap.put("retcode","1");
+//                    }else if (ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("1")){
+//                        // 正式环境
+//                        resultMap = this.phoneRechargeWn(orderInfo, productInfo);
+//                    }
+//
+//                }else{
+//                    // 欧非话费充值
+//                    if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("0") ){
+//                        // 测试环境
+//                        resultMap.put("retcode","1");
+//                    }else if ( ConfigUtil.getValue("ENVIRONMENT_TYPE").equals("1") ){
+//                        // 正式环境
+//                        resultMap = this.phoneRechargeOf(orderInfo, productInfo);
+//                    }
+//                }
+//            } else if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 ) {
+//                // 油卡充值 1:中国石化 2:中国石油
+//                resultMap = this.gasRecharge(orderInfo, productInfo);
+//            }
+//        }
+//        //添加通道流水 更新order状态
+//        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+//        if ( orderInfo.getInterfaceType() == 0 ){
+//            // 欧飞接口返回处理
+//            if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ) {
+//                //充值成功
+//                String foreign_orderid = resultMap.getOrDefault("orderid", "");     //接口订单id
+//                orderInfo.setForeignOrderNo(foreign_orderid);
+//                orderInfo.setStatus((byte)1);   // 已支付
+//            } else {
+//                orderInfo.setStatus((byte)2);   // 支付失败
+//            }
+//        }else if ( orderInfo.getInterfaceType() == 1 ){
+//            // 威能接口返回处理
+//            if ( resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1") ){
+//                orderInfo.setStatus((byte)1);   // 已支付
+//            }else{
+//                orderInfo.setStatus((byte)2);   // 支付失败
+//            }
+//        }
+//
+//        byte rechargeType = 0;
+//        if ( orderInfo.getOrderType() == 1 || orderInfo.getOrderType() == 2 ) {
+//            rechargeType = 6;
+//        } else if ( orderInfo.getOrderType() == 3 ) {
+//            rechargeType = 4;
+//        }
+//        stream.setType(rechargeType);
+//        stream.setOrderNo(orderInfo.getOrderNo());
+//        stream.setRequestUrl(resultMap.get("requestUrl"));
+//        stream.setRequestContent(resultMap.get("requestParam"));
+//        String requestUrl = resultMap.get("requestUrl");
+//        String requestParam = resultMap.get("requestParam");
+//        resultMap.remove("requestUrl");
+//        resultMap.remove("requestParam");
+//        String responseJson = orderInfo.getInterfaceType().equals((byte)1)?resultMap.get("responseParam"):JsonUtils.toJson(resultMap);
+//        stream.setResponseContent(responseJson);
+//        stream.setAddtime(new Date());
+//        int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
+//
+//        //更新订单
+//        orderInfo.setId(orderInfo.getId());
+//        orderInfo.setRechargeTime(new Date());
+//        String game_state = resultMap.getOrDefault("game_state", "");
+//        orderInfo.setRechargeStatus(game_state);     //0充值中 1充值成功 9充值失败
+//        orderInfo.setForeignRequestContent(requestUrl + "?" + requestParam);
+//        orderInfo.setForeignResponseContent(responseJson);
+//        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderInfo);
+//
+//        if ( (resultMap.containsKey("retcode") && resultMap.get("retcode").equals("1")) || (resultMap.containsKey("message") && resultMap.get("message").equals("成功")) ) {
+//            //扣减豆操作
+//            int res_uporder = shopCouponRemainServiceFacade.CouponHandler(userCouponList.getList(), orderInfo, userInfo);
+//        } else {
+//            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "提交失败", null);
+//        }
+//        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "充值成功", ManageConstants.rechargeStatusCn_map.get(game_state));
+//    }
 
     // 发email
     public String sendCardEmail(HttpServletResponse Httpresponse,String data) throws Exception {
@@ -828,7 +1208,7 @@ public class OrdersController {
         return resultMap;
     }
 
-    @RequestMapping("/ofpayNotifyUrl")
+  /*  @RequestMapping("/ofpayNotifyUrl")
     @ResponseBody
     public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
     {
@@ -871,11 +1251,86 @@ public class OrdersController {
         {
             //支付失败 取消豆
             res_cancelDouMap = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
-
             int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(orderInfo.getCustomerId());
 
             sbf.append("\n订单状态：充值失败");
             sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","豆退还操作信息为空"));
+
+        } else
+        {
+            sbf.append("\n订单状态：充值成功");
+            sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","更新订单成功"));
+        }
+        orderinfo.setId(orderInfo.getId());
+        orderinfo.setRechargeStatus(request.getRet_code());     //0充值中 1充值成功 9充值失败
+        orderinfo.setUpdatetime(new Date());
+        orderinfo.setInterfaceType((byte)0);
+        int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(orderinfo);
+
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+        return "Y";
+    }*/
+
+    /**
+     * 服务转让改版
+     */
+    @RequestMapping("/ofpayNotifyUrl")
+    @ResponseBody
+    public String ofpayNotifyUrl(OfpayRequest request, HttpServletRequest httpRequest)
+    {
+//        String sign =
+
+        //1.流水 2.订单信息 3.更新订单状态
+        Map<String, Object> map = ClassUtil.requestToMap(request);
+        String json = JsonUtils.toJson(map);
+
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n充值类型:" + "充值回调");
+        sbf.append("\n访问地址：" + ServletUtils.getIpAddr(httpRequest));
+        sbf.append("\n访问参数：" + map);
+
+        String fileName = "ofpayNotify";
+        String path = "/logs/jpf-market-api/log/";
+
+        ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrder(request.getSporder_id());
+        if ( orderInfo == null )
+        {
+            sbf.append("\n描述： 订单ID：" + request.getSporder_id() + "不存在");
+            LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+            return "N";
+        }
+
+        //流水
+        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+        stream.setType((byte)7);
+        stream.setBatchId(orderInfo.getOrderNo());
+        stream.setResponseContent(json);
+        stream.setAddtime(new Date());
+        int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
+        ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
+        String rechargeStatus = "0";
+        Map<String,String> res_cancelDouMap = new HashMap<>();
+        Map<String,String> res_cancelDouMap_sale = new HashMap<>();
+        if ( request.getRet_code().equals("9") )    //1成功 9失败
+        {
+            //如果订单非转让都不为空退非转让部分并记录日志
+            if(StringUtils.isNotBlank(orderInfo.getCouponDetail()) && orderInfo.getCouponDetail()!=null){
+                res_cancelDouMap = shopOrderInterfaceServiceFacade.cancelOrderDou(orderInfo.getOrderNo());
+                sbf.append("\n描述：" + res_cancelDouMap.getOrDefault("douJson","豆退还操作信息为空"));
+            }
+            //如果转让部分不为空扣除转让部分并记录日志
+            if(StringUtils.isNotBlank(orderInfo.getCouponDetail()) && orderInfo.getCouponDetailSale()!=null ){
+                res_cancelDouMap_sale = shopOrderInterfaceServiceFacade.cancelOrderDouSale(orderInfo.getOrderNo());
+                sbf.append("\n转让部分退出描述：" + res_cancelDouMap_sale.getOrDefault("douJson","转让部分豆退还操作信息为空"));
+            }
+            //支付失败 取消豆
+            int count = shopCouponRemainServiceFacade.dealCustomerExpiredCoupon(orderInfo.getCustomerId());
+
+            sbf.append("\n订单状态：充值失败");
+
 
         } else
         {
@@ -1360,6 +1815,32 @@ public class OrdersController {
         resultMap = JsonUtils.toCollection(requestStr, new TypeReference<Map<String, Object>>(){});
         resultMap.put("code",JpfInterfaceErrorInfo.SUCCESS.getCode());
         return resultMap;
+    }
+
+    /**
+     * 模拟支付流程匹配欣券
+     */
+    @RequestMapping(value="test",method = RequestMethod.POST)
+    @ResponseBody
+    public String  test(){
+        //根据订单信息模拟数据
+        String orderNo="102123132";
+     /*   ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderOne(orderNo,uid);
+        //开始匹配欣券
+        int res_uporder = shopCouponRemainServiceFacade.CouponHandlerAll( orderInfo, userInfo);
+        if(res_uporder==1){
+            return "yes";
+        }else{
+            return "No";
+        }*/
+        //模拟转让操作
+        //.dealCustomerExpiredCoupon("16");
+        //模拟退还非转让部分
+        Map<String,String> res_cancelDouMap = new HashMap<>();
+        Map<String,String> res_cancelDouMapSale = new HashMap<>();
+        res_cancelDouMap=shopOrderInterfaceServiceFacade.cancelOrderDou(orderNo);
+        res_cancelDouMapSale=shopOrderInterfaceServiceFacade.cancelOrderDouSale(orderNo);
+        return "";
     }
 
 }

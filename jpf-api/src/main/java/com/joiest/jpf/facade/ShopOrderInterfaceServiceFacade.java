@@ -38,4 +38,8 @@ public interface ShopOrderInterfaceServiceFacade {
      * 取消订单消费的豆
      */
     public Map<String,String> cancelOrderDou(String orderNo);
+    /**
+     * 取消订单消费转让比例的豆
+     */
+    public Map<String,String> cancelOrderDouSale(String orderNo);
 }

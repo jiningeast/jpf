@@ -210,6 +210,24 @@ public class ShopOrderInterfaceInfo implements Serializable {
      */
     private String image;
 
+    /**
+     * 券转额度消费详情，json存激活id，豆数量
+     */
+    private String couponDetailSale;
+
+    /**
+     * 当前系统时间
+     */
+    private Date currentSystemTime;
+
+    public Date getCurrentSystemTime() {
+        return currentSystemTime;
+    }
+
+    public void setCurrentSystemTime(Date currentSystemTime) {
+        this.currentSystemTime = currentSystemTime;
+    }
+
     public String getId() {
         return id;
     }
@@ -538,5 +556,13 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setBargainOrderNo(String bargainOrderNo) {
         this.bargainOrderNo = bargainOrderNo;
+    }
+
+    public String getCouponDetailSale() {
+        return couponDetailSale;
+    }
+
+    public void setCouponDetailSale(String couponDetailSale) {
+        this.couponDetailSale = couponDetailSale;
     }
 }
