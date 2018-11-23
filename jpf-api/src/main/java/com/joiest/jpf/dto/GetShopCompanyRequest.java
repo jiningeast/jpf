@@ -92,6 +92,15 @@ public class GetShopCompanyRequest {
      */
     private BigDecimal percent;
 
+    private String openAccent;
+
+    public String getOpenAccent() {
+        return openAccent;
+    }
+
+    public void setOpenAccent(String openAccent) {
+        this.openAccent = openAccent;
+    }
 
     public String getId() {
         return id;

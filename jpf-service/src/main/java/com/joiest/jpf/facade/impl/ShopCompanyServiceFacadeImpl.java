@@ -216,6 +216,13 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         String accountReturn=loanAmount.toString();
         payShopCompany.setMoney(loanAmount);
         payShopCompany.setAddtime(date);
+        payShopCompany.setLoginName(request.getReceiveEmail());
+        Integer randPwd = ToolUtils.getRandomInt(100000,999999);
+        payShopCompany.setLoginPwd(SHA1.getInstance().getMySHA1Code(randPwd.toString()));
+        payShopCompany.setIsFirstLogin((byte)0);
+        if(StringUtils.equals("1",request.getOpenAccent())){
+            sendMailToCompany(request);
+        }
         //获取刚插入的id
            int res = payShopCompanyCustomMapper.insertSelective(payShopCompany);
             String sprimatkey = payShopCompany.getId();
@@ -233,6 +240,10 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
             }
 
         return new JpfResponseDto();
+    }
+
+    //
+    private void sendMailToCompany(GetShopCompanyRequest request) {
     }
 
     /**
