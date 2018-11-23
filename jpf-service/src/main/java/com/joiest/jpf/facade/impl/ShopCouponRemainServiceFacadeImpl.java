@@ -5,6 +5,7 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.JsonUtils;
+import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCouponRemainCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
@@ -23,6 +24,7 @@ import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServiceFacade {
@@ -342,7 +344,20 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             //更新信息
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
         }
-         return res_order;
+        //=========日志记录==========
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n订单号:"+orderInfo.getOrderNo());
+        sbf.append("\n用户信息:"+userInfo);
+        sbf.append("\n扣除非转让：" + json_couponDetail);
+        sbf.append("\n扣除转让部分：" + json_couponDetailSale);
+        String fileName = "DouSalePay";
+        String path = "/logs/jpf-market-api/log/";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+
+        return res_order;
     }
 
 
@@ -480,6 +495,19 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             //更新信息
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "更新订单信息失败");
         }
+
+        //=========转让日志记录==========
+        StringBuilder sbf = new StringBuilder();
+        Date date = new Date();
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sbf.append("\n\nTime:" + myfmt1.format(date));
+        sbf.append("\n转让订单号:"+orderInfo.getOrderNo());
+        sbf.append("\n用户信息:"+userInfo);
+        sbf.append("\n扣除转让部分欣豆：" + json_couponDetail);
+        String fileName = "DouTranfer";
+        String path = "/logs/jpf-market-api/log/";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+
         return res_order;
     }
 

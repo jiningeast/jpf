@@ -84,6 +84,11 @@ public class ShopCustomerInfo {
      */
     private Date updatetime;
 
+    /**
+     * 可转让豆
+     */
+    private Integer saleDou;
+
     public String getId() {
         return id;
     }
@@ -294,5 +299,13 @@ public class ShopCustomerInfo {
 
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    public Integer getSaleDou() {
+        return saleDou;
+    }
+
+    public void setSaleDou(Integer saleDou) {
+        this.saleDou = saleDou;
     }
 }
