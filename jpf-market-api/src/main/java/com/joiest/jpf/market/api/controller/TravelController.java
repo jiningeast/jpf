@@ -50,9 +50,9 @@ public class TravelController {
         String decoderPayShopSupplierId = ConfigUtil.getValue("travel_supplier_id");
         System.out.println("获取的供应商Id为：" + decoderPayShopSupplierId);
         List<PayShopProductInfo> shopProductInfoList = shopAdInterfaceServiceFacade.getProductInfoList(decoderPayShopSupplierId);
-        ShopProductInfoResponse response = new ShopProductInfoResponse();
         List<ShopProductInfoResponse> responseList = new ArrayList<>();
         for(PayShopProductInfo payShopProductInfo:shopProductInfoList){
+            ShopProductInfoResponse response = new ShopProductInfoResponse();
             response.setImgUrl(payShopProductInfo.getImgurl());
             response.setId(payShopProductInfo.getId().toString());
             response.setTitle(payShopProductInfo.getTitle());
