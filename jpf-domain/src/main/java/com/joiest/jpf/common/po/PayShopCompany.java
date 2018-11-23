@@ -95,6 +95,11 @@ public class PayShopCompany implements Serializable {
      */
     private Byte isFirstLogin;
 
+    /**
+     * 账户是否开通，0未开通，1已开通
+     */
+    private Byte accountStatus;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -241,6 +246,14 @@ public class PayShopCompany implements Serializable {
         this.isFirstLogin = isFirstLogin;
     }
 
+    public Byte getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(Byte accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
     /**
      *
      */
@@ -268,6 +281,7 @@ public class PayShopCompany implements Serializable {
         sb.append(", loginName=").append(loginName);
         sb.append(", loginPwd=").append(loginPwd);
         sb.append(", isFirstLogin=").append(isFirstLogin);
+        sb.append(", accountStatus=").append(accountStatus);
         sb.append("]");
         return sb.toString();
     }
@@ -305,7 +319,8 @@ public class PayShopCompany implements Serializable {
             && (this.getPercent() == null ? other.getPercent() == null : this.getPercent().equals(other.getPercent()))
             && (this.getLoginName() == null ? other.getLoginName() == null : this.getLoginName().equals(other.getLoginName()))
             && (this.getLoginPwd() == null ? other.getLoginPwd() == null : this.getLoginPwd().equals(other.getLoginPwd()))
-            && (this.getIsFirstLogin() == null ? other.getIsFirstLogin() == null : this.getIsFirstLogin().equals(other.getIsFirstLogin()));
+            && (this.getIsFirstLogin() == null ? other.getIsFirstLogin() == null : this.getIsFirstLogin().equals(other.getIsFirstLogin()))
+            && (this.getAccountStatus() == null ? other.getAccountStatus() == null : this.getAccountStatus().equals(other.getAccountStatus()));
     }
 
     /**
@@ -333,6 +348,7 @@ public class PayShopCompany implements Serializable {
         result = prime * result + ((getLoginName() == null) ? 0 : getLoginName().hashCode());
         result = prime * result + ((getLoginPwd() == null) ? 0 : getLoginPwd().hashCode());
         result = prime * result + ((getIsFirstLogin() == null) ? 0 : getIsFirstLogin().hashCode());
+        result = prime * result + ((getAccountStatus() == null) ? 0 : getAccountStatus().hashCode());
         return result;
     }
 }

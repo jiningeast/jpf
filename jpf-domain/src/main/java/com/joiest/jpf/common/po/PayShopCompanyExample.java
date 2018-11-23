@@ -1376,6 +1376,66 @@ public class PayShopCompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andAccountStatusIsNull() {
+            addCriterion("account_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusIsNotNull() {
+            addCriterion("account_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusEqualTo(Byte value) {
+            addCriterion("account_status =", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusNotEqualTo(Byte value) {
+            addCriterion("account_status <>", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusGreaterThan(Byte value) {
+            addCriterion("account_status >", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("account_status >=", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusLessThan(Byte value) {
+            addCriterion("account_status <", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("account_status <=", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusIn(List<Byte> values) {
+            addCriterion("account_status in", values, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusNotIn(List<Byte> values) {
+            addCriterion("account_status not in", values, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusBetween(Byte value1, Byte value2) {
+            addCriterion("account_status between", value1, value2, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("account_status not between", value1, value2, "accountStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchNoLikeInsensitive(String value) {
             addCriterion("upper(merch_no) like", value.toUpperCase(), "merchNo");
             return (Criteria) this;
