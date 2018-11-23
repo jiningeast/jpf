@@ -169,6 +169,45 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         return count;
     }
 
+//    @Override
+//    public GetCouponRemainResponse getCouponRemainByUidForInterface(String uid) {
+//
+//        PayShopCouponRemainExample example = new PayShopCouponRemainExample();
+//        example.setOrderByClause("id ASC");
+//        PayShopCouponRemainExample.Criteria c = example.createCriteria();
+//        PayShopCouponRemainExample.Criteria cOr = example.createCriteria();
+//        c.andCustomerIdEqualTo(uid);
+//        cOr.andStatusEqualTo((byte)0);
+//        cOr.andStatusEqualTo((byte)3);
+//        example.or(cOr);
+//        List<PayShopCouponRemain> list = payShopCouponRemainMapper.selectByExample(example);
+//        if ( list.isEmpty() || list == null )
+//        {
+//            return null;
+//        }
+//        List<ShopCouponRemainInfo> resultList = new ArrayList<>();
+//        int douTotal = 0;
+//        for ( PayShopCouponRemain one : list)
+//        {
+//            ShopCouponRemainInfo info = new ShopCouponRemainInfo();
+//            BeanCopier beanCopier = BeanCopier.create(PayShopCouponRemain.class, ShopCouponRemainInfo.class, false);
+//            beanCopier.copy(one, info, null);
+//            resultList.add(info);
+//            douTotal += one.getCouponDouLeft();
+//        }
+//        GetCouponRemainResponse response = new GetCouponRemainResponse();
+//        response.setList(resultList);
+//        response.setCount(list.size());
+//        response.setDouTotal(douTotal);
+//
+//        return response;
+//    }
+
+    /**
+     * 重新修改 2018-11-22
+     * @param uid
+     * @return
+     */
     @Override
     public GetCouponRemainResponse getCouponRemainByUidForInterface(String uid) {
 
@@ -177,9 +216,12 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         PayShopCouponRemainExample.Criteria c = example.createCriteria();
         PayShopCouponRemainExample.Criteria cOr = example.createCriteria();
         c.andCustomerIdEqualTo(uid);
-        cOr.andStatusEqualTo((byte)0);
-        cOr.andStatusEqualTo((byte)3);
+        c.andStatusEqualTo((byte)0);
+        //改版2018-11-22
+        cOr.andCustomerIdEqualTo(uid);
+        cOr.andSalestatusEqualTo((byte)0);
         example.or(cOr);
+
         List<PayShopCouponRemain> list = payShopCouponRemainMapper.selectByExample(example);
         if ( list.isEmpty() || list == null )
         {

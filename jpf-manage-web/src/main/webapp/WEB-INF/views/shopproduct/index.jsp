@@ -126,9 +126,9 @@
                 columns:[[
                     {field:'id',title:'商品ID',width:80},
                     {field:'name',title:'商品名称',width:200},
-                    {field:'bid',title:'商品进价',width:50},
-                    {field:'money',title:'商品售价',width:50},
-                    {field:'rechargeMoney',title:'充值面额(元)',width:50},
+                    {field:'bid',title:'商品进价',width:65},
+                    {field:'money',title:'商品售价',width:65},
+                    {field:'rechargeMoney',title:'充值面额(元)',width:90},
                     {field:'dou',title:'所需豆',width:50},
                     {field:'brandName',title:'商品品牌',width:150},
                     {field:'supplierName',title:'供应商',width:150},
