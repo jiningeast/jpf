@@ -356,6 +356,8 @@ public class OrdersController {
             if( res_upOrder != 1 ){
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "手机号更新失败，请从新提交", "");
             }
+            orderInfo.setChargeNo(requestMap.get("phone").toString().trim());
+            orderInfo.setReceiveValue(requestMap.get("phone").toString().trim());
         }
 
         // 校验码验证
@@ -389,7 +391,7 @@ public class OrdersController {
             List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,orderInfo.getAmount());
             if( list == null || list.isEmpty() || productInfo.getStored()<orderInfo.getAmount() || list.size()<orderInfo.getAmount() ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
-            }else if( list.size() <= productInfo.getStoredSafe() ) {
+            }else if( productInfo.getStored() <= productInfo.getStoredSafe() ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
             } else {
                 return this.cardRecharge(orderInfo,productInfo,list,userCouponList,Httpresponse);
@@ -1007,7 +1009,7 @@ public class OrdersController {
             sbf.append("\n用户id:" + userInfo.getId());
             sbf.append("\n用户手机号:" + userInfo.getPhone());
             sbf.append("\n订单id：" + orderInfo.getId());
-            sbf.append("\n订单号：" + orderInfo.getId());
+            sbf.append("\n订单号：" + orderInfo.getOrderNo());
             sbf.append("\n卡密id：" + shopStockCardInfo.getId());
             String fileName = "CardPayLog";
             String path = "/logs/jpf-market-api/log/";
@@ -1021,6 +1023,10 @@ public class OrdersController {
         if ( orderInfo.getReceiveType() == 1 ){
             if ( StringUtils.isNotBlank(orderInfo.getReceiveValue()) ){
                 String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
+                if(orderInfo.getOrderType() == 4 ){
+                    //content = "您已购买携程旅游卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
+                }
+
                 Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
 
                 // 添加短信流水
