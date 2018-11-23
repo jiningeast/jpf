@@ -170,7 +170,9 @@ public class OrdersController {
             if( list == null || list.isEmpty() || productInfo.getStored()<amount || list.size()<amount ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
             }
-            if ( list.size() <= productInfo.getStoredSafe() ){
+            //if ( list.size() <= productInfo.getStoredSafe() ){
+            // 实际库存修改 2018-11-22
+            if ( productInfo.getStored() <= productInfo.getStoredSafe() ){
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
             }
         }else{
@@ -347,6 +349,7 @@ public class OrdersController {
         if ( orderInfo.getOrderType() == 4  ) {
             ShopOrderInterfaceInfo shopOrderInterfaceInfo = new ShopOrderInterfaceInfo();
             shopOrderInterfaceInfo.setChargeNo(requestMap.get("phone").toString().trim());
+            shopOrderInterfaceInfo.setReceiveValue(requestMap.get("phone").toString().trim());
             shopOrderInterfaceInfo.setId(orderInfo.getId());
             shopOrderInterfaceInfo.setUpdatetime(new Date());
             int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(shopOrderInterfaceInfo);
