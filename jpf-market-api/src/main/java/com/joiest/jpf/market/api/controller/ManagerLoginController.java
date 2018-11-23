@@ -47,7 +47,7 @@ public class ManagerLoginController {
         if(StringUtils.isBlank(userName)||StringUtils.isBlank(password)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getCode(),JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getDesc(),null);
         }
-        //查询用户信息  待完善
+        //查询用户信息
         PayShopCompany company = shopCompanyServiceFacade.getCompanyByUserNamnAndPasswd(Base64CustomUtils.base64Decoder(userName),Base64CustomUtils.base64Decoder(password));
         if(company==null){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_PASSWD_ERROR.getCode(),JpfInterfaceErrorInfo.USER_PASSWD_ERROR.getDesc(),null);
@@ -116,7 +116,7 @@ public class ManagerLoginController {
     @RequestMapping(value="logout",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String logout(HttpServletRequest request){
-        String token = request.getParameter("token");
+        String token = request.getHeader("tokenStr");
         redisCustomServiceFacade.remove(ConfigUtil.getValue("MARKETMANGER_LOGIN_KEY") + token);
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.LOGOUT.getCode(),JpfInterfaceErrorInfo.LOGOUT.getDesc(),null);
     }

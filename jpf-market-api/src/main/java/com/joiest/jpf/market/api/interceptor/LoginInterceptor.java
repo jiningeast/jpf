@@ -75,7 +75,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         };
         List<String> marageLoginUrl = new ArrayList<String>() {
             {
-                add("/market-manager/loginIn");                //绑定手机号
+                add("/market-manager/managerLogin/loginIn");                //绑定手机号
+                add("/market-manager/managerLogin/loginFail");
             }
         };
         System.out.println(ServletUtils.getIpAddr(request));
@@ -122,6 +123,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return super.preHandle(request, response, handler);
         } else  if(!marageLoginUrl.contains(requestUri)&&StringUtils.equals("manager",login_type)){
             //验证redis
+            System.out.println(ConfigUtil.getValue("MARKETMANGER_LOGIN_KEY")+Token);
             String marketManagerLoginKey=redisCustomServiceFacade.get(ConfigUtil.getValue("MARKETMANGER_LOGIN_KEY")+Token);
             if(StringUtils.isNotBlank(marketManagerLoginKey)){
                return true;
@@ -130,7 +132,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         }else{
-            return false;
+            return true;
         }
     }
 
