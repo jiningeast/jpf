@@ -80,7 +80,59 @@ public class PayShopCompanyCustom implements Serializable {
      */
     private BigDecimal percent;
 
+    /**
+     * 欣享用户的登录名称
+     */
+    private String loginName;
+
+    /**
+     * 欣享用户的登录密码
+     */
+    private String loginPwd;
+
+    /**
+     * 是否是第一次登录
+     */
+    private Byte isFirstLogin;
+
+    /**
+     * 账户是否开通，0未开通，1已开通
+     */
+    private Byte accountStatus;
+
     private static final long serialVersionUID = 1L;
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getLoginPwd() {
+        return loginPwd;
+    }
+
+    public void setLoginPwd(String loginPwd) {
+        this.loginPwd = loginPwd;
+    }
+
+    public Byte getIsFirstLogin() {
+        return isFirstLogin;
+    }
+
+    public void setIsFirstLogin(Byte isFirstLogin) {
+        this.isFirstLogin = isFirstLogin;
+    }
+
+    public Byte getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(Byte accountStatus) {
+        this.accountStatus = accountStatus;
+    }
 
     public String getId() {
         return id;

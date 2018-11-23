@@ -81,8 +81,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">联系人邮箱：</td>
                     <td>
-                        <input id="receiveEmail" name="receiveEmail" data-options="required:true,validType:'email'" type="text" style="width:150px" class="easyui-textbox"
-                               value="${shopCompanyInfo.receiveEmail}"/>
+                        ${shopCompanyInfo.receiveEmail}
                     </td>
                 </tr>
 
