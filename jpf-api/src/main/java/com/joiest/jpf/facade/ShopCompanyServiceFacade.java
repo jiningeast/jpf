@@ -73,4 +73,9 @@ public interface ShopCompanyServiceFacade {
      */
     PayShopCompany getById(String companyId);
 
+    /**
+     * 开通商户账号
+     * @param id
+     */
+    void openAccount(String id)  throws Exception;
 }

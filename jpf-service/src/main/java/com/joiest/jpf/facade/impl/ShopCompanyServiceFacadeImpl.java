@@ -188,6 +188,15 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "联系电话已经存在");
         }
 
+        //验证
+        PayShopCompanyExample exampleEmail= new PayShopCompanyExample();
+        PayShopCompanyExample.Criteria c4 = examplePhone.createCriteria();
+        c4.andReceiveEmailEqualTo(request.getReceiveEmail());
+        List<PayShopCompany> CompanyListEmail = payShopCompanyMapper.selectByExample(exampleEmail);
+        if(CompanyListEmail != null && !CompanyListEmail.isEmpty()){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "邮箱已经存在");
+        }
+
         //插表操作
         //生成商户编号
         Date date = new Date();
@@ -221,7 +230,9 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         payShopCompany.setLoginPwd(SHA1.getInstance().getMySHA1Code(randPwd.toString()));
         payShopCompany.setIsFirstLogin((byte)0);
         if(StringUtils.equals("1",request.getOpenAccent())){
-            sendMailToCompany(request);
+            payShopCompany.setAccountStatus((byte)1);
+        }else{
+            payShopCompany.setAccountStatus((byte)0);
         }
         //获取刚插入的id
            int res = payShopCompanyCustomMapper.insertSelective(payShopCompany);
@@ -235,15 +246,29 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
             payShopCompanyUp.setMoneyCode(code);
             try {
                 payShopCompanyMapper.updateByExampleSelective(payShopCompanyUp,updateCode);
+                if(StringUtils.equals("1",request.getOpenAccent())){
+                    sendMailToCompany(payShopCompany,randPwd);
+                }
             } catch (Exception e) {
                 throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
             }
+        try {
+
+        }catch (Exception e){
+            throw new JpfException(JpfErrorInfo.SYSTEM_ERROR, "账户开通失败");
+        }
 
         return new JpfResponseDto();
     }
 
     //
-    private void sendMailToCompany(GetShopCompanyRequest request) {
+    private void sendMailToCompany(PayShopCompany company,Integer randPwd) throws Exception {
+        String html="<div style='width: 600px;margin: 0 auto'><h3 style='color:#003E64; text-align:center; '>欣享爱生活帐号开通</h3>" +
+                "<p style=''>尊敬的用户您好：</p><p style='text-indent: 2em'>感谢您使用欣享爱生活|企业管理后台，您的帐号已经开通,帐号信息如下：</p>" +
+                "<p style='text-indent: 2em'>用户名："+company.getLoginName()+"</p>" +
+                "<p style='text-indent: 2em'>登录密码："+randPwd+"</p>" +
+                "<p style='text-align: right; color:#003E64; font-size: 20px;'>欣享科技团队</p></div>";
+        SendMailUtil.sendHtmlEmail2(company.getReceiveEmail(),"欣享爱生活 --登录账号/密码","欣享爱生活用户",html);
     }
 
     /**
@@ -518,5 +543,21 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
     @Override
     public PayShopCompany getById(String companyId) {
         return payShopCompanyMapper.selectByPrimaryKey(companyId);
+    }
+
+
+    @Override
+    public void openAccount(String id)  throws Exception{
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(id);
+        if(StringUtils.isBlank(payShopCompany.getLoginName())){
+            payShopCompany.setLoginName(payShopCompany.getReceiveEmail());
+            payShopCompany.setIsFirstLogin((byte)0);
+        }
+        Integer randPwd = ToolUtils.getRandomInt(100000,999999);
+        payShopCompany.setLoginPwd(SHA1.getInstance().getMySHA1Code(randPwd.toString()));
+        payShopCompany.setAccountStatus((byte)1);
+        payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompany);
+        //发送邮件
+        sendMailToCompany(payShopCompany,randPwd);
     }
 }

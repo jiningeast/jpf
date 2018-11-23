@@ -1,6 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.dto.GetShopCompanyRequest;
 import com.joiest.jpf.dto.GetShopCompanyResponse;
 import com.joiest.jpf.entity.ShopCompanyInfo;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
@@ -95,6 +97,24 @@ public class ShopCompanyController {
     public JpfResponseDto delCompanyShop(String merchNo,int type) {
 
         return shopCompanyServiceFacade.delCompanyShop(merchNo, type);
+    }
+
+    /**
+     * 开通账户
+     * @param id  商户id
+     * @return
+     */
+    @RequestMapping(value="openAccount",method = RequestMethod.POST)
+    @ResponseBody
+    public JpfResponseDto openAccount(String id){
+        JpfResponseDto jpfResponseDto = new JpfResponseDto();
+        try{
+            shopCompanyServiceFacade.openAccount(id);
+        }catch (Exception e){
+            jpfResponseDto.setResponseError("-1",JpfErrorInfo.OPENACCOUNTFAIL.desc());
+            return jpfResponseDto;
+        }
+        return jpfResponseDto;
     }
 
 }

@@ -80,6 +80,19 @@ public class ShopCompanyInfo {
      */
     private BigDecimal percent;
 
+    /**
+     * 账户的状态
+     */
+    private Byte accountStatus;
+
+    public Byte getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(Byte accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -199,6 +212,7 @@ public class ShopCompanyInfo {
         sb.append(", salePhone=").append(salePhone);
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
+        sb.append(", accountStatus=").append(accountStatus);
         sb.append("]");
         return sb.toString();
     }
@@ -230,7 +244,8 @@ public class ShopCompanyInfo {
                 && (this.getSaleName() == null ? other.getSaleName() == null : this.getSaleName().equals(other.getSaleName()))
                 && (this.getSalePhone() == null ? other.getSalePhone() == null : this.getSalePhone().equals(other.getSalePhone()))
                 && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-                && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()));
+                && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
+                &&(this.getAccountStatus() == null ? other.getAccountStatus() == null : this.getAccountStatus().equals(other.getAccountStatus()));
     }
 
     /**
@@ -252,6 +267,7 @@ public class ShopCompanyInfo {
         result = prime * result + ((getSalePhone() == null) ? 0 : getSalePhone().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
+        result = prime * result + ((getAccountStatus() == null) ? 0 : getAccountStatus().hashCode());
         return result;
     }
 
