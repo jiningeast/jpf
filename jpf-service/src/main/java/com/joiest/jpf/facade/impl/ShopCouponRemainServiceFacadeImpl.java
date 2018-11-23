@@ -553,7 +553,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         return res_order;
     }
 
-    /**
+     /**
      * @param remainInfo
      * @param deduct    转让需要扣除的豆
      */

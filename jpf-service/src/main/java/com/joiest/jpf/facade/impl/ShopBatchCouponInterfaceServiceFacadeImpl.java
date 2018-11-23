@@ -84,7 +84,7 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
 
 
         //未设置转让百分比
-        if(payShopCompany.getPercent().compareTo(new BigDecimal("0.00"))<0){
+        if( payShopCompany.getPercent().compareTo(new BigDecimal("0.000"))<=0 ){
             return 8;
         }
         //============进行换算转让和非转让的都数量===============
