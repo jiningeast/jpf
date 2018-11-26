@@ -389,7 +389,7 @@ public class OrdersController {
             List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,orderInfo.getAmount());
             if( list == null || list.isEmpty() || productInfo.getStored()<orderInfo.getAmount() || list.size()<orderInfo.getAmount() ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
-            }else if( list.size() <= productInfo.getStoredSafe() ) {
+            }else if( productInfo.getStored() <= productInfo.getStoredSafe() ) {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
             } else {
                 return this.cardRecharge(orderInfo,productInfo,list,userCouponList,Httpresponse);
