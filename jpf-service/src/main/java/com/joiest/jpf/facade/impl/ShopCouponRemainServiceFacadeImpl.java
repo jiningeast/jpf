@@ -614,7 +614,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             //String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
             payShopCustomerUpdate.setId(orderInfo.getSellerCustomerId());
             payShopCustomerUpdate.setFreezeDou(dou);
-            payShopCustomerUpdate.setSaleDou(saledou);
+            //payShopCustomerUpdate.setSaleDou(saledou);
             //payShopCustomerUpdate.setDou(countDou);
             //payShopCustomerUpdate.setCode(code);
             payShopCustomerUpdate.setUpdatetime(new Date());
