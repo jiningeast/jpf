@@ -240,9 +240,7 @@ public class FlowRechargeController {
         merRespons.put("value",chargeProductInfo.getValue());//充值面值
         merRespons.put("salePrice",chargeProductInfo.getSalePrice());//扣商户的钱
         merRespons.put("productId",actParam.get("productId"));//产品金额
-        merRespons.put("foreignOrderNo",actParam.get("orderid"));//返回欧非或者威能订单号
-        logger.info("ofOrder"+actParam.get("outOrderNo")+orderno+actParam.get("phone")+chargeProductInfo.getValue()+chargeProductInfo.getSalePrice()+map.get("orderid"));
-        logger.info("ofOrder"+map.get("orderid"));
+        merRespons.put("foreignOrderNo",map.get("orderid"));//返回欧非或者威能订单号
 
         if(map.get("code").equals("10000")){
 
@@ -354,7 +352,6 @@ public class FlowRechargeController {
         rechargeMap.put("buyNum", "1");     //暂定为 1
         rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
         responseMap = new OfpayUtils().chargePhone(rechargeMap);
-        logger.info("chargePhone",responseMap.get("orderid"));
         resultMap.put("orderid",responseMap.get("orderid"));//欧非订单号
         resultMap.put("requestUrl",responseMap.get("requestUrl"));
         resultMap.put("requestParam",responseMap.get("requestParam"));
