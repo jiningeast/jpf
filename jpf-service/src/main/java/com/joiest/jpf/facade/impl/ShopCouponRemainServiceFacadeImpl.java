@@ -497,7 +497,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             if ( orderBlance > one.getSaleDouLeft() )
             {
                 //全部扣除
-                one.setStatus((byte)1);
+                one.setSalestatus((byte)1);
                 Boolean isTrue = doCouponAttorn(one, one.getSaleDouLeft(), orderInfo);      //用完
 
                 orderBlance = orderBlance - one.getSaleDouLeft();     //订单余额金额
@@ -515,7 +515,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
                 {
                     status = 1;    //全部扣除
                 }
-                one.setStatus(status);
+                one.setSalestatus(status);
                 Boolean isTrue = doCouponAttorn(one, orderBlance, orderInfo);     //未用完
 
                 int douBlance = one.getSaleDouLeft() - orderBlance;       //本券剩余豆数量

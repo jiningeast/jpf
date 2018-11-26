@@ -12,7 +12,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/spring-aggregator.xml</param-value>
+		<param-value>classpath:spring/spring-aggregator.xml,classpath:spring/spring-quartz.xml</param-value>
 	</context-param>
 
 	<!-- 用于初始化Spring容器的Listener -->

@@ -1,5 +1,8 @@
 package com.joiest.jpf.market.api.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,4 +64,56 @@ public class ToolsUtils {
 
     }
 
+    /**
+     * 检测订单是否过期方法
+     * (一个检测订单是否超过24小时的方法,返回false为过期，true为未过期)
+     * @param startTime 下单时间
+     * @param endTime 当前时间
+     * @return
+     */
+    public static boolean checkOrderValidition(Date startTime, Date endTime){
+        long time = endTime.getTime() - startTime.getTime();
+//        if(time < 0){
+//            return false;
+//        }
+        double result = time * 1.0 /(1000 * 60 * 60);
+        if(result <= 24){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 获取当前时间24小时之前的时间点(格式化输出)
+     * @param hour 小时数
+     * @return 格式化字符串类型
+     */
+    public static String getBeforeHourTimeReturnString(int hour){
+        String returnstr = "";
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - hour);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        returnstr = df.format(calendar.getTime());
+        return returnstr;
+    }
+
+    /**
+     * 获取当前时间24小时之前的时间点(格式化输出)
+     * @param hour 小时数
+     * @return 时间类型
+     */
+    public static Date getBeforeHourTimeReturnDate(int hour){
+        String returnstr = "";
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - hour);
+        return calendar.getTime();
+    }
+    
+    public static void main(String[] args) {
+//        String beforeHourTime = getBeforeHourTimeReturnString(24);
+//        Date beforeHourTimeReturnDate = getBeforeHourTimeReturnDate(23);
+//        System.out.println("24小时前执行的时间是：" + beforeHourTime);
+//        System.out.println("23小时前执行的时间是：" + beforeHourTimeReturnDate);
+    }
 }

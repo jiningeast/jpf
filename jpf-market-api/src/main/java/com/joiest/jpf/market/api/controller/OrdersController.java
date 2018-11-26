@@ -1361,7 +1361,12 @@ public class OrdersController {
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), "");
         }
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), userInfo.getDou());
+        //改版欣豆转让
+        //拼装数据
+        Map<String,Object> returnMap=new HashMap<>();
+        returnMap.put("douCount",userInfo.getDou());
+        returnMap.put("saleDou",userInfo.getSaleDou());
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), returnMap);
     }
 
     @ModelAttribute
