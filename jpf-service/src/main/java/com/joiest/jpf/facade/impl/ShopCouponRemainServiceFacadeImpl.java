@@ -609,14 +609,14 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             // 客户总豆数量减去一部分pay_shop_customer
             PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
             int dou = payShopCustomer.getFreezeDou() - deduct;
-            int countDou=payShopCustomer.getDou()-deduct;
+            //int countDou=payShopCustomer.getDou()-deduct;
             int saledou=payShopCustomer.getSaleDou()-deduct;
-            String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
+            //String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
             payShopCustomerUpdate.setId(orderInfo.getSellerCustomerId());
             payShopCustomerUpdate.setFreezeDou(dou);
             payShopCustomerUpdate.setSaleDou(saledou);
-            payShopCustomerUpdate.setDou(countDou);
-            payShopCustomerUpdate.setCode(code);
+            //payShopCustomerUpdate.setDou(countDou);
+            //payShopCustomerUpdate.setCode(code);
             payShopCustomerUpdate.setUpdatetime(new Date());
             int res_updateCustomCode = payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
             if ( res_updateCustomCode < 1 )
