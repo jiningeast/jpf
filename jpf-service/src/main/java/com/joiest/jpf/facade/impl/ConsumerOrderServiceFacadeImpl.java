@@ -122,6 +122,8 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void matchingDataTaskStart(PayChargeConsumerOrder payChargeConsumerOrder) {
+        payChargeConsumerOrder.setStatus((byte)1);
+        payChargeConsumerOrderMapper.updateByPrimaryKeySelective(payChargeConsumerOrder);
         //拉取数据
         PayChargeCompany chargeCompany =  payChargeCompanyMapper.selectByPrimaryKey(payChargeConsumerOrder.getCompanyId());
         List<PayShopBargainRechargeOrder> list =new ArrayList<>();
