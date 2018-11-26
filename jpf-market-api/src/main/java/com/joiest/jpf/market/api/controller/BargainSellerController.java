@@ -172,7 +172,7 @@ public class BargainSellerController {
         Integer over = userInfo.getSaleDou()-dou;
         shopCustomerInfo.setSaleDou(over);
         shopCustomerInfo.setDou(douCount);
-        String code = ToolUtils.CreateCode(String.valueOf(douCount),shopCustomerInfo.getId());
+        String code = ToolUtils.CreateCode(String.valueOf(douCount),userInfo.getId());
         shopCustomerInfo.setCode(code);
         shopCustomerInfo.setId(userInfo.getId());
         //shopCustomerInfo.setCode(ToolUtils.CreateCode(over.toString(),uid));
