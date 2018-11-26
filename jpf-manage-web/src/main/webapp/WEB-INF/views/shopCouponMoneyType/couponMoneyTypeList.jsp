@@ -1,3 +1,4 @@
+<%@ taglib prefix="C" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <!DOCTYPE html>
@@ -10,26 +11,17 @@
         $(function() {
             $('#add').window({
                 title:'新增面值',
-                width:'80%',
-                height:'500px',
+                width:'50%',
+                height:'300px',
                 closed:true,
                 modal:true,
                 maximized:false,//弹出窗口最大化
 
             });
-            $('#infoDiv').window({
-                title:'详情',
-                width:'1024px',
-                height:'500px',
-                closed:true,
-                modal:true,
-                maximized:true,//弹出窗口最大化
-
-            });
-            $('#infoUpdate').window({
-                title:'详情',
-                width:'1024px',
-                height:'500px',
+            $('#edit').window({
+                title:'编辑',
+                width:'50%',
+                height:'300px',
                 closed:true,
                 modal:true,
                 maximized:false,//弹出窗口最大化
@@ -43,83 +35,7 @@
                     }
                 },
                 {
-                    text:'详情',
-                    iconCls:'icon-view-detail',
-                    handler:function(){
-                        var rows = $('#dg').datagrid('getSelections');
-                        if (rows.length != 1) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return
-                        }
-                        $('#infoDiv').window("open").window('refresh', 'info?id='+rows[0].id+'&phone='+rows[0].phone+'&dou='+rows[0].dou).window('setTitle','欣豆详情');
-                    }
-                },
-                {
-                    text : '冻结',
-                    iconCls:'icon-no',
-                    handler : function () {
-                        var rows = $("#dg").datagrid('getSelections');
-                        if ( rows.length != 1 ) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return false;
-                        }
-                        $.messager.confirm('冻结','确认冻结操作？',function(r){
-                            if (r){
-                                $.ajax({
-                                    type : 'get',
-                                    url :'delCompanyCustomer?id='+rows[0].id+'&type=2',
-                                    dataType:"json",
-                                    contentType:"application/json",
-                                    success : function(msg){
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                        } else {
-                                            $.messager.alert('消息提示','操作成功!','info');
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error : function () {
-                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                    }
-                                })
-                            }
-                        })
-                    }
-                },
-                {
-                    text : '恢复',
-                    iconCls:'icon-ok',
-                    handler : function () {
-                        var rows = $("#dg").datagrid('getSelections');
-                        if ( rows.length != 1 ) {
-                            $.messager.alert('消息提示','请选择一条数据！','info');
-                            return false;
-                        }
-                        $.messager.confirm('恢复','确认恢复正常操作？',function(r){
-                            if (r){
-                                $.ajax({
-                                    type : 'get',
-                                    url :'delCompanyCustomer?id='+rows[0].id+'&type=1',
-                                    dataType:"json",
-                                    contentType:"application/json",
-                                    success : function(msg){
-                                        if (msg.retCode != '0000') {
-                                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
-                                        } else {
-                                            $.messager.alert('消息提示','操作成功!','info');
-                                            $('#dg').datagrid('reload');
-                                        }
-                                    },
-                                    error : function () {
-                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
-                                    }
-                                })
-                            }
-                        })
-                    }
-                },
-                {
-                    text : '类型编辑',
+                    text : '编辑',
                     iconCls:'icon-edit',
                     handler : function () {
                         var rows = $("#dg").datagrid('getSelections');
@@ -127,11 +43,10 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return false;
                         }
-                        $('#infoUpdate').window("open").window('refresh', 'editCustomer/page?id='+rows[0].id+'&phone='+rows[0].phone+'&dou='+rows[0].dou).window('setTitle','编辑用户详情');
+                        $('#edit').window("open").window('refresh', '/shopCouponMoneyType/goUpdate?id='+rows[0].id).window('setTitle','编辑面值');
                     }
                 }
             ];
-
             $('#dg').datagrid({
                 title:'欣券面值信息',
                 toolbar:toolbar,
@@ -147,7 +62,16 @@
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'money',title:'面值(元)',width:'8%'},
-                    {field:'status',title:'状态',width:'5%'},
+                    {field:'status',title:'状态',width:'5%',
+                        formatter:function (value,row,index) {
+                            if ( value==0 ){
+                                return "显示";
+                            }else if(value==1){
+                                return "隐藏";
+                            }else{
+                                return "自定义";
+                            }
+                        }},
                     {field:'addtime',title:'新增时间',width:'12%',formatter: formatDateStr},
                     {field:'updatetime',title:'修改时间',width:'12%',formatter: formatDateStr}
                 ]]
@@ -186,11 +110,6 @@
             $("#formDiv").panel().width=1;
             $('#dg').datagrid().width=1;
         });
-        function goActive(id,phone,dou) {
-            //var rows = $('#dg').datagrid('getSelections');
-            $('#infoDiv').window("open").window('refresh', 'info?id='+id+'&phone='+phone+'&dou='+dou).window('setTitle','欣豆详情');
-        }
-
     </script>
     <style>
         #searchForm table tr td:nth-child(odd) { text-align: right; }
@@ -208,15 +127,17 @@
                         <td>
                             <select name="money" id="money"   class="easyui-combobox"  style="width:120px;">
                                 <option value="">--请选择--</option>
-                                <option value="1">10</option>
-                                <option value="2">20</option>
+                                <C:forEach items="${moneyList}" var="money">
+                                    <option value="${money}">${money}</option>
+                                </C:forEach>
                             </select>
                         </td>
                         <td>状态:</td>
                         <td>
                             <select name="status" id="status"  class="easyui-combobox" style="width:120px;">
                                 <option value="">--请选择--</option>
-                                <option value="1">系统定义</option>
+                                <option value="0">显示</option>
+                                <option value="1">隐藏</option>
                                 <option value="2">自定义</option>
                             </select>
                         </td>
@@ -233,7 +154,6 @@
     <table id="dg"></table>
 </div>
 <div id="add"></div>
-<div id="infoUpdate"></div>
 <div id="edit"></div>
 </body>
 </html>
