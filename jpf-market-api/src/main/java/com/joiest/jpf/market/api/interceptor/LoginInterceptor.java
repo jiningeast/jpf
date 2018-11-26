@@ -71,6 +71,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 add("/demo/test");              // 测试函数
                 add("/travel/proList");              // 旅游生活商品列表页
                 add("/travel/proInfo"); // 获取商品服务列表
+                add("/orderInfo/timeoutCancelOrder");// 定时取消超时未支付订单接口
             }
         };
         List<String> marageLoginUrl = new ArrayList<String>() {

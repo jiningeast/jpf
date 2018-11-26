@@ -181,6 +181,15 @@ public class OrderInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
     }
 
+    /**
+     * 超时未支付订单自动取消定时器(随项目启动而启动)
+     */
+    @RequestMapping(value = "/timeoutCancelOrder", method = RequestMethod.GET, produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public void orderInfoCancel(){
+        shopOrderInfoInterfaceServiceFacade.timerDetectShopOrderAndCancel(ToolsUtils.getBeforeHourTimeReturnDate(24));
+    }
+    
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
