@@ -1,5 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayShopCouponMoneyType;
 import com.joiest.jpf.facade.ShopCouponMoneyTypeServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +41,9 @@ public class ShopCouponMoneyTypeController {
         return new ModelAndView("shopCouponMoneyType/couponMoneyTypeAdd");
     }
 
-    /*public  add(){
-
-    }*/
+    @RequestMapping("/add")
+    @ResponseBody
+    public JpfResponseDto add(PayShopCouponMoneyType payShopCouponMoneyType){
+        return shopCouponMoneyTypeServiceFacade.add(payShopCouponMoneyType);
+    }
 }

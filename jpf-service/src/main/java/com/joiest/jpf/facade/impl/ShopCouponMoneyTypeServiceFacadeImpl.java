@@ -1,5 +1,6 @@
 package com.joiest.jpf.facade.impl;
 
+import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayShopCouponMoneyType;
 import com.joiest.jpf.common.po.PayShopCouponMoneyTypeExample;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponMoneyTypeMapper;
@@ -48,5 +49,10 @@ public class ShopCouponMoneyTypeServiceFacadeImpl implements ShopCouponMoneyType
         }
 
         return payShopCouponMoneyTypeMapper.countByExample(example);
+    }
+
+    @Override
+    public JpfResponseDto add(PayShopCouponMoneyType payShopCouponMoneyType) {
+        return  new JpfResponseDto();
     }
 }
