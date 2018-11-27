@@ -17,7 +17,8 @@
         <form id="editForm" method="post" enctype="multipart/form-data" accept="image/gif, image/jpeg,image/jpg, image/png">
             <table cellpadding=3 class="table table-bordered">
                 <tr>
-                    <th>添加</th>
+                    <th>编辑</th>
+                    <input type="hidden" name="id" id="id" value="${productOne.id}" />
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">商品类型：</td>
@@ -286,6 +287,7 @@
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', '操作成功！', 'info');
+                            $("#supplierName").val(supplierName);
                             $("#supplierId").combobox('reload',"../param/getShopSuppliers");
                             $("#supplierName_add").textbox('setValue','');
                         }
@@ -327,6 +329,7 @@
                             // $('#dg').datagrid('reload');
                             $("#typeId").combobox('reload','../param/getShopProductType');
                             $("#typeName_add").textbox('setValue','');
+                            $("#typeName").val(typeName);
                         }
                     },
                     error: function () {
@@ -367,6 +370,7 @@
                             // $('#dg').datagrid('reload');
                             $("#brandId").combobox('reload','../param/getShopBrandList');
                             $("#brandName_add").textbox('setValue','');
+                            $("#brandName").val(brandName);
                         }
                     },
                     error: function () {
