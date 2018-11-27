@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +26,7 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("flowRecharge")
+@Scope("prototype")
 public class FlowRechargeController {
 
     /**
@@ -50,8 +52,8 @@ public class FlowRechargeController {
     private ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
     private Map<String,String> actParam = new HashMap<>();
     private Map<String,Object> actTreeParam = new TreeMap<>();
-    private static Boolean validate;
-    private static String respond;
+    private Boolean validate;
+    private String respond;
 
     @ModelAttribute
     public String beforAction(HttpServletRequest request) throws Exception{
