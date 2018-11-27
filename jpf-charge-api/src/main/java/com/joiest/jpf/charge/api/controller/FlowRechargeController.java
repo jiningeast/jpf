@@ -212,6 +212,7 @@ public class FlowRechargeController {
             upOrderInfo.setProductType(0);
             //请求欧非
             map = phoneRechargeOf(actParam);
+            logger.info("oufei"+map.get("orderid"));
         }else {
 
             upOrderInfo.setInterfaceType(type);
@@ -219,6 +220,7 @@ public class FlowRechargeController {
             actParam.put("forProductId",chargeProductInfo.getWnProductId());
             //请求微能接口
             map = phoneRechargeWn(actParam);
+            logger.info("weineng"+map.get("orderid"));
         }
         //添加流水
         ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
@@ -238,6 +240,7 @@ public class FlowRechargeController {
         merRespons.put("value",chargeProductInfo.getValue());//充值面值
         merRespons.put("salePrice",chargeProductInfo.getSalePrice());//扣商户的钱
         merRespons.put("productId",actParam.get("productId"));//产品金额
+        merRespons.put("foreignOrderNo",map.get("orderid"));//返回欧非或者威能订单号
 
         if(map.get("code").equals("10000")){
 
@@ -300,7 +303,7 @@ public class FlowRechargeController {
         upOrderInfo.setUpdatetime(new Date());
 
         chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
-
+        logger.info("backLogInfo="+responseParam.toString());
         return responseParam.toString();
     }
     /**
@@ -349,7 +352,6 @@ public class FlowRechargeController {
         rechargeMap.put("buyNum", "1");     //暂定为 1
         rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
         responseMap = new OfpayUtils().chargePhone(rechargeMap);
-
         resultMap.put("orderid",responseMap.get("orderid"));//欧非订单号
         resultMap.put("requestUrl",responseMap.get("requestUrl"));
         resultMap.put("requestParam",responseMap.get("requestParam"));
@@ -795,6 +797,11 @@ public class FlowRechargeController {
         }
         respond = resParam.toString();
         return validate;
+    }
+
+    public static void main(String[] args) {
+        //merchNo=MC15411265483241688&service=placeOrderVa&productId=1007&outOrderNo=111111&phone=18801147519&dateTime=201811260022&notifyUrl=http://www.baidu.com&sign=508900BDA3F42200BDBBFDD19133F390
+        System.out.println(Md5Encrypt.md5("Md5(dateTime=201811260022&merchNo=MC15411265483241688&notifyUrl=http://www.baidu.com&outOrderNo=111111&phone=18801147519&productId=1007&service=placeOrderValimyHcZOzMmhukCqB").toUpperCase());
     }
 
 }
