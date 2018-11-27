@@ -1116,6 +1116,316 @@ public class PayShopCompanyChargeExample {
             return (Criteria) this;
         }
 
+        public Criteria andContractNoIsNull() {
+            addCriterion("contract_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoIsNotNull() {
+            addCriterion("contract_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoEqualTo(String value) {
+            addCriterion("contract_no =", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotEqualTo(String value) {
+            addCriterion("contract_no <>", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoGreaterThan(String value) {
+            addCriterion("contract_no >", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoGreaterThanOrEqualTo(String value) {
+            addCriterion("contract_no >=", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLessThan(String value) {
+            addCriterion("contract_no <", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLessThanOrEqualTo(String value) {
+            addCriterion("contract_no <=", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLike(String value) {
+            addCriterion("contract_no like", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotLike(String value) {
+            addCriterion("contract_no not like", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoIn(List<String> values) {
+            addCriterion("contract_no in", values, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotIn(List<String> values) {
+            addCriterion("contract_no not in", values, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoBetween(String value1, String value2) {
+            addCriterion("contract_no between", value1, value2, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotBetween(String value1, String value2) {
+            addCriterion("contract_no not between", value1, value2, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeIsNull() {
+            addCriterion("duetime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeIsNotNull() {
+            addCriterion("duetime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeEqualTo(Date value) {
+            addCriterion("duetime =", value, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeNotEqualTo(Date value) {
+            addCriterion("duetime <>", value, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeGreaterThan(Date value) {
+            addCriterion("duetime >", value, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("duetime >=", value, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeLessThan(Date value) {
+            addCriterion("duetime <", value, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeLessThanOrEqualTo(Date value) {
+            addCriterion("duetime <=", value, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeIn(List<Date> values) {
+            addCriterion("duetime in", values, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeNotIn(List<Date> values) {
+            addCriterion("duetime not in", values, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeBetween(Date value1, Date value2) {
+            addCriterion("duetime between", value1, value2, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuetimeNotBetween(Date value1, Date value2) {
+            addCriterion("duetime not between", value1, value2, "duetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateIsNull() {
+            addCriterion("transfer_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateIsNotNull() {
+            addCriterion("transfer_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate =", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate <>", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateGreaterThan(BigDecimal value) {
+            addCriterion("transfer_rate >", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate >=", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateLessThan(BigDecimal value) {
+            addCriterion("transfer_rate <", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate <=", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateIn(List<BigDecimal> values) {
+            addCriterion("transfer_rate in", values, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotIn(List<BigDecimal> values) {
+            addCriterion("transfer_rate not in", values, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("transfer_rate between", value1, value2, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("transfer_rate not between", value1, value2, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyIsNull() {
+            addCriterion("coupon_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyIsNotNull() {
+            addCriterion("coupon_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyEqualTo(BigDecimal value) {
+            addCriterion("coupon_money =", value, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("coupon_money <>", value, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyGreaterThan(BigDecimal value) {
+            addCriterion("coupon_money >", value, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("coupon_money >=", value, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyLessThan(BigDecimal value) {
+            addCriterion("coupon_money <", value, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("coupon_money <=", value, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyIn(List<BigDecimal> values) {
+            addCriterion("coupon_money in", values, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("coupon_money not in", values, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("coupon_money between", value1, value2, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("coupon_money not between", value1, value2, "couponMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyIsNull() {
+            addCriterion("service_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyIsNotNull() {
+            addCriterion("service_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyEqualTo(BigDecimal value) {
+            addCriterion("service_money =", value, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("service_money <>", value, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyGreaterThan(BigDecimal value) {
+            addCriterion("service_money >", value, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("service_money >=", value, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyLessThan(BigDecimal value) {
+            addCriterion("service_money <", value, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("service_money <=", value, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyIn(List<BigDecimal> values) {
+            addCriterion("service_money in", values, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("service_money not in", values, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("service_money between", value1, value2, "serviceMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("service_money not between", value1, value2, "serviceMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyNameLikeInsensitive(String value) {
             addCriterion("upper(company_name) like", value.toUpperCase(), "companyName");
             return (Criteria) this;
@@ -1133,6 +1443,11 @@ public class PayShopCompanyChargeExample {
 
         public Criteria andCheckOperatorNameLikeInsensitive(String value) {
             addCriterion("upper(check_operator_name) like", value.toUpperCase(), "checkOperatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLikeInsensitive(String value) {
+            addCriterion("upper(contract_no) like", value.toUpperCase(), "contractNo");
             return (Criteria) this;
         }
     }

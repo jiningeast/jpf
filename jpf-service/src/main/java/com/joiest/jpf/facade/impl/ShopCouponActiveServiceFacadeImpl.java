@@ -12,6 +12,8 @@ import com.joiest.jpf.entity.ShopCouponActiveInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 import com.joiest.jpf.facade.ShopCouponActiveServiceFacade;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShopCouponActiveServiceFacadeImpl implements ShopCouponActiveServiceFacade {
+
 
     @Autowired
     private PayShopCouponActiveMapper payShopCouponActiveMapper;

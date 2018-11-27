@@ -16,6 +16,8 @@ import com.joiest.jpf.facade.ShopBatchServiceFacade;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
+
+    private static final Logger logger = LogManager.getLogger(ShopBatchServiceFacadeImpl.class);
 
     @Autowired
     private PayShopBatchMapper payShopBatchMapper;
@@ -213,6 +217,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         String excelPath = ConfigUtil.getValue("EXCEL_PATH");
         JSONObject exExcelResponse = null;
         try {
+            logger.info("excelPath"+excelPath);
             exExcelResponse = excelUtils.exportExcel(httpResponse,titles.toString(),fields.toString(),infoList,2,excelPath);
         } catch (Exception e) {
             e.printStackTrace();

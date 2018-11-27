@@ -1786,76 +1786,6 @@ public class PayShopBatchExample {
             return (Criteria) this;
         }
 
-        public Criteria andExcelUrlIsNull() {
-            addCriterion("excel_url is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlIsNotNull() {
-            addCriterion("excel_url is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlEqualTo(String value) {
-            addCriterion("excel_url =", value, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlNotEqualTo(String value) {
-            addCriterion("excel_url <>", value, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlGreaterThan(String value) {
-            addCriterion("excel_url >", value, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlGreaterThanOrEqualTo(String value) {
-            addCriterion("excel_url >=", value, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlLessThan(String value) {
-            addCriterion("excel_url <", value, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlLessThanOrEqualTo(String value) {
-            addCriterion("excel_url <=", value, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlLike(String value) {
-            addCriterion("excel_url like", value, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlNotLike(String value) {
-            addCriterion("excel_url not like", value, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlIn(List<String> values) {
-            addCriterion("excel_url in", values, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlNotIn(List<String> values) {
-            addCriterion("excel_url not in", values, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlBetween(String value1, String value2) {
-            addCriterion("excel_url between", value1, value2, "excelUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlNotBetween(String value1, String value2) {
-            addCriterion("excel_url not between", value1, value2, "excelUrl");
-            return (Criteria) this;
-        }
-
         public Criteria andSendTimeIsNull() {
             addCriterion("send_time is null");
             return (Criteria) this;
@@ -2096,6 +2026,126 @@ public class PayShopBatchExample {
             return (Criteria) this;
         }
 
+        public Criteria andTransferRateIsNull() {
+            addCriterion("transfer_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateIsNotNull() {
+            addCriterion("transfer_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate =", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate <>", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateGreaterThan(BigDecimal value) {
+            addCriterion("transfer_rate >", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate >=", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateLessThan(BigDecimal value) {
+            addCriterion("transfer_rate <", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate <=", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateIn(List<BigDecimal> values) {
+            addCriterion("transfer_rate in", values, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotIn(List<BigDecimal> values) {
+            addCriterion("transfer_rate not in", values, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("transfer_rate between", value1, value2, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("transfer_rate not between", value1, value2, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdIsNull() {
+            addCriterion("company_charge_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdIsNotNull() {
+            addCriterion("company_charge_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdEqualTo(String value) {
+            addCriterion("company_charge_id =", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdNotEqualTo(String value) {
+            addCriterion("company_charge_id <>", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdGreaterThan(String value) {
+            addCriterion("company_charge_id >", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdGreaterThanOrEqualTo(String value) {
+            addCriterion("company_charge_id >=", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdLessThan(String value) {
+            addCriterion("company_charge_id <", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdLessThanOrEqualTo(String value) {
+            addCriterion("company_charge_id <=", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdIn(List<String> values) {
+            addCriterion("company_charge_id in", values, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdNotIn(List<String> values) {
+            addCriterion("company_charge_id not in", values, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdBetween(String value1, String value2) {
+            addCriterion("company_charge_id between", value1, value2, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdNotBetween(String value1, String value2) {
+            addCriterion("company_charge_id not between", value1, value2, "companyChargeId");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyNameLikeInsensitive(String value) {
             addCriterion("upper(company_name) like", value.toUpperCase(), "companyName");
             return (Criteria) this;
@@ -2148,11 +2198,6 @@ public class PayShopBatchExample {
 
         public Criteria andOperatorNameLikeInsensitive(String value) {
             addCriterion("upper(operator_name) like", value.toUpperCase(), "operatorName");
-            return (Criteria) this;
-        }
-
-        public Criteria andExcelUrlLikeInsensitive(String value) {
-            addCriterion("upper(excel_url) like", value.toUpperCase(), "excelUrl");
             return (Criteria) this;
         }
     }
