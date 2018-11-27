@@ -62,4 +62,11 @@ public interface ShopCouponMoneyTypeServiceFacade {
      * @return
      */
     List<Map<String,Object>> getMoneyToMap();
+
+    /**
+     * 保存实体。并且返回id
+     * @param payShopCouponMoneyType 面值实体
+     * @return
+     */
+    String addAndGetId(PayShopCouponMoneyType payShopCouponMoneyType);
 }

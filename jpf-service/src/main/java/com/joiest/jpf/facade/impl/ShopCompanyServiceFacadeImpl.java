@@ -317,9 +317,9 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
 
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人电话不能为空");
 
-        }else if(StringUtils.isBlank(request.getReceiveEmail())){
-
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不能为空");
+//        }else if(StringUtils.isBlank(request.getReceiveEmail())){
+//
+//            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不能为空");
 
         }else if(request.getPercent().equals("")){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须填写转让百分比");
@@ -341,12 +341,12 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         if(isphoneresale==false){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "销售电话不正确");
         }
-        String emailpattern="^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
-        boolean isemail = Pattern.matches(emailpattern, request.getReceiveEmail());
-
-        if(isemail==false){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不正确");
-        }
+//        String emailpattern="^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
+//        boolean isemail = Pattern.matches(emailpattern, request.getReceiveEmail());
+//
+//        if(isemail==false){
+//            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不正确");
+//        }
 
         //查询当前信息表中是否存在
         PayShopCompanyExample example= new PayShopCompanyExample();

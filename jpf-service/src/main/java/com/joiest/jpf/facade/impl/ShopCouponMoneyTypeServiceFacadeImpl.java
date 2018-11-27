@@ -95,4 +95,12 @@ public class ShopCouponMoneyTypeServiceFacadeImpl implements ShopCouponMoneyType
     public List<Map<String,Object>> getMoneyToMap() {
         return payShopCouponMoneyTypeCustomMapper.getMoneyToMap();
     }
+
+    @Override
+    public String addAndGetId(PayShopCouponMoneyType payShopCouponMoneyType) {
+        payShopCouponMoneyType.setAddtime(new Date());
+        payShopCouponMoneyType.setUseNum(0);
+        payShopCouponMoneyTypeCustomMapper.insertSelective(payShopCouponMoneyType);
+        return payShopCouponMoneyType.getId();
+    }
 }

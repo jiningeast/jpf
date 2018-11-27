@@ -61,7 +61,7 @@
             </table>
         </form>
     </div>
-    <div region="south" border="false"     style=" height: 30px; line-height: 30px;">
+    <div region="south" border="false"     style="text-align: right; height: 30px; line-height: 30px;">
         <a id="saveBtn_audit" class="easyui-linkbutton" icon="icon-ok"    href="javascript:void(0)">确定</a>
     </div>
     <div id="companys"></div>
