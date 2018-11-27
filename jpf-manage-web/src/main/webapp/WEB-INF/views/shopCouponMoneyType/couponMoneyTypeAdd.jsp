@@ -19,17 +19,17 @@
                 <tr>
                     <td  style="text-align: right;width:40%" bgcolor="#f1f1f1">面值(元)：</td>
                     <td>
-                        <input id="money" name="companyName" data-options="required:true,validType:'money'" type="text" style="width:150px" class="easyui-textbox" required="true" value=""/>
+                        <input id="money" name="money" data-options="required:true,validType:'money'" type="text" style="width:150px" class="easyui-textbox" required="true" value=""/>
                     </td>
                 </tr>
                 <tr>
                     <td  style="text-align: right;width:30%" bgcolor="#f1f1f1">状态：</td>
                     <td>
                         <select id="status" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                            <option value="" selected="selected">--请选择--</option>
                             <option value="0">显示</option>
-                            <option value="1" selected="selected">隐藏</option>
-                            <option value="1" selected="selected">自定义</option>
-                            <option value="2" selected="selected">删除</option>
+                            <option value="1">隐藏</option>
+                            <option value="2">自定义</option>
                         </select>
                     </td>
                 </tr>
@@ -56,12 +56,10 @@
                 if (!isValid) {
                     return;
                 }
-                var queryArray = $('#addForm').serializeArray();
-                var postData = parsePostData(queryArray);
                 $.ajax({
                     type: 'post',
                     url: '/shopCouponMoneyType/add',
-                    data: postData,
+                    data: $('#addForm').serialize(),
                     dataType: 'json',
                     success: function (msg) {
                         if (msg.retCode != '0000') {
@@ -81,7 +79,7 @@
 
         $('#cancelBtn_m').linkbutton({
             onClick: function () {
-                $('#infoDiv').window('close');
+                $('#add').window('close');
             }
         });
     })

@@ -56,7 +56,7 @@ public class ManagerLoginController {
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.ABNORMAL_STATUS.getCode(),JpfInterfaceErrorInfo.ABNORMAL_STATUS.getDesc(),null);
             }else{
                 //生成token
-                String token =  AESUtils.encrypt(company.getMerchNo()+company.getId(),ConfigUtil.getValue("AES_KEY"));
+                String token =  AESUtils.encrypt(company.getMerchNo()+company.getId()+ToolUtils.getRandomInt(100000,999999),ConfigUtil.getValue("AES_KEY"));
                 String value = AESUtils.encrypt(company.getId(), ConfigUtil.getValue("AES_KEY"));
                 Map<String,Object> map = new HashMap<String,Object>();
                 map.put("companyId",company.getId());
