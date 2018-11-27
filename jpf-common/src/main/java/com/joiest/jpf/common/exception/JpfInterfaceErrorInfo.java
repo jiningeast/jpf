@@ -111,7 +111,9 @@ public enum JpfInterfaceErrorInfo {
 
     OLDPASSERROR("80009","原密码错误"),
 
-    LOGOUT("80010","已退出登录");
+    LOGOUT("80010","已退出登录"),
+
+    PARAMNOTNULL("80011","数据不全");
 
     private final String desc;
 

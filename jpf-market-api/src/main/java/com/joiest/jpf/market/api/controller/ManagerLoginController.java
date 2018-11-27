@@ -62,6 +62,7 @@ public class ManagerLoginController {
                 map.put("companyId",company.getId());
                 map.put("companyName",company.getCompanyName());
                 map.put("merchNo",company.getMerchNo());
+                map.put("money",company.getMoney());
                 map.put("token",token);
                 map.put("isFirst",company.getIsFirstLogin());
                 redisCustomServiceFacade.set(ConfigUtil.getValue("MARKETMANGER_LOGIN_KEY") + token, value,30*60);
