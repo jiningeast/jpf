@@ -168,8 +168,12 @@ public class BargainSellerController {
 
         //更新用户豆  冻结豆
         ShopCustomerInfo shopCustomerInfo = new ShopCustomerInfo();
+        Integer douCount=userInfo.getDou()-dou;
         Integer over = userInfo.getSaleDou()-dou;
         shopCustomerInfo.setSaleDou(over);
+        shopCustomerInfo.setDou(douCount);
+        String code = ToolUtils.CreateCode(String.valueOf(douCount),userInfo.getId());
+        shopCustomerInfo.setCode(code);
         shopCustomerInfo.setId(userInfo.getId());
         //shopCustomerInfo.setCode(ToolUtils.CreateCode(over.toString(),uid));
         if(userInfo.getFreezeDou() != null && userInfo.getFreezeDou()>0){

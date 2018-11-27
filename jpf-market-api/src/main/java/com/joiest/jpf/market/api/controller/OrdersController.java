@@ -1852,6 +1852,7 @@ public class OrdersController {
         //模拟退还非转让部分
         Map<String,String> res_cancelDouMap = new HashMap<>();
         Map<String,String> res_cancelDouMapSale = new HashMap<>();
+        //查出这个人的所有可转让的信息
         res_cancelDouMap=shopOrderInterfaceServiceFacade.cancelOrderDou(orderNo);
         res_cancelDouMapSale=shopOrderInterfaceServiceFacade.cancelOrderDouSale(orderNo);
         return "";

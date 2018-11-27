@@ -284,9 +284,9 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             {
                 //查出当前用户的可转让以及不可转让金额
                 Map<String,String> mapJosn = new HashMap<>();
-                mapJosn.put("remainId", saleNo.get(0).getId());
-                mapJosn.put("couponId", saleNo.get(0).getCouponId());
-                mapJosn.put("couponNo", saleNo.get(0).getCouponNo());
+                mapJosn.put("remainId", one.getId());
+                mapJosn.put("couponId", one.getCouponId());
+                mapJosn.put("couponNo", one.getCouponNo());
 
                 if ( orderBlance > one.getCouponDouLeft() )
                 {
@@ -335,38 +335,38 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
              int orderBlanceAfter = orderInfo.getTotalDou()-saleNoSum;  //剩余的总金额
 
-             for ( ShopCouponRemainInfo one : saleYes)
+             for ( ShopCouponRemainInfo oneSale : saleYes)
              {
                  Map<String,String> mapJosnSale = new HashMap<>();
-                 mapJosnSale.put("remainId", saleYes.get(0).getId());
-                 mapJosnSale.put("couponId", saleYes.get(0).getCouponId());
-                 mapJosnSale.put("couponNo", saleYes.get(0).getCouponNo());
+                 mapJosnSale.put("remainId", oneSale.getId());
+                 mapJosnSale.put("couponId", oneSale.getCouponId());
+                 mapJosnSale.put("couponNo", oneSale.getCouponNo());
 
-                 if ( orderBlanceAfter > one.getSaleDouLeft() )
+                 if ( orderBlanceAfter > oneSale.getSaleDouLeft() )
                  {
                      //全部扣除
-                     one.setSalestatus((byte)1);
-                     Boolean isTrue = doCouponAfter(one, one.getSaleDouLeft(), orderInfo);      //用完
+                     oneSale.setSalestatus((byte)1);
+                     Boolean isTrue = doCouponAfter(oneSale, oneSale.getSaleDouLeft(), orderInfo);      //用完
 
-                     orderBlanceAfter = orderBlanceAfter - one.getSaleDouLeft();     //订单余额金额
+                     orderBlanceAfter = orderBlanceAfter - oneSale.getSaleDouLeft();     //订单余额金额
 
-                     mapJosnSale.put("deduct", one.getSaleDouLeft().toString());   //此券扣减豆的数量  = 此券数量
+                     mapJosnSale.put("deduct", oneSale.getSaleDouLeft().toString());   //此券扣减豆的数量  = 此券数量
                      int douBlance = 0;      //本券剩余豆数量
                      mapJosnSale.put("remainDou", String.valueOf(douBlance));   //  全部扣除
-                 } else if( orderBlanceAfter <= one.getSaleDouLeft() )
+                 } else if( orderBlanceAfter <= oneSale.getSaleDouLeft() )
                  {
                      byte setSalestatus = 0;
-                     if ( orderBlanceAfter < one.getSaleDouLeft() )
+                     if ( orderBlanceAfter < oneSale.getSaleDouLeft() )
                      {
                          setSalestatus = 0;    //未扣完
-                     } else if ( orderBlanceAfter == one.getSaleDouLeft() )
+                     } else if ( orderBlanceAfter == oneSale.getSaleDouLeft() )
                      {
                          setSalestatus = 1;    //全部扣除
                      }
-                     one.setSalestatus(setSalestatus);
-                     Boolean isTrue = doCouponAfter(one, orderBlanceAfter, orderInfo);     //未用完
+                     oneSale.setSalestatus(setSalestatus);
+                     Boolean isTrue = doCouponAfter(oneSale, orderBlanceAfter, orderInfo);     //未用完
 
-                     int douBlance = one.getSaleDouLeft() - orderBlanceAfter;       //本券剩余豆数量
+                     int douBlance = oneSale.getSaleDouLeft() - orderBlanceAfter;       //本券剩余豆数量
 
                      mapJosnSale.put("deduct", String.valueOf(orderBlanceAfter));         //此券扣减豆的数量 = 订单金额
                      mapJosnSale.put("remainDou", String.valueOf(douBlance));
@@ -490,14 +490,14 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         for ( ShopCouponRemainInfo one : list)
         {
             Map<String,String> mapJosn = new HashMap<>();
-            mapJosn.put("remainId", list.get(0).getId());
-            mapJosn.put("couponId", list.get(0).getCouponId());
-            mapJosn.put("couponNo", list.get(0).getCouponNo());
+            mapJosn.put("remainId", one.getId());
+            mapJosn.put("couponId", one.getCouponId());
+            mapJosn.put("couponNo", one.getCouponNo());
 
             if ( orderBlance > one.getSaleDouLeft() )
             {
                 //全部扣除
-                one.setStatus((byte)1);
+                one.setSalestatus((byte)1);
                 Boolean isTrue = doCouponAttorn(one, one.getSaleDouLeft(), orderInfo);      //用完
 
                 orderBlance = orderBlance - one.getSaleDouLeft();     //订单余额金额
@@ -515,7 +515,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
                 {
                     status = 1;    //全部扣除
                 }
-                one.setStatus(status);
+                one.setSalestatus(status);
                 Boolean isTrue = doCouponAttorn(one, orderBlance, orderInfo);     //未用完
 
                 int douBlance = one.getSaleDouLeft() - orderBlance;       //本券剩余豆数量
@@ -609,14 +609,14 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             // 客户总豆数量减去一部分pay_shop_customer
             PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
             int dou = payShopCustomer.getFreezeDou() - deduct;
-            int countDou=payShopCustomer.getDou()-deduct;
+            //int countDou=payShopCustomer.getDou()-deduct;
             int saledou=payShopCustomer.getSaleDou()-deduct;
-            String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
+            //String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
             payShopCustomerUpdate.setId(orderInfo.getSellerCustomerId());
             payShopCustomerUpdate.setFreezeDou(dou);
-            payShopCustomerUpdate.setSaleDou(saledou);
-            payShopCustomerUpdate.setDou(countDou);
-            payShopCustomerUpdate.setCode(code);
+            //payShopCustomerUpdate.setSaleDou(saledou);
+            //payShopCustomerUpdate.setDou(countDou);
+            //payShopCustomerUpdate.setCode(code);
             payShopCustomerUpdate.setUpdatetime(new Date());
             int res_updateCustomCode = payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
             if ( res_updateCustomCode < 1 )

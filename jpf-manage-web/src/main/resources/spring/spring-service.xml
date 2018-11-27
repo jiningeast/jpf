@@ -79,5 +79,6 @@
 	<bean id="ChargeBalanceServiceFacade" class="com.joiest.jpf.facade.impl.ChargeBalanceServiceFacadeImpl"></bean>
 	<bean id="ChargeInterfaceStreamFacade" class="com.joiest.jpf.facade.impl.ChargeInterfaceStreamFacadeImpl"></bean>
 	<bean id="ChargeCompanyMoneyStreamServiceFacade" class="com.joiest.jpf.facade.impl.ChargeCompanyMoneyStreamServiceFacadeImpl"></bean>
+	<bean id="ShopCouponMoneyTypeServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponMoneyTypeServiceFacadeImpl"></bean>
 
 </beans>

@@ -108,6 +108,11 @@
                     "url" : "shopproduct/index"
                 },{
                     "menuid" : "303",
+                    "menuname" : "欣豆市场欣券面值管理",
+                    "icon" : "icon-nav",
+                    "url" : "/shopCouponMoneyType/index"
+                },{
+                    "menuid" : "304",
                     "menuname" : "充值平台产品管理",
                     "icon" : "icon-nav",
                     "url" : "chargeProduct/index"
