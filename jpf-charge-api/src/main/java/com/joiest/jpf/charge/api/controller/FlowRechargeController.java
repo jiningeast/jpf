@@ -52,8 +52,8 @@ public class FlowRechargeController {
     private ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
     private Map<String,String> actParam = new HashMap<>();
     private Map<String,Object> actTreeParam = new TreeMap<>();
-    private Boolean validate;
-    private String respond;
+    private Boolean validate = true;
+    private String respond = "";
 
     @ModelAttribute
     public String beforAction(HttpServletRequest request) throws Exception{
@@ -61,8 +61,8 @@ public class FlowRechargeController {
         companyInfo = new ChargeCompanyInfo();
         actParam = new HashMap<>();
         actTreeParam = new TreeMap<>();
-        validate = true;
-        respond = null;
+        /*validate = true;
+        respond = null;*/
         //需要过滤的方法执行此
         String requestURI = request.getRequestURI();
         String method_name = requestURI.substring(requestURI.lastIndexOf("/") + 1);
