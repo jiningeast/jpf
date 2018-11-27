@@ -99,7 +99,7 @@
         });
     }
 
-    // 计算实际到帐金额
+    // 计算实际到帐金额1
     function getRealMoney() {
 
         //var moneyrel = parseInt( $("#contractMoney").val() );
