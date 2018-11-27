@@ -61,4 +61,18 @@ public class ShopBrandServiceFacadeImpl implements ShopBrandServiceFacade {
         payShopBrandMapper.insertSelective(info);
         return new JpfResponseDto();
     }
+
+    @Override
+    public JpfResponseDto editBrand(ShopBrandRequest request) {
+        if (StringUtils.isBlank(request.getBrandName()) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "供应商名称不能为空");
+        }
+        PayShopBrand info = new PayShopBrand();
+        info.setId(request.getId());
+        info.setUpdatetime(new Date());
+        info.setBrandName(request.getBrandName());
+        payShopBrandMapper.updateByPrimaryKeySelective(info);
+        return new JpfResponseDto();
+    }
 }

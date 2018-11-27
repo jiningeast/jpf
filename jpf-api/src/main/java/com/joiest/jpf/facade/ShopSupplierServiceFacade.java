@@ -17,4 +17,9 @@ public interface ShopSupplierServiceFacade {
      * 添加供应商
      */
     public JpfResponseDto addShopProductSupplier(ShopSupplierRequest request);
+
+    /**
+     * 编辑供应商
+     */
+    public JpfResponseDto editShopProductSupplier(ShopSupplierRequest request);
 }

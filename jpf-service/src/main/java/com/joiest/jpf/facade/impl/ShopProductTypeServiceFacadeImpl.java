@@ -60,4 +60,21 @@ public class ShopProductTypeServiceFacadeImpl implements ShopProductTypeServiceF
         payShopProductTypeMapper.insertSelective(info);
         return new JpfResponseDto();
     }
+
+    @Override
+    public JpfResponseDto editShopProductType(ShopProductTypeRequest request) {
+        if (StringUtils.isBlank(request.getPname()) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "供应商名称不能为空");
+        }
+        if(StringUtils.isBlank(request.getPid().toString()) ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "商品类型ID不能为空");
+        }
+        PayShopProductType info = new PayShopProductType();
+        info.setPname(request.getPname());
+        info.setUpdatetime(new Date());
+        info.setPid(request.getPid());
+        payShopProductTypeMapper.updateByPrimaryKeySelective(info);
+        return new JpfResponseDto();
+    }
 }

@@ -60,4 +60,22 @@ public class ShopSupplierServiceFacadeImpl implements ShopSupplierServiceFacade 
         payShopSupplierMapper.insertSelective(info);
         return new JpfResponseDto();
     }
+
+    @Override
+    public JpfResponseDto editShopProductSupplier(ShopSupplierRequest request) {
+        if (StringUtils.isBlank(request.getSupplierName()) )
+        {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "供应商名称不能为空");
+        }
+        if(StringUtils.isBlank(request.getId().toString()) ){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "供应商ID不能为空");
+        }
+        PayShopSupplier info = new PayShopSupplier();
+        info.setSupplierName(request.getSupplierName());
+        info.setUpdatetime(new Date());
+        info.setId(request.getId());
+        payShopSupplierMapper.updateByPrimaryKeySelective(info);
+        return new JpfResponseDto();
+    }
+
 }

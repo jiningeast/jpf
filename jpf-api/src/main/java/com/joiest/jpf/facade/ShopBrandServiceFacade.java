@@ -19,4 +19,9 @@ public interface ShopBrandServiceFacade {
      */
     public JpfResponseDto addBrand(ShopBrandRequest request);
 
+    /**
+     * 编辑品牌
+     */
+    public JpfResponseDto editBrand(ShopBrandRequest request);
+
 }
