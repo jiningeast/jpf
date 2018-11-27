@@ -16,7 +16,7 @@ public class PayShopCouponMoneyType implements Serializable {
     private BigDecimal money;
 
     /**
-     * 类型状态  0是正常显示，1 自定义显示 2 删除
+     * 类型状态  0是正常显示，1 隐藏 2 自定义 3删除
      */
     private Byte status;
 
