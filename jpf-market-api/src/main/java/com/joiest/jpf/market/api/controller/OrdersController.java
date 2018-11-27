@@ -1024,7 +1024,7 @@ public class OrdersController {
             if ( StringUtils.isNotBlank(orderInfo.getReceiveValue()) ){
                 String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
                 if(orderInfo.getOrderType() == 4 ){
-                    //content = "您已购买携程旅游卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
+                    content = "您已购买携程旅游卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
                 }
 
                 Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
