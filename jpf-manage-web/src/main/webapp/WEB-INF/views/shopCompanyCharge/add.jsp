@@ -40,31 +40,31 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">欣券金额：</td>
-                    <td>
-                        <input id="couponMoney" name="couponMoney" type="text"   data-options="required:true,onChange:changeTotal" missingMessage="请填写欣券金额"  width="120" class="easyui-numberbox" precision="2" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">服务费金额：</td>
-                    <td>
-                        <input id="serviceMoney" name="serviceMoney" type="text"   data-options="required:true,onChange:changeTotal"
-                               missingMessage="请填写服务费金额"  width="120" class="easyui-numberbox" precision="2" />
-                    </td>
-                </tr>
-                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">合同金额：</td>
                     <td>
-                        <input id="contractMoney" name="contractMoney" type="text"   data-options="onChange:getRealMoney" readonly="readonly" missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
+                        <input id="contractMoney" name="contractMoney" type="text"   data-options="onChange:getRealMoney"  missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">费率：</td>
                     <td>
                         <input id="rate" name="rate" type="text"
-                                width="120" class="easyui-numberbox" precision="2"  value="0" data-options="required:true,onChange:getRealMoney"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
+                               width="120" class="easyui-numberbox" precision="2"  value="0" data-options="required:true,onChange:getRealMoney"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">欣券金额：</td>
+                    <td>
+                        <input id="couponMoney" name="couponMoney" type="text"   data-options="required:true" readonly="readonly" missingMessage="请填写欣券金额"  width="120" class="easyui-numberbox" precision="2" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务费金额：</td>
+                    <td>
+                        <input id="serviceMoney" name="serviceMoney" type="text"   data-options="required:true" readonly="readonly"  missingMessage="请填写服务费金额"  width="120" class="easyui-numberbox" precision="2" />
+                    </td>
+                </tr>
+
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">实际到帐金额：</td>
                     <td>
@@ -125,20 +125,6 @@
         });
     }
 
-    //计算总的金额
-    function changeTotal(){
-        var totalMoney=0;
-        var couponMoney = $("#couponMoney").val();
-        var serviceMoney = $("#serviceMoney").val();
-        if(couponMoney!=""&&!isNaN(couponMoney)){
-            totalMoney=totalMoney+parseInt(couponMoney);
-        }
-        if(serviceMoney!=""&&!isNaN(serviceMoney)){
-            totalMoney=totalMoney+parseInt(serviceMoney);
-        }
-        $("#contractMoney").textbox("setValue",totalMoney.toFixed(2));
-    }
-
     // 计算实际到帐金额
     function getRealMoney() {
 
@@ -148,6 +134,8 @@
             var calculate = (moneyrel * rote)/100;
             var money=(moneyrel-calculate).toFixed(2);
             $("#moneyCopy").textbox("setValue",money);
+            $("#couponMoney").textbox("setValue",money);
+            $("#serviceMoney").textbox("setValue",calculate);
             $("#money").val(money);
 
         }

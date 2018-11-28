@@ -31,7 +31,7 @@ public class ShopBatchRequest {
     /**
      * 状态 0=生成券码中 1=生成完毕，待发券  2=已发券 3=已取消
      */
-    private byte status;
+    private Byte status;
 
     /**
      * 销售人姓名
@@ -107,11 +107,11 @@ public class ShopBatchRequest {
         this.expireMonth = expireMonth;
     }
 
-    public byte getStatus() {
+    public Byte getStatus() {
         return status;
     }
 
-    public void setStatus(byte status) {
+    public void setStatus(Byte status) {
         this.status = status;
     }
 

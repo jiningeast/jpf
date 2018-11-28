@@ -67,6 +67,9 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         if ( shopBatchRequest.getSalesName() != null ){
             c.andSalesNameEqualTo(shopBatchRequest.getSalesName());
         }
+        if(shopBatchRequest.getStatus()!=null){
+            c.andStatusEqualTo(shopBatchRequest.getStatus());
+        }
         e.setPageSize(shopBatchRequest.getRows());
         e.setPageNo(shopBatchRequest.getPage());
         e.setOrderByClause("id DESC");

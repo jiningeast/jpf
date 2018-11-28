@@ -110,6 +110,19 @@ public class ShopCompanyChargeInfo implements Serializable {
      */
     private BigDecimal serviceMoney;
 
+    /**
+     * 剩余金额
+     */
+    private BigDecimal balance;
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     public String getContractNo() {
         return contractNo;
     }

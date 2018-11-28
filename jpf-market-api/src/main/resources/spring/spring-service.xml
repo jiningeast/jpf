@@ -31,5 +31,7 @@
 	<bean id="ShopProductInfoServicefacade" class="com.joiest.jpf.facade.impl.ShopProductInfoServicefacadeImpl"></bean>
 	<bean id="ShopCompanyServiceFacade" class="com.joiest.jpf.facade.impl.ShopCompanyServiceFacadeImpl"></bean>
 	<bean id="ShopCouponMoneyTypeServiceFacade" class="com.joiest.jpf.facade.impl.ShopCouponMoneyTypeServiceFacadeImpl"></bean>
+	<bean id="ShopBatchServiceFacade" class="com.joiest.jpf.facade.impl.ShopBatchServiceFacadeImpl"></bean>
+	<bean id="ShopCompanyChargeServiceFacade" class="com.joiest.jpf.facade.impl.ShopCompanyChargeServiceFacadeImpl"></bean>
 
 </beans>
