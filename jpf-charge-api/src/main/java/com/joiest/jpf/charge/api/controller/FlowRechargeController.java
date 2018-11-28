@@ -638,6 +638,7 @@ public class FlowRechargeController {
         merRespons.put("value",chargeProductInfo.getValue());//充值面值
         merRespons.put("salePrice",chargeProductInfo.getSalePrice());//扣商户的钱
         merRespons.put("productId",chargeProductInfo.getId());//产品id
+        merRespons.put("foreignOrderNo",map.get("orderid"));//返回欧非或者威能订单号
 
         if(map.get("code").equals("10000")){
 
