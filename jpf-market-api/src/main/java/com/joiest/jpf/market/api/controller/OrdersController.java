@@ -135,27 +135,7 @@ public class OrdersController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getCode(), JpfInterfaceErrorInfo.MK_PRODUCT_NOFOUND.getDesc(), "");
         }
 
-        // 先创建一个空订单，待更新
-        ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
-        String orderno = ToolsUtils.createOrderid();
-        info.setOrderNo(orderno);
-        info.setCustomerId(userInfo.getId());
-        info.setCustomerName(userInfo.getNickname());
-        info.setProductId(productInfo.getId());
-        info.setProductName(productInfo.getName());
-        info.setProductMoney(productInfo.getMoney());
-        info.setProductDou(productInfo.getDou());
-        info.setProductInfoId(productInfo.getProductInfoId());
-        info.setAddtime(new Date());
-        int orderId = shopOrderInterfaceServiceFacade.addOrder(info);
-        info.setId(""+orderId);
-        // 获取orderid的个位数，0,1时用欧非接口，2-9用威能接口
-        String lastNum = StringUtils.substring(String.valueOf(orderId),-1,String.valueOf(orderId).length());
-        if ( Integer.parseInt(lastNum) <= 1 ){
-            info.setInterfaceType((byte)0);     // 0=欧非 1=威能 （威能价格便宜，多用威能）
-        }else {
-            info.setInterfaceType((byte)1);
-        }
+
 
         // 验证传入的信息
         String source = "1";    // 1=直充 2=卡密
@@ -221,6 +201,39 @@ public class OrdersController {
             }
         }
         ValidatorUtils.validateInterface(request);
+
+
+        //用户可用券列表
+        GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(uid);
+        if ( userCouponList == null || userCouponList.getCount() == 0) {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
+        }
+        int orderDou = Integer.valueOf(request.getPaymoney());
+        if ( orderDou > userInfo.getDou() || orderDou > userCouponList.getDouTotal())
+        {
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(), JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(), "");
+        }
+        // 先创建一个空订单，待更新
+        ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
+        String orderno = ToolsUtils.createOrderid();
+        info.setOrderNo(orderno);
+        info.setCustomerId(userInfo.getId());
+        info.setCustomerName(userInfo.getNickname());
+        info.setProductId(productInfo.getId());
+        info.setProductName(productInfo.getName());
+        info.setProductMoney(productInfo.getMoney());
+        info.setProductDou(productInfo.getDou());
+        info.setProductInfoId(productInfo.getProductInfoId());
+        info.setAddtime(new Date());
+        int orderId = shopOrderInterfaceServiceFacade.addOrder(info);
+        info.setId(""+orderId);
+        // 获取orderid的个位数，0,1时用欧非接口，2-9用威能接口
+        String lastNum = StringUtils.substring(String.valueOf(orderId),-1,String.valueOf(orderId).length());
+        if ( Integer.parseInt(lastNum) <= 1 ){
+            info.setInterfaceType((byte)0);     // 0=欧非 1=威能 （威能价格便宜，多用威能）
+        }else {
+            info.setInterfaceType((byte)1);
+        }
         /*
         // 充值金额与付款金额必须一致
         if ( !request.getMoney().equals(request.getPaymoney()) )

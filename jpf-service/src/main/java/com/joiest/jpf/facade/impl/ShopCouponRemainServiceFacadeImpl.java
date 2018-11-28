@@ -235,7 +235,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             BeanCopier beanCopier = BeanCopier.create(PayShopCouponRemain.class, ShopCouponRemainInfo.class, false);
             beanCopier.copy(one, info, null);
             resultList.add(info);
-            douTotal += one.getCouponDouLeft();
+            douTotal += one.getCouponDouLeft()+one.getSaleDouLeft();
         }
         GetCouponRemainResponse response = new GetCouponRemainResponse();
         response.setList(resultList);
