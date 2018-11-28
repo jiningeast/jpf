@@ -2,11 +2,14 @@ package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayChargeCompany;
+import com.joiest.jpf.common.po.PayShopCompanyCharge;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.entity.ChargeOrderInfo;
 import net.sf.json.JSONObject;
+
+import java.util.List;
 
 public interface ChargeCompanyServiceFacade {
 

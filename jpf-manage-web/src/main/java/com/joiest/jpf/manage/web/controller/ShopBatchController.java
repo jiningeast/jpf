@@ -686,4 +686,9 @@ public class ShopBatchController {
 
         return count;
     }
+
+    @RequestMapping("/goSearchBatchNo")
+    public ModelAndView goSearchBatchNo(){
+        return new ModelAndView("shopBatch/searchBatchNo");
+    }
 }

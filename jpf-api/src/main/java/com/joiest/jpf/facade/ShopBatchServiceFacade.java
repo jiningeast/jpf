@@ -7,6 +7,7 @@ import com.joiest.jpf.dto.ShopBatchResponse;
 import com.joiest.jpf.entity.ShopBatchInfo;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface ShopBatchServiceFacade {
 
@@ -39,4 +40,5 @@ public interface ShopBatchServiceFacade {
      * 根据批次号查找批次
      */
     public PayShopBatch getBatchByBatchNo(String batchNo);
+
 }

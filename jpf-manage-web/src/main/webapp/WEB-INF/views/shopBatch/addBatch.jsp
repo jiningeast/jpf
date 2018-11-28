@@ -13,10 +13,23 @@
             <input type="hidden" id="companyName" name="companyName">
             <table id="addCoupons" cellpadding="5" width="100%">
                 <tr>
+                    <td colspan="8" style="text-align: left"><b>合同信息：</b></td>
+                </tr>
+                <tr>
+                    <td  style="width: 140px">选择批次号</td>
+                    <td width="180px">
+                        <input id="batchNo" type="text" class="easyui-textbox" style="width: 100%" disabled="disabled">
+                        <input id="batchId" name="companyId" type="hidden">
+                    </td>
+                    <td align="left" colspan="6" style="text-align: left;">
+                        <a id="searchBatchNo" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选择批次</a>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="8" style="text-align: left"><b>商户信息：</b></td>
                 </tr>
                 <tr>
-                    <td width="70px">指定商户</td>
+                    <td style="width: 140px">指定商户</td>
                     <td width="180px">
                         <input id="name" type="text" class="easyui-textbox" style="width: 100%" disabled="disabled">
                         <input id="mid" name="companyId" type="hidden">
@@ -64,6 +77,7 @@
         <a id="confirmBatch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确定</a>
     </div>
     <div id="companys"></div>
+    <div id="batchWin"></div>
 </div>
 <script>
     $(function () {
@@ -74,6 +88,19 @@
             }
         });
 
+        $("#searchBatchNo").linkbutton({
+            onClick:function(){
+                $('#batchWin').window("open").window('refresh', '/shopBatch/goSearchBatchNo').window('setTitle','选取批次号');
+            }
+        });
+
+        // 选取公司弹窗大小
+        $('#batchWin').window({
+            width:'1024px',
+            height:'550px',
+            closed:true,
+            modal:true
+        });
         // 选取公司弹窗大小
         $('#companys').window({
             width:'1024px',
