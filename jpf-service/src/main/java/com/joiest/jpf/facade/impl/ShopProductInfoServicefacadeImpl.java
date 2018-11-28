@@ -102,6 +102,9 @@ public class ShopProductInfoServicefacadeImpl implements ShopProductInfoServiceF
         info.setBrandId(Integer.parseInt(request.getBrandId()));
         info.setSupplierId(Integer.parseInt(request.getSupplierId()));
         info.setTypeId(Integer.parseInt(request.getTypeId()));
+        info.setSupplierName(request.getSupplierName());
+        info.setTypeName(request.getTypeName());
+        info.setBrandName(request.getBrandName());
         //info.setStatus((byte)1);
         info.setUpdatetime(new Date());
         info.setContactEmail(request.getContactEmail());

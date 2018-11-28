@@ -25,6 +25,7 @@ import java.util.List;
 
 public class ShopBargainRequestServiceFacadeImpl implements ShopBargainRequestServiceFacade {
 
+
     @Autowired
     private PayShopBargainRequestMapper payShopBargainRequestMapper;
 

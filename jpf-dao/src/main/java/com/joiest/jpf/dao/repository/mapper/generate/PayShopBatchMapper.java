@@ -41,12 +41,6 @@ public interface PayShopBatchMapper {
     int insertSelective(PayShopBatch record);
 
     /**
-     *
-     * @param example
-     */
-    List<PayShopBatch> selectByExampleWithBLOBs(PayShopBatchExample example);
-
-    /**
      * 根据条件查询列表
      *
      * @param example
@@ -74,14 +68,6 @@ public interface PayShopBatchMapper {
      * @param record
      * @param example
      */
-    int updateByExampleWithBLOBs(@Param("record") PayShopBatch record, @Param("example") PayShopBatchExample example);
-
-    /**
-     * 选择性更新数据库记录
-     *
-     * @param record
-     * @param example
-     */
     int updateByExample(@Param("record") PayShopBatch record, @Param("example") PayShopBatchExample example);
 
     /**
@@ -90,12 +76,6 @@ public interface PayShopBatchMapper {
      * @param record
      */
     int updateByPrimaryKeySelective(PayShopBatch record);
-
-    /**
-     *
-     * @param record
-     */
-    int updateByPrimaryKeyWithBLOBs(PayShopBatch record);
 
     /**
      * 根据主键来更新数据库记录

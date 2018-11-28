@@ -80,6 +80,31 @@ public class PayShopCompanyCharge implements Serializable {
      */
     private Date updatetime;
 
+    /**
+     * 合同号
+     */
+    private String contractNo;
+
+    /**
+     * 合同到期时间
+     */
+    private Date duetime;
+
+    /**
+     * 消费转让率
+     */
+    private BigDecimal transferRate;
+
+    /**
+     * 欣券金额
+     */
+    private BigDecimal couponMoney;
+
+    /**
+     * 服务金额
+     */
+    private BigDecimal serviceMoney;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -202,6 +227,46 @@ public class PayShopCompanyCharge implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo == null ? null : contractNo.trim();
+    }
+
+    public Date getDuetime() {
+        return duetime;
+    }
+
+    public void setDuetime(Date duetime) {
+        this.duetime = duetime;
+    }
+
+    public BigDecimal getTransferRate() {
+        return transferRate;
+    }
+
+    public void setTransferRate(BigDecimal transferRate) {
+        this.transferRate = transferRate;
+    }
+
+    public BigDecimal getCouponMoney() {
+        return couponMoney;
+    }
+
+    public void setCouponMoney(BigDecimal couponMoney) {
+        this.couponMoney = couponMoney;
+    }
+
+    public BigDecimal getServiceMoney() {
+        return serviceMoney;
+    }
+
+    public void setServiceMoney(BigDecimal serviceMoney) {
+        this.serviceMoney = serviceMoney;
+    }
+
     /**
      *
      */
@@ -226,6 +291,11 @@ public class PayShopCompanyCharge implements Serializable {
         sb.append(", status=").append(status);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", contractNo=").append(contractNo);
+        sb.append(", duetime=").append(duetime);
+        sb.append(", transferRate=").append(transferRate);
+        sb.append(", couponMoney=").append(couponMoney);
+        sb.append(", serviceMoney=").append(serviceMoney);
         sb.append("]");
         return sb.toString();
     }
@@ -260,7 +330,12 @@ public class PayShopCompanyCharge implements Serializable {
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getContractNo() == null ? other.getContractNo() == null : this.getContractNo().equals(other.getContractNo()))
+            && (this.getDuetime() == null ? other.getDuetime() == null : this.getDuetime().equals(other.getDuetime()))
+            && (this.getTransferRate() == null ? other.getTransferRate() == null : this.getTransferRate().equals(other.getTransferRate()))
+            && (this.getCouponMoney() == null ? other.getCouponMoney() == null : this.getCouponMoney().equals(other.getCouponMoney()))
+            && (this.getServiceMoney() == null ? other.getServiceMoney() == null : this.getServiceMoney().equals(other.getServiceMoney()));
     }
 
     /**
@@ -285,6 +360,11 @@ public class PayShopCompanyCharge implements Serializable {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getContractNo() == null) ? 0 : getContractNo().hashCode());
+        result = prime * result + ((getDuetime() == null) ? 0 : getDuetime().hashCode());
+        result = prime * result + ((getTransferRate() == null) ? 0 : getTransferRate().hashCode());
+        result = prime * result + ((getCouponMoney() == null) ? 0 : getCouponMoney().hashCode());
+        result = prime * result + ((getServiceMoney() == null) ? 0 : getServiceMoney().hashCode());
         return result;
     }
 }
