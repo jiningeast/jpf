@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Auther: admin
@@ -25,7 +29,7 @@ import java.util.List;
  * @Description:
  */
 @Controller
-@RequestMapping("/shopBatchController")
+@RequestMapping("/market-manager/shopBatchController")
 public class ShopBatchController {
 
     @Autowired
@@ -36,7 +40,7 @@ public class ShopBatchController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "getUsableBatchNo",method = RequestMethod.POST)
+    @RequestMapping(value = "/getUsableBatchNo",method = RequestMethod.POST)
     @ResponseBody
     public String getUsableBatchNo(HttpServletRequest request){
 
@@ -44,14 +48,22 @@ public class ShopBatchController {
         if(StringUtils.isBlank(companyId)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
         }
-        List<PayShopCompanyCharge> payShopCompanyCharges;
+        List<Map<String,Object>> list = new ArrayList<>();
         try {
-            payShopCompanyCharges = shopCompanyChargeServiceFacade.getListByCompanyId(Base64CustomUtils.base64Decoder(companyId));
+            List<PayShopCompanyCharge> payShopCompanyCharges = shopCompanyChargeServiceFacade.getListByCompanyId(Base64CustomUtils.base64Decoder(companyId));
+            for (PayShopCompanyCharge payShopCompanyCharge:payShopCompanyCharges) {
+                Map<String,Object> map =new ConcurrentHashMap<>();
+                map.put("id",payShopCompanyCharge.getId());
+                map.put("contractNo",payShopCompanyCharge.getContractNo());
+                map.put("balance",payShopCompanyCharge.getBalance());
+                map.put("transferRate",payShopCompanyCharge.getTransferRate());
+                list.add(map);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),JpfInterfaceErrorInfo.FAIL.getDesc(),null);
         }
 
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),payShopCompanyCharges);
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),list);
     }
 }
