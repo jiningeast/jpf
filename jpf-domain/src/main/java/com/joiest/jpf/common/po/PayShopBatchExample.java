@@ -1536,6 +1536,76 @@ public class PayShopBatchExample {
             return (Criteria) this;
         }
 
+        public Criteria andSmsContentIsNull() {
+            addCriterion("sms_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentIsNotNull() {
+            addCriterion("sms_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentEqualTo(String value) {
+            addCriterion("sms_content =", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentNotEqualTo(String value) {
+            addCriterion("sms_content <>", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentGreaterThan(String value) {
+            addCriterion("sms_content >", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentGreaterThanOrEqualTo(String value) {
+            addCriterion("sms_content >=", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentLessThan(String value) {
+            addCriterion("sms_content <", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentLessThanOrEqualTo(String value) {
+            addCriterion("sms_content <=", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentLike(String value) {
+            addCriterion("sms_content like", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentNotLike(String value) {
+            addCriterion("sms_content not like", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentIn(List<String> values) {
+            addCriterion("sms_content in", values, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentNotIn(List<String> values) {
+            addCriterion("sms_content not in", values, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentBetween(String value1, String value2) {
+            addCriterion("sms_content between", value1, value2, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentNotBetween(String value1, String value2) {
+            addCriterion("sms_content not between", value1, value2, "smsContent");
+            return (Criteria) this;
+        }
+
         public Criteria andSmsTimeIsNull() {
             addCriterion("sms_time is null");
             return (Criteria) this;
@@ -1783,6 +1853,76 @@ public class PayShopBatchExample {
 
         public Criteria andOperatorNameNotBetween(String value1, String value2) {
             addCriterion("operator_name not between", value1, value2, "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlIsNull() {
+            addCriterion("excel_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlIsNotNull() {
+            addCriterion("excel_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlEqualTo(String value) {
+            addCriterion("excel_url =", value, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlNotEqualTo(String value) {
+            addCriterion("excel_url <>", value, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlGreaterThan(String value) {
+            addCriterion("excel_url >", value, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("excel_url >=", value, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlLessThan(String value) {
+            addCriterion("excel_url <", value, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlLessThanOrEqualTo(String value) {
+            addCriterion("excel_url <=", value, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlLike(String value) {
+            addCriterion("excel_url like", value, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlNotLike(String value) {
+            addCriterion("excel_url not like", value, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlIn(List<String> values) {
+            addCriterion("excel_url in", values, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlNotIn(List<String> values) {
+            addCriterion("excel_url not in", values, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlBetween(String value1, String value2) {
+            addCriterion("excel_url between", value1, value2, "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlNotBetween(String value1, String value2) {
+            addCriterion("excel_url not between", value1, value2, "excelUrl");
             return (Criteria) this;
         }
 
@@ -2196,8 +2336,18 @@ public class PayShopBatchExample {
             return (Criteria) this;
         }
 
+        public Criteria andSmsContentLikeInsensitive(String value) {
+            addCriterion("upper(sms_content) like", value.toUpperCase(), "smsContent");
+            return (Criteria) this;
+        }
+
         public Criteria andOperatorNameLikeInsensitive(String value) {
             addCriterion("upper(operator_name) like", value.toUpperCase(), "operatorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelUrlLikeInsensitive(String value) {
+            addCriterion("upper(excel_url) like", value.toUpperCase(), "excelUrl");
             return (Criteria) this;
         }
     }
