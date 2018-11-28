@@ -24,6 +24,22 @@
                     <td>${shopCompanyChargeInfo.companyName}</td>
                 </tr>
                 <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同号：</td>
+                    <td>${shopCompanyChargeInfo.contractNo}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同到期时间：</td>
+                    <td><fmt:formatDate value="${shopCompanyChargeInfo.duetime}" pattern="yyyy-MM-dd"/></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">欣券金额：</td>
+                    <td>${shopCompanyChargeInfo.couponMoney}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务金额：</td>
+                    <td>${shopCompanyChargeInfo.serviceMoney}</td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">合同金额：</td>
                     <td>${shopCompanyChargeInfo.contractMoney}</td>
                 </tr>
@@ -34,6 +50,10 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">实际到帐：</td>
                     <td>${shopCompanyChargeInfo.money}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务转让率 (%)：</td>
+                    <td>${shopCompanyChargeInfo.transferRate} </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">付款凭证：</td>

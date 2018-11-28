@@ -21,18 +21,41 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">充值公司：</td>
                     <td>
-                        <input id="companyName" name="companyName" type="text"  data-options="required:true"
-                               width="120" class="easyui-textbox"/>
+                        <input id="companyName" name="companyName" type="text"  data-options="required:true"  width="120" class="easyui-textbox" missingMessage="请选择充值公司"/>
                         <input id="companyId" name="companyId" type="hidden"  />
                         <a id="searchCompany" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选取商户</a>
                     </td>
                 </tr>
-
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同号：</td>
+                    <td>
+                        <input id="contractNo" name="contractNo" type="text"   data-options="required:true" missingMessage="请填写合同号"  width="120" class="easyui-numberbox"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同到期时间：</td>
+                    <td>
+                        <input type="text" class="Wdate" style="width: 141px;border-radius: 5px;height: 18px;border: 1px solid #95B8E7;" id="duetime"  name="duetime" data-options="required:true" missingMessage="请填写合同到期时间"
+                               onfocus="WdatePicker({minDate:new Date(),minDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd'})"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">欣券金额：</td>
+                    <td>
+                        <input id="couponMoney" name="couponMoney" type="text"   data-options="required:true,onChange:changeTotal" missingMessage="请填写欣券金额"  width="120" class="easyui-numberbox" precision="2" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务费金额：</td>
+                    <td>
+                        <input id="serviceMoney" name="serviceMoney" type="text"   data-options="required:true,onChange:changeTotal"
+                               missingMessage="请填写服务费金额"  width="120" class="easyui-numberbox" precision="2" />
+                    </td>
+                </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">合同金额：</td>
                     <td>
-                        <input id="contractMoney" name="contractMoney" type="text"   data-options="required:true,onChange:getRealMoney"
-                               missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
+                        <input id="contractMoney" name="contractMoney" type="text"   data-options="onChange:getRealMoney" readonly="readonly" missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
                     </td>
                 </tr>
                 <tr>
@@ -47,6 +70,12 @@
                     <td>
                         <input id="moneyCopy" name="moneyCopy" class="easyui-textbox" disabled="disabled"/>
                         <input id="money" name="money" type="hidden"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务转让率：</td>
+                    <td>
+                        <input id="transferRate" name="transferRate" class="easyui-textbox" missingMessage="请填写服务转让率"  data-options="required:true" value="30"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
                     </td>
                 </tr>
                 <tr>
@@ -96,6 +125,20 @@
         });
     }
 
+    //计算总的金额
+    function changeTotal(){
+        var totalMoney=0;
+        var couponMoney = $("#couponMoney").val();
+        var serviceMoney = $("#serviceMoney").val();
+        if(couponMoney!=""&&!isNaN(couponMoney)){
+            totalMoney=totalMoney+parseInt(couponMoney);
+        }
+        if(serviceMoney!=""&&!isNaN(serviceMoney)){
+            totalMoney=totalMoney+parseInt(serviceMoney);
+        }
+        $("#contractMoney").textbox("setValue",totalMoney.toFixed(2));
+    }
+
     // 计算实际到帐金额
     function getRealMoney() {
 
@@ -130,8 +173,18 @@
         // 点击确定
         $("#saveBtn_audit").linkbutton({
             onClick : function () {
+                var isValid = $("#auditForm").form('enableValidation').form('validate');
+                if (!isValid) {
+                    return;
+                }
                 if ( $("#companyId").val() == ""  ){
                     $.messager.alert('提示', '请选择公司', 'info');
+                    return false;
+                }
+                // 判断上传文件
+                var duetime = $("#duetime").val();
+                if( duetime == "" ){
+                    $.messager.alert('提示', '请填写合同到期时间!', 'info');
                     return false;
                 }
                 // 判断上传文件
