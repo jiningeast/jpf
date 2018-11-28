@@ -130,7 +130,10 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         String pattern = "^[1][3,4,5,7,8][0-9]{9}$";
 
         boolean isphone = Pattern.matches(pattern, request.getContactPhone());
-
+        double percent = request.getPercent().doubleValue();
+        if(percent > 0.9 || percent < 0.1){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "只能填写0.1到0.9之间的值");
+        }
         if(isphone==false){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "联系电话不正确");
         }
@@ -190,7 +193,7 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
 
         //验证
         PayShopCompanyExample exampleEmail= new PayShopCompanyExample();
-        PayShopCompanyExample.Criteria c4 = examplePhone.createCriteria();
+        PayShopCompanyExample.Criteria c4 = exampleEmail.createCriteria();
         c4.andReceiveEmailEqualTo(request.getReceiveEmail());
         List<PayShopCompany> CompanyListEmail = payShopCompanyMapper.selectByExample(exampleEmail);
         if(CompanyListEmail != null && !CompanyListEmail.isEmpty()){
@@ -327,7 +330,10 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         String pattern = "^[1][3,4,5,7,8][0-9]{9}$";
 
         boolean isphone = Pattern.matches(pattern, request.getContactPhone());
-
+        double percent = request.getPercent().doubleValue();
+        if(percent > 0.9 || percent < 0.1){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "只能填写0.1到0.9之间的值");
+        }
         if(isphone==false){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "联系电话不正确");
         }
