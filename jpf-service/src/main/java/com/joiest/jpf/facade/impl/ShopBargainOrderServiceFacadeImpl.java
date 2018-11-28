@@ -337,7 +337,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                     //取消转让修改豆
                     // 客户总豆数量减去一部分pay_shop_customer
                     PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-                    int countDou=payShopCustomerUpdate.getDou()+payShopBargainOrder.getDou();
+                    int countDou=payShopCustomer.getDou()+ payShopBargainOrder.getDou();
                     int dou = payShopCustomer.getSaleDou() + payShopBargainOrder.getDou();
                     String code = ToolUtils.CreateCode(String.valueOf(countDou),payShopBargainOrder.getSellerCustomerId());
                     payShopCustomerUpdate.setId(payShopBargainOrder.getSellerCustomerId());

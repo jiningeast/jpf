@@ -155,7 +155,11 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
         payShopCompanyCharge.setAddtime(curretDate);
         payShopCompanyCharge.setStatus((byte)0);
         payShopCompanyCharge.setUpdatetime(curretDate);
-
+        payShopCompanyCharge.setContractNo(request.getContractNo());
+        payShopCompanyCharge.setDuetime(DateUtils.getFdate(request.getDuetime(),DateUtils.DATEFORMATSHORT));
+        payShopCompanyCharge.setCouponMoney(request.getCouponMoney());
+        payShopCompanyCharge.setServiceMoney(request.getServiceMoney());
+        payShopCompanyCharge.setTransferRate(request.getTransferRate());
         int count = payShopCompanyChargeMapper.insertSelective(payShopCompanyCharge);
         if( count != 1 ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "添加失败");
