@@ -966,6 +966,13 @@ public class OrdersController {
         Date date = new Date();
         SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         StringBuilder smsSb = new StringBuilder();
+        //  短信tips:
+        //短信接口内容长度最长支付150个字符 需要把短信处理成多次发送 2018-11-29 拆分规则按照5条内容调用一次接口
+        Map<String,String> smsContentMap = new HashMap<>();
+        Integer smsSize = 0; //短信数
+        Integer smsPage = 0; //短信页
+        Integer smsPageSieze = 2; //短信页数 最大支付2且大于0 卡密内容两个已经近100个字符了
+        String smsStr = ""; // 短信内容
 
         for ( ShopStockCardInfo shopStockCardInfo:list ){
             //更新卡密信息到具体的用户
@@ -1006,9 +1013,28 @@ public class OrdersController {
             orderinfo.setStockCardId(shopStockCardInfo.getId());
 
             int res_upOrder = shopOrderInterfaceServiceFacade.updateOrder(  orderinfo);
+
+            String smsInfo = "[卡号："+shopStockCardInfo.getCardNo()+"，密码：" +shopStockCardInfo.getCardPass()+ "]";
+            smsStr += smsInfo;
             if ( isShopSuc >0 )
             {
-                smsSb.append("[卡号："+shopStockCardInfo.getCardNo()+"，密码：" +shopStockCardInfo.getCardPass()+ "]");
+                //smsSb.append("[卡号："+shopStockCardInfo.getCardNo()+"，密码：" +shopStockCardInfo.getCardPass()+ "]");
+                smsSb.append(smsInfo);
+                smsSize++;
+                if( list.size() >= smsPageSieze ){
+                    if( smsSize%smsPageSieze == 0 ){
+                        //每smsPageSieze条为一组数据 触发一个短信接口
+                        smsContentMap.put(smsPage.toString(),smsStr);
+                        //每smsPageSieze条内容清空一下
+                        smsStr = "";
+                        smsPage++;// 记录总数
+                    }else{
+                        smsContentMap.put(smsPage.toString(),smsStr);
+                    }
+                }
+                else{
+                    smsContentMap.put(smsPage.toString(),smsStr);
+                }
             } else
             {
                 Map<String,String> err = new HashMap<>();
@@ -1035,22 +1061,47 @@ public class OrdersController {
 
         if ( orderInfo.getReceiveType() == 1 ){
             if ( StringUtils.isNotBlank(orderInfo.getReceiveValue()) ){
-                String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
-                if(orderInfo.getOrderType() == 4 ){
-                    content = "您已购买携程旅游卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
+
+                //短信发送及流水按照  smsContentMap 数组进行循环发送
+                if( smsContentMap.size() > 0  ){
+                    for (Map.Entry<String, String> entry : smsContentMap.entrySet()) {
+                        Integer smsNum = entry.getValue().split("\\]").length;
+                        //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+                        String content = "您已购买中石化加油卡"+smsNum+"张，"+entry.getValue()+"，请妥善保管。";
+                        if(orderInfo.getOrderType() == 4 ){
+                            content = "您已购买携程旅游卡"+smsNum+"张，"+entry.getValue()+"，请妥善保管。";
+                        }
+
+                        Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+
+                        // 添加短信流水
+                        ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+                        shopInterfaceStreamInfo.setType((byte)1);
+                        shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+                        shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+                        shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+                        shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+                        shopInterfaceStreamInfo.setAddtime(new Date());
+                        shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+                    }
                 }
 
-                Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
-
-                // 添加短信流水
-                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
-                shopInterfaceStreamInfo.setType((byte)1);
-                shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
-                shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
-                shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
-                shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
-                shopInterfaceStreamInfo.setAddtime(new Date());
-                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+//                String content = "您已购买中石化加油卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
+//                if(orderInfo.getOrderType() == 4 ){
+//                    content = "您已购买携程旅游卡"+list.size()+"张，"+smsSb+"，请妥善保管。";
+//                }
+//
+//                Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
+//
+//                // 添加短信流水
+//                ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+//                shopInterfaceStreamInfo.setType((byte)1);
+//                shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+//                shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+//                shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+//                shopInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
+//                shopInterfaceStreamInfo.setAddtime(new Date());
+//                shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
             }else{
                 String content = "您已购买中石化加油卡一张，卡号"+list.get(0).getCardNo()+"，密码"+list.get(0).getCardPass()+"，请妥善保管。";
                 Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");
