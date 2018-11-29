@@ -341,7 +341,7 @@
         console.log(formData);
         console.log($('#uploadfile')[0].files[0]);
         $.ajax({
-            url: '/cloudCompany/upload',
+            url: '../cloudCompany/upload',
             type: 'POST',
             data: formData,
             async: false,
