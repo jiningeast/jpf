@@ -9,7 +9,7 @@
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
     <script>
         $(function() {
-            $('#add').window({
+            $('#couponMoneyAddWin').window({
                 title:'新增面值',
                 width:'50%',
                 height:'300px',
@@ -18,7 +18,7 @@
                 maximized:false,//弹出窗口最大化
 
             });
-            $('#edit').window({
+            $('#couponMoneyEditWin').window({
                 title:'编辑',
                 width:'50%',
                 height:'300px',
@@ -31,7 +31,7 @@
                     text:'新增',
                     iconCls:'icon-add',
                     handler:function(){
-                        $('#add').window("open").window('refresh', '/shopCouponMoneyType/goAdd').window('setTitle','新增面值');
+                        $('#couponMoneyAddWin').window("open").window('refresh', '../shopCouponMoneyType/goAdd').window('setTitle','新增面值');
                     }
                 },
                 {
@@ -43,7 +43,7 @@
                             $.messager.alert('消息提示','请选择一条数据！','info');
                             return false;
                         }
-                        $('#edit').window("open").window('refresh', '/shopCouponMoneyType/goUpdate?id='+rows[0].id).window('setTitle','编辑面值');
+                        $('#couponMoneyEditWin').window("open").window('refresh', '../shopCouponMoneyType/goUpdate?id='+rows[0].id).window('setTitle','编辑面值');
                     }
                 }
             ];
@@ -58,7 +58,7 @@
                 selectOnCheck:true,
                 remoteSort: false, // 服务端排序
                 // width:500,
-                url:'/shopCouponMoneyType/list',
+                url:'../shopCouponMoneyType/list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'money',title:'面值(元)',width:'8%'},
@@ -153,7 +153,7 @@
     <br/>
     <table id="dg"></table>
 </div>
-<div id="add"></div>
-<div id="edit"></div>
+<div id="couponMoneyAddWin"></div>
+<div id="couponMoneyEditWin"></div>
 </body>
 </html>

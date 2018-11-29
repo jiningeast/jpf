@@ -26,8 +26,7 @@
                 <tr>
                     <td  style="text-align: right;width:30%" bgcolor="#f1f1f1">状态：</td>
                     <td>
-                        <select id="updateStatus" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;">
-                            <option value="">--请选择--</option>
+                        <select id="updateStatus" name="status" data-options="required:true" class="easyui-combobox" style="width: 150px;">
                             <option value="0" ${payShopCouponMoneyType.status eq 0?"selected":""}>显示</option>
                             <option value="1" ${payShopCouponMoneyType.status eq 1?"selected":""}>隐藏</option>
                             <option value="2" ${payShopCouponMoneyType.status eq 2?"selected":""}>自定义</option>
@@ -40,9 +39,9 @@
     </div>
     <div region="south" border="false"
          style="text-align: right; height: 30px; line-height: 30px;">
-        <a id="saveBtn_m" class="easyui-linkbutton" icon="icon-ok"
+        <a id="editBtn_m" class="easyui-linkbutton" icon="icon-ok"
            href="javascript:void(0)">确定</a>
-        <a id="cancelBtn_m" class="easyui-linkbutton" icon="icon-cancel"
+        <a id="editCancelBtn_m" class="easyui-linkbutton" icon="icon-cancel"
            href="javascript:void(0)">取消</a>
     </div>
 </div>
@@ -51,24 +50,24 @@
 </style>
 <script>
     $(function () {
-        $("#saveBtn_m").linkbutton({
+        $("#editBtn_m").linkbutton({
             onClick: function () {
                 var isValid = $("#editForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
                 }
                 $.ajax({
-                    type: 'post',
-                    url: '/shopCouponMoneyType/edit',
+                    type: 'POST',
+                    url: '../shopCouponMoneyType/edit',
                     data: $('#editForm').serialize(),
                     dataType: 'json',
                     success: function (msg) {
                         if (msg.retCode != '0000') {
-                            $('#edit').window('close');
+                            $('#couponMoneyEditWin').window('close');
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', '操作成功！', 'info');
-                            $('#edit').window('close');
+                            $('#couponMoneyEditWin').window('close');
                             $('#dg').datagrid('reload');
                         }
                     },
@@ -79,9 +78,9 @@
             }
         });
 
-        $('#cancelBtn_m').linkbutton({
+        $('#editCancelBtn_m').linkbutton({
             onClick: function () {
-                $('#edit').window('close');
+                $('#couponMoneyEditWin').window('close');
             }
         });
     })

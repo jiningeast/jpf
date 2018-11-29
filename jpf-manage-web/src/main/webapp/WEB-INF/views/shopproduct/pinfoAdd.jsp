@@ -338,8 +338,8 @@
     function doUploadImg() {
         var formData = new FormData();
         formData.append('file', $('#uploadfile')[0].files[0]);
-        console.log(formData);
-        console.log($('#uploadfile')[0].files[0]);
+        //console.log(formData);
+        //console.log($('#uploadfile')[0].files[0]);
         $.ajax({
             url: '/cloudCompany/upload',
             type: 'POST',

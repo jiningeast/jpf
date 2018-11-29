@@ -116,7 +116,7 @@
                             if (r){
                                 $.ajax({
                                     type : 'POST',
-                                    url :'/shopCompany/openAccount?id='+rows[0].id,
+                                    url :'../shopCompany/openAccount?id='+rows[0].id,
                                     dataType:"json",
                                     contentType:"application/json",
                                     success : function(msg){

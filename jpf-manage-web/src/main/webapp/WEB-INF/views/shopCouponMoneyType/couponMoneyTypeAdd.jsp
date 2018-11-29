@@ -25,9 +25,8 @@
                 <tr>
                     <td  style="text-align: right;width:30%" bgcolor="#f1f1f1">状态：</td>
                     <td>
-                        <select id="status" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;">
-                            <option value="" selected="selected">--请选择--</option>
-                            <option value="0">显示</option>
+                        <select id="status" name="status" data-options="required:true" class="easyui-combobox" style="width: 150px;">
+                            <option value="0" selected="selected">显示</option>
                             <option value="1">隐藏</option>
                             <option value="2">自定义</option>
                         </select>
@@ -58,7 +57,7 @@
                 }
                 $.ajax({
                     type: 'post',
-                    url: '/shopCouponMoneyType/add',
+                    url: '../shopCouponMoneyType/add',
                     data: $('#addForm').serialize(),
                     dataType: 'json',
                     success: function (msg) {
@@ -66,7 +65,7 @@
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', '操作成功！', 'info');
-                            $('#add').window('close');
+                            $('#couponMoneyAddWin').window('close');
                             $('#dg').datagrid('reload');
                         }
                     },
@@ -79,7 +78,7 @@
 
         $('#cancelBtn_m').linkbutton({
             onClick: function () {
-                $('#add').window('close');
+                $('#couponMoneyAddWin').window('close');
             }
         });
     })
