@@ -98,9 +98,9 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">图片：</td>
                     <td colspan="3">
-                        <c:if test="${productOne.imgurl != null && productOne.imgurl != '' }">
+                     <%--   <c:if test="${productOne.imgurl != null && productOne.imgurl != '' }">
                         <img src="${productOne.imgurl}" width="200" height="200" />
-                        </c:if>
+                        </c:if>--%>
                         <p>
                             上传文件： <input type="file" name="file" id="uploadfile">
                             <input type="button" value="上传" onclick="doUploadImg()"/>
@@ -180,7 +180,12 @@
         $('#supplierName').val("${productOne.supplierName}");
         $('#brandName').val("${productOne.brandName}");
         $('#typeName').val("${productOne.typeName}");
-
+        if ('${productOne.imgurl}')
+        {
+            var c=   '<img width="200px" height="200px" src="'+'${productOne.imgurl}' + '"/>';
+            $("#imgDiv").html(c);
+            $("#imgurl").val('${productOne.imgurl}');
+        }
         // $('#stored_type').combobox('select', '0');
     }
 
