@@ -14,7 +14,7 @@
     <div class="easyui-layout" fit="true">
         <div region="center" border="false"
              style="padding: 10px; background: #fff; border: 1px solid #ccc;">
-            <form id="editForm" method="post" enctype="multipart/form-data" accept="image/gif, image/jpeg,image/jpg, image/png">
+            <form id="addForm" method="post" enctype="multipart/form-data" accept="image/gif, image/jpeg,image/jpg, image/png">
                 <table cellpadding=3 class="table table-bordered">
                     <tr>
                         <th>添加</th>
@@ -201,11 +201,11 @@
 
         $("#saveBtn_m").linkbutton({
             onClick: function () {
-                var isValid = $("#editForm").form('enableValidation').form('validate');
+                var isValid = $("#addForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
                 }
-                var queryArray = $('#editForm').serializeArray();
+                var queryArray = $('#addForm').serializeArray();
                 var postData = parsePostData(queryArray);
                 $.ajax({
                     type: 'post',

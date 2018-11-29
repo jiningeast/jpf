@@ -98,7 +98,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">图片：</td>
                     <td colspan="3">
-                     <%--   <c:if test="${productOne.imgurl != null && productOne.imgurl != '' }">
+                       <%-- <c:if test="${productOne.imgurl != null && productOne.imgurl != '' }">
                         <img src="${productOne.imgurl}" width="200" height="200" />
                         </c:if>--%>
                         <p>
