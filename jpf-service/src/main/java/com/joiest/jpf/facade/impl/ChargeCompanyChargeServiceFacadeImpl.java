@@ -198,7 +198,7 @@ public class ChargeCompanyChargeServiceFacadeImpl implements ChargeCompanyCharge
                             streamData.setProductName("充值");//产品名称
                             streamData.setProductValue(money); //产品面值
                             streamData.setProductBidPrice(zeroNum);//产品成本价
-                            streamData.setProductSalePrice(null);//产品标准售价 默认null
+                            streamData.setProductSalePrice(money);//产品标准售价 默认null
                             streamData.setProductInterfacePrice(zeroNum);//产品接口价
                             streamData.setProductAmount(null);//产品数量
                             streamData.setTotalMoney(zeroNum);//总价
