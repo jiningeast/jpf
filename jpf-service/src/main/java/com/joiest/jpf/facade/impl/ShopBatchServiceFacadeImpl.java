@@ -3,13 +3,13 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopBatchCouponCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBatchCustomMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchCouponMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopInterfaceStreamMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
+import com.joiest.jpf.entity.BatchInfo;
+import com.joiest.jpf.entity.BatchInfoList;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopBatchInfo;
 import com.joiest.jpf.facade.ShopBatchServiceFacade;
@@ -45,6 +45,12 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
 
     @Autowired
     private PayShopInterfaceStreamMapper payShopInterfaceStreamMapper;
+
+    @Autowired
+    private PayShopCompanyChargeMapper payShopCompanyChargeMapper;
+
+    @Autowired
+    private PayShopBatchCouponCustomMapper payShopBatchCouponCustomMapper;
 
     @Override
     public ShopBatchResponse getBatches(ShopBatchRequest shopBatchRequest){
@@ -161,7 +167,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
                 payShopBatchCoupon.setCompanyName(shopBatchRequest.getCompanyName());
                 payShopBatchCoupon.setCouponNo(createCouponNo());
                 String activeCode = getRandomString(10);
-                while ( isActiveCodeExist(activeCode) ){
+                while (isActiveCodeExist(activeCode) ){
                     activeCode = getRandomString(10);
                 }
                 payShopBatchCoupon.setActiveCode(getRandomString(10));
@@ -399,5 +405,114 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         }
 
         return list.get(0);
+    }
+
+    /**
+     * 下单操作
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void payCouponOrder(BatchInfoList batchInfoList) {
+        //查询商户信息
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(batchInfoList.getCompanyId());
+        //查询商户使用合同问题
+        PayShopCompanyCharge payShopCompanyCharge = payShopCompanyChargeMapper.selectByPrimaryKey(batchInfoList.getContractId());
+        PayShopBatch payShopBatch = savePayShopBatch(batchInfoList, payShopCompany, payShopCompanyCharge);
+        String batchId = payShopBatch.getId();
+        String batchNo = payShopBatch.getBatchNo();
+        //所有券的信息
+        List<BatchInfo> couponList = batchInfoList.getCouponList();
+        List<PayShopBatchCoupon> payShopBatchCouponList = savePayShopBatchCoupon(payShopCompany, payShopBatch, batchId, batchNo, couponList);
+        //批量insert数据
+        payShopBatchCouponCustomMapper.batchInsert(payShopBatchCouponList);
+        // 扣企业的款
+        subCompanyMoney(batchInfoList, payShopCompany);
+
+    }
+
+    /**
+     * 核减企业的钱
+     * @param batchInfoList
+     * @param payShopCompany
+     */
+    private void subCompanyMoney(BatchInfoList batchInfoList, PayShopCompany payShopCompany) {
+        BigDecimal newMoney = ArithmeticUtils.sub(payShopCompany.getMoney().toString(),batchInfoList.getTotalMoney()).setScale(2,BigDecimal.ROUND_DOWN);;
+        payShopCompany.setMoney(newMoney);
+        String moneyCode = ToolUtils.CreateCode(newMoney.toString(),payShopCompany.getId());
+        payShopCompany.setMoneyCode(moneyCode);
+        payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompany);
+    }
+
+    /**
+     * 保存生成的券
+     * @param payShopCompany
+     * @param payShopBatch
+     * @param batchId
+     * @param batchNo
+     * @param couponList
+     * @return
+     */
+    private List<PayShopBatchCoupon> savePayShopBatchCoupon(PayShopCompany payShopCompany, PayShopBatch payShopBatch, String batchId, String batchNo, List<BatchInfo> couponList) {
+        List<PayShopBatchCoupon> shopBatchCouponList =new ArrayList<>();
+        for (BatchInfo batchInfo: couponList) {
+            // 根据兑换比例把面值兑换成豆
+            Double money = new Double(batchInfo.getPrice());
+            Double dou = money * payShopBatch.getScale();
+            for (int i=0;i<Integer.parseInt(batchInfo.getNumber());i++) {
+                PayShopBatchCoupon payShopBatchCoupon = new PayShopBatchCoupon();
+                payShopBatchCoupon.setBatchId(batchId);
+                payShopBatchCoupon.setBatchNo(batchNo);
+                payShopBatchCoupon.setCompanyId(payShopCompany.getId());
+                payShopBatchCoupon.setCompanyName(payShopCompany.getCompanyName());
+                payShopBatchCoupon.setCouponNo(createCouponNo());
+                String activeCode = getRandomString(10);
+                while ( isActiveCodeExist(activeCode) ){
+                    activeCode = getRandomString(10);
+                }
+                payShopBatchCoupon.setActiveCode(getRandomString(10));
+                payShopBatchCoupon.setMoney(Integer.parseInt(batchInfo.getPrice()));
+                payShopBatchCoupon.setDou(dou.intValue());
+                payShopBatchCoupon.setIsActive((byte)0);
+                payShopBatchCoupon.setExpireMonth(0);
+                payShopBatchCoupon.setIsExpired((byte)0);
+                payShopBatchCoupon.setAddtime(new Date());
+                payShopBatchCoupon.setStatus((byte)0);
+                shopBatchCouponList.add(payShopBatchCoupon);
+            }
+        }
+        return  shopBatchCouponList;
+    }
+
+    /**
+     * 保存批次数据
+     * @param batchInfoList
+     * @param payShopCompany
+     * @param payShopCompanyCharge
+     * @return
+     */
+    private PayShopBatch savePayShopBatch(BatchInfoList batchInfoList, PayShopCompany payShopCompany, PayShopCompanyCharge payShopCompanyCharge) {
+        PayShopBatch payShopBatch = new PayShopBatch();
+        payShopBatch.setCompanyId(payShopCompany.getId());
+        payShopBatch.setCompanyName(payShopCompany.getCompanyName());
+        payShopBatch.setBatchNo(createBatchNo());
+        payShopBatch.setMoney(new BigDecimal(batchInfoList.getTotalMoney()));
+        payShopBatch.setScale(1.00);
+        payShopBatch.setCount(Integer.parseInt(batchInfoList.getTotalNum()));
+        payShopBatch.setExpireMonth(0);
+        payShopBatch.setStatus((byte)4);
+        payShopBatch.setActivetedNum(0);
+        payShopBatch.setSalesName(payShopCompany.getSaleName());
+        payShopBatch.setReceiveName(payShopBatch.getReceiveName());
+        payShopBatch.setReceiveEmail(payShopBatch.getReceiveEmail());
+        payShopBatch.setReceivePhone(payShopBatch.getReceivePhone());
+        payShopBatch.setEmailStatus((byte)0);
+        payShopBatch.setSmsStatus((byte)0);
+        payShopBatch.setOperatorId(payShopCompanyCharge.getOperatorId());
+        payShopBatch.setOperatorName(payShopCompanyCharge.getOperatorName());
+        payShopBatch.setAddtime(new Date());
+        payShopBatch.setTransferRate(payShopCompanyCharge.getTransferRate());
+        payShopBatch.setCompanyChargeId(payShopCompanyCharge.getId());
+        payShopBatchCustomMapper.insertSelective(payShopBatch);
+        return payShopBatch;
     }
 }
