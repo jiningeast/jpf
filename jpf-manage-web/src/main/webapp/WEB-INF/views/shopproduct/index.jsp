@@ -13,7 +13,7 @@
                     text:'商品基础信息添加',
                     iconCls:'icon-redo',
                     handler:function(){
-                        $('#infoDiv').window("open").window('refresh', 'pInfoAdd/page').window('setTitle','添加商品基础信息');
+                        $('#pinfoAddDiv').window("open").window('refresh', 'pInfoAdd/page').window('setTitle','添加商品基础信息');
                     }
                 },
                 {
@@ -179,6 +179,13 @@
                 closed:true,
                 modal:true
             });
+
+            $('#pinfoAddDiv').window({
+                width:'1000px',
+                height:'700px',
+                closed:true,
+                modal:true
+            });
         });
 
         $(window).resize(function() {
@@ -238,6 +245,7 @@
 </div>
 
 <div id="infoDiv"></div>
+<div id="pinfoAddDiv"></div>
 <script>
     function initData() {
 
