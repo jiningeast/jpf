@@ -1116,6 +1116,326 @@ public class PayShopCompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andPercentIsNull() {
+            addCriterion("percent is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentIsNotNull() {
+            addCriterion("percent is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentEqualTo(BigDecimal value) {
+            addCriterion("percent =", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentNotEqualTo(BigDecimal value) {
+            addCriterion("percent <>", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentGreaterThan(BigDecimal value) {
+            addCriterion("percent >", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("percent >=", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentLessThan(BigDecimal value) {
+            addCriterion("percent <", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("percent <=", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentIn(List<BigDecimal> values) {
+            addCriterion("percent in", values, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentNotIn(List<BigDecimal> values) {
+            addCriterion("percent not in", values, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("percent between", value1, value2, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("percent not between", value1, value2, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameIsNull() {
+            addCriterion("login_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameIsNotNull() {
+            addCriterion("login_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameEqualTo(String value) {
+            addCriterion("login_name =", value, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameNotEqualTo(String value) {
+            addCriterion("login_name <>", value, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameGreaterThan(String value) {
+            addCriterion("login_name >", value, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameGreaterThanOrEqualTo(String value) {
+            addCriterion("login_name >=", value, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameLessThan(String value) {
+            addCriterion("login_name <", value, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameLessThanOrEqualTo(String value) {
+            addCriterion("login_name <=", value, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameLike(String value) {
+            addCriterion("login_name like", value, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameNotLike(String value) {
+            addCriterion("login_name not like", value, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameIn(List<String> values) {
+            addCriterion("login_name in", values, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameNotIn(List<String> values) {
+            addCriterion("login_name not in", values, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameBetween(String value1, String value2) {
+            addCriterion("login_name between", value1, value2, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameNotBetween(String value1, String value2) {
+            addCriterion("login_name not between", value1, value2, "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdIsNull() {
+            addCriterion("login_pwd is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdIsNotNull() {
+            addCriterion("login_pwd is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdEqualTo(String value) {
+            addCriterion("login_pwd =", value, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdNotEqualTo(String value) {
+            addCriterion("login_pwd <>", value, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdGreaterThan(String value) {
+            addCriterion("login_pwd >", value, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdGreaterThanOrEqualTo(String value) {
+            addCriterion("login_pwd >=", value, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdLessThan(String value) {
+            addCriterion("login_pwd <", value, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdLessThanOrEqualTo(String value) {
+            addCriterion("login_pwd <=", value, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdLike(String value) {
+            addCriterion("login_pwd like", value, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdNotLike(String value) {
+            addCriterion("login_pwd not like", value, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdIn(List<String> values) {
+            addCriterion("login_pwd in", values, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdNotIn(List<String> values) {
+            addCriterion("login_pwd not in", values, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdBetween(String value1, String value2) {
+            addCriterion("login_pwd between", value1, value2, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdNotBetween(String value1, String value2) {
+            addCriterion("login_pwd not between", value1, value2, "loginPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginIsNull() {
+            addCriterion("is_first_login is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginIsNotNull() {
+            addCriterion("is_first_login is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginEqualTo(Byte value) {
+            addCriterion("is_first_login =", value, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginNotEqualTo(Byte value) {
+            addCriterion("is_first_login <>", value, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginGreaterThan(Byte value) {
+            addCriterion("is_first_login >", value, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_first_login >=", value, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginLessThan(Byte value) {
+            addCriterion("is_first_login <", value, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginLessThanOrEqualTo(Byte value) {
+            addCriterion("is_first_login <=", value, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginIn(List<Byte> values) {
+            addCriterion("is_first_login in", values, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginNotIn(List<Byte> values) {
+            addCriterion("is_first_login not in", values, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginBetween(Byte value1, Byte value2) {
+            addCriterion("is_first_login between", value1, value2, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstLoginNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_first_login not between", value1, value2, "isFirstLogin");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusIsNull() {
+            addCriterion("account_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusIsNotNull() {
+            addCriterion("account_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusEqualTo(Byte value) {
+            addCriterion("account_status =", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusNotEqualTo(Byte value) {
+            addCriterion("account_status <>", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusGreaterThan(Byte value) {
+            addCriterion("account_status >", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("account_status >=", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusLessThan(Byte value) {
+            addCriterion("account_status <", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("account_status <=", value, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusIn(List<Byte> values) {
+            addCriterion("account_status in", values, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusNotIn(List<Byte> values) {
+            addCriterion("account_status not in", values, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusBetween(Byte value1, Byte value2) {
+            addCriterion("account_status between", value1, value2, "accountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("account_status not between", value1, value2, "accountStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchNoLikeInsensitive(String value) {
             addCriterion("upper(merch_no) like", value.toUpperCase(), "merchNo");
             return (Criteria) this;
@@ -1163,6 +1483,16 @@ public class PayShopCompanyExample {
 
         public Criteria andMoneyCodeLikeInsensitive(String value) {
             addCriterion("upper(money_code) like", value.toUpperCase(), "moneyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginNameLikeInsensitive(String value) {
+            addCriterion("upper(login_name) like", value.toUpperCase(), "loginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginPwdLikeInsensitive(String value) {
+            addCriterion("upper(login_pwd) like", value.toUpperCase(), "loginPwd");
             return (Criteria) this;
         }
     }

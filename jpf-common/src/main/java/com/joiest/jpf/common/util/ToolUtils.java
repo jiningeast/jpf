@@ -1,7 +1,9 @@
 package com.joiest.jpf.common.util;
 
+import com.aliyun.oss.OSSClient;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -497,5 +499,37 @@ public class ToolUtils {
     /**
      * 生成商户秘钥
      */
+
+    /**
+     * 上传文件
+     * @param files 文件路径
+     * @return OSS阿里云地址
+     */
+    public static String upload(String files) {
+        String[] filex = files.split(",");
+        String md5key = "";
+
+        OSSClient ossClient= AliyunOSSClientUtil.getOSSClient();
+        for(String filename:filex){
+            // 上传文件流。
+            File fileOne = new File(filename);
+            // InputStream inputStream = new FileInputStream(fileOne);
+            md5key  = AliyunOSSClientUtil.uploadObject2OSS(ossClient, fileOne, OSSClientConstants.BACKET_NAME,OSSClientConstants.FOLDER);
+            // 关闭OSSClient。
+            /*
+            System.out.println(md5key);
+            System.out.println("Object：" + OSSClientConstants.BACKET_NAME + OSSClientConstants.FOLDER + "存入OSS成功。");
+            */
+        }
+        String subMd5key="";
+        //截取去掉后缀时效
+        if(md5key != null && md5key.length() != 0){
+            subMd5key =md5key.substring(0,md5key.lastIndexOf("?"));
+            subMd5key = StringUtils.strip(subMd5key, "\"");
+            subMd5key = StringUtils.stripEnd(subMd5key, "\"");
+        }
+
+        return subMd5key;
+    }
 
 }

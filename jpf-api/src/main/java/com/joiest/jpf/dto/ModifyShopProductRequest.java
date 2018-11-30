@@ -103,6 +103,16 @@ public class ModifyShopProductRequest {
     private Date updatetime;
 
     /**
+     * 商品详情ID
+     */
+    private String productContentId;
+
+    /**
+     * 商品详情ID
+     */
+    private String productContent;
+
+    /**
      * 充值面额
      */
     @Digits(integer=5,fraction=0, message = "充值面额只能为整数")
@@ -257,4 +267,19 @@ public class ModifyShopProductRequest {
         this.type = type;
     }
 
+    public String getProductContentId() {
+        return productContentId;
+    }
+
+    public void setProductContentId(String productContentId) {
+        this.productContentId = productContentId;
+    }
+
+    public String getProductContent() {
+        return productContent;
+    }
+
+    public void setProductContent(String productContent) {
+        this.productContent = productContent;
+    }
 }

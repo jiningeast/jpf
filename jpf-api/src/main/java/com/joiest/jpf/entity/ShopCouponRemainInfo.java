@@ -1,5 +1,6 @@
 package com.joiest.jpf.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ShopCouponRemainInfo {
@@ -57,6 +58,31 @@ public class ShopCouponRemainInfo {
      * 更新时间
      */
     private Date updatetime;
+
+    /**
+     * 可转让豆
+     */
+    private Integer saleDouYes;
+
+    /**
+     * 可转让豆剩余
+     */
+    private Integer saleDouLeft;
+
+    /**
+     * 非转让豆
+     */
+    private Integer saleDouNo;
+
+    /**
+     * 转让比例
+     */
+    private BigDecimal percent;
+
+    /**
+     * 转让状态:0没用完;1已用完;2过期清零
+     */
+    private Byte salestatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -148,4 +174,43 @@ public class ShopCouponRemainInfo {
         this.updatetime = updatetime;
     }
 
+    public Integer getSaleDouYes() {
+        return saleDouYes;
+    }
+
+    public void setSaleDouYes(Integer saleDouYes) {
+        this.saleDouYes = saleDouYes;
+    }
+
+    public Integer getSaleDouLeft() {
+        return saleDouLeft;
+    }
+
+    public void setSaleDouLeft(Integer saleDouLeft) {
+        this.saleDouLeft = saleDouLeft;
+    }
+
+    public Integer getSaleDouNo() {
+        return saleDouNo;
+    }
+
+    public void setSaleDouNo(Integer saleDouNo) {
+        this.saleDouNo = saleDouNo;
+    }
+
+    public BigDecimal getPercent() {
+        return percent;
+    }
+
+    public void setPercent(BigDecimal percent) {
+        this.percent = percent;
+    }
+
+    public Byte getSalestatus() {
+        return salestatus;
+    }
+
+    public void setSalestatus(Byte salestatus) {
+        this.salestatus = salestatus;
+    }
 }

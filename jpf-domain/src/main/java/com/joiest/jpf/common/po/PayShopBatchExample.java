@@ -1536,6 +1536,76 @@ public class PayShopBatchExample {
             return (Criteria) this;
         }
 
+        public Criteria andSmsContentIsNull() {
+            addCriterion("sms_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentIsNotNull() {
+            addCriterion("sms_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentEqualTo(String value) {
+            addCriterion("sms_content =", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentNotEqualTo(String value) {
+            addCriterion("sms_content <>", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentGreaterThan(String value) {
+            addCriterion("sms_content >", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentGreaterThanOrEqualTo(String value) {
+            addCriterion("sms_content >=", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentLessThan(String value) {
+            addCriterion("sms_content <", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentLessThanOrEqualTo(String value) {
+            addCriterion("sms_content <=", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentLike(String value) {
+            addCriterion("sms_content like", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentNotLike(String value) {
+            addCriterion("sms_content not like", value, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentIn(List<String> values) {
+            addCriterion("sms_content in", values, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentNotIn(List<String> values) {
+            addCriterion("sms_content not in", values, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentBetween(String value1, String value2) {
+            addCriterion("sms_content between", value1, value2, "smsContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsContentNotBetween(String value1, String value2) {
+            addCriterion("sms_content not between", value1, value2, "smsContent");
+            return (Criteria) this;
+        }
+
         public Criteria andSmsTimeIsNull() {
             addCriterion("sms_time is null");
             return (Criteria) this;
@@ -2096,6 +2166,256 @@ public class PayShopBatchExample {
             return (Criteria) this;
         }
 
+        public Criteria andTransferRateIsNull() {
+            addCriterion("transfer_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateIsNotNull() {
+            addCriterion("transfer_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate =", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate <>", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateGreaterThan(BigDecimal value) {
+            addCriterion("transfer_rate >", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate >=", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateLessThan(BigDecimal value) {
+            addCriterion("transfer_rate <", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("transfer_rate <=", value, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateIn(List<BigDecimal> values) {
+            addCriterion("transfer_rate in", values, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotIn(List<BigDecimal> values) {
+            addCriterion("transfer_rate not in", values, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("transfer_rate between", value1, value2, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransferRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("transfer_rate not between", value1, value2, "transferRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdIsNull() {
+            addCriterion("company_charge_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdIsNotNull() {
+            addCriterion("company_charge_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdEqualTo(String value) {
+            addCriterion("company_charge_id =", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdNotEqualTo(String value) {
+            addCriterion("company_charge_id <>", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdGreaterThan(String value) {
+            addCriterion("company_charge_id >", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdGreaterThanOrEqualTo(String value) {
+            addCriterion("company_charge_id >=", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdLessThan(String value) {
+            addCriterion("company_charge_id <", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdLessThanOrEqualTo(String value) {
+            addCriterion("company_charge_id <=", value, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdIn(List<String> values) {
+            addCriterion("company_charge_id in", values, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdNotIn(List<String> values) {
+            addCriterion("company_charge_id not in", values, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdBetween(String value1, String value2) {
+            addCriterion("company_charge_id between", value1, value2, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyChargeIdNotBetween(String value1, String value2) {
+            addCriterion("company_charge_id not between", value1, value2, "companyChargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdIsNull() {
+            addCriterion("order_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdIsNotNull() {
+            addCriterion("order_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdEqualTo(String value) {
+            addCriterion("order_id =", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdNotEqualTo(String value) {
+            addCriterion("order_id <>", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdGreaterThan(String value) {
+            addCriterion("order_id >", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdGreaterThanOrEqualTo(String value) {
+            addCriterion("order_id >=", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdLessThan(String value) {
+            addCriterion("order_id <", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdLessThanOrEqualTo(String value) {
+            addCriterion("order_id <=", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdIn(List<String> values) {
+            addCriterion("order_id in", values, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdNotIn(List<String> values) {
+            addCriterion("order_id not in", values, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdBetween(String value1, String value2) {
+            addCriterion("order_id between", value1, value2, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdNotBetween(String value1, String value2) {
+            addCriterion("order_id not between", value1, value2, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoIsNull() {
+            addCriterion("contract_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoIsNotNull() {
+            addCriterion("contract_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoEqualTo(String value) {
+            addCriterion("contract_no =", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotEqualTo(String value) {
+            addCriterion("contract_no <>", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoGreaterThan(String value) {
+            addCriterion("contract_no >", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoGreaterThanOrEqualTo(String value) {
+            addCriterion("contract_no >=", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLessThan(String value) {
+            addCriterion("contract_no <", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLessThanOrEqualTo(String value) {
+            addCriterion("contract_no <=", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLike(String value) {
+            addCriterion("contract_no like", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotLike(String value) {
+            addCriterion("contract_no not like", value, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoIn(List<String> values) {
+            addCriterion("contract_no in", values, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotIn(List<String> values) {
+            addCriterion("contract_no not in", values, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoBetween(String value1, String value2) {
+            addCriterion("contract_no between", value1, value2, "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoNotBetween(String value1, String value2) {
+            addCriterion("contract_no not between", value1, value2, "contractNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyNameLikeInsensitive(String value) {
             addCriterion("upper(company_name) like", value.toUpperCase(), "companyName");
             return (Criteria) this;
@@ -2146,6 +2466,11 @@ public class PayShopBatchExample {
             return (Criteria) this;
         }
 
+        public Criteria andSmsContentLikeInsensitive(String value) {
+            addCriterion("upper(sms_content) like", value.toUpperCase(), "smsContent");
+            return (Criteria) this;
+        }
+
         public Criteria andOperatorNameLikeInsensitive(String value) {
             addCriterion("upper(operator_name) like", value.toUpperCase(), "operatorName");
             return (Criteria) this;
@@ -2153,6 +2478,11 @@ public class PayShopBatchExample {
 
         public Criteria andExcelUrlLikeInsensitive(String value) {
             addCriterion("upper(excel_url) like", value.toUpperCase(), "excelUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractNoLikeInsensitive(String value) {
+            addCriterion("upper(contract_no) like", value.toUpperCase(), "contractNo");
             return (Criteria) this;
         }
     }

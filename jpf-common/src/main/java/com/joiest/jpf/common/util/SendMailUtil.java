@@ -140,6 +140,48 @@ public class SendMailUtil{
     }
 
     /**
+     * 发送简单的html邮件
+     */
+    public static boolean sendHtmlEmail2(String to,String subject,String nickname, String html) throws Exception {
+        // 创建Session实例对象
+        Session session1 = Session.getInstance(props, new MyAuthenticator());
+
+        // 创建MimeMessage实例对象
+        MimeMessage message = new MimeMessage(session1);
+        // 设置邮件主题
+        message.setSubject(subject);
+        // 设置发送人
+        message.setFrom(new InternetAddress(from));
+        // 设置发送时间
+        message.setSentDate(new Date());
+        // 设置收件人
+        message.setRecipients(RecipientType.TO, InternetAddress.parse(to));
+        // 设置html内容为邮件正文，指定MIME类型为text/html类型，并指定字符编码为gbk
+        message.setContent(html,"text/html;charset=utf-8");
+
+        //设置自定义发件人昵称
+        String nick="";
+        try {
+            nick=javax.mail.internet.MimeUtility.encodeText(nickname);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        message.setFrom(new InternetAddress(nick+" <"+from+">"));
+        // 保存并生成最终的邮件内容
+        message.saveChanges();
+
+        // 发送邮件
+        try {
+            Transport.send(message);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    /**
      * 发送带内嵌图片的HTML邮件
      */
     public static void sendHtmlWithInnerImageEmail() throws MessagingException {

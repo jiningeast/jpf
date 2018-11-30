@@ -94,6 +94,11 @@ public class PayShopCustomerCustom implements Serializable {
      */
     private String mpid;
 
+    /**
+     * 可转让豆
+     */
+    private Integer saleDou;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -324,5 +329,13 @@ public class PayShopCustomerCustom implements Serializable {
 
     public void setIsBargainBuyer(Byte isBargainBuyer) {
         this.isBargainBuyer = isBargainBuyer;
+    }
+
+    public Integer getSaleDou() {
+        return saleDou;
+    }
+
+    public void setSaleDou(Integer saleDou) {
+        this.saleDou = saleDou;
     }
 }

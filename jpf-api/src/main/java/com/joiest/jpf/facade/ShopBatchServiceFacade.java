@@ -39,4 +39,5 @@ public interface ShopBatchServiceFacade {
      * 根据批次号查找批次
      */
     public PayShopBatch getBatchByBatchNo(String batchNo);
+
 }

@@ -11,6 +11,7 @@ import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.facade.ShopOrderInfoInterfaceServiceFacade;
+import com.joiest.jpf.market.api.util.ToolsUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -63,7 +65,7 @@ public class OrderInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "未登录", null);
         }
         request.setUid(uid); // 用户登录ID
-
+        shopOrderInfoInterfaceServiceFacade.timerDetectShopOrderAndCancel(ToolsUtils.getBeforeHourTimeReturnDate(24));
         ShopOrderInfoInterfaceResponse response = shopOrderInfoInterfaceServiceFacade.getList(request);
         if( response == null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "没有更多了", null);
@@ -96,19 +98,23 @@ public class OrderInfoController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "订单编号不能为空", null);
         }
         request.setUid(uid); // 用户登录ID
+        shopOrderInfoInterfaceServiceFacade.timerDetectShopOrderAndCancel(ToolsUtils.getBeforeHourTimeReturnDate(24));
         ShopOrderInterfaceInfo response = shopOrderInfoInterfaceServiceFacade.getOne(request);
         if( response == null ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "没有更多了", null);
         }
         response.setUserDou(userInfo.getDou());  //获取用户当前豆数量
+        response.setCurrentSystemTime(new Date()); // 传当前系统时间
         response.setTotalDou(response.getTotalDou());
-        if ( response.getOrderType() == 1 ){
-            response.setTypeName("中石化充值");
-        }else if ( response.getOrderType() == 2 ){
-            response.setTypeName("中石油充值");
-        }else if ( response.getOrderType() == 3 ) {
-            response.setTypeName("话费充值");
-        }
+//        if ( response.getOrderType() == 1 ){
+//            response.setTypeName("中石化充值");
+//        }else if ( response.getOrderType() == 2 ){
+//            response.setTypeName("中石油充值");
+//        }else if ( response.getOrderType() == 3 ) {
+//            response.setTypeName("话费充值");
+//        }else if( response.getOrderType() == 4){
+//            response.setTypeName("携程商品");
+//        }
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), response);
     }
@@ -175,6 +181,15 @@ public class OrderInfoController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), JpfInterfaceErrorInfo.SUCCESS.getDesc(), null);
     }
 
+    /**
+     * 超时未支付订单自动取消定时器(随项目启动而启动)
+     */
+    @RequestMapping(value = "/timeoutCancelOrder", method = RequestMethod.GET, produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public void orderInfoCancel(){
+        shopOrderInfoInterfaceServiceFacade.timerDetectShopOrderAndCancel(ToolsUtils.getBeforeHourTimeReturnDate(24));
+    }
+    
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {

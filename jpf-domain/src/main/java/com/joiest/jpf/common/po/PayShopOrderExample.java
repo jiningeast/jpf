@@ -2536,6 +2536,136 @@ public class PayShopOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andCouponDetailSaleIsNull() {
+            addCriterion("coupon_detail_sale is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleIsNotNull() {
+            addCriterion("coupon_detail_sale is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleEqualTo(String value) {
+            addCriterion("coupon_detail_sale =", value, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleNotEqualTo(String value) {
+            addCriterion("coupon_detail_sale <>", value, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleGreaterThan(String value) {
+            addCriterion("coupon_detail_sale >", value, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleGreaterThanOrEqualTo(String value) {
+            addCriterion("coupon_detail_sale >=", value, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleLessThan(String value) {
+            addCriterion("coupon_detail_sale <", value, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleLessThanOrEqualTo(String value) {
+            addCriterion("coupon_detail_sale <=", value, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleLike(String value) {
+            addCriterion("coupon_detail_sale like", value, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleNotLike(String value) {
+            addCriterion("coupon_detail_sale not like", value, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleIn(List<String> values) {
+            addCriterion("coupon_detail_sale in", values, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleNotIn(List<String> values) {
+            addCriterion("coupon_detail_sale not in", values, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleBetween(String value1, String value2) {
+            addCriterion("coupon_detail_sale between", value1, value2, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleNotBetween(String value1, String value2) {
+            addCriterion("coupon_detail_sale not between", value1, value2, "couponDetailSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeIsNull() {
+            addCriterion("product_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeIsNotNull() {
+            addCriterion("product_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeEqualTo(Integer value) {
+            addCriterion("product_type =", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeNotEqualTo(Integer value) {
+            addCriterion("product_type <>", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeGreaterThan(Integer value) {
+            addCriterion("product_type >", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("product_type >=", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeLessThan(Integer value) {
+            addCriterion("product_type <", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("product_type <=", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeIn(List<Integer> values) {
+            addCriterion("product_type in", values, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeNotIn(List<Integer> values) {
+            addCriterion("product_type not in", values, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeBetween(Integer value1, Integer value2) {
+            addCriterion("product_type between", value1, value2, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("product_type not between", value1, value2, "productType");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNoLikeInsensitive(String value) {
             addCriterion("upper(order_no) like", value.toUpperCase(), "orderNo");
             return (Criteria) this;
@@ -2603,6 +2733,11 @@ public class PayShopOrderExample {
 
         public Criteria andBargainOrderNoLikeInsensitive(String value) {
             addCriterion("upper(bargain_order_no) like", value.toUpperCase(), "bargainOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponDetailSaleLikeInsensitive(String value) {
+            addCriterion("upper(coupon_detail_sale) like", value.toUpperCase(), "couponDetailSale");
             return (Criteria) this;
         }
     }

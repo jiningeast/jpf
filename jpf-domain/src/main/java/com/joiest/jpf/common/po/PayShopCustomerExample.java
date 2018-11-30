@@ -1395,6 +1395,66 @@ public class PayShopCustomerExample {
             return (Criteria) this;
         }
 
+        public Criteria andSaleDouIsNull() {
+            addCriterion("sale_dou is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouIsNotNull() {
+            addCriterion("sale_dou is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouEqualTo(Integer value) {
+            addCriterion("sale_dou =", value, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNotEqualTo(Integer value) {
+            addCriterion("sale_dou <>", value, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouGreaterThan(Integer value) {
+            addCriterion("sale_dou >", value, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sale_dou >=", value, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLessThan(Integer value) {
+            addCriterion("sale_dou <", value, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLessThanOrEqualTo(Integer value) {
+            addCriterion("sale_dou <=", value, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouIn(List<Integer> values) {
+            addCriterion("sale_dou in", values, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNotIn(List<Integer> values) {
+            addCriterion("sale_dou not in", values, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouBetween(Integer value1, Integer value2) {
+            addCriterion("sale_dou between", value1, value2, "saleDou");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNotBetween(Integer value1, Integer value2) {
+            addCriterion("sale_dou not between", value1, value2, "saleDou");
+            return (Criteria) this;
+        }
+
         public Criteria andNameLikeInsensitive(String value) {
             addCriterion("upper(name) like", value.toUpperCase(), "name");
             return (Criteria) this;

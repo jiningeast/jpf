@@ -95,6 +95,11 @@ public class ShopCustomerInterfaceInfo {
      */
     private Date updatetime;
 
+    /**
+     * 可转让豆
+     */
+    private Integer saleDou;
+
     public String getId() {
         return id;
     }
@@ -239,6 +244,13 @@ public class ShopCustomerInterfaceInfo {
         this.updatetime = updatetime;
     }
 
+    public Integer getSaleDou() {
+        return saleDou;
+    }
+
+    public void setSaleDou(Integer saleDou) {
+        this.saleDou = saleDou;
+    }
 
     /**
      *

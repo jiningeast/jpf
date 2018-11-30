@@ -52,7 +52,13 @@
                         </select>
                     </td>
                 </tr>
-
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">转让百分比：</td>
+                    <td>
+                        <input id="percent" name="percent" type="text" style="width:150px" class="easyui-textbox"
+                               value="" precision="3" data-options="required:true"/>
+                    </td>
+                </tr>
             </table>
                 <table cellpadding=3 class="table table-bordered" align="center">
                     <h2 align="center">接收欣券信息</h2>
@@ -78,8 +84,18 @@
                                value=""/>
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">是否开通登录账号：</td>
+                    <td>
+                        <select id="openAccent" name="openAccent" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                            <option value="0" selected="selected">否</option>
+                            <option value="1">是</option>
+                        </select>
+                    </td>
+                </tr>
 
-            </table>
+
+                </table>
             <table cellpadding=3 class="table table-bordered" align="center">
                 <h2 align="center">销售信息</h2>
                 <tr>

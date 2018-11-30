@@ -54,6 +54,7 @@ public class MyController {
         Map<String,Object> responseMap = new HashMap<>();
         responseMap.put("phone",userInfo.getPhone());
         responseMap.put("dou",userInfo.getDou());
+        responseMap.put("saleDou",userInfo.getSaleDou());//可转让欣豆
         responseMap.put("avatar",userInfo.getAvatar());
         responseMap.put("ordersCount",count);
         responseMap.put("transOrdersCount",transBuyerCount+transSellerCount);

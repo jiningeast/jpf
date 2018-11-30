@@ -98,6 +98,42 @@
                             }
                         })
                     }
+                },
+                {
+                    text : '开通账户',
+                    iconCls:'icon-edit',
+                    handler : function () {
+                        var rows = $("#dg").datagrid('getSelections');
+                        if ( rows.length != 1 ) {
+                            $.messager.alert('消息提示','请选择一条数据！','info');
+                            return false;
+                        }
+                        if(rows[0].accountStatus == 1){
+                            $.messager.alert('消息提示','账户已开通！','info');
+                            return false;
+                        }
+                        $.messager.confirm('开通账户','确认开通账户？',function(r){
+                            if (r){
+                                $.ajax({
+                                    type : 'POST',
+                                    url :'../shopCompany/openAccount?id='+rows[0].id,
+                                    dataType:"json",
+                                    contentType:"application/json",
+                                    success : function(msg){
+                                        if (msg.retCode != '0000') {
+                                            $.messager.alert('消息提示','操作失败[' + msg.retMsg + ']!','error');
+                                        } else {
+                                            $.messager.alert('消息提示','操作成功!','info');
+                                            $('#dg').datagrid('reload');
+                                        }
+                                    },
+                                    error : function () {
+                                        $.messager.alert('消息提示','连接网络失败，请您检查您的网络!','error');
+                                    }
+                                })
+                            }
+                        })
+                    }
                 }
             ];
 
@@ -135,10 +171,19 @@
                     {field:'addtime',title:'添加时间',width:'10%',formatter: formatDateStr},
                     {field:'status',title:'登录状态',width:'8%',
                         formatter : function(value,row,index){
-                            if(value=='1'){return '启用中'}
-                            else{return '已停用'}
+                            if(value=='1'){return "<span style='color:#00FF00'>启用中</span>"}
+                            else{return "<span style='color:red'>已停用</span>"}
                         },styler: function (value, row, index) {
                             return 'color:red';
+                        }
+                    },
+                    {field:'accountStatus',title:'账户状态',width:'8%',
+                        formatter : function(value,row,index){
+                            if(value==0){
+                                return "<span style='color:red'>未开通</span>"
+                            }else{
+                                return "<span style='color:#00FF00'>已开通</span>"
+                            }
                         }
                     }
 

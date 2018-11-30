@@ -34,6 +34,16 @@ public class GetShopProductRequest {
 
     private long rows;
 
+    /**
+     * 商品基础信息id
+     */
+    private String productInfoId;
+
+    /**
+     * 商品基础信息id
+     */
+    private String productContent;
+
     //品牌id
     private String brandId;
 
@@ -121,5 +131,21 @@ public class GetShopProductRequest {
 
     public void setRows(long rows) {
         this.rows = rows;
+    }
+
+    public String getProductInfoId() {
+        return productInfoId;
+    }
+
+    public void setProductInfoId(String productInfoId) {
+        this.productInfoId = productInfoId;
+    }
+
+    public String getProductContent() {
+        return productContent;
+    }
+
+    public void setProductContent(String productContent) {
+        this.productContent = productContent;
     }
 }

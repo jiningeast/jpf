@@ -18,4 +18,10 @@ public interface ShopProductTypeServiceFacade {
      * 添加商品分类
      */
     public JpfResponseDto addShopProductType(ShopProductTypeRequest request);
+
+    /**
+     * 编辑商品分类
+     */
+    public JpfResponseDto editShopProductType(ShopProductTypeRequest request);
+
 }

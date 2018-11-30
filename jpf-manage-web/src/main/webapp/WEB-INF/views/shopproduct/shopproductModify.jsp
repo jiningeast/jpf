@@ -10,18 +10,29 @@
     <%@ include file="/WEB-INF/views/common/header_js.jsp" %>
 </head>
 <body>
+<script type="text/javascript">
+    window.UEDITOR_HOME_URL="${basePath}/resources/plugin/ueditor/";
+</script>
+<script type="text/javascript" charset="utf-8" src="${basePath}/resources/plugin/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${basePath}/resources/plugin/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="${basePath}/resources/plugin/ueditor/lang/zh-cn/zh-cn.js"></script>
+<!--uditor配置信息 start -->
+<style>
+    .tdwitdh { width: 10%;}
+</style>
 <!-- 添加弹出窗口 -->
     <div class="easyui-layout" fit="true">
         <div region="center" border="false"
              style="padding: 10px; background: #fff; border: 1px solid #ccc;">
             <form id="editForm" method="post" enctype="multipart/form-data" accept="image/gif, image/jpeg,image/jpg, image/png">
                 <input type="hidden" name="id" value="${productOne.id}" />
+                <input type="hidden" name="productContentId" value="${productOne.productContentId}" />
                 <table cellpadding=3 class="table table-bordered">
                     <tr>
                         <th>添加商品</th>
                     </tr>
                     <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">商品基础信息：</td>
+                        <td class="tdwitdh" style="text-align: right;background-color: #f1f1f1;">商品基础信息：</td>
                         <td>
                             <select id="productInfoId" name="productInfoId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
                         </td>
@@ -114,6 +125,12 @@
                             <div id="imgDiv"></div>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">商品详情：</td>
+                        <td colspan="3">
+                            <textarea id="content_m" name="productContent" class="easyui-validatebox" style="width: 95%;height: 350px;">${productOne.productContent}</textarea>
+                        </td>
+                    </tr>
                 </table>
             </form>
         </div>
@@ -158,6 +175,19 @@
     }
 
     $(function () {
+
+        // //实例化编辑器
+        // //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        var ue = UE.getEditor('content_m');
+        UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+        UE.Editor.prototype.getActionUrl = function(action) {
+            if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadvideo') {
+                return '/cloudCompany/uploadUEditorImage';
+            } else {
+                return this._bkGetActionUrl.call(this, action);
+            }
+        }
+
         // $("#stored_type").combobox({
         //     onSelect: function () {
         //         var stored_type = $("#stored_type").combobox('getValue');

@@ -83,6 +83,37 @@
                         </td>
                     </tr>
                 </table>
+
+                <table cellpadding=3 class="table table-bordered">
+                    <tr>
+                        <th>旅游生活-携程信息</th>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">标题：</td>
+                        <td colspan="3">
+                            <input id="title" name="title" type="text"  class="easyui-textbox"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">图片：</td>
+                        <td colspan="3">
+                            <p>
+                                上传文件： <input type="file" name="file" id="uploadfile">
+                                <input type="button" value="上传" onclick="doUploadImg()"/>
+                            </p>
+                            <!--保存图片OSS地址-->
+                            <input id="imgurl" name="imgurl" type="hidden" style="width:150px" data-options="required:true" value=""/>
+                            <!--图片展示-->
+                            <div id="imgDiv"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">价格范围区间：</td>
+                        <td colspan="3">
+                            <input id="moneyscope" name="moneyscope" type="text" class="easyui-textbox"/>(例：100-1000)
+                        </td>
+                    </tr>
+                </table>
             </form>
         </div>
         <div region="south" border="false"
@@ -215,7 +246,7 @@
                 param["supplierName"] = supplierName;
                 $.ajax({
                     type: 'post',
-                    url: 'supplier/add',
+                    url: '/shopproduct/supplier/add',
                     data: param,
                     dataType: 'json',
                     success: function (msg) {
@@ -246,7 +277,7 @@
                 param["pname"] = typeName;
                 $.ajax({
                     type: 'post',
-                    url: 'producttype/add',
+                    url: '/shopproduct/producttype/add',
                     data: param,
                     dataType: 'json',
                     success: function (msg) {
@@ -279,7 +310,7 @@
                 param["brandName"] = brandName;
                 $.ajax({
                     type: 'post',
-                    url: 'brand/add',
+                    url: '/shopproduct/brand/add',
                     data: param,
                     dataType: 'json',
                     success: function (msg) {
@@ -300,7 +331,34 @@
             }
         });
 
+
+
     });
+
+    function doUploadImg() {
+        var formData = new FormData();
+        formData.append('file', $('#uploadfile')[0].files[0]);
+        //console.log(formData);
+        //console.log($('#uploadfile')[0].files[0]);
+        $.ajax({
+            url: '/cloudCompany/upload',
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (ret) {
+                console.log(ret);
+                var c=   '<img width="200px" height="200px" src="'+ret+'"/>';
+                $("#imgDiv").html(c);
+                $("#imgurl").val(ret);
+            },
+            error: function (ret) {
+                $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');
+            }
+        });
+    }
 
 </script>
 </body>

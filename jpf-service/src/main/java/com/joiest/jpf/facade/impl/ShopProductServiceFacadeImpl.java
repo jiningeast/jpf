@@ -1,13 +1,15 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.constant.EnumConstants;
+import com.joiest.jpf.common.custom.PayShopProductCustom;
+import com.joiest.jpf.common.custom.PayShopProductCustomExample;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayShopProduct;
-import com.joiest.jpf.common.po.PayShopProductExample;
-import com.joiest.jpf.common.po.PayShopProductInfo;
-import com.joiest.jpf.common.po.PayShopProductInfoExample;
+import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopProductContentCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopProductCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductContentMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductInfoMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductMapper;
 import com.joiest.jpf.dto.GetShopProductRequest;
@@ -21,6 +23,7 @@ import com.joiest.jpf.facade.ShopProductServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -31,7 +34,16 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
     private PayShopProductMapper payShopProductMapper;
 
     @Autowired
+    private PayShopProductCustomMapper payShopProductCustomMapper;
+
+    @Autowired
     private PayShopProductInfoMapper payShopProductInfoMapper;
+
+    @Autowired
+    private PayShopProductContentMapper payShopProductContentMapper;
+
+    @Autowired
+    private PayShopProductContentCustomMapper payShopProductContentCustomMapper;
 
     @Override
     public GetShopProductResponse getProductList(GetShopProductRequest request) {
@@ -143,6 +155,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})//事务处理
     public JpfResponseDto addShopProduct(ModifyShopProductRequest request) {
         PayShopProduct payShopProduct = new PayShopProduct();
         payShopProduct.setProductInfoId(Integer.valueOf(request.getProductInfoId()));
@@ -157,13 +170,36 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setOperatorName(request.getOperatorName());
         payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
         payShopProduct.setCardid(request.getCardid());
+        payShopProduct.setStatus(request.getStatus());
         BigDecimal bid=new BigDecimal(request.getBid());
         BigDecimal money=new BigDecimal(request.getMoney());
         payShopProduct.setBid(bid);
         payShopProduct.setMoney(money);
         payShopProduct.setType(request.getType());
+        payShopProduct.setProductContentId("0"); //内容ID
 
-        int res = payShopProductMapper.insertSelective(payShopProduct);
+        //int res = payShopProductMapper.insertSelective(payShopProduct);
+        payShopProductCustomMapper.insertSelective(payShopProduct);
+        if( Integer.valueOf(payShopProduct.getId()) > 0 ){
+
+            //是否添加详情内容
+            if( !StringUtils.isBlank(request.getProductContent())){
+                PayShopProductContent productContent = new PayShopProductContent();
+                productContent.setContent(request.getProductContent());
+                payShopProductContentCustomMapper.insertSelective(productContent);
+                if( Integer.valueOf(productContent.getId()) > 0 ){
+
+                    PayShopProduct shopProduct = new PayShopProduct();
+                    shopProduct.setProductContentId(productContent.getId());
+                    shopProduct.setId(payShopProduct.getId());
+                    int upCount = payShopProductMapper.updateByPrimaryKeySelective(shopProduct);
+                    if( upCount != 1 ){
+                        throw new JpfException(JpfErrorInfo.INVALID_PARAMETER,"操作失败");
+                    }
+                }
+            }
+
+        }
         return new JpfResponseDto();
     }
 
@@ -176,20 +212,21 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         PayShopProductExample example = new PayShopProductExample();
         PayShopProductExample.Criteria c = example.createCriteria();
         c.andIdEqualTo(id);
-        PayShopProduct payShopProduct = payShopProductMapper.selectByPrimaryKey(id);
+        List<PayShopProductCustom> payShopProductCustom = payShopProductCustomMapper.selectContentByPid(example);
 
-        if ( payShopProduct == null )
+        if ( payShopProductCustom == null || payShopProductCustom.size() <= 0 )
         {
             return null;
         }
         ShopProductInfo info = new ShopProductInfo();
-        BeanCopier beanCopier = BeanCopier.create(PayShopProduct.class, ShopProductInfo.class, false);
-        beanCopier.copy(payShopProduct, info, null);
+        BeanCopier beanCopier = BeanCopier.create(PayShopProductCustom.class, ShopProductInfo.class, false);
+        beanCopier.copy(payShopProductCustom.get(0), info, null);
 
         return info;
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})//事务处理
     public JpfResponseDto modifyShopProduct(ModifyShopProductRequest request) {
         PayShopProduct payShopProduct = new PayShopProduct();
         payShopProduct.setId(request.getId());
@@ -212,6 +249,39 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setMoney(money);
         payShopProduct.setType(request.getType());
         int res = payShopProductMapper.updateByPrimaryKeySelective(payShopProduct);
+        if( res == 1  ){
+
+            //商品详情是否存在
+            if( Integer.valueOf(request.getProductContentId()) > 0 ){
+
+                PayShopProductContent productContent = new PayShopProductContent();
+                productContent.setContent(request.getProductContent());
+                productContent.setId(request.getProductContentId());
+                int upCount = payShopProductContentMapper.updateByPrimaryKeySelective(productContent);
+                if( upCount != 1 ){
+                        throw new JpfException(JpfErrorInfo.INVALID_PARAMETER,"操作失败");
+                }
+            }else{
+                //添加商品详情
+                //是否添加详情内容
+                if( !StringUtils.isBlank(request.getProductContent())){
+                    PayShopProductContent productContent = new PayShopProductContent();
+                    productContent.setContent(request.getProductContent());
+                    payShopProductContentCustomMapper.insertSelective(productContent);
+                    if( Integer.valueOf(productContent.getId()) > 0 ){
+
+                        PayShopProduct shopProduct = new PayShopProduct();
+                        shopProduct.setProductContentId(productContent.getId());
+                        shopProduct.setId(payShopProduct.getId());
+                        int upCount = payShopProductMapper.updateByPrimaryKeySelective(shopProduct);
+                        if( upCount != 1 ){
+                            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER,"操作失败");
+                        }
+                    }
+                }
+            }
+        }
+
         return new JpfResponseDto();
     }
 
@@ -228,9 +298,47 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         info.setTypeId(Integer.parseInt(request.getTypeId()));
         info.setStatus((byte)1);
         info.setAddtime(new Date());
+        info.setTitle(request.getTitle());
+        info.setImgurl(request.getImgurl());
+        info.setMoneyscope(request.getMoneyscope());
 
         int res = payShopProductInfoMapper.insertSelective(info);
 
         return new JpfResponseDto();
     }
+
+    /**
+     * 商品详情页
+     */
+    @Override
+    public GetShopProductResponse getList(GetShopProductRequest request){
+
+        PayShopProductExample example = new PayShopProductExample();
+        PayShopProductExample.Criteria c = example.createCriteria();
+        c.andProductInfoIdEqualTo(Integer.valueOf(request.getProductInfoId()));
+        //商品状态：0=下架 1=上架
+        c.andStatusEqualTo((byte)1);
+        example.setOrderByClause("recharge_money ASC");
+
+        List<PayShopProductCustom> list = payShopProductCustomMapper.selectContentByPid(example);
+        if( list == null || list.size() < 0 ){
+            return null;
+        }
+
+        GetShopProductResponse response = new GetShopProductResponse();
+        List<ShopProductInfo> infos = new ArrayList<>();
+        for(PayShopProductCustom one:list){
+            ShopProductInfo shopProductInfo = new ShopProductInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopProductCustom.class,ShopProductInfo.class,false);
+            beanCopier.copy(one,shopProductInfo,null);
+            infos.add(shopProductInfo);
+        }
+        response.setList(infos);
+        response.setCount(infos.size());
+        return response;
+
+    }
+
+
+
 }

@@ -1,9 +1,12 @@
 package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayShopCompanyCharge;
 import com.joiest.jpf.dto.GetShopCompanyChargeRequest;
 import com.joiest.jpf.dto.GetShopCompanyChargeResponse;
 import com.joiest.jpf.entity.ShopCompanyChargeInfo;
+
+import java.util.List;
 
 public interface ShopCompanyChargeServiceFacade {
 
@@ -32,4 +35,17 @@ public interface ShopCompanyChargeServiceFacade {
      */
     public JpfResponseDto caiWuCompanyCharge(GetShopCompanyChargeRequest request);
 
+    /**
+     * 查询可以使用的企业合同3
+     * @param companyId
+     * @return
+     */
+    List<PayShopCompanyCharge> getListByCompanyId(String companyId);
+
+    /**
+     * 根据id查询合同
+     * @param contractId
+     * @return
+     */
+    PayShopCompanyCharge getById(String contractId);
 }

@@ -3,11 +3,9 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopBatchCouponCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBatchCustomMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchCouponMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopInterfaceStreamMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
@@ -16,6 +14,8 @@ import com.joiest.jpf.facade.ShopBatchServiceFacade;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
+
+    private static final Logger logger = LogManager.getLogger(ShopBatchServiceFacadeImpl.class);
 
     @Autowired
     private PayShopBatchMapper payShopBatchMapper;
@@ -42,26 +44,38 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
     @Autowired
     private PayShopInterfaceStreamMapper payShopInterfaceStreamMapper;
 
+    @Autowired
+    private PayShopCompanyChargeMapper payShopCompanyChargeMapper;
+
+    @Autowired
+    private PayShopBatchCouponCustomMapper payShopBatchCouponCustomMapper;
+
     @Override
     public ShopBatchResponse getBatches(ShopBatchRequest shopBatchRequest){
         ShopBatchResponse shopBatchResponse = new ShopBatchResponse();
 
         PayShopBatchExample e = new PayShopBatchExample();
         PayShopBatchExample.Criteria c = e.createCriteria();
-        if ( shopBatchRequest.getId() != null ){
+        if (StringUtils.isNotBlank(shopBatchRequest.getId())){
             c.andIdEqualTo(shopBatchRequest.getId());
         }
-        if ( shopBatchRequest.getBatchNo() != null ){
+        if (StringUtils.isNotBlank(shopBatchRequest.getBatchNo())){
             c.andBatchNoEqualTo(shopBatchRequest.getBatchNo());
         }
-        if ( shopBatchRequest.getCompanyName() != null ){
+        if (StringUtils.isNotBlank(shopBatchRequest.getCompanyName())){
             c.andCompanyNameEqualTo(shopBatchRequest.getCompanyName());
         }
-        if ( shopBatchRequest.getReceiveName() != null ){
+        if (StringUtils.isNotBlank(shopBatchRequest.getReceiveName())){
             c.andReceiveNameEqualTo(shopBatchRequest.getReceiveName());
         }
-        if ( shopBatchRequest.getSalesName() != null ){
+        if (StringUtils.isNotBlank(shopBatchRequest.getSalesName())){
             c.andSalesNameEqualTo(shopBatchRequest.getSalesName());
+        }
+        if(shopBatchRequest.getStatus()!=null){
+            c.andStatusEqualTo(shopBatchRequest.getStatus());
+        }
+        if(shopBatchRequest.getStatus()==null||(shopBatchRequest.getStatus()!=null&&shopBatchRequest.getStatus()!=4)){
+            c.andStatusNotEqualTo((byte)4);
         }
         e.setPageSize(shopBatchRequest.getRows());
         e.setPageNo(shopBatchRequest.getPage());
@@ -154,7 +168,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
                 payShopBatchCoupon.setCompanyName(shopBatchRequest.getCompanyName());
                 payShopBatchCoupon.setCouponNo(createCouponNo());
                 String activeCode = getRandomString(10);
-                while ( isActiveCodeExist(activeCode) ){
+                while (isActiveCodeExist(activeCode) ){
                     activeCode = getRandomString(10);
                 }
                 payShopBatchCoupon.setActiveCode(getRandomString(10));
@@ -213,6 +227,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         String excelPath = ConfigUtil.getValue("EXCEL_PATH");
         JSONObject exExcelResponse = null;
         try {
+            logger.info("excelPath"+excelPath);
             exExcelResponse = excelUtils.exportExcel(httpResponse,titles.toString(),fields.toString(),infoList,2,excelPath);
         } catch (Exception e) {
             e.printStackTrace();

@@ -10,7 +10,10 @@ import com.joiest.jpf.dto.GetCloudCompanysResponse;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,7 +40,7 @@ import java.util.TreeMap;
 @Controller
 @RequestMapping("/cloudCompany")
 public class CloudCompanyController {
-
+    private static final Logger logger = LogManager.getLogger(ParamController.class);
     @Autowired
     private CloudCompanyServiceFacade cloudCompanyServiceFacade;
 
@@ -227,4 +232,34 @@ public class CloudCompanyController {
     public JpfResponseDto delCompany(String merchNo, int type) {
         return cloudCompanyServiceFacade.delCompany(merchNo, type);
     }
+
+    @RequestMapping(value = "uploadUEditorImage")
+    public void uploadUEditorImage(@RequestParam(value = "upfile", required = false) MultipartFile file,
+                                   HttpServletResponse response, HttpServletRequest request) throws Exception {
+        request.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding("utf-8");
+        JSONObject json=new JSONObject();
+        PrintWriter out = response.getWriter();
+
+        logger.info("上传图片开始");
+        try {
+            String savePre = ConfigUtil.getValue("ROOT_PATH");
+            String allpath = PhotoUtil.saveFile(file, savePre);
+            String uploadedUrl = "";
+            if ( allpath != null ){
+                uploadedUrl = ToolUtils.upload(allpath);
+            }
+            json.put("state", "SUCCESS");
+            json.put("title", file.getName());
+            json.put("url",uploadedUrl);//修改为自己的图片保存路径
+            json.put("original", file.getName());
+            out.print(json.toString());
+            logger.info("上传图片结束，位置："+uploadedUrl);
+        } catch (Exception e) {
+            json.put("state", "上传图片出错");
+            out.print(json.toString());
+            logger.error("上传图片出错",e);
+        }
+    }
+
 }

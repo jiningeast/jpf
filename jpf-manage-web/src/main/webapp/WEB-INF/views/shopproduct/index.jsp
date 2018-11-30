@@ -13,7 +13,7 @@
                     text:'商品基础信息添加',
                     iconCls:'icon-redo',
                     handler:function(){
-                        $('#infoDiv').window("open").window('refresh', 'pInfoAdd/page').window('setTitle','添加商品基础信息');
+                        $('#pinfoAddDiv').window("open").window('refresh', 'pInfoAdd/page').window('setTitle','添加商品基础信息');
                     }
                 },
                 {
@@ -126,9 +126,9 @@
                 columns:[[
                     {field:'id',title:'商品ID',width:80},
                     {field:'name',title:'商品名称',width:200},
-                    {field:'bid',title:'商品进价',width:50},
-                    {field:'money',title:'商品售价',width:50},
-                    {field:'rechargeMoney',title:'充值面额(元)',width:50},
+                    {field:'bid',title:'商品进价',width:65},
+                    {field:'money',title:'商品售价',width:65},
+                    {field:'rechargeMoney',title:'充值面额(元)',width:90},
                     {field:'dou',title:'所需豆',width:50},
                     {field:'brandName',title:'商品品牌',width:150},
                     {field:'supplierName',title:'供应商',width:150},
@@ -174,8 +174,15 @@
             });
 
             $('#infoDiv').window({
-                width:'800px',
-                height:'500px',
+                width:'1000px',
+                height:'700px',
+                closed:true,
+                modal:true
+            });
+
+            $('#pinfoAddDiv').window({
+                width:'1000px',
+                height:'700px',
                 closed:true,
                 modal:true
             });
@@ -238,6 +245,7 @@
 </div>
 
 <div id="infoDiv"></div>
+<div id="pinfoAddDiv"></div>
 <script>
     function initData() {
 

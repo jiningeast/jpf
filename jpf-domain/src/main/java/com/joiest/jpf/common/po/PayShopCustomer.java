@@ -99,6 +99,11 @@ public class PayShopCustomer implements Serializable {
      */
     private String mpid;
 
+    /**
+     * 可转让豆
+     */
+    private Integer saleDou;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -253,6 +258,14 @@ public class PayShopCustomer implements Serializable {
         this.mpid = mpid == null ? null : mpid.trim();
     }
 
+    public Integer getSaleDou() {
+        return saleDou;
+    }
+
+    public void setSaleDou(Integer saleDou) {
+        this.saleDou = saleDou;
+    }
+
     /**
      *
      */
@@ -281,6 +294,7 @@ public class PayShopCustomer implements Serializable {
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append(", mpid=").append(mpid);
+        sb.append(", saleDou=").append(saleDou);
         sb.append("]");
         return sb.toString();
     }
@@ -319,7 +333,8 @@ public class PayShopCustomer implements Serializable {
             && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()));
+            && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()))
+            && (this.getSaleDou() == null ? other.getSaleDou() == null : this.getSaleDou().equals(other.getSaleDou()));
     }
 
     /**
@@ -348,6 +363,7 @@ public class PayShopCustomer implements Serializable {
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getMpid() == null) ? 0 : getMpid().hashCode());
+        result = prime * result + ((getSaleDou() == null) ? 0 : getSaleDou().hashCode());
         return result;
     }
 }

@@ -52,18 +52,40 @@
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
                     {field:'companyName',title:'公司名称',width:'12%'},
-                    {field:'contractMoney',title:'合同金额',width:'12%',formatter: function (value, row, index) {
+                    {field:'contractNo',title:'合同号',width:'8%'},
+                    {field:'duetime',title:'合同到期时间',width:'8%',formatter: formatDateStr},
+                    {field:'couponMoney',title:'欣券金额',width:'8%',formatter: function (value, row, index) {
+                            if (value != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
+                    {field:'serviceMoney',title:'服务金额',width:'8%',formatter: function (value, row, index) {
+                            if (value != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
+                    {field:'contractMoney',title:'合同金额',width:'8%',formatter: function (value, row, index) {
+                            if (value != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
+                    {field:'rate',title:'费率 (%)',width:'5%',  formatter: function (value, row, index) {
                             if (row != null) {
                                 return parseFloat(value).toFixed(2);
                             }
                         }},
-                    {field:'rate',title:'费率 (%)',width:'12%',  formatter: function (value, row, index) {
-                            if (row != null) {
+                    {field:'money',title:'实际到帐金额',width:'8%',formatter: function (value, row, index) {
+                            if (value != null) {
                                 return parseFloat(value).toFixed(2);
                             }
                         }},
-                    {field:'money',title:'实际到帐金额',width:'10%',formatter: function (value, row, index) {
-                            if (row != null) {
+                    {field:'balance',title:'合同剩余金额',width:'8%',formatter: function (value, row, index) {
+                            if (value != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
+                    {field:'transferRate',title:'服务转让率 (%)',width:'5%',  formatter: function (value, row, index) {
+                            if (value != null) {
                                 return parseFloat(value).toFixed(2);
                             }
                         }},

@@ -15,7 +15,9 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.dto.GetShopBargainOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainOrderResponse;
+import com.joiest.jpf.dto.GetShopCouponRemainResponse;
 import com.joiest.jpf.entity.ShopBargainOrderInfo;
+import com.joiest.jpf.entity.ShopCouponRemainInfo;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
 import com.joiest.jpf.facade.ShopBargainOrderServiceFacade;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
@@ -254,13 +256,20 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                      BeanCopier beanCopierCutem = BeanCopier.create(PayShopCustomer.class, ShopCustomerInterfaceInfo.class, false);
                      beanCopierCutem.copy(payShopCustomer,shopCustomerInterfaceInfo, null);
                      //用户可用券列表
-                     GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(custemID);
+                    /* GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(custemID);
                      if ( userCouponList == null || userCouponList.getCount() == 0)
                      {
                          throw new JpfException(JpfErrorInfo.DAL_ERROR, "卖家无可用欣豆");
+                     }*/
+                     //欣券转让改版
+                     GetShopCouponRemainResponse remainResponseAfter=shopCouponRemainServiceFacade.getSum(custemID);
+                     List<ShopCouponRemainInfo> saleYes=remainResponseAfter.getSaleYes();//可转让欣券列表
+                     int saleYesSum=remainResponseAfter.getSaleYesSum();//可转让总额
+                     if(saleYesSum==0 || saleYes.size()<0){
+                         throw new JpfException(JpfErrorInfo.DAL_ERROR, "卖家无可用欣豆");
                      }
                      //执行扣豆操作、
-                    shopCouponRemainServiceFacade.CouponAttorn(userCouponList.getList(), shopBargainOrderInfo, shopCustomerInterfaceInfo);
+                    shopCouponRemainServiceFacade.CouponAttorn(saleYes, shopBargainOrderInfo, shopCustomerInterfaceInfo);
 
                     recordData.setPayImg(request.getPayImg());
                     recordData.setStatus(request.getStatus());
@@ -328,10 +337,13 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                     //取消转让修改豆
                     // 客户总豆数量减去一部分pay_shop_customer
                     PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-                    int dou = payShopCustomer.getDou() + payShopBargainOrder.getDou();
-                    String code = ToolUtils.CreateCode(String.valueOf(dou),payShopBargainOrder.getSellerCustomerId());
+                    int countDou=payShopCustomer.getDou()+ payShopBargainOrder.getDou();
+                    int dou = payShopCustomer.getSaleDou() + payShopBargainOrder.getDou();
+                    String code = ToolUtils.CreateCode(String.valueOf(countDou),payShopBargainOrder.getSellerCustomerId());
                     payShopCustomerUpdate.setId(payShopBargainOrder.getSellerCustomerId());
-                    payShopCustomerUpdate.setDou(dou);
+                    payShopCustomerUpdate.setDou(countDou);
+                    payShopCustomerUpdate.setSaleDou(dou);
+                    //用户总豆增加
                     payShopCustomerUpdate.setFreezeDou(payShopCustomer.getFreezeDou()-payShopBargainOrder.getDou());
                     payShopCustomerUpdate.setCode(code);
                     payShopCustomerUpdate.setUpdatetime(new Date());

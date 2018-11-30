@@ -115,6 +115,11 @@ public class PayShopProduct implements Serializable {
      */
     private Date updatetime;
 
+    /**
+     * 商品详情ID
+     */
+    private String productContentId;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -293,6 +298,14 @@ public class PayShopProduct implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public String getProductContentId() {
+        return productContentId;
+    }
+
+    public void setProductContentId(String productContentId) {
+        this.productContentId = productContentId == null ? null : productContentId.trim();
+    }
+
     /**
      *
      */
@@ -324,6 +337,7 @@ public class PayShopProduct implements Serializable {
         sb.append(", ctcProductId=").append(ctcProductId);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", productContentId=").append(productContentId);
         sb.append("]");
         return sb.toString();
     }
@@ -365,7 +379,8 @@ public class PayShopProduct implements Serializable {
             && (this.getCuccProductId() == null ? other.getCuccProductId() == null : this.getCuccProductId().equals(other.getCuccProductId()))
             && (this.getCtcProductId() == null ? other.getCtcProductId() == null : this.getCtcProductId().equals(other.getCtcProductId()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getProductContentId() == null ? other.getProductContentId() == null : this.getProductContentId().equals(other.getProductContentId()));
     }
 
     /**
@@ -397,6 +412,7 @@ public class PayShopProduct implements Serializable {
         result = prime * result + ((getCtcProductId() == null) ? 0 : getCtcProductId().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getProductContentId() == null) ? 0 : getProductContentId().hashCode());
         return result;
     }
 }

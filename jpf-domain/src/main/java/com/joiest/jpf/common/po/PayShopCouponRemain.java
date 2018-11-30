@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopCouponRemain implements Serializable {
@@ -35,14 +36,24 @@ public class PayShopCouponRemain implements Serializable {
     private Integer couponDou;
 
     /**
-     * 券豆余额
+     * 非转让豆
+     */
+    private Integer saleDouNo;
+
+    /**
+     * 非转让券豆余额
      */
     private Integer couponDouLeft;
 
     /**
-     * 此券是否已用完 0=没用完 1=消费用完 2=过期清零
+     * 可转让豆
      */
-    private Byte status;
+    private Integer saleDouYes;
+
+    /**
+     * 可转让豆剩余
+     */
+    private Integer saleDouLeft;
 
     /**
      * 到期时间
@@ -58,6 +69,21 @@ public class PayShopCouponRemain implements Serializable {
      * 更新时间
      */
     private Date updatetime;
+
+    /**
+     * 转让比例
+     */
+    private BigDecimal percent;
+
+    /**
+     * 此券是否已用完 0=没用完 1=消费用完 2=过期清零 3=服务转让没用完 4=服务转让用完
+     */
+    private Byte status;
+
+    /**
+     * 转让状态:0没用完;1已用完;2过期清零
+     */
+    private Byte salestatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -109,6 +135,14 @@ public class PayShopCouponRemain implements Serializable {
         this.couponDou = couponDou;
     }
 
+    public Integer getSaleDouNo() {
+        return saleDouNo;
+    }
+
+    public void setSaleDouNo(Integer saleDouNo) {
+        this.saleDouNo = saleDouNo;
+    }
+
     public Integer getCouponDouLeft() {
         return couponDouLeft;
     }
@@ -117,12 +151,20 @@ public class PayShopCouponRemain implements Serializable {
         this.couponDouLeft = couponDouLeft;
     }
 
-    public Byte getStatus() {
-        return status;
+    public Integer getSaleDouYes() {
+        return saleDouYes;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
+    public void setSaleDouYes(Integer saleDouYes) {
+        this.saleDouYes = saleDouYes;
+    }
+
+    public Integer getSaleDouLeft() {
+        return saleDouLeft;
+    }
+
+    public void setSaleDouLeft(Integer saleDouLeft) {
+        this.saleDouLeft = saleDouLeft;
     }
 
     public Date getExpireTime() {
@@ -149,6 +191,30 @@ public class PayShopCouponRemain implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public BigDecimal getPercent() {
+        return percent;
+    }
+
+    public void setPercent(BigDecimal percent) {
+        this.percent = percent;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Byte getSalestatus() {
+        return salestatus;
+    }
+
+    public void setSalestatus(Byte salestatus) {
+        this.salestatus = salestatus;
+    }
+
     /**
      *
      */
@@ -164,11 +230,16 @@ public class PayShopCouponRemain implements Serializable {
         sb.append(", couponActiveCode=").append(couponActiveCode);
         sb.append(", customerId=").append(customerId);
         sb.append(", couponDou=").append(couponDou);
+        sb.append(", saleDouNo=").append(saleDouNo);
         sb.append(", couponDouLeft=").append(couponDouLeft);
-        sb.append(", status=").append(status);
+        sb.append(", saleDouYes=").append(saleDouYes);
+        sb.append(", saleDouLeft=").append(saleDouLeft);
         sb.append(", expireTime=").append(expireTime);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", percent=").append(percent);
+        sb.append(", status=").append(status);
+        sb.append(", salestatus=").append(salestatus);
         sb.append("]");
         return sb.toString();
     }
@@ -195,11 +266,16 @@ public class PayShopCouponRemain implements Serializable {
             && (this.getCouponActiveCode() == null ? other.getCouponActiveCode() == null : this.getCouponActiveCode().equals(other.getCouponActiveCode()))
             && (this.getCustomerId() == null ? other.getCustomerId() == null : this.getCustomerId().equals(other.getCustomerId()))
             && (this.getCouponDou() == null ? other.getCouponDou() == null : this.getCouponDou().equals(other.getCouponDou()))
+            && (this.getSaleDouNo() == null ? other.getSaleDouNo() == null : this.getSaleDouNo().equals(other.getSaleDouNo()))
             && (this.getCouponDouLeft() == null ? other.getCouponDouLeft() == null : this.getCouponDouLeft().equals(other.getCouponDouLeft()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getSaleDouYes() == null ? other.getSaleDouYes() == null : this.getSaleDouYes().equals(other.getSaleDouYes()))
+            && (this.getSaleDouLeft() == null ? other.getSaleDouLeft() == null : this.getSaleDouLeft().equals(other.getSaleDouLeft()))
             && (this.getExpireTime() == null ? other.getExpireTime() == null : this.getExpireTime().equals(other.getExpireTime()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getPercent() == null ? other.getPercent() == null : this.getPercent().equals(other.getPercent()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getSalestatus() == null ? other.getSalestatus() == null : this.getSalestatus().equals(other.getSalestatus()));
     }
 
     /**
@@ -215,11 +291,16 @@ public class PayShopCouponRemain implements Serializable {
         result = prime * result + ((getCouponActiveCode() == null) ? 0 : getCouponActiveCode().hashCode());
         result = prime * result + ((getCustomerId() == null) ? 0 : getCustomerId().hashCode());
         result = prime * result + ((getCouponDou() == null) ? 0 : getCouponDou().hashCode());
+        result = prime * result + ((getSaleDouNo() == null) ? 0 : getSaleDouNo().hashCode());
         result = prime * result + ((getCouponDouLeft() == null) ? 0 : getCouponDouLeft().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getSaleDouYes() == null) ? 0 : getSaleDouYes().hashCode());
+        result = prime * result + ((getSaleDouLeft() == null) ? 0 : getSaleDouLeft().hashCode());
         result = prime * result + ((getExpireTime() == null) ? 0 : getExpireTime().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getPercent() == null) ? 0 : getPercent().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getSalestatus() == null) ? 0 : getSalestatus().hashCode());
         return result;
     }
 }

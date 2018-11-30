@@ -1,5 +1,6 @@
 package com.joiest.jpf.common.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -555,6 +556,66 @@ public class PayShopCouponRemainExample {
             return (Criteria) this;
         }
 
+        public Criteria andSaleDouNoIsNull() {
+            addCriterion("sale_dou_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoIsNotNull() {
+            addCriterion("sale_dou_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoEqualTo(Integer value) {
+            addCriterion("sale_dou_no =", value, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoNotEqualTo(Integer value) {
+            addCriterion("sale_dou_no <>", value, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoGreaterThan(Integer value) {
+            addCriterion("sale_dou_no >", value, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sale_dou_no >=", value, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoLessThan(Integer value) {
+            addCriterion("sale_dou_no <", value, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoLessThanOrEqualTo(Integer value) {
+            addCriterion("sale_dou_no <=", value, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoIn(List<Integer> values) {
+            addCriterion("sale_dou_no in", values, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoNotIn(List<Integer> values) {
+            addCriterion("sale_dou_no not in", values, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoBetween(Integer value1, Integer value2) {
+            addCriterion("sale_dou_no between", value1, value2, "saleDouNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouNoNotBetween(Integer value1, Integer value2) {
+            addCriterion("sale_dou_no not between", value1, value2, "saleDouNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCouponDouLeftIsNull() {
             addCriterion("coupon_dou_left is null");
             return (Criteria) this;
@@ -615,63 +676,123 @@ public class PayShopCouponRemainExample {
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNull() {
-            addCriterion("status is null");
+        public Criteria andSaleDouYesIsNull() {
+            addCriterion("sale_dou_yes is null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
+        public Criteria andSaleDouYesIsNotNull() {
+            addCriterion("sale_dou_yes is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Byte value) {
-            addCriterion("status =", value, "status");
+        public Criteria andSaleDouYesEqualTo(Integer value) {
+            addCriterion("sale_dou_yes =", value, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Byte value) {
-            addCriterion("status <>", value, "status");
+        public Criteria andSaleDouYesNotEqualTo(Integer value) {
+            addCriterion("sale_dou_yes <>", value, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Byte value) {
-            addCriterion("status >", value, "status");
+        public Criteria andSaleDouYesGreaterThan(Integer value) {
+            addCriterion("sale_dou_yes >", value, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
-            addCriterion("status >=", value, "status");
+        public Criteria andSaleDouYesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sale_dou_yes >=", value, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Byte value) {
-            addCriterion("status <", value, "status");
+        public Criteria andSaleDouYesLessThan(Integer value) {
+            addCriterion("sale_dou_yes <", value, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Byte value) {
-            addCriterion("status <=", value, "status");
+        public Criteria andSaleDouYesLessThanOrEqualTo(Integer value) {
+            addCriterion("sale_dou_yes <=", value, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Byte> values) {
-            addCriterion("status in", values, "status");
+        public Criteria andSaleDouYesIn(List<Integer> values) {
+            addCriterion("sale_dou_yes in", values, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Byte> values) {
-            addCriterion("status not in", values, "status");
+        public Criteria andSaleDouYesNotIn(List<Integer> values) {
+            addCriterion("sale_dou_yes not in", values, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(Byte value1, Byte value2) {
-            addCriterion("status between", value1, value2, "status");
+        public Criteria andSaleDouYesBetween(Integer value1, Integer value2) {
+            addCriterion("sale_dou_yes between", value1, value2, "saleDouYes");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
-            addCriterion("status not between", value1, value2, "status");
+        public Criteria andSaleDouYesNotBetween(Integer value1, Integer value2) {
+            addCriterion("sale_dou_yes not between", value1, value2, "saleDouYes");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftIsNull() {
+            addCriterion("sale_dou_left is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftIsNotNull() {
+            addCriterion("sale_dou_left is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftEqualTo(Integer value) {
+            addCriterion("sale_dou_left =", value, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftNotEqualTo(Integer value) {
+            addCriterion("sale_dou_left <>", value, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftGreaterThan(Integer value) {
+            addCriterion("sale_dou_left >", value, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sale_dou_left >=", value, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftLessThan(Integer value) {
+            addCriterion("sale_dou_left <", value, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftLessThanOrEqualTo(Integer value) {
+            addCriterion("sale_dou_left <=", value, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftIn(List<Integer> values) {
+            addCriterion("sale_dou_left in", values, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftNotIn(List<Integer> values) {
+            addCriterion("sale_dou_left not in", values, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftBetween(Integer value1, Integer value2) {
+            addCriterion("sale_dou_left between", value1, value2, "saleDouLeft");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleDouLeftNotBetween(Integer value1, Integer value2) {
+            addCriterion("sale_dou_left not between", value1, value2, "saleDouLeft");
             return (Criteria) this;
         }
 
@@ -852,6 +973,186 @@ public class PayShopCouponRemainExample {
 
         public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
             addCriterion("updatetime not between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentIsNull() {
+            addCriterion("percent is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentIsNotNull() {
+            addCriterion("percent is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentEqualTo(BigDecimal value) {
+            addCriterion("percent =", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentNotEqualTo(BigDecimal value) {
+            addCriterion("percent <>", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentGreaterThan(BigDecimal value) {
+            addCriterion("percent >", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("percent >=", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentLessThan(BigDecimal value) {
+            addCriterion("percent <", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("percent <=", value, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentIn(List<BigDecimal> values) {
+            addCriterion("percent in", values, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentNotIn(List<BigDecimal> values) {
+            addCriterion("percent not in", values, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("percent between", value1, value2, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andPercentNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("percent not between", value1, value2, "percent");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Byte value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Byte value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Byte value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Byte value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Byte> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Byte> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Byte value1, Byte value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusIsNull() {
+            addCriterion("saleStatus is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusIsNotNull() {
+            addCriterion("saleStatus is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusEqualTo(Byte value) {
+            addCriterion("saleStatus =", value, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusNotEqualTo(Byte value) {
+            addCriterion("saleStatus <>", value, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusGreaterThan(Byte value) {
+            addCriterion("saleStatus >", value, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("saleStatus >=", value, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusLessThan(Byte value) {
+            addCriterion("saleStatus <", value, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusLessThanOrEqualTo(Byte value) {
+            addCriterion("saleStatus <=", value, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusIn(List<Byte> values) {
+            addCriterion("saleStatus in", values, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusNotIn(List<Byte> values) {
+            addCriterion("saleStatus not in", values, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusBetween(Byte value1, Byte value2) {
+            addCriterion("saleStatus between", value1, value2, "salestatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalestatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("saleStatus not between", value1, value2, "salestatus");
             return (Criteria) this;
         }
 

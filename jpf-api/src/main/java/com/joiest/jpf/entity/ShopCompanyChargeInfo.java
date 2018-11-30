@@ -85,6 +85,84 @@ public class ShopCompanyChargeInfo implements Serializable {
      */
     private Date updatetime;
 
+    /**
+     * 合同号
+     */
+    private String contractNo;
+
+    /**
+     * 合同到期时间
+     */
+    private Date duetime;
+
+    /**
+     * 消费转让率
+     */
+    private BigDecimal transferRate;
+
+    /**
+     * 欣券金额
+     */
+    private BigDecimal couponMoney;
+
+    /**
+     * 服务金额
+     */
+    private BigDecimal serviceMoney;
+
+    /**
+     * 剩余金额
+     */
+    private BigDecimal balance;
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public Date getDuetime() {
+        return duetime;
+    }
+
+    public void setDuetime(Date duetime) {
+        this.duetime = duetime;
+    }
+
+    public BigDecimal getTransferRate() {
+        return transferRate;
+    }
+
+    public void setTransferRate(BigDecimal transferRate) {
+        this.transferRate = transferRate;
+    }
+
+    public BigDecimal getCouponMoney() {
+        return couponMoney;
+    }
+
+    public void setCouponMoney(BigDecimal couponMoney) {
+        this.couponMoney = couponMoney;
+    }
+
+    public BigDecimal getServiceMoney() {
+        return serviceMoney;
+    }
+
+    public void setServiceMoney(BigDecimal serviceMoney) {
+        this.serviceMoney = serviceMoney;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {

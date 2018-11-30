@@ -48,6 +48,11 @@
             validator:function (value) {
                 return /^(([1-9][0-9]*)|(([0]\.\d{1,4}|[1-9][0-9]*\.\d{1,4})))$/.test(value);
             },message:'请输入有效的金额，最多保留四位小数。'
+        },
+		money:{
+            validator:function (value) {
+                return /^(([1-9][0-9]*))$/.test(value);
+            },message:'请输入有效的金额。'
         }
 	})
 });

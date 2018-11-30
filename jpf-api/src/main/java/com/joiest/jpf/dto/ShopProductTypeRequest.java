@@ -107,4 +107,5 @@ public class ShopProductTypeRequest {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
 }

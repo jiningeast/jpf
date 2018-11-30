@@ -32,6 +32,9 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
 
     @Autowired
     private PayShopCouponRemainMapper payShopCouponRemainMapper;
+
+    @Autowired
+    private  PayShopCompanyMapper payShopCompanyMapper;
     /**
      * 根据激活码获取券并且激活
      */
@@ -64,6 +67,7 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         {
             return  4;//批次信息有误
         }
+
         //根据uid查出用户信息
         PayShopCustomerExample ecustom = new PayShopCustomerExample();
         PayShopCustomerExample.Criteria ccustom = ecustom.createCriteria();
@@ -74,12 +78,28 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         {
             return  5;//用户信息有误
         }
-        String name=listCustom.get(0).getName();
+        String compayId=listBatch.get(0).getCompanyId();
+        //根据公司id获取公司的基础转让百分比
+        PayShopCompany payShopCompany=payShopCompanyMapper.selectByPrimaryKey(compayId);
 
+
+        //未设置转让百分比
+        if( payShopCompany.getPercent().compareTo(new BigDecimal("0.000"))<=0 ){
+            return 8;
+        }
+        //============进行换算转让和非转让的都数量===============
+        int douCount=list.get(0).getDou();
+        BigDecimal bigdou=new BigDecimal(douCount);
+        BigDecimal saleYes=bigdou.multiply(payShopCompany.getPercent());//可转让额度
+        int saleY=saleYes.intValue();//可转让金额
+        int saleN=douCount-saleY;//不可转让金额
+        String name=listCustom.get(0).getName();
         //进行金额校验
         Integer dou=listCustom.get(0).getDou();
+        Integer saleDou=listCustom.get(0).getSaleDou();
         String code=listCustom.get(0).getCode();
         Boolean res= ToolUtils.ValidateCode(code,uid,dou.toString());
+
         if(res==false){
             return 6;//金额校验失败
         }
@@ -98,6 +118,7 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         } catch (ParseException e1) {
             e1.printStackTrace();
         }
+
         //添加active欣券行为明细
         PayShopCouponActive active =new PayShopCouponActive();
 
@@ -136,7 +157,9 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         //修改客户表
         PayShopCustomer custoner=new PayShopCustomer();
         Integer douAll=dou+list.get(0).getDou();
+        Integer douIssale=saleDou+saleY;
         custoner.setDou(douAll);
+        custoner.setSaleDou(douIssale);
         //充值校验码
         String newCodeALL = Md5Encrypt.md5(uid+douAll+"test","UTF-8");
         custoner.setCode(newCodeALL);
@@ -152,8 +175,12 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         remain.setCouponNo(list.get(0).getCouponNo());
         remain.setCouponActiveCode(couponNo);
         remain.setCustomerId(uid);
-        remain.setCouponDou(list.get(0).getDou());
-        remain.setCouponDouLeft(list.get(0).getDou());
+        remain.setCouponDou(list.get(0).getDou());//总豆
+        remain.setSaleDouNo(saleN);//不可转让总豆
+        remain.setCouponDouLeft(saleN);//不可转让剩余额度
+        remain.setSaleDouYes(saleY);
+        remain.setSaleDouLeft(saleY);
+        remain.setPercent(payShopCompany.getPercent());//转让百分比
         remain.setStatus((byte)0);
         remain.setExpireTime(dateAddMonth);
         remain.setAddtime(dNow);

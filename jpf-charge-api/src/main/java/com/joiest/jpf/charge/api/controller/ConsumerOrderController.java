@@ -72,7 +72,7 @@ public class ConsumerOrderController {
 
         Map<String,Object> responseMap =new HashMap<String,Object>();
 
-        if(!ConfigUtil.getValue("API_IS_OPEN").equals("OPEN")){
+        if(!"OPEN".equals(ConfigUtil.getValue("API_IS_OPEN"))){
 
             responseMap.put("code",JpfInterfaceErrorInfo.API_IS_OPEN.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.API_IS_OPEN.getDesc());
@@ -201,29 +201,35 @@ public class ConsumerOrderController {
      * 匹配数据
      */
     @RequestMapping(value="/matchingDataTask",method = RequestMethod.GET,produces = "text/plain;charset=utf-8")
-    public void matchingDataTask(){
+    @ResponseBody
+    public String matchingDataTask(){
         //查询是否存在需要待执行的任务
+        String ret = "数据匹配成功";
         PayChargeConsumerOrder payChargeConsumerOrder = consumerOrderServiceFacade.selectConsumerOrderTask();
         if(payChargeConsumerOrder!=null){ //不为空准备执行任务
             //查询redis的队列是不是为空，如果为空不执行
             Long size = redisCustomServiceFacade.getSize("consumerOrderQueue");
             if(size.longValue() != 0){//开始执行匹配操作
                 consumerOrderServiceFacade.matchingDataTaskStart(payChargeConsumerOrder);
+                ret+=ret+",订单号:"+payChargeConsumerOrder.getOrderNo();
             }else{
                 //拉取数据，存储在list
                 pushDateToRedis(1000L);
+                ret+=ret+",redis 数据队列数据不足，从新拉取";
             }
-
         }
+        return ret;
     }
 
     /**
      * 匹配数据到redis
      */
     @RequestMapping(value="/pushDataToRedisTask",method = RequestMethod.GET,produces = "text/plain;charset=utf-8")
-    public void pushDataToRedisTask(){
+    @ResponseBody
+    public String  pushDataToRedisTask(){
         logger.info("开始push数据"+new Date());
         //首先获取redis的consumerOrderQueue 队列的长度，
+        String ret = "数据push成功";
         try {
             Long size = redisCustomServiceFacade.getSize("consumerOrderQueue");
             if(size.longValue() <1000){//保证list集合的size 最多是1000
@@ -233,9 +239,10 @@ public class ConsumerOrderController {
             }
         }catch (Exception e){
             logger.error(e.getMessage());
+            ret="数据push失败";
         }
-
         logger.info("结束push数据"+new Date());
+        return ret;
     }
 
     /**
@@ -250,21 +257,6 @@ public class ConsumerOrderController {
             }
         }
     }
-
-    public static void main(String[] args) {
-        int i = 0;
-        while (true){
-            i++;
-            if(i==5){
-                break;
-            }
-        }
-
-        System.out.println(i);
-    }
-
-
-
     /**
      * 订单查询列表
      * orderNo  订单号

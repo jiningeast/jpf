@@ -47,8 +47,9 @@ public class CertificateController {
    public String activation(String data)
    {
 
+
        //判断当前用户是否锁定
-       if(userInfo.getStatus()==0){
+       if(userInfo.getStatus()==0 && userInfo.getStatus()!=null){
 
            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "您已经被冻结请联系客服", null);
 
@@ -72,7 +73,7 @@ public class CertificateController {
            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
        }
 
-       //查询当前激活码是否存在
+       //激活欣券
        int infos = shopBatchCouponInterfaceServiceFacade.getCouponByCouponNo(code.trim(),uid);
 
         if(infos==1){
@@ -103,7 +104,9 @@ public class CertificateController {
 
            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "激活失败", null);
 
-       }
+       }else if(infos==8){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "公司未设置转让百分比", null);
+        }
        //存在此激活码做激活处理
        //根据token查处当前用户的信息
        return "";
@@ -160,5 +163,9 @@ public class CertificateController {
             userInfo = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId).get(0);
             uid = userInfo.getId();
         }
+    }
+    public static  void main(String []args){
+        String token = AESUtils.encrypt("o3YP30Yk8YVlAHW8Fm6YrpQfpm-w",ConfigUtil.getValue("AES_KEY"));
+        System.out.println(token);
     }
    }

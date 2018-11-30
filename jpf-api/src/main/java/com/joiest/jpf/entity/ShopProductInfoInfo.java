@@ -90,6 +90,21 @@ public class ShopProductInfoInfo {
 
     private String content;
 
+    /**
+     * 品牌名称
+     */
+    private String title;
+
+    /**
+     * 品牌图片
+     */
+    private String imgurl;
+
+    /**
+     * 价格范围区间
+     */
+    private String moneyscope;
+
     public String getContentId() {
         return contentId;
     }
@@ -232,5 +247,29 @@ public class ShopProductInfoInfo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
+    public String getMoneyscope() {
+        return moneyscope;
+    }
+
+    public void setMoneyscope(String moneyscope) {
+        this.moneyscope = moneyscope;
     }
 }

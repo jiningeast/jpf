@@ -95,9 +95,12 @@ public class BargainSellerController {
 
         Integer dou = Integer.valueOf(requestParam.get("dou").toString());
 
-        if(dou>userInfo.getDou())
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "抱歉，您的欣豆不足", null);
-
+       /* if(dou>userInfo.getDou())
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "抱歉，您的欣豆不足", null);*/
+        //2018-11-22改
+        if(dou>userInfo.getSaleDou()){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "抱歉，您的可转让欣豆不足", null);
+        }
         //获取服务转让订单
         ShopBargainRequestInfo shopBargainRequestInfo = shopBargainRequestServiceFacade.getBargainById(requestParam.get("bargainRequestId").toString());
         if(shopBargainRequestInfo==null)
@@ -165,10 +168,14 @@ public class BargainSellerController {
 
         //更新用户豆  冻结豆
         ShopCustomerInfo shopCustomerInfo = new ShopCustomerInfo();
-        Integer over = userInfo.getDou()-dou;
-        shopCustomerInfo.setDou(over);
+        Integer douCount=userInfo.getDou()-dou;
+        Integer over = userInfo.getSaleDou()-dou;
+        shopCustomerInfo.setSaleDou(over);
+        shopCustomerInfo.setDou(douCount);
+        String code = ToolUtils.CreateCode(String.valueOf(douCount),userInfo.getId());
+        shopCustomerInfo.setCode(code);
         shopCustomerInfo.setId(userInfo.getId());
-        shopCustomerInfo.setCode(ToolUtils.CreateCode(over.toString(),uid));
+        //shopCustomerInfo.setCode(ToolUtils.CreateCode(over.toString(),uid));
         if(userInfo.getFreezeDou() != null && userInfo.getFreezeDou()>0){
 
             shopCustomerInfo.setFreezeDou(userInfo.getFreezeDou()+dou);

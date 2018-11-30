@@ -155,7 +155,12 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
         payShopCompanyCharge.setAddtime(curretDate);
         payShopCompanyCharge.setStatus((byte)0);
         payShopCompanyCharge.setUpdatetime(curretDate);
-
+        payShopCompanyCharge.setContractNo(request.getContractNo());
+        payShopCompanyCharge.setDuetime(DateUtils.getFdate(request.getDuetime(),DateUtils.DATEFORMATSHORT));
+        payShopCompanyCharge.setCouponMoney(request.getCouponMoney());
+        payShopCompanyCharge.setServiceMoney(request.getServiceMoney());
+        payShopCompanyCharge.setTransferRate(request.getTransferRate());
+        payShopCompanyCharge.setBalance(request.getCouponMoney());
         int count = payShopCompanyChargeMapper.insertSelective(payShopCompanyCharge);
         if( count != 1 ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "添加失败");
@@ -284,6 +289,22 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "更新失败");
         }
         return new JpfResponseDto();
+    }
+
+    @Override
+    public List<PayShopCompanyCharge> getListByCompanyId(String companyId) {
+        PayShopCompanyChargeExample example = new PayShopCompanyChargeExample();
+        PayShopCompanyChargeExample.Criteria criteria= example.createCriteria();
+        criteria.andCompanyIdEqualTo(companyId);
+        criteria.andBalanceGreaterThan(new BigDecimal(0));
+        criteria.andStatusEqualTo((byte)1);
+        example.setOrderByClause(" id asc ");
+        return payShopCompanyChargeMapper.selectByExample(example);
+    }
+
+    @Override
+    public PayShopCompanyCharge getById(String contractId) {
+        return payShopCompanyChargeMapper.selectByPrimaryKey(contractId);
     }
 
 

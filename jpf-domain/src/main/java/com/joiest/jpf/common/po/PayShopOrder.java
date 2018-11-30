@@ -26,7 +26,7 @@ public class PayShopOrder implements Serializable {
     private String stockCardId;
 
     /**
-     * 订单类型 1:中国石化; 2中国石油; 3话费充值
+     * 订单类型 1:中国石化; 2中国石油; 3话费充值 4=携程商品
      */
     private Byte orderType;
 
@@ -121,12 +121,12 @@ public class PayShopOrder implements Serializable {
     private String couponDetail;
 
     /**
-     * 订单状态 0=待支付 1=已支付 2=支付失败 3=已取消
+     * 订单状态 0=待支付 1=已支付 2=支付失败 3=已取消 4=充值成功 5=充值失败
      */
     private Byte status;
 
     /**
-     * 充值状态
+     * 充值状态 0充值中 1充值成功 9充值失败
      */
     private String rechargeStatus;
 
@@ -189,6 +189,16 @@ public class PayShopOrder implements Serializable {
      * 更新时间
      */
     private Date updatetime;
+
+    /**
+     * 券转额度消费详情，json存激活id，豆数量
+     */
+    private String couponDetailSale;
+
+    /**
+     * 商品类型
+     */
+    private Integer productType;
 
     private static final long serialVersionUID = 1L;
 
@@ -488,6 +498,22 @@ public class PayShopOrder implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public String getCouponDetailSale() {
+        return couponDetailSale;
+    }
+
+    public void setCouponDetailSale(String couponDetailSale) {
+        this.couponDetailSale = couponDetailSale == null ? null : couponDetailSale.trim();
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
+    }
+
     /**
      *
      */
@@ -534,6 +560,8 @@ public class PayShopOrder implements Serializable {
         sb.append(", addtime=").append(addtime);
         sb.append(", paytime=").append(paytime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", couponDetailSale=").append(couponDetailSale);
+        sb.append(", productType=").append(productType);
         sb.append("]");
         return sb.toString();
     }
@@ -590,7 +618,9 @@ public class PayShopOrder implements Serializable {
             && (this.getBargainOrderNo() == null ? other.getBargainOrderNo() == null : this.getBargainOrderNo().equals(other.getBargainOrderNo()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getCouponDetailSale() == null ? other.getCouponDetailSale() == null : this.getCouponDetailSale().equals(other.getCouponDetailSale()))
+            && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()));
     }
 
     /**
@@ -637,6 +667,8 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getPaytime() == null) ? 0 : getPaytime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getCouponDetailSale() == null) ? 0 : getCouponDetailSale().hashCode());
+        result = prime * result + ((getProductType() == null) ? 0 : getProductType().hashCode());
         return result;
     }
 }

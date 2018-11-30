@@ -103,7 +103,23 @@ public enum JpfInterfaceErrorInfo {
 
     EXCESS_DEPOSIT("80005","余额超限"),
 
-    ORDER_STATUS("80006","订单未处理完成请等待！");
+    ORDER_STATUS("80006","订单未处理完成请等待！"),
+
+    USER_PASSWD_ERROR("80007","用户名或者密码错误"),
+
+    ABNORMAL_STATUS("80008","账户状态异常"),
+
+    OLDPASSERROR("80009","原密码错误"),
+
+    LOGOUT("80010","已退出登录"),
+
+    PARAMNOTNULL("80011","数据不全"),
+
+    CONTRACT_SUFFICIENT("80012","合同余额不足"),
+
+    ORDER_STATUS_ERROR("80013","订单已经匹配欣券成功,无法取消"),
+
+    ORDER_STATUS_CANCAL("80014","订单未取消,无法删除");
 
     private final String desc;
 

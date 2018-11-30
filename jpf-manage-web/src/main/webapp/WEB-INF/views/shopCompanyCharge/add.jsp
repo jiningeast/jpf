@@ -21,32 +21,61 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">充值公司：</td>
                     <td>
-                        <input id="companyName" name="companyName" type="text"  data-options="required:true"
-                               width="120" class="easyui-textbox"/>
+                        <input id="companyName" name="companyName" type="text"  data-options="required:true"  width="120" class="easyui-textbox" missingMessage="请选择充值公司"/>
                         <input id="companyId" name="companyId" type="hidden"  />
                         <a id="searchCompany" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选取商户</a>
                     </td>
                 </tr>
-
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同号：</td>
+                    <td>
+                        <input id="contractNo" name="contractNo" type="text"   data-options="required:true" missingMessage="请填写合同号"  width="120" class="easyui-textbox"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同到期时间：</td>
+                    <td>
+                        <input type="text" class="Wdate" style="width: 141px;border-radius: 5px;height: 18px;border: 1px solid #95B8E7;" id="duetime"  name="duetime" data-options="required:true" missingMessage="请填写合同到期时间"
+                               onfocus="WdatePicker({minDate:new Date(),minDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd'})"/>
+                    </td>
+                </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">合同金额：</td>
                     <td>
-                        <input id="contractMoney" name="contractMoney" type="text"   data-options="required:true,onChange:getRealMoney"
-                               missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
+                        <input id="contractMoney" name="contractMoney" type="text"   data-options="onChange:getRealMoney"  missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">费率：</td>
                     <td>
                         <input id="rate" name="rate" type="text"
-                                width="120" class="easyui-numberbox" precision="2"  value="0" data-options="required:true,onChange:getRealMoney"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
+                               width="120" class="easyui-numberbox" precision="2"  value="0" data-options="required:true,onChange:getRealMoney"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">欣券金额：</td>
+                    <td>
+                        <input id="couponMoney" name="couponMoney" type="text"   data-options="required:true" readonly="readonly" missingMessage="请填写欣券金额"  width="120" class="easyui-numberbox" precision="2" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务费金额：</td>
+                    <td>
+                        <input id="serviceMoney" name="serviceMoney" type="text"   data-options="required:true" readonly="readonly"  missingMessage="请填写服务费金额"  width="120" class="easyui-numberbox" precision="2" />
+                    </td>
+                </tr>
+
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">实际到帐金额：</td>
                     <td>
                         <input id="moneyCopy" name="moneyCopy" class="easyui-textbox" disabled="disabled"/>
                         <input id="money" name="money" type="hidden"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务转让率：</td>
+                    <td>
+                        <input id="transferRate" name="transferRate" class="easyui-numberbox" missingMessage="请填写服务转让率"  data-options="required:true" value="30"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
                     </td>
                 </tr>
                 <tr>
@@ -61,7 +90,7 @@
             </table>
         </form>
     </div>
-    <div region="south" border="false"     style=" height: 30px; line-height: 30px;">
+    <div region="south" border="false"     style="text-align: right; height: 30px; line-height: 30px;">
         <a id="saveBtn_audit" class="easyui-linkbutton" icon="icon-ok"    href="javascript:void(0)">确定</a>
     </div>
     <div id="companys"></div>
@@ -105,6 +134,8 @@
             var calculate = (moneyrel * rote)/100;
             var money=(moneyrel-calculate).toFixed(2);
             $("#moneyCopy").textbox("setValue",money);
+            $("#couponMoney").textbox("setValue",money);
+            $("#serviceMoney").textbox("setValue",calculate);
             $("#money").val(money);
 
         }
@@ -130,8 +161,28 @@
         // 点击确定
         $("#saveBtn_audit").linkbutton({
             onClick : function () {
+                var isValid = $("#auditForm").form('enableValidation').form('validate');
+                if (!isValid) {
+                    return;
+                }
+                if ( $("#contractNo").val() == ""  ){
+                    $.messager.alert('提示', '请选择公司', 'info');
+                    return false;
+                }else {
+                    var r = /^[\u0391-\uFFE5]+$/;
+                    if(r.test($("#contractNo").val())){
+                        $.messager.alert('提示','合同号不能输入中文字符' , 'info');
+                        return false;
+                    }
+                }
                 if ( $("#companyId").val() == ""  ){
                     $.messager.alert('提示', '请选择公司', 'info');
+                    return false;
+                }
+                // 判断上传文件
+                var duetime = $("#duetime").val();
+                if( duetime == "" ){
+                    $.messager.alert('提示', '请填写合同到期时间!', 'info');
                     return false;
                 }
                 // 判断上传文件

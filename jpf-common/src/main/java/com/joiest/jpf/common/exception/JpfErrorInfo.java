@@ -49,7 +49,8 @@ public enum JpfErrorInfo {
     BATCH_NOT_EXIST("批次号错误"),
     EMPTY_TOTAL_MONEY("总金额为空"),
     ERROR_TOTAL_MONEY("总金额和各人员金额有误"),
-    COMPANY_IS_FREEZE("企业帐户被冻结");
+    COMPANY_IS_FREEZE("企业帐户被冻结"),
+    OPENACCOUNTFAIL("开通账户失败");
     // ===================================== 管理后台相关 end
 
     private final String desc;

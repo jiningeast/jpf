@@ -21,9 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInterfaceServiceFacade {
 
@@ -167,4 +165,17 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         return jpfResponseDto;
     }
 
+    /**
+     * 检测订单并取消超时的订单(适用于系统启动之初由定时器监测到的超时订单)
+     * @param time 当前时间24小时之前的时间
+     */
+    @Override
+    public void timerDetectShopOrderAndCancel(Date time) {
+        PayShopOrderExample payShopOrderExample = new PayShopOrderExample();
+        payShopOrderExample.createCriteria().andStatusEqualTo((byte)0).andAddtimeLessThanOrEqualTo(time);
+        PayShopOrder record = new PayShopOrder();
+        record.setStatus((byte)3);
+        record.setUpdatetime(new Date());
+        payShopOrderMapper.updateByExampleSelective(record ,payShopOrderExample);
+    }
 }

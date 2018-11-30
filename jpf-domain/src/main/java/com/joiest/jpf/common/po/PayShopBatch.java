@@ -46,7 +46,7 @@ public class PayShopBatch implements Serializable {
     private Integer expireMonth;
 
     /**
-     * 批次状态 0=生成券码中 1=生成完毕，待发券  2=已发券 3=已取消
+     * 批次状态 0=生成券码中 1=生成完毕，待发券  2=已发券 3=已取消  4 申请中
      */
     private Byte status;
 
@@ -111,12 +111,17 @@ public class PayShopBatch implements Serializable {
     private Byte emailStatus;
 
     /**
+     * 短信内容
+     */
+    private String smsContent;
+
+    /**
      * 短信发送时间
      */
     private Date smsTime;
 
     /**
-     * 短信发送 0::未发送 1:已发送 2:发送失败
+     * 短信发送 0:未发送 1:已发送 2:发送失败
      */
     private Byte smsStatus;
 
@@ -141,7 +146,7 @@ public class PayShopBatch implements Serializable {
     private Date sendTime;
 
     /**
-     * 分发方式 0=email发给接收人 1=群发给个人
+     * 分发方式 0=email发给接收人 1=群发给个人并激活 2=群发给个人不激活
      */
     private Byte sendType;
 
@@ -156,9 +161,24 @@ public class PayShopBatch implements Serializable {
     private Date updatetime;
 
     /**
-     * 短信内容
+     * 转让率
      */
-    private String smsContent;
+    private BigDecimal transferRate;
+
+    /**
+     * pay_company_charge_id  关联id
+     */
+    private String companyChargeId;
+
+    /**
+     * 订单号
+     */
+    private String orderId;
+
+    /**
+     * 合同号
+     */
+    private String contractNo;
 
     private static final long serialVersionUID = 1L;
 
@@ -330,6 +350,14 @@ public class PayShopBatch implements Serializable {
         this.emailStatus = emailStatus;
     }
 
+    public String getSmsContent() {
+        return smsContent;
+    }
+
+    public void setSmsContent(String smsContent) {
+        this.smsContent = smsContent == null ? null : smsContent.trim();
+    }
+
     public Date getSmsTime() {
         return smsTime;
     }
@@ -402,12 +430,36 @@ public class PayShopBatch implements Serializable {
         this.updatetime = updatetime;
     }
 
-    public String getSmsContent() {
-        return smsContent;
+    public BigDecimal getTransferRate() {
+        return transferRate;
     }
 
-    public void setSmsContent(String smsContent) {
-        this.smsContent = smsContent == null ? null : smsContent.trim();
+    public void setTransferRate(BigDecimal transferRate) {
+        this.transferRate = transferRate;
+    }
+
+    public String getCompanyChargeId() {
+        return companyChargeId;
+    }
+
+    public void setCompanyChargeId(String companyChargeId) {
+        this.companyChargeId = companyChargeId == null ? null : companyChargeId.trim();
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo == null ? null : contractNo.trim();
     }
 
     /**
@@ -440,6 +492,7 @@ public class PayShopBatch implements Serializable {
         sb.append(", emailContent=").append(emailContent);
         sb.append(", emailTime=").append(emailTime);
         sb.append(", emailStatus=").append(emailStatus);
+        sb.append(", smsContent=").append(smsContent);
         sb.append(", smsTime=").append(smsTime);
         sb.append(", smsStatus=").append(smsStatus);
         sb.append(", operatorId=").append(operatorId);
@@ -449,7 +502,10 @@ public class PayShopBatch implements Serializable {
         sb.append(", sendType=").append(sendType);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
-        sb.append(", smsContent=").append(smsContent);
+        sb.append(", transferRate=").append(transferRate);
+        sb.append(", companyChargeId=").append(companyChargeId);
+        sb.append(", orderId=").append(orderId);
+        sb.append(", contractNo=").append(contractNo);
         sb.append("]");
         return sb.toString();
     }
@@ -491,6 +547,7 @@ public class PayShopBatch implements Serializable {
             && (this.getEmailContent() == null ? other.getEmailContent() == null : this.getEmailContent().equals(other.getEmailContent()))
             && (this.getEmailTime() == null ? other.getEmailTime() == null : this.getEmailTime().equals(other.getEmailTime()))
             && (this.getEmailStatus() == null ? other.getEmailStatus() == null : this.getEmailStatus().equals(other.getEmailStatus()))
+            && (this.getSmsContent() == null ? other.getSmsContent() == null : this.getSmsContent().equals(other.getSmsContent()))
             && (this.getSmsTime() == null ? other.getSmsTime() == null : this.getSmsTime().equals(other.getSmsTime()))
             && (this.getSmsStatus() == null ? other.getSmsStatus() == null : this.getSmsStatus().equals(other.getSmsStatus()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
@@ -500,7 +557,10 @@ public class PayShopBatch implements Serializable {
             && (this.getSendType() == null ? other.getSendType() == null : this.getSendType().equals(other.getSendType()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getSmsContent() == null ? other.getSmsContent() == null : this.getSmsContent().equals(other.getSmsContent()));
+            && (this.getTransferRate() == null ? other.getTransferRate() == null : this.getTransferRate().equals(other.getTransferRate()))
+            && (this.getCompanyChargeId() == null ? other.getCompanyChargeId() == null : this.getCompanyChargeId().equals(other.getCompanyChargeId()))
+            && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
+            && (this.getContractNo() == null ? other.getContractNo() == null : this.getContractNo().equals(other.getContractNo()));
     }
 
     /**
@@ -531,6 +591,7 @@ public class PayShopBatch implements Serializable {
         result = prime * result + ((getEmailContent() == null) ? 0 : getEmailContent().hashCode());
         result = prime * result + ((getEmailTime() == null) ? 0 : getEmailTime().hashCode());
         result = prime * result + ((getEmailStatus() == null) ? 0 : getEmailStatus().hashCode());
+        result = prime * result + ((getSmsContent() == null) ? 0 : getSmsContent().hashCode());
         result = prime * result + ((getSmsTime() == null) ? 0 : getSmsTime().hashCode());
         result = prime * result + ((getSmsStatus() == null) ? 0 : getSmsStatus().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
@@ -540,7 +601,10 @@ public class PayShopBatch implements Serializable {
         result = prime * result + ((getSendType() == null) ? 0 : getSendType().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
-        result = prime * result + ((getSmsContent() == null) ? 0 : getSmsContent().hashCode());
+        result = prime * result + ((getTransferRate() == null) ? 0 : getTransferRate().hashCode());
+        result = prime * result + ((getCompanyChargeId() == null) ? 0 : getCompanyChargeId().hashCode());
+        result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
+        result = prime * result + ((getContractNo() == null) ? 0 : getContractNo().hashCode());
         return result;
     }
 }

@@ -99,7 +99,7 @@ public class PayShopBatchCoupon implements Serializable {
     private Date sendTime;
 
     /**
-     * 发送方式 0=email发给接收人 1=群发给个人
+     * 发送方式 0=email发给接收人 1=群发给个人并激活 2=群发给个人不激活
      */
     private Byte sendType;
 
@@ -112,6 +112,16 @@ public class PayShopBatchCoupon implements Serializable {
      * 
      */
     private Date updatetime;
+
+    /**
+     * 当前券的状态 0 申请中  1申请完成
+     */
+    private Byte status;
+
+    /**
+     * 订单号
+     */
+    private String orderId;
 
     private static final long serialVersionUID = 1L;
 
@@ -283,6 +293,22 @@ public class PayShopBatchCoupon implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
+    }
+
     /**
      *
      */
@@ -313,6 +339,8 @@ public class PayShopBatchCoupon implements Serializable {
         sb.append(", sendType=").append(sendType);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", status=").append(status);
+        sb.append(", orderId=").append(orderId);
         sb.append("]");
         return sb.toString();
     }
@@ -353,7 +381,9 @@ public class PayShopBatchCoupon implements Serializable {
             && (this.getSendTime() == null ? other.getSendTime() == null : this.getSendTime().equals(other.getSendTime()))
             && (this.getSendType() == null ? other.getSendType() == null : this.getSendType().equals(other.getSendType()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()));
     }
 
     /**
@@ -384,6 +414,8 @@ public class PayShopBatchCoupon implements Serializable {
         result = prime * result + ((getSendType() == null) ? 0 : getSendType().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
         return result;
     }
 }

@@ -5,10 +5,7 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.po.PayShopCompanyExample;
-import com.joiest.jpf.common.util.ConfigUtil;
-import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
 import com.joiest.jpf.dto.GetShopCompanyRequest;
@@ -127,11 +124,16 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
 
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不能为空");
 
+        }else if(request.getPercent().equals("")){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须填写转让百分比");
         }
         String pattern = "^[1][3,4,5,7,8][0-9]{9}$";
 
         boolean isphone = Pattern.matches(pattern, request.getContactPhone());
-
+        double percent = request.getPercent().doubleValue();
+        if(percent > 0.9 || percent < 0.1){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "只能填写0.1到0.9之间的值");
+        }
         if(isphone==false){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "联系电话不正确");
         }
@@ -189,6 +191,15 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "联系电话已经存在");
         }
 
+        //验证
+        PayShopCompanyExample exampleEmail= new PayShopCompanyExample();
+        PayShopCompanyExample.Criteria c4 = exampleEmail.createCriteria();
+        c4.andReceiveEmailEqualTo(request.getReceiveEmail());
+        List<PayShopCompany> CompanyListEmail = payShopCompanyMapper.selectByExample(exampleEmail);
+        if(CompanyListEmail != null && !CompanyListEmail.isEmpty()){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "邮箱已经存在");
+        }
+
         //插表操作
         //生成商户编号
         Date date = new Date();
@@ -212,10 +223,20 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         payShopCompany.setReceiveEmail(request.getReceiveEmail());
         payShopCompany.setSaleName(request.getSaleName());
         payShopCompany.setSalePhone(request.getSalePhone());
+        payShopCompany.setPercent(request.getPercent());
         BigDecimal loanAmount = new BigDecimal("0.00");
         String accountReturn=loanAmount.toString();
         payShopCompany.setMoney(loanAmount);
         payShopCompany.setAddtime(date);
+        payShopCompany.setLoginName(request.getReceiveEmail());
+        Integer randPwd = ToolUtils.getRandomInt(100000,999999);
+        payShopCompany.setLoginPwd(SHA1.getInstance().getMySHA1Code(randPwd.toString()));
+        payShopCompany.setIsFirstLogin((byte)0);
+        if(StringUtils.equals("1",request.getOpenAccent())){
+            payShopCompany.setAccountStatus((byte)1);
+        }else{
+            payShopCompany.setAccountStatus((byte)0);
+        }
         //获取刚插入的id
            int res = payShopCompanyCustomMapper.insertSelective(payShopCompany);
             String sprimatkey = payShopCompany.getId();
@@ -228,11 +249,29 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
             payShopCompanyUp.setMoneyCode(code);
             try {
                 payShopCompanyMapper.updateByExampleSelective(payShopCompanyUp,updateCode);
+                if(StringUtils.equals("1",request.getOpenAccent())){
+                    sendMailToCompany(payShopCompany,randPwd);
+                }
             } catch (Exception e) {
                 throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "添加失败");
             }
+        try {
+
+        }catch (Exception e){
+            throw new JpfException(JpfErrorInfo.SYSTEM_ERROR, "账户开通失败");
+        }
 
         return new JpfResponseDto();
+    }
+
+    //
+    private void sendMailToCompany(PayShopCompany company,Integer randPwd) throws Exception {
+        String html="<div style='width: 600px;margin: 0 auto'><h3 style='color:#003E64; text-align:center; '>欣享爱生活帐号开通</h3>" +
+                "<p style=''>尊敬的用户您好：</p><p style='text-indent: 2em'>感谢您使用欣享爱生活|企业管理后台，您的帐号已经开通,帐号信息如下：</p>" +
+                "<p style='text-indent: 2em'>用户名："+company.getLoginName()+"</p>" +
+                "<p style='text-indent: 2em'>登录密码："+randPwd+"</p>" +
+                "<p style='text-align: right; color:#003E64; font-size: 20px;'>欣享科技团队</p></div>";
+        SendMailUtil.sendHtmlEmail2(company.getReceiveEmail(),"欣享爱生活 --登录账号/密码","欣享爱生活用户",html);
     }
 
     /**
@@ -281,15 +320,20 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
 
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人电话不能为空");
 
-        }else if(StringUtils.isBlank(request.getReceiveEmail())){
+//        }else if(StringUtils.isBlank(request.getReceiveEmail())){
+//
+//            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不能为空");
 
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不能为空");
-
+        }else if(request.getPercent().equals("")){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "必须填写转让百分比");
         }
         String pattern = "^[1][3,4,5,7,8][0-9]{9}$";
 
         boolean isphone = Pattern.matches(pattern, request.getContactPhone());
-
+        double percent = request.getPercent().doubleValue();
+        if(percent > 0.9 || percent < 0.1){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "只能填写0.1到0.9之间的值");
+        }
         if(isphone==false){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "联系电话不正确");
         }
@@ -303,12 +347,12 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         if(isphoneresale==false){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "销售电话不正确");
         }
-        String emailpattern="^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
-        boolean isemail = Pattern.matches(emailpattern, request.getReceiveEmail());
-
-        if(isemail==false){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不正确");
-        }
+//        String emailpattern="^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$";
+//        boolean isemail = Pattern.matches(emailpattern, request.getReceiveEmail());
+//
+//        if(isemail==false){
+//            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "接收人邮箱不正确");
+//        }
 
         //查询当前信息表中是否存在
         PayShopCompanyExample example= new PayShopCompanyExample();
@@ -357,7 +401,8 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         payShopCompany.setReceiveEmail(request.getReceiveEmail());
         payShopCompany.setSaleName(request.getSaleName());
         payShopCompany.setSalePhone(request.getSalePhone());
-
+        payShopCompany.setPercent(request.getPercent());
+        
         //修改基本信息表
         String sprimatkey = request.getId();
         PayShopCompanyExample exampleup= new PayShopCompanyExample();
@@ -484,5 +529,41 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         }
 
         return list.get(0);
+    }
+
+
+    @Override
+    public PayShopCompany getCompanyByUserNamnAndPasswd(String userName, String password) {
+        PayShopCompanyExample e = new PayShopCompanyExample();
+        PayShopCompanyExample.Criteria criteria = e.createCriteria();
+        criteria.andLoginNameEqualTo(userName);
+        criteria.andLoginPwdEqualTo(SHA1.getInstance().getMySHA1Code(password));
+        List<PayShopCompany> list = payShopCompanyMapper.selectByExample(e);
+        if (list!=null&&list.size()!=0){
+            return list.get(0);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public PayShopCompany getById(String companyId) {
+        return payShopCompanyMapper.selectByPrimaryKey(companyId);
+    }
+
+
+    @Override
+    public void openAccount(String id)  throws Exception{
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(id);
+        if(StringUtils.isBlank(payShopCompany.getLoginName())){
+            payShopCompany.setLoginName(payShopCompany.getReceiveEmail());
+            payShopCompany.setIsFirstLogin((byte)0);
+        }
+        Integer randPwd = ToolUtils.getRandomInt(100000,999999);
+        payShopCompany.setLoginPwd(SHA1.getInstance().getMySHA1Code(randPwd.toString()));
+        payShopCompany.setAccountStatus((byte)1);
+        payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompany);
+        //发送邮件
+        sendMailToCompany(payShopCompany,randPwd);
     }
 }
