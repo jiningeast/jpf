@@ -12,9 +12,9 @@
             <input type="hidden" id="coupons" name="coupons">
             <input type="hidden" id="companyName" name="companyName">
             <table id="addCoupons" cellpadding="5" width="100%">
-                <tr>
+               <%-- <tr>
                     <td colspan="8" style="text-align: left"><b>合同信息：</b></td>
-                </tr>
+                </tr>--%>
               <%--  <tr>
                     <td  style="width: 140px">选择批次号</td>
                     <td width="180px">
