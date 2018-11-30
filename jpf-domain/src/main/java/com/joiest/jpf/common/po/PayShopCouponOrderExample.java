@@ -376,52 +376,52 @@ public class PayShopCouponOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Boolean value) {
+        public Criteria andStatusEqualTo(Byte value) {
             addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Boolean value) {
+        public Criteria andStatusNotEqualTo(Byte value) {
             addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Boolean value) {
+        public Criteria andStatusGreaterThan(Byte value) {
             addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
             addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Boolean value) {
+        public Criteria andStatusLessThan(Byte value) {
             addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Boolean value) {
+        public Criteria andStatusLessThanOrEqualTo(Byte value) {
             addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Boolean> values) {
+        public Criteria andStatusIn(List<Byte> values) {
             addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Boolean> values) {
+        public Criteria andStatusNotIn(List<Byte> values) {
             addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(Boolean value1, Boolean value2) {
+        public Criteria andStatusBetween(Byte value1, Byte value2) {
             addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
@@ -676,62 +676,62 @@ public class PayShopCouponOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentEqualTo(String value) {
+        public Criteria andServiceContentEqualTo(BigDecimal value) {
             addCriterion("service_content =", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentNotEqualTo(String value) {
+        public Criteria andServiceContentNotEqualTo(BigDecimal value) {
             addCriterion("service_content <>", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentGreaterThan(String value) {
+        public Criteria andServiceContentGreaterThan(BigDecimal value) {
             addCriterion("service_content >", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentGreaterThanOrEqualTo(String value) {
+        public Criteria andServiceContentGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("service_content >=", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentLessThan(String value) {
+        public Criteria andServiceContentLessThan(BigDecimal value) {
             addCriterion("service_content <", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentLessThanOrEqualTo(String value) {
+        public Criteria andServiceContentLessThanOrEqualTo(BigDecimal value) {
             addCriterion("service_content <=", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentLike(String value) {
+        public Criteria andServiceContentLike(BigDecimal value) {
             addCriterion("service_content like", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentNotLike(String value) {
+        public Criteria andServiceContentNotLike(BigDecimal value) {
             addCriterion("service_content not like", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentIn(List<String> values) {
+        public Criteria andServiceContentIn(List<BigDecimal> values) {
             addCriterion("service_content in", values, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentNotIn(List<String> values) {
+        public Criteria andServiceContentNotIn(List<BigDecimal> values) {
             addCriterion("service_content not in", values, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentBetween(String value1, String value2) {
+        public Criteria andServiceContentBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("service_content between", value1, value2, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentNotBetween(String value1, String value2) {
+        public Criteria andServiceContentNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("service_content not between", value1, value2, "serviceContent");
             return (Criteria) this;
         }
@@ -746,52 +746,52 @@ public class PayShopCouponOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andContractIdEqualTo(Long value) {
+        public Criteria andContractIdEqualTo(String value) {
             addCriterion("contract_id =", value, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdNotEqualTo(Long value) {
+        public Criteria andContractIdNotEqualTo(String value) {
             addCriterion("contract_id <>", value, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdGreaterThan(Long value) {
+        public Criteria andContractIdGreaterThan(String value) {
             addCriterion("contract_id >", value, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andContractIdGreaterThanOrEqualTo(String value) {
             addCriterion("contract_id >=", value, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdLessThan(Long value) {
+        public Criteria andContractIdLessThan(String value) {
             addCriterion("contract_id <", value, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdLessThanOrEqualTo(Long value) {
+        public Criteria andContractIdLessThanOrEqualTo(String value) {
             addCriterion("contract_id <=", value, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdIn(List<Long> values) {
+        public Criteria andContractIdIn(List<String> values) {
             addCriterion("contract_id in", values, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdNotIn(List<Long> values) {
+        public Criteria andContractIdNotIn(List<String> values) {
             addCriterion("contract_id not in", values, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdBetween(Long value1, Long value2) {
+        public Criteria andContractIdBetween(String value1, String value2) {
             addCriterion("contract_id between", value1, value2, "contractId");
             return (Criteria) this;
         }
 
-        public Criteria andContractIdNotBetween(Long value1, Long value2) {
+        public Criteria andContractIdNotBetween(String value1, String value2) {
             addCriterion("contract_id not between", value1, value2, "contractId");
             return (Criteria) this;
         }
@@ -876,52 +876,52 @@ public class PayShopCouponOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdEqualTo(Long value) {
+        public Criteria andCompanyIdEqualTo(String value) {
             addCriterion("company_id =", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdNotEqualTo(Long value) {
+        public Criteria andCompanyIdNotEqualTo(String value) {
             addCriterion("company_id <>", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdGreaterThan(Long value) {
+        public Criteria andCompanyIdGreaterThan(String value) {
             addCriterion("company_id >", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andCompanyIdGreaterThanOrEqualTo(String value) {
             addCriterion("company_id >=", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdLessThan(Long value) {
+        public Criteria andCompanyIdLessThan(String value) {
             addCriterion("company_id <", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdLessThanOrEqualTo(Long value) {
+        public Criteria andCompanyIdLessThanOrEqualTo(String value) {
             addCriterion("company_id <=", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdIn(List<Long> values) {
+        public Criteria andCompanyIdIn(List<String> values) {
             addCriterion("company_id in", values, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdNotIn(List<Long> values) {
+        public Criteria andCompanyIdNotIn(List<String> values) {
             addCriterion("company_id not in", values, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdBetween(Long value1, Long value2) {
+        public Criteria andCompanyIdBetween(String value1, String value2) {
             addCriterion("company_id between", value1, value2, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyIdNotBetween(Long value1, Long value2) {
+        public Criteria andCompanyIdNotBetween(String value1, String value2) {
             addCriterion("company_id not between", value1, value2, "companyId");
             return (Criteria) this;
         }
@@ -1058,11 +1058,6 @@ public class PayShopCouponOrderExample {
 
         public Criteria andOrderNoLikeInsensitive(String value) {
             addCriterion("upper(order_no) like", value.toUpperCase(), "orderNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andServiceContentLikeInsensitive(String value) {
-            addCriterion("upper(service_content) like", value.toUpperCase(), "serviceContent");
             return (Criteria) this;
         }
 

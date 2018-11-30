@@ -23,7 +23,7 @@ public class PayShopCouponOrder implements Serializable {
     /**
      * 状态
      */
-    private Boolean status;
+    private Byte status;
 
     /**
      * 添加时间
@@ -48,12 +48,12 @@ public class PayShopCouponOrder implements Serializable {
     /**
      * 服务内容
      */
-    private String serviceContent;
+    private BigDecimal serviceContent;
 
     /**
      * 合同id
      */
-    private Long contractId;
+    private String contractId;
 
     /**
      * 合同号
@@ -63,7 +63,7 @@ public class PayShopCouponOrder implements Serializable {
     /**
      * 企业id
      */
-    private Long companyId;
+    private String companyId;
 
     /**
      * 企业名称
@@ -101,11 +101,11 @@ public class PayShopCouponOrder implements Serializable {
         this.totalMoney = totalMoney;
     }
 
-    public Boolean getStatus() {
+    public Byte getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Byte status) {
         this.status = status;
     }
 
@@ -141,20 +141,20 @@ public class PayShopCouponOrder implements Serializable {
         this.serviceMoney = serviceMoney;
     }
 
-    public String getServiceContent() {
+    public BigDecimal getServiceContent() {
         return serviceContent;
     }
 
-    public void setServiceContent(String serviceContent) {
-        this.serviceContent = serviceContent == null ? null : serviceContent.trim();
+    public void setServiceContent(BigDecimal serviceContent) {
+        this.serviceContent = serviceContent;
     }
 
-    public Long getContractId() {
+    public String getContractId() {
         return contractId;
     }
 
-    public void setContractId(Long contractId) {
-        this.contractId = contractId;
+    public void setContractId(String contractId) {
+        this.contractId = contractId == null ? null : contractId.trim();
     }
 
     public String getContractNo() {
@@ -165,12 +165,12 @@ public class PayShopCouponOrder implements Serializable {
         this.contractNo = contractNo == null ? null : contractNo.trim();
     }
 
-    public Long getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId == null ? null : companyId.trim();
     }
 
     public String getCompanyName() {
