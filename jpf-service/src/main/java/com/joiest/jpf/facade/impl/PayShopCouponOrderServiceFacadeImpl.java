@@ -61,7 +61,7 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
 
         payShopCouponOrder.setCouponMoney(new BigDecimal(couponOrderList.getTotalMoney()));
         payShopCouponOrder.setServiceMoney(ArithmeticUtils.mul(couponOrderList.getTotalMoney(),ArithmeticUtils.div(payShopCompanyCharge.getRate().toString(),"100",3)));
-        payShopCouponOrder.setServiceContent(new BigDecimal(0));
+        payShopCouponOrder.setServiceContent("");
         payShopCouponOrderMapper.insertSelective(payShopCouponOrder);
         //保存订单的详情信息
         saveCouponOrderInfo(payShopCouponOrder,couponOrderList);

@@ -15,7 +15,7 @@
                 <tr>
                     <td colspan="8" style="text-align: left"><b>合同信息：</b></td>
                 </tr>
-                <tr>
+              <%--  <tr>
                     <td  style="width: 140px">选择批次号</td>
                     <td width="180px">
                         <input id="batchNo" type="text" class="easyui-textbox" style="width: 100%" disabled="disabled">
@@ -24,7 +24,7 @@
                     <td align="left" colspan="6" style="text-align: left;">
                         <a id="searchBatchNo" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选择批次</a>
                     </td>
-                </tr>
+                </tr>--%>
                 <tr>
                     <td colspan="8" style="text-align: left"><b>商户信息：</b></td>
                 </tr>
@@ -88,11 +88,11 @@
             }
         });
 
-        $("#searchBatchNo").linkbutton({
+     /*   $("#searchBatchNo").linkbutton({
             onClick:function(){
                 $('#batchWin').window("open").window('refresh', '/shopBatch/goSearchBatchNo').window('setTitle','选取批次号');
             }
-        });
+        });*/
 
         // 选取公司弹窗大小
         $('#batchWin').window({
