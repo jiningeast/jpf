@@ -378,7 +378,7 @@ public class ShopBatchController {
     }
 
     public static void main(String[] args) {
-        System.out.println(Md5Encrypt.md5("merchNo=MC1541126548324168863&money=20.00imyHcZOzMmhukCqB").toUpperCase());
+        System.out.println(Md5Encrypt.md5("merchNo=MC1541126548324168863&money=200.00imyHcZOzMmhukCqB").toUpperCase());
         Map<String,Object> map = new HashMap<>();
         map.put("merchNo","MC1541126548324168863");
         map.put("money","20.00");

@@ -121,7 +121,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void matchingDataTaskStart(PayChargeConsumerOrder payChargeConsumerOrder) {
+    public void matchingDataTaskStart(PayChargeConsumerOrder payChargeConsumerOrder) throws  Exception {
         payChargeConsumerOrder.setStatus((byte)1);
         payChargeConsumerOrderMapper.updateByPrimaryKeySelective(payChargeConsumerOrder);
         //拉取数据
@@ -148,7 +148,9 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
             matchingDataTask(payShopBargainRechargeOrder,chargeCompany,payChargeConsumerOrder);
         }
         //批量更新shopBargainRechargeOrder
-        payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(list);
+        if(list.size()!=0){
+            payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(list);
+        }
         //扣减商户的钱
         String totalMoney=ArithmeticUtils.sub(payChargeConsumerOrder.getMoney().toString(),money).toString();
         chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),totalMoney));
