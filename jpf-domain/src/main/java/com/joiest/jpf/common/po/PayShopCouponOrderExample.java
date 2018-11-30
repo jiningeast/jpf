@@ -676,62 +676,62 @@ public class PayShopCouponOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentEqualTo(BigDecimal value) {
+        public Criteria andServiceContentEqualTo(String value) {
             addCriterion("service_content =", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentNotEqualTo(BigDecimal value) {
+        public Criteria andServiceContentNotEqualTo(String value) {
             addCriterion("service_content <>", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentGreaterThan(BigDecimal value) {
+        public Criteria andServiceContentGreaterThan(String value) {
             addCriterion("service_content >", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andServiceContentGreaterThanOrEqualTo(String value) {
             addCriterion("service_content >=", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentLessThan(BigDecimal value) {
+        public Criteria andServiceContentLessThan(String value) {
             addCriterion("service_content <", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andServiceContentLessThanOrEqualTo(String value) {
             addCriterion("service_content <=", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentLike(BigDecimal value) {
+        public Criteria andServiceContentLike(String value) {
             addCriterion("service_content like", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentNotLike(BigDecimal value) {
+        public Criteria andServiceContentNotLike(String value) {
             addCriterion("service_content not like", value, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentIn(List<BigDecimal> values) {
+        public Criteria andServiceContentIn(List<String> values) {
             addCriterion("service_content in", values, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentNotIn(List<BigDecimal> values) {
+        public Criteria andServiceContentNotIn(List<String> values) {
             addCriterion("service_content not in", values, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andServiceContentBetween(String value1, String value2) {
             addCriterion("service_content between", value1, value2, "serviceContent");
             return (Criteria) this;
         }
 
-        public Criteria andServiceContentNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andServiceContentNotBetween(String value1, String value2) {
             addCriterion("service_content not between", value1, value2, "serviceContent");
             return (Criteria) this;
         }
@@ -1056,8 +1056,73 @@ public class PayShopCouponOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andTotalNumIsNull() {
+            addCriterion("total_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumIsNotNull() {
+            addCriterion("total_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumEqualTo(Integer value) {
+            addCriterion("total_num =", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumNotEqualTo(Integer value) {
+            addCriterion("total_num <>", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumGreaterThan(Integer value) {
+            addCriterion("total_num >", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_num >=", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumLessThan(Integer value) {
+            addCriterion("total_num <", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumLessThanOrEqualTo(Integer value) {
+            addCriterion("total_num <=", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumIn(List<Integer> values) {
+            addCriterion("total_num in", values, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumNotIn(List<Integer> values) {
+            addCriterion("total_num not in", values, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumBetween(Integer value1, Integer value2) {
+            addCriterion("total_num between", value1, value2, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("total_num not between", value1, value2, "totalNum");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNoLikeInsensitive(String value) {
             addCriterion("upper(order_no) like", value.toUpperCase(), "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentLikeInsensitive(String value) {
+            addCriterion("upper(service_content) like", value.toUpperCase(), "serviceContent");
             return (Criteria) this;
         }
 

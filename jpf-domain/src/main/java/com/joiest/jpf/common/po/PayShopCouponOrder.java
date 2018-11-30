@@ -11,7 +11,7 @@ public class PayShopCouponOrder implements Serializable {
     private String id;
 
     /**
-     * 订单号：xx+时间戳+随机6位
+     * 订单号：XQ+时间戳+随机6位
      */
     private String orderNo;
 
@@ -48,7 +48,7 @@ public class PayShopCouponOrder implements Serializable {
     /**
      * 服务内容
      */
-    private BigDecimal serviceContent;
+    private String serviceContent;
 
     /**
      * 合同id
@@ -75,6 +75,9 @@ public class PayShopCouponOrder implements Serializable {
      */
     private Integer personNum;
 
+    /**
+     * 订单总的条数
+     */
     private Integer totalNum;
 
     private static final long serialVersionUID = 1L;
@@ -143,12 +146,12 @@ public class PayShopCouponOrder implements Serializable {
         this.serviceMoney = serviceMoney;
     }
 
-    public BigDecimal getServiceContent() {
+    public String getServiceContent() {
         return serviceContent;
     }
 
-    public void setServiceContent(BigDecimal serviceContent) {
-        this.serviceContent = serviceContent;
+    public void setServiceContent(String serviceContent) {
+        this.serviceContent = serviceContent == null ? null : serviceContent.trim();
     }
 
     public String getContractId() {
