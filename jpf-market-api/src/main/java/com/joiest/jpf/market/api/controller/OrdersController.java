@@ -291,6 +291,12 @@ public class OrdersController {
         // 更新订单信息
         info.setChargeNo(chargeNo);
         info.setOrderType(Byte.valueOf(request.getOtype()));
+        //商品类型
+        Integer  productType = 0;
+        if( StringUtils.isNotBlank(request.getProductType())){
+            productType = Integer.valueOf(request.getProductType());
+        }
+        info.setProductType(productType);
         info.setRequestedContent(requestJson);
         info.setSource((byte)0);    // 0=自平台 1=敬恒
         info.setUpdatetime(new Date());
@@ -345,7 +351,7 @@ public class OrdersController {
         }
 
         //携程生活订单
-        if( orderInfo.getOrderType() == 4 ){
+        if( orderInfo.getOrderType() == 0 && orderInfo.getProductType() > 0  ){
             if( StringUtils.isBlank(requestMap.get("phone").toString()) ){
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "手机号不能为空", "");
             }
@@ -356,10 +362,8 @@ public class OrdersController {
             if( !requestMap.get("phone").toString().equals(userInfo.getPhone()) ){
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), "登录账号与接受短信手机号不一致", "");
             }
-        }
 
-        //携程生活订单 存储用户收货手机号
-        if ( orderInfo.getOrderType() == 4  ) {
+            //携程生活订单 存储用户收货手机号
             ShopOrderInterfaceInfo shopOrderInterfaceInfo = new ShopOrderInterfaceInfo();
             shopOrderInterfaceInfo.setChargeNo(requestMap.get("phone").toString().trim());
             shopOrderInterfaceInfo.setReceiveValue(requestMap.get("phone").toString().trim());
@@ -371,6 +375,7 @@ public class OrdersController {
             }
             orderInfo.setChargeNo(requestMap.get("phone").toString().trim());
             orderInfo.setReceiveValue(requestMap.get("phone").toString().trim());
+
         }
 
         // 校验码验证
@@ -1068,8 +1073,8 @@ public class OrdersController {
                         Integer smsNum = entry.getValue().split("\\]").length;
                         //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
                         String content = "您已购买中石化加油卡"+smsNum+"张，"+entry.getValue()+"，请妥善保管。";
-                        if(orderInfo.getOrderType() == 4 ){
-                            content = "您已购买携程旅游卡"+smsNum+"张，"+entry.getValue()+"，请妥善保管。";
+                        if(orderInfo.getOrderType() == 0 &&  orderInfo.getProductType() >0 ){
+                            content = "您已购买"+orderInfo.getProductTypeName()+"卡"+smsNum+"张，"+entry.getValue()+"，请妥善保管。";
                         }
 
                         Map<String,String> smsResMap = SmsUtils.send(orderInfo.getReceiveValue(),content,"CardSmsLog");

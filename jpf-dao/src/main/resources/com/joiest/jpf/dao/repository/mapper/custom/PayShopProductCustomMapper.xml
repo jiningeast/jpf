@@ -31,6 +31,7 @@
     <result column="product_content_id" jdbcType="BIGINT" property="productContentId" />
 
     <result column="content" jdbcType="BIGINT" property="productContent" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--

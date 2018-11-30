@@ -67,6 +67,11 @@ public class CreateOrderInterfaceRequest {
      */
     private String reveiveValue;
 
+    /**
+     * 商品类型
+     */
+    private String productType;
+
     public String getCardno() {
         return cardno;
     }
@@ -153,5 +158,13 @@ public class CreateOrderInterfaceRequest {
 
     public void setReveiveValue(String reveiveValue) {
         this.reveiveValue = reveiveValue;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 }
