@@ -110,6 +110,11 @@ public class PayShopCompanyCharge implements Serializable {
      */
     private BigDecimal balance;
 
+    /**
+     * 服务内容
+     */
+    private String serviceContent;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -280,6 +285,14 @@ public class PayShopCompanyCharge implements Serializable {
         this.balance = balance;
     }
 
+    public String getServiceContent() {
+        return serviceContent;
+    }
+
+    public void setServiceContent(String serviceContent) {
+        this.serviceContent = serviceContent == null ? null : serviceContent.trim();
+    }
+
     /**
      *
      */
@@ -310,6 +323,7 @@ public class PayShopCompanyCharge implements Serializable {
         sb.append(", couponMoney=").append(couponMoney);
         sb.append(", serviceMoney=").append(serviceMoney);
         sb.append(", balance=").append(balance);
+        sb.append(", serviceContent=").append(serviceContent);
         sb.append("]");
         return sb.toString();
     }
@@ -350,7 +364,8 @@ public class PayShopCompanyCharge implements Serializable {
             && (this.getTransferRate() == null ? other.getTransferRate() == null : this.getTransferRate().equals(other.getTransferRate()))
             && (this.getCouponMoney() == null ? other.getCouponMoney() == null : this.getCouponMoney().equals(other.getCouponMoney()))
             && (this.getServiceMoney() == null ? other.getServiceMoney() == null : this.getServiceMoney().equals(other.getServiceMoney()))
-            && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()));
+            && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()))
+            && (this.getServiceContent() == null ? other.getServiceContent() == null : this.getServiceContent().equals(other.getServiceContent()));
     }
 
     /**
@@ -381,6 +396,7 @@ public class PayShopCompanyCharge implements Serializable {
         result = prime * result + ((getCouponMoney() == null) ? 0 : getCouponMoney().hashCode());
         result = prime * result + ((getServiceMoney() == null) ? 0 : getServiceMoney().hashCode());
         result = prime * result + ((getBalance() == null) ? 0 : getBalance().hashCode());
+        result = prime * result + ((getServiceContent() == null) ? 0 : getServiceContent().hashCode());
         return result;
     }
 }

@@ -118,6 +118,11 @@ public class PayShopBatchCoupon implements Serializable {
      */
     private Byte status;
 
+    /**
+     * 订单号
+     */
+    private String orderId;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -296,6 +301,14 @@ public class PayShopBatchCoupon implements Serializable {
         this.status = status;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
+    }
+
     /**
      *
      */
@@ -327,6 +340,7 @@ public class PayShopBatchCoupon implements Serializable {
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append(", status=").append(status);
+        sb.append(", orderId=").append(orderId);
         sb.append("]");
         return sb.toString();
     }
@@ -368,7 +382,8 @@ public class PayShopBatchCoupon implements Serializable {
             && (this.getSendType() == null ? other.getSendType() == null : this.getSendType().equals(other.getSendType()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()));
     }
 
     /**
@@ -400,6 +415,7 @@ public class PayShopBatchCoupon implements Serializable {
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
         return result;
     }
 }

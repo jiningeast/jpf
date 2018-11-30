@@ -1486,6 +1486,76 @@ public class PayShopCompanyChargeExample {
             return (Criteria) this;
         }
 
+        public Criteria andServiceContentIsNull() {
+            addCriterion("service_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentIsNotNull() {
+            addCriterion("service_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentEqualTo(String value) {
+            addCriterion("service_content =", value, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentNotEqualTo(String value) {
+            addCriterion("service_content <>", value, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentGreaterThan(String value) {
+            addCriterion("service_content >", value, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentGreaterThanOrEqualTo(String value) {
+            addCriterion("service_content >=", value, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentLessThan(String value) {
+            addCriterion("service_content <", value, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentLessThanOrEqualTo(String value) {
+            addCriterion("service_content <=", value, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentLike(String value) {
+            addCriterion("service_content like", value, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentNotLike(String value) {
+            addCriterion("service_content not like", value, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentIn(List<String> values) {
+            addCriterion("service_content in", values, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentNotIn(List<String> values) {
+            addCriterion("service_content not in", values, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentBetween(String value1, String value2) {
+            addCriterion("service_content between", value1, value2, "serviceContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentNotBetween(String value1, String value2) {
+            addCriterion("service_content not between", value1, value2, "serviceContent");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyNameLikeInsensitive(String value) {
             addCriterion("upper(company_name) like", value.toUpperCase(), "companyName");
             return (Criteria) this;
@@ -1508,6 +1578,11 @@ public class PayShopCompanyChargeExample {
 
         public Criteria andContractNoLikeInsensitive(String value) {
             addCriterion("upper(contract_no) like", value.toUpperCase(), "contractNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceContentLikeInsensitive(String value) {
+            addCriterion("upper(service_content) like", value.toUpperCase(), "serviceContent");
             return (Criteria) this;
         }
     }

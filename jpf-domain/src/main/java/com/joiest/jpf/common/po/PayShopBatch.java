@@ -170,6 +170,16 @@ public class PayShopBatch implements Serializable {
      */
     private String companyChargeId;
 
+    /**
+     * 订单号
+     */
+    private String orderId;
+
+    /**
+     * 合同号
+     */
+    private String contractNo;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -436,6 +446,22 @@ public class PayShopBatch implements Serializable {
         this.companyChargeId = companyChargeId == null ? null : companyChargeId.trim();
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo == null ? null : contractNo.trim();
+    }
+
     /**
      *
      */
@@ -478,6 +504,8 @@ public class PayShopBatch implements Serializable {
         sb.append(", updatetime=").append(updatetime);
         sb.append(", transferRate=").append(transferRate);
         sb.append(", companyChargeId=").append(companyChargeId);
+        sb.append(", orderId=").append(orderId);
+        sb.append(", contractNo=").append(contractNo);
         sb.append("]");
         return sb.toString();
     }
@@ -530,7 +558,9 @@ public class PayShopBatch implements Serializable {
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
             && (this.getTransferRate() == null ? other.getTransferRate() == null : this.getTransferRate().equals(other.getTransferRate()))
-            && (this.getCompanyChargeId() == null ? other.getCompanyChargeId() == null : this.getCompanyChargeId().equals(other.getCompanyChargeId()));
+            && (this.getCompanyChargeId() == null ? other.getCompanyChargeId() == null : this.getCompanyChargeId().equals(other.getCompanyChargeId()))
+            && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
+            && (this.getContractNo() == null ? other.getContractNo() == null : this.getContractNo().equals(other.getContractNo()));
     }
 
     /**
@@ -573,6 +603,8 @@ public class PayShopBatch implements Serializable {
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getTransferRate() == null) ? 0 : getTransferRate().hashCode());
         result = prime * result + ((getCompanyChargeId() == null) ? 0 : getCompanyChargeId().hashCode());
+        result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
+        result = prime * result + ((getContractNo() == null) ? 0 : getContractNo().hashCode());
         return result;
     }
 }
