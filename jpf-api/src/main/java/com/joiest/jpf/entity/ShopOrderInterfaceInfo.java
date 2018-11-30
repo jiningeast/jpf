@@ -216,6 +216,16 @@ public class ShopOrderInterfaceInfo implements Serializable {
     private String couponDetailSale;
 
     /**
+     * 商品类型
+     */
+    private Integer productType;
+
+    /**
+     * 商品类型
+     */
+    private String productTypeName;
+
+    /**
      * 当前系统时间
      */
     private Date currentSystemTime;
@@ -564,5 +574,21 @@ public class ShopOrderInterfaceInfo implements Serializable {
 
     public void setCouponDetailSale(String couponDetailSale) {
         this.couponDetailSale = couponDetailSale;
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
+    }
+
+    public String getProductTypeName() {
+        return productTypeName;
+    }
+
+    public void setProductTypeName(String productTypeName) {
+        this.productTypeName = productTypeName;
     }
 }

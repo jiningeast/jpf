@@ -34,6 +34,9 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
     private PayShopCouponActiveMapper payShopCouponActiveMapper;
 
     @Autowired
+    private PayShopProductTypeMapper payShopProductTypeMapper;
+
+    @Autowired
     private PayShopCustomerMapper payShopCustomerMapper;
 
     @Override
@@ -66,6 +69,16 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
         ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
         BeanCopier beanCopier = BeanCopier.create(PayShopOrder.class, ShopOrderInterfaceInfo.class, false);
         beanCopier.copy(list.get(0), info, null);
+
+        //查询商品类型Id 及名称
+        Integer  productType = info.getProductType();
+        info.setProductTypeName("");
+        if( productType > 0 ){
+            PayShopProductType payShopProductType = payShopProductTypeMapper.selectByPrimaryKey(productType);
+            if( payShopProductType != null ){
+                info.setProductTypeName(payShopProductType.getPname());
+            }
+        }
 
         return info;
     }

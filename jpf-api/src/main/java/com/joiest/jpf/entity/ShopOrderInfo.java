@@ -241,6 +241,16 @@ public class ShopOrderInfo {
      */
     private String foreignResponseContent;
 
+    /**
+     * 券转额度消费详情，json存激活id，豆数量
+     */
+    private String couponDetailSale;
+
+    /**
+     * 商品类型
+     */
+    private Integer productType;
+
 
 
     private static final long serialVersionUID = 1L;
@@ -617,5 +627,21 @@ public class ShopOrderInfo {
 
     public void setInterfaceType(Byte interfaceType) {
         this.interfaceType = interfaceType;
+    }
+
+    public String getCouponDetailSale() {
+        return couponDetailSale;
+    }
+
+    public void setCouponDetailSale(String couponDetailSale) {
+        this.couponDetailSale = couponDetailSale;
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
     }
 }
