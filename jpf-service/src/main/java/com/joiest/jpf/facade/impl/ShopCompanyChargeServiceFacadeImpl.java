@@ -302,5 +302,10 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
         return payShopCompanyChargeMapper.selectByExample(example);
     }
 
+    @Override
+    public PayShopCompanyCharge getById(String contractId) {
+        return payShopCompanyChargeMapper.selectByPrimaryKey(contractId);
+    }
+
 
 }

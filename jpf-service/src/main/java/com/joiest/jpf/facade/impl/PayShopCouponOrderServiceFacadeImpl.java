@@ -6,6 +6,7 @@ import com.joiest.jpf.common.po.PayShopCouponOrder;
 import com.joiest.jpf.common.po.PayShopCouponOrderInfo;
 import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopCouponOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyChargeMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponOrderInfoMapper;
@@ -35,6 +36,8 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
     private PayShopCompanyChargeMapper payShopCompanyChargeMapper;
     @Autowired
     private PayShopCouponOrderInfoMapper payShopCouponOrderInfoMapper;
+    @Autowired
+    private PayShopCouponOrderCustomMapper payShopCouponOrderCustomMapper;
 
     /**
      * 保存订单
@@ -61,8 +64,8 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
 
         payShopCouponOrder.setCouponMoney(new BigDecimal(couponOrderList.getTotalMoney()));
         payShopCouponOrder.setServiceMoney(ArithmeticUtils.mul(couponOrderList.getTotalMoney(),ArithmeticUtils.div(payShopCompanyCharge.getRate().toString(),"100",3)));
-        payShopCouponOrder.setServiceContent("");
-        payShopCouponOrderMapper.insertSelective(payShopCouponOrder);
+        payShopCouponOrder.setServiceContent(payShopCompanyCharge.getServiceContent());
+        payShopCouponOrderCustomMapper.insertSelective(payShopCouponOrder);
         //保存订单的详情信息
         saveCouponOrderInfo(payShopCouponOrder,couponOrderList);
         //扣减合同的钱  此操作只是更新合同上的金额，并非真实的扣除了账户的钱

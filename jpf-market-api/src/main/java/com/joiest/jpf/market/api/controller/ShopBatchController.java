@@ -91,6 +91,15 @@ public class ShopBatchController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.ABNORMAL_STATUS.getCode(),JpfInterfaceErrorInfo.ABNORMAL_STATUS.getDesc(),null);
         }
 
+        //查询合同的余额够不够
+        PayShopCompanyCharge payShopCompanyCharge = shopCompanyChargeServiceFacade.getById(couponOrderList.getContractId());
+        if(payShopCompanyCharge==null){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
+        }
+
+        if(payShopCompanyCharge.getBalance().compareTo(new BigDecimal(couponOrderList.getTotalMoney()))<0){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CONTRACT_SUFFICIENT.getCode(),JpfInterfaceErrorInfo.CONTRACT_SUFFICIENT.getDesc(),null);
+        }
         ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(couponOrderList.getCompanyId());
         if ( shopCompanyInfo.getStatus() != 1 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.ABNORMAL_STATUS.getCode(),JpfInterfaceErrorInfo.ABNORMAL_STATUS.getDesc(),null);

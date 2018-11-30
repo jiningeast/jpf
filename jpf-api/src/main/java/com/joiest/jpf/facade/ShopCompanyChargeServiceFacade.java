@@ -41,4 +41,11 @@ public interface ShopCompanyChargeServiceFacade {
      * @return
      */
     List<PayShopCompanyCharge> getListByCompanyId(String companyId);
+
+    /**
+     * 根据id查询合同
+     * @param contractId
+     * @return
+     */
+    PayShopCompanyCharge getById(String contractId);
 }
