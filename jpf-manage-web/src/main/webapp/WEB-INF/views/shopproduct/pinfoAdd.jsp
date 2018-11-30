@@ -246,7 +246,7 @@
                 param["supplierName"] = supplierName;
                 $.ajax({
                     type: 'post',
-                    url: 'supplier/add',
+                    url: '/shopproduct/supplier/add',
                     data: param,
                     dataType: 'json',
                     success: function (msg) {
@@ -277,7 +277,7 @@
                 param["pname"] = typeName;
                 $.ajax({
                     type: 'post',
-                    url: 'producttype/add',
+                    url: '/shopproduct/producttype/add',
                     data: param,
                     dataType: 'json',
                     success: function (msg) {
@@ -310,7 +310,7 @@
                 param["brandName"] = brandName;
                 $.ajax({
                     type: 'post',
-                    url: 'brand/add',
+                    url: '/shopproduct/brand/add',
                     data: param,
                     dataType: 'json',
                     success: function (msg) {
