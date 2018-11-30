@@ -9,14 +9,16 @@ import java.util.List;
  * @Description:
  */
 
-public class BatchInfoList {
+public class CouponOrderList{
 
     private String totalNum;
     private String companyId;
     private String totalMoney;
     private String contractNo;
     private String contractId;
-    List<BatchInfo> couponList;
+    private String couponMoney;
+    private String serviceMoney;
+    List<CouponOrderInfo> couponList;
 
     public String getContractId() {
         return contractId;
@@ -58,11 +60,27 @@ public class BatchInfoList {
         this.contractNo = contractNo;
     }
 
-    public List<BatchInfo> getCouponList() {
+    public List<CouponOrderInfo> getCouponList() {
         return couponList;
     }
 
-    public void setCouponList(List<BatchInfo> couponList) {
+    public void setCouponList(List<CouponOrderInfo> couponList) {
         this.couponList = couponList;
+    }
+
+    public String getCouponMoney() {
+        return couponMoney;
+    }
+
+    public void setCouponMoney(String couponMoney) {
+        this.couponMoney = couponMoney;
+    }
+
+    public String getServiceMoney() {
+        return serviceMoney;
+    }
+
+    public void setServiceMoney(String serviceMoney) {
+        this.serviceMoney = serviceMoney;
     }
 }

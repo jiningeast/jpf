@@ -1070,6 +1070,67 @@ public class PayShopCouponOrderExample {
             addCriterion("upper(company_name) like", value.toUpperCase(), "companyName");
             return (Criteria) this;
         }
+
+        public Criteria andTotalNumIsNull() {
+            addCriterion("total_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumNotNull() {
+            addCriterion("total_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumEqualTo(Integer value) {
+            addCriterion("total_num =", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumNotEqualTo(Integer value) {
+            addCriterion("total_num <>", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumGreaterThan(Integer value) {
+            addCriterion("total_num >", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_num >=", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumLessThan(Integer value) {
+            addCriterion("total_num <", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumLessThanOrEqualTo(Integer value) {
+            addCriterion("total_num <=", value, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumIn(List<Integer> values) {
+            addCriterion("total_num in", values, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumNotIn(List<Integer> values) {
+            addCriterion("total_num not in", values, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumBetween(Integer value1, Integer value2) {
+            addCriterion("total_num between", value1, value2, "totalNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("total_num not between", value1, value2, "totalNum");
+            return (Criteria) this;
+        }
+
     }
 
     public static class Criteria extends GeneratedCriteria {

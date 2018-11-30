@@ -6,9 +6,9 @@ package com.joiest.jpf.entity;
  * @Date: 2018/11/29 11:02
  * @Description:
  */
-public class BatchInfo {
+public class CouponOrderInfo {
 
-    private String id;
+    private String coupon_type;
     private String number;
     private String price;
     private String totalPrice;
@@ -21,12 +21,12 @@ public class BatchInfo {
         this.totalPrice = totalPrice;
     }
 
-    public String getId() {
-        return id;
+    public String getCoupon_type() {
+        return coupon_type;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCoupon_type(String coupon_type) {
+        this.coupon_type = coupon_type;
     }
 
     public String getNumber() {

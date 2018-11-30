@@ -75,6 +75,8 @@ public class PayShopCouponOrder implements Serializable {
      */
     private Integer personNum;
 
+    private Integer totalNum;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -189,6 +191,14 @@ public class PayShopCouponOrder implements Serializable {
         this.personNum = personNum;
     }
 
+    public Integer getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(Integer totalNum) {
+        this.totalNum = totalNum;
+    }
+
     /**
      *
      */
@@ -212,6 +222,7 @@ public class PayShopCouponOrder implements Serializable {
         sb.append(", companyId=").append(companyId);
         sb.append(", companyName=").append(companyName);
         sb.append(", personNum=").append(personNum);
+        sb.append(", totalNum=").append(totalNum);
         sb.append("]");
         return sb.toString();
     }
@@ -245,7 +256,8 @@ public class PayShopCouponOrder implements Serializable {
             && (this.getContractNo() == null ? other.getContractNo() == null : this.getContractNo().equals(other.getContractNo()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
-            && (this.getPersonNum() == null ? other.getPersonNum() == null : this.getPersonNum().equals(other.getPersonNum()));
+            && (this.getPersonNum() == null ? other.getPersonNum() == null : this.getPersonNum().equals(other.getPersonNum()))
+            && (this.getTotalNum() == null ? other.getTotalNum() == null : this.getTotalNum().equals(other.getTotalNum()));
     }
 
     /**
@@ -269,6 +281,7 @@ public class PayShopCouponOrder implements Serializable {
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getPersonNum() == null) ? 0 : getPersonNum().hashCode());
+        result = prime * result + ((getTotalNum() == null) ? 0 : getTotalNum().hashCode());
         return result;
     }
 }

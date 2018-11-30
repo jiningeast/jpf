@@ -4,11 +4,9 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.PayShopBatch;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
-import com.joiest.jpf.entity.BatchInfoList;
 import com.joiest.jpf.entity.ShopBatchInfo;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public interface ShopBatchServiceFacade {
 
@@ -42,8 +40,4 @@ public interface ShopBatchServiceFacade {
      */
     public PayShopBatch getBatchByBatchNo(String batchNo);
 
-    /**
-     * 下单
-     */
-    void payCouponOrder(BatchInfoList batchInfoList);
 }

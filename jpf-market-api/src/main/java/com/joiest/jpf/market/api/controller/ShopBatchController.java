@@ -5,9 +5,9 @@ import com.joiest.jpf.common.po.PayShopCompanyCharge;
 import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.entity.BatchInfoList;
+import com.joiest.jpf.entity.CouponOrderList;
 import com.joiest.jpf.entity.ShopCompanyInfo;
-import com.joiest.jpf.facade.ShopBatchServiceFacade;
+import com.joiest.jpf.facade.PayShopCouponOrderServiceFacade;
 import com.joiest.jpf.facade.ShopCompanyChargeServiceFacade;
 import com.joiest.jpf.facade.ShopCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +38,7 @@ public class ShopBatchController {
     @Autowired
     private ShopCompanyServiceFacade shopCompanyServiceFacade;
     @Autowired
-    private ShopBatchServiceFacade shopBatchServiceFacade;
+    private PayShopCouponOrderServiceFacade payShopCouponOrderServiceFacade;
     /**
      * 查询可用的订单号
      * @param request
@@ -84,24 +84,24 @@ public class ShopBatchController {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
         }
         //转化成实体信息 判断参数是否合法
-        BatchInfoList batchInfoList = JsonUtils.toObject(Base64CustomUtils.base64Decoder(couponOrder), BatchInfoList.class);
-        if(StringUtils.isBlank(batchInfoList.getCompanyId())||StringUtils.isBlank(batchInfoList.getContractNo())
-                ||StringUtils.isBlank(batchInfoList.getTotalMoney())||StringUtils.isBlank(batchInfoList.getTotalNum())
-                ||(batchInfoList.getCouponList()==null||batchInfoList.getCouponList().size()==0)||StringUtils.isBlank(batchInfoList.getContractId())){
+        CouponOrderList couponOrderList = JsonUtils.toObject(Base64CustomUtils.base64Decoder(couponOrder), CouponOrderList.class);
+        if(StringUtils.isBlank(couponOrderList.getCompanyId())||StringUtils.isBlank(couponOrderList.getContractNo())
+                ||StringUtils.isBlank(couponOrderList.getTotalMoney())||StringUtils.isBlank(couponOrderList.getTotalNum())
+                ||(couponOrderList.getCouponList()==null||couponOrderList.getCouponList().size()==0)||StringUtils.isBlank(couponOrderList.getContractId())){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.ABNORMAL_STATUS.getCode(),JpfInterfaceErrorInfo.ABNORMAL_STATUS.getDesc(),null);
         }
 
-        ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(batchInfoList.getCompanyId());
+        ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(couponOrderList.getCompanyId());
         if ( shopCompanyInfo.getStatus() != 1 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.ABNORMAL_STATUS.getCode(),JpfInterfaceErrorInfo.ABNORMAL_STATUS.getDesc(),null);
         }
 
-        if(shopCompanyInfo.getMoney().compareTo(new BigDecimal(batchInfoList.getTotalMoney()))<0){
+        if(shopCompanyInfo.getMoney().compareTo(new BigDecimal(couponOrderList.getTotalMoney()))<0){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(),JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(),null);
         }
 
         try {
-            shopBatchServiceFacade.payCouponOrder(batchInfoList);
+            payShopCouponOrderServiceFacade.saveCouponOrder(couponOrderList);
         } catch (Exception e) {
             e.printStackTrace();
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),JpfInterfaceErrorInfo.FAIL.getDesc(),null);
