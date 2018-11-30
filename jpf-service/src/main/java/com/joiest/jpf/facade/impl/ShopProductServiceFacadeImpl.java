@@ -308,7 +308,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
     }
 
     /**
-     * 商品列表页
+     * 商品详情页
      */
     @Override
     public GetShopProductResponse getList(GetShopProductRequest request){

@@ -64,7 +64,7 @@ public class TravelController {
     }
 
     /**
-     * 商品列表
+     * 旅游商品详情页接口
      * */
     @RequestMapping(value = "/proList", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody

@@ -125,6 +125,11 @@ public class PayShopProductCustom implements Serializable {
      */
     private String productContent;
 
+    /**
+     * 商品详情
+     */
+    private Integer typeId;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -427,5 +432,13 @@ public class PayShopProductCustom implements Serializable {
 
     public void setProductContent(String productContent) {
         this.productContent = productContent;
+    }
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
     }
 }
