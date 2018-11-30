@@ -9,13 +9,13 @@
     <script>
         $(function() {
             var toolbar = [
-                {
+              /*  {
                     text:'商品基础信息添加',
                     iconCls:'icon-redo',
                     handler:function(){
                         $('#infoDiv').window("open").window('refresh', 'pInfoAdd/page').window('setTitle','添加商品基础信息');
                     }
-                },
+                },*/
                 {
                     text:'编辑',
                     iconCls:'icon-edit',
