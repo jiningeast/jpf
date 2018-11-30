@@ -29,7 +29,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">合同号：</td>
                     <td>
-                        <input id="contractNo" name="contractNo" type="text"   data-options="required:true" missingMessage="请填写合同号"  width="120" class="easyui-numberbox"  />
+                        <input id="contractNo" name="contractNo" type="text"   data-options="required:true" missingMessage="请填写合同号"  width="120" class="easyui-textbox"  />
                     </td>
                 </tr>
                 <tr>
@@ -75,7 +75,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">服务转让率：</td>
                     <td>
-                        <input id="transferRate" name="transferRate" class="easyui-textbox" missingMessage="请填写服务转让率"  data-options="required:true" value="30"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
+                        <input id="transferRate" name="transferRate" class="easyui-numberbox" missingMessage="请填写服务转让率"  data-options="required:true" value="30"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
                     </td>
                 </tr>
                 <tr>
@@ -164,6 +164,16 @@
                 var isValid = $("#auditForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
+                }
+                if ( $("#contractNo").val() == ""  ){
+                    $.messager.alert('提示', '请选择公司', 'info');
+                    return false;
+                }else {
+                    var r = /^[\u0391-\uFFE5]+$/;
+                    if(r.test($("#contractNo").val())){
+                        $.messager.alert('提示','合同号不能输入中文字符' , 'info');
+                        return false;
+                    }
                 }
                 if ( $("#companyId").val() == ""  ){
                     $.messager.alert('提示', '请选择公司', 'info');
