@@ -11,7 +11,7 @@ public class PayShopCouponOrder implements Serializable {
     private String id;
 
     /**
-     * 订单号：xx+时间戳+随机6位
+     * 订单号：XQ+时间戳+随机6位
      */
     private String orderNo;
 
@@ -48,7 +48,7 @@ public class PayShopCouponOrder implements Serializable {
     /**
      * 服务内容
      */
-    private BigDecimal serviceContent;
+    private String serviceContent;
 
     /**
      * 合同id
@@ -74,6 +74,11 @@ public class PayShopCouponOrder implements Serializable {
      * 人数
      */
     private Integer personNum;
+
+    /**
+     * 订单总的条数
+     */
+    private Integer totalNum;
 
     private static final long serialVersionUID = 1L;
 
@@ -141,12 +146,12 @@ public class PayShopCouponOrder implements Serializable {
         this.serviceMoney = serviceMoney;
     }
 
-    public BigDecimal getServiceContent() {
+    public String getServiceContent() {
         return serviceContent;
     }
 
-    public void setServiceContent(BigDecimal serviceContent) {
-        this.serviceContent = serviceContent;
+    public void setServiceContent(String serviceContent) {
+        this.serviceContent = serviceContent == null ? null : serviceContent.trim();
     }
 
     public String getContractId() {
@@ -189,6 +194,14 @@ public class PayShopCouponOrder implements Serializable {
         this.personNum = personNum;
     }
 
+    public Integer getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(Integer totalNum) {
+        this.totalNum = totalNum;
+    }
+
     /**
      *
      */
@@ -212,6 +225,7 @@ public class PayShopCouponOrder implements Serializable {
         sb.append(", companyId=").append(companyId);
         sb.append(", companyName=").append(companyName);
         sb.append(", personNum=").append(personNum);
+        sb.append(", totalNum=").append(totalNum);
         sb.append("]");
         return sb.toString();
     }
@@ -245,7 +259,8 @@ public class PayShopCouponOrder implements Serializable {
             && (this.getContractNo() == null ? other.getContractNo() == null : this.getContractNo().equals(other.getContractNo()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
-            && (this.getPersonNum() == null ? other.getPersonNum() == null : this.getPersonNum().equals(other.getPersonNum()));
+            && (this.getPersonNum() == null ? other.getPersonNum() == null : this.getPersonNum().equals(other.getPersonNum()))
+            && (this.getTotalNum() == null ? other.getTotalNum() == null : this.getTotalNum().equals(other.getTotalNum()));
     }
 
     /**
@@ -269,6 +284,7 @@ public class PayShopCouponOrder implements Serializable {
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getPersonNum() == null) ? 0 : getPersonNum().hashCode());
+        result = prime * result + ((getTotalNum() == null) ? 0 : getTotalNum().hashCode());
         return result;
     }
 }
