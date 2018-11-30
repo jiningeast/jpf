@@ -115,7 +115,11 @@ public enum JpfInterfaceErrorInfo {
 
     PARAMNOTNULL("80011","数据不全"),
 
-    CONTRACT_SUFFICIENT("80012","合同余额不足");
+    CONTRACT_SUFFICIENT("80012","合同余额不足"),
+
+    ORDER_STATUS_ERROR("80013","订单已经匹配欣券成功,无法取消"),
+
+    ORDER_STATUS_CANCAL("80014","订单未取消,无法删除");
 
     private final String desc;
 

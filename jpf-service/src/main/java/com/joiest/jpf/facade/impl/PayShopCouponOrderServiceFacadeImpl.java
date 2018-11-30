@@ -1,10 +1,8 @@
 package com.joiest.jpf.facade.impl;
 
-import com.joiest.jpf.common.po.PayShopCompany;
-import com.joiest.jpf.common.po.PayShopCompanyCharge;
-import com.joiest.jpf.common.po.PayShopCouponOrder;
-import com.joiest.jpf.common.po.PayShopCouponOrderInfo;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.ArithmeticUtils;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCouponOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCompanyChargeMapper;
@@ -20,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Auther: admin
@@ -72,6 +71,93 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
         payShopCompanyCharge.setBalance(ArithmeticUtils.sub(payShopCompanyCharge.getBalance().toString(),couponOrderList.getTotalMoney()));
         payShopCompanyChargeMapper.updateByPrimaryKeySelective(payShopCompanyCharge);
 
+    }
+
+    /**
+     * 根据订单号查询订单
+     * @param map
+     * @return
+     */
+    @Override
+    public List<PayShopCouponOrder> getOrderList(Map<String, Object> map) {
+        PayShopCouponOrderExample example = new PayShopCouponOrderExample();
+        PayShopCouponOrderExample.Criteria criteria = example.createCriteria();
+        example.setOrderByClause(" id asc ");
+        if (Long.valueOf(map.get("pageSize").toString())<= 0){
+            example.setPageSize(10);
+        }else{
+            example.setPageSize(Long.valueOf(map.get("pageSize").toString()));
+        }
+        if(Long.valueOf(map.get("pageNo").toString())== 0){
+            example.setPageNo(1);
+        }else{
+            example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
+        }
+       if(map.get("startTime")!=null){
+            criteria.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(map.get("startTime").toString(),DateUtils.DATEFORMATSHORT));
+        }
+        if(map.get("endTime")!=null){
+            criteria.andAddtimeLessThan(DateUtils.getFdate(map.get("endTime").toString(),DateUtils.DATEFORMATLONG));
+        }
+        if(map.get("companyId")!=null){
+            criteria.andCompanyIdEqualTo(map.get("companyId").toString());
+        }
+        return payShopCouponOrderMapper.selectByExample(example);
+    }
+
+    /**
+     * 根据订单号查询订单的详情
+     * @param orderNo
+     * @return
+     */
+    @Override
+    public List<PayShopCouponOrderInfo> getOrderInfo(String orderNo) {
+        PayShopCouponOrderExample example = new PayShopCouponOrderExample();
+        PayShopCouponOrderExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderNoEqualTo(orderNo);
+        List<PayShopCouponOrder> orderList = payShopCouponOrderMapper.selectByExample(example);
+        if(orderList==null||orderList.size()==0){
+            return null;
+        }
+        PayShopCouponOrderInfoExample example1=new PayShopCouponOrderInfoExample();
+        PayShopCouponOrderInfoExample.Criteria criteria1 = example1.createCriteria();
+        criteria1.andOrderIdEqualTo(orderList.get(0).getId());
+        List<PayShopCouponOrderInfo> payShopCouponOrderInfos = payShopCouponOrderInfoMapper.selectByExample(example1);
+        return payShopCouponOrderInfos;
+    }
+
+    /**
+     * 取消订单
+     * @param payShopCouponOrder
+     */
+    @Override
+    public void cancalOrder(PayShopCouponOrder payShopCouponOrder) {
+        payShopCouponOrder.setStatus((byte)2);
+        payShopCouponOrderMapper.updateByPrimaryKeySelective(payShopCouponOrder);
+        //还原合同的余额
+        PayShopCompanyCharge payShopCompanyCharge = payShopCompanyChargeMapper.selectByPrimaryKey(payShopCouponOrder.getContractId());
+        payShopCompanyCharge.setBalance(ArithmeticUtils.add(payShopCompanyCharge.getBalance().toString(),payShopCouponOrder.getTotalMoney().toString()));
+        payShopCompanyChargeMapper.updateByPrimaryKeySelective(payShopCompanyCharge);
+    }
+
+    /**
+     * 根据订单id 查询订单
+     * @param orderId
+     * @return
+     */
+    @Override
+    public PayShopCouponOrder getByOrderId(String orderId) {
+        return payShopCouponOrderMapper.selectByPrimaryKey(orderId);
+    }
+
+    /**
+     * 删除订单
+     * @param payShopCouponOrder
+     */
+    @Override
+    public void deleteOrder(PayShopCouponOrder payShopCouponOrder) {
+        payShopCouponOrder.setStatus((byte)3);
+        payShopCouponOrderMapper.updateByPrimaryKeySelective(payShopCouponOrder);
     }
 
     /**
