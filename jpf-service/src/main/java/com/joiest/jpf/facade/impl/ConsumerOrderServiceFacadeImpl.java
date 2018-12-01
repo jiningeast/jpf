@@ -98,9 +98,9 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         List<PayChargeConsumerOrder> payChargeConsumerOrders = payChargeConsumerOrderMapper.selectByExample(example);
         if(payChargeConsumerOrders!=null&&payChargeConsumerOrders.size()!=0){
             PayChargeConsumerOrder payChargeConsumerOrder = payChargeConsumerOrders.get(0);
-            payChargeConsumerOrder.setStatus((byte)1);
-            //更新数据库状态为1 待处理
-            payChargeConsumerOrderMapper.updateByPrimaryKeySelective(payChargeConsumerOrder);
+            //payChargeConsumerOrder.setStatus((byte)1);
+            //更新数据库状态为1 待处理 此处不再更新，因为会有事务问题
+            //payChargeConsumerOrderMapper.updateByPrimaryKeySelective(payChargeConsumerOrder);
             return payChargeConsumerOrder;
         }else{
             return null;
@@ -114,7 +114,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         String orderId = savePayChargeOrder(chargeCompany.getCompanyName(), payShopBargainRechargeOrder, order,payChargeConsumerOrder.getOrderNo());
         order.setId(orderId);
         //给每条记录保存流水
-        savePayChargeMoneyStream(order,payShopBargainRechargeOrder.getAmount());
+        savePayChargeMoneyStream(order,chargeCompany.getMoney());
 
     }
 
@@ -132,12 +132,12 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
             String json = redisCustomServiceFacade.rPop("consumerOrderQueue");
             PayShopBargainRechargeOrder payShopBargainRechargeOrder = JsonUtils.toObject(json, PayShopBargainRechargeOrder.class);
             //判断剩余的钱是否小于下一条匹配的钱，如果是，直接break
-            if(new BigDecimal(money).compareTo(payShopBargainRechargeOrder.getAmount())<0){
+            if(new BigDecimal(money).compareTo(payShopBargainRechargeOrder.getFacePrice())<0){
                 //如果这条数据没有匹配，那就重新放回到redis队列中
                 redisCustomServiceFacade.lpush("consumerOrderQueue",JsonUtils.toJson(payShopBargainRechargeOrder));
                 break;
             }
-            money= ArithmeticUtils.sub(money,payShopBargainRechargeOrder.getAmount().toString()).toString();
+            money= ArithmeticUtils.sub(money,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
             payShopBargainRechargeOrder.setUpdatetime(new Date());
             payShopBargainRechargeOrder.setPullCompanyId(payChargeConsumerOrder.getCompanyId());
             payShopBargainRechargeOrder.setPullOrderNo(payChargeConsumerOrder.getOrderNo());
@@ -186,12 +186,12 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         order.setProductId("0");
         order.setProductName(payShopBargainRechargeOrder.getItemName());
         order.setProductPrice(payShopBargainRechargeOrder.getPrice());
-        if(payShopBargainRechargeOrder.getOrderType()==3){
-            order.setProductType(1);
+        if(payShopBargainRechargeOrder.getOrderType()==2){
+            order.setProductType(3);
         }else if(payShopBargainRechargeOrder.getOrderType()==1){
             order.setProductType(2);
         }else{
-            order.setProductType(3);
+            order.setProductType(4);
         }
         order.setProductValue(payShopBargainRechargeOrder.getFacePrice());
         order.setStatus((byte)0);
@@ -218,7 +218,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
         payChargeCompanyMoneyStream.setInterfaceType((byte)2);
         payChargeCompanyMoneyStream.setIsDel((byte)0);
-        payChargeCompanyMoneyStream.setNewMoney(ArithmeticUtils.sub(companyMoney.toString(),order.getTotalMoney().toString()));
+        payChargeCompanyMoneyStream.setNewMoney(ArithmeticUtils.sub(companyMoney.toString(),order.getProductValue().toString()));
         payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
         payChargeCompanyMoneyStream.setProductName(order.getProductName());
         payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
