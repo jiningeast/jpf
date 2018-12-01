@@ -15,6 +15,8 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStream
 import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.facade.ConsumerOrderServiceFacade;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -28,6 +30,7 @@ import java.util.Date;
 
 
 public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacade {
+    private static final Logger logger = LogManager.getLogger(ConsumerOrderServiceFacadeImpl.class);
 
     @Autowired
     private PayChargeConsumerOrderMapper payChargeConsumerOrderMapper;
@@ -129,8 +132,11 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         PayChargeCompany chargeCompany =  payChargeCompanyMapper.selectByPrimaryKey(payChargeConsumerOrder.getCompanyId());
         List<PayShopBargainRechargeOrder> list =new ArrayList<>();
         newCompanyMoney=chargeCompany.getMoney().toString();
+        logger.info("余额"+newCompanyMoney);
         String money = payChargeConsumerOrder.getMoney().toString();
+        int i=0;
         while (true){
+            logger.info("循环"+i+"开始");
             String json = redisCustomServiceFacade.rPop("consumerOrderQueue");
             PayShopBargainRechargeOrder payShopBargainRechargeOrder = JsonUtils.toObject(json, PayShopBargainRechargeOrder.class);
             //判断剩余的钱是否小于下一条匹配的钱，如果是，直接break
@@ -140,7 +146,9 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
                 break;
             }
             money= ArithmeticUtils.sub(money,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
+            logger.info("剪之前"+newCompanyMoney);
             newCompanyMoney = ArithmeticUtils.sub(newCompanyMoney,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
+            logger.info("剪之后"+newCompanyMoney);
             payShopBargainRechargeOrder.setUpdatetime(new Date());
             payShopBargainRechargeOrder.setPullCompanyId(payChargeConsumerOrder.getCompanyId());
             payShopBargainRechargeOrder.setPullOrderNo(payChargeConsumerOrder.getOrderNo());
@@ -151,6 +159,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
             list.add(payShopBargainRechargeOrder);
             //保存订单信息，并且保存流水信息
             matchingDataTask(payShopBargainRechargeOrder,chargeCompany,payChargeConsumerOrder);
+            logger.info("循环"+i+"结束");
         }
         //批量更新shopBargainRechargeOrder
         if(list.size()!=0){
@@ -223,7 +232,9 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
         payChargeCompanyMoneyStream.setInterfaceType((byte)2);
         payChargeCompanyMoneyStream.setIsDel((byte)0);
+        logger.info("保存流水前:"+newCompanyMoney);
         payChargeCompanyMoneyStream.setNewMoney(new BigDecimal(newCompanyMoney));
+        logger.info("保存流水后:"+newCompanyMoney);
         payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
         payChargeCompanyMoneyStream.setProductName(order.getProductName());
         payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
