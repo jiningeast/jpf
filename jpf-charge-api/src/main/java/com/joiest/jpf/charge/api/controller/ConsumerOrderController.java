@@ -210,8 +210,14 @@ public class ConsumerOrderController {
             //查询redis的队列是不是为空，如果为空不执行
             Long size = redisCustomServiceFacade.getSize("consumerOrderQueue");
             if(size.longValue() != 0){//开始执行匹配操作
-                consumerOrderServiceFacade.matchingDataTaskStart(payChargeConsumerOrder);
-                ret+=ret+",订单号:"+payChargeConsumerOrder.getOrderNo();
+                try{
+                    consumerOrderServiceFacade.matchingDataTaskStart(payChargeConsumerOrder);
+                }catch (Exception e){
+                    logger.error(e.getMessage());
+                    ret="无匹配的记录";
+                    return ret;
+                }
+                ret=ret+",订单号:"+payChargeConsumerOrder.getOrderNo();
             }else{
                 //拉取数据，存储在list
                 pushDateToRedis(1000L);

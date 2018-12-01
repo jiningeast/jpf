@@ -31,5 +31,5 @@ public interface ConsumerOrderServiceFacade {
      * 开始匹配数据
      * @param payChargeConsumerOrder
      */
-    void matchingDataTaskStart(PayChargeConsumerOrder payChargeConsumerOrder);
+    void matchingDataTaskStart(PayChargeConsumerOrder payChargeConsumerOrder) throws  Exception;
 }

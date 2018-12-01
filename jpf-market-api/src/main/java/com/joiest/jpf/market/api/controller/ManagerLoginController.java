@@ -45,7 +45,7 @@ public class ManagerLoginController {
         String password = request.getParameter("password");
         //验证用户名密码不能为空
         if(StringUtils.isBlank(userName)||StringUtils.isBlank(password)){
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getCode(),JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getDesc(),null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USERINFO_VALID_FAIL.getCode(),"用户名密码不能为空",null);
         }
         //查询用户信息
         PayShopCompany company = shopCompanyServiceFacade.getCompanyByUserNamnAndPasswd(Base64CustomUtils.base64Decoder(userName),Base64CustomUtils.base64Decoder(password));
@@ -69,7 +69,7 @@ public class ManagerLoginController {
                 //更新登录的状态值
                 company.setIsFirstLogin((byte)1);
                 shopCompanyServiceFacade.updateCompanyRecord(company);
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),map);
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"已登录",map);
             }
         }
 
@@ -103,7 +103,7 @@ public class ManagerLoginController {
             company.setLoginPwd(SHA1.getInstance().getMySHA1Code(Base64CustomUtils.base64Decoder(newPass)));
             company.setIsFirstLogin((byte)1);
             shopCompanyServiceFacade.updateCompanyRecord(company);
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"密码修改成功",null);
         }else{
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.OLDPASSERROR.getCode(),JpfInterfaceErrorInfo.OLDPASSERROR.getDesc(),null);
         }

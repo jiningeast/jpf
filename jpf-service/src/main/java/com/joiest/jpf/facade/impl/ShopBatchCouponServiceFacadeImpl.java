@@ -97,7 +97,9 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         PayShopBatchCouponExample.Criteria c = e.createCriteria();
         c.andCompanyIdEqualTo(companyId);
         c.andMoneyEqualTo(Integer.parseInt(value));
-        c.andBatchNoEqualTo(batchNo);
+        if(StringUtils.isNotBlank(batchNo)){
+            c.andBatchNoEqualTo(batchNo);
+        }
         c.andIsActiveEqualTo((byte)0);
         c.andIsExpiredEqualTo((byte)0);
 

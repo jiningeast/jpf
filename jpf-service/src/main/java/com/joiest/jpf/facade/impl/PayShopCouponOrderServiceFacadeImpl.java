@@ -102,6 +102,7 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
         if(map.get("companyId")!=null){
             criteria.andCompanyIdEqualTo(map.get("companyId").toString());
         }
+        criteria.andStatusNotEqualTo((byte)3);
         return payShopCouponOrderMapper.selectByExample(example);
     }
 
