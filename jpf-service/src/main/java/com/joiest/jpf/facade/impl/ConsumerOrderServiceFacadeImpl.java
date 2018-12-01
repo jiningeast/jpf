@@ -42,6 +42,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
     @Autowired
     private PayShopBargainRechargeOrderCustomMapper payShopBargainRechargeOrderCustomMapper;
 
+    private volatile  String  newCompanyMoney="";
     /**
      *
      * @param orderNo
@@ -127,6 +128,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         //拉取数据
         PayChargeCompany chargeCompany =  payChargeCompanyMapper.selectByPrimaryKey(payChargeConsumerOrder.getCompanyId());
         List<PayShopBargainRechargeOrder> list =new ArrayList<>();
+        newCompanyMoney=chargeCompany.getMoney().toString();
         String money = payChargeConsumerOrder.getMoney().toString();
         while (true){
             String json = redisCustomServiceFacade.rPop("consumerOrderQueue");
@@ -138,13 +140,14 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
                 break;
             }
             money= ArithmeticUtils.sub(money,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
+            newCompanyMoney = ArithmeticUtils.sub(newCompanyMoney,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
             payShopBargainRechargeOrder.setUpdatetime(new Date());
             payShopBargainRechargeOrder.setPullCompanyId(payChargeConsumerOrder.getCompanyId());
             payShopBargainRechargeOrder.setPullOrderNo(payChargeConsumerOrder.getOrderNo());
             payShopBargainRechargeOrder.setPullMerchNo(payChargeConsumerOrder.getMerchNo());
             payShopBargainRechargeOrder.setMatchingStatus((byte)2);
-            //这个地方实际更新对象余额
-            chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),payShopBargainRechargeOrder.getFacePrice().toString()));
+            //这个地方实际更新对象余额 验证后，发现还是存在线程安全问题
+            //chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),payShopBargainRechargeOrder.getFacePrice().toString()));
             list.add(payShopBargainRechargeOrder);
             //保存订单信息，并且保存流水信息
             matchingDataTask(payShopBargainRechargeOrder,chargeCompany,payChargeConsumerOrder);
@@ -155,7 +158,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         }
         //扣减商户的钱
         String totalMoney=ArithmeticUtils.sub(payChargeConsumerOrder.getMoney().toString(),money).toString();
-        //chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),totalMoney));
+        chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),totalMoney));
         chargeCompany.setMoneyCode(Md5Encrypt.md5(chargeCompany.getId()+chargeCompany.getMoney()+ ConfigUtil.getValue("MERCH_VALIDE_CODE")));
         chargeCompany.setUpdatetime(new Date());
         payChargeCompanyMapper.updateByPrimaryKeySelective(chargeCompany);
@@ -220,7 +223,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
         payChargeCompanyMoneyStream.setInterfaceType((byte)2);
         payChargeCompanyMoneyStream.setIsDel((byte)0);
-        payChargeCompanyMoneyStream.setNewMoney(companyMoney);
+        payChargeCompanyMoneyStream.setNewMoney(new BigDecimal(newCompanyMoney));
         payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
         payChargeCompanyMoneyStream.setProductName(order.getProductName());
         payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
