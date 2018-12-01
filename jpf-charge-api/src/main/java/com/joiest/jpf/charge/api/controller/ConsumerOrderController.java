@@ -203,6 +203,7 @@ public class ConsumerOrderController {
     @RequestMapping(value="/matchingDataTask",method = RequestMethod.GET,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String matchingDataTask(){
+        logger.info("开始执行匹配Start");
         //查询是否存在需要待执行的任务
         String ret = "数据匹配成功";
         //先查询redis 该任务是否可以执行，如果不能执行，返回请等待
@@ -233,6 +234,7 @@ public class ConsumerOrderController {
                 ret+=ret+",redis 数据队列数据不足，从新拉取";
             }
         }
+        logger.info("开始执行匹配end");
         return ret;
     }
 
