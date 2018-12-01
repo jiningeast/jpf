@@ -363,9 +363,7 @@ public class ShopBatchController {
 
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("00001");
-            jpfResponseDto.setRetMsg(uuid.toString());
-
-            return jpfResponseDto;
+            return setReslt("00001",uuid.toString());
         }
         return new JpfResponseDto();
     }
