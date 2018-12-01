@@ -205,18 +205,26 @@ public class ConsumerOrderController {
     public String matchingDataTask(){
         //查询是否存在需要待执行的任务
         String ret = "数据匹配成功";
+        //先查询redis 该任务是否可以执行，如果不能执行，返回请等待
+        String flag = redisCustomServiceFacade.get("matchingDataTaskFlag");
+        if(StringUtils.isNotBlank(flag)&&StringUtils.equals("run",flag)){
+            ret = "目前多条数据在匹配中，请等待.......";
+            return ret;
+        }
         PayChargeConsumerOrder payChargeConsumerOrder = consumerOrderServiceFacade.selectConsumerOrderTask();
         if(payChargeConsumerOrder!=null){ //不为空准备执行任务
-            //查询redis的队列是不是为空，如果为空不执行
             Long size = redisCustomServiceFacade.getSize("consumerOrderQueue");
             if(size.longValue() != 0){//开始执行匹配操作
+                redisCustomServiceFacade.set("matchingDataTaskFlag","run",0);
                 try{
                     consumerOrderServiceFacade.matchingDataTaskStart(payChargeConsumerOrder);
                 }catch (Exception e){
                     logger.error(e.getMessage());
+                    redisCustomServiceFacade.set("matchingDataTaskFlag","stop",0);
                     ret="无匹配的记录";
                     return ret;
                 }
+                redisCustomServiceFacade.set("matchingDataTaskFlag","stop",0);
                 ret=ret+",订单号:"+payChargeConsumerOrder.getOrderNo();
             }else{
                 //拉取数据，存储在list
