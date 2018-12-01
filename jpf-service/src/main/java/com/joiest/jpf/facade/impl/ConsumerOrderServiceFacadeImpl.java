@@ -143,6 +143,8 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
             payShopBargainRechargeOrder.setPullOrderNo(payChargeConsumerOrder.getOrderNo());
             payShopBargainRechargeOrder.setPullMerchNo(payChargeConsumerOrder.getMerchNo());
             payShopBargainRechargeOrder.setMatchingStatus((byte)2);
+            //这个地方实际更新对象余额
+            chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),payShopBargainRechargeOrder.getFacePrice().toString()));
             list.add(payShopBargainRechargeOrder);
             //保存订单信息，并且保存流水信息
             matchingDataTask(payShopBargainRechargeOrder,chargeCompany,payChargeConsumerOrder);
@@ -153,7 +155,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         }
         //扣减商户的钱
         String totalMoney=ArithmeticUtils.sub(payChargeConsumerOrder.getMoney().toString(),money).toString();
-        chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),totalMoney));
+        //chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),totalMoney));
         chargeCompany.setMoneyCode(Md5Encrypt.md5(chargeCompany.getId()+chargeCompany.getMoney()+ ConfigUtil.getValue("MERCH_VALIDE_CODE")));
         chargeCompany.setUpdatetime(new Date());
         payChargeCompanyMapper.updateByPrimaryKeySelective(chargeCompany);
@@ -218,7 +220,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
         payChargeCompanyMoneyStream.setInterfaceType((byte)2);
         payChargeCompanyMoneyStream.setIsDel((byte)0);
-        payChargeCompanyMoneyStream.setNewMoney(ArithmeticUtils.sub(companyMoney.toString(),order.getProductValue().toString()));
+        payChargeCompanyMoneyStream.setNewMoney(companyMoney);
         payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
         payChargeCompanyMoneyStream.setProductName(order.getProductName());
         payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
