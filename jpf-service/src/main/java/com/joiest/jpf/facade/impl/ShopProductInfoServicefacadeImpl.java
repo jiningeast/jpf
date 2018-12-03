@@ -76,7 +76,7 @@ public class ShopProductInfoServicefacadeImpl implements ShopProductInfoServiceF
     @Override
     public List<PayShopProductInfo> getProductInfoList(String payShopSupplierId) {
         PayShopProductInfoExample example = new PayShopProductInfoExample();
-        example.createCriteria().andSupplierIdEqualTo(Integer.valueOf(payShopSupplierId));
+        example.createCriteria().andSupplierIdEqualTo(Integer.valueOf(payShopSupplierId)).andStatusEqualTo((byte)0);
         List<PayShopProductInfo> payShopProductInfosList = payShopProductInfoMapper.selectByExample(example);
         return payShopProductInfosList;
     }
