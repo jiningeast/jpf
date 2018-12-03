@@ -4,6 +4,7 @@ import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
@@ -105,19 +106,22 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         int count = 0;
         if ( !list.isEmpty() ){
             for (PayShopCouponRemain payShopCouponRemain:list){
-                int douLeft = payShopCouponRemain.getCouponDouLeft();
+                BigDecimal douLeft=payShopCouponRemain.getCouponDouLeft();
+                //int douLeft = payShopCouponRemain.getCouponDouLeft();
                 //改版===
-                int douSale=payShopCouponRemain.getSaleDouLeft();
-                int countDou=douLeft+douSale;
+                BigDecimal douSale=payShopCouponRemain.getSaleDouLeft();
+                //int douSale=payShopCouponRemain.getSaleDouLeft();
+                BigDecimal countDou=new BigDecimal(ArithmeticUtils.add(douLeft.toString(),douSale.toString(),2));
+                //int countDou=douLeft+douSale;
                 PayShopCustomer payShopCustomer = payShopCustomerMapper.selectByPrimaryKey(payShopCouponRemain.getCustomerId());
                 PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(payShopCouponRemain.getCouponId());
                 PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(payShopBatchCoupon.getCompanyId());
                 PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(payShopBatchCoupon.getBatchId());
 
                 // 更新批次余额表pay_shop_coupon_remain
-                payShopCouponRemain.setCouponDouLeft(0);
+                payShopCouponRemain.setCouponDouLeft(new BigDecimal("0.00"));
                 //转让额度清零2018-11-22
-                payShopCouponRemain.setSaleDouLeft(0);
+                payShopCouponRemain.setSaleDouLeft(new BigDecimal("0.00"));
                 payShopCouponRemain.setSalestatus((byte)2);
                 //------end
                 payShopCouponRemain.setStatus((byte)2);
@@ -152,9 +156,11 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
                 // 客户总豆数量减去一部分pay_shop_customer
                 PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-                int dou = payShopCustomer.getDou() - countDou;
+                BigDecimal dou =new BigDecimal(ArithmeticUtils.sub(payShopCustomer.getDou().toString(),countDou.toString(),2));
+                //int dou = payShopCustomer.getDou() - countDou;
                 //改版
-                int saleDou=payShopCustomer.getSaleDou()-douSale;
+                BigDecimal saleDou=new BigDecimal(ArithmeticUtils.sub(payShopCustomer.getSaleDou().toString(),douSale.toString(),2));
+                //int saleDou=payShopCustomer.getSaleDou()-douSale;
                 String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
                 payShopCustomerUpdate.setId(payShopCouponRemain.getCustomerId());
                 payShopCustomerUpdate.setDou(dou);

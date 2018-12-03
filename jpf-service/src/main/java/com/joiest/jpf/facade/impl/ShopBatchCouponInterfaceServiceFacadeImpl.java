@@ -1,10 +1,12 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.facade.ShopBatchCouponInterfaceServiceFacade;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,15 +90,16 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
             return 8;
         }
         //============进行换算转让和非转让的都数量===============
-        int douCount=list.get(0).getDou();
-        BigDecimal bigdou=new BigDecimal(douCount);
-        BigDecimal saleYes=bigdou.multiply(payShopCompany.getPercent());//可转让额度
-        int saleY=saleYes.intValue();//可转让金额
-        int saleN=douCount-saleY;//不可转让金额
+        BigDecimal bigdou=list.get(0).getDou();//券所值豆
+        //计算券所对应的豆
+
+        BigDecimal saleY=new BigDecimal(ArithmeticUtils.mul(bigdou.toString(),payShopCompany.getPercent().toString(),2));//可转让额度
+        BigDecimal saleN=new BigDecimal(ArithmeticUtils.sub(bigdou.toString(),saleY.toString(),2));//不可转让金额
         String name=listCustom.get(0).getName();
         //进行金额校验
-        Integer dou=listCustom.get(0).getDou();
-        Integer saleDou=listCustom.get(0).getSaleDou();
+
+        BigDecimal dou=listCustom.get(0).getDou();
+        BigDecimal saleDou=listCustom.get(0).getSaleDou();
         String code=listCustom.get(0).getCode();
         Boolean res= ToolUtils.ValidateCode(code,uid,dou.toString());
 
@@ -156,8 +159,10 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
 
         //修改客户表
         PayShopCustomer custoner=new PayShopCustomer();
-        Integer douAll=dou+list.get(0).getDou();
-        Integer douIssale=saleDou+saleY;
+        BigDecimal douAll= new BigDecimal(ArithmeticUtils.add(dou.toString(),list.get(0).getDou().toString(),2));
+        //Integer douAll=dou+list.get(0).getDou();
+        BigDecimal douIssale=new BigDecimal(ArithmeticUtils.add(saleDou.toString(),saleY.toString(),2));
+        //Integer douIssale=saleDou+saleY;
         custoner.setDou(douAll);
         custoner.setSaleDou(douIssale);
         //充值校验码

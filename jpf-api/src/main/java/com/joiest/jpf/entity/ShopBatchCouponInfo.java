@@ -1,5 +1,6 @@
 package com.joiest.jpf.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ShopBatchCouponInfo {
@@ -47,7 +48,7 @@ public class ShopBatchCouponInfo {
     /**
      * 对应豆数量
      */
-    private Integer dou;
+    private BigDecimal dou;
 
     /**
      * 是否激活 0=未激活 1=已激活
@@ -168,11 +169,11 @@ public class ShopBatchCouponInfo {
         this.money = money;
     }
 
-    public Integer getDou() {
+    public  BigDecimal getDou() {
         return dou;
     }
 
-    public void setDou(Integer dou) {
+    public void setDou(BigDecimal dou) {
         this.dou = dou;
     }
 

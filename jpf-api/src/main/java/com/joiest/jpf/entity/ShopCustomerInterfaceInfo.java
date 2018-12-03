@@ -2,6 +2,7 @@ package com.joiest.jpf.entity;
 
 import com.joiest.jpf.common.po.PayShopCustomer;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ShopCustomerInterfaceInfo {
@@ -73,12 +74,12 @@ public class ShopCustomerInterfaceInfo {
     /**
      * 欣豆数量
      */
-    private Integer dou;
+    private BigDecimal dou;
 
     /**
      * 冻结的欣豆
      */
-    private Integer freezeDou;
+    private BigDecimal freezeDou;
 
     /**
      * 充值校验码
@@ -98,7 +99,7 @@ public class ShopCustomerInterfaceInfo {
     /**
      * 可转让豆
      */
-    private Integer saleDou;
+    private BigDecimal saleDou;
 
     public String getId() {
         return id;
@@ -164,14 +165,6 @@ public class ShopCustomerInterfaceInfo {
         this.idno = idno == null ? null : idno.trim();
     }
 
-    public Integer getFreezeDou() {
-        return freezeDou;
-    }
-
-    public void setFreezeDou(Integer freezeDou) {
-        this.freezeDou = freezeDou;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -212,13 +205,7 @@ public class ShopCustomerInterfaceInfo {
         this.status = status;
     }
 
-    public Integer getDou() {
-        return dou;
-    }
 
-    public void setDou(Integer dou) {
-        this.dou = dou;
-    }
 
     public String getCode() {
         return code;
@@ -244,11 +231,27 @@ public class ShopCustomerInterfaceInfo {
         this.updatetime = updatetime;
     }
 
-    public Integer getSaleDou() {
+    public BigDecimal getDou() {
+        return dou;
+    }
+
+    public void setDou(BigDecimal dou) {
+        this.dou = dou;
+    }
+
+    public BigDecimal getFreezeDou() {
+        return freezeDou;
+    }
+
+    public void setFreezeDou(BigDecimal freezeDou) {
+        this.freezeDou = freezeDou;
+    }
+
+    public BigDecimal getSaleDou() {
         return saleDou;
     }
 
-    public void setSaleDou(Integer saleDou) {
+    public void setSaleDou(BigDecimal saleDou) {
         this.saleDou = saleDou;
     }
 

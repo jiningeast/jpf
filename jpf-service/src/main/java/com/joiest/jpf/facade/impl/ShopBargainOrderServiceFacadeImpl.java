@@ -5,6 +5,7 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBargainOrderCustomMapper;
@@ -290,9 +291,9 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                      payShopBargainRechargeView.setBoid(Long.valueOf(payShopBargainOrder.getId()));
                      payShopBargainRechargeView.setOrderNo(payShopBargainOrder.getOrderNo());
                      payShopBargainRechargeView.setStatus(1);
-                     payShopBargainRechargeView.setTransferPrice(new BigDecimal(payShopBargainOrder.getDou()));
+                     payShopBargainRechargeView.setTransferPrice(payShopBargainOrder.getDou());
                      payShopBargainRechargeView.setAlreadyPrice(new BigDecimal("0.00"));
-                     payShopBargainRechargeView.setRemainPrice(new BigDecimal(payShopBargainOrder.getDou()));
+                     payShopBargainRechargeView.setRemainPrice(payShopBargainOrder.getDou());
                      payShopBargainRechargeView.setAddtime(new Date());
                      payShopBargainRechargeViewMapper.insertSelective(payShopBargainRechargeView);
 
@@ -335,16 +336,19 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
 
                     }
                     //取消转让修改豆
-                    // 客户总豆数量减去一部分pay_shop_customer
+                    // 客户总豆数量加上一部分pay_shop_customer
                     PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-                    int countDou=payShopCustomer.getDou()+ payShopBargainOrder.getDou();
-                    int dou = payShopCustomer.getSaleDou() + payShopBargainOrder.getDou();
+                    BigDecimal countDou=new BigDecimal(ArithmeticUtils.add(payShopCustomer.getDou().toString(),payShopBargainOrder.getDou().toString(),2));
+                    //int countDou=payShopCustomer.getDou()+ payShopBargainOrder.getDou();
+                    BigDecimal dou =new BigDecimal(ArithmeticUtils.add(payShopCustomer.getSaleDou().toString(),payShopBargainOrder.getDou().toString(),2));
+                    //int dou = payShopCustomer.getSaleDou() + payShopBargainOrder.getDou();
                     String code = ToolUtils.CreateCode(String.valueOf(countDou),payShopBargainOrder.getSellerCustomerId());
                     payShopCustomerUpdate.setId(payShopBargainOrder.getSellerCustomerId());
                     payShopCustomerUpdate.setDou(countDou);
                     payShopCustomerUpdate.setSaleDou(dou);
                     //用户总豆增加
-                    payShopCustomerUpdate.setFreezeDou(payShopCustomer.getFreezeDou()-payShopBargainOrder.getDou());
+                    BigDecimal freeDou=new BigDecimal(ArithmeticUtils.sub(payShopCustomer.getFreezeDou().toString(),payShopBargainOrder.getDou().toString(),2));
+                    payShopCustomerUpdate.setFreezeDou(freeDou);
                     payShopCustomerUpdate.setCode(code);
                     payShopCustomerUpdate.setUpdatetime(new Date());
                     int res_updateCustomCode = payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomerUpdate);
