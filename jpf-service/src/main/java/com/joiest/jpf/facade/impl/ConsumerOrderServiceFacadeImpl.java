@@ -15,6 +15,8 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStream
 import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.facade.ConsumerOrderServiceFacade;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -28,6 +30,7 @@ import java.util.Date;
 
 
 public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacade {
+    private static final Logger logger = LogManager.getLogger(ConsumerOrderServiceFacadeImpl.class);
 
     @Autowired
     private PayChargeConsumerOrderMapper payChargeConsumerOrderMapper;
@@ -98,23 +101,23 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         List<PayChargeConsumerOrder> payChargeConsumerOrders = payChargeConsumerOrderMapper.selectByExample(example);
         if(payChargeConsumerOrders!=null&&payChargeConsumerOrders.size()!=0){
             PayChargeConsumerOrder payChargeConsumerOrder = payChargeConsumerOrders.get(0);
-            payChargeConsumerOrder.setStatus((byte)1);
-            //更新数据库状态为1 待处理
-            payChargeConsumerOrderMapper.updateByPrimaryKeySelective(payChargeConsumerOrder);
+            //payChargeConsumerOrder.setStatus((byte)1);
+            //更新数据库状态为1 待处理 此处不再更新，因为会有事务问题
+            //payChargeConsumerOrderMapper.updateByPrimaryKeySelective(payChargeConsumerOrder);
             return payChargeConsumerOrder;
         }else{
             return null;
         }
     }
 
-    public void matchingDataTask(PayShopBargainRechargeOrder payShopBargainRechargeOrder, PayChargeCompany chargeCompany, PayChargeConsumerOrder payChargeConsumerOrder) {
+    public void matchingDataTask(PayShopBargainRechargeOrder payShopBargainRechargeOrder, PayChargeCompany chargeCompany, PayChargeConsumerOrder payChargeConsumerOrder,String money) {
         //生成真实定单，并且生成正常流水
         //生成订单号
         PayChargeOrder order = new PayChargeOrder();
         String orderId = savePayChargeOrder(chargeCompany.getCompanyName(), payShopBargainRechargeOrder, order,payChargeConsumerOrder.getOrderNo());
         order.setId(orderId);
         //给每条记录保存流水
-        savePayChargeMoneyStream(order,payShopBargainRechargeOrder.getAmount());
+        savePayChargeMoneyStream(order,money);
 
     }
 
@@ -127,25 +130,36 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         //拉取数据
         PayChargeCompany chargeCompany =  payChargeCompanyMapper.selectByPrimaryKey(payChargeConsumerOrder.getCompanyId());
         List<PayShopBargainRechargeOrder> list =new ArrayList<>();
+        //记录余额
+        String newCompanyMoney=chargeCompany.getMoney().toString();
+        logger.info("余额"+newCompanyMoney);
         String money = payChargeConsumerOrder.getMoney().toString();
+        int i=0;
         while (true){
+            logger.info("循环"+i+"开始");
             String json = redisCustomServiceFacade.rPop("consumerOrderQueue");
             PayShopBargainRechargeOrder payShopBargainRechargeOrder = JsonUtils.toObject(json, PayShopBargainRechargeOrder.class);
             //判断剩余的钱是否小于下一条匹配的钱，如果是，直接break
-            if(new BigDecimal(money).compareTo(payShopBargainRechargeOrder.getAmount())<0){
+            if(new BigDecimal(money).compareTo(payShopBargainRechargeOrder.getFacePrice())<0){
                 //如果这条数据没有匹配，那就重新放回到redis队列中
                 redisCustomServiceFacade.lpush("consumerOrderQueue",JsonUtils.toJson(payShopBargainRechargeOrder));
                 break;
             }
-            money= ArithmeticUtils.sub(money,payShopBargainRechargeOrder.getAmount().toString()).toString();
+            money= ArithmeticUtils.sub(money,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
+            logger.info("剪之前"+newCompanyMoney);
+            newCompanyMoney = ArithmeticUtils.sub(newCompanyMoney,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
+            logger.info("剪之后"+newCompanyMoney);
             payShopBargainRechargeOrder.setUpdatetime(new Date());
             payShopBargainRechargeOrder.setPullCompanyId(payChargeConsumerOrder.getCompanyId());
             payShopBargainRechargeOrder.setPullOrderNo(payChargeConsumerOrder.getOrderNo());
             payShopBargainRechargeOrder.setPullMerchNo(payChargeConsumerOrder.getMerchNo());
             payShopBargainRechargeOrder.setMatchingStatus((byte)2);
+            //这个地方实际更新对象余额 验证后，发现还是存在线程安全问题
+            //chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),payShopBargainRechargeOrder.getFacePrice().toString()));
             list.add(payShopBargainRechargeOrder);
             //保存订单信息，并且保存流水信息
-            matchingDataTask(payShopBargainRechargeOrder,chargeCompany,payChargeConsumerOrder);
+            matchingDataTask(payShopBargainRechargeOrder,chargeCompany,payChargeConsumerOrder,newCompanyMoney);
+            logger.info("循环"+i+"结束");
         }
         //批量更新shopBargainRechargeOrder
         if(list.size()!=0){
@@ -186,12 +200,12 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         order.setProductId("0");
         order.setProductName(payShopBargainRechargeOrder.getItemName());
         order.setProductPrice(payShopBargainRechargeOrder.getPrice());
-        if(payShopBargainRechargeOrder.getOrderType()==3){
-            order.setProductType(1);
+        if(payShopBargainRechargeOrder.getOrderType()==2){
+            order.setProductType(3);
         }else if(payShopBargainRechargeOrder.getOrderType()==1){
             order.setProductType(2);
         }else{
-            order.setProductType(3);
+            order.setProductType(4);
         }
         order.setProductValue(payShopBargainRechargeOrder.getFacePrice());
         order.setStatus((byte)0);
@@ -206,7 +220,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
      * 保存交易的流水
      * @param order  新生成的系统订单
      */
-    private void savePayChargeMoneyStream(PayChargeOrder order,BigDecimal companyMoney) {
+    private void savePayChargeMoneyStream(PayChargeOrder order,String money) {
         PayChargeCompanyMoneyStream payChargeCompanyMoneyStream = new PayChargeCompanyMoneyStream();
         String moneyStramNo = "MS"+System.currentTimeMillis()+ ToolUtils.getRandomInt(100,999);
         payChargeCompanyMoneyStream.setMerchNo(order.getMerchNo()); //商户号
@@ -218,7 +232,9 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
         payChargeCompanyMoneyStream.setInterfaceType((byte)2);
         payChargeCompanyMoneyStream.setIsDel((byte)0);
-        payChargeCompanyMoneyStream.setNewMoney(ArithmeticUtils.sub(companyMoney.toString(),order.getTotalMoney().toString()));
+        logger.info("保存流水前:"+money);
+        payChargeCompanyMoneyStream.setNewMoney(new BigDecimal(money));
+        logger.info("保存流水后:"+money);
         payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
         payChargeCompanyMoneyStream.setProductName(order.getProductName());
         payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
