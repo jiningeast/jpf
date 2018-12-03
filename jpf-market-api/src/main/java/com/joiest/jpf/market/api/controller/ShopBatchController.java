@@ -257,10 +257,15 @@ public class ShopBatchController {
         Map<String,Object> map =new ConcurrentHashMap<>();
         map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
         map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
-        map.put("orderNo",Base64CustomUtils.base64Decoder(orderId));
-        List<PayShopBatchCoupon> payShopBatchCoupons = shopBatchCouponServiceFacade.getCouponsByOrderId(map);
-
-        return "";
+        map.put("orderId",Base64CustomUtils.base64Decoder(orderId));
+        List<PayShopBatchCoupon> payShopBatchCoupons = null;
+        try {
+            payShopBatchCoupons = shopBatchCouponServiceFacade.getCouponsByOrderId(map);
+        } catch (Exception e) {
+            logger.error("getCouponInfo "+e.getMessage());
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"删除失败", null);
+        }
+         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功", payShopBatchCoupons);
      }
 
     /**

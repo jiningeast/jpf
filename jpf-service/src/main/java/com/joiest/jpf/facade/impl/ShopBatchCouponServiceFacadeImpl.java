@@ -413,6 +413,12 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         }else{
             example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
         }
-        return payShopBatchCouponMapper.selectByExample(example);
+        List<PayShopBatchCoupon> payShopBatchCoupons = payShopBatchCouponMapper.selectByExample(example);
+        for (PayShopBatchCoupon payShopBatchCoupon: payShopBatchCoupons) {
+            String start = StringUtils.substring(payShopBatchCoupon.getActiveCode(),0,2);
+            String end = StringUtils.substring(payShopBatchCoupon.getActiveCode(),-2,payShopBatchCoupon.getActiveCode().length());
+            payShopBatchCoupon.setActiveCode(start+"****"+end);
+        }
+        return payShopBatchCoupons;
     }
 }
