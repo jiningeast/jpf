@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopCustomer implements Serializable {
@@ -70,14 +71,19 @@ public class PayShopCustomer implements Serializable {
     private Byte status;
 
     /**
-     * 欣豆数量
+     * 总豆
      */
-    private Integer dou;
+    private BigDecimal dou;
 
     /**
-     * 冻结欣豆
+     * 冻结豆
      */
-    private Integer freezeDou;
+    private BigDecimal freezeDou;
+
+    /**
+     * 可转让豆
+     */
+    private BigDecimal saleDou;
 
     /**
      * 充值校验码
@@ -98,11 +104,6 @@ public class PayShopCustomer implements Serializable {
      * 隶属公众号id
      */
     private String mpid;
-
-    /**
-     * 可转让豆
-     */
-    private Integer saleDou;
 
     private static final long serialVersionUID = 1L;
 
@@ -210,20 +211,28 @@ public class PayShopCustomer implements Serializable {
         this.status = status;
     }
 
-    public Integer getDou() {
+    public BigDecimal getDou() {
         return dou;
     }
 
-    public void setDou(Integer dou) {
+    public void setDou(BigDecimal dou) {
         this.dou = dou;
     }
 
-    public Integer getFreezeDou() {
+    public BigDecimal getFreezeDou() {
         return freezeDou;
     }
 
-    public void setFreezeDou(Integer freezeDou) {
+    public void setFreezeDou(BigDecimal freezeDou) {
         this.freezeDou = freezeDou;
+    }
+
+    public BigDecimal getSaleDou() {
+        return saleDou;
+    }
+
+    public void setSaleDou(BigDecimal saleDou) {
+        this.saleDou = saleDou;
     }
 
     public String getCode() {
@@ -258,14 +267,6 @@ public class PayShopCustomer implements Serializable {
         this.mpid = mpid == null ? null : mpid.trim();
     }
 
-    public Integer getSaleDou() {
-        return saleDou;
-    }
-
-    public void setSaleDou(Integer saleDou) {
-        this.saleDou = saleDou;
-    }
-
     /**
      *
      */
@@ -290,11 +291,11 @@ public class PayShopCustomer implements Serializable {
         sb.append(", status=").append(status);
         sb.append(", dou=").append(dou);
         sb.append(", freezeDou=").append(freezeDou);
+        sb.append(", saleDou=").append(saleDou);
         sb.append(", code=").append(code);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append(", mpid=").append(mpid);
-        sb.append(", saleDou=").append(saleDou);
         sb.append("]");
         return sb.toString();
     }
@@ -330,11 +331,11 @@ public class PayShopCustomer implements Serializable {
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getDou() == null ? other.getDou() == null : this.getDou().equals(other.getDou()))
             && (this.getFreezeDou() == null ? other.getFreezeDou() == null : this.getFreezeDou().equals(other.getFreezeDou()))
+            && (this.getSaleDou() == null ? other.getSaleDou() == null : this.getSaleDou().equals(other.getSaleDou()))
             && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()))
-            && (this.getSaleDou() == null ? other.getSaleDou() == null : this.getSaleDou().equals(other.getSaleDou()));
+            && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()));
     }
 
     /**
@@ -359,11 +360,11 @@ public class PayShopCustomer implements Serializable {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getDou() == null) ? 0 : getDou().hashCode());
         result = prime * result + ((getFreezeDou() == null) ? 0 : getFreezeDou().hashCode());
+        result = prime * result + ((getSaleDou() == null) ? 0 : getSaleDou().hashCode());
         result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getMpid() == null) ? 0 : getMpid().hashCode());
-        result = prime * result + ((getSaleDou() == null) ? 0 : getSaleDou().hashCode());
         return result;
     }
 }
