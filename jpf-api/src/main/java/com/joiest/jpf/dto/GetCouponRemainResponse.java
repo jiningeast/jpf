@@ -2,6 +2,7 @@ package com.joiest.jpf.dto;
 
 import com.joiest.jpf.entity.ShopCouponRemainInfo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class GetCouponRemainResponse {
@@ -12,7 +13,7 @@ public class GetCouponRemainResponse {
     int count;
 
     //可用豆总额
-    int douTotal;
+    BigDecimal douTotal;
 
     public List<ShopCouponRemainInfo> getList() {
         return list;
@@ -30,11 +31,11 @@ public class GetCouponRemainResponse {
         this.count = count;
     }
 
-    public int getDouTotal() {
+    public BigDecimal getDouTotal() {
         return douTotal;
     }
 
-    public void setDouTotal(int douTotal) {
+    public void setDouTotal(BigDecimal douTotal) {
         this.douTotal = douTotal;
     }
 }

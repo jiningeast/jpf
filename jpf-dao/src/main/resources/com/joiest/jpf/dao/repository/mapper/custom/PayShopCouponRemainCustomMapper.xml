@@ -431,14 +431,14 @@
       percent = #{percent,jdbcType=DECIMAL}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="SaleYesSum" parameterType="com.joiest.jpf.common.po.PayShopCouponRemainExample" resultType="java.lang.Integer">
+  <select id="SaleYesSum" parameterType="com.joiest.jpf.common.po.PayShopCouponRemainExample" resultType="java.math.BigDecimal">
     SELECT SUM(sale_dou_left) FROM pay_shop_coupon_remain
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
 
   </select>
-  <select id="SaleNoSum" parameterType="com.joiest.jpf.common.po.PayShopCouponRemainExample" resultType="java.lang.Integer">
+  <select id="SaleNoSum" parameterType="com.joiest.jpf.common.po.PayShopCouponRemainExample" resultType="java.math.BigDecimal">
     SELECT SUM(coupon_dou_left) FROM pay_shop_coupon_remain
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

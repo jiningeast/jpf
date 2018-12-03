@@ -90,10 +90,10 @@ public interface PayShopCouponRemainCustomMapper {
     /**
      * 查询可转让总金额
      */
-    int SaleYesSum(PayShopCouponRemainExample example);
+    BigDecimal SaleYesSum(PayShopCouponRemainExample example);
 
     /**
      * 查询不可转让转让总金额
      */
-    int SaleNoSum(PayShopCouponRemainExample example);
+    BigDecimal SaleNoSum(PayShopCouponRemainExample example);
 }

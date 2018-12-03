@@ -234,14 +234,16 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             return null;
         }
         List<ShopCouponRemainInfo> resultList = new ArrayList<>();
-        int douTotal = 0;
+        BigDecimal douTotal=new BigDecimal("0.00");
+        //int douTotal = 0;
         for ( PayShopCouponRemain one : list)
         {
             ShopCouponRemainInfo info = new ShopCouponRemainInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopCouponRemain.class, ShopCouponRemainInfo.class, false);
             beanCopier.copy(one, info, null);
             resultList.add(info);
-            douTotal += one.getCouponDouLeft()+one.getSaleDouLeft();
+
+            douTotal = new BigDecimal(ArithmeticUtils.add(one.getCouponDouLeft().toString(),one.getSaleDouLeft().toString(),2));
         }
         GetCouponRemainResponse response = new GetCouponRemainResponse();
         response.setList(resultList);
@@ -264,24 +266,31 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         //获取个人的可转让和不可转让的额度
         GetShopCouponRemainResponse remainResponse=getSum(userInfo.getId());
         List<ShopCouponRemainInfo> saleNo=remainResponse.getSaleNo();//不可转让欣券列表
-        int saleNoSum=remainResponse.getSaleNoSum();//不可转让总额
+        BigDecimal saleNoSum=remainResponse.getSaleNoSum();//不可转让总额
+        //int saleNoSum=remainResponse.getSaleNoSum();//不可转让总额
         List<ShopCouponRemainInfo> saleYesBefore=remainResponse.getSaleYes();//可转让欣券列表
-        int saleYesSumBefore=remainResponse.getSaleYesSum();//可转让总额
+        BigDecimal saleYesSumBefore=remainResponse.getSaleYesSum();//可转让总额
+        //int saleYesSumBefore=remainResponse.getSaleYesSum();//可转让总额
         List<Map<String,String>> coupon_detail = new ArrayList<>();
         List<Map<String,String>> coupon_detailsale = new ArrayList<>();
         //判断当前人是否有可支付的欣券
         String json_couponDetail = null;//表中记录的json券扣除详细
         String json_couponDetailSale = null;//表中记录的json可转让券扣除详细
-
-        if(saleNoSum==0 && saleYesSumBefore==0){
+        BigDecimal coutAll=new BigDecimal(ArithmeticUtils.add(saleNoSum.toString(),saleYesSumBefore.toString(),2));
+        if(saleNoSum.compareTo(new BigDecimal("0.00"))<=0 && saleYesSumBefore.compareTo(new BigDecimal("0.00"))<=0){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "无可用欣豆");
+        }else if(coutAll.compareTo(orderInfo.getTotalDou())<0){
+            throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "可用欣豆不足");
+        }
+      /*  if(saleNoSum==0 && saleYesSumBefore==0){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "无可用欣豆");
         }else if((saleNoSum+saleYesSumBefore)<orderInfo.getTotalDou()){
             throw new JpfInterfaceException(JpfInterfaceErrorInfo.FAIL.getCode(), "可用欣豆不足");
-        }
+        }*/
 
-        if(saleNo.size()>0 && saleNoSum >0 ){
+        if(saleNo.size()>0 && saleNoSum.compareTo(new BigDecimal("0.00"))>0){
 
-            int orderBlance = orderInfo.getTotalDou();  //订单总额
+            BigDecimal orderBlance = orderInfo.getTotalDou();  //订单总额
 
             Map<String,String> map = new HashMap<>();
 
@@ -294,52 +303,55 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
                 mapJosn.put("couponId", one.getCouponId());
                 mapJosn.put("couponNo", one.getCouponNo());
 
-                if ( orderBlance > one.getCouponDouLeft() )
+                if ( orderBlance .compareTo(one.getCouponDouLeft())>0)
                 {
                     //全部扣除
                     one.setStatus((byte)1);
 
                     Boolean isTrue = doCoupon(one, one.getCouponDouLeft(), orderInfo);      //用完
 
-                    orderBlance = orderBlance - one.getCouponDouLeft();     //订单余额金额
+                    orderBlance = new BigDecimal(ArithmeticUtils.sub(orderBlance.toString(),one.getCouponDouLeft().toString(),2));     //订单余额金额
 
                     mapJosn.put("deduct", one.getCouponDouLeft().toString());   //此券扣减豆的数量  = 此券数量
-                    int douBlance = 0;      //本券剩余豆数量
+                    BigDecimal douBlance = new BigDecimal("0.00");      //本券剩余豆数量
                     mapJosn.put("remainDou", String.valueOf(douBlance));   //  全部扣除
-                } else if( orderBlance <= one.getCouponDouLeft() )
+                } else if( orderBlance .compareTo(one.getCouponDouLeft())<=0 )
                 {
                     byte status = 0;
-                    if ( orderBlance < one.getCouponDouLeft() )
+                    if ( orderBlance .compareTo(one.getCouponDouLeft())<0 )
                     {
                         status = 0;    //未扣完
-                    } else if ( orderBlance == one.getCouponDouLeft() )
+                    } else if ( orderBlance .compareTo(one.getCouponDouLeft())==0)
                     {
                         status = 1;    //全部扣除
                     }
                     one.setStatus(status);
                     Boolean isTrue = doCoupon(one, orderBlance, orderInfo);     //未用完
 
-                    int douBlance = one.getCouponDouLeft() - orderBlance;       //本券剩余豆数量
+                    BigDecimal douBlance = new BigDecimal(ArithmeticUtils.sub(one.getCouponDouLeft().toString(),orderBlance.toString(),2));       //本券剩余豆数量
 
                     mapJosn.put("deduct", String.valueOf(orderBlance));         //此券扣减豆的数量 = 订单金额
                     mapJosn.put("remainDou", String.valueOf(douBlance));
 
-                    orderBlance = 0;    //订单余额金额
+                    orderBlance = new BigDecimal("0.00");    //订单余额金额
                 }
                 coupon_detail.add(mapJosn);
-                if ( orderBlance == 0 ) break;
+                if ( orderBlance.compareTo(new BigDecimal("0.00"))==0){
+                    break;
+                }
             }
             json_couponDetail=  JsonUtils.toJson(coupon_detail);
         }
         //获取个人的可转让和不可转让的额度
         GetShopCouponRemainResponse remainResponseAfter=getSum(userInfo.getId());
         List<ShopCouponRemainInfo> saleYes=remainResponseAfter.getSaleYes();//可转让欣券列表
-        int saleYesSum=remainResponseAfter.getSaleYesSum();//可转让总额
+        BigDecimal saleYesSum=remainResponseAfter.getSaleYesSum();//可转让总额
 
         //如果订单金额大于非转让金额执行扣除转让的百分比
-         if(orderInfo.getTotalDou()>saleNoSum && saleYesSum>0 ){
 
-             int orderBlanceAfter = orderInfo.getTotalDou()-saleNoSum;  //剩余的总金额
+        if(orderInfo.getTotalDou().compareTo(saleNoSum)>0 && saleYesSum.compareTo(new BigDecimal("0.00"))>0){
+
+             BigDecimal orderBlanceAfter = new BigDecimal(ArithmeticUtils.sub(orderInfo.getTotalDou().toString(),saleNoSum.toString(),2));  //剩余的总金额
 
              for ( ShopCouponRemainInfo oneSale : saleYes)
              {
@@ -348,39 +360,41 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
                  mapJosnSale.put("couponId", oneSale.getCouponId());
                  mapJosnSale.put("couponNo", oneSale.getCouponNo());
 
-                 if ( orderBlanceAfter > oneSale.getSaleDouLeft() )
+                 if ( orderBlanceAfter .compareTo( oneSale.getSaleDouLeft() )>0)
                  {
                      //全部扣除
                      oneSale.setSalestatus((byte)1);
                      Boolean isTrue = doCouponAfter(oneSale, oneSale.getSaleDouLeft(), orderInfo);      //用完
 
-                     orderBlanceAfter = orderBlanceAfter - oneSale.getSaleDouLeft();     //订单余额金额
+                     orderBlanceAfter = new BigDecimal(ArithmeticUtils.sub(orderBlanceAfter.toString(),oneSale.getSaleDouLeft().toString(),2));     //订单余额金额
 
                      mapJosnSale.put("deduct", oneSale.getSaleDouLeft().toString());   //此券扣减豆的数量  = 此券数量
-                     int douBlance = 0;      //本券剩余豆数量
+                     BigDecimal douBlance =new BigDecimal("0.00" );      //本券剩余豆数量
                      mapJosnSale.put("remainDou", String.valueOf(douBlance));   //  全部扣除
-                 } else if( orderBlanceAfter <= oneSale.getSaleDouLeft() )
+                 } else if( orderBlanceAfter .compareTo( oneSale.getSaleDouLeft() )<=0)
                  {
                      byte setSalestatus = 0;
-                     if ( orderBlanceAfter < oneSale.getSaleDouLeft() )
+                     if ( orderBlanceAfter .compareTo( oneSale.getSaleDouLeft() )<0)
                      {
                          setSalestatus = 0;    //未扣完
-                     } else if ( orderBlanceAfter == oneSale.getSaleDouLeft() )
+                     } else if ( orderBlanceAfter .compareTo( oneSale.getSaleDouLeft() )==0)
                      {
                          setSalestatus = 1;    //全部扣除
                      }
                      oneSale.setSalestatus(setSalestatus);
                      Boolean isTrue = doCouponAfter(oneSale, orderBlanceAfter, orderInfo);     //未用完
 
-                     int douBlance = oneSale.getSaleDouLeft() - orderBlanceAfter;       //本券剩余豆数量
+                     BigDecimal douBlance =new BigDecimal(ArithmeticUtils.sub(oneSale.getSaleDouLeft().toString(),orderBlanceAfter.toString(),2));       //本券剩余豆数量
 
                      mapJosnSale.put("deduct", String.valueOf(orderBlanceAfter));         //此券扣减豆的数量 = 订单金额
                      mapJosnSale.put("remainDou", String.valueOf(douBlance));
 
-                     orderBlanceAfter = 0;    //订单余额金额
+                     orderBlanceAfter = new BigDecimal("0.00");    //订单余额金额
                  }
                  coupon_detailsale.add(mapJosnSale);
-                 if ( orderBlanceAfter == 0 ) break;
+                 if ( orderBlanceAfter .compareTo(new BigDecimal("0.00"))== 0 ) {
+                     break;
+                 }
              }
              json_couponDetailSale=JsonUtils.toJson(coupon_detailsale);
          }
@@ -487,7 +501,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
     @Transactional
     public int CouponAttorn(List<ShopCouponRemainInfo> list, ShopBargainOrderInfo orderInfo, ShopCustomerInterfaceInfo userInfo)
     {
-        int orderBlance = orderInfo.getDou();  //订单总额
+        BigDecimal orderBlance = orderInfo.getDou();  //订单总额
 
         List<Map<String,String>> coupon_detail = new ArrayList<>();
         Map<String,String> map = new HashMap<>();
@@ -500,39 +514,41 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             mapJosn.put("couponId", one.getCouponId());
             mapJosn.put("couponNo", one.getCouponNo());
 
-            if ( orderBlance > one.getSaleDouLeft() )
+            if ( orderBlance .compareTo( one.getSaleDouLeft() )>0)
             {
                 //全部扣除
                 one.setSalestatus((byte)1);
                 Boolean isTrue = doCouponAttorn(one, one.getSaleDouLeft(), orderInfo);      //用完
 
-                orderBlance = orderBlance - one.getSaleDouLeft();     //订单余额金额
+                orderBlance = new BigDecimal(ArithmeticUtils.sub(orderBlance.toString(),one.getSaleDouLeft().toString(),2));     //订单余额金额
 
                 mapJosn.put("deduct", one.getSaleDouLeft().toString());   //此券扣减豆的数量  = 此券数量
-                int douBlance = 0;      //本券剩余豆数量
+                BigDecimal douBlance =new BigDecimal("0.00") ;      //本券剩余豆数量
                 mapJosn.put("remainDou", String.valueOf(douBlance));   //  全部扣除
-            } else if( orderBlance <= one.getSaleDouLeft() )
+            } else if( orderBlance .compareTo( one.getSaleDouLeft() )<=0)
             {
                 byte status = 0;
-                if ( orderBlance < one.getSaleDouLeft() )
+                if ( orderBlance .compareTo( one.getSaleDouLeft() )<0)
                 {
                     status = 0;    //未扣完
-                } else if ( orderBlance == one.getSaleDouLeft() )
+                } else if ( orderBlance .compareTo( one.getSaleDouLeft() )==0)
                 {
                     status = 1;    //全部扣除
                 }
                 one.setSalestatus(status);
                 Boolean isTrue = doCouponAttorn(one, orderBlance, orderInfo);     //未用完
 
-                int douBlance = one.getSaleDouLeft() - orderBlance;       //本券剩余豆数量
+                BigDecimal douBlance =new BigDecimal(ArithmeticUtils.sub(one.getSaleDouLeft().toString(),orderBlance.toString(),2));       //本券剩余豆数量
 
                 mapJosn.put("deduct", String.valueOf(orderBlance));         //此券扣减豆的数量 = 订单金额
                 mapJosn.put("remainDou", String.valueOf(douBlance));
 
-                orderBlance = 0;    //订单余额金额
+                orderBlance = new BigDecimal("0.00");    //订单余额金额
             }
             coupon_detail.add(mapJosn);
-            if ( orderBlance == 0 ) break;
+            if ( orderBlance .compareTo(new BigDecimal("0.00"))==0){
+                break;
+            }
         }
         String json_couponDetail = JsonUtils.toJson(coupon_detail);
         //更新订单状态
@@ -564,7 +580,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
      * @param deduct    转让需要扣除的豆
      */
 //    @Transactional
-    public Boolean doCouponAttorn(ShopCouponRemainInfo remainInfo, int deduct, ShopBargainOrderInfo orderInfo)
+    public Boolean doCouponAttorn(ShopCouponRemainInfo remainInfo, BigDecimal deduct, ShopBargainOrderInfo orderInfo)
     {
         //1.remain减去金额 2.active log 3.customer减去金额 & code生成
         try{
@@ -577,7 +593,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             PayShopCouponRemain payShopCouponRemain = new PayShopCouponRemain();
             BeanCopier beanCopier = BeanCopier.create(ShopCouponRemainInfo.class, PayShopCouponRemain.class, false);
             beanCopier.copy(remainInfo, payShopCouponRemain, null);
-            int remain = payShopCouponRemain.getSaleDouLeft() - deduct;
+            BigDecimal remain = new BigDecimal(ArithmeticUtils.sub(payShopCouponRemain.getSaleDouLeft().toString(),deduct.toString(),2));
             payShopCouponRemain.setSaleDouLeft(remain);
             payShopCouponRemain.setUpdatetime(new Date());
             int res_couponRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
@@ -614,9 +630,9 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
             // 客户总豆数量减去一部分pay_shop_customer
             PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-            int dou = payShopCustomer.getFreezeDou() - deduct;
+            BigDecimal dou = new BigDecimal(ArithmeticUtils.sub(payShopCustomer.getFreezeDou().toString(),deduct.toString(),2));
             //int countDou=payShopCustomer.getDou()-deduct;
-            int saledou=payShopCustomer.getSaleDou()-deduct;
+            BigDecimal saledou=new BigDecimal(ArithmeticUtils.sub(payShopCustomer.getSaleDou().toString(),deduct.toString(),2));
             //String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
             payShopCustomerUpdate.setId(orderInfo.getSellerCustomerId());
             payShopCustomerUpdate.setFreezeDou(dou);
@@ -643,7 +659,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
      * @param deduct    需要扣除的豆
      */
 //    @Transactional
-    public Boolean doCoupon(ShopCouponRemainInfo remainInfo, int deduct, ShopOrderInterfaceInfo orderInfo)
+    public Boolean doCoupon(ShopCouponRemainInfo remainInfo, BigDecimal deduct, ShopOrderInterfaceInfo orderInfo)
     {
         //1.remain减去金额 2.active log 3.customer减去金额 & code生成
         try{
@@ -656,7 +672,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             PayShopCouponRemain payShopCouponRemain = new PayShopCouponRemain();
             BeanCopier beanCopier = BeanCopier.create(ShopCouponRemainInfo.class, PayShopCouponRemain.class, false);
             beanCopier.copy(remainInfo, payShopCouponRemain, null);
-            int remain = payShopCouponRemain.getCouponDouLeft() - deduct;
+            BigDecimal remain =new BigDecimal(ArithmeticUtils.sub(payShopCouponRemain.getCouponDouLeft().toString(),deduct.toString(),2));
             payShopCouponRemain.setCouponDouLeft(remain);
             payShopCouponRemain.setUpdatetime(new Date());
             int res_couponRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
@@ -692,7 +708,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
             // 客户总豆数量减去一部分pay_shop_customer
             PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-            int dou = payShopCustomer.getDou() - deduct;
+            BigDecimal dou =new BigDecimal(ArithmeticUtils.sub(payShopCustomer.getDou().toString(),deduct.toString(),2));
             String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
             payShopCustomerUpdate.setId(orderInfo.getCustomerId());
             payShopCustomerUpdate.setDou(dou);
@@ -717,7 +733,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
      * @param deduct    支付剩余扣除的豆即转让的豆//改版
      */
 //    @Transactional
-    public Boolean doCouponAfter(ShopCouponRemainInfo remainInfo, int deduct, ShopOrderInterfaceInfo orderInfo)
+    public Boolean doCouponAfter(ShopCouponRemainInfo remainInfo, BigDecimal deduct, ShopOrderInterfaceInfo orderInfo)
     {
         //1.remain减去金额 2.active log 3.customer减去金额 & code生成
         try{
@@ -730,7 +746,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             PayShopCouponRemain payShopCouponRemain = new PayShopCouponRemain();
             BeanCopier beanCopier = BeanCopier.create(ShopCouponRemainInfo.class, PayShopCouponRemain.class, false);
             beanCopier.copy(remainInfo, payShopCouponRemain, null);
-            int remain = payShopCouponRemain.getSaleDouLeft() - deduct;
+            BigDecimal remain = new BigDecimal(ArithmeticUtils.sub(payShopCouponRemain.getSaleDouLeft().toString(),deduct.toString(),2));
             payShopCouponRemain.setSaleDouLeft(remain);
             payShopCouponRemain.setUpdatetime(new Date());
             int res_couponRemain = payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
@@ -766,8 +782,8 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
             // 客户总豆数量减去一部分pay_shop_customer
             PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-            int dou = payShopCustomer.getDou() - deduct;
-            int saleDou = payShopCustomer.getSaleDou() - deduct;
+            BigDecimal dou = new BigDecimal(ArithmeticUtils.sub(payShopCustomer.getDou().toString(),deduct.toString(),2));
+            BigDecimal saleDou =new BigDecimal(ArithmeticUtils.sub(payShopCustomer.getSaleDou().toString(),deduct.toString(),2));
             String code = ToolUtils.CreateCode(String.valueOf(dou),payShopCouponRemain.getCustomerId());
             payShopCustomerUpdate.setId(orderInfo.getCustomerId());
             payShopCustomerUpdate.setDou(dou);
@@ -865,7 +881,8 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         } catch (Exception e) {
             saleNo=null;
         }
-        int saleNoSum= 0;
+        BigDecimal saleNoSum=new BigDecimal("0.00");
+        //int saleNoSum= 0;
         try {
             saleNoSum = payShopCouponRemainCustomMapper.SaleNoSum(exampleNo);
         } catch (Exception e) {
@@ -885,7 +902,8 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         PayShopCouponRemainExample.Criteria cYes=exampleYes.createCriteria();
         cYes.andCustomerIdEqualTo(customId);
         cYes.andSalestatusEqualTo((byte)0);
-        int saleYesSum= 0;
+        BigDecimal saleYesSum=new BigDecimal("0.00");
+        //int saleYesSum= 0;
         try {
             saleYesSum = payShopCouponRemainCustomMapper.SaleYesSum(exampleYes);
         } catch (Exception e) {

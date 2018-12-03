@@ -3,6 +3,7 @@ package com.joiest.jpf.dto;
 import com.joiest.jpf.entity.ShopCouponActiveInfo;
 import com.joiest.jpf.entity.ShopCouponRemainInfo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class GetShopCouponRemainResponse {
@@ -11,8 +12,8 @@ public class GetShopCouponRemainResponse {
     List<ShopCouponRemainInfo>saleYes;//可转让欣券
     List<ShopCouponRemainInfo>saleNo;//不可转让欣豆
     private int count;
-    private int saleYesSum;
-    private int saleNoSum;
+    private BigDecimal saleYesSum;
+    private BigDecimal saleNoSum;
     public List<ShopCouponActiveInfo> getList() {
         return list;
     }
@@ -45,19 +46,19 @@ public class GetShopCouponRemainResponse {
         this.saleNo = saleNo;
     }
 
-    public int getSaleYesSum() {
+    public BigDecimal getSaleYesSum() {
         return saleYesSum;
     }
 
-    public void setSaleYesSum(int saleYesSum) {
+    public void setSaleYesSum(BigDecimal saleYesSum) {
         this.saleYesSum = saleYesSum;
     }
 
-    public int getSaleNoSum() {
+    public BigDecimal getSaleNoSum() {
         return saleNoSum;
     }
 
-    public void setSaleNoSum(int saleNoSum) {
+    public void setSaleNoSum(BigDecimal saleNoSum) {
         this.saleNoSum = saleNoSum;
     }
 }

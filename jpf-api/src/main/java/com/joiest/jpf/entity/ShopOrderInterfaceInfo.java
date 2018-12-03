@@ -103,7 +103,7 @@ public class ShopOrderInterfaceInfo implements Serializable {
     /**
      * 订单总豆数量
      */
-    private Integer totalDou;
+    private BigDecimal totalDou;
 
     /**
      * 支付方式 0=豆支付 1=微信支付
@@ -390,11 +390,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
         this.totalMoney = totalMoney;
     }
 
-    public Integer getTotalDou() {
+    public BigDecimal getTotalDou() {
         return totalDou;
     }
 
-    public void setTotalDou(Integer totalDou) {
+    public void setTotalDou(BigDecimal totalDou) {
         this.totalDou = totalDou;
     }
 

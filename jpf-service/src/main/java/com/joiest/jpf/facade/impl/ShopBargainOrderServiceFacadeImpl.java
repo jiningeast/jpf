@@ -265,8 +265,8 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                      //欣券转让改版
                      GetShopCouponRemainResponse remainResponseAfter=shopCouponRemainServiceFacade.getSum(custemID);
                      List<ShopCouponRemainInfo> saleYes=remainResponseAfter.getSaleYes();//可转让欣券列表
-                     int saleYesSum=remainResponseAfter.getSaleYesSum();//可转让总额
-                     if(saleYesSum==0 || saleYes.size()<0){
+                     BigDecimal saleYesSum=remainResponseAfter.getSaleYesSum();//可转让总额
+                     if(saleYesSum.compareTo(new BigDecimal("0.00"))==0 || saleYes.size()<0){
                          throw new JpfException(JpfErrorInfo.DAL_ERROR, "卖家无可用欣豆");
                      }
                      //执行扣豆操作、
