@@ -77,6 +77,17 @@
                         <td></td>
                     </tr>
                     <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">状态：</td>
+                        <td>
+                            <select id="status_s" name="status" class="easyui-combobox" style="width:120px;">
+                                <option value="0">显示</option>
+                                <option value="1">不显示</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
                         <td colspan="3">
                             <input id="remark" name="remark" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="multiline:true"/>
@@ -217,7 +228,7 @@
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', '操作成功！', 'info');
-                            $('#infoDiv').window('close');
+                            $('#pinfoAddDiv').window('close');
                             $('#dg').datagrid('reload');
                         }
                     },
@@ -230,7 +241,7 @@
 
         $('#cancelBtn_m').linkbutton({
             onClick: function(){
-                $('#infoDiv').window('close');
+                $('#pinfoAddDiv').window('close');
             }
         });
 
