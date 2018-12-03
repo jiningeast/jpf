@@ -2,6 +2,7 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayShopCouponActive;
 import com.joiest.jpf.common.po.PayShopCouponActiveExample;
+import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponActiveMapper;
 import com.joiest.jpf.dto.GetShopCouponActiveInterfaceRequest;
 import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,14 +39,16 @@ public class ShopCouponActiveInterfaceServiceFacadeImpl implements ShopCouponAct
         }
 
         List<ShopCouponActiveInterfaceInfo> resultList = new ArrayList<>();
-        int dou_able = 0;
+        //int dou_able = 0;
+        BigDecimal dou_able = new BigDecimal("0");
         for (PayShopCouponActive one : list)
         {
             ShopCouponActiveInterfaceInfo info = new ShopCouponActiveInterfaceInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopCouponActive.class, ShopCouponActiveInterfaceInfo.class, false);
             beanCopier.copy(one, info, null);
             resultList.add(info);
-            dou_able += one.getDou();
+            //dou_able += one.getDou();
+            dou_able = new BigDecimal(ArithmeticUtils.add(dou_able.toString(),one.getDou().toString(),2));
         }
         GetUserCouponActiveInterfaceResponse response = new GetUserCouponActiveInterfaceResponse();
         response.setList(resultList);
@@ -85,14 +89,16 @@ public class ShopCouponActiveInterfaceServiceFacadeImpl implements ShopCouponAct
         }
 
         List<ShopCouponActiveInterfaceInfo> resultList = new ArrayList<>();
-        int dou_able = 0;
+//        int dou_able = 0;
+        BigDecimal dou_able = new BigDecimal("0");
         for (PayShopCouponActive one : list)
         {
             ShopCouponActiveInterfaceInfo info = new ShopCouponActiveInterfaceInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopCouponActive.class, ShopCouponActiveInterfaceInfo.class, false);
             beanCopier.copy(one, info, null);
             resultList.add(info);
-            dou_able += one.getDou();
+//            dou_able += one.getDou();
+            dou_able = new BigDecimal(ArithmeticUtils.add(dou_able.toString(),one.getDou().toString(),2));
         }
         GetUserCouponActiveInterfaceResponse response = new GetUserCouponActiveInterfaceResponse();
         response.setList(resultList);

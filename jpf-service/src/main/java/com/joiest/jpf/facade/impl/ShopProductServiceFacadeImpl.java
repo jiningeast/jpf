@@ -161,7 +161,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setProductInfoId(Integer.valueOf(request.getProductInfoId()));
         payShopProduct.setName(request.getName());
         payShopProduct.setImage(request.getImage());
-        payShopProduct.setDou(Integer.parseInt(request.getDou()));
+        payShopProduct.setDou(new BigDecimal(request.getDou()));
         payShopProduct.setIntro(request.getIntro());
         payShopProduct.setStored(Integer.parseInt(request.getStored()));
         payShopProduct.setStoredSafe(Integer.parseInt(request.getStoredSafe()));
@@ -233,7 +233,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setProductInfoId(Integer.valueOf(request.getProductInfoId()));
         payShopProduct.setName(request.getName());
         payShopProduct.setImage(request.getImage());
-        payShopProduct.setDou(Integer.parseInt(request.getDou()));
+        payShopProduct.setDou(new BigDecimal(request.getDou()));
         payShopProduct.setIntro(request.getIntro());
         payShopProduct.setStored(Integer.parseInt(request.getStored()));
         payShopProduct.setStoredSafe(Integer.parseInt(request.getStoredSafe()));

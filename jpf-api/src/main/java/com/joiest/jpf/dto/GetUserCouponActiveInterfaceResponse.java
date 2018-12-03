@@ -12,7 +12,7 @@ public class GetUserCouponActiveInterfaceResponse {
     int count;
 
     //可用豆总额
-    int douTotal;
+    BigDecimal douTotal;
 
     public List<ShopCouponActiveInterfaceInfo> getList() {
         return list;
@@ -30,11 +30,11 @@ public class GetUserCouponActiveInterfaceResponse {
         this.count = count;
     }
 
-    public int getDouTotal() {
+    public BigDecimal getDouTotal() {
         return douTotal;
     }
 
-    public void setDouTotal(int douTotal) {
+    public void setDouTotal(BigDecimal douTotal) {
         this.douTotal = douTotal;
     }
 }
