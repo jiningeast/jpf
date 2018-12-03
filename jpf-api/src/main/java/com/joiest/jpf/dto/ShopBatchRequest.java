@@ -63,6 +63,12 @@ public class ShopBatchRequest {
      */
     private String operatorName;
 
+    private String contractNo;
+
+    private String orderId;
+
+    private String contractId;
+
     private int page;
 
     private int rows;
@@ -177,5 +183,29 @@ public class ShopBatchRequest {
 
     public void setRows(int rows) {
         this.rows = rows;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
     }
 }

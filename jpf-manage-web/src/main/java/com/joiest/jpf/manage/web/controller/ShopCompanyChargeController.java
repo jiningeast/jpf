@@ -1,6 +1,7 @@
 package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
+import com.joiest.jpf.common.po.PayShopCompanyCharge;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.dto.GetShopCompanyChargeRequest;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -207,6 +209,17 @@ public class ShopCompanyChargeController {
 
     }
 
+    /**
+     * 查新商户可用合同
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getCompanyCharge")
+    public List<PayShopCompanyCharge> getCompanyCharge(HttpServletRequest request){
+        String companyId = request.getParameter("companyId");
+        return shopCompanyChargeServiceFacade.getListByCompanyId(companyId);
+    }
 
 
 

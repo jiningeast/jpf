@@ -82,6 +82,7 @@
                     {field:'id',title:'批次id',width:"5%"},
                     {field:'companyName',title:'商户名称',width:"10%"},
                     {field:'batchNo',title:'批次号',width:"15%"},
+                    {field:'contractNo',title:'订单号',width:"15%"},
                     {field:'money',title:'批次总金额',width:"10%"},
                     {field:'count',title:'券数量',width:"10%"},
                     {field:'activetedNum',title:'已激活',width:"10%"},

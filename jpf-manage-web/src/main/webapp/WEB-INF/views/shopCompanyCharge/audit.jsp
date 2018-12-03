@@ -60,6 +60,10 @@
                     <td><img src="${shopCompanyChargeInfo.imgUrl}" width="200" height="200" /></td>
                 </tr>
                 <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;"">服务内容：</td>
+                    <td>${shopCompanyChargeInfo.serviceContent}</td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">添加人：</td>
                     <td>${shopCompanyChargeInfo.operatorName}</td>
                 </tr>

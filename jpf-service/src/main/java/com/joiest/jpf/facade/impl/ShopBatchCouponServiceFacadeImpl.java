@@ -395,4 +395,24 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
 
         return payShopBatchCouponMapper.updateByExampleSelective(payShopBatchCoupon,e);
     }
+
+    @Override
+    public List<PayShopBatchCoupon> getCouponsByOrderId(Map<String, Object> map) {
+        PayShopBatchCouponExample example = new PayShopBatchCouponExample();
+        PayShopBatchCouponExample.Criteria criteria = example.createCriteria();
+        if(map.get("orderId")!=null){
+            criteria.andOrderIdEqualTo(map.get("orderId").toString());
+        }
+        if (Long.valueOf(map.get("pageSize").toString())<= 0){
+            example.setPageSize(10);
+        }else{
+            example.setPageSize(Long.valueOf(map.get("pageSize").toString()));
+        }
+        if(Long.valueOf(map.get("pageNo").toString())== 0){
+            example.setPageNo(1);
+        }else{
+            example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
+        }
+        return payShopBatchCouponMapper.selectByExample(example);
+    }
 }

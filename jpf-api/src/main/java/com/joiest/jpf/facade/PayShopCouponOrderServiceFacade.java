@@ -29,10 +29,10 @@ public interface PayShopCouponOrderServiceFacade {
 
     /**
      * 查询订单的详情
-     * @param orderNo
+     * @param map
      * @return
      */
-    List<PayShopCouponOrderInfo> getOrderInfo(String orderNo);
+    List<PayShopCouponOrderInfo> getOrderInfo(Map<String, Object> map);
 
     /**
      * 取消订单
