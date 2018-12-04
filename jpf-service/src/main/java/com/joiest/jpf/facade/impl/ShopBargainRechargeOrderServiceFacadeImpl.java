@@ -2,6 +2,7 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrderExample;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBargainRechargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBargainRechargeOrderMapper;
@@ -87,8 +88,8 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
     }
 
     @Override
-    public BigDecimal getMoneyTotal() {
-        return payShopBargainRechargeOrderCustomMapper.getTotalMoney();
+    public BigDecimal getMoneyTotal(String userId) {
+        return payShopBargainRechargeOrderCustomMapper.getTotalMoney(Integer.valueOf(userId));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -98,6 +99,7 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         PayShopBargainRechargeOrderExample.Criteria criteria = example.createCriteria();
         criteria.andMatchingStatusEqualTo((byte)0);
         example.setPageNo(1);
+        criteria.andUserIdEqualTo(Integer.valueOf(ConfigUtil.getValue("USERID")));
         example.setPageSize(querySize);
         example.setOrderByClause(" id asc ");
         List<PayShopBargainRechargeOrder> payShopBargainRechargeOrders = payShopBargainRechargeOrderMapper.selectByExample(example);

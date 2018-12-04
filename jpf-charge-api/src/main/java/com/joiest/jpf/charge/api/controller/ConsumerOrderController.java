@@ -190,7 +190,7 @@ public class ConsumerOrderController {
             return responseMap;
         }
         //验证数据的存储量，够不够下单的钱
-        BigDecimal moneyTotal = shopBargainRechargeOrderServiceFacade.getMoneyTotal();
+        BigDecimal moneyTotal = shopBargainRechargeOrderServiceFacade.getMoneyTotal(ConfigUtil.getValue("USERID"));
         System.out.println(moneyTotal.compareTo(new BigDecimal(money))>0);
         if(moneyTotal.compareTo(new BigDecimal(money))<0){
             responseMap.put("code",JpfInterfaceErrorInfo.EXCESS_DEPOSIT.getCode());

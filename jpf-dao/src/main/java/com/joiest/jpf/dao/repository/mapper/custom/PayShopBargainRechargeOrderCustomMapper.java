@@ -98,7 +98,7 @@ public interface PayShopBargainRechargeOrderCustomMapper {
      * 查询数据存现存的总额，看是否能够满足用户的面值
      * @return
      */
-    BigDecimal getTotalMoney();
+    BigDecimal getTotalMoney(Integer userId);
 
     /**
      * 批量更新
