@@ -10,10 +10,15 @@ import com.joiest.jpf.entity.ShopCompanyInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 import com.joiest.jpf.facade.*;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -400,6 +407,52 @@ public class ShopBatchController {
         return  jpfResponseDto;
     }
 
+    /**
+     * 下载excel模板
+     */
+    @RequestMapping("/downloadFile")
+    @ResponseBody
+    public HttpServletResponse download(HttpServletRequest request, HttpServletResponse response){
+        //下载文件路径
+        OutputStream toClient=null;
+        InputStream fis = null;
+        try{
+            String path = ConfigUtil.getValue("EXCEL_PATH") + "module/";
+            String filename = "前台网站欣券群发模板.xlsx";
+            // path是指欲下载的文件的路径。
+            File file = new File(path+filename);
+            // 以流的形式下载文件。
+            fis = new BufferedInputStream(new FileInputStream(file));
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            fis.close();
+            // 清空response
+            response.reset();
+            // 设置response的Header
+            String fileName = new String(filename.getBytes(),"ISO-8859-1");
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            response.addHeader("Content-Length", "" + file.length());
+            toClient = new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream");
+            toClient.write(buffer);
+            toClient.flush();
+            toClient.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if(toClient!=null){
+                    toClient.close();
+                }
+                if(fis!=null){
+                    fis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return response;
+    }
     public static void main(String[] args) {
         System.out.println(Md5Encrypt.md5("merchNo=MC1541126548324168863&money=200.00imyHcZOzMmhukCqB").toUpperCase());
         Map<String,Object> map = new HashMap<>();
