@@ -321,7 +321,7 @@ public class ShopBatchController {
         // 获取excel各面值券的数量
         List<ShopCustomerInfo> personsList = new ArrayList<>();    // 新建校验人数组
         Map<String,Integer> valueCount = new HashedMap();
-        int totalValue = 0;
+        BigDecimal totalValue =new BigDecimal(0) ;
         for ( int i=2; i<list.size(); i++){
             // 获取每条信息详情
             Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
@@ -343,7 +343,7 @@ public class ShopBatchController {
             failCustomer.setName(singlePerson.get(0));
             failCustomer.setPhone(singlePerson.get(1));
             //=========类型修改===========
-            //failCustomer.setDou(singlePerson.get(2));
+            failCustomer.setDou(new BigDecimal(value));
             if ( StringUtils.isNotBlank(idno) ){
                 failCustomer.setIdno(idno);
             }
@@ -362,7 +362,7 @@ public class ShopBatchController {
                 personsList.add(failCustomer);
             }
             // 统计总金额
-            totalValue = totalValue + Integer.parseInt(value);
+            totalValue =ArithmeticUtils.add(totalValue.toString(),value);
 
             // 统计各面值的数量
             if ( valueCount.get(value) == null ){
@@ -372,7 +372,7 @@ public class ShopBatchController {
             }
         }
         // 判断总面值和各人员面值的总和是不是统一
-        if (Integer.parseInt(totalMoney) != totalValue){
+        if (new BigDecimal(totalMoney) != totalValue){
             return setReslt("10001",JpfErrorInfo.ERROR_TOTAL_MONEY.desc());
         }
         // 判断数据库中有没有对应的这些个券
