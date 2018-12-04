@@ -101,11 +101,12 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         example.setPageSize(querySize);
         example.setOrderByClause(" id asc ");
         List<PayShopBargainRechargeOrder> payShopBargainRechargeOrders = payShopBargainRechargeOrderMapper.selectByExample(example);
-        for (PayShopBargainRechargeOrder payShopBargainRechargeOrder: payShopBargainRechargeOrders) {
+        //停止更新数据
+      /*  for (PayShopBargainRechargeOrder payShopBargainRechargeOrder: payShopBargainRechargeOrders) {
             payShopBargainRechargeOrder.setMatchingStatus((byte)1);
         }
         //批量更新数据量
-        payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(payShopBargainRechargeOrders);
+        payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(payShopBargainRechargeOrders);*/
         return payShopBargainRechargeOrders;
     }
 }

@@ -119,7 +119,9 @@ public enum JpfInterfaceErrorInfo {
 
     ORDER_STATUS_ERROR("80013","订单已经匹配欣券成功,无法取消"),
 
-    ORDER_STATUS_CANCAL("80014","订单未取消,无法删除");
+    ORDER_STATUS_CANCAL("80014","订单未取消,无法删除"),
+
+    ONE_MONEY_MAX("80015","单笔请求金额过大，不得超过1,000,000");
 
     private final String desc;
 
