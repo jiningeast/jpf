@@ -76,9 +76,9 @@ public class PayShopOrder implements Serializable {
     private BigDecimal productMoney;
 
     /**
-     * 产品豆数量
+     * 产品豆价格
      */
-    private BigDecimal productDou;
+    private Integer productDou;
 
     /**
      * 商品基础信息id
@@ -101,9 +101,9 @@ public class PayShopOrder implements Serializable {
     private BigDecimal totalMoney;
 
     /**
-     * 订单总豆
+     * 订单总豆数量
      */
-    private BigDecimal totalDou;
+    private Integer totalDou;
 
     /**
      * 支付方式 0=豆支付 1=微信支付
@@ -314,11 +314,11 @@ public class PayShopOrder implements Serializable {
         this.productMoney = productMoney;
     }
 
-    public BigDecimal getProductDou() {
+    public Integer getProductDou() {
         return productDou;
     }
 
-    public void setProductDou(BigDecimal productDou) {
+    public void setProductDou(Integer productDou) {
         this.productDou = productDou;
     }
 
@@ -354,11 +354,11 @@ public class PayShopOrder implements Serializable {
         this.totalMoney = totalMoney;
     }
 
-    public BigDecimal getTotalDou() {
+    public Integer getTotalDou() {
         return totalDou;
     }
 
-    public void setTotalDou(BigDecimal totalDou) {
+    public void setTotalDou(Integer totalDou) {
         this.totalDou = totalDou;
     }
 
