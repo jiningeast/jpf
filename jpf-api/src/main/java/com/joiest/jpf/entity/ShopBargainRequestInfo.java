@@ -1,5 +1,6 @@
 package com.joiest.jpf.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ShopBargainRequestInfo {
@@ -21,7 +22,7 @@ public class ShopBargainRequestInfo {
     /**
      * 最低豆数
      */
-    private Integer minDou;
+    private BigDecimal minDou;
 
     /**
      * 是否开启此收豆信息 0=不开启 1=开启
@@ -66,11 +67,11 @@ public class ShopBargainRequestInfo {
         this.offRate = offRate;
     }
 
-    public Integer getMinDou() {
+    public BigDecimal getMinDou() {
         return minDou;
     }
 
-    public void setMinDou(Integer minDou) {
+    public void setMinDou(BigDecimal minDou) {
         this.minDou = minDou;
     }
 

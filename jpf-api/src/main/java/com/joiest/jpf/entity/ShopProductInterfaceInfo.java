@@ -48,7 +48,7 @@ public class ShopProductInterfaceInfo {
     /**
      * 豆
      */
-    private BigDecimal dou;;
+    private BigDecimal dou;
 
     /**
      * 产品简介
