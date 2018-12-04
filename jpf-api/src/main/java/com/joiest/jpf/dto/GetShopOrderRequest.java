@@ -86,6 +86,11 @@ public class GetShopOrderRequest {
     private Byte status;
 
     /**
+     * 充值状态 0充值中 1充值成功 9充值失败
+     */
+    private String rechargeStatus;
+
+    /**
      * 消费时关联券使用记录表的id
      */
     private String couponActiveId;
@@ -519,5 +524,13 @@ public class GetShopOrderRequest {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public String getRechargeStatus() {
+        return rechargeStatus;
+    }
+
+    public void setRechargeStatus(String rechargeStatus) {
+        this.rechargeStatus = rechargeStatus;
     }
 }

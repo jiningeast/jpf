@@ -46,6 +46,7 @@ public class OfpayUtils {
 
     //油卡卡号查询
     private String gas_query;
+    private String searchOrderInfo;
 
     public OfpayUtils() {
         this.userid = ConfigUtil.getValue("userid");
@@ -64,6 +65,43 @@ public class OfpayUtils {
         this.aes_ecb_nopadding_pw = ConfigUtil.getValue("AES_ECB_NOPADDING_PW");
         this.querycardinfo = ConfigUtil.getValue("querycardinfo");
         this.finance_query = ConfigUtil.getValue("finance_query");
+        this.searchOrderInfo = ConfigUtil.getValue("searchOrderInfo");
+    }
+
+    /**
+     * 自动对账接口_账务明细部分
+     * @param queryMap
+     * @return
+     * @version 6.0
+     */
+    public Map<String, String> searchOrderInfo(Map<String,String> queryMap) throws DocumentException {
+        Map<String,Object> requestMap = new LinkedHashMap<>();
+        requestMap.put("userid",userid); // 商户号
+        requestMap.put("userpws",Md5Encrypt.md5(userpws));  // 商户密码
+        requestMap.put("sporder_id",queryMap.get("sporder_id")); //商家下单时传入的订单号
+        requestMap.put("md5_str", getStandardSign(requestMap)); //统一签名接口 参数必须按照接口顺序传入
+        requestMap.put("format",queryMap.get("format")); // 版本
+        requestMap.put("version","6.0"); // 版本
+
+        String requestParam = ToolUtils.mapToUrl(requestMap); // 请求参数
+        String resultXml = OkHttpUtils.postForm(searchOrderInfo,requestMap);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        Date date = new Date();
+        String fileName = "SearchOrderInfo";
+        String path = "/logs/jpf-market-api/log/";
+        SimpleDateFormat myfmt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        stringBuilder.append("\n\nTime:" + myfmt1.format(date));
+        stringBuilder.append("\n业务类型:" + "查询订单信息");
+        stringBuilder.append("\n请求地址：" + searchOrderInfo);
+        stringBuilder.append("\n接口参数：" + requestMap);
+        stringBuilder.append("\n回调信息：" + resultXml);
+
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("responseParam",resultXml);
+        resultMap.put("requestUrl", searchOrderInfo);
+        resultMap.put("requestParam", requestParam);
+        return resultMap;
     }
 
     /**
@@ -197,6 +235,21 @@ public class OfpayUtils {
         map.put("requestUrl", phone_requestUrl);
         map.put("requestParam", requestParam);
         return map;
+    }
+
+    /**
+     * 公共sign签名 签名键必须按照接口顺序传入
+     */
+    private String getStandardSign(Map<String,Object> map){
+        String signStr = "";
+        if( !map.isEmpty()){
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                signStr += entry.getValue().toString();
+            }
+            signStr += ConfigUtil.getValue("keystr");
+            return Md5Encrypt.md5(signStr).toUpperCase();
+        }
+        return null;
     }
 
     /**
