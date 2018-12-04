@@ -19,7 +19,8 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("chargeMoneyStream")
-public class ChargeCompanyMoneyStreamController {
+public class
+ChargeCompanyMoneyStreamController {
 
     @Autowired
     private ChargeCompanyMoneyStreamServiceFacade chargeCompanyMoneyStreamServiceFacade;

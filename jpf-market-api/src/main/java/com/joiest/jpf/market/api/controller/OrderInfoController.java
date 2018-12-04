@@ -6,13 +6,14 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
+import com.joiest.jpf.entity.ShopInterfaceStreamInfo;
+import com.joiest.jpf.entity.ShopOrderInfo;
 import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
-import com.joiest.jpf.facade.RedisCustomServiceFacade;
-import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopOrderInfoInterfaceServiceFacade;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.util.ToolsUtils;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("orderInfo")
@@ -43,6 +44,12 @@ public class OrderInfoController {
 
     @Autowired
     private ShopCustomerInterfaceServiceFacade shopCustomerInterfaceServiceFacade;
+
+    @Autowired
+    private ShopInterfaceStreamServiceFacade shopInterfaceStreamServiceFacade;
+
+    @Autowired
+    ShopOrderInterfaceServiceFacade shopOrderInterfaceServiceFacade;
 
     /*
     * 订单列表页
@@ -189,6 +196,126 @@ public class OrderInfoController {
     public void orderInfoCancel(){
         shopOrderInfoInterfaceServiceFacade.timerDetectShopOrderAndCancel(ToolsUtils.getBeforeHourTimeReturnDate(24));
     }
+
+    /**
+     * 处理欧飞异常订单
+     * @param
+     */
+    @RequestMapping(value = "/solveAbnormalOrders", method = RequestMethod.POST, produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    public void solveAbnormalOrders() throws DocumentException {
+
+        //存储日志记录
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        StringBuilder logContent = new StringBuilder();
+
+        String logPath = "/logs/jpf-market-api/log/";
+        String fileName = "SearchOufeiOrder";
+        logContent.append("\n\nTime:" + myfmt.format(date));
+
+        //查询半小时前的订单
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) - 30);
+        Date beforeTime = calendar.getTime();
+
+        ShopOrderInterfaceInfo shopOrderInterfaceInfo = new ShopOrderInterfaceInfo();
+        //已支付状态
+        shopOrderInterfaceInfo.setStatus((byte)1);
+        //充值中状态
+        shopOrderInterfaceInfo.setRechargeStatus("0");
+        shopOrderInterfaceInfo.setInterfaceType((byte)0);
+        shopOrderInterfaceInfo.setPaytime(beforeTime);
+        List<ShopOrderInterfaceInfo> list = shopOrderInfoInterfaceServiceFacade.getAbnormalOrders(shopOrderInterfaceInfo);
+        if( list !=null && list.size() >0 ){
+
+            for (int i = 0; i < list.size(); i++) {
+
+                logContent = new StringBuilder(); //初始化日志变量
+                // 请求欧飞接口
+                if( list.get(i).getInterfaceType() == 0 ){
+                    String orderNo = list.get(i).getOrderNo();
+                    String id = list.get(i).getId();
+                    String status = list.get(i).getStatus().toString();
+                    String rechargeStatus = list.get(i).getRechargeStatus();
+                    logContent.append("\n请求单号:"+orderNo+"\t ");
+                    Map<String,String> queryMap = new HashMap<>();
+                    queryMap.put("sporder_id", orderNo);
+                    queryMap.put("format", "json");
+                    Map<String,String> queryPhoneResponseMap = new OfpayUtils().searchOrderInfo(queryMap);
+
+                    logContent.append("\n接口返回数据:"+queryPhoneResponseMap.get("responseParam")+" ");
+
+                    // 开始处理订单状态及流水
+                    if( queryPhoneResponseMap !=null ){
+                        JSONObject responseParam = JSONObject.fromObject(queryPhoneResponseMap.get("responseParam"));
+                        if(responseParam != null ){
+                            String retcode = responseParam.get("retcode").toString();
+                            String game_state = responseParam.get("game_state").toString();
+                            if( retcode.equals("1") ){
+                                String orderid = responseParam.get("orderid").toString(); //欧飞订单号
+                                //流水
+                                ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
+                                stream.setType((byte)4); // 4=话费充值接口
+                                stream.setOrderNo(orderNo);
+                                stream.setRequestUrl(queryPhoneResponseMap.get("requestUrl"));
+                                stream.setRequestContent(queryPhoneResponseMap.get("requestParam"));
+                                stream.setResponseContent(queryPhoneResponseMap.get("responseParam"));
+                                stream.setAddtime(date);
+                                int res_addstream = shopInterfaceStreamServiceFacade.addStream(stream);
+
+                                ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
+                                info.setForeignOrderNo(orderid);
+                                info.setForeignRequestContent(queryPhoneResponseMap.get("requestParam"));
+                                info.setForeignResponseContent(queryPhoneResponseMap.get("responseParam"));
+                                info.setUpdatetime(date);
+                                info.setId(id);
+                                // 1充值成功、0充值中、9充值失败
+                                if(game_state.equals("1") ){
+
+                                    info.setRechargeStatus("1");
+                                    info.setStatus((byte)4);
+                                    int upCount = shopOrderInterfaceServiceFacade.updateOrder(info);
+                                    logContent.append("\n处理结果：接口充值成功 \t 更新前状态：recharge_status:"+rechargeStatus+" status:\"+status+\"\t 更新后状态：recharge_status:1 status:4 \t  ");
+                                    if( upCount != 1 ){
+                                        logContent.append("\t 订单更新失败 \t");
+                                    }else{
+                                        logContent.append("\t  订单更新成功 \t");
+                                    }
+                                }
+                                if(game_state.equals("0") ){
+
+                                }
+                                if(game_state.equals("9") ){
+                                    info.setRechargeStatus("9");
+                                    info.setStatus((byte)5);
+                                    int upCount = shopOrderInterfaceServiceFacade.updateOrder(info);
+                                    logContent.append("\n处理结果：接口充值失败 \t更新前状态：recharge_status:"+rechargeStatus+" status:"+status+" \t更新后状态：recharge_status:9 status=5  ");
+                                    if( upCount != 1 ){
+                                        logContent.append("\t 订单更新失败 \t");
+                                    }else{
+                                        logContent.append("\t订单更新成功 \t");
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                    LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+
+                }
+            }
+
+
+
+        }else{
+            logContent.append("\n未匹配到订单信息 ");
+            LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+        }
+
+    }
+
     
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
