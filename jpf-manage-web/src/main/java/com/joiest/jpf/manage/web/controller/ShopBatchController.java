@@ -459,7 +459,7 @@ public class ShopBatchController {
             ShopCustomerInfo failCustomer = new ShopCustomerInfo();
             failCustomer.setName(singlePerson.get(0));
             failCustomer.setPhone(singlePerson.get(1));
-            failCustomer.setDou(Integer.parseInt(singlePerson.get(2)));
+            //failCustomer.setDou(Integer.parseInt(singlePerson.get(2)));
             if ( StringUtils.isNotBlank(idno) ){
                 failCustomer.setIdno(idno);
             }

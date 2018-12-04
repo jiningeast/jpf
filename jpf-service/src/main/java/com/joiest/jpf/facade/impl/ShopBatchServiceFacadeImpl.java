@@ -193,8 +193,10 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
                 payShopBatchCoupon.setMoney(Integer.parseInt(single.get("money")));
                 // 根据兑换比例把面值兑换成豆
                 Double money = new Double(single.get("money"));
-                Double dou = money * payShopBatch.getScale();
-                payShopBatchCoupon.setDou( dou.intValue() );
+//                Double dou = money * payShopBatch.getScale();
+                BigDecimal dou = new BigDecimal(money*payShopBatch.getScale());
+                //payShopBatchCoupon.setDou( dou.intValue() );
+                payShopBatchCoupon.setDou( dou );
                 payShopBatchCoupon.setIsActive((byte)0);
                 payShopBatchCoupon.setExpireMonth(shopBatchRequest.getExpireMonth());
                 payShopBatchCoupon.setIsExpired((byte)0);

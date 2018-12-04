@@ -1,6 +1,7 @@
 package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopOrderCustomMapper;
@@ -256,8 +257,8 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
          //批次信息
          PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(payShopBatchCoupon.getBatchId());
 
-         int deduct = Integer.parseInt(couponDetailList.get(i).get("deduct"));
-         int curr_total = deduct + remain.getCouponDouLeft();
+         BigDecimal deduct = new BigDecimal(couponDetailList.get(i).get("deduct"));
+         BigDecimal curr_total = new BigDecimal(ArithmeticUtils.add(deduct.toString(),remain.getCouponDouLeft().toString(),2));
          remain.setCouponDouLeft(curr_total);
          remain.setUpdatetime(new Date());
          PayShopCouponRemainExample example = new PayShopCouponRemainExample();
@@ -291,10 +292,10 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
          payShopCouponActive.setOrderId(orderInfo.getOrderNo());
          int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
 
-         // 客户总豆数量减去一部分pay_shop_customer
+         // 客户总豆数量加上一部分pay_shop_customer
          PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-         int dou = payShopCustomer.getDou() + deduct;
-         String code = ToolUtils.CreateCode(String.valueOf(dou),remain.getCustomerId());
+         BigDecimal dou = new BigDecimal(ArithmeticUtils.add(payShopCustomer.getDou().toString(),deduct.toString(),2));
+         String code = ToolUtils.CreateCode(dou.toString(),remain.getCustomerId());
          payShopCustomerUpdate.setId(orderInfo.getCustomerId());
          payShopCustomerUpdate.setDou(dou);
          payShopCustomerUpdate.setCode(code);
@@ -335,9 +336,10 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
             PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(remain.getCouponId());
             //批次信息
             PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(payShopBatchCoupon.getBatchId());
-
-            int deduct = Integer.parseInt(couponDetailList.get(i).get("deduct"));
-            int curr_total = deduct + remain.getSaleDouLeft();
+            BigDecimal deduct = new BigDecimal(couponDetailList.get(i).get("deduct"));
+            BigDecimal curr_total = new BigDecimal(ArithmeticUtils.add(deduct.toString(),remain.getSaleDouLeft().toString(),2));
+         /*   int deduct = Integer.parseInt(couponDetailList.get(i).get("deduct"));
+            int curr_total = deduct + remain.getSaleDouLeft();*/
             remain.setSaleDouLeft(curr_total);
             remain.setUpdatetime(new Date());
             PayShopCouponRemainExample example = new PayShopCouponRemainExample();
@@ -371,10 +373,12 @@ public class ShopOrderInterfaceServiceFacadeImpl implements ShopOrderInterfaceSe
             payShopCouponActive.setOrderId(orderInfo.getOrderNo());
             int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
 
-            // 客户总豆数量减去一部分pay_shop_customer
+            // 客户总豆数量加上一部分pay_shop_customer
             PayShopCustomer payShopCustomerUpdate = new PayShopCustomer();
-            int dou = payShopCustomer.getDou() + deduct;
-            int saledou=payShopCustomer.getSaleDou()+deduct;
+            BigDecimal dou = new BigDecimal(ArithmeticUtils.add(payShopCustomer.getDou().toString(),deduct.toString(),2));
+            BigDecimal saledou = new BigDecimal(ArithmeticUtils.add(payShopCustomer.getSaleDou().toString(),deduct.toString(),2));
+           /* int dou = payShopCustomer.getDou() + deduct;
+            int saledou=payShopCustomer.getSaleDou()+deduct;*/
             String code = ToolUtils.CreateCode(String.valueOf(dou),remain.getCustomerId());
             payShopCustomerUpdate.setId(orderInfo.getCustomerId());
             payShopCustomerUpdate.setDou(dou);

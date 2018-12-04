@@ -2,6 +2,7 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.OkHttpUtils;
 import com.joiest.jpf.common.util.ToolUtils;
@@ -195,7 +196,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             customerInsert.setPhone(phone);
             customerInsert.setIsVerify((byte)0);
             customerInsert.setStatus((byte)1);
-            customerInsert.setDou(Integer.parseInt(dou));
+            customerInsert.setDou(new BigDecimal(dou));
             customerInsert.setAddtime(new Date());
             payShopCustomerCustomMapper.insertSelective(customerInsert);
             // 添加完后更新校验码字段
@@ -214,7 +215,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         }else{
             // 充值豆
             payShopCustomer = customerList.get(0);
-            Integer newDou = payShopCustomer.getDou() + Integer.parseInt(dou);
+            BigDecimal newDou = new BigDecimal(ArithmeticUtils.add(payShopCustomer.getDou().toString(),dou,2));
             payShopCustomer.setDou(newDou);
             String newCode = ToolUtils.CreateCode(newDou.toString(),payShopCustomer.getId());     // dou校验码
             payShopCustomer.setCode(newCode);
@@ -285,7 +286,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             payShopCouponActive.setCouponNo(couponUpdate.getCouponNo());
             payShopCouponActive.setActiveCode(couponUpdate.getActiveCode());
             payShopCouponActive.setMoney(new BigDecimal(dou));
-            payShopCouponActive.setDou(Integer.parseInt(dou));
+            payShopCouponActive.setDou(new BigDecimal(dou));
             payShopCouponActive.setType("0");
             payShopCouponActive.setExpireTime(couponUpdate.getExpireTime());
             payShopCouponActive.setAddtime(new Date());

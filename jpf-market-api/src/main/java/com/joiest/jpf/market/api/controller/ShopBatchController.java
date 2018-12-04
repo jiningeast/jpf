@@ -333,10 +333,11 @@ public class ShopBatchController {
             // 判断所有人的状态是不是已冻结
             PayShopCustomer existCustomer = shopCustomerServiceFacade.getCustomerByPhone(singlePerson.get(1));
             ShopCustomerInfo failCustomer = new ShopCustomerInfo();
-            failCustomer.setName(name);
-            failCustomer.setPhone(phone);
-            failCustomer.setDou(Integer.parseInt(value));
-            if (StringUtils.isNotBlank(idno)){
+            failCustomer.setName(singlePerson.get(0));
+            failCustomer.setPhone(singlePerson.get(1));
+            //=========类型修改===========
+            //failCustomer.setDou(singlePerson.get(2));
+            if ( StringUtils.isNotBlank(idno) ){
                 failCustomer.setIdno(idno);
             }
             if (existCustomer.getStatus()== 0){

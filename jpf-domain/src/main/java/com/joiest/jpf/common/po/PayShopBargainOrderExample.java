@@ -696,52 +696,52 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andMinDouEqualTo(Integer value) {
+        public Criteria andMinDouEqualTo(BigDecimal value) {
             addCriterion("min_dou =", value, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouNotEqualTo(Integer value) {
+        public Criteria andMinDouNotEqualTo(BigDecimal value) {
             addCriterion("min_dou <>", value, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouGreaterThan(Integer value) {
+        public Criteria andMinDouGreaterThan(BigDecimal value) {
             addCriterion("min_dou >", value, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouGreaterThanOrEqualTo(Integer value) {
+        public Criteria andMinDouGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("min_dou >=", value, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouLessThan(Integer value) {
+        public Criteria andMinDouLessThan(BigDecimal value) {
             addCriterion("min_dou <", value, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouLessThanOrEqualTo(Integer value) {
+        public Criteria andMinDouLessThanOrEqualTo(BigDecimal value) {
             addCriterion("min_dou <=", value, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouIn(List<Integer> values) {
+        public Criteria andMinDouIn(List<BigDecimal> values) {
             addCriterion("min_dou in", values, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouNotIn(List<Integer> values) {
+        public Criteria andMinDouNotIn(List<BigDecimal> values) {
             addCriterion("min_dou not in", values, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouBetween(Integer value1, Integer value2) {
+        public Criteria andMinDouBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("min_dou between", value1, value2, "minDou");
             return (Criteria) this;
         }
 
-        public Criteria andMinDouNotBetween(Integer value1, Integer value2) {
+        public Criteria andMinDouNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("min_dou not between", value1, value2, "minDou");
             return (Criteria) this;
         }
@@ -756,52 +756,52 @@ public class PayShopBargainOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andDouEqualTo(Integer value) {
+        public Criteria andDouEqualTo(BigDecimal value) {
             addCriterion("dou =", value, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouNotEqualTo(Integer value) {
+        public Criteria andDouNotEqualTo(BigDecimal value) {
             addCriterion("dou <>", value, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouGreaterThan(Integer value) {
+        public Criteria andDouGreaterThan(BigDecimal value) {
             addCriterion("dou >", value, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouGreaterThanOrEqualTo(Integer value) {
+        public Criteria andDouGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("dou >=", value, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouLessThan(Integer value) {
+        public Criteria andDouLessThan(BigDecimal value) {
             addCriterion("dou <", value, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouLessThanOrEqualTo(Integer value) {
+        public Criteria andDouLessThanOrEqualTo(BigDecimal value) {
             addCriterion("dou <=", value, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouIn(List<Integer> values) {
+        public Criteria andDouIn(List<BigDecimal> values) {
             addCriterion("dou in", values, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouNotIn(List<Integer> values) {
+        public Criteria andDouNotIn(List<BigDecimal> values) {
             addCriterion("dou not in", values, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouBetween(Integer value1, Integer value2) {
+        public Criteria andDouBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("dou between", value1, value2, "dou");
             return (Criteria) this;
         }
 
-        public Criteria andDouNotBetween(Integer value1, Integer value2) {
+        public Criteria andDouNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("dou not between", value1, value2, "dou");
             return (Criteria) this;
         }

@@ -33,27 +33,27 @@ public class PayShopCouponRemain implements Serializable {
     /**
      * 券本身值多少个豆
      */
-    private Integer couponDou;
+    private BigDecimal couponDou;
 
     /**
      * 非转让豆
      */
-    private Integer saleDouNo;
+    private BigDecimal saleDouNo;
 
     /**
      * 非转让券豆余额
      */
-    private Integer couponDouLeft;
+    private BigDecimal couponDouLeft;
 
     /**
      * 可转让豆
      */
-    private Integer saleDouYes;
+    private BigDecimal saleDouYes;
 
     /**
      * 可转让豆剩余
      */
-    private Integer saleDouLeft;
+    private BigDecimal saleDouLeft;
 
     /**
      * 到期时间
@@ -127,43 +127,43 @@ public class PayShopCouponRemain implements Serializable {
         this.customerId = customerId == null ? null : customerId.trim();
     }
 
-    public Integer getCouponDou() {
+    public BigDecimal getCouponDou() {
         return couponDou;
     }
 
-    public void setCouponDou(Integer couponDou) {
+    public void setCouponDou(BigDecimal couponDou) {
         this.couponDou = couponDou;
     }
 
-    public Integer getSaleDouNo() {
+    public BigDecimal getSaleDouNo() {
         return saleDouNo;
     }
 
-    public void setSaleDouNo(Integer saleDouNo) {
+    public void setSaleDouNo(BigDecimal saleDouNo) {
         this.saleDouNo = saleDouNo;
     }
 
-    public Integer getCouponDouLeft() {
+    public BigDecimal getCouponDouLeft() {
         return couponDouLeft;
     }
 
-    public void setCouponDouLeft(Integer couponDouLeft) {
+    public void setCouponDouLeft(BigDecimal couponDouLeft) {
         this.couponDouLeft = couponDouLeft;
     }
 
-    public Integer getSaleDouYes() {
+    public BigDecimal getSaleDouYes() {
         return saleDouYes;
     }
 
-    public void setSaleDouYes(Integer saleDouYes) {
+    public void setSaleDouYes(BigDecimal saleDouYes) {
         this.saleDouYes = saleDouYes;
     }
 
-    public Integer getSaleDouLeft() {
+    public BigDecimal getSaleDouLeft() {
         return saleDouLeft;
     }
 
-    public void setSaleDouLeft(Integer saleDouLeft) {
+    public void setSaleDouLeft(BigDecimal saleDouLeft) {
         this.saleDouLeft = saleDouLeft;
     }
 

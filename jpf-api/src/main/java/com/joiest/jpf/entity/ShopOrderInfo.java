@@ -47,7 +47,7 @@ public class ShopOrderInfo {
     /**
      *
      */
-    private Integer productDou;
+    private BigDecimal productDou;
 
     /**
      * 商品基础信息id
@@ -67,7 +67,7 @@ public class ShopOrderInfo {
     /**
      * 订单总豆数量
      */
-    private Integer totalDou;
+    private BigDecimal totalDou;
 
     /**
      * 支付方式 0=豆支付 1=微信支付
@@ -311,12 +311,20 @@ public class ShopOrderInfo {
         this.productMoney = productMoney;
     }
 
-    public Integer getProductDou() {
+    public BigDecimal getProductDou() {
         return productDou;
     }
 
-    public void setProductDou(Integer productDou) {
+    public void setProductDou(BigDecimal productDou) {
         this.productDou = productDou;
+    }
+
+    public BigDecimal getTotalDou() {
+        return totalDou;
+    }
+
+    public void setTotalDou(BigDecimal totalDou) {
+        this.totalDou = totalDou;
     }
 
     public Integer getProductInfoId() {
@@ -343,13 +351,6 @@ public class ShopOrderInfo {
         this.totalMoney = totalMoney;
     }
 
-    public Integer getTotalDou() {
-        return totalDou;
-    }
-
-    public void setTotalDou(Integer totalDou) {
-        this.totalDou = totalDou;
-    }
 
     public Byte getPayWay() {
         return payWay;
