@@ -13,11 +13,11 @@ import java.util.Date;
  */
 public class PhotoUtil {
 
-	public static String saveFile2( MultipartFile filedata,String savePre,String newFileName) {
+	/*public static String saveFile2( MultipartFile filedata,String savePre,String newFileName) {
 
 		// 根据配置文件获取服务器图片存放路径
 		String saveFilePath = savePre;
-		/* 构建文件目录 */
+		*//* 构建文件目录 *//*
 		File fileDir = new File(saveFilePath);
 		if (!fileDir.exists()) {
 
@@ -42,7 +42,7 @@ public class PhotoUtil {
 			e.printStackTrace();
 		}
 		return null;
-	}
+	}*/
 	/**
 	 * 功能描述   保存图片
 	 * @param filedata

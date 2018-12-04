@@ -14,8 +14,8 @@
     <result column="seller_customer_id" jdbcType="BIGINT" property="sellerCustomerId" />
     <result column="seller_customer_nickname" jdbcType="VARCHAR" property="sellerCustomerNickname" />
     <result column="off_rate" jdbcType="DOUBLE" property="offRate" />
-    <result column="min_dou" jdbcType="INTEGER" property="minDou" />
-    <result column="dou" jdbcType="INTEGER" property="dou" />
+    <result column="min_dou" jdbcType="DECIMAL" property="minDou" />
+    <result column="dou" jdbcType="DECIMAL" property="dou" />
     <result column="transfer_price" jdbcType="DECIMAL" property="transferPrice" />
     <result column="real_name" jdbcType="VARCHAR" property="realName" />
     <result column="idno" jdbcType="VARCHAR" property="idno" />
