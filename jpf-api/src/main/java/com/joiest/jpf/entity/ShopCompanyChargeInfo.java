@@ -115,6 +115,19 @@ public class ShopCompanyChargeInfo implements Serializable {
      */
     private BigDecimal balance;
 
+    /**
+     * 服务内容
+     */
+    private String serviceContent;
+
+    public String getServiceContent() {
+        return serviceContent;
+    }
+
+    public void setServiceContent(String serviceContent) {
+        this.serviceContent = serviceContent;
+    }
+
     public BigDecimal getBalance() {
         return balance;
     }

@@ -296,7 +296,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         info.setBrandId(Integer.parseInt(request.getBrandId()));
         info.setSupplierId(Integer.parseInt(request.getSupplierId()));
         info.setTypeId(Integer.parseInt(request.getTypeId()));
-        info.setStatus((byte)1);
+        info.setStatus((byte)request.getStatus());
         info.setAddtime(new Date());
         info.setTitle(request.getTitle());
         info.setImgurl(request.getImgurl());

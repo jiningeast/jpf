@@ -2,9 +2,7 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
-import com.joiest.jpf.common.po.PayShopBatch;
-import com.joiest.jpf.common.po.PayShopCompany;
-import com.joiest.jpf.common.po.PayShopCustomer;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
 import com.joiest.jpf.dto.ShopBatchRequest;
@@ -687,8 +685,51 @@ public class ShopBatchController {
         return count;
     }
 
-    @RequestMapping("/goSearchBatchNo")
-    public ModelAndView goSearchBatchNo(){
-        return new ModelAndView("shopBatch/searchBatchNo");
+    /**
+     * 跳转到选取订单的页面
+     * @return
+     */
+    @RequestMapping("/goSearchOrderNo")
+    public ModelAndView goSearchOrderNo(){
+        return new ModelAndView("shopBatch/searchOrderNo");
+    }
+
+
+    /**
+     * 查询所有的订单
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getOrderList")
+    public Map<String,Object> getOrderList(HttpServletRequest request){
+        String pageNo = request.getParameter("pageNo");
+        String pageSize = request.getParameter("pageSize");
+        List<PayShopCouponOrder> list = shopBatchServiceFacade.getOrderList(pageNo,pageSize);
+        Map<String,Object> map = new HashMap<>();
+        map.put("total",list.size());
+        map.put("rows",list);
+        return  map;
+    }
+
+    /**
+     * 查询所有的订单详情
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getOrderInfo")
+    public Map<String,Object> getOrderInfo(HttpServletRequest request){
+        Map<String,Object> map = new HashMap<>();
+        String orderId = request.getParameter("orderId");
+        if(StringUtils.isBlank(orderId)){
+            map.put("total",0);
+            map.put("rows",new ArrayList());
+            return map;
+        }
+        List<PayCouponInfo> list = shopBatchServiceFacade.getOrderInfo(orderId);
+        map.put("rows",list);
+        map.put("total",list.size());
+        return  map;
     }
 }

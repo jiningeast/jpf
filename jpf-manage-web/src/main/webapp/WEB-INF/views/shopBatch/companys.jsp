@@ -43,8 +43,11 @@
                 $("#name").textbox("setValue",rows[0].companyName);
                 $("#mid").val(rows[0].id);
                 $("#companys").window("close");
+                //查询可用合同
+                getContracNo(rows[0].id)
             }
         }];
+
 
         $('#companysDataGrid').datagrid({
             title:'商户信息列表',
@@ -84,5 +87,29 @@
             }
         });
     })
+
+    function getContracNo(companyId){
+        $.ajax({
+            type:"POST",
+            url:"../shopCompanyCharge/getCompanyCharge",
+            data:{
+                "companyId":companyId
+            },
+            success:function(data){
+                $("#contractId").empty();
+                if(data.length==0){
+                    $.messager.alert('消息提示','无可用合同!','info');
+                    $("#contractId").combobox('loadData', {});
+                    return false;
+                }else{
+                    $("#contractId").append("<option value=''>--请选择--</option>");
+                    for(var i=0;i<data.length;i++){
+                        $("#contractId").append("<option value="+data[i].id+">"+data[i].contractNo+"</option>");
+                    }
+                    $("#contractId").combobox({});
+                }
+            }
+        });
+    }
 </script>
 </body>

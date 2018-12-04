@@ -11,20 +11,22 @@
             <input type="hidden" id="total" name="total">
             <input type="hidden" id="coupons" name="coupons">
             <input type="hidden" id="companyName" name="companyName">
+            <input type="hidden" id="contractNo" name="contractNo">
             <table id="addCoupons" cellpadding="5" width="100%">
-               <%-- <tr>
-                    <td colspan="8" style="text-align: left"><b>合同信息：</b></td>
-                </tr>--%>
-              <%--  <tr>
-                    <td  style="width: 140px">选择批次号</td>
+               <tr>
+                    <td colspan="8" style="text-align: left"><b>订单信息：</b></td>
+                </tr>
+              <tr>
+                    <td  style="width: 140px">选择订单</td>
                     <td width="180px">
-                        <input id="batchNo" type="text" class="easyui-textbox" style="width: 100%" disabled="disabled">
-                        <input id="batchId" name="companyId" type="hidden">
+                        <input id="orderNo" type="text" class="easyui-textbox" style="width: 100%" disabled="disabled">
+                        <input id="orderId" name="orderId" type="hidden">
                     </td>
                     <td align="left" colspan="6" style="text-align: left;">
-                        <a id="searchBatchNo" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选择批次</a>
+                        <a id="searchOrderhNo" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选择订单</a>
+                        <a id="canaclOrderhNo" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">取消选中</a>
                     </td>
-                </tr>--%>
+                </tr>
                 <tr>
                     <td colspan="8" style="text-align: left"><b>商户信息：</b></td>
                 </tr>
@@ -34,7 +36,10 @@
                         <input id="name" type="text" class="easyui-textbox" style="width: 100%" disabled="disabled">
                         <input id="mid" name="companyId" type="hidden">
                     </td>
-                    <td align="left" colspan="6" style="text-align: left;"><a id="searchCompany" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选取商户</a></td>
+                    <td align="left" colspan="6" style="text-align: left;">
+                        <a id="searchCompany" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选取商户</a>
+                        <a id="canacCompany" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">取消选中</a>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="8" style="text-align: left"><b>申请欣券：</b></td>
@@ -54,9 +59,23 @@
             <br>
             <table width="100%">
                 <tr>
+                    <td width="70" align="right">选择合同&nbsp;</td>
+                    <td width="190">
+                        <select id="contractId" name="contractId" class="easyui-combobox" style="width: 150px">
+                        </select>
+                    </td>
+                    <td width="260" colspan="2"></td>
+                    <td width="70"></td>
+                    <td width="190"></td>
+                    <td width="260" colspan="2"></td>
+                </tr>
+            </table>
+            <br>
+            <table width="100%">
+                <tr>
                     <td width="70" align="right">有效期&nbsp;</td>
                     <td width="190">
-                        <select id="expireMonth" name="expireMonth" class="easyui-combobox" style="width: 90px">
+                        <select id="expireMonth" name="expireMonth" class="easyui-combobox" style="width: 150px">
                             <option value="3" selected="selected">3个月</option>
                             <option value="6">6个月</option>
                             <option value="9">9个月</option>
@@ -77,7 +96,7 @@
         <a id="confirmBatch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确定</a>
     </div>
     <div id="companys"></div>
-    <div id="batchWin"></div>
+    <div id="orderWin"></div>
 </div>
 <script>
     $(function () {
@@ -85,17 +104,50 @@
         $("#searchCompany").linkbutton({
             onClick:function(){
                 $('#companys').window("open").window('refresh', '../shopBatch/companys').window('setTitle','选取公司');
+                $("#searchOrderhNo").linkbutton("disable");
+                $("#canaclOrderhNo").linkbutton("disable")
             }
         });
 
-     /*   $("#searchBatchNo").linkbutton({
+       $("#searchOrderhNo").linkbutton({
             onClick:function(){
-                $('#batchWin').window("open").window('refresh', '/shopBatch/goSearchBatchNo').window('setTitle','选取批次号');
-            }
-        });*/
+                $('#orderWin').window("open").window('refresh', '../shopBatch/goSearchOrderNo').window('setTitle','选取订单号');
+                //禁用按钮
+                $("#searchCompany").linkbutton("disable");
+                $("#addCoupon").linkbutton("disable");
+                $("#canacCompany").linkbutton("disable");
 
-        // 选取公司弹窗大小
-        $('#batchWin').window({
+            }
+        });
+        $("#canaclOrderhNo").linkbutton({
+            onClick:function(){
+                //禁用按钮
+                $('#searchCompany').linkbutton("enable");
+                $("#addCoupon").linkbutton("enable");
+                $("#canacCompany").linkbutton("enable");
+                $("#orderNo").textbox("setValue","");
+                $("#orderId").val("");
+                $("#name").textbox("setValue","");
+                $("#mid").val("");
+                $("#contracNo").val("");
+                $("#couponDG").datagrid("load",{orderId:''});
+                $('#contractId').combobox('setValue',"");
+                $("#contractId").combobox('loadData', {});
+
+            }
+        });
+        $("#canacCompany").linkbutton({
+            onClick:function(){
+                //禁用按钮
+                $('#searchOrderhNo').linkbutton("enable");
+                $("#canaclOrderhNo").linkbutton("enable");
+                $("#name").textbox("setValue","");
+                $("#mid").val("");
+            }
+        });
+
+        // 选取订单弹窗大小
+        $('#orderWin').window({
             width:'1024px',
             height:'550px',
             closed:true,
@@ -114,6 +166,7 @@
             singleSelect:true,
             multiselect:false,
             fitColumns:true,
+            url:'../shopBatch/getOrderInfo',
             columns:[[
                 {field:'money',title:'面值',width:"25%",align:"center"},
                 {field:'amount',title:'数量',width:"25%",align:"center"},
@@ -175,7 +228,12 @@
                     $.messager.alert('提示', '请添加券', 'info');
                     return false;
                 }
-
+                // 判断合同
+                if ( $("#contractId").combobox("getValue") == ""||$("#contractId").combobox("getValue") == null){
+                    $.messager.alert('提示', '请选择合同', 'info');
+                    return false;
+                }
+                $("#contractNo").val($("#contractId").combobox("getText"));
                 ajaxLoading();
             },
             success:function (msg) {

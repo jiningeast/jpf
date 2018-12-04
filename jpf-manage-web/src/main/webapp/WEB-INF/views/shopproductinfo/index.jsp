@@ -54,9 +54,9 @@
                     {field:'status',title:'商品状态',width:50,
                         formatter: function(value,row,index){
                             if (value == 0){
-                                return "下架";
+                                return "显示";
                             } else if (value == 1) {
-                                return "上架";
+                                return "不显示";
                             }
                         }
                     },
@@ -134,8 +134,8 @@
                         <td>
                             <select id="status_s" name="status" class="easyui-combobox" style="width:120px;">
                                 <option value="">全部</option>
-                                <option value="1">上架</option>
-                                <option value="0">下架</option>
+                                <option value="1">不显示</option>
+                                <option value="0">显示</option>
                             </select>
                         </td>
                     </tr>
