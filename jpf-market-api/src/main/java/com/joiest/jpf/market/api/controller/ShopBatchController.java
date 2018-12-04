@@ -170,13 +170,18 @@ public class ShopBatchController {
     @ResponseBody
     public String getOrderInfo(HttpServletRequest request){
         String orderNo = request.getParameter("orderNo");
-        if(StringUtils.isBlank(orderNo)){
+        String pageNo = request.getParameter("pageNo");
+        String pageSize = request.getParameter("pageSize");
+        if(StringUtils.isBlank(orderNo)||StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
         }
-
+        Map<String,Object> map =new ConcurrentHashMap<>();
         List<PayShopCouponOrderInfo> payShopCouponOrderInfos = null;
+        map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
+        map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
+        map.put("orderNo",Base64CustomUtils.base64Decoder(orderNo));
         try {
-            payShopCouponOrderInfos = payShopCouponOrderServiceFacade.getOrderInfo(Base64CustomUtils.base64Decoder(orderNo));
+            payShopCouponOrderInfos = payShopCouponOrderServiceFacade.getOrderInfo(map);
         } catch (Exception e) {
             logger.error("getOrderInfo："+e.getMessage());
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),JpfInterfaceErrorInfo.FAIL.getDesc(),null);
@@ -234,13 +239,41 @@ public class ShopBatchController {
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"删除成功", null);
     }
 
+    /**
+     * 查看所有批次所有的欣券
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getCouponInfo",method = RequestMethod.POST)
+    public String getCouponInfo(HttpServletRequest request){
+        //查询的订单号
+        String orderId = request.getParameter("orderId");
+        String pageNo = request.getParameter("pageNo");
+        String pageSize = request.getParameter("pageSize");
+        if(StringUtils.isBlank(orderId)||StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
+        }
+        Map<String,Object> map =new ConcurrentHashMap<>();
+        map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
+        map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
+        map.put("orderId",Base64CustomUtils.base64Decoder(orderId));
+        List<PayShopBatchCoupon> payShopBatchCoupons = null;
+        try {
+            payShopBatchCoupons = shopBatchCouponServiceFacade.getCouponsByOrderId(map);
+        } catch (Exception e) {
+            logger.error("getCouponInfo "+e.getMessage());
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"删除失败", null);
+        }
+         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功", payShopBatchCoupons);
+     }
 
     /**
      * 上传excel 解析是否完整
      */
     @RequestMapping("/uploadExcel")
     @ResponseBody
-    public JpfResponseDto uploadExcel(@RequestParam("uploadfile") MultipartFile uploadfile,String companyId) throws Exception{
+    public JpfResponseDto uploadExcel(@RequestParam("uploadfile") MultipartFile uploadfile,String companyId,String companyName,String orderId,String totalMoney) throws Exception{
         // 获取当前的文件名
         String fileNameAll = uploadfile.getOriginalFilename();
         String fileName = fileNameAll.substring(0,fileNameAll.lastIndexOf("."));
@@ -265,19 +298,15 @@ public class ShopBatchController {
         if ( list.size() > maxAmount ){
             return setReslt("10001",JpfErrorInfo.MAX_LIMIT.desc());
         }
-        Map<Integer,String> excelInfo = (Map<Integer,String>)list.get(2);
-        // 获取公司名称，判断其不为空
-        String companyName = excelInfo.get(0);
-        if ( !StringUtils.isNotBlank(companyName) ){
-            return setReslt("10006",JpfErrorInfo.EMPTY_COMPANY_NAME.desc());
+        if(StringUtils.isBlank(orderId)){
+            return setReslt("10001",JpfErrorInfo.EMPTY_BATCH_NO.desc());
         }
-        // 判断选择的批次的企业和excel中的企业名称是否一致
-        PayShopCompany payShopCompany = shopCompanyServiceFacade.getCompanyByName(companyName);
-        if ( !payShopCompany.getId().equals(companyId) ){
-            return setReslt("10006",JpfErrorInfo.ERROR_COMPANY_NAME.desc());
+        //根据订单号查询批次
+        PayShopBatch payShopBatch = shopBatchServiceFacade.getBatchByOrderId(orderId);
+        if (payShopBatch == null ){
+           return setReslt("10005",JpfErrorInfo.BATCH_NOT_EXIST.desc());
         }
         // 获取总面值,判断其不为空
-        String totalMoney = excelInfo.get(1);
         if (!StringUtils.isNotBlank(totalMoney) ){
             return setReslt("10001",JpfErrorInfo.EMPTY_TOTAL_MONEY.desc());
         }
@@ -286,11 +315,11 @@ public class ShopBatchController {
         List<ShopCustomerInfo> personsList = new ArrayList<>();    // 新建校验人数组
         Map<String,Integer> valueCount = new HashedMap();
         int totalValue = 0;
-        for ( int i=4; i<list.size(); i++){
+        for ( int i=2; i<list.size(); i++){
             // 获取每条信息详情
             Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
             // 判断手机号合法性
-            if ( !ToolUtils.checkPhone( singlePerson.get(1) ) ){
+            if (!ToolUtils.checkPhone(singlePerson.get(1))){
                 return setReslt("10005","用户"+singlePerson.get(0)+"的手机号有误，请检查后重新上传");
             }
             // 姓名、手机号和面值必填
@@ -298,19 +327,19 @@ public class ShopBatchController {
             String phone = singlePerson.get(1);
             String value = singlePerson.get(2);
             String idno = StringUtils.isNotBlank(singlePerson.get(3)) ? singlePerson.get(3) : null;
-            if ( !StringUtils.isNotBlank(name) || !StringUtils.isNotBlank(phone) || !StringUtils.isNotBlank(value) ){
+            if (!StringUtils.isNotBlank(name) ||!StringUtils.isNotBlank(phone)||!StringUtils.isNotBlank(value) ){
                 return setReslt("10004","Excel第"+i+"行的数据不完整，请修改后重新上传");
             }
             // 判断所有人的状态是不是已冻结
             PayShopCustomer existCustomer = shopCustomerServiceFacade.getCustomerByPhone(singlePerson.get(1));
             ShopCustomerInfo failCustomer = new ShopCustomerInfo();
-            failCustomer.setName(singlePerson.get(0));
-            failCustomer.setPhone(singlePerson.get(1));
-            failCustomer.setDou(Integer.parseInt(singlePerson.get(2)));
-            if ( StringUtils.isNotBlank(idno) ){
+            failCustomer.setName(name);
+            failCustomer.setPhone(phone);
+            failCustomer.setDou(Integer.parseInt(value));
+            if (StringUtils.isNotBlank(idno)){
                 failCustomer.setIdno(idno);
             }
-            if ( existCustomer.getStatus() == 0 ){
+            if (existCustomer.getStatus()== 0){
                 // 账户已冻结
                 failCustomer.setStatus((byte)0);
             }
@@ -334,15 +363,13 @@ public class ShopBatchController {
                 valueCount.put( value,valueCount.get(value) + 1);
             }
         }
-
         // 判断总面值和各人员面值的总和是不是统一
         if (Integer.parseInt(totalMoney) != totalValue){
             return setReslt("10001",JpfErrorInfo.ERROR_TOTAL_MONEY.desc());
         }
-
         // 判断数据库中有没有对应的这些个券
         for (Map.Entry<String, Integer> entry : valueCount.entrySet()) {
-            int valueNum = shopBatchCouponServiceFacade.getCouponNumByValue(companyId,entry.getKey(), null );
+            int valueNum = shopBatchCouponServiceFacade.getCouponNumByValue(companyId,entry.getKey(), payShopBatch.getBatchNo());
             if ( valueNum < entry.getValue() ){
                 return setReslt("10002","面值"+entry.getKey()+"的库存数量少于Excel中的数量");
             }
@@ -359,10 +386,7 @@ public class ShopBatchController {
             responseMap.put("path",path);
             responseMap.put("data",JsonUtils.toJson(personsList));
             responseMap.put("totalMoney",totalMoney);
-            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+uuid.toString()+".txt",false);
-
-            JpfResponseDto jpfResponseDto = new JpfResponseDto();
-            jpfResponseDto.setRetCode("00001");
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+"XQ"+uuid.toString()+".txt",false);
             return setReslt("00001",uuid.toString());
         }
         return new JpfResponseDto();
