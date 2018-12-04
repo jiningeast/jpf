@@ -63,7 +63,7 @@ public class PayShopCouponActive implements Serializable {
     /**
      * 豆数量
      */
-    private BigDecimal dou;
+    private Integer dou;
 
     /**
      * 根据行为不同显示的内容不同
@@ -71,7 +71,7 @@ public class PayShopCouponActive implements Serializable {
     private String content;
 
     /**
-     * 行为 0=激活 1=消费 2=退豆 3=过期 4=服务转让的冻结 5=卖家服务转让成功 6=服务转让的取消 7=买家收豆成功
+     * 行为 0=激活 1=消费 2=退豆 3=过期
      */
     private String type;
 
@@ -200,11 +200,11 @@ public class PayShopCouponActive implements Serializable {
         this.money = money;
     }
 
-    public BigDecimal getDou() {
+    public Integer getDou() {
         return dou;
     }
 
-    public void setDou(BigDecimal dou) {
+    public void setDou(Integer dou) {
         this.dou = dou;
     }
 

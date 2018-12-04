@@ -48,12 +48,12 @@ public class PayShopBargainOrder implements Serializable {
     /**
      * 最低限额豆数
      */
-    private BigDecimal minDou;
+    private Integer minDou;
 
     /**
      * 使用了多少豆
      */
-    private BigDecimal dou;
+    private Integer dou;
 
     /**
      * 转让价
@@ -221,19 +221,19 @@ public class PayShopBargainOrder implements Serializable {
         this.offRate = offRate;
     }
 
-    public BigDecimal getMinDou() {
+    public Integer getMinDou() {
         return minDou;
     }
 
-    public void setMinDou(BigDecimal minDou) {
+    public void setMinDou(Integer minDou) {
         this.minDou = minDou;
     }
 
-    public BigDecimal getDou() {
+    public Integer getDou() {
         return dou;
     }
 
-    public void setDou(BigDecimal dou) {
+    public void setDou(Integer dou) {
         this.dou = dou;
     }
 
