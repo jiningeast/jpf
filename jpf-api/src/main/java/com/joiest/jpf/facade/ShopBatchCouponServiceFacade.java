@@ -1,11 +1,13 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.common.po.PayShopBatchCoupon;
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface ShopBatchCouponServiceFacade {
 
@@ -43,4 +45,11 @@ public interface ShopBatchCouponServiceFacade {
      * 根据批次id批量更新券的发送方式
      */
     public int updateCouponSendTypeByBatchId(String batchId);
+
+    /**
+     *
+     * @param map
+     * @return
+     */
+    List<PayShopBatchCoupon> getCouponsByOrderId(Map<String, Object> map);
 }

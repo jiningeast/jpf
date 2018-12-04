@@ -62,7 +62,7 @@ public class ShopCouponActiveInterfaceInfo {
     /**
      * 豆数量
      */
-    private Integer dou;
+    private BigDecimal dou;
 
     /**
      * 根据行为不同显示的内容不同
@@ -182,11 +182,11 @@ public class ShopCouponActiveInterfaceInfo {
         this.money = money;
     }
 
-    public Integer getDou() {
+    public BigDecimal getDou() {
         return dou;
     }
 
-    public void setDou(Integer dou) {
+    public void setDou(BigDecimal dou) {
         this.dou = dou;
     }
 

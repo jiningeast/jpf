@@ -14,7 +14,7 @@
     <div class="easyui-layout" fit="true">
         <div region="center" border="false"
              style="padding: 10px; background: #fff; border: 1px solid #ccc;">
-            <form id="editForm" method="post" enctype="multipart/form-data" accept="image/gif, image/jpeg,image/jpg, image/png">
+            <form id="addForm" method="post" enctype="multipart/form-data" accept="image/gif, image/jpeg,image/jpg, image/png">
                 <table cellpadding=3 class="table table-bordered">
                     <tr>
                         <th>添加</th>
@@ -77,6 +77,17 @@
                         <td></td>
                     </tr>
                     <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">状态：</td>
+                        <td>
+                            <select id="status_s" name="status" class="easyui-combobox" style="width:120px;">
+                                <option value="0">显示</option>
+                                <option value="1">不显示</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
                         <td colspan="3">
                             <input id="remark" name="remark" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="multiline:true"/>
@@ -98,13 +109,13 @@
                         <td style="text-align: right;background-color: #f1f1f1;">图片：</td>
                         <td colspan="3">
                             <p>
-                                上传文件： <input type="file" name="file" id="uploadfile">
-                                <input type="button" value="上传" onclick="doUploadImg()"/>
+                                上传文件： <input type="file" name="file" id="pInfouploadfile">
+                                <input type="button" value="上传" onclick="pInfoDoUploadImg()"/>
                             </p>
                             <!--保存图片OSS地址-->
-                            <input id="imgurl" name="imgurl" type="hidden" style="width:150px" data-options="required:true" value=""/>
+                            <input id="pInfoimgurl" name="imgurl" type="hidden" style="width:150px" data-options="required:true" value=""/>
                             <!--图片展示-->
-                            <div id="imgDiv"></div>
+                            <div id="pInfoimgDiv"></div>
                         </td>
                     </tr>
                     <tr>
@@ -118,9 +129,9 @@
         </div>
         <div region="south" border="false"
              style="text-align: right; height: 30px; line-height: 30px;">
-            <a id="saveBtn_m" class="easyui-linkbutton" icon="icon-ok"
+            <a id="saveBtn_pInfom" class="easyui-linkbutton" icon="icon-ok"
                href="javascript:void(0)">确定</a>
-            <a id="cancelBtn_m" class="easyui-linkbutton" icon="icon-cancel"
+            <a id="cancelBtn_pInfom" class="easyui-linkbutton" icon="icon-cancel"
                href="javascript:void(0)">取消</a>
         </div>
     </div>
@@ -199,13 +210,13 @@
         //必须延迟加载，因为easyui没有渲染完，执行就会抛出错误。TypeError: $.data(...) is undefined。试过js执行顺序也不可以。
         setTimeout("initData()", 500);
 
-        $("#saveBtn_m").linkbutton({
+        $("#saveBtn_pInfom").linkbutton({
             onClick: function () {
-                var isValid = $("#editForm").form('enableValidation').form('validate');
+                var isValid = $("#addForm").form('enableValidation').form('validate');
                 if (!isValid) {
                     return;
                 }
-                var queryArray = $('#editForm').serializeArray();
+                var queryArray = $('#addForm').serializeArray();
                 var postData = parsePostData(queryArray);
                 $.ajax({
                     type: 'post',
@@ -217,7 +228,7 @@
                             $.messager.alert('消息提示', '操作失败[' + msg.retMsg + ']！', 'error');
                         } else {
                             $.messager.alert('消息提示', '操作成功！', 'info');
-                            $('#infoDiv').window('close');
+                            $('#pinfoAddDiv').window('close');
                             $('#dg').datagrid('reload');
                         }
                     },
@@ -228,9 +239,9 @@
             }
         });
 
-        $('#cancelBtn_m').linkbutton({
+        $('#cancelBtn_pInfom').linkbutton({
             onClick: function(){
-                $('#infoDiv').window('close');
+                $('#pinfoAddDiv').window('close');
             }
         });
 
@@ -335,9 +346,9 @@
 
     });
 
-    function doUploadImg() {
+    function pInfoDoUploadImg() {
         var formData = new FormData();
-        formData.append('file', $('#uploadfile')[0].files[0]);
+        formData.append('file', $('#pInfouploadfile')[0].files[0]);
         //console.log(formData);
         //console.log($('#uploadfile')[0].files[0]);
         $.ajax({
@@ -351,8 +362,8 @@
             success: function (ret) {
                 console.log(ret);
                 var c=   '<img width="200px" height="200px" src="'+ret+'"/>';
-                $("#imgDiv").html(c);
-                $("#imgurl").val(ret);
+                $("#pInfoimgDiv").html(c);
+                $("#pInfoimgurl").val(ret);
             },
             error: function (ret) {
                 $.messager.alert('消息提示', '连接网络失败，请您检查您的网络!', 'error');

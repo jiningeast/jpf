@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
@@ -118,7 +119,7 @@ public class CustomController {
 
         //2、插入pay_shop_customer 用户信息
         Date date = new Date();
-        String dou = "0"; //豆数量
+        BigDecimal dou = new BigDecimal("0.00"); //豆数量
 
         PayShopCustomer record = new PayShopCustomer();
         record.setName("");
@@ -130,16 +131,16 @@ public class CustomController {
         record.setIsVerify((byte)0); // 默认未实名认证
         record.setStatus((byte)1);
         record.setPhone(mobile);
-        record.setDou(Integer.parseInt(dou));
+        record.setDou(dou);
         record.setCode("");
-        record.setDou(0);
+        record.setDou(new BigDecimal("0.00"));
         record.setAddtime(date);
         record.setUpdatetime(date);
         String shopCustomId = shopCustomerInterfaceServiceFacade.addCustomer(record);
         if( shopCustomId !=null && StringUtils.isNotBlank(shopCustomId)){
             PayShopCustomer retInfo = new PayShopCustomer();
             String uid = shopCustomId;
-            String customCode = ToolUtils.CreateCode(dou,uid);
+            String customCode = ToolUtils.CreateCode(dou.toString(),uid);
             retInfo.setCode(customCode);
             JpfResponseDto responseDto =shopCustomerInterfaceServiceFacade.updateCustomerByOpenId(retInfo,weixinUserInfo.getOpenid());
             if(responseDto.getRetCode().equals("0000")){

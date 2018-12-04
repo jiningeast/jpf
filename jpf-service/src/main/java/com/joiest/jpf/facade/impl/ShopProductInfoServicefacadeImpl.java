@@ -32,7 +32,9 @@ public class ShopProductInfoServicefacadeImpl implements ShopProductInfoServiceF
 
         PayShopProductInfoExample example = new PayShopProductInfoExample();
         PayShopProductInfoExample.Criteria c = example.createCriteria();
-        example.setOrderByClause("supplier_id DESC");
+        example.setOrderByClause("id desc,supplier_id DESC");
+        example.setPageNo(request.getPage());
+        example.setPageSize(request.getRows());
 
         List<PayShopProductInfo> list = payShopProductInfoMapper.selectByExample(example);
         if( list == null || list.size() <= 0 ){
@@ -105,7 +107,8 @@ public class ShopProductInfoServicefacadeImpl implements ShopProductInfoServiceF
         info.setSupplierName(request.getSupplierName());
         info.setTypeName(request.getTypeName());
         info.setBrandName(request.getBrandName());
-        //info.setStatus((byte)1);
+        info.setStatus((byte)request.getStatus());
+        info.setRemark(request.getRemark());
         info.setUpdatetime(new Date());
         info.setContactEmail(request.getContactEmail());
         info.setContactName(request.getContactName());

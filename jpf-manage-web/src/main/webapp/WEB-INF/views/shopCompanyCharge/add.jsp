@@ -79,6 +79,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">服务内容：</td>
+                    <td>
+                        <input id="serviceContent" name="serviceContent" class="easyui-textbox" missingMessage="请填写服务内容"  data-options="required:true"/>
+                    </td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">付款凭证：</td>
                     <td>
                         <p>上传文件： <input type="file" name="file" id="file2"></p>

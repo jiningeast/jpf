@@ -104,6 +104,16 @@ public class GetShopProductInfoRequest {
      */
     private String moneyscope;
 
+    /**
+     * 分页
+     */
+    private long page;
+
+    /**
+     * 查询数量
+     */
+    private long rows;
+
     public String getContentId() {
         return contentId;
     }
@@ -270,5 +280,21 @@ public class GetShopProductInfoRequest {
 
     public void setMoneyscope(String moneyscope) {
         this.moneyscope = moneyscope;
+    }
+
+    public long getPage() {
+        return page;
+    }
+
+    public void setPage(long page) {
+        this.page = page;
+    }
+
+    public long getRows() {
+        return rows;
+    }
+
+    public void setRows(long rows) {
+        this.rows = rows;
     }
 }

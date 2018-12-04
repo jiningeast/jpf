@@ -32,12 +32,27 @@ public class ShopCouponRemainInfo {
     /**
      * 券本身值多少个豆
      */
-    private Integer couponDou;
+    private BigDecimal couponDou;
 
     /**
-     * 券豆余额
+     * 非转让豆
      */
-    private Integer couponDouLeft;
+    private BigDecimal saleDouNo;
+
+    /**
+     * 非转让券豆余额
+     */
+    private BigDecimal couponDouLeft;
+
+    /**
+     * 可转让豆
+     */
+    private BigDecimal saleDouYes;
+
+    /**
+     * 可转让豆剩余
+     */
+    private BigDecimal saleDouLeft;
 
     /**
      * 此券是否已用完 0=没用完 1=消费用完 2=过期清零
@@ -59,20 +74,7 @@ public class ShopCouponRemainInfo {
      */
     private Date updatetime;
 
-    /**
-     * 可转让豆
-     */
-    private Integer saleDouYes;
 
-    /**
-     * 可转让豆剩余
-     */
-    private Integer saleDouLeft;
-
-    /**
-     * 非转让豆
-     */
-    private Integer saleDouNo;
 
     /**
      * 转让比例
@@ -126,21 +128,7 @@ public class ShopCouponRemainInfo {
         this.customerId = customerId == null ? null : customerId.trim();
     }
 
-    public Integer getCouponDou() {
-        return couponDou;
-    }
 
-    public void setCouponDou(Integer couponDou) {
-        this.couponDou = couponDou;
-    }
-
-    public Integer getCouponDouLeft() {
-        return couponDouLeft;
-    }
-
-    public void setCouponDouLeft(Integer couponDouLeft) {
-        this.couponDouLeft = couponDouLeft;
-    }
 
     public Byte getStatus() {
         return status;
@@ -174,28 +162,48 @@ public class ShopCouponRemainInfo {
         this.updatetime = updatetime;
     }
 
-    public Integer getSaleDouYes() {
-        return saleDouYes;
+    public BigDecimal getCouponDou() {
+        return couponDou;
     }
 
-    public void setSaleDouYes(Integer saleDouYes) {
-        this.saleDouYes = saleDouYes;
+    public void setCouponDou(BigDecimal couponDou) {
+        this.couponDou = couponDou;
     }
 
-    public Integer getSaleDouLeft() {
-        return saleDouLeft;
-    }
-
-    public void setSaleDouLeft(Integer saleDouLeft) {
-        this.saleDouLeft = saleDouLeft;
-    }
-
-    public Integer getSaleDouNo() {
+    public BigDecimal getSaleDouNo() {
         return saleDouNo;
     }
 
-    public void setSaleDouNo(Integer saleDouNo) {
+    public void setSaleDouNo(BigDecimal saleDouNo) {
         this.saleDouNo = saleDouNo;
+    }
+
+    public BigDecimal getCouponDouLeft() {
+        return couponDouLeft;
+    }
+
+    public void setCouponDouLeft(BigDecimal couponDouLeft) {
+        this.couponDouLeft = couponDouLeft;
+    }
+
+    public BigDecimal getSaleDouYes() {
+        return saleDouYes;
+    }
+
+    public void setSaleDouYes(BigDecimal saleDouYes) {
+        this.saleDouYes = saleDouYes;
+    }
+
+    public BigDecimal getSaleDouLeft() {
+        return saleDouLeft;
+    }
+
+    public void setSaleDouLeft(BigDecimal saleDouLeft) {
+        this.saleDouLeft = saleDouLeft;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public BigDecimal getPercent() {

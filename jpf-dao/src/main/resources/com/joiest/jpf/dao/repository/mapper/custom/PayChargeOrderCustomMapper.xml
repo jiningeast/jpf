@@ -172,14 +172,14 @@
     -->
     insert into pay_charge_order (id, order_no, foreign_order_no,
     company_id, company_name, merch_no,
-    charge_phone, product_id, product_name,
+    charge_phone, product_id, product_name,product_value,product_type
     product_price, product_amount, total_money,
     interface_type, request_params, notify_url,
     notify_params, notify_time, status,
     addtime, updatetime, consumer_order_no)
     values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{foreignOrderNo,jdbcType=VARCHAR},
     #{companyId,jdbcType=BIGINT}, #{companyName,jdbcType=VARCHAR}, #{merchNo,jdbcType=VARCHAR},
-    #{chargePhone,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR},
+    #{chargePhone,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR},#{productValue,jdbcType=DECIMAL},#{productType,jdbcType=INTEGER},
     #{productPrice,jdbcType=DECIMAL}, #{productAmount,jdbcType=INTEGER}, #{totalMoney,jdbcType=DECIMAL},
     #{interfaceType,jdbcType=TINYINT}, #{requestParams,jdbcType=VARCHAR}, #{notifyUrl,jdbcType=VARCHAR},
     #{notifyParams,jdbcType=VARCHAR}, #{notifyTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT},
@@ -218,6 +218,12 @@
       </if>
       <if test="productName != null">
         product_name,
+      </if>
+      <if test="productValue != null">
+        product_value,
+      </if>
+      <if test="productType != null">
+        product_type,
       </if>
       <if test="productPrice != null">
         product_price,
@@ -283,6 +289,12 @@
       </if>
       <if test="productName != null">
         #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productValue != null">
+        #{productValue,jdbcType=DECIMAL},
+      </if>
+      <if test="productType != null">
+        #{productType,jdbcType=INTEGER},
       </if>
       <if test="productPrice != null">
         #{productPrice,jdbcType=DECIMAL},
@@ -366,6 +378,12 @@
       <if test="record.productName != null">
         product_name = #{record.productName,jdbcType=VARCHAR},
       </if>
+      <if test="record.productValue != null">
+        product_value = #{record.productValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productType != null">
+        product_type = #{record.productType,jdbcType=INTEGER},
+      </if>
       <if test="record.productPrice != null">
         product_price = #{record.productPrice,jdbcType=DECIMAL},
       </if>
@@ -422,6 +440,8 @@
     charge_phone = #{record.chargePhone,jdbcType=VARCHAR},
     product_id = #{record.productId,jdbcType=BIGINT},
     product_name = #{record.productName,jdbcType=VARCHAR},
+    product_value = #{record.productValue,jdbcType=DECIMAL},
+    product_type = #{record.productType,jdbcType=INTEGER},
     product_price = #{record.productPrice,jdbcType=DECIMAL},
     product_amount = #{record.productAmount,jdbcType=INTEGER},
     total_money = #{record.totalMoney,jdbcType=DECIMAL},
@@ -468,6 +488,12 @@
       </if>
       <if test="productName != null">
         product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productValue != null">
+        product_value = #{productValue,jdbcType=DECIMAL},
+      </if>
+      <if test="productType != null">
+        product_type = #{productType,jdbcType=INTEGER},
       </if>
       <if test="productPrice != null">
         product_price = #{productPrice,jdbcType=DECIMAL},
@@ -522,6 +548,8 @@
     charge_phone = #{chargePhone,jdbcType=VARCHAR},
     product_id = #{productId,jdbcType=BIGINT},
     product_name = #{productName,jdbcType=VARCHAR},
+    product_value = #{productValue,jdbcType=DECIMAL},
+    product_type = #{productType,jdbcType=INTEGER},
     product_price = #{productPrice,jdbcType=DECIMAL},
     product_amount = #{productAmount,jdbcType=INTEGER},
     total_money = #{totalMoney,jdbcType=DECIMAL},

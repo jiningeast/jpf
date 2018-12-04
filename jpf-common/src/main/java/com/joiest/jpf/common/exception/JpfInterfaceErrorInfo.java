@@ -113,7 +113,7 @@ public enum JpfInterfaceErrorInfo {
 
     LOGOUT("80010","已退出登录"),
 
-    PARAMNOTNULL("80011","数据不全"),
+    PARAMNOTNULL("80011","数据参数不全"),
 
     CONTRACT_SUFFICIENT("80012","合同余额不足"),
 

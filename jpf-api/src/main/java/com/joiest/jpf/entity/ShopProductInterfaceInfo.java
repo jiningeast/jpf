@@ -48,7 +48,7 @@ public class ShopProductInterfaceInfo {
     /**
      * 豆
      */
-    private Integer dou;
+    private BigDecimal dou;
 
     /**
      * 产品简介
@@ -180,13 +180,13 @@ public class ShopProductInterfaceInfo {
         this.bid = bid;
     }
 
-    public Integer getDou() {
+  /*  public Integer getDou() {
         return dou;
     }
 
-    public void setDou(Integer dou) {
+    public void setDou(BigDecimal dou;) {
         this.dou = dou;
-    }
+    }*/
 
     public String getIntro() {
         return intro;
@@ -433,6 +433,14 @@ public class ShopProductInterfaceInfo {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public BigDecimal getDou() {
+        return dou;
+    }
+
+    public void setDou(BigDecimal dou) {
+        this.dou = dou;
     }
 
     //================ 自定义字段 end ================

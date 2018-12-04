@@ -125,6 +125,19 @@ public class GetShopCompanyChargeRequest {
      */
     private BigDecimal couponMoney;
 
+    /**
+     * 服务内容
+     */
+    private String serviceContent;
+
+    public String getServiceContent() {
+        return serviceContent;
+    }
+
+    public void setServiceContent(String serviceContent) {
+        this.serviceContent = serviceContent;
+    }
+
     public String getContractNo() {
         return contractNo;
     }

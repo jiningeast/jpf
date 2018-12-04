@@ -161,6 +161,7 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
         payShopCompanyCharge.setServiceMoney(request.getServiceMoney());
         payShopCompanyCharge.setTransferRate(request.getTransferRate());
         payShopCompanyCharge.setBalance(request.getCouponMoney());
+        payShopCompanyCharge.setServiceContent(request.getServiceContent());
         int count = payShopCompanyChargeMapper.insertSelective(payShopCompanyCharge);
         if( count != 1 ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "添加失败");

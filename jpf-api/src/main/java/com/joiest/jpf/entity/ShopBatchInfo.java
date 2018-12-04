@@ -159,6 +159,16 @@ public class ShopBatchInfo {
      */
     private String smsContent;
 
+    private String contractNo;
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
     public String getId() {
         return id;
     }

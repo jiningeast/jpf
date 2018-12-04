@@ -78,7 +78,7 @@ public class ShopOrderInterfaceInfo implements Serializable {
     /**
      * 产品豆价格
      */
-    private Integer productDou;
+    private BigDecimal productDou;
 
     /**
      * 商品基础信息id
@@ -103,7 +103,7 @@ public class ShopOrderInterfaceInfo implements Serializable {
     /**
      * 订单总豆数量
      */
-    private Integer totalDou;
+    private BigDecimal totalDou;
 
     /**
      * 支付方式 0=豆支付 1=微信支付
@@ -198,7 +198,7 @@ public class ShopOrderInterfaceInfo implements Serializable {
     /**
      * 用户豆余额
      */
-    private int userDou;
+    private BigDecimal userDou;
 
     /**
      * 标题
@@ -350,11 +350,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
         this.productMoney = productMoney;
     }
 
-    public Integer getProductDou() {
+    public BigDecimal getProductDou() {
         return productDou;
     }
 
-    public void setProductDou(Integer productDou) {
+    public void setProductDou(BigDecimal productDou) {
         this.productDou = productDou;
     }
 
@@ -390,11 +390,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
         this.totalMoney = totalMoney;
     }
 
-    public Integer getTotalDou() {
+    public BigDecimal getTotalDou() {
         return totalDou;
     }
 
-    public void setTotalDou(Integer totalDou) {
+    public void setTotalDou(BigDecimal totalDou) {
         this.totalDou = totalDou;
     }
 
@@ -511,11 +511,11 @@ public class ShopOrderInterfaceInfo implements Serializable {
         this.rechargeMoney = rechargeMoney;
     }
 
-    public int getUserDou() {
+    public BigDecimal getUserDou() {
         return userDou;
     }
 
-    public void setUserDou(int userDou) {
+    public void setUserDou(BigDecimal userDou) {
         this.userDou = userDou;
     }
 

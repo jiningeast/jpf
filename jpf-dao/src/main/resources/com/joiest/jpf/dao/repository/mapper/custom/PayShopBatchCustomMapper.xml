@@ -32,6 +32,10 @@
     <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="transfer_rate" jdbcType="DECIMAL" property="transferRate" />
+    <result column="company_charge_id" jdbcType="BIGINT" property="companyChargeId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="contract_no" jdbcType="VARCHAR" property="contractNo" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.joiest.jpf.common.po.PayShopBatch">
     <!--
@@ -308,6 +312,18 @@
       <if test="smsContent != null">
         sms_content,
       </if>
+      <if test="transferRate != null">
+        transfer_rate,
+      </if>
+      <if test="companyChargeId != null">
+        company_charge_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="contractNo != null">
+        contract_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -390,6 +406,18 @@
       </if>
       <if test="smsContent != null">
         #{smsContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="transferRate != null">
+        #{transferRate,jdbcType=DECIMAL},
+      </if>
+      <if test="companyChargeId != null">
+        #{companyChargeId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="contractNo != null">
+        #{contractNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

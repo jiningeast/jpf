@@ -47,12 +47,12 @@ public class ShopBargainOrderInfo {
     /**
      * 最低限额豆数
      */
-    private Integer minDou;
+    private BigDecimal minDou;
 
     /**
      * 使用了多少豆
      */
-    private Integer dou;
+    private BigDecimal dou;
 
     /**
      * 转让价
@@ -213,19 +213,19 @@ public class ShopBargainOrderInfo {
         this.offRate = offRate;
     }
 
-    public Integer getMinDou() {
+    public BigDecimal getMinDou() {
         return minDou;
     }
 
-    public void setMinDou(Integer minDou) {
+    public void setMinDou(BigDecimal minDou) {
         this.minDou = minDou;
     }
 
-    public Integer getDou() {
+    public BigDecimal getDou() {
         return dou;
     }
 
-    public void setDou(Integer dou) {
+    public void setDou(BigDecimal dou) {
         this.dou = dou;
     }
 

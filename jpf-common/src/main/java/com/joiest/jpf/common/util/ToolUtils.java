@@ -1,12 +1,14 @@
 package com.joiest.jpf.common.util;
 
 import com.aliyun.oss.OSSClient;
+import com.sun.org.apache.xpath.internal.SourceTree;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
@@ -532,4 +534,28 @@ public class ToolUtils {
         return subMd5key;
     }
 
+    //Bigdecimal 相减四舍五入
+    /**
+     * 提供精确的减法运算
+     *
+     * @param v1    被减数
+     * @param v2    减数
+     * @param scale 保留scale 位小数
+     * @return 两个参数的差
+     */
+    public static String sub(String v1, String v2, int scale) {
+        if (scale < 0) {
+            throw new IllegalArgumentException(
+                    "The scale must be a positive integer or zero");
+        }
+        BigDecimal b1 = new BigDecimal(v1);
+        BigDecimal b2 = new BigDecimal(v2);
+        return b1.subtract(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+    }
+
+    public static void main(String[] args){
+//方法体
+        String aa=sub("11.3","11.222",2);
+        System.out.println(aa);
+    }
 }

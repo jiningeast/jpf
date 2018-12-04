@@ -106,16 +106,30 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
         return payShopCouponOrderMapper.selectByExample(example);
     }
 
+
+
     /**
      * 根据订单号查询订单的详情
-     * @param orderNo
+     * @param map
      * @return
      */
     @Override
-    public List<PayShopCouponOrderInfo> getOrderInfo(String orderNo) {
+    public List<PayShopCouponOrderInfo> getOrderInfo(Map<String,Object> map) {
         PayShopCouponOrderExample example = new PayShopCouponOrderExample();
         PayShopCouponOrderExample.Criteria criteria = example.createCriteria();
-        criteria.andOrderNoEqualTo(orderNo);
+        if(map.get("orderNo")!=null){
+            criteria.andOrderNoEqualTo(map.get("orderNo").toString());
+        }
+        if (Long.valueOf(map.get("pageSize").toString())<= 0){
+            example.setPageSize(10);
+        }else{
+            example.setPageSize(Long.valueOf(map.get("pageSize").toString()));
+        }
+        if(Long.valueOf(map.get("pageNo").toString())== 0){
+            example.setPageNo(1);
+        }else{
+            example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
+        }
         List<PayShopCouponOrder> orderList = payShopCouponOrderMapper.selectByExample(example);
         if(orderList==null||orderList.size()==0){
             return null;

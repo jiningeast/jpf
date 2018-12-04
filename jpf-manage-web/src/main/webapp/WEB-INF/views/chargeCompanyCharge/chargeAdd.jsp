@@ -99,10 +99,11 @@
         });
     }
 
-    // 计算实际到帐金额
+    // 计算实际到帐金额1
     function getRealMoney() {
 
-        var moneyrel = parseInt( $("#contractMoney").val() );
+        //var moneyrel = parseInt( $("#contractMoney").val() );
+        var moneyrel = $("#contractMoney").val();
         var rote = ( $("#rate").val() );
         if ( !isNaN(moneyrel) && !isNaN(rote) ){
             var calculate = (moneyrel * rote)/100;

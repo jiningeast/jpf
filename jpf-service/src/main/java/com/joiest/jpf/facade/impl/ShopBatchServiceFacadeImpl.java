@@ -8,6 +8,7 @@ import com.joiest.jpf.dao.repository.mapper.custom.PayShopBatchCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.ShopBatchRequest;
 import com.joiest.jpf.dto.ShopBatchResponse;
+import com.joiest.jpf.entity.PayCouponInfo;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopBatchInfo;
 import com.joiest.jpf.facade.ShopBatchServiceFacade;
@@ -49,6 +50,10 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
 
     @Autowired
     private PayShopBatchCouponCustomMapper payShopBatchCouponCustomMapper;
+    @Autowired
+    private   PayShopCouponOrderMapper payShopCouponOrderMapper;
+    @Autowired
+    private   PayShopCouponOrderInfoMapper payShopCouponOrderInfoMapper;
 
     @Override
     public ShopBatchResponse getBatches(ShopBatchRequest shopBatchRequest){
@@ -153,6 +158,19 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         payShopBatch.setOperatorName(shopBatchRequest.getOperatorName());
         payShopBatch.setAddtime(new Date());
 
+        //--------此为支持前台系统新增--------
+        //订单上保存合同的id 如果走的直接走的后台，前台数据订单关系暂且未维护
+        if(StringUtils.isNotBlank(shopBatchRequest.getOrderId())){
+            payShopBatch.setOrderId(shopBatchRequest.getOrderId());
+        }else{
+            payShopBatch.setOrderId("0");
+        }
+        //根据订单号上的合同号 查询可用的合同
+        payShopBatch.setCompanyChargeId(shopBatchRequest.getContractId());
+        payShopBatch.setContractNo(shopBatchRequest.getContractNo());
+        PayShopCompanyCharge payShopCompanyCharge = payShopCompanyChargeMapper.selectByPrimaryKey(shopBatchRequest.getContractId());
+        payShopBatch.setTransferRate(payShopCompanyCharge.getTransferRate());
+        //--------此为支持前台系统新增-------- 还应增加保存前台数据的方法，后续在做
         payShopBatchCustomMapper.insertSelective(payShopBatch);
         String batchId = payShopBatch.getId();
         String batchNo = payShopBatch.getBatchNo();
@@ -175,12 +193,16 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
                 payShopBatchCoupon.setMoney(Integer.parseInt(single.get("money")));
                 // 根据兑换比例把面值兑换成豆
                 Double money = new Double(single.get("money"));
-                Double dou = money * payShopBatch.getScale();
-                payShopBatchCoupon.setDou( dou.intValue() );
+//                Double dou = money * payShopBatch.getScale();
+                BigDecimal dou = new BigDecimal(money*payShopBatch.getScale());
+                //payShopBatchCoupon.setDou( dou.intValue() );
+                payShopBatchCoupon.setDou( dou );
                 payShopBatchCoupon.setIsActive((byte)0);
                 payShopBatchCoupon.setExpireMonth(shopBatchRequest.getExpireMonth());
                 payShopBatchCoupon.setIsExpired((byte)0);
                 payShopBatchCoupon.setAddtime(new Date());
+                payShopBatchCoupon.setOrderId(StringUtils.isNotBlank(shopBatchRequest.getOrderId())?shopBatchRequest.getOrderId():"0");
+                payShopBatchCoupon.setStatus((byte)0);
                 payShopBatchCouponsList.add(payShopBatchCoupon);
 
                 payShopBatchCouponMapper.insert(payShopBatchCoupon);
@@ -272,6 +294,12 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         payShopInterfaceStreamMapper.insertSelective(payShopInterfaceStream);
 
         // 批次及券生成完毕，更新批次状态为“1：生成完毕，待发券”
+        //全部执行完毕后，更新前台订单状态
+        if(StringUtils.isNotBlank(shopBatchRequest.getOrderId())){
+            PayShopCouponOrder payShopCouponOrder =payShopCouponOrderMapper.selectByPrimaryKey(shopBatchRequest.getOrderId());
+            payShopCouponOrder.setStatus((byte)1);
+            payShopCouponOrderMapper.updateByPrimaryKeySelective(payShopCouponOrder);
+        }
 
         return new JpfResponseDto();
     }
@@ -406,5 +434,61 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         }
 
         return list.get(0);
+    }
+
+    @Override
+    public PayShopBatch getBatchByOrderId(String orderId) {
+        PayShopBatchExample example = new PayShopBatchExample();
+        PayShopBatchExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderIdEqualTo(orderId);
+        List<PayShopBatch> list = payShopBatchMapper.selectByExample(example);
+        if (list!=null&&list.size()!=0){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 查询所有的订单
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<PayShopCouponOrder> getOrderList(String pageNo, String pageSize) {
+        PayShopCouponOrderExample example = new PayShopCouponOrderExample();
+        PayShopCouponOrderExample.Criteria criteria = example.createCriteria();
+        if(StringUtils.isEmpty(pageNo)){
+            example.setPageNo(0);
+            example.setPageSize(10);
+        }else{
+            example.setPageNo(Long.parseLong(pageNo));
+            example.setPageSize(Long.parseLong(pageSize));
+        }
+        //查询已申请，未完成的数据
+        criteria.andStatusEqualTo((byte)0);
+        return payShopCouponOrderMapper.selectByExample(example);
+    }
+
+    /**
+     * 查询订单的详细信息
+     * @param orderId
+     * @return
+     */
+    @Override
+    public List<PayCouponInfo> getOrderInfo(String orderId) {
+        List<PayCouponInfo> payCouponInfos = new ArrayList<>();
+        PayShopCouponOrderInfoExample example = new PayShopCouponOrderInfoExample();
+        PayShopCouponOrderInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderIdEqualTo(orderId);
+        List<PayShopCouponOrderInfo> payShopCouponOrderInfos = payShopCouponOrderInfoMapper.selectByExample(example);
+        for (PayShopCouponOrderInfo payShopCouponOrderInfo: payShopCouponOrderInfos) {
+            PayCouponInfo payCouponInfo =new PayCouponInfo();
+            payCouponInfo.setMoney(payShopCouponOrderInfo.getPrice().intValue()+"");
+            payCouponInfo.setAmount(payShopCouponOrderInfo.getNumber()+"");
+            payCouponInfo.setCalculate(payShopCouponOrderInfo.getTotalPrice()+"");
+            payCouponInfos.add(payCouponInfo);
+        }
+        return payCouponInfos;
     }
 }

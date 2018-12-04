@@ -93,12 +93,12 @@ public class BargainSellerController {
         //参数验证
         ValidatorUtils.validateInterface(douTransferRequest);
 
-        Integer dou = Integer.valueOf(requestParam.get("dou").toString());
-
+        //Integer dou = Integer.valueOf(requestParam.get("dou").toString());
+        BigDecimal dou =new BigDecimal(requestParam.get("dou").toString());
        /* if(dou>userInfo.getDou())
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "抱歉，您的欣豆不足", null);*/
         //2018-11-22改
-        if(dou>userInfo.getSaleDou()){
+        if(dou.compareTo(userInfo.getSaleDou())>0){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "抱歉，您的可转让欣豆不足", null);
         }
         //获取服务转让订单
@@ -106,14 +106,15 @@ public class BargainSellerController {
         if(shopBargainRequestInfo==null)
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "买家发布信息有误", null);
 
-        if(shopBargainRequestInfo.getMinDou() > dou){
+        if(shopBargainRequestInfo.getMinDou() .compareTo(dou)>0){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "最低转让"+shopBargainRequestInfo.getMinDou(), null);
         }
         //转让价 即 豆转换成的钱
-        Double allDou = dou*shopBargainRequestInfo.getOffRate();
-        BigDecimal selfTranferPrice = new BigDecimal(allDou).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_DOWN);
-
+        BigDecimal allDou=new BigDecimal(ArithmeticUtils.mul(dou.toString(),shopBargainRequestInfo.getOffRate().toString(),2));
+        //Double allDou = dou*shopBargainRequestInfo.getOffRate();
+        //BigDecimal selfTranferPrice = allDou.divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_DOWN);
+        BigDecimal selfTranferPrice=new BigDecimal(ArithmeticUtils.div(allDou.toString(),new BigDecimal("100").toString(),2));
         if(!selfTranferPrice.equals(new BigDecimal(requestParam.get("transferPrice").toString())))
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "转让价有误", null);
 
@@ -168,17 +169,20 @@ public class BargainSellerController {
 
         //更新用户豆  冻结豆
         ShopCustomerInfo shopCustomerInfo = new ShopCustomerInfo();
-        Integer douCount=userInfo.getDou()-dou;
-        Integer over = userInfo.getSaleDou()-dou;
+        BigDecimal douCount=new BigDecimal(ArithmeticUtils.sub(userInfo.getDou().toString(),dou.toString(),2));
+        //Integer douCount=userInfo.getDou()-dou;
+        BigDecimal over =new BigDecimal(ArithmeticUtils.sub(userInfo.getSaleDou().toString(),dou.toString(),2));
+        //Integer over = userInfo.getSaleDou()-dou;
         shopCustomerInfo.setSaleDou(over);
         shopCustomerInfo.setDou(douCount);
         String code = ToolUtils.CreateCode(String.valueOf(douCount),userInfo.getId());
         shopCustomerInfo.setCode(code);
         shopCustomerInfo.setId(userInfo.getId());
         //shopCustomerInfo.setCode(ToolUtils.CreateCode(over.toString(),uid));
-        if(userInfo.getFreezeDou() != null && userInfo.getFreezeDou()>0){
-
-            shopCustomerInfo.setFreezeDou(userInfo.getFreezeDou()+dou);
+        //if(userInfo.getFreezeDou() != null && userInfo.getFreezeDou()>0){
+        if(userInfo.getFreezeDou().compareTo(new BigDecimal("0.00"))>0){
+            BigDecimal freeDou=new BigDecimal(ArithmeticUtils.add(userInfo.getFreezeDou().toString(),dou.toString(),2));
+            shopCustomerInfo.setFreezeDou(freeDou);
         }else{
 
             shopCustomerInfo.setFreezeDou(dou);

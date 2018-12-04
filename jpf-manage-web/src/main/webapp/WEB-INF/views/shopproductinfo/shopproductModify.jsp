@@ -78,6 +78,17 @@
                     <td></td>
                 </tr>
                 <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">状态：</td>
+                    <td>
+                        <select id="status_esits" name="status" class="easyui-combobox" style="width:120px;">
+                            <option value="0">显示</option>
+                            <option value="1">不显示</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">备注：</td>
                     <td colspan="3">
                         <input id="remark" name="remark" value="${productOne.remark}" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="multiline:true"/>
@@ -171,6 +182,7 @@
 
 
     function initData() {
+        $('#status_esits').combobox('select', '${productOne.status}');
         $('#typeId').combobox('select', '${productOne.typeId}');
         $('#supplierId').combobox('select', '${productOne.supplierId}');
         $('#brandId').combobox('select', '${productOne.brandId}');

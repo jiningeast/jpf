@@ -203,21 +203,38 @@ public class ConsumerOrderController {
     @RequestMapping(value="/matchingDataTask",method = RequestMethod.GET,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String matchingDataTask(){
+        logger.info("开始执行匹配Start");
         //查询是否存在需要待执行的任务
         String ret = "数据匹配成功";
+        //先查询redis 该任务是否可以执行，如果不能执行，返回请等待
+        String flag = redisCustomServiceFacade.get("matchingDataTaskFlag");
+        if(StringUtils.isNotBlank(flag)&&StringUtils.equals("run",flag)){
+            ret = "目前多条数据在匹配中，请等待.......";
+            return ret;
+        }
         PayChargeConsumerOrder payChargeConsumerOrder = consumerOrderServiceFacade.selectConsumerOrderTask();
         if(payChargeConsumerOrder!=null){ //不为空准备执行任务
-            //查询redis的队列是不是为空，如果为空不执行
             Long size = redisCustomServiceFacade.getSize("consumerOrderQueue");
             if(size.longValue() != 0){//开始执行匹配操作
-                consumerOrderServiceFacade.matchingDataTaskStart(payChargeConsumerOrder);
-                ret+=ret+",订单号:"+payChargeConsumerOrder.getOrderNo();
+                redisCustomServiceFacade.set("matchingDataTaskFlag","run",0);
+                try{
+                    consumerOrderServiceFacade.matchingDataTaskStart(payChargeConsumerOrder);
+                }catch (Exception e){
+                    logger.error(e.getMessage());
+                    redisCustomServiceFacade.set("matchingDataTaskFlag","stop",0);
+                    ret="无匹配的记录";
+                    return ret;
+                }
+                redisCustomServiceFacade.set("matchingDataTaskFlag","stop",0);
+                ret=ret+",订单号:"+payChargeConsumerOrder.getOrderNo();
             }else{
                 //拉取数据，存储在list
-                pushDateToRedis(1000L);
+                Long redis_length = Long.valueOf(ConfigUtil.getValue("REDIS_LENGTH"));
+                pushDateToRedis(redis_length);
                 ret+=ret+",redis 数据队列数据不足，从新拉取";
             }
         }
+        logger.info("开始执行匹配end");
         return ret;
     }
 
@@ -232,9 +249,10 @@ public class ConsumerOrderController {
         String ret = "数据push成功";
         try {
             Long size = redisCustomServiceFacade.getSize("consumerOrderQueue");
-            if(size.longValue() <1000){//保证list集合的size 最多是1000
+            Long redis_length = Long.valueOf(ConfigUtil.getValue("REDIS_LENGTH"));
+            if(size.longValue() < redis_length){//保证list集合的size 最多是1000
                 //开始执行匹配操作
-                long querySize = 1000-size;
+                long querySize = redis_length-size;
                 pushDateToRedis(querySize);
             }
         }catch (Exception e){
@@ -424,11 +442,12 @@ public class ConsumerOrderController {
             jsonObject.put("companyName",one.getCompanyName());//企业名称
             jsonObject.put("merchNo",one.getMerchNo());//商户号
             jsonObject.put("chargePhone",one.getChargePhone());//充值号码
-            //jsonObject.put("productType",one.getProductType());//产品；类型
+            jsonObject.put("productType",one.getProductType());//产品；类型
             jsonObject.put("productName",one.getProductName());//商品名称
-            jsonObject.put("productPrice",one.getProductPrice());//商品价格
+            //jsonObject.put("productPrice",one.getProductPrice());//商品价格
             jsonObject.put("productAmount",one.getProductAmount());//商品数量
-            jsonObject.put("totalMoney",one.getTotalMoney());//订单金额
+            jsonObject.put("productValue",one.getProductValue());//商品价格
+            //jsonObject.put("totalMoney",one.getTotalMoney());//订单金额
             jsonObject.put("status",one.getStatus());//订单状态
             jsonObject.put("consumerOrderNo",one.getConsumerOrderNo());//拉取单号
             //时间格式转换

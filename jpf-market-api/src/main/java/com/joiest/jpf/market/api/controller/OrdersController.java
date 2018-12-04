@@ -208,8 +208,8 @@ public class OrdersController {
         if ( userCouponList == null || userCouponList.getCount() == 0) {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
         }
-        int orderDou = Integer.valueOf(request.getPaymoney());
-        if ( orderDou > userInfo.getDou() || orderDou > userCouponList.getDouTotal())
+        BigDecimal orderDou = new BigDecimal(request.getPaymoney());
+        if ( orderDou .compareTo( userInfo.getDou())>0 || orderDou .compareTo( userCouponList.getDouTotal())>0)
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(), JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(), "");
         }
@@ -269,7 +269,8 @@ public class OrdersController {
         if ( request.getAmount() != null && StringUtils.isNotBlank(""+request.getAmount()) ){
             // 如果参数中有数量
             info.setTotalMoney(new BigDecimal(productInfo.getMoney().doubleValue()*Integer.parseInt(request.getAmount())));
-            info.setTotalDou(productInfo.getDou()*Integer.parseInt(request.getAmount()));
+            BigDecimal totloDou=new BigDecimal(ArithmeticUtils.mul(productInfo.getDou().toString(),request.getAmount().toString(),2));
+            info.setTotalDou(totloDou);
             info.setAmount(Integer.parseInt(request.getAmount()));
         }else{
             // 如果参数中没有数量
@@ -393,8 +394,8 @@ public class OrdersController {
         if ( userCouponList == null || userCouponList.getCount() == 0) {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getCode(), JpfInterfaceErrorInfo.CURR_DOU_TOTAL_ZERO.getDesc(), "");
         }
-        int orderDou = orderInfo.getTotalDou();
-        if ( orderDou > userInfo.getDou() || orderDou > userCouponList.getDouTotal())
+        BigDecimal orderDou = orderInfo.getTotalDou();
+        if ( orderDou .compareTo( userInfo.getDou())>0 || orderDou .compareTo( userCouponList.getDouTotal())>0)
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode(), JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getDesc(), "");
         }
