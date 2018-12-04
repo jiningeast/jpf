@@ -229,6 +229,8 @@ public class OrderInfoController {
         List<ShopOrderInterfaceInfo> list = shopOrderInfoInterfaceServiceFacade.getAbnormalOrders(shopOrderInterfaceInfo);
         if( list !=null && list.size() >0 ){
 
+            LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+
             for (int i = 0; i < list.size(); i++) {
 
                 logContent = new StringBuilder(); //初始化日志变量
