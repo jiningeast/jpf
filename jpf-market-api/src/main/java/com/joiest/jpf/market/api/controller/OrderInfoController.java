@@ -266,8 +266,8 @@ public class OrderInfoController {
 
                                 ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
                                 info.setForeignOrderNo(orderid);
-                                info.setForeignRequestContent(queryPhoneResponseMap.get("requestParam"));
-                                info.setForeignResponseContent(queryPhoneResponseMap.get("responseParam"));
+                                //info.setForeignRequestContent(queryPhoneResponseMap.get("requestParam"));
+                                //info.setForeignResponseContent(queryPhoneResponseMap.get("responseParam"));
                                 info.setUpdatetime(date);
                                 info.setId(id);
                                 // 1充值成功、0充值中、9充值失败
