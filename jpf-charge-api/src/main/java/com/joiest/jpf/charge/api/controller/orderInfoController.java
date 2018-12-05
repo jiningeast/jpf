@@ -56,7 +56,7 @@ public class orderInfoController {
         ChargeOrderInfo chargeOrderInfo = new ChargeOrderInfo();
         //上游充值成功
         chargeOrderInfo.setStatus((byte)2);
-        chargeOrderInfo.setInterfaceType((byte)0);
+        //chargeOrderInfo.setInterfaceType((byte)0); // 接口类型 0=欧非 1=威能
         List<ChargeOrderInfo> list = chargeOrderServiceFacade.getAbnormalOrders(chargeOrderInfo);
         if( list !=null && list.size() >0 ){
 
