@@ -67,7 +67,7 @@ public class orderInfoController {
                 logContent = new StringBuilder(); //初始化日志变量
                 // 请求欧飞接口
                 Byte type = list.get(i).getInterfaceType() == null ? (byte)0 : list.get(i).getInterfaceType();
-                if( list.get(i).getInterfaceType() == 0  ){
+                if( type == 0  ){
                     String orderNo = list.get(i).getOrderNo();
                     String id = list.get(i).getId();
                     String status = list.get(i).getStatus().toString();
