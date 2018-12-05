@@ -154,7 +154,8 @@
                             <td>
                                 <select id="status" name="status" class="easyui-combobox" style="width:120px;">
                                     <option value="">全部</option>
-                                    <option value="1">订单生成</option>
+                                    <option value="0">下单成功</option>
+                                    <option value="1">充值中</option>
                                     <option value="2">充值成功</option>
                                     <option value="3">充值失败</option>
                                     <option value="4">退款申请中</option>
