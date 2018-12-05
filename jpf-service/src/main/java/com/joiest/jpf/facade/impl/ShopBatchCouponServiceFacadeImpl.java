@@ -49,6 +49,9 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
     @Autowired
     private PayShopConponExcelMapper payShopConponExcelMapper;
 
+    @Autowired
+    private PayShopCouponOrderMapper payShopCouponOrderMapper;
+
     /**
      * 根据id获取单个券详情
      */
@@ -424,6 +427,9 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             String start = StringUtils.substring(payShopBatchCoupon.getActiveCode(),0,2);
             String end = StringUtils.substring(payShopBatchCoupon.getActiveCode(),-2,payShopBatchCoupon.getActiveCode().length());
             payShopBatchCoupon.setActiveCode(start+"****"+end);
+            if(payShopBatchCoupon.getSendType()==null){
+                payShopBatchCoupon.setSendType((byte)5);
+            }
         }
         PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = new PayShopBatchCouponResultInfo();
         payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCoupons);
@@ -505,6 +511,10 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
                 }
             }
         }
+        //更改订单状态
+        PayShopCouponOrder payShopCouponOrder = payShopCouponOrderMapper.selectByPrimaryKey(payShopBatch.getOrderId());
+        payShopCouponOrder.setStatus((byte)4);
+        payShopCouponOrderMapper.updateByPrimaryKeySelective(payShopCouponOrder);
         return couponsList;
     }
 }
