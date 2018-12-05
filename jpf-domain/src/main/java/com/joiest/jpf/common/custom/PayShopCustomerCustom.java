@@ -1,6 +1,7 @@
 package com.joiest.jpf.common.custom;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayShopCustomerCustom implements Serializable {
@@ -72,7 +73,7 @@ public class PayShopCustomerCustom implements Serializable {
     /**
      * 欣豆数量
      */
-    private Integer dou;
+    private BigDecimal dou;
 
     /**
      * 充值校验码
@@ -97,7 +98,7 @@ public class PayShopCustomerCustom implements Serializable {
     /**
      * 可转让豆
      */
-    private Integer saleDou;
+    private BigDecimal saleDou;
 
     private static final long serialVersionUID = 1L;
 
@@ -197,14 +198,6 @@ public class PayShopCustomerCustom implements Serializable {
         this.status = status;
     }
 
-    public Integer getDou() {
-        return dou;
-    }
-
-    public void setDou(Integer dou) {
-        this.dou = dou;
-    }
-
     public String getCode() {
         return code;
     }
@@ -235,6 +228,22 @@ public class PayShopCustomerCustom implements Serializable {
 
     public void setMpid(String mpid) {
         this.mpid = mpid == null ? null : mpid.trim();
+    }
+
+    public BigDecimal getDou() {
+        return dou;
+    }
+
+    public void setDou(BigDecimal dou) {
+        this.dou = dou;
+    }
+
+    public BigDecimal getSaleDou() {
+        return saleDou;
+    }
+
+    public void setSaleDou(BigDecimal saleDou) {
+        this.saleDou = saleDou;
     }
 
     /**
@@ -331,11 +340,4 @@ public class PayShopCustomerCustom implements Serializable {
         this.isBargainBuyer = isBargainBuyer;
     }
 
-    public Integer getSaleDou() {
-        return saleDou;
-    }
-
-    public void setSaleDou(Integer saleDou) {
-        this.saleDou = saleDou;
-    }
 }

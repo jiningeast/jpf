@@ -18,13 +18,14 @@
     <result column="is_bargain_buyer" jdbcType="TINYINT" property="isBargainBuyer" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="dou" jdbcType="INTEGER" property="dou" />
+    <result column="dou" jdbcType="DECIMAL" property="dou" />
+    <result column="freeze_dou" jdbcType="DECIMAL" property="freezeDou" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
     <result column="mpid" jdbcType="BIGINT" property="mpid" />
     <result column="headimgurl" jdbcType="VARCHAR" property="avatar" />
-    <result column="sale_dou" jdbcType="INTEGER" property="saleDou" />
+    <result column="sale_dou" jdbcType="DECIMAL" property="saleDou" />
   </resultMap>
   <sql id="Example_Where_Clause_Custom">
     <!--
