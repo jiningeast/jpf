@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class PayShopBatchCouponResultInfo {
     private Integer total;
-    private List<PayShopBatchCoupon> payShopBatchCoupons;
+    private List<PayShopBatchCouponResult> payShopBatchCoupons;
 
     public Integer getTotal() {
         return total;
@@ -22,11 +22,11 @@ public class PayShopBatchCouponResultInfo {
         this.total = total;
     }
 
-    public List<PayShopBatchCoupon> getPayShopBatchCoupons() {
+    public List<PayShopBatchCouponResult> getPayShopBatchCoupons() {
         return payShopBatchCoupons;
     }
 
-    public void setPayShopBatchCoupons(List<PayShopBatchCoupon> payShopBatchCoupons) {
+    public void setPayShopBatchCoupons(List<PayShopBatchCouponResult> payShopBatchCoupons) {
         this.payShopBatchCoupons = payShopBatchCoupons;
     }
 }

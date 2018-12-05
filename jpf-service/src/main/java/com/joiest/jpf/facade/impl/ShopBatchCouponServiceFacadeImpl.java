@@ -9,6 +9,7 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCustomerCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
+import com.joiest.jpf.entity.PayShopBatchCouponResult;
 import com.joiest.jpf.entity.PayShopBatchCouponResultInfo;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
@@ -423,16 +424,43 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         }
         List<PayShopBatchCoupon> payShopBatchCoupons = payShopBatchCouponMapper.selectByExample(example);
         int count = payShopBatchCouponMapper.countByExample(example);
+        List<PayShopBatchCouponResult> payShopBatchCouponResult=new ArrayList<>();
         for (PayShopBatchCoupon payShopBatchCoupon: payShopBatchCoupons) {
+            PayShopBatchCouponResult result = new PayShopBatchCouponResult();
+            //根据订单查询excel信息
             String start = StringUtils.substring(payShopBatchCoupon.getActiveCode(),0,2);
             String end = StringUtils.substring(payShopBatchCoupon.getActiveCode(),-2,payShopBatchCoupon.getActiveCode().length());
             payShopBatchCoupon.setActiveCode(start+"****"+end);
             if(payShopBatchCoupon.getSendType()==null){
                 payShopBatchCoupon.setSendType((byte)5);
             }
+            result.setActiveCode(payShopBatchCoupon.getActiveCode());
+            result.setActiveCustomerId(payShopBatchCoupon.getActiveCustomerId());
+            result.setActiveName(payShopBatchCoupon.getActiveName());
+            result.setActivePhone(payShopBatchCoupon.getActivePhone());
+            result.setActiveTime(payShopBatchCoupon.getActiveTime());
+            result.setBatchId(payShopBatchCoupon.getBatchId());
+            result.setBatchNo(payShopBatchCoupon.getBatchNo());
+            result.setCompanyId(payShopBatchCoupon.getCompanyId());
+            result.setCompanyName(payShopBatchCoupon.getCompanyName());
+            result.setCouponNo(payShopBatchCoupon.getCouponNo());
+            result.setDou(payShopBatchCoupon.getDou());
+            result.setExpireMonth(payShopBatchCoupon.getExpireMonth());
+            result.setExpireTime(payShopBatchCoupon.getExpireTime());
+            result.setAddtime(payShopBatchCoupon.getAddtime());
+            result.setId(payShopBatchCoupon.getId());
+            result.setIsActive(payShopBatchCoupon.getIsActive());
+            result.setIsExpired(payShopBatchCoupon.getIsExpired());
+            result.setMoney(payShopBatchCoupon.getMoney());
+            result.setOrderId(payShopBatchCoupon.getOrderId());
+            result.setSendTime(payShopBatchCoupon.getSendTime());
+            result.setSendType(payShopBatchCoupon.getSendType());
+            result.setStatus(payShopBatchCoupon.getStatus());
+            result.setUpdatetime(payShopBatchCoupon.getUpdatetime());
+            payShopBatchCouponResult.add(result);
         }
         PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = new PayShopBatchCouponResultInfo();
-        payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCoupons);
+        payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCouponResult);
         payShopBatchCouponResultInfo.setTotal(count);
         return payShopBatchCouponResultInfo;
     }
@@ -507,6 +535,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
                     //payShopConponExcel.setOrderNo(payShopBatch);
                     payShopConponExcel.setUsePhone(phone);
                     payShopConponExcel.setUserName(name);
+                    //增加保留欣券的id
                     payShopConponExcelMapper.insertSelective(payShopConponExcel);
                 }
             }
