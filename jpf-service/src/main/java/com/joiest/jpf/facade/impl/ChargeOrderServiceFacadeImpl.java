@@ -74,7 +74,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         return Integer.valueOf(payChargeOrder.getId());
     }
     /*
-      * 查询订单
+      * 查询订单1
      */
     @Override
     public GetChargeOrderResponse getRecords(GetChargeOrderRequest request){
