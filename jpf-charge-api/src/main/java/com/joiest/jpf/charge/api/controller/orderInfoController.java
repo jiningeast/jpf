@@ -40,7 +40,7 @@ public class orderInfoController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/solveAbnormalOrders", method = RequestMethod.POST, produces = "text/plain;charset=utf-8")
+    @RequestMapping(value = "/solveAbnormalOrders", method = RequestMethod.GET, produces = "text/plain;charset=utf-8")
     //@ResponseBody
     public void solveAbnormalOrders() throws DocumentException {
 
