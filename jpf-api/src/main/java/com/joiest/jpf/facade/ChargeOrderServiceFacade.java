@@ -6,6 +6,7 @@ import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
 import com.joiest.jpf.entity.ChargeOrderInfo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ChargeOrderServiceFacade {
@@ -39,4 +40,9 @@ public interface ChargeOrderServiceFacade {
      * 订单统计
      */
     public Map<String, Object> getStatistics(ChargeOrderInterfaceRequest request);
+
+    /**
+     * 订单列表
+     */
+    public List<ChargeOrderInfo> getAbnormalOrders(ChargeOrderInfo request);
 }
