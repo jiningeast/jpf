@@ -53,4 +53,14 @@ public interface ShopBatchCouponServiceFacade {
      * @return
      */
     PayShopBatchCouponResultInfo getCouponsByOrderId(Map<String, Object> map);
+
+    /**
+     * 获取所有发放人手机号，并且绑定欣券
+     * @param list
+     * @param companyId
+     * @param batchId
+     * @param excelLocalUrl
+     * @return
+     */
+    List<ShopBatchCouponInfo> getCouponsWeb(List<LinkedHashMap<String,Object>> list, String companyId, String batchId, String excelLocalUrl);
 }

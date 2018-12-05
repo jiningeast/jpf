@@ -183,8 +183,11 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         PayShopCustomerExample.Criteria c = e.createCriteria();
         c.andPhoneEqualTo(phone);
         List<PayShopCustomer> list = payShopCustomerMapper.selectByExample(e);
+        if(list!=null&&list.size()!=0){
+            return list.get(0);
+        }
+        return null;
 
-        return list.get(0);
     }
 
     @Override

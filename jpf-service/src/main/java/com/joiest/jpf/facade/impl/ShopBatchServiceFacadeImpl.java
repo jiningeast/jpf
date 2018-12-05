@@ -491,4 +491,9 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         }
         return payCouponInfos;
     }
+
+    @Override
+    public void update(PayShopBatch payShopBatch) {
+        payShopBatchMapper.updateByPrimaryKeySelective(payShopBatch);
+    }
 }

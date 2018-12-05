@@ -566,4 +566,9 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         //发送邮件
         sendMailToCompany(payShopCompany,randPwd);
     }
+
+    @Override
+    public void chargeSub(String companyId, String totalMoney) {
+
+    }
 }

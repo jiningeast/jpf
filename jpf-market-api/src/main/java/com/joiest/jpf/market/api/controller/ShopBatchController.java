@@ -1,13 +1,12 @@
 package com.joiest.jpf.market.api.controller;
 
-import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
-import org.apache.commons.collections.map.HashedMap;
+import com.joiest.jpf.market.api.util.SmsUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,6 +47,8 @@ public class ShopBatchController {
     private ShopCustomerServiceFacade shopCustomerServiceFacade;
     @Autowired
     private ShopBatchCouponServiceFacade shopBatchCouponServiceFacade;
+    @Autowired
+    private ShopInterfaceStreamServiceFacade shopInterfaceStreamServiceFacade;
 
     /**
      * 查询可用的合同号
@@ -113,7 +114,7 @@ public class ShopBatchController {
                 hashMap.put("balance",payShopCompanyCharge.getBalance());
                 hashMap.put("totalMoney",payShopCompanyCharge.getMoney());
                 hashMap.put("date",payShopCompanyCharge.getAddtime());
-                list.add(map);
+                list.add(hashMap);
             }
             payShopCompanyChargeInfo.setList(list);
             payShopCompanyChargeInfo.setTotal(total);
@@ -316,9 +317,17 @@ public class ShopBatchController {
     /**
      * 上传excel 解析是否完整
      */
-    @RequestMapping("/uploadExcel")
+    @RequestMapping(value = "/uploadExcel",method = RequestMethod.POST)
     @ResponseBody
     public String uploadExcel(@RequestParam("uploadfile") MultipartFile uploadfile,String companyId,String companyName,String orderId,String totalMoney) throws Exception{
+
+        if(StringUtils.isBlank(companyId)||StringUtils.isBlank(companyName)||StringUtils.isBlank(orderId)||StringUtils.isBlank(totalMoney)){
+            return setReslt("10008","数据参数不全",null);
+        }
+        companyId=Base64CustomUtils.base64Decoder(companyId);
+        companyName=Base64CustomUtils.base64Decoder(companyName);
+        orderId=Base64CustomUtils.base64Decoder(orderId);
+        totalMoney=Base64CustomUtils.base64Decoder(totalMoney);
         // 获取当前的文件名
         String fileNameAll = uploadfile.getOriginalFilename();
         String fileName = fileNameAll.substring(0,fileNameAll.lastIndexOf("."));
@@ -358,7 +367,7 @@ public class ShopBatchController {
         // 验证该企业有没有excel上描述的券
         // 获取excel各面值券的数量
         List<ShopCustomerInfo> personsList = new ArrayList<>();    // 新建校验人数组
-        Map<String,Integer> valueCount = new HashedMap();
+        Map<String,Integer> valueCount = new LinkedHashMap<>();
         BigDecimal totalValue =new BigDecimal(0) ;
         for ( int i=2; i<list.size(); i++){
             // 获取每条信息详情
@@ -406,12 +415,14 @@ public class ShopBatchController {
             }
         }
         // 判断总面值和各人员面值的总和是不是统一
-        if (new BigDecimal(totalMoney) != totalValue){
+        if (new BigDecimal(totalMoney).compareTo(totalValue)!=0){
             return setReslt("10001",JpfErrorInfo.ERROR_TOTAL_MONEY.desc(),null);
         }
         // 判断数据库中有没有对应的这些个券
+        String couponDesc="商家发送请求共"+personsList.size()+"条记录;-";
         for (Map.Entry<String, Integer> entry : valueCount.entrySet()) {
             int valueNum = shopBatchCouponServiceFacade.getCouponNumByValue(companyId,entry.getKey(), payShopBatch.getBatchNo());
+            couponDesc+="面值"+entry.getKey()+","+valueNum+"笔-";
             if ( valueNum < entry.getValue() ){
                 return setReslt("10002","面值"+entry.getKey()+"的库存数量少于Excel中的数量",null);
             }
@@ -420,15 +431,19 @@ public class ShopBatchController {
         if (!personsList.isEmpty() ){
             UUID uuid = UUID.randomUUID();
             Map<String,Object> responseMap = new HashMap<>();
-            responseMap.put("code","00001");
+            responseMap.put("code","100000");
             responseMap.put("info","人员校验情况如下：");
             responseMap.put("companyId",companyId);
             responseMap.put("companyName",companyName);
             responseMap.put("path",path);
-            responseMap.put("data",JsonUtils.toJson(personsList));
+            responseMap.put("orderId",orderId);
+            responseMap.put("data",personsList);
             responseMap.put("totalMoney",totalMoney);
-            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+"XQ"+uuid.toString()+".txt",false);
-            return setReslt("10000",uuid.toString(),responseMap);
+            responseMap.put("couponDesc",couponDesc);
+            responseMap.put("excleTitle",fileNameAll);
+            responseMap.put("excleName",ConfigUtil.getValue("CACHE_PATH_XQ")+"XQ"+uuid.toString()+".txt");
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH_XQ")+"XQ"+uuid.toString()+".txt",false);
+            return ToolUtils.mapToJsonBase64(responseMap);
         }
         return setReslt("10008","上传数据为空",null);
     }
@@ -483,6 +498,74 @@ public class ShopBatchController {
         }
         return response;
     }
+
+    /**
+     * 群发券操作
+     */
+    @RequestMapping("/sendCoupons")
+    @ResponseBody
+    public String sendCoupons(String fileName){
+        if(StringUtils.isBlank(fileName)){
+            return setReslt("80010","数据参数不全",null);
+        }
+        fileName=Base64CustomUtils.base64Decoder(fileName);
+        // 读取暂存文件
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH_XQ")+fileName+".txt","UTF-8");
+        Map<String,Object> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
+        List<LinkedHashMap<String,Object>> list = (List<LinkedHashMap<String, Object>>) jsonMap.get("data");
+        String companyId = (String) jsonMap.get("companyId");
+        String companyName = (String) jsonMap.get("companyName");
+        String orderId = (String) jsonMap.get("orderId");
+        String excelLocalUrl = (String) jsonMap.get("path");
+        String totalMoney = (String) jsonMap.get("totalMoney");
+        // 检查商户是否已禁用
+        ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(companyId);
+        if(shopCompanyInfo==null){
+            return setReslt("10001","该商户系统中不存在",null);
+        }
+        if (shopCompanyInfo.getStatus() == 0){
+            return setReslt("10001","该商户已禁用",null);
+        }
+        // 检验金额验证码的正确性
+        if (!shopCompanyServiceFacade.checkMoneyCode(companyId)){
+            return setReslt("10002","金额校验码错误",null);
+        }
+        //根据订单号查询批次
+        PayShopBatch payShopBatch = shopBatchServiceFacade.getBatchByOrderId(orderId);
+        if(payShopBatch==null){
+            return setReslt("10002","当前订单对应的批次不存在",null);
+        }
+        List<ShopBatchCouponInfo> couponsList  = shopBatchCouponServiceFacade.getCouponsWeb(list,companyId,payShopBatch.getId(),excelLocalUrl);
+        // 扣款
+        shopCompanyServiceFacade.chargeSub(companyId,totalMoney);
+        // 开始发短信
+        String content;
+        for ( ShopBatchCouponInfo shopBatchCouponInfo:couponsList ){
+            content = "您收到一个激活码："+shopBatchCouponInfo.getActiveCode()+"，请微信搜索“欣享爱生活”公众号登录使用。";
+            //sendToPersonsSms(shopBatchCouponInfo.getActivePhone(),content,payShopBatch.getBatchNo());
+        }
+        return setReslt("10000","发放成功",null);
+    }
+
+    // 群发的短信
+    public void sendToPersonsSms(String phone,String content,String batchNo){
+        Map<String,String> smsResMap = SmsUtils.send(phone,content,"xinxiang");
+        Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
+        if ( responseMap.get("code").equals("10000") ){
+            // 添加短信流水
+            ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+            shopInterfaceStreamInfo.setType((byte)1);
+            shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+            shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+            shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+            shopInterfaceStreamInfo.setBatchNo(batchNo);
+            shopInterfaceStreamInfo.setAddtime(new Date());
+            shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+        }
+    }
+
+
+
     public static void main(String[] args) {
         System.out.println(Md5Encrypt.md5("merchNo=MC1541126548324168863&money=200.00imyHcZOzMmhukCqB").toUpperCase());
         Map<String,Object> map = new HashMap<>();
@@ -494,6 +577,11 @@ public class ShopBatchController {
         treeMap.putAll(map);
         String respos = ToolUtils.mapToUrl(treeMap);
         System.out.println(Md5Encrypt.md5(respos+"imyHcZOzMmhukCqB").toUpperCase());
+
+        BigDecimal bigDecimal = new BigDecimal(200);
+        System.out.println(new BigDecimal(200).compareTo(bigDecimal));
+        System.out.println(Base64CustomUtils.base64Encoder("测试天天向上"));
+        System.out.println(Base64CustomUtils.base64Decoder(Base64CustomUtils.base64Encoder("测试天天向上")));
     }
 
 
