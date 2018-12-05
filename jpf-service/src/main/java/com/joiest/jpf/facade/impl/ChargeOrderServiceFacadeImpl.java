@@ -117,7 +117,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         e.setPageSize(request.getRows());
         e.setOrderByClause("id DESC");
         c.andIsDelEqualTo((byte)0);
-        // c.andInterfaceOrderNoIsNotNull();
+        //c.andInterfaceOrderNoIsNotNull();
         List<ChargeOrderInfo> infos = new ArrayList<>();
         List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(e);
         int count = payChargeOrderMapper.countByExample(e);
