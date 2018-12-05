@@ -41,7 +41,7 @@ public class orderInfoController {
      * @return
      */
     @RequestMapping(value = "/solveAbnormalOrders", method = RequestMethod.GET, produces = "text/plain;charset=utf-8")
-    //@ResponseBody
+    @ResponseBody
     public void solveAbnormalOrders() throws DocumentException {
 
         //存储日志记录
