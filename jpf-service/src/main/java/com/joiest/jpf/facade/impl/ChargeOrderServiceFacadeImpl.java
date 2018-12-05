@@ -284,7 +284,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
         PayChargeOrderExample.Criteria c =example.createCriteria();
         c.andStatusEqualTo((byte)request.getStatus());
-        c.andInterfaceTypeEqualTo(request.getInterfaceType());
+        //c.andInterfaceTypeEqualTo(request.getInterfaceType());
         //c.andPaytimeLessThanOrEqualTo(request.getPaytime());
         c.andInterfaceOrderNoIsNull();
 

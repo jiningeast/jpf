@@ -56,7 +56,7 @@ public class orderInfoController {
         ChargeOrderInfo chargeOrderInfo = new ChargeOrderInfo();
         //上游充值成功
         chargeOrderInfo.setStatus((byte)2);
-        chargeOrderInfo.setInterfaceType((byte)0);
+        //chargeOrderInfo.setInterfaceType((byte)0); // 接口类型 0=欧非 1=威能
         List<ChargeOrderInfo> list = chargeOrderServiceFacade.getAbnormalOrders(chargeOrderInfo);
         if( list !=null && list.size() >0 ){
 
@@ -66,11 +66,12 @@ public class orderInfoController {
 
                 logContent = new StringBuilder(); //初始化日志变量
                 // 请求欧飞接口
-                if( list.get(i).getInterfaceType() == 0 ){
+                Byte type = list.get(i).getInterfaceType() == null ? (byte)0 : list.get(i).getInterfaceType();
+                if( list.get(i).getInterfaceType() == 0  ){
                     String orderNo = list.get(i).getOrderNo();
                     String id = list.get(i).getId();
                     String status = list.get(i).getStatus().toString();
-                    Byte type = list.get(i).getInterfaceType();
+
                     logContent.append("\n请求单号:"+orderNo+"\t ");
                     Map<String,String> queryMap = new HashMap<>();
                     queryMap.put("sporder_id", orderNo);
