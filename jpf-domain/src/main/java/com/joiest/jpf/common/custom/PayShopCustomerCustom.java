@@ -76,6 +76,11 @@ public class PayShopCustomerCustom implements Serializable {
     private BigDecimal dou;
 
     /**
+     * 冻结豆
+     */
+    private BigDecimal freezeDou;
+
+    /**
      * 充值校验码
      */
     private String code;
@@ -244,6 +249,14 @@ public class PayShopCustomerCustom implements Serializable {
 
     public void setSaleDou(BigDecimal saleDou) {
         this.saleDou = saleDou;
+    }
+
+    public BigDecimal getFreezeDou() {
+        return freezeDou;
+    }
+
+    public void setFreezeDou(BigDecimal freezeDou) {
+        this.freezeDou = freezeDou;
     }
 
     /**
