@@ -9,6 +9,7 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCustomerCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
+import com.joiest.jpf.entity.PayShopBatchCouponResultInfo;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 import com.joiest.jpf.facade.ShopBatchCouponServiceFacade;
@@ -398,28 +399,32 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
     }
 
     @Override
-    public List<PayShopBatchCoupon> getCouponsByOrderId(Map<String, Object> map) {
+    public PayShopBatchCouponResultInfo getCouponsByOrderId(Map<String, Object> map) {
         PayShopBatchCouponExample example = new PayShopBatchCouponExample();
         PayShopBatchCouponExample.Criteria criteria = example.createCriteria();
         if(map.get("orderId")!=null){
             criteria.andOrderIdEqualTo(map.get("orderId").toString());
         }
-        if (Long.valueOf(map.get("pageSize").toString())<= 0){
+        if (map.get("pageSize")==null||Long.valueOf(map.get("pageSize").toString())<= 0){
             example.setPageSize(10);
         }else{
             example.setPageSize(Long.valueOf(map.get("pageSize").toString()));
         }
-        if(Long.valueOf(map.get("pageNo").toString())== 0){
+        if(map.get("pageNo")==null||Long.valueOf(map.get("pageNo").toString())== 0){
             example.setPageNo(1);
         }else{
             example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
         }
         List<PayShopBatchCoupon> payShopBatchCoupons = payShopBatchCouponMapper.selectByExample(example);
+        int count = payShopBatchCouponMapper.countByExample(example);
         for (PayShopBatchCoupon payShopBatchCoupon: payShopBatchCoupons) {
             String start = StringUtils.substring(payShopBatchCoupon.getActiveCode(),0,2);
             String end = StringUtils.substring(payShopBatchCoupon.getActiveCode(),-2,payShopBatchCoupon.getActiveCode().length());
             payShopBatchCoupon.setActiveCode(start+"****"+end);
         }
-        return payShopBatchCoupons;
+        PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = new PayShopBatchCouponResultInfo();
+        payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCoupons);
+        payShopBatchCouponResultInfo.setTotal(count);
+        return payShopBatchCouponResultInfo;
     }
 }
