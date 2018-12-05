@@ -31,9 +31,6 @@ public interface ShopOrderInfoInterfaceServiceFacade {
      */
     void timerDetectShopOrderAndCancel(Date time);
 
-    /**
-     * 订单列表
-     */
-    public List<ShopOrderInterfaceInfo> getAbnormalOrders(ShopOrderInterfaceInfo request);
+
 
 }

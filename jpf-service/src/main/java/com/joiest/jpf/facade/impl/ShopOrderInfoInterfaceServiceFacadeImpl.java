@@ -180,39 +180,4 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         payShopOrderMapper.updateByExampleSelective(record ,payShopOrderExample);
     }
 
-    /**
-     * 异常订单处理
-     */
-    @Override
-    public List<ShopOrderInterfaceInfo>  getAbnormalOrders(ShopOrderInterfaceInfo request)
-    {
-
-        PayShopOrderExample example = new PayShopOrderExample();
-        example.setOrderByClause("addtime ASC");
-        example.setPageNo(1);
-        example.setPageSize(1);
-
-        PayShopOrderExample.Criteria c =example.createCriteria();
-        c.andStatusEqualTo((byte)request.getStatus());
-        c.andRechargeStatusEqualTo(request.getRechargeStatus());
-        c.andInterfaceTypeEqualTo(request.getInterfaceType());
-        c.andPaytimeLessThanOrEqualTo(request.getPaytime());
-        c.andForeignOrderNoIsNull();
-
-        List<PayShopOrder> list = payShopOrderMapper.selectByExample(example);
-        if( list.size() <=0 || list == null){
-            return null;
-        }
-        List<ShopOrderInterfaceInfo> infoList = new ArrayList<>();
-
-        for (PayShopOrder one : list)
-        {
-            ShopOrderInterfaceInfo info = new ShopOrderInterfaceInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayShopOrder.class, ShopOrderInterfaceInfo.class, false);
-            beanCopier.copy(one, info, null);
-            infoList.add(info);
-        }
-
-        return infoList;
-    }
 }
