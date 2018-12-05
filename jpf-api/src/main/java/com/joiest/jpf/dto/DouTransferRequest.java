@@ -6,8 +6,8 @@ import javax.validation.constraints.Pattern;
 
 public class DouTransferRequest {
 
-    @NotBlank(message = "转让服务金额不合法")
-    @Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2}){1}$", message = "转让服务金额不合法")
+    //@NotBlank(message = "转让服务金额不合法")
+    //@Pattern(regexp = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2}){1}$", message = "转让服务金额不合法")
     private String dou;
 
     @NotBlank(message = "转让价有误")
