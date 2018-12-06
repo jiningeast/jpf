@@ -14,7 +14,7 @@
     <result column="money" jdbcType="DECIMAL" property="money" />
     <result column="recharge_money" jdbcType="INTEGER" property="rechargeMoney" />
     <result column="bid" jdbcType="DECIMAL" property="bid" />
-    <result column="dou" jdbcType="INTEGER" property="dou" />
+    <result column="dou" jdbcType="DECIMAL" property="dou" />
     <result column="intro" jdbcType="VARCHAR" property="intro" />
     <result column="stored" jdbcType="INTEGER" property="stored" />
     <result column="stored_safe" jdbcType="INTEGER" property="storedSafe" />

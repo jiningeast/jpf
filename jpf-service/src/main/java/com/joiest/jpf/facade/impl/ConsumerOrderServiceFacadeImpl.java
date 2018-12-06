@@ -124,31 +124,40 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void matchingDataTaskStart(PayChargeConsumerOrder payChargeConsumerOrder) throws  Exception {
+    public void matchingDataTaskStart(PayChargeConsumerOrder payChargeConsumerOrder){
         payChargeConsumerOrder.setStatus((byte)1);
         payChargeConsumerOrderMapper.updateByPrimaryKeySelective(payChargeConsumerOrder);
         //拉取数据
         PayChargeCompany chargeCompany =  payChargeCompanyMapper.selectByPrimaryKey(payChargeConsumerOrder.getCompanyId());
         List<PayShopBargainRechargeOrder> list =new ArrayList<>();
+        //List<PayShopBargainRechargeOrder> listNoUse =new ArrayList<>();
         //记录余额
         String newCompanyMoney=chargeCompany.getMoney().toString();
-        logger.info("余额"+newCompanyMoney);
         String money = payChargeConsumerOrder.getMoney().toString();
-        int i=0;
+        long start = System.currentTimeMillis();
+        long end = 0L ;
         while (true){
-            logger.info("循环"+i+"开始");
+            end=System.currentTimeMillis();
+            float excTime=(float)(end-start)/1000/60;
+            if(excTime>30){
+                break;
+            }
             String json = redisCustomServiceFacade.rPop("consumerOrderQueue");
+            if(StringUtils.isBlank(json)){
+                //如果redis中的数据不够了，就直接返回数据
+                break;
+            }
             PayShopBargainRechargeOrder payShopBargainRechargeOrder = JsonUtils.toObject(json, PayShopBargainRechargeOrder.class);
             //判断剩余的钱是否小于下一条匹配的钱，如果是，直接break
             if(new BigDecimal(money).compareTo(payShopBargainRechargeOrder.getFacePrice())<0){
                 //如果这条数据没有匹配，那就重新放回到redis队列中
-                redisCustomServiceFacade.lpush("consumerOrderQueue",JsonUtils.toJson(payShopBargainRechargeOrder));
-                break;
+                //redisCustomServiceFacade.lpush("consumerOrderQueue",JsonUtils.toJson(payShopBargainRechargeOrder));
+              /*  payShopBargainRechargeOrder.setMatchingStatus((byte)0);
+                listNoUse.add(payShopBargainRechargeOrder);*/
+                continue;
             }
             money= ArithmeticUtils.sub(money,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
-            logger.info("剪之前"+newCompanyMoney);
             newCompanyMoney = ArithmeticUtils.sub(newCompanyMoney,payShopBargainRechargeOrder.getFacePrice().toString()).toString();
-            logger.info("剪之后"+newCompanyMoney);
             payShopBargainRechargeOrder.setUpdatetime(new Date());
             payShopBargainRechargeOrder.setPullCompanyId(payChargeConsumerOrder.getCompanyId());
             payShopBargainRechargeOrder.setPullOrderNo(payChargeConsumerOrder.getOrderNo());
@@ -159,12 +168,14 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
             list.add(payShopBargainRechargeOrder);
             //保存订单信息，并且保存流水信息
             matchingDataTask(payShopBargainRechargeOrder,chargeCompany,payChargeConsumerOrder,newCompanyMoney);
-            logger.info("循环"+i+"结束");
         }
         //批量更新shopBargainRechargeOrder
         if(list.size()!=0){
             payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(list);
         }
+       /* if(listNoUse.size()!=0){ //更新未使用数据为未使用数据
+            payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(listNoUse);
+        }*/
         //扣减商户的钱
         String totalMoney=ArithmeticUtils.sub(payChargeConsumerOrder.getMoney().toString(),money).toString();
         chargeCompany.setMoney(ArithmeticUtils.sub(chargeCompany.getMoney().toString(),totalMoney));

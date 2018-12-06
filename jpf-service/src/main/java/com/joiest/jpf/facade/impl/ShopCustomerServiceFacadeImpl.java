@@ -7,6 +7,7 @@ import com.joiest.jpf.common.po.PayShopBargainOrder;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.po.PayShopCustomerExample;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
 import com.joiest.jpf.dto.GetShopCustomerRequest;
 import com.joiest.jpf.dto.GetShopCustomerResponse;
@@ -15,6 +16,7 @@ import com.joiest.jpf.facade.ShopCustomerServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -207,6 +209,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
     /**
      * 更新用户信息
      * */
+    @Override
     public int upCustomerInfo(ShopCustomerInfo shopCustomerInfo){
 
        PayShopCustomer payShopCustomer = new PayShopCustomer();
@@ -216,6 +219,30 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
 
         return payShopCustomerMapper.updateByPrimaryKeySelective(payShopCustomer);
     }
+    /**
+     * 修改所有用户的code
+     * */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateCode(){
 
-
+        PayShopCustomerExample example = new PayShopCustomerExample();
+        example.setOrderByClause("addtime DESC");
+        List<PayShopCustomer> list = payShopCustomerMapper.selectByExample(example);
+        for (PayShopCustomer one : list)
+        {
+            ShopCustomerInfo info = new ShopCustomerInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayShopCustomer.class, ShopCustomerInfo.class, false);
+            beanCopier.copy(one, info, null);
+            //进行code转换
+            String code= ToolUtils.CreateCode(info.getDou().toString(),info.getId());
+            info.setCode(code);
+            //修改用户信息
+            int result=upCustomerInfo(info);
+            if(result!=1){
+                return false;
+            }
+        }
+        return true;
+    }
 }

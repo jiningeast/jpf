@@ -106,7 +106,7 @@ public class BargainSellerController {
         if(shopBargainRequestInfo==null)
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "买家发布信息有误", null);
 
-        if(shopBargainRequestInfo.getMinDou() .compareTo(dou)>0){
+        if(shopBargainRequestInfo.getMinDou()!=null && shopBargainRequestInfo.getMinDou().compareTo(dou)>0){
 
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "最低转让"+shopBargainRequestInfo.getMinDou(), null);
         }

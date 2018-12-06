@@ -212,6 +212,10 @@ public class FlowRechargeController {
             type = 0;
             upOrderInfo.setInterfaceType(type);
             upOrderInfo.setProductType(0);
+
+            //更新订单接口类型 防止请求接口异常 订单没有类型
+            chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
+
             //请求欧非
             map = phoneRechargeOf(actParam);
             logger.info("oufei"+map.get("orderid"));
@@ -219,6 +223,9 @@ public class FlowRechargeController {
 
             upOrderInfo.setInterfaceType(type);
             upOrderInfo.setProductType(1);
+            //更新订单接口类型 防止请求接口异常 订单没有类型
+            chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
+
             actParam.put("forProductId",chargeProductInfo.getWnProductId());
             //请求微能接口
             map = phoneRechargeWn(actParam);

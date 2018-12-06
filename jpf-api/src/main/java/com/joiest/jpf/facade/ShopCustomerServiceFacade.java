@@ -38,4 +38,9 @@ public interface ShopCustomerServiceFacade {
      * */
     public int upCustomerInfo(ShopCustomerInfo shopCustomerInfo);
 
+    /**
+     * 修改所有用户的code校验码
+     */
+    public Boolean updateCode();
+
 }

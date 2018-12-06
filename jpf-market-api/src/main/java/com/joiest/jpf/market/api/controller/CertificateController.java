@@ -2,13 +2,13 @@ package com.joiest.jpf.market.api.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dto.GetShopCustomerRequest;
+import com.joiest.jpf.dto.GetShopCustomerResponse;
 import com.joiest.jpf.dto.GetUserCouponActiveInterfaceResponse;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
-import com.joiest.jpf.facade.RedisCustomServiceFacade;
-import com.joiest.jpf.facade.ShopBatchCouponInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
+import com.joiest.jpf.facade.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -39,6 +40,9 @@ public class CertificateController {
 
     @Autowired
     private ShopCustomerInterfaceServiceFacade shopCustomerInterfaceServiceFacade;
+
+    @Autowired
+    private ShopCustomerServiceFacade shopCustomerServiceFacade;
     /**
      * 欣券激活冲豆操作
      */
@@ -164,8 +168,21 @@ public class CertificateController {
             uid = userInfo.getId();
         }
     }
-    public static  void main(String []args){
+    //修改用户的code码
+    @RequestMapping(value = "/updateCode",method=RequestMethod.GET,produces = "application/json;charset=utf8")
+    @ResponseBody
+    public String   updateCode(){
+        //查出所有人
+        Boolean result=shopCustomerServiceFacade.updateCode();
+        if(!result){
+            return "FALSE";
+        }else{
+            return "SUCCESS";
+        }
+    }
+/*    public static  void main(String []args){
         String token = AESUtils.encrypt("o3YP30Yk8YVlAHW8Fm6YrpQfpm-w",ConfigUtil.getValue("AES_KEY"));
         System.out.println(token);
-    }
+    }*/
+
    }
