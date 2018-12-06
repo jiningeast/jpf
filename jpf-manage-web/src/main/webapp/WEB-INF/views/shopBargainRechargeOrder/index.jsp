@@ -56,6 +56,15 @@
                     $('#searchForm').form('reset');
                 }
             });
+
+            //导出excel
+            $('#importExcelShopBargainRecharge').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serialize();
+                    var importExcelShopBargainRecharge = "./exportExcel?"+queryArray;
+                    window.location.href = importExcelShopBargainRecharge;
+                }
+            });
         })
     </script>
 </head>
@@ -115,6 +124,7 @@
         <div id="ft" style="padding:5px;">
             <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
             <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+            <a id="importExcelShopBargainRecharge" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-download'">导出</a>
         </div>
         <br/>
         <table id="dg"></table>

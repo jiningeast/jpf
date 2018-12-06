@@ -7,6 +7,7 @@ import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
@@ -16,16 +17,29 @@ import com.joiest.jpf.facade.ChargeCompanyMoneyStreamServiceFacade;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -210,5 +224,154 @@ public class ChargeOrderController {
 
         return  new JpfResponseDto();
     }
+    
+    /**
+     * 充值平台订单管理-Excel导出
+     * @param request
+     * @param response
+     */
+    @RequestMapping("exportExcel")
+    @ResponseBody
+    public void exportExcel(GetChargeOrderRequest request, HttpServletResponse response){
+        Map<String,String> requestInterfaceTypeMap = new HashMap<>(2);
+        requestInterfaceTypeMap.put("0","欧飞");
+        requestInterfaceTypeMap.put("1","威能");
+        
+        Map<String,String> requestStatusMap = new HashMap<>(6);
+        requestStatusMap.put("0","订单生成");
+        requestStatusMap.put("2","充值成功");
+        requestStatusMap.put("3","充值失败");
+        requestStatusMap.put("4","退款申请中");
+        requestStatusMap.put("5","退款成功");
+        requestStatusMap.put("6","拒绝退款");
 
+        request.setInterfaceTypeParam(requestInterfaceTypeMap);
+        request.setStatusParam(requestStatusMap);
+        request.setPage(0);
+        request.setRows(0);
+        
+        GetChargeOrderResponse chargeOrderResponse = chargeOrderServiceFacade.getRecords(request);
+        if(chargeOrderResponse.getList() == null || chargeOrderResponse.getList().isEmpty()){
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
+        }
+        try {
+            JSONObject jsonObject = exportExcelByInfoNew(response, chargeOrderResponse.getList(), 1, "");
+        } catch (Exception e) {
+            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "数据导出异常");
+        }
+    }
+
+    /**
+     * 导出充值订单数据格式到Excel文件
+     * @param response 响应头
+     * @param data 数据
+     * @param type 1 下载  2 生成文件
+     * @param path
+     * @return
+     */
+    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<ChargeOrderInfo> data, int type, String path){
+        type = type < 1 ? 1 : type;
+        JSONObject res = new JSONObject();
+        res.put("code","10000");
+        res.put("info","SUCCESS");
+        SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
+        String productPrice = "",interfaceType = "",status = "",notifyTime = "",addTime = "",updatetime = "";
+        for (int i = 0; i < 1; i++) {
+            Sheet sheet = xssfWorkbook.getSheet("sheet" + (i + 1));
+            if (sheet == null) {
+                sheet = xssfWorkbook.createSheet("sheet" + (i + 1));
+            }
+            // 生成标题
+            Map<Integer, Object> firstTitles = new HashMap<>();
+            firstTitles.put(0, "订单号");
+            firstTitles.put(1, "外来订单号");
+            firstTitles.put(2, "商户id");
+            firstTitles.put(3, "商户名称");
+            firstTitles.put(4, "商户号");
+            firstTitles.put(5, "充值号码");
+            firstTitles.put(6, "产品id");
+            firstTitles.put(7, "产品名称");
+            firstTitles.put(8, "产品单价");
+            firstTitles.put(9, "接口类型");
+            firstTitles.put(10, "上游订单号");
+            firstTitles.put(11, "订单状态");
+            firstTitles.put(12, "下游请求参数");
+            firstTitles.put(13, "异步回调地址");
+            firstTitles.put(14, "异步回调参数");
+            firstTitles.put(15, "异步回调时间");
+            firstTitles.put(16, "添加时间");
+            firstTitles.put(17, "更新时间");
+            exportExcel.genSheetHead(sheet, 0, firstTitles);
+            for (int rownum = 1; rownum <= data.size(); rownum++) {
+                Row row = sheet.createRow(rownum);
+                int k = -1;
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getOrderNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getForeignOrderNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyId());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyName());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getMerchNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getChargePhone());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductId());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductName());
+                if(data.get(rownum - 1).getProductPrice() == null){
+                    productPrice = "";
+                }else{
+                    productPrice = String.valueOf(data.get(rownum-1).getProductPrice());
+                }
+                exportExcel.createCell(row, ++k, productPrice);
+                if(data.get(rownum - 1).getInterfaceType() == null){
+                    interfaceType = "";
+                }else if(data.get(rownum-1).getInterfaceType() == 0){
+                    interfaceType = "欧飞";
+                }else if(data.get(rownum-1).getInterfaceType() == 1){
+                    interfaceType = "威能";
+                }
+                exportExcel.createCell(row, ++k, interfaceType);
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getInterfaceOrderNo());
+                if(data.get(rownum - 1).getStatus() == null){
+                    status = "";
+                }else if(data.get(rownum-1).getStatus() == 0){
+                    status = "平台下单成功";
+                }else if(data.get(rownum-1).getStatus() == 1){
+                    status = "充值中";
+                }else if(data.get(rownum-1).getStatus() == 2){
+                    status = "上游充值成功";
+                }else if(data.get(rownum-1).getStatus() == 3){
+                    status = "上游充值失败";
+                }else if(data.get(rownum-1).getStatus() == 4){
+                    status = "申请退款";
+                }else if(data.get(rownum-1).getStatus() == 5){
+                    status = "退款成功";
+                }else if(data.get(rownum-1).getStatus() == 6){
+                    status = "拒绝退款";
+                }else if(data.get(rownum-1).getStatus() == 7){
+                    status = "退款失败";
+                }
+                exportExcel.createCell(row, ++k, status);
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getRequestParams());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getNotifyUrl());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getNotifyParams());
+                if(data.get(rownum-1).getNotifyTime() == null){
+                    notifyTime = "";
+                }else{
+                    notifyTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getNotifyTime());
+                }
+                exportExcel.createCell(row, ++k, notifyTime);
+                if(data.get(rownum-1).getAddtime() == null){
+                    addTime = "";
+                }else{
+                    addTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime());
+                }
+                exportExcel.createCell(row, ++k, addTime);
+                if(data.get(rownum-1).getUpdatetime() == null){
+                    updatetime = "";
+                }else{
+                    updatetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getUpdatetime());
+                }
+                exportExcel.createCell(row, ++k, updatetime);
+            }
+        }
+        String fileName = "充值平台订单列表-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx";
+        return exportExcel.writeIntoExcel(fileName, response, xssfWorkbook, path, type, res);
+    }
 }

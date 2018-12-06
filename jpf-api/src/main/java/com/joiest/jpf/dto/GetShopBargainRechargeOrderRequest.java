@@ -2,6 +2,7 @@ package com.joiest.jpf.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 public class GetShopBargainRechargeOrderRequest {
 
@@ -23,6 +24,15 @@ public class GetShopBargainRechargeOrderRequest {
 
     private Integer infoStatus;
 
+    private Map<String,String> infoStatusMap;
+
+    public Map<String, String> getInfoStatusMap() {
+        return infoStatusMap;
+    }
+
+    public void setInfoStatusMap(Map<String, String> infoStatusMap) {
+        this.infoStatusMap = infoStatusMap;
+    }
 
     private int page;
 

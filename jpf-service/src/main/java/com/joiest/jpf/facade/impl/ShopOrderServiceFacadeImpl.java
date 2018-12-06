@@ -32,15 +32,15 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
     @Override
     public GetShopOrderResponse getList(GetShopOrderRequest request)
     {
-        if ( request.getRows() <= 0 )
-        {
-            request.setRows(10);
-        }
-
-        if ( request.getPage() <= 0 )
-        {
-            request.setPage(1);
-        }
+//        if ( request.getRows() <= 0 )
+//        {
+//            request.setRows(10);
+//        }
+//
+//        if ( request.getPage() <= 0 )
+//        {
+//            request.setPage(1);
+//        }
 
         PayShopOrderCustomExample example = new PayShopOrderCustomExample();
         example.setPageNo(request.getPage());
