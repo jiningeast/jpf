@@ -111,7 +111,15 @@
                 closed:true,
                 modal:true
             });
-
+            
+            //导出excel
+            $('#importChargeOrder').linkbutton({
+                onClick: function(){
+                    var queryArray = $('#searchForm').serialize();
+                    var importChargeOrder = "./exportExcel?"+queryArray;
+                    window.location.href = importChargeOrder;
+                }
+            });
         })
     </script>
 </head>
@@ -162,10 +170,20 @@
                                     <option value="6">拒绝退款</option>
                                 </select>
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>添加时间:</td>
+                            <td>
+                                <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
+                                       name="addtimeStart"
+                                       onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'addtimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                                -
+                                <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
+                                       name="addtimeEnd"
+                                       onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                            </td>
+                            <td>上游订单号:</td>
+                            <td>
+                                <input id="interfaceOrderNo" name="interfaceOrderNo" class="easyui-textbox" type="text" >
+                            </td>
                         </tr>
                     </table>
                 </form>
@@ -174,6 +192,7 @@
         <div id="ft" style="padding:5px;">
             <a id="searchBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>&nbsp;&nbsp;
             <a id="searchRestBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">重置</a>
+            <a id="importChargeOrder" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-download'">导出</a>
         </div>
         <br/>
         <div id="dg"></div>
