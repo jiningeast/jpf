@@ -185,10 +185,14 @@ public class ShopBatchController {
         String pageSize = request.getParameter("pageSize");
         String startTime = request.getParameter("startTime");
         String endTime = request.getParameter("endTime");
+        String status = request.getParameter("status");
         Map<String,Object> map =new ConcurrentHashMap<>();
         if(StringUtils.isNotBlank(startTime)&&StringUtils.isNotBlank(endTime)){
             map.put("startTime",Base64CustomUtils.base64Decoder(startTime));
             map.put("endTime",Base64CustomUtils.base64Decoder(endTime));
+        }
+        if(StringUtils.isNotBlank(status)){
+            map.put("status",Base64CustomUtils.base64Decoder(status));
         }
         if(StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)&&StringUtils.isBlank(companyId)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
