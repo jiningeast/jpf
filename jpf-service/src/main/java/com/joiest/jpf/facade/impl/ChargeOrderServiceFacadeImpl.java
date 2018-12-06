@@ -113,6 +113,17 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         if ( request.getStatus() != null && StringUtils.isNotBlank(""+request.getStatus()) ){
             c.andStatusEqualTo(request.getStatus());
         }
+        if ( request.getInterfaceOrderNo() != null && StringUtils.isNotBlank(""+request.getInterfaceOrderNo())){
+            c.andInterfaceOrderNoEqualTo(request.getInterfaceOrderNo());
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
         e.setOrderByClause("id DESC");

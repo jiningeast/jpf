@@ -244,7 +244,7 @@ public class ShopBargainOrderServiceFacadeImpl implements ShopBargainOrderServic
                      if(StringUtils.isBlank(request.getPayImg())){
                          throw new JpfException(JpfErrorInfo.DAL_ERROR, "请上传付款凭证");
                      }
-                     //买家金额校验
+                     //卖家金额校验
                      String custemID=payShopCustomer.getId();
                      String code=payShopCustomer.getCode();
                      String dou=payShopCustomer.getDou().toString();

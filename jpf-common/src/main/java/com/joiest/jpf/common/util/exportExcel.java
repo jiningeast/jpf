@@ -2,19 +2,28 @@ package com.joiest.jpf.common.util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.RichTextString;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.plaf.synth.Region;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class exportExcel {
 
@@ -225,5 +234,93 @@ public class exportExcel {
                 file.delete();
             }
         }
+    }
+
+    /**
+     * 写入标题
+     * @param sheet
+     * @param rowNum 第几行的行号
+     * @param values key:第几列的列号  value:值
+     */
+    public static void genSheetHead(Sheet sheet, int rowNum, Map<Integer, Object> values) {
+
+        Row row = sheet.createRow(rowNum);
+        for (Integer cellNum : values.keySet()) {
+            Cell cell = row.createCell(cellNum);
+            Object value = values.get(cellNum);
+            generateValue(value, cell);
+        }
+    }
+
+    /**
+     * 写入单元格
+     * @param row
+     * @param cellNum 第几列的列号
+     * @param value   值
+     */
+    public static void createCell(Row row, int cellNum, Object value) {
+        Cell cell = row.createCell(cellNum);
+        generateValue(value, cell);
+    }
+
+    private static void generateValue(Object value, Cell cell) {
+        if (value instanceof String) {
+            cell.setCellValue((String) value);
+        } else if (value instanceof Boolean) {
+            cell.setCellValue((Boolean) value);
+        } else if (value instanceof Double) {
+            cell.setCellValue((Double) value);
+        } else if (value instanceof Date) {
+            cell.setCellValue((Date) value);
+        } else if (value instanceof Calendar) {
+            cell.setCellValue((Calendar) value);
+        } else if (value instanceof RichTextString) {
+            cell.setCellValue((RichTextString) value);
+        }
+    }
+
+    /**
+     * 写入Excel文件
+     * @param response
+     * @param xssfWorkbook
+     * @param path
+     * @param type
+     * @param res
+     * @return
+     */
+    public static JSONObject writeIntoExcel(String fileName,HttpServletResponse response, SXSSFWorkbook xssfWorkbook,String path,int type,JSONObject res){
+        OutputStream output= null;
+        try {
+            if(type == 1){
+                response.reset();
+                output = response.getOutputStream();
+                response.setCharacterEncoding("utf-8");
+                response.setHeader("Content-disposition", "attachment;filename="+new String(fileName.getBytes("gbk"), "iso8859-1"));
+                response.setContentType("application/vnd.ms-excel");
+                xssfWorkbook.write(output);
+                output.close();
+            }else{
+                File fileDir = new File(path);
+                if (!fileDir.exists()) {
+                    fileDir.mkdirs();
+                }
+                String actual = path+fileName;
+                File file = new File(actual);
+                file.createNewFile();
+                //将excel写入
+                FileOutputStream stream= FileUtils.openOutputStream(file);
+                xssfWorkbook.write(stream);
+                stream.close();
+
+                JSONObject fileInfo = new JSONObject();
+                fileInfo.put("localUrl",actual);//服务器实际路径
+                fileInfo.put("fileName",fileName);//文件名
+
+                res.put("data",fileInfo);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }
