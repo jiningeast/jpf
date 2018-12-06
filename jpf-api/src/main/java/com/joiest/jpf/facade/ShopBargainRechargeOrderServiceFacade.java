@@ -15,7 +15,7 @@ public interface ShopBargainRechargeOrderServiceFacade {
      */
     public GetShopBargainRechargeOrderResponse getRecords(GetShopBargainRechargeOrderRequest request);
 
-    BigDecimal getMoneyTotal();
+    BigDecimal getMoneyTotal(String userId,String startDate);
 
     /**
      * 查询数据中的数据，向redis 中加入数据

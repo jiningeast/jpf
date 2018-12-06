@@ -2,6 +2,7 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrderExample;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopBargainRechargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBargainRechargeOrderMapper;
@@ -16,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRechargeOrderServiceFacade {
 
@@ -87,8 +90,15 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
     }
 
     @Override
-    public BigDecimal getMoneyTotal() {
-        return payShopBargainRechargeOrderCustomMapper.getTotalMoney();
+    public BigDecimal getMoneyTotal(String userId,String startDate) {
+        Map<String,Object> param = new HashMap<>();
+        param.put("userId",Integer.valueOf(userId));
+        if(StringUtils.isNotBlank(startDate)){
+            param.put("startDate",DateUtils.getFdate(startDate, DateUtils.DATEFORMATLONG));
+        }else{
+            param.put("startDate",null);
+        }
+        return payShopBargainRechargeOrderCustomMapper.getTotalMoney(param);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -98,14 +108,21 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         PayShopBargainRechargeOrderExample.Criteria criteria = example.createCriteria();
         criteria.andMatchingStatusEqualTo((byte)0);
         example.setPageNo(1);
+        if(StringUtils.isNotBlank(ConfigUtil.getValue("ZHANYUNUSERID"))){
+            criteria.andUserIdEqualTo(Integer.valueOf(ConfigUtil.getValue("ZHANYUNUSERID")));
+        }
+        if(StringUtils.isNotBlank(ConfigUtil.getValue("ZHANYUANDATE"))){
+            criteria.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(ConfigUtil.getValue("ZHANYUANDATE"), DateUtils.DATEFORMATLONG));
+        }
         example.setPageSize(querySize);
         example.setOrderByClause(" id asc ");
         List<PayShopBargainRechargeOrder> payShopBargainRechargeOrders = payShopBargainRechargeOrderMapper.selectByExample(example);
-        for (PayShopBargainRechargeOrder payShopBargainRechargeOrder: payShopBargainRechargeOrders) {
+        //停止更新数据
+      /*  for (PayShopBargainRechargeOrder payShopBargainRechargeOrder: payShopBargainRechargeOrders) {
             payShopBargainRechargeOrder.setMatchingStatus((byte)1);
         }
         //批量更新数据量
-        payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(payShopBargainRechargeOrders);
+        payShopBargainRechargeOrderCustomMapper.batchUpdatePayShopBro(payShopBargainRechargeOrders);*/
         return payShopBargainRechargeOrders;
     }
 }
