@@ -169,7 +169,7 @@ public class CertificateController {
         }
     }
     //修改用户的code码
-    @RequestMapping(value = "/updateCode",method=RequestMethod.POST,produces = "application/json;charset=utf8")
+    @RequestMapping(value = "/updateCode",method=RequestMethod.GET,produces = "application/json;charset=utf8")
     @ResponseBody
     public String   updateCode(){
         //查出所有人
