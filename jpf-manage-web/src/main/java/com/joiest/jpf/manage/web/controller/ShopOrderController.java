@@ -2,14 +2,14 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.GetShopOrderRequest;
 import com.joiest.jpf.dto.GetShopOrderResponse;
 import com.joiest.jpf.entity.ShopOrderInfo;
 import com.joiest.jpf.facade.ShopOrderServiceFacade;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -21,14 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
+import java.io.*;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 @Controller
@@ -91,7 +87,10 @@ public class ShopOrderController {
         request.setOrderStatusParam(requestOrderStatusMap);
         request.setPage(0);
         request.setRows(0);
-
+        if(StringUtils.isBlank(request.getAddtimeEnd()) || StringUtils.isBlank(request.getAddtimeStart())){
+            request.setAddtimeStart(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getBeforeDayTimeReturnDate(1)));
+            request.setAddtimeEnd(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        }
         GetShopOrderResponse shopOrderResponse= shopOrderServiceFacade.getList(request);
         if(shopOrderResponse.getList() == null || shopOrderResponse.getList().isEmpty()){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
@@ -112,7 +111,7 @@ public class ShopOrderController {
      * @param path
      * @return
      */
-    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<ShopOrderInfo> data, int type, String path){
+    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<ShopOrderInfo> data, int type, String path) throws UnsupportedEncodingException {
         type = type < 1 ? 1 : type;
         JSONObject res = new JSONObject();
         res.put("code","10000");
@@ -132,12 +131,12 @@ public class ShopOrderController {
             firstTitles.put(3, "数量");
             firstTitles.put(4, "总金额");
             firstTitles.put(5, "总欣豆");
-            // firstTitles.put(6, "微信昵称");
-            firstTitles.put(6, "下单时间");
-            firstTitles.put(7, "支付时间");
-            firstTitles.put(8, "状态");
-            firstTitles.put(9, "供应商");
-            firstTitles.put(10, "订单来源");
+            firstTitles.put(6, "微信昵称");
+            firstTitles.put(7, "下单时间");
+            firstTitles.put(8, "支付时间");
+            firstTitles.put(9, "状态");
+            firstTitles.put(10, "供应商");
+            firstTitles.put(11, "订单来源");
             exportExcel.genSheetHead(sheet, 0, firstTitles);
             for (int rownum = 1; rownum <= data.size(); rownum++) {
                 Row row = sheet.createRow(rownum);
@@ -163,7 +162,7 @@ public class ShopOrderController {
                     totalDou = String.valueOf(data.get(rownum-1).getTotalDou());
                 }
                 exportExcel.createCell(row, ++k, totalDou);
-                // createCell(row, ++k, data.get(rownum-1).getCustomerName());
+                exportExcel.createCell(row, ++k, URLDecoder.decode(data.get(rownum-1).getCustomerName(),"UTF-8"));
                 if(data.get(rownum-1).getAddtime() == null){
                     addTime = "";
                 }else{

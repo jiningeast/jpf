@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -112,7 +113,7 @@ public class BargainBuyerController {
         GetShopBargainRequestRequest request = new GetShopBargainRequestRequest();
         request.setCustomerId(uid);
         request.setOffRate(Double.parseDouble(offRate));
-        request.setMinDou(Integer.parseInt(minDou));
+        request.setMinDou(new BigDecimal(minDou));
         request.setStatus(  statusNew );
 
 

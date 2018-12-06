@@ -2,14 +2,14 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderResponse;
 import com.joiest.jpf.entity.ShopBargainRechargeOrderInfo;
 import com.joiest.jpf.facade.ShopBargainRechargeOrderServiceFacade;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -19,10 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,7 +63,10 @@ public class ShopBargainRechargeOrderController {
         request.setInfoStatusMap(requestInfoStatusMap);
         request.setPage(0);
         request.setRows(0);
-        
+        if(StringUtils.isBlank(request.getAddtimeEnd()) || StringUtils.isBlank(request.getAddtimeStart())){
+            request.setAddtimeStart(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getBeforeDayTimeReturnDate(1)));
+            request.setAddtimeEnd(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        }
         GetShopBargainRechargeOrderResponse shopBargainRechargeOrderResponse = shopBargainRechargeOrderServiceFacade.getRecords(request);
         List<ShopBargainRechargeOrderInfo> list = shopBargainRechargeOrderResponse.getList();
         if(list == null || list.isEmpty()){
