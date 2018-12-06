@@ -566,4 +566,18 @@ public class ShopCompanyServiceFacadeImpl implements ShopCompanyServiceFacade {
         //发送邮件
         sendMailToCompany(payShopCompany,randPwd);
     }
+
+    @Override
+    public void chargeSub(String companyId, String totalMoney) {
+        PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(companyId);
+        if ( !checkMoneyCode(companyId) ){
+            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "该企业已被启用");
+        }
+        PayShopCompany payShopCompanyUpdate = new PayShopCompany();
+        payShopCompanyUpdate.setId(companyId);
+        BigDecimal sub = ArithmeticUtils.sub(payShopCompany.getMoney().toString(), totalMoney);
+        payShopCompanyUpdate.setMoney(sub);                        // 充值后的余额
+        payShopCompanyUpdate.setMoneyCode(getMoneyCode(companyId,sub.toString()));     // 新的金额校验码
+        payShopCompanyMapper.updateByPrimaryKeySelective(payShopCompanyUpdate);
+    }
 }

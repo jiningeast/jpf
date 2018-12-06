@@ -1,15 +1,12 @@
 package com.joiest.jpf.market.api.controller;
 
-import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.*;
-import com.joiest.jpf.entity.CouponOrderList;
-import com.joiest.jpf.entity.ShopCompanyInfo;
-import com.joiest.jpf.entity.ShopCustomerInfo;
+import com.joiest.jpf.entity.*;
 import com.joiest.jpf.facade.*;
-import org.apache.commons.collections.map.HashedMap;
+import com.joiest.jpf.market.api.util.SmsUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,9 +47,11 @@ public class ShopBatchController {
     private ShopCustomerServiceFacade shopCustomerServiceFacade;
     @Autowired
     private ShopBatchCouponServiceFacade shopBatchCouponServiceFacade;
+    @Autowired
+    private ShopInterfaceStreamServiceFacade shopInterfaceStreamServiceFacade;
 
     /**
-     * 查询可用的订单号
+     * 查询可用的合同号
      * @param request
      * @return
      */
@@ -70,7 +71,8 @@ public class ShopBatchController {
                 map.put("id",payShopCompanyCharge.getId());
                 map.put("contractNo",payShopCompanyCharge.getContractNo());
                 map.put("balance",payShopCompanyCharge.getBalance());
-                map.put("rate",payShopCompanyCharge.getRate());
+                map.put("totalMoney",payShopCompanyCharge.getMoney());
+                map.put("date",payShopCompanyCharge.getAddtime());
                 list.add(map);
             }
         } catch (Exception e) {
@@ -80,6 +82,49 @@ public class ShopBatchController {
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功",list);
     }
+
+    /**
+     * 查询可用的合同号
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getUsableBatchNoPage",method = RequestMethod.POST)
+    @ResponseBody
+    public String getUsableBatchNoPage(HttpServletRequest request){
+
+        String companyId = request.getParameter("companyId");
+        String pageNo = request.getParameter("pageNo");
+        String pageSize = request.getParameter("pageSize");
+        if(StringUtils.isBlank(companyId)||StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
+        }
+        List<Map<String,Object>> list = new ArrayList<>();
+        PayShopCompanyChargeInfo payShopCompanyChargeInfo = new PayShopCompanyChargeInfo();
+        try {
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("companyId",Base64CustomUtils.base64Decoder(companyId));
+            map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
+            map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
+            List<PayShopCompanyCharge> payShopCompanyCharges = shopCompanyChargeServiceFacade.getListByCompanyIdByPage(map);
+            Integer total = shopCompanyChargeServiceFacade.getTotal(map);
+            for (PayShopCompanyCharge payShopCompanyCharge:payShopCompanyCharges) {
+                Map<String,Object> hashMap =new ConcurrentHashMap<>();
+                hashMap.put("id",payShopCompanyCharge.getId());
+                hashMap.put("contractNo",payShopCompanyCharge.getContractNo());
+                hashMap.put("balance",payShopCompanyCharge.getBalance());
+                hashMap.put("totalMoney",payShopCompanyCharge.getMoney());
+                hashMap.put("date",payShopCompanyCharge.getAddtime());
+                list.add(hashMap);
+            }
+            payShopCompanyChargeInfo.setList(list);
+            payShopCompanyChargeInfo.setTotal(total);
+        } catch (Exception e) {
+            logger.error("getUsableBatchNo："+e.getMessage());
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"获取失败",null);
+        }
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功",payShopCompanyChargeInfo);
+    }
+
 
     /**
      * 欣享爱生活下单接口
@@ -151,14 +196,14 @@ public class ShopBatchController {
         map.put("companyId",Base64CustomUtils.base64Decoder(companyId));
         map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
         map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
-        List<PayShopCouponOrder> orderList;
+        PayShopCouponOrderResultInfo payShopCouponOrderResultInfo = null;
         try {
-            orderList = payShopCouponOrderServiceFacade.getOrderList(map);
+            payShopCouponOrderResultInfo = payShopCouponOrderServiceFacade.getOrderList(map);
         } catch (Exception e) {
             logger.error("getOrderList："+e.getMessage());
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),JpfInterfaceErrorInfo.FAIL.getDesc(),null);
         }
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),orderList);
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),payShopCouponOrderResultInfo);
     }
 
     /**
@@ -180,13 +225,14 @@ public class ShopBatchController {
         map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
         map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
         map.put("orderNo",Base64CustomUtils.base64Decoder(orderNo));
+        PayShopCouponOrderInfoResultInfo payShopCouponOrderInfoResultInfo = null;
         try {
-            payShopCouponOrderInfos = payShopCouponOrderServiceFacade.getOrderInfo(map);
+            payShopCouponOrderInfoResultInfo = payShopCouponOrderServiceFacade.getOrderInfo(map);
         } catch (Exception e) {
             logger.error("getOrderInfo："+e.getMessage());
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),JpfInterfaceErrorInfo.FAIL.getDesc(),null);
         }
-        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),payShopCouponOrderInfos);
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),payShopCouponOrderInfoResultInfo);
     }
 
     /**
@@ -258,22 +304,30 @@ public class ShopBatchController {
         map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
         map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
         map.put("orderId",Base64CustomUtils.base64Decoder(orderId));
-        List<PayShopBatchCoupon> payShopBatchCoupons = null;
+        PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = null;
         try {
-            payShopBatchCoupons = shopBatchCouponServiceFacade.getCouponsByOrderId(map);
+            payShopBatchCouponResultInfo = shopBatchCouponServiceFacade.getCouponsByOrderId(map);
         } catch (Exception e) {
             logger.error("getCouponInfo "+e.getMessage());
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"删除失败", null);
         }
-         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功", payShopBatchCoupons);
+         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功", payShopBatchCouponResultInfo);
      }
 
     /**
      * 上传excel 解析是否完整
      */
-    @RequestMapping("/uploadExcel")
+    @RequestMapping(value = "/uploadExcel",method = RequestMethod.POST)
     @ResponseBody
-    public JpfResponseDto uploadExcel(@RequestParam("uploadfile") MultipartFile uploadfile,String companyId,String companyName,String orderId,String totalMoney) throws Exception{
+    public String uploadExcel(@RequestParam("uploadfile") MultipartFile uploadfile,String companyId,String companyName,String orderId,String totalMoney) throws Exception{
+
+        if(StringUtils.isBlank(companyId)||StringUtils.isBlank(companyName)||StringUtils.isBlank(orderId)||StringUtils.isBlank(totalMoney)){
+            return setReslt("10008","数据参数不全",null);
+        }
+        companyId=Base64CustomUtils.base64Decoder(companyId);
+        companyName=Base64CustomUtils.base64Decoder(companyName);
+        orderId=Base64CustomUtils.base64Decoder(orderId);
+        totalMoney=Base64CustomUtils.base64Decoder(totalMoney);
         // 获取当前的文件名
         String fileNameAll = uploadfile.getOriginalFilename();
         String fileName = fileNameAll.substring(0,fileNameAll.lastIndexOf("."));
@@ -281,7 +335,7 @@ public class ShopBatchController {
         ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(companyId);
         // 判断企业有没有停用
         if (shopCompanyInfo.getStatus()== 0){
-            return setReslt("10001",JpfErrorInfo.COMPANY_NOT_AVAILABLE.desc());
+            return setReslt("10001",JpfErrorInfo.COMPANY_NOT_AVAILABLE.desc(),null);
         }
         // 将excel暂存到硬盘上
         String savePre = ConfigUtil.getValue("EXCEL_PATH");
@@ -296,31 +350,31 @@ public class ShopBatchController {
 
         // 最多数量限制
         if ( list.size() > maxAmount ){
-            return setReslt("10001",JpfErrorInfo.MAX_LIMIT.desc());
+            return setReslt("10001",JpfErrorInfo.MAX_LIMIT.desc(),null);
         }
         if(StringUtils.isBlank(orderId)){
-            return setReslt("10001",JpfErrorInfo.EMPTY_BATCH_NO.desc());
+            return setReslt("10001",JpfErrorInfo.EMPTY_BATCH_NO.desc(),null);
         }
         //根据订单号查询批次
         PayShopBatch payShopBatch = shopBatchServiceFacade.getBatchByOrderId(orderId);
         if (payShopBatch == null ){
-           return setReslt("10005",JpfErrorInfo.BATCH_NOT_EXIST.desc());
+           return setReslt("10005",JpfErrorInfo.BATCH_NOT_EXIST.desc(),null);
         }
         // 获取总面值,判断其不为空
         if (!StringUtils.isNotBlank(totalMoney) ){
-            return setReslt("10001",JpfErrorInfo.EMPTY_TOTAL_MONEY.desc());
+            return setReslt("10001",JpfErrorInfo.EMPTY_TOTAL_MONEY.desc(),null);
         }
         // 验证该企业有没有excel上描述的券
         // 获取excel各面值券的数量
         List<ShopCustomerInfo> personsList = new ArrayList<>();    // 新建校验人数组
-        Map<String,Integer> valueCount = new HashedMap();
-        int totalValue = 0;
+        Map<String,Integer> valueCount = new LinkedHashMap<>();
+        BigDecimal totalValue =new BigDecimal(0) ;
         for ( int i=2; i<list.size(); i++){
             // 获取每条信息详情
             Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
             // 判断手机号合法性
             if (!ToolUtils.checkPhone(singlePerson.get(1))){
-                return setReslt("10005","用户"+singlePerson.get(0)+"的手机号有误，请检查后重新上传");
+                return setReslt("10005","用户"+singlePerson.get(0)+"的手机号有误，请检查后重新上传",null);
             }
             // 姓名、手机号和面值必填
             String name = singlePerson.get(0);
@@ -328,35 +382,31 @@ public class ShopBatchController {
             String value = singlePerson.get(2);
             String idno = StringUtils.isNotBlank(singlePerson.get(3)) ? singlePerson.get(3) : null;
             if (!StringUtils.isNotBlank(name) ||!StringUtils.isNotBlank(phone)||!StringUtils.isNotBlank(value) ){
-                return setReslt("10004","Excel第"+i+"行的数据不完整，请修改后重新上传");
+                return setReslt("10004","Excel第"+i+"行的数据不完整，请修改后重新上传",null);
             }
             // 判断所有人的状态是不是已冻结
             PayShopCustomer existCustomer = shopCustomerServiceFacade.getCustomerByPhone(singlePerson.get(1));
             ShopCustomerInfo failCustomer = new ShopCustomerInfo();
             failCustomer.setName(singlePerson.get(0));
             failCustomer.setPhone(singlePerson.get(1));
-            //=========类型修改===========
-            //failCustomer.setDou(singlePerson.get(2));
+            failCustomer.setDou(new BigDecimal(value));
             if ( StringUtils.isNotBlank(idno) ){
                 failCustomer.setIdno(idno);
             }
-            if (existCustomer.getStatus()== 0){
-                // 账户已冻结
-                failCustomer.setStatus((byte)0);
-            }
-            // 检查校验码
-            String checkCode = ToolUtils.CreateCode(existCustomer.getDou().toString(),existCustomer.getId());
-            if ( !existCustomer.getCode().equals(checkCode) ){
-                // 校验码错误
-                failCustomer.setIsVerify((byte)0);
+            if(existCustomer!=null){
+                if (existCustomer.getStatus()== 0){
+                    failCustomer.setStatus((byte)0); // 账户已冻结
+                }
+                // 检查校验码
+                String checkCode = ToolUtils.CreateCode(existCustomer.getDou().toString(),existCustomer.getId());
+                if ( !existCustomer.getCode().equals(checkCode) ){
+                    failCustomer.setIsVerify((byte)0); // 校验码错误
+                }
             }
             // 将校验过的人添加到数组中
-            if ( failCustomer.getName() != null ){
-                personsList.add(failCustomer);
-            }
+            personsList.add(failCustomer);
             // 统计总金额
-            totalValue = totalValue + Integer.parseInt(value);
-
+            totalValue =ArithmeticUtils.add(totalValue.toString(),value);
             // 统计各面值的数量
             if ( valueCount.get(value) == null ){
                 valueCount.put( value,1);
@@ -365,40 +415,156 @@ public class ShopBatchController {
             }
         }
         // 判断总面值和各人员面值的总和是不是统一
-        if (Integer.parseInt(totalMoney) != totalValue){
-            return setReslt("10001",JpfErrorInfo.ERROR_TOTAL_MONEY.desc());
+        if (new BigDecimal(totalMoney).compareTo(totalValue)!=0){
+            return setReslt("10001",JpfErrorInfo.ERROR_TOTAL_MONEY.desc(),null);
         }
         // 判断数据库中有没有对应的这些个券
+        String couponDesc="商家发送请求共"+personsList.size()+"条记录;-";
         for (Map.Entry<String, Integer> entry : valueCount.entrySet()) {
             int valueNum = shopBatchCouponServiceFacade.getCouponNumByValue(companyId,entry.getKey(), payShopBatch.getBatchNo());
+            couponDesc+="面值"+entry.getKey()+","+valueNum+"笔-";
             if ( valueNum < entry.getValue() ){
-                return setReslt("10002","面值"+entry.getKey()+"的库存数量少于Excel中的数量");
+                return setReslt("10002","面值"+entry.getKey()+"的库存数量少于Excel中的数量",null);
             }
         }
-
         // 输出校验的人集合
-        if ( !personsList.isEmpty() ){
+        if (!personsList.isEmpty() ){
             UUID uuid = UUID.randomUUID();
             Map<String,Object> responseMap = new HashMap<>();
-            responseMap.put("code","00001");
+            responseMap.put("code","100000");
             responseMap.put("info","人员校验情况如下：");
             responseMap.put("companyId",companyId);
             responseMap.put("companyName",companyName);
             responseMap.put("path",path);
-            responseMap.put("data",JsonUtils.toJson(personsList));
+            responseMap.put("orderId",orderId);
+            responseMap.put("data",personsList);
             responseMap.put("totalMoney",totalMoney);
-            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH")+"XQ"+uuid.toString()+".txt",false);
-            return setReslt("00001",uuid.toString());
+            responseMap.put("couponDesc",couponDesc);
+            responseMap.put("excleTitle",fileNameAll);
+            responseMap.put("excleName",ConfigUtil.getValue("CACHE_PATH_XQ")+"XQ"+uuid.toString()+".txt");
+            LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH_XQ")+"XQ"+uuid.toString()+".txt",false);
+            return ToolUtils.mapToJsonBase64(responseMap);
         }
-        return new JpfResponseDto();
+        return setReslt("10008","上传数据为空",null);
     }
 
-    private JpfResponseDto setReslt(String s, String desc) {
-        JpfResponseDto jpfResponseDto = new JpfResponseDto();
-        jpfResponseDto.setRetCode(s);
-        jpfResponseDto.setRetMsg(desc);
-        return  jpfResponseDto;
+    private String setReslt(String s, String desc,Object jsonData) {
+        return  ToolUtils.toJsonBase64(s,desc,jsonData);
     }
+
+    /**
+     * 下载excel模板
+     */
+    @RequestMapping("/downloadFile")
+    @ResponseBody
+    public HttpServletResponse download(HttpServletRequest request, HttpServletResponse response){
+        //下载文件路径
+        OutputStream toClient=null;
+        InputStream fis = null;
+        try{
+            String path = ConfigUtil.getValue("EXCEL_PATH") + "module/";
+            String filename = "前台网站欣券群发模板.xlsx";
+            // path是指欲下载的文件的路径。
+            File file = new File(path+filename);
+            // 以流的形式下载文件。
+            fis = new BufferedInputStream(new FileInputStream(file));
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            fis.close();
+            // 清空response
+            response.reset();
+            // 设置response的Header
+            String fileName = new String(filename.getBytes(),"ISO-8859-1");
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            response.addHeader("Content-Length", "" + file.length());
+            toClient = new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream");
+            toClient.write(buffer);
+            toClient.flush();
+            toClient.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if(toClient!=null){
+                    toClient.close();
+                }
+                if(fis!=null){
+                    fis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return response;
+    }
+
+    /**
+     * 群发券操作
+     */
+    @RequestMapping("/sendCoupons")
+    @ResponseBody
+    public String sendCoupons(String fileName){
+        if(StringUtils.isBlank(fileName)){
+            return setReslt("80010","数据参数不全",null);
+        }
+        fileName=Base64CustomUtils.base64Decoder(fileName);
+        // 读取暂存文件
+        String fileContent = ToolUtils.readFromFile(ConfigUtil.getValue("CACHE_PATH_XQ")+fileName+".txt","UTF-8");
+        Map<String,Object> jsonMap = JsonUtils.toObject(fileContent,HashMap.class);
+        List<LinkedHashMap<String,Object>> list = (List<LinkedHashMap<String, Object>>) jsonMap.get("data");
+        String companyId = (String) jsonMap.get("companyId");
+        String companyName = (String) jsonMap.get("companyName");
+        String orderId = (String) jsonMap.get("orderId");
+        String excelLocalUrl = (String) jsonMap.get("path");
+        String totalMoney = (String) jsonMap.get("totalMoney");
+        // 检查商户是否已禁用
+        ShopCompanyInfo shopCompanyInfo = shopCompanyServiceFacade.getCompanyOne(companyId);
+        if(shopCompanyInfo==null){
+            return setReslt("10001","该商户系统中不存在",null);
+        }
+        if (shopCompanyInfo.getStatus() == 0){
+            return setReslt("10001","该商户已禁用",null);
+        }
+        // 检验金额验证码的正确性
+        if (!shopCompanyServiceFacade.checkMoneyCode(companyId)){
+            return setReslt("10002","金额校验码错误",null);
+        }
+        //根据订单号查询批次
+        PayShopBatch payShopBatch = shopBatchServiceFacade.getBatchByOrderId(orderId);
+        if(payShopBatch==null){
+            return setReslt("10002","当前订单对应的批次不存在",null);
+        }
+        List<ShopBatchCouponInfo> couponsList  = shopBatchCouponServiceFacade.getCouponsWeb(list,companyId,payShopBatch.getId(),excelLocalUrl);
+        // 扣款
+        shopCompanyServiceFacade.chargeSub(companyId,totalMoney);
+        // 开始发短信
+        String content;
+        for ( ShopBatchCouponInfo shopBatchCouponInfo:couponsList ){
+            content = "您收到一个激活码："+shopBatchCouponInfo.getActiveCode()+"，请微信搜索“欣享爱生活”公众号登录使用。";
+            //sendToPersonsSms(shopBatchCouponInfo.getActivePhone(),content,payShopBatch.getBatchNo());
+        }
+        return setReslt("10000","发放成功",null);
+    }
+
+    // 群发的短信
+    public void sendToPersonsSms(String phone,String content,String batchNo){
+        Map<String,String> smsResMap = SmsUtils.send(phone,content,"xinxiang");
+        Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
+        if ( responseMap.get("code").equals("10000") ){
+            // 添加短信流水
+            ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
+            shopInterfaceStreamInfo.setType((byte)1);
+            shopInterfaceStreamInfo.setRequestUrl(smsResMap.get("requestUrl"));
+            shopInterfaceStreamInfo.setRequestContent(smsResMap.get("requestParam"));
+            shopInterfaceStreamInfo.setResponseContent(smsResMap.get("response"));
+            shopInterfaceStreamInfo.setBatchNo(batchNo);
+            shopInterfaceStreamInfo.setAddtime(new Date());
+            shopInterfaceStreamServiceFacade.addStream(shopInterfaceStreamInfo);
+        }
+    }
+
+
 
     public static void main(String[] args) {
         System.out.println(Md5Encrypt.md5("merchNo=MC1541126548324168863&money=200.00imyHcZOzMmhukCqB").toUpperCase());
@@ -411,5 +577,12 @@ public class ShopBatchController {
         treeMap.putAll(map);
         String respos = ToolUtils.mapToUrl(treeMap);
         System.out.println(Md5Encrypt.md5(respos+"imyHcZOzMmhukCqB").toUpperCase());
+
+        BigDecimal bigDecimal = new BigDecimal(200);
+        System.out.println(new BigDecimal(200).compareTo(bigDecimal));
+        System.out.println(Base64CustomUtils.base64Encoder("测试天天向上"));
+        System.out.println(Base64CustomUtils.base64Decoder(Base64CustomUtils.base64Encoder("测试天天向上")));
     }
+
+
 }

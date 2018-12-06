@@ -11,6 +11,8 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponOrderInfoMappe
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponOrderMapper;
 import com.joiest.jpf.entity.CouponOrderInfo;
 import com.joiest.jpf.entity.CouponOrderList;
+import com.joiest.jpf.entity.PayShopCouponOrderInfoResultInfo;
+import com.joiest.jpf.entity.PayShopCouponOrderResultInfo;
 import com.joiest.jpf.facade.PayShopCouponOrderServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,16 +81,16 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
      * @return
      */
     @Override
-    public List<PayShopCouponOrder> getOrderList(Map<String, Object> map) {
+    public PayShopCouponOrderResultInfo getOrderList(Map<String, Object> map) {
         PayShopCouponOrderExample example = new PayShopCouponOrderExample();
         PayShopCouponOrderExample.Criteria criteria = example.createCriteria();
         example.setOrderByClause(" id asc ");
-        if (Long.valueOf(map.get("pageSize").toString())<= 0){
+        if (map.get("pageSize")==null||Long.valueOf(map.get("pageSize").toString())<= 0){
             example.setPageSize(10);
         }else{
             example.setPageSize(Long.valueOf(map.get("pageSize").toString()));
         }
-        if(Long.valueOf(map.get("pageNo").toString())== 0){
+        if(map.get("pageNo")==null||Long.valueOf(map.get("pageNo").toString())== 0){
             example.setPageNo(1);
         }else{
             example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
@@ -103,7 +105,12 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
             criteria.andCompanyIdEqualTo(map.get("companyId").toString());
         }
         criteria.andStatusNotEqualTo((byte)3);
-        return payShopCouponOrderMapper.selectByExample(example);
+        List<PayShopCouponOrder> orderList = payShopCouponOrderMapper.selectByExample(example);
+        int total = payShopCouponOrderMapper.countByExample(example);
+        PayShopCouponOrderResultInfo payShopCouponOrderResultInfo = new PayShopCouponOrderResultInfo();
+        payShopCouponOrderResultInfo.setPayShopCouponOrderResults(orderList);
+        payShopCouponOrderResultInfo.setTotal(total);
+        return payShopCouponOrderResultInfo;
     }
 
 
@@ -114,18 +121,18 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
      * @return
      */
     @Override
-    public List<PayShopCouponOrderInfo> getOrderInfo(Map<String,Object> map) {
+    public PayShopCouponOrderInfoResultInfo getOrderInfo(Map<String,Object> map) {
         PayShopCouponOrderExample example = new PayShopCouponOrderExample();
         PayShopCouponOrderExample.Criteria criteria = example.createCriteria();
         if(map.get("orderNo")!=null){
             criteria.andOrderNoEqualTo(map.get("orderNo").toString());
         }
-        if (Long.valueOf(map.get("pageSize").toString())<= 0){
+        if (map.get("pageSize")==null||Long.valueOf(map.get("pageSize").toString())<= 0){
             example.setPageSize(10);
         }else{
             example.setPageSize(Long.valueOf(map.get("pageSize").toString()));
         }
-        if(Long.valueOf(map.get("pageNo").toString())== 0){
+        if(map.get("pageSize")==null||Long.valueOf(map.get("pageNo").toString())== 0){
             example.setPageNo(1);
         }else{
             example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
@@ -138,7 +145,11 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
         PayShopCouponOrderInfoExample.Criteria criteria1 = example1.createCriteria();
         criteria1.andOrderIdEqualTo(orderList.get(0).getId());
         List<PayShopCouponOrderInfo> payShopCouponOrderInfos = payShopCouponOrderInfoMapper.selectByExample(example1);
-        return payShopCouponOrderInfos;
+        int total = payShopCouponOrderInfoMapper.countByExample(example1);
+        PayShopCouponOrderInfoResultInfo payShopCouponOrderInfoResultInfo = new PayShopCouponOrderInfoResultInfo();
+        payShopCouponOrderInfoResultInfo.setPayShopCouponOrderInfos(payShopCouponOrderInfos);
+        payShopCouponOrderInfoResultInfo.setTotal(total);
+        return payShopCouponOrderInfoResultInfo;
     }
 
     /**

@@ -24,6 +24,22 @@ public class ToolUtils {
 
     /**
      * 将异常以json并base64的方式返回
+     * @param data 返回数据
+     * @return base64加密串
+     */
+    public static String mapToJsonBase64(Object data)
+    {
+        //String jsonStr = JsonUtils.toJson(responseMap).replaceAll("\\\\","");
+        String jsonStr = JsonUtils.toJson(data);
+
+        String base64Str = Base64CustomUtils.base64Encoder(jsonStr);
+        base64Str = base64Str.replaceAll("\r","");
+        base64Str = base64Str.replaceAll("\n","");
+        return base64Str;
+
+    }
+    /**
+     * 将异常以json并base64的方式返回
      * @param code 异常码
      * @param info 异常信息
      * @param data 返回数据

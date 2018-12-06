@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServiceFacade {
 
@@ -306,6 +307,42 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
     @Override
     public PayShopCompanyCharge getById(String contractId) {
         return payShopCompanyChargeMapper.selectByPrimaryKey(contractId);
+    }
+
+    @Override
+    public List<PayShopCompanyCharge> getListByCompanyIdByPage(Map<String, Object> map) {
+        PayShopCompanyChargeExample example = new PayShopCompanyChargeExample();
+        PayShopCompanyChargeExample.Criteria criteria= example.createCriteria();
+        if (map.get("companyId")!=null){
+            criteria.andCompanyIdEqualTo(map.get("companyId").toString());
+        }
+        if (map.get("pageSize")==null||Long.valueOf(map.get("pageSize").toString())<= 0){
+            example.setPageSize(10);
+        }else{
+            example.setPageSize(Long.valueOf(map.get("pageSize").toString()));
+        }
+        if(map.get("pageNo")==null||Long.valueOf(map.get("pageNo").toString())== 0){
+            example.setPageNo(1);
+        }else{
+            example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
+        }
+        criteria.andBalanceGreaterThan(new BigDecimal(0));
+        criteria.andStatusEqualTo((byte)1);
+        example.setOrderByClause(" id asc ");
+        return payShopCompanyChargeMapper.selectByExample(example);
+    }
+
+    @Override
+    public Integer getTotal(Map<String, Object> map) {
+        PayShopCompanyChargeExample example = new PayShopCompanyChargeExample();
+        PayShopCompanyChargeExample.Criteria criteria= example.createCriteria();
+        if (map.get("companyId")!=null){
+            criteria.andCompanyIdEqualTo(map.get("companyId").toString());
+        }
+        criteria.andBalanceGreaterThan(new BigDecimal(0));
+        criteria.andStatusEqualTo((byte)1);
+        example.setOrderByClause(" id asc ");
+        return payShopCompanyChargeMapper.countByExample(example);
     }
 
 

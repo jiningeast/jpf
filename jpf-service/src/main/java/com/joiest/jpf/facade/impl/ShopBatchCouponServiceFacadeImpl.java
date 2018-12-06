@@ -9,6 +9,8 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCustomerCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
+import com.joiest.jpf.entity.PayShopBatchCouponResult;
+import com.joiest.jpf.entity.PayShopBatchCouponResultInfo;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 import com.joiest.jpf.facade.ShopBatchCouponServiceFacade;
@@ -44,6 +46,12 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
 
     @Autowired
     private PayCloudInterfaceStreamMapper payCloudInterfaceStreamMapper;
+
+    @Autowired
+    private PayShopConponExcelMapper payShopConponExcelMapper;
+
+    @Autowired
+    private PayShopCouponOrderMapper payShopCouponOrderMapper;
 
     /**
      * 根据id获取单个券详情
@@ -228,7 +236,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         PayShopBatchCouponExample couponExample = new PayShopBatchCouponExample();
         PayShopBatchCouponExample.Criteria couponCriteria = couponExample.createCriteria();
         couponCriteria.andCompanyIdEqualTo(companyId);
-        couponCriteria.andDouEqualTo(Integer.parseInt(dou));
+        couponCriteria.andDouEqualTo(new BigDecimal(dou));
         couponCriteria.andBatchNoEqualTo(batchNo);
         couponCriteria.andIsActiveEqualTo((byte)0);
         couponCriteria.andIsExpiredEqualTo((byte)0);
@@ -355,7 +363,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             PayShopBatchCouponExample couponExample = new PayShopBatchCouponExample();
             PayShopBatchCouponExample.Criteria couponCriteria = couponExample.createCriteria();
             couponCriteria.andCompanyIdEqualTo(companyId);
-            couponCriteria.andDouEqualTo(Integer.parseInt(singlePerson.get("dou").toString()));
+            couponCriteria.andDouEqualTo(new BigDecimal(singlePerson.get("dou").toString()));
             couponCriteria.andBatchNoEqualTo(batchNo);
             couponCriteria.andIsActiveEqualTo((byte)0);
             couponCriteria.andIsExpiredEqualTo((byte)0);
@@ -398,28 +406,144 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
     }
 
     @Override
-    public List<PayShopBatchCoupon> getCouponsByOrderId(Map<String, Object> map) {
+    public PayShopBatchCouponResultInfo getCouponsByOrderId(Map<String, Object> map) {
         PayShopBatchCouponExample example = new PayShopBatchCouponExample();
         PayShopBatchCouponExample.Criteria criteria = example.createCriteria();
         if(map.get("orderId")!=null){
             criteria.andOrderIdEqualTo(map.get("orderId").toString());
         }
-        if (Long.valueOf(map.get("pageSize").toString())<= 0){
+        if (map.get("pageSize")==null||Long.valueOf(map.get("pageSize").toString())<= 0){
             example.setPageSize(10);
         }else{
             example.setPageSize(Long.valueOf(map.get("pageSize").toString()));
         }
-        if(Long.valueOf(map.get("pageNo").toString())== 0){
+        if(map.get("pageNo")==null||Long.valueOf(map.get("pageNo").toString())== 0){
             example.setPageNo(1);
         }else{
             example.setPageNo(Long.valueOf(map.get("pageNo").toString()));
         }
         List<PayShopBatchCoupon> payShopBatchCoupons = payShopBatchCouponMapper.selectByExample(example);
+        int count = payShopBatchCouponMapper.countByExample(example);
+        List<PayShopBatchCouponResult> payShopBatchCouponResult=new ArrayList<>();
         for (PayShopBatchCoupon payShopBatchCoupon: payShopBatchCoupons) {
+            PayShopBatchCouponResult result = new PayShopBatchCouponResult();
+            //根据订单查询excel信息
             String start = StringUtils.substring(payShopBatchCoupon.getActiveCode(),0,2);
             String end = StringUtils.substring(payShopBatchCoupon.getActiveCode(),-2,payShopBatchCoupon.getActiveCode().length());
             payShopBatchCoupon.setActiveCode(start+"****"+end);
+            if(payShopBatchCoupon.getSendType()==null){
+                payShopBatchCoupon.setSendType((byte)5);
+            }
+            result.setActiveCode(payShopBatchCoupon.getActiveCode());
+            result.setActiveCustomerId(payShopBatchCoupon.getActiveCustomerId());
+            result.setActiveName(payShopBatchCoupon.getActiveName());
+            result.setActivePhone(payShopBatchCoupon.getActivePhone());
+            result.setActiveTime(payShopBatchCoupon.getActiveTime());
+            result.setBatchId(payShopBatchCoupon.getBatchId());
+            result.setBatchNo(payShopBatchCoupon.getBatchNo());
+            result.setCompanyId(payShopBatchCoupon.getCompanyId());
+            result.setCompanyName(payShopBatchCoupon.getCompanyName());
+            result.setCouponNo(payShopBatchCoupon.getCouponNo());
+            result.setDou(payShopBatchCoupon.getDou());
+            result.setExpireMonth(payShopBatchCoupon.getExpireMonth());
+            result.setExpireTime(payShopBatchCoupon.getExpireTime());
+            result.setAddtime(payShopBatchCoupon.getAddtime());
+            result.setId(payShopBatchCoupon.getId());
+            result.setIsActive(payShopBatchCoupon.getIsActive());
+            result.setIsExpired(payShopBatchCoupon.getIsExpired());
+            result.setMoney(payShopBatchCoupon.getMoney());
+            result.setOrderId(payShopBatchCoupon.getOrderId());
+            result.setSendTime(payShopBatchCoupon.getSendTime());
+            result.setSendType(payShopBatchCoupon.getSendType());
+            result.setStatus(payShopBatchCoupon.getStatus());
+            result.setUpdatetime(payShopBatchCoupon.getUpdatetime());
+            payShopBatchCouponResult.add(result);
         }
-        return payShopBatchCoupons;
+        PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = new PayShopBatchCouponResultInfo();
+        payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCouponResult);
+        payShopBatchCouponResultInfo.setTotal(count);
+        return payShopBatchCouponResultInfo;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public List<ShopBatchCouponInfo> getCouponsWeb(List<LinkedHashMap<String,Object>> list, String companyId, String batchId, String excelLocalUrl) {
+        // OSS上传excel文件
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("path",excelLocalUrl);
+        String url = ConfigUtil.getValue("CLOUD_API_URL")+"/oss/upload";
+        String response = OkHttpUtils.postForm(url,requestMap);
+        // 增加==OSS接口流水==
+        PayCloudInterfaceStream payCloudInterfaceStream = new PayCloudInterfaceStream();
+        payCloudInterfaceStream.setType((byte)0);
+        payCloudInterfaceStream.setRequestUrl(url);
+        payCloudInterfaceStream.setRequestContent(ToolUtils.mapToUrl(requestMap));
+        payCloudInterfaceStream.setResponseContent(response);
+        payCloudInterfaceStream.setAddtime(new Date());
+        payCloudInterfaceStreamMapper.insertSelective(payCloudInterfaceStream);
+        // 更新批次表相关字段
+        PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(batchId);
+        String newExcelUrl;
+        if (StringUtils.isNotBlank(payShopBatch.getExcelUrl()) ){
+            newExcelUrl = payShopBatch.getExcelUrl() +','+ response;
+        }else{
+            newExcelUrl = response;
+        }
+        payShopBatch.setExcelUrl(newExcelUrl);
+        payShopBatch.setSendTime(new Date());
+        //payShopBatch.setSendType((byte)1);
+        payShopBatch.setUpdatetime(new Date());
+        payShopBatch.setStatus((byte)2);
+        payShopBatch.setSendType((byte)2);
+        payShopBatchMapper.updateByPrimaryKeySelective(payShopBatch);
+        // 获取待发券的个人
+        List<ShopBatchCouponInfo> couponsList = new ArrayList<>();
+        //查询该批次所有的券
+        PayShopBatchCouponExample couponExample = new PayShopBatchCouponExample();
+        PayShopBatchCouponExample.Criteria couponCriteria = couponExample.createCriteria();
+        couponCriteria.andCompanyIdEqualTo(companyId);
+        couponCriteria.andOrderIdEqualTo(payShopBatch.getOrderId());
+        couponCriteria.andIsActiveEqualTo((byte)0);
+        couponCriteria.andIsExpiredEqualTo((byte)0);
+        List<PayShopBatchCoupon> findCoupons = payShopBatchCouponMapper.selectByExample(couponExample);
+        for (int i=0; i<list.size(); i++) {
+            for (PayShopBatchCoupon payShopBatchCoupon: findCoupons) {
+                LinkedHashMap<String,Object> singlePerson = list.get(i);
+                String name = singlePerson.get("name").toString();
+                String phone = singlePerson.get("phone").toString();
+                String value = singlePerson.get("dou").toString();
+                String idno = singlePerson.get("idno") == null ? "" : singlePerson.get("idno").toString();
+                if(payShopBatchCoupon.getDou().compareTo(new BigDecimal(value))==0){
+                    ShopBatchCouponInfo shopBatchCouponInfo = new ShopBatchCouponInfo();
+                    shopBatchCouponInfo.setActivePhone(list.get(i).get("phone").toString());
+                    shopBatchCouponInfo.setActiveCode(payShopBatchCoupon.getActiveCode());
+                    couponsList.add(shopBatchCouponInfo);
+                    //payShopBatchCoupon.setActivePhone(shopCustomerInfo.getPhone());
+                    payShopBatchCoupon.setSendTime(new Date());
+                    payShopBatchCoupon.setSendType((byte)2);
+                    payShopBatchCoupon.setUpdatetime(new Date());
+                    payShopBatchCouponMapper.updateByPrimaryKeySelective(payShopBatchCoupon);
+                    //保存发放记录
+                    PayShopConponExcel payShopConponExcel = new PayShopConponExcel();
+                    payShopConponExcel.setAddtime(new Date());
+                    payShopConponExcel.setBatchId(batchId);
+                    payShopConponExcel.setBatchNo(payShopBatch.getBatchNo());
+                    payShopConponExcel.setCompanyId(companyId);
+                    payShopConponExcel.setCompanyName(payShopBatch.getCompanyName());
+                    payShopConponExcel.setIdcard(idno);
+                    payShopConponExcel.setOrderId(payShopBatch.getOrderId());
+                    //payShopConponExcel.setOrderNo(payShopBatch);
+                    payShopConponExcel.setUsePhone(phone);
+                    payShopConponExcel.setUserName(name);
+                    //增加保留欣券的id
+                    payShopConponExcelMapper.insertSelective(payShopConponExcel);
+                }
+            }
+        }
+        //更改订单状态
+        PayShopCouponOrder payShopCouponOrder = payShopCouponOrderMapper.selectByPrimaryKey(payShopBatch.getOrderId());
+        payShopCouponOrder.setStatus((byte)4);
+        payShopCouponOrderMapper.updateByPrimaryKeySelective(payShopCouponOrder);
+        return couponsList;
     }
 }

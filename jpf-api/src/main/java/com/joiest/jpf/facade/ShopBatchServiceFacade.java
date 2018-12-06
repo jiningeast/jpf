@@ -65,4 +65,10 @@ public interface ShopBatchServiceFacade {
      * @return
      */
     List<PayCouponInfo> getOrderInfo(String orderId);
+
+    /**
+     * 更新批次信息
+     * @param payShopBatch
+     */
+    void update(PayShopBatch payShopBatch);
 }

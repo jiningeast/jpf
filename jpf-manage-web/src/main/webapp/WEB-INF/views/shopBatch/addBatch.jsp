@@ -46,9 +46,9 @@
                 </tr>
                 <tr>
                     <td width="100" valign="top">面值</td>
-                    <td width="190"><input id="money" name="money" type="text" class="easyui-textbox" data-options="onChange:getCalMoney"><br><span style="color: #c6c6c6">只支持整数</span></td>
+                    <td width="190"><input id="money" name="money" type="text" class="easyui-numberbox" data-options="onChange:getCalMoney"><br><span style="color: #c6c6c6">只支持整数</span></td>
                     <td width="100" valign="top">数量</td>
-                    <td width="190"><input id="amount" name="amount" type="text" class="easyui-textbox" data-options="onChange:getCalMoney"><br><span style="color: #c6c6c6">只支持整数</span></td>
+                    <td width="190"><input id="amount" name="amount" type="text" class="easyui-numberbox" data-options="onChange:getCalMoney"><br><span style="color: #c6c6c6">只支持整数</span></td>
                     <td width="100" valign="top">小计</td>
                     <td width="190"><input id="calMoney" type="text" class="easyui-textbox" disabled="disabled"><br>&nbsp;</td>
                     <td width="100"><a id="addCoupon" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a></td>
