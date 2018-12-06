@@ -12,6 +12,7 @@ import com.joiest.jpf.common.po.PayShopProductInfoExample;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopOrderMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductInfoMapper;
+import com.joiest.jpf.dto.GetShopOrderRequest;
 import com.joiest.jpf.dto.ShopOrderInfoInterfaceRequest;
 import com.joiest.jpf.dto.ShopOrderInfoInterfaceResponse;
 import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
@@ -178,4 +179,5 @@ public class ShopOrderInfoInterfaceServiceFacadeImpl implements ShopOrderInfoInt
         record.setUpdatetime(new Date());
         payShopOrderMapper.updateByExampleSelective(record ,payShopOrderExample);
     }
+
 }

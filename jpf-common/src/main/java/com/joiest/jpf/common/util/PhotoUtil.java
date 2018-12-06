@@ -13,6 +13,36 @@ import java.util.Date;
  */
 public class PhotoUtil {
 
+	/*public static String saveFile2( MultipartFile filedata,String savePre,String newFileName) {
+
+		// 根据配置文件获取服务器图片存放路径
+		String saveFilePath = savePre;
+		*//* 构建文件目录 *//*
+		File fileDir = new File(saveFilePath);
+		if (!fileDir.exists()) {
+
+			fileDir.mkdirs();
+		}
+		//上传的文件名
+		String filename=filedata.getOriginalFilename();
+		//文件的扩展名
+		String extensionName = filename.substring(filename.lastIndexOf(".") + 1);
+		try {
+
+			String imgPath = saveFilePath + newFileName + "." +extensionName;
+			FileOutputStream out = new FileOutputStream(imgPath);
+			// 写入文件
+			out.write(filedata.getBytes());
+			out.flush();
+			out.close();
+
+			//本地服务器地址
+			return imgPath;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}*/
 	/**
 	 * 功能描述   保存图片
 	 * @param filedata

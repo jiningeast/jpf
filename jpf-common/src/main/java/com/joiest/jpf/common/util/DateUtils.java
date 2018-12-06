@@ -468,6 +468,32 @@ public class DateUtils {
 		return myfmt1.format(date);
 	}
 
+	/**
+	 * 获取当前时间指定小时之前的时间点(格式化输出)
+	 * @param hour 小时数
+	 * @return 时间类型
+	 */
+	public static Date getBeforeHourTimeReturnDate(int hour){
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - hour);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 获取前n天零点的时刻
+	 * @param day
+	 * @return
+	 */
+	public static Date getBeforeDayTimeReturnDate(int day){
+		Calendar calendar = Calendar. getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar. HOUR_OF_DAY, 0);
+		calendar.set(Calendar. MINUTE, 0);
+		calendar.set(Calendar. SECOND, 0);
+		calendar.set(Calendar. MILLISECOND, 0);
+		calendar.add(Calendar. DAY_OF_MONTH, day - 2);
+		return calendar.getTime();
+	}
 	public static void main(String[] args) {
 //		System.out.println(DateUtils.getString2YmdDate("20120101").getTime());
 //		System.out.println(DateUtils.getCurrentTimeMillis());

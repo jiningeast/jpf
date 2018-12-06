@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -101,9 +102,10 @@ public class BargainBuyerController {
         if( Integer.parseInt(offRate) < 0 || Integer.parseInt(offRate) >= 100 ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"折扣率需大于0且小于100",null);
         }
-        if( !minDouFlag || Integer.valueOf(minDou)%10 !=0 || Integer.valueOf(minDou) <= 0   ){
+        /*if( !minDouFlag || Integer.valueOf(minDou)%10 !=0 || Integer.valueOf(minDou) <= 0   ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"最低限额需大于0且必须为10的整数倍",null);
-        }
+        }*/
+
         Byte statusNew = Byte.valueOf( status); //回收状态
         if( !statusFlag || (statusNew !=0 && statusNew !=1)   ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"回收状态值填写错误",null);
@@ -111,7 +113,7 @@ public class BargainBuyerController {
         GetShopBargainRequestRequest request = new GetShopBargainRequestRequest();
         request.setCustomerId(uid);
         request.setOffRate(Double.parseDouble(offRate));
-        request.setMinDou(Integer.parseInt(minDou));
+        request.setMinDou(new BigDecimal(minDou));
         request.setStatus(  statusNew );
 
 

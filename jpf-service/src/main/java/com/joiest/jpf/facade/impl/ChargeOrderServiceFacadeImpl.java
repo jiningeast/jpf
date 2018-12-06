@@ -113,11 +113,22 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         if ( request.getStatus() != null && StringUtils.isNotBlank(""+request.getStatus()) ){
             c.andStatusEqualTo(request.getStatus());
         }
+        if ( request.getInterfaceOrderNo() != null && StringUtils.isNotBlank(""+request.getInterfaceOrderNo())){
+            c.andInterfaceOrderNoEqualTo(request.getInterfaceOrderNo());
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
         e.setOrderByClause("id DESC");
         c.andIsDelEqualTo((byte)0);
-        c.andInterfaceOrderNoIsNotNull();
+        //c.andInterfaceOrderNoIsNotNull();
         List<ChargeOrderInfo> infos = new ArrayList<>();
         List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(e);
         int count = payChargeOrderMapper.countByExample(e);
@@ -270,6 +281,40 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         return payChargeOrderMapper.updateByPrimaryKeySelective(payChargeOrder);
     }
 
+    /**
+     * 异常订单处理
+     */
+    @Override
+    public List<ChargeOrderInfo>  getAbnormalOrders(ChargeOrderInfo request)
+    {
+
+        PayChargeOrderExample example = new PayChargeOrderExample();
+        example.setOrderByClause("addtime ASC");
+        //example.setPageNo(1);
+        //example.setPageSize(1);
+
+        PayChargeOrderExample.Criteria c =example.createCriteria();
+        //c.andStatusEqualTo((byte)request.getStatus());
+        //c.andInterfaceTypeEqualTo(request.getInterfaceType());
+        //c.andPaytimeLessThanOrEqualTo(request.getPaytime());
+        c.andInterfaceOrderNoIsNull();
+
+        List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
+        if( list.size() <=0 || list == null){
+            return null;
+        }
+        List<ChargeOrderInfo> infoList = new ArrayList<>();
+
+        for (PayChargeOrder one : list)
+        {
+            ChargeOrderInfo info = new ChargeOrderInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
+            beanCopier.copy(one, info, null);
+            infoList.add(info);
+        }
+
+        return infoList;
+    }
 
 }
 

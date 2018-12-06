@@ -564,8 +564,11 @@
     <include refid="Base_Column_List" />
     from pay_shop_bargain_recharge_order where  pull_order_no  is null order by id asc  limit #{startNum},#{endNum}
   </select>
-  <select id="getTotalMoney"  resultType="DECIMAL" >
-    select sum(face_price) from pay_shop_bargain_recharge_order  where pull_order_no is null
+  <select id="getTotalMoney"  resultType="DECIMAL" parameterType="map" >
+    select sum(face_price) from pay_shop_bargain_recharge_order  where matching_status != 2 and user_id=#{userId,jdbcType=INTEGER}
+    <if test="startDate!=null and startDate!=''">
+        and addtime &gt;= #{startDate,jdbcType=TIMESTAMP}
+    </if>
   </select>
   <update id="batchUpdatePayShopBro" parameterType="java.util.List">
     <if test="list!=null">

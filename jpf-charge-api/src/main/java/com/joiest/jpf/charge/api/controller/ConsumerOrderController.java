@@ -1,6 +1,7 @@
 package com.joiest.jpf.charge.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.Md5Encrypt;
 import com.joiest.jpf.common.util.ToolUtils;
@@ -121,8 +122,9 @@ public class ConsumerOrderController {
      */
     private Map<String,Object> CheckData(String merchNo, String money, String sign){
 
-        //接口返回参数数据
+        //单笔金额验证
         Map<String,Object> responseMap = new HashMap<>();
+
         //参数不合法
         if(StringUtils.isBlank(merchNo)){
             responseMap.put("code",JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode());
@@ -161,8 +163,12 @@ public class ConsumerOrderController {
             responseMap.put("info",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc());
             return responseMap;
         }
+        if(new BigDecimal(ConfigUtil.getValue("MAXMONEY")).compareTo(new BigDecimal(money))<0){
+            responseMap.put("code",JpfInterfaceErrorInfo.ONE_MONEY_MAX.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.ONE_MONEY_MAX.getDesc());
+            return responseMap;
+        }
         String  privateKey = result.getPrivateKey();
-
         //校验来源数据是否合法
         String selfSign = Md5Encrypt.md5(respos+privateKey).toUpperCase();
         if(!selfSign.equals(sign)){
@@ -170,8 +176,6 @@ public class ConsumerOrderController {
             responseMap.put("info",JpfInterfaceErrorInfo.INCORRECT_SIGN.getDesc());
             return responseMap;
         }
-
-
         //验证商户目前余额能够购买输入的金额
         if(new BigDecimal(money).compareTo(result.getMoney())>0){
             responseMap.put("code",JpfInterfaceErrorInfo.USER_DOU_NOT_SUFFICIENT.getCode());
@@ -186,9 +190,8 @@ public class ConsumerOrderController {
             return responseMap;
         }
         //验证数据的存储量，够不够下单的钱
-        BigDecimal moneyTotal = shopBargainRechargeOrderServiceFacade.getMoneyTotal();
-        System.out.println(moneyTotal.compareTo(new BigDecimal(money))>0);
-        if(moneyTotal.compareTo(new BigDecimal(money))<0){
+        BigDecimal moneyTotal = shopBargainRechargeOrderServiceFacade.getMoneyTotal(ConfigUtil.getValue("ZHANYUNUSERID"),ConfigUtil.getValue("ZHANYUANDATE"));
+        if(moneyTotal==null||moneyTotal.compareTo(new BigDecimal(money))<0){
             responseMap.put("code",JpfInterfaceErrorInfo.EXCESS_DEPOSIT.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.EXCESS_DEPOSIT.getDesc());
             return responseMap;
@@ -203,6 +206,7 @@ public class ConsumerOrderController {
     @RequestMapping(value="/matchingDataTask",method = RequestMethod.GET,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String matchingDataTask(){
+        long l = System.currentTimeMillis();
         logger.info("开始执行匹配Start");
         //查询是否存在需要待执行的任务
         String ret = "数据匹配成功";
@@ -214,27 +218,36 @@ public class ConsumerOrderController {
         }
         PayChargeConsumerOrder payChargeConsumerOrder = consumerOrderServiceFacade.selectConsumerOrderTask();
         if(payChargeConsumerOrder!=null){ //不为空准备执行任务
+            redisCustomServiceFacade.set("matchingDataTaskFlag","run",0);
             Long size = redisCustomServiceFacade.getSize("consumerOrderQueue");
-            if(size.longValue() != 0){//开始执行匹配操作
-                redisCustomServiceFacade.set("matchingDataTaskFlag","run",0);
-                try{
-                    consumerOrderServiceFacade.matchingDataTaskStart(payChargeConsumerOrder);
-                }catch (Exception e){
-                    logger.error(e.getMessage());
-                    redisCustomServiceFacade.set("matchingDataTaskFlag","stop",0);
-                    ret="无匹配的记录";
-                    return ret;
-                }
-                redisCustomServiceFacade.set("matchingDataTaskFlag","stop",0);
-                ret=ret+",订单号:"+payChargeConsumerOrder.getOrderNo();
-            }else{
-                //拉取数据，存储在list
-                Long redis_length = Long.valueOf(ConfigUtil.getValue("REDIS_LENGTH"));
-                pushDateToRedis(redis_length);
-                ret+=ret+",redis 数据队列数据不足，从新拉取";
+            String num = ArithmeticUtils.div(payChargeConsumerOrder.getMoney().toString(), "50", 0);
+            if(size.longValue() != 0){
+                //删除list
+                redisCustomServiceFacade.remove("consumerOrderQueue");
             }
+            logger.info("拉取金额:"+payChargeConsumerOrder.getMoney()+",拉取条数"+num+" 加10，并压入队列");
+            Long redis_length =Long.parseLong(ArithmeticUtils.add(num,"10").toString());
+            boolean run = pushDateToRedis(redis_length);
+            if(!run){
+                ret ="数据库没有可匹配数据，无法匹配";
+                return ret;
+            }
+            logger.info("拉取订单号:"+payChargeConsumerOrder.getOrderNo()+"所需数据，并压入队列");
+
+            try{
+                consumerOrderServiceFacade.matchingDataTaskStart(payChargeConsumerOrder);
+            }catch (Exception e){
+                logger.error(e.getMessage());
+                redisCustomServiceFacade.set("matchingDataTaskFlag","stop",0);
+                ret="无匹配的记录";
+                return ret;
+            }
+            redisCustomServiceFacade.set("matchingDataTaskFlag","stop",0);
+            ret=ret+",订单号:"+payChargeConsumerOrder.getOrderNo();
+
         }
         logger.info("开始执行匹配end");
+        logger.info(l+"-----"+System.currentTimeMillis());
         return ret;
     }
 
@@ -267,12 +280,15 @@ public class ConsumerOrderController {
      * push data to redis
      * @param querySize
      */
-    private void pushDateToRedis(long querySize) {
+    private boolean pushDateToRedis(long querySize) {
         List<PayShopBargainRechargeOrder> payShopBargainRechargeOrders = shopBargainRechargeOrderServiceFacade.pushDataToRedisTask(querySize);
         if(payShopBargainRechargeOrders!=null&&payShopBargainRechargeOrders.size()!=0){
             for (PayShopBargainRechargeOrder payShopBargainRechargeOrder:payShopBargainRechargeOrders) {
                 redisCustomServiceFacade.lpush("consumerOrderQueue", JsonUtils.toJson(payShopBargainRechargeOrder));
             }
+            return  true;
+        }else{
+            return false;
         }
     }
     /**
@@ -480,5 +496,8 @@ public class ConsumerOrderController {
 
     }
 
+    public static void main(String[] args) {
+        System.out.println(Md5Encrypt.md5("merchNo=MC1541126548324168863&money=20000.00imyHcZOzMmhukCqB").toUpperCase());
+    }
 
 }

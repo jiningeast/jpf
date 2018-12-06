@@ -3,6 +3,7 @@ package com.joiest.jpf.dto;
 import com.joiest.jpf.common.po.PayShopOrder;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 public class GetShopOrderRequest {
     /**
@@ -86,6 +87,11 @@ public class GetShopOrderRequest {
     private Byte status;
 
     /**
+     * 充值状态 0充值中 1充值成功 9充值失败
+     */
+    private String rechargeStatus;
+
+    /**
      * 消费时关联券使用记录表的id
      */
     private String couponActiveId;
@@ -140,7 +146,25 @@ public class GetShopOrderRequest {
 
     private long page;
 
+    private Map<String,String> sourceParam;
+    
+    private Map<String,String> orderStatusParam;
 
+    public Map<String, String> getSourceParam() {
+        return sourceParam;
+    }
+
+    public void setSourceParam(Map<String, String> sourceParam) {
+        this.sourceParam = sourceParam;
+    }
+
+    public Map<String, String> getOrderStatusParam() {
+        return orderStatusParam;
+    }
+
+    public void setOrderStatusParam(Map<String, String> orderStatusParam) {
+        this.orderStatusParam = orderStatusParam;
+    }
 
     /**
      * 下单时间
@@ -519,5 +543,13 @@ public class GetShopOrderRequest {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public String getRechargeStatus() {
+        return rechargeStatus;
+    }
+
+    public void setRechargeStatus(String rechargeStatus) {
+        this.rechargeStatus = rechargeStatus;
     }
 }

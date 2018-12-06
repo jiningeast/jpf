@@ -6,13 +6,14 @@ import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
+import com.joiest.jpf.entity.ShopInterfaceStreamInfo;
+import com.joiest.jpf.entity.ShopOrderInfo;
 import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
-import com.joiest.jpf.facade.RedisCustomServiceFacade;
-import com.joiest.jpf.facade.ShopCouponActiveInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
-import com.joiest.jpf.facade.ShopOrderInfoInterfaceServiceFacade;
+import com.joiest.jpf.facade.*;
 import com.joiest.jpf.market.api.util.ToolsUtils;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("orderInfo")
@@ -43,6 +44,12 @@ public class OrderInfoController {
 
     @Autowired
     private ShopCustomerInterfaceServiceFacade shopCustomerInterfaceServiceFacade;
+
+    @Autowired
+    private ShopInterfaceStreamServiceFacade shopInterfaceStreamServiceFacade;
+
+    @Autowired
+    ShopOrderInterfaceServiceFacade shopOrderInterfaceServiceFacade;
 
     /*
     * 订单列表页
@@ -189,7 +196,8 @@ public class OrderInfoController {
     public void orderInfoCancel(){
         shopOrderInfoInterfaceServiceFacade.timerDetectShopOrderAndCancel(ToolsUtils.getBeforeHourTimeReturnDate(24));
     }
-    
+
+
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
