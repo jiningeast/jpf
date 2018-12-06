@@ -294,16 +294,24 @@ public class ShopBatchController {
     @RequestMapping(value = "/getCouponInfo",method = RequestMethod.POST)
     public String getCouponInfo(HttpServletRequest request){
         //查询的订单号
-        String orderId = request.getParameter("orderId");
+        String sendType=request.getParameter("sendType");
+        String isActive=request.getParameter("isActive");
+        String orderNo = request.getParameter("orderNo");
         String pageNo = request.getParameter("pageNo");
         String pageSize = request.getParameter("pageSize");
-        if(StringUtils.isBlank(orderId)||StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)){
+        if(StringUtils.isBlank(orderNo)||StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
         }
         Map<String,Object> map =new ConcurrentHashMap<>();
         map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
         map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
-        map.put("orderId",Base64CustomUtils.base64Decoder(orderId));
+        map.put("orderId",Base64CustomUtils.base64Decoder(orderNo));
+        if(StringUtils.isNotBlank(sendType)){
+            map.put("sendType",Base64CustomUtils.base64Decoder(sendType));
+        }
+        if(StringUtils.isNotBlank(isActive)){
+            map.put("isActive",Base64CustomUtils.base64Decoder(isActive));
+        }
         PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = null;
         try {
             payShopBatchCouponResultInfo = shopBatchCouponServiceFacade.getCouponsByOrderId(map);
