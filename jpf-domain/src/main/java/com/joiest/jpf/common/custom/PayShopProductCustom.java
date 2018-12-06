@@ -48,7 +48,7 @@ public class PayShopProductCustom implements Serializable {
     /**
      * 豆
      */
-    private Integer dou;
+    private BigDecimal dou;
 
     /**
      * 产品简介
@@ -196,11 +196,11 @@ public class PayShopProductCustom implements Serializable {
         this.bid = bid;
     }
 
-    public Integer getDou() {
+    public BigDecimal getDou() {
         return dou;
     }
 
-    public void setDou(Integer dou) {
+    public void setDou(BigDecimal dou) {
         this.dou = dou;
     }
 

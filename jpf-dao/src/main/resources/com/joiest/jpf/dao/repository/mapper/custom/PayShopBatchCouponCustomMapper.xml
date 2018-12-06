@@ -14,7 +14,7 @@
     <result column="coupon_no" jdbcType="VARCHAR" property="couponNo" />
     <result column="active_code" jdbcType="VARCHAR" property="activeCode" />
     <result column="money" jdbcType="INTEGER" property="money" />
-    <result column="dou" jdbcType="INTEGER" property="dou" />
+    <result column="dou" jdbcType="DECIMAL" property="dou" />
     <result column="is_active" jdbcType="TINYINT" property="isActive" />
     <result column="active_customer_id" jdbcType="BIGINT" property="activeCustomerId" />
     <result column="active_phone" jdbcType="VARCHAR" property="activePhone" />
