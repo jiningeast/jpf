@@ -163,7 +163,7 @@ public class ConsumerOrderController {
             responseMap.put("info",JpfInterfaceErrorInfo.MERCH_FREEZEUP.getDesc());
             return responseMap;
         }
-        if(new BigDecimal(1000000).compareTo(new BigDecimal(money))<0){
+        if(new BigDecimal(ConfigUtil.getValue("MAXMONEY")).compareTo(new BigDecimal(money))<0){
             responseMap.put("code",JpfInterfaceErrorInfo.ONE_MONEY_MAX.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.ONE_MONEY_MAX.getDesc());
             return responseMap;
@@ -190,7 +190,7 @@ public class ConsumerOrderController {
             return responseMap;
         }
         //验证数据的存储量，够不够下单的钱
-        BigDecimal moneyTotal = shopBargainRechargeOrderServiceFacade.getMoneyTotal(ConfigUtil.getValue("ZHANYUNUSERID"));
+        BigDecimal moneyTotal = shopBargainRechargeOrderServiceFacade.getMoneyTotal(ConfigUtil.getValue("ZHANYUNUSERID"),ConfigUtil.getValue("ZHANYUANDATE"));
         System.out.println(moneyTotal.compareTo(new BigDecimal(money))>0);
         if(moneyTotal.compareTo(new BigDecimal(money))<0){
             responseMap.put("code",JpfInterfaceErrorInfo.EXCESS_DEPOSIT.getCode());
@@ -207,6 +207,7 @@ public class ConsumerOrderController {
     @RequestMapping(value="/matchingDataTask",method = RequestMethod.GET,produces = "text/plain;charset=utf-8")
     @ResponseBody
     public String matchingDataTask(){
+        long l = System.currentTimeMillis();
         logger.info("开始执行匹配Start");
         //查询是否存在需要待执行的任务
         String ret = "数据匹配成功";
@@ -227,7 +228,11 @@ public class ConsumerOrderController {
             }
             logger.info("拉取金额:"+payChargeConsumerOrder.getMoney()+",拉取条数"+num+" 加10，并压入队列");
             Long redis_length =Long.parseLong(ArithmeticUtils.add(num,"10").toString());
-            pushDateToRedis(redis_length);
+            boolean run = pushDateToRedis(redis_length);
+            if(!run){
+                ret ="数据库没有可匹配数据，无法匹配";
+                return ret;
+            }
             logger.info("拉取订单号:"+payChargeConsumerOrder.getOrderNo()+"所需数据，并压入队列");
 
             try{
@@ -243,6 +248,7 @@ public class ConsumerOrderController {
 
         }
         logger.info("开始执行匹配end");
+        logger.info(l+"-----"+System.currentTimeMillis());
         return ret;
     }
 
@@ -275,12 +281,15 @@ public class ConsumerOrderController {
      * push data to redis
      * @param querySize
      */
-    private void pushDateToRedis(long querySize) {
+    private boolean pushDateToRedis(long querySize) {
         List<PayShopBargainRechargeOrder> payShopBargainRechargeOrders = shopBargainRechargeOrderServiceFacade.pushDataToRedisTask(querySize);
         if(payShopBargainRechargeOrders!=null&&payShopBargainRechargeOrders.size()!=0){
             for (PayShopBargainRechargeOrder payShopBargainRechargeOrder:payShopBargainRechargeOrders) {
                 redisCustomServiceFacade.lpush("consumerOrderQueue", JsonUtils.toJson(payShopBargainRechargeOrder));
             }
+            return  true;
+        }else{
+            return false;
         }
     }
     /**

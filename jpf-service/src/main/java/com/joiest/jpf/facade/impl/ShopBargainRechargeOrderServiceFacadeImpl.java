@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRechargeOrderServiceFacade {
 
@@ -88,8 +90,15 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
     }
 
     @Override
-    public BigDecimal getMoneyTotal(String userId) {
-        return payShopBargainRechargeOrderCustomMapper.getTotalMoney(Integer.valueOf(userId));
+    public BigDecimal getMoneyTotal(String userId,String startDate) {
+        Map<String,Object> param = new HashMap<>();
+        param.put("userId",Integer.valueOf(userId));
+        if(StringUtils.isNotBlank(startDate)){
+            param.put("startDate",DateUtils.getFdate(startDate, DateUtils.DATEFORMATLONG));
+        }else{
+            param.put("startDate",null);
+        }
+        return payShopBargainRechargeOrderCustomMapper.getTotalMoney(param);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -99,7 +108,12 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         PayShopBargainRechargeOrderExample.Criteria criteria = example.createCriteria();
         criteria.andMatchingStatusEqualTo((byte)0);
         example.setPageNo(1);
-        criteria.andUserIdEqualTo(Integer.valueOf(ConfigUtil.getValue("USERID")));
+        if(StringUtils.isNotBlank(ConfigUtil.getValue("ZHANYUNUSERID"))){
+            criteria.andUserIdEqualTo(Integer.valueOf(ConfigUtil.getValue("ZHANYUNUSERID")));
+        }
+        if(StringUtils.isNotBlank(ConfigUtil.getValue("ZHANYUANDATE"))){
+            criteria.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(ConfigUtil.getValue("ZHANYUANDATE"), DateUtils.DATEFORMATLONG));
+        }
         example.setPageSize(querySize);
         example.setOrderByClause(" id asc ");
         List<PayShopBargainRechargeOrder> payShopBargainRechargeOrders = payShopBargainRechargeOrderMapper.selectByExample(example);
