@@ -1,5 +1,5 @@
 package com.joiest.jpf.common.po;
-
+import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
 
