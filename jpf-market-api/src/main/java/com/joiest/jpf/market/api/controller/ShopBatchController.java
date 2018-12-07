@@ -185,10 +185,14 @@ public class ShopBatchController {
         String pageSize = request.getParameter("pageSize");
         String startTime = request.getParameter("startTime");
         String endTime = request.getParameter("endTime");
+        String status = request.getParameter("status");
         Map<String,Object> map =new ConcurrentHashMap<>();
         if(StringUtils.isNotBlank(startTime)&&StringUtils.isNotBlank(endTime)){
             map.put("startTime",Base64CustomUtils.base64Decoder(startTime));
             map.put("endTime",Base64CustomUtils.base64Decoder(endTime));
+        }
+        if(StringUtils.isNotBlank(status)){
+            map.put("status",Base64CustomUtils.base64Decoder(status));
         }
         if(StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)&&StringUtils.isBlank(companyId)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
@@ -294,16 +298,24 @@ public class ShopBatchController {
     @RequestMapping(value = "/getCouponInfo",method = RequestMethod.POST)
     public String getCouponInfo(HttpServletRequest request){
         //查询的订单号
-        String orderId = request.getParameter("orderId");
+        String sendType=request.getParameter("sendType");
+        String isActive=request.getParameter("isActive");
+        String orderNo = request.getParameter("orderNo");
         String pageNo = request.getParameter("pageNo");
         String pageSize = request.getParameter("pageSize");
-        if(StringUtils.isBlank(orderId)||StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)){
+        if(StringUtils.isBlank(orderNo)||StringUtils.isBlank(pageNo)||StringUtils.isBlank(pageSize)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),JpfInterfaceErrorInfo.PARAMNOTNULL.getDesc(),null);
         }
         Map<String,Object> map =new ConcurrentHashMap<>();
         map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
         map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
-        map.put("orderId",Base64CustomUtils.base64Decoder(orderId));
+        map.put("orderNo",Base64CustomUtils.base64Decoder(orderNo));
+        if(StringUtils.isNotBlank(sendType)){
+            map.put("sendType",Base64CustomUtils.base64Decoder(sendType));
+        }
+        if(StringUtils.isNotBlank(isActive)){
+            map.put("isActive",Base64CustomUtils.base64Decoder(isActive));
+        }
         PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = null;
         try {
             payShopBatchCouponResultInfo = shopBatchCouponServiceFacade.getCouponsByOrderId(map);
@@ -441,7 +453,7 @@ public class ShopBatchController {
             responseMap.put("totalMoney",totalMoney);
             responseMap.put("couponDesc",couponDesc);
             responseMap.put("excleTitle",fileNameAll);
-            responseMap.put("excleName",ConfigUtil.getValue("CACHE_PATH_XQ")+"XQ"+uuid.toString()+".txt");
+            responseMap.put("excleName","XQ"+uuid.toString());
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH_XQ")+"XQ"+uuid.toString()+".txt",false);
             return ToolUtils.mapToJsonBase64(responseMap);
         }

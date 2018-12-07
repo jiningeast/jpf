@@ -104,7 +104,11 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
         if(map.get("companyId")!=null){
             criteria.andCompanyIdEqualTo(map.get("companyId").toString());
         }
-        criteria.andStatusNotEqualTo((byte)3);
+        if(map.get("status")!=null){
+            criteria.andStatusEqualTo((byte)4);
+        }else{
+            criteria.andStatusNotEqualTo((byte)3);
+        }
         List<PayShopCouponOrder> orderList = payShopCouponOrderMapper.selectByExample(example);
         int total = payShopCouponOrderMapper.countByExample(example);
         PayShopCouponOrderResultInfo payShopCouponOrderResultInfo = new PayShopCouponOrderResultInfo();

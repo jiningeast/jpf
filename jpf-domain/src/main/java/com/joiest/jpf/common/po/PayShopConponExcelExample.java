@@ -955,6 +955,66 @@ public class PayShopConponExcelExample {
             return (Criteria) this;
         }
 
+        public Criteria andCouponIdIsNull() {
+            addCriterion("coupon_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdIsNotNull() {
+            addCriterion("coupon_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdEqualTo(String value) {
+            addCriterion("coupon_id =", value, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdNotEqualTo(String value) {
+            addCriterion("coupon_id <>", value, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdGreaterThan(String value) {
+            addCriterion("coupon_id >", value, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdGreaterThanOrEqualTo(String value) {
+            addCriterion("coupon_id >=", value, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdLessThan(String value) {
+            addCriterion("coupon_id <", value, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdLessThanOrEqualTo(String value) {
+            addCriterion("coupon_id <=", value, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdIn(List<String> values) {
+            addCriterion("coupon_id in", values, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdNotIn(List<String> values) {
+            addCriterion("coupon_id not in", values, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdBetween(String value1, String value2) {
+            addCriterion("coupon_id between", value1, value2, "couponId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponIdNotBetween(String value1, String value2) {
+            addCriterion("coupon_id not between", value1, value2, "couponId");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyNameLikeInsensitive(String value) {
             addCriterion("upper(company_name) like", value.toUpperCase(), "companyName");
             return (Criteria) this;

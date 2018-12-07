@@ -64,6 +64,11 @@ public class PayShopConponExcel implements Serializable {
      */
     private Date updatetime;
 
+    /**
+     * 欣券id
+     */
+    private String couponId;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -162,6 +167,14 @@ public class PayShopConponExcel implements Serializable {
         this.updatetime = updatetime;
     }
 
+    public String getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(String couponId) {
+        this.couponId = couponId == null ? null : couponId.trim();
+    }
+
     /**
      *
      */
@@ -183,6 +196,7 @@ public class PayShopConponExcel implements Serializable {
         sb.append(", idcard=").append(idcard);
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
+        sb.append(", couponId=").append(couponId);
         sb.append("]");
         return sb.toString();
     }
@@ -214,7 +228,8 @@ public class PayShopConponExcel implements Serializable {
             && (this.getUsePhone() == null ? other.getUsePhone() == null : this.getUsePhone().equals(other.getUsePhone()))
             && (this.getIdcard() == null ? other.getIdcard() == null : this.getIdcard().equals(other.getIdcard()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
-            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()));
+            && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
+            && (this.getCouponId() == null ? other.getCouponId() == null : this.getCouponId().equals(other.getCouponId()));
     }
 
     /**
@@ -236,6 +251,7 @@ public class PayShopConponExcel implements Serializable {
         result = prime * result + ((getIdcard() == null) ? 0 : getIdcard().hashCode());
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
+        result = prime * result + ((getCouponId() == null) ? 0 : getCouponId().hashCode());
         return result;
     }
 }

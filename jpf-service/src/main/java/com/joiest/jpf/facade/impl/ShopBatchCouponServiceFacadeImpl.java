@@ -409,8 +409,37 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
     public PayShopBatchCouponResultInfo getCouponsByOrderId(Map<String, Object> map) {
         PayShopBatchCouponExample example = new PayShopBatchCouponExample();
         PayShopBatchCouponExample.Criteria criteria = example.createCriteria();
-        if(map.get("orderId")!=null){
-            criteria.andOrderIdEqualTo(map.get("orderId").toString());
+        if(map.get("sendType")!=null){
+            //1 未发放
+            if(StringUtils.equals("1",map.get("sendType").toString())){
+                criteria.andSendTypeIsNull();
+            //2 未发放
+            }else{
+                criteria.andSendTypeIsNotNull();
+            }
+        }
+        //isActive==1
+        if(map.get("isActive")!=null){
+            //1 未发放
+            if(StringUtils.equals("1",map.get("isActive").toString())){
+                criteria.andIsActiveEqualTo((byte)1);
+                //2 未发放
+            }else{
+                 criteria.andIsActiveEqualTo((byte)0);
+            }
+        }
+        if(map.get("orderNo")!=null){
+            PayShopCouponOrderExample example1 = new PayShopCouponOrderExample();
+            PayShopCouponOrderExample.Criteria criteria1 = example1.createCriteria();
+            criteria1.andOrderNoEqualTo(map.get("orderNo").toString());
+            List<PayShopCouponOrder> payShopCouponOrders = payShopCouponOrderMapper.selectByExample(example1);
+            if(payShopCouponOrders!=null&&payShopCouponOrders.size()!=0){
+                criteria.andOrderIdEqualTo(payShopCouponOrders.get(0).getId());
+            }else{
+                criteria.andOrderIdEqualTo("99999999");
+            }
+        }else{
+            criteria.andOrderIdEqualTo("99999999");
         }
         if (map.get("pageSize")==null||Long.valueOf(map.get("pageSize").toString())<= 0){
             example.setPageSize(10);
@@ -457,6 +486,16 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
             result.setSendType(payShopBatchCoupon.getSendType());
             result.setStatus(payShopBatchCoupon.getStatus());
             result.setUpdatetime(payShopBatchCoupon.getUpdatetime());
+            //查询excel
+            PayShopConponExcelExample excelExample = new PayShopConponExcelExample();
+            PayShopConponExcelExample.Criteria criteria1 = excelExample.createCriteria();
+            criteria1.andCouponIdEqualTo(payShopBatchCoupon.getId());
+            List<PayShopConponExcel> payShopConponExcels = payShopConponExcelMapper.selectByExample(excelExample);
+            if(payShopConponExcels!=null&&payShopConponExcels.size()!=0){
+                result.setUseName(payShopConponExcels.get(0).getUserName());
+                result.setPhone(payShopConponExcels.get(0).getUsePhone());
+                result.setIdcard(payShopConponExcels.get(0).getIdcard());
+            }
             payShopBatchCouponResult.add(result);
         }
         PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = new PayShopBatchCouponResultInfo();
@@ -536,6 +575,7 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
                     payShopConponExcel.setUsePhone(phone);
                     payShopConponExcel.setUserName(name);
                     //增加保留欣券的id
+                    payShopConponExcel.setCouponId(payShopBatchCoupon.getId());
                     payShopConponExcelMapper.insertSelective(payShopConponExcel);
                 }
             }
