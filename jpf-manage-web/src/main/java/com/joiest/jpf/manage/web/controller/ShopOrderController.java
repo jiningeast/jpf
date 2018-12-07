@@ -87,7 +87,16 @@ public class ShopOrderController {
         request.setOrderStatusParam(requestOrderStatusMap);
         request.setPage(0);
         request.setRows(0);
-        if(StringUtils.isBlank(request.getAddtimeEnd()) || StringUtils.isBlank(request.getAddtimeStart())){
+        
+        boolean flag = StringUtils.isBlank(request.getAddtimeEnd()) 
+                    && StringUtils.isBlank(request.getAddtimeStart())
+                    && StringUtils.isBlank(request.getProductName())
+                    && request.getSource() == null
+                    && StringUtils.isBlank(request.getOrderNo())
+                    && StringUtils.isBlank(request.getPaytimeStart())
+                    && StringUtils.isBlank(request.getPaytimeStart())
+                    && request.getStatus() == null;
+        if(flag){
             request.setAddtimeStart(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getBeforeDayTimeReturnDate(1)));
             request.setAddtimeEnd(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         }
@@ -118,98 +127,76 @@ public class ShopOrderController {
         res.put("info","SUCCESS");
         SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
         String amount = "" ,totalMoney = "",totalDou = "" ,addTime = "",payTime = "",status = "",interfaceType = "",source = "";
-        for (int i = 0; i < 1; i++) {
-            Sheet sheet = xssfWorkbook.getSheet("sheet" + (i + 1));
-            if (sheet == null) {
-                sheet = xssfWorkbook.createSheet("sheet" + (i + 1));
+        Sheet sheet = xssfWorkbook.getSheet("sheet1");
+        if (sheet == null) {
+            sheet = xssfWorkbook.createSheet("sheet1");
+        }
+        exportExcel.genSheetHead(sheet, 0, generateTitle());
+        for (int rownum = 1; rownum <= data.size(); rownum++) {
+            Row row = sheet.createRow(rownum);
+            int k = -1;
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getOrderNo());
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductName());
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getTypeName());
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getAmount() == null ? "" : String.valueOf(data.get(rownum-1).getAmount()));
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getTotalMoney() == null ? "" : String.valueOf(data.get(rownum-1).getTotalMoney()));
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getTotalDou() == null ? "" :String.valueOf(data.get(rownum-1).getTotalDou()));
+            exportExcel.createCell(row, ++k, URLDecoder.decode(data.get(rownum-1).getCustomerName(),"UTF-8"));
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime()));
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getPaytime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getPaytime()));
+            if(data.get(rownum-1).getStatus() == null){
+                status = "";
+            }else{
+                switch (data.get(rownum-1).getStatus()){
+                    case 0: status = "待支付";break;
+                    case 1: status = "已支付";break;
+                    case 2: status = "支付失败";break;
+                    case 3: status = "已取消";break;
+                    case 4: status = "充值成功";break;
+                    case 5: status = "充值失败";break;
+                }
             }
-            // 生成标题
-            Map<Integer, Object> firstTitles = new HashMap<>();
-            firstTitles.put(0, "订单号");
-            firstTitles.put(1, "产品名称");
-            firstTitles.put(2, "产品类型");
-            firstTitles.put(3, "数量");
-            firstTitles.put(4, "总金额");
-            firstTitles.put(5, "总欣豆");
-            firstTitles.put(6, "微信昵称");
-            firstTitles.put(7, "下单时间");
-            firstTitles.put(8, "支付时间");
-            firstTitles.put(9, "状态");
-            firstTitles.put(10, "供应商");
-            firstTitles.put(11, "订单来源");
-            exportExcel.genSheetHead(sheet, 0, firstTitles);
-            for (int rownum = 1; rownum <= data.size(); rownum++) {
-                Row row = sheet.createRow(rownum);
-                int k = -1;
-                exportExcel.createCell(row, ++k, data.get(rownum-1).getOrderNo());
-                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductName());
-                exportExcel.createCell(row, ++k, data.get(rownum-1).getTypeName());
-                if(data.get(rownum-1).getAmount() == null){
-                    amount = "";
-                }else{
-                    amount = String.valueOf(data.get(rownum-1).getAmount());
+            exportExcel.createCell(row, ++k, status);
+            if(data.get(rownum-1).getInterfaceType() == null){
+                interfaceType = "";
+            }else{
+                switch (data.get(rownum-1).getInterfaceType()) {
+                    case 0:interfaceType = "欧飞";break;
+                    case 1:interfaceType = "威能";break;
                 }
-                exportExcel.createCell(row, ++k, amount);
-                if(data.get(rownum-1).getTotalMoney() == null){
-                    totalMoney = "";
-                }else{
-                    totalMoney = String.valueOf(data.get(rownum-1).getTotalMoney());
-                }
-                exportExcel.createCell(row, ++k, totalMoney);
-                if(data.get(rownum-1).getTotalDou() == null){
-                    totalDou = "";
-                }else{
-                    totalDou = String.valueOf(data.get(rownum-1).getTotalDou());
-                }
-                exportExcel.createCell(row, ++k, totalDou);
-                exportExcel.createCell(row, ++k, URLDecoder.decode(data.get(rownum-1).getCustomerName(),"UTF-8"));
-                if(data.get(rownum-1).getAddtime() == null){
-                    addTime = "";
-                }else{
-                    addTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime());
-                }
-                exportExcel.createCell(row, ++k, addTime);
-                if(data.get(rownum-1).getPaytime() == null){
-                    payTime = "";
-                }else{
-                    payTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getPaytime());
-                }
-                exportExcel.createCell(row, ++k, payTime);
-                if(data.get(rownum-1).getStatus() == null){
-                    status = "";
-                }else if(data.get(rownum-1).getStatus() == 0){
-                    status = "待支付";
-                }else if(data.get(rownum-1).getStatus() == 1){
-                    status = "已支付";
-                }else if(data.get(rownum-1).getStatus() == 2){
-                    status = "支付失败";
-                }else if(data.get(rownum-1).getStatus() == 3){
-                    status = "已取消";
-                }else if(data.get(rownum-1).getStatus() == 4){
-                    status = "充值成功";
-                }else if(data.get(rownum-1).getStatus() == 5){
-                    status = "充值失败";
-                }
-                exportExcel.createCell(row, ++k, status);
-                if(data.get(rownum-1).getInterfaceType() == null){
-                    interfaceType = "";
-                }else if(data.get(rownum-1).getInterfaceType() == 0){
-                    interfaceType = "欧飞";
-                }else if(data.get(rownum-1).getInterfaceType() == 1){
-                    interfaceType = "威能";
-                }
-                exportExcel.createCell(row, ++k, interfaceType);
-                if(data.get(rownum-1).getSource() == null){
-                    source = "";
-                }else if(data.get(rownum-1).getSource() == 0){
-                    source = "自平台";
-                }else if(data.get(rownum-1).getSource() == 1){
-                    source = "敬恒";
-                }
-                exportExcel.createCell(row, ++k, source);
             }
+            exportExcel.createCell(row, ++k, interfaceType);
+            if(data.get(rownum-1).getSource() == null){
+                source = "";
+            }else if(data.get(rownum-1).getSource() == 0){
+                source = "自平台";
+            }else if(data.get(rownum-1).getSource() == 1){
+                source = "敬恒";
+            }
+            exportExcel.createCell(row, ++k, source);
         }
         String fileName = "欣豆市场订单列表-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx";
         return exportExcel.writeIntoExcel(fileName, response, xssfWorkbook, path, type, res);
+    }
+
+    /**
+     * 定义标题
+     * @return
+     */
+    private Map<Integer,Object> generateTitle(){
+        Map<Integer, Object> firstTitles = new HashMap<>(12);
+        firstTitles.put(0, "订单号");
+        firstTitles.put(1, "产品名称");
+        firstTitles.put(2, "产品类型");
+        firstTitles.put(3, "数量");
+        firstTitles.put(4, "总金额");
+        firstTitles.put(5, "总欣豆");
+        firstTitles.put(6, "微信昵称");
+        firstTitles.put(7, "下单时间");
+        firstTitles.put(8, "支付时间");
+        firstTitles.put(9, "状态");
+        firstTitles.put(10, "供应商");
+        firstTitles.put(11, "订单来源");
+        return firstTitles;
     }
 }
