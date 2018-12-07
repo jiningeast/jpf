@@ -7,6 +7,7 @@ import com.joiest.jpf.dto.GetShopCompanyChargeResponse;
 import com.joiest.jpf.entity.ShopCompanyChargeInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ShopCompanyChargeServiceFacade {
 
@@ -48,4 +49,18 @@ public interface ShopCompanyChargeServiceFacade {
      * @return
      */
     PayShopCompanyCharge getById(String contractId);
+
+    /**
+     * 分页查询可用合同
+     * @param map
+     * @return
+     */
+    List<PayShopCompanyCharge> getListByCompanyIdByPage(Map<String, Object> map);
+
+    /**
+     * 查询可用合同总数
+     * @param map
+     * @return
+     */
+    Integer getTotal(Map<String, Object> map);
 }

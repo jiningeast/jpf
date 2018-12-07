@@ -104,7 +104,7 @@
                 }else{
                     $("#contractId").append("<option value=''>--请选择--</option>");
                     for(var i=0;i<data.length;i++){
-                        $("#contractId").append("<option value="+data[i].id+">"+data[i].contractNo+"</option>");
+                        $("#contractId").append("<option value="+data[i].id+">"+data[i].contractNo+"(余额:"+data[i].balance+")</option>");
                     }
                     $("#contractId").combobox({});
                 }
