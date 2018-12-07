@@ -65,7 +65,7 @@
                             banlanStr += (row["streamType"] == 0 ) ? row["productSalePrice"]: "";
                             banlanStr += "<br/>";
                             banlanStr += "支出：";
-                            banlanStr += (row["status"] == 1) ? row["productSalePrice"] : "";
+                            banlanStr += (row["streamType"] == 1) ? row["productSalePrice"] : "";
                             banlanStr += "<br/>";
                             return banlanStr;
                         }
