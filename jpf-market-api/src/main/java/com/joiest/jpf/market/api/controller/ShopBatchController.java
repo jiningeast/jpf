@@ -309,7 +309,7 @@ public class ShopBatchController {
         Map<String,Object> map =new ConcurrentHashMap<>();
         map.put("pageNo",Base64CustomUtils.base64Decoder(pageNo));
         map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
-        map.put("orderId",Base64CustomUtils.base64Decoder(orderNo));
+        map.put("orderNo",Base64CustomUtils.base64Decoder(orderNo));
         if(StringUtils.isNotBlank(sendType)){
             map.put("sendType",Base64CustomUtils.base64Decoder(sendType));
         }
@@ -453,7 +453,7 @@ public class ShopBatchController {
             responseMap.put("totalMoney",totalMoney);
             responseMap.put("couponDesc",couponDesc);
             responseMap.put("excleTitle",fileNameAll);
-            responseMap.put("excleName",ConfigUtil.getValue("CACHE_PATH_XQ")+"XQ"+uuid.toString()+".txt");
+            responseMap.put("excleName","XQ"+uuid.toString());
             LogsCustomUtils2.writeIntoFile(JsonUtils.toJson(responseMap),ConfigUtil.getValue("CACHE_PATH_XQ")+"XQ"+uuid.toString()+".txt",false);
             return ToolUtils.mapToJsonBase64(responseMap);
         }

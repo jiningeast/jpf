@@ -420,7 +420,13 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         }
         //isActive==1
         if(map.get("isActive")!=null){
-            criteria.andIsActiveEqualTo(Byte.valueOf(map.get("isActive").toString()));
+            //1 未发放
+            if(StringUtils.equals("1",map.get("isActive").toString())){
+                criteria.andIsActiveEqualTo((byte)1);
+                //2 未发放
+            }else{
+                 criteria.andIsActiveEqualTo((byte)0);
+            }
         }
         if(map.get("orderNo")!=null){
             PayShopCouponOrderExample example1 = new PayShopCouponOrderExample();
