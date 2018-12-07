@@ -474,7 +474,7 @@ public class ShopBatchController {
         OutputStream toClient=null;
         InputStream fis = null;
         try{
-            String path = ConfigUtil.getValue("EXCEL_PATH") + "module/";
+            String path = ConfigUtil.getValue("EXCEL_PATH") + "/module/";
             String filename = "前台网站欣券群发模板.xlsx";
             // path是指欲下载的文件的路径。
             File file = new File(path+filename);
