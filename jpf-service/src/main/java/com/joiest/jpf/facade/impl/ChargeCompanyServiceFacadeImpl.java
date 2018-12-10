@@ -66,7 +66,6 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
             c.andIsFreezeEqualTo((byte)1);
         }
         e.setOrderByClause("id DESC");
-
         List<PayChargeCompany> list =  payChargeCompanyMapper.selectByExample(e);
         response.setCount(payChargeCompanyMapper.countByExample(e));
         List<ChargeCompanyInfo> infos = new ArrayList<>();
@@ -74,11 +73,9 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
             ChargeCompanyInfo info = new ChargeCompanyInfo();
             BeanCopier beanCopier = BeanCopier.create(PayChargeCompany.class,ChargeCompanyInfo.class,false);
             beanCopier.copy(one,info,null);
-
             infos.add(info);
         }
         response.setList(infos);
-
         return response;
     }
 
@@ -87,13 +84,11 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
      * */
     @Override
     public ChargeCompanyInfo getOne(ChargeCompanyInfo companyInfo){
-
         PayChargeCompanyExample example = new PayChargeCompanyExample();
         PayChargeCompanyExample.Criteria c = example.createCriteria();
         if(companyInfo.getMerchNo() != null ){
             c.andMerchNoEqualTo(companyInfo.getMerchNo());
         }
-
         List<PayChargeCompany> list = payChargeCompanyMapper.selectByExample(example);
         if( list == null || list.size() <=0  ){
             return null;
@@ -108,7 +103,6 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
      * */
     @Override
     public ChargeCompanyInfo getRecordByMerchNo(String merchNO){
-
         PayChargeCompanyExample example = new PayChargeCompanyExample();
         PayChargeCompanyExample.Criteria c = example.createCriteria();
         if(StringUtils.isNotBlank(merchNO)){
@@ -255,17 +249,13 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
         ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
         companyInfo.setMerchNo(orderInfo.getMerchNo());
-
         ChargeCompanyInfo chargeCompanyInfo = getOne(companyInfo);
-
         if(chargeCompanyInfo == null){
-
             retParam.put("info","订单信息未匹配到商户信息");
             return retParam;
         }
         Boolean newCode = ToolUtils.ValidateCode(chargeCompanyInfo.getMoneyCode(),chargeCompanyInfo.getId(),chargeCompanyInfo.getMoney().toString(), ConfigUtil.getValue("MERCH_VALIDE_CODE"));
         if(newCode.equals(false)){
-
             retParam.put("info","商户金额校验错误");
             return retParam;
         }
@@ -277,10 +267,8 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         comInfo.setId(chargeCompanyInfo.getId());
         comInfo.setMoneyCode(moneyCode);
         comInfo.setMoney(companyMoney);
-
         int isUp = updateColumnByPrimaryKey(comInfo);
         if(isUp == 1){
-
             retParam.put("code","10000");
             retParam.put("info","返还商户金额成功");
         }
