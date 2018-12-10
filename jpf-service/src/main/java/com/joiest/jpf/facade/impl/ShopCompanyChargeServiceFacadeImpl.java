@@ -300,7 +300,7 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
         criteria.andCompanyIdEqualTo(companyId);
         criteria.andBalanceGreaterThan(new BigDecimal(0));
         criteria.andStatusEqualTo((byte)1);
-        example.setOrderByClause(" id asc ");
+        example.setOrderByClause(" id desc ");
         return payShopCompanyChargeMapper.selectByExample(example);
     }
 
