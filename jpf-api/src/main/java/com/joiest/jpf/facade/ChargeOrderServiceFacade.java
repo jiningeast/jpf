@@ -45,4 +45,9 @@ public interface ChargeOrderServiceFacade {
      * 订单列表
      */
     public List<ChargeOrderInfo> getAbnormalOrders(ChargeOrderInfo request);
+
+    /**
+     * 订单列表
+     */
+    public List<ChargeOrderInfo> getAllAbnormalOrders(ChargeOrderInfo request);
 }
