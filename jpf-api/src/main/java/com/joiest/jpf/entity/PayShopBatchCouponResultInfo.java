@@ -11,6 +11,7 @@ import java.util.List;
  * @Description:
  */
 public class PayShopBatchCouponResultInfo {
+    private String msg;
     private Integer total;
     private List<PayShopBatchCouponResult> payShopBatchCoupons;
 
@@ -28,5 +29,13 @@ public class PayShopBatchCouponResultInfo {
 
     public void setPayShopBatchCoupons(List<PayShopBatchCouponResult> payShopBatchCoupons) {
         this.payShopBatchCoupons = payShopBatchCoupons;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }
