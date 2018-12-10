@@ -550,6 +550,7 @@ public class OfpayUtils {
 
         String fileName = "OfpayGas";
         String path = "/logs/jpf-charge-api/log/";
+        LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
 
         Map<String,String> map = new ReadXML().getBooksOneByStr(resultXml);
         String orderStatus = map.getOrDefault("retcode","");
