@@ -116,8 +116,21 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("10001");
             jpfResponseDto.setRetMsg("商户已停用，无法继续操作");
+            return jpfResponseDto;
         }
-
+        PayShopCompanyCharge payShopCompanyCharge = payShopCompanyChargeMapper.selectByPrimaryKey(shopBatchRequest.getContractId());
+        if(payShopCompanyCharge==null){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10002");
+            jpfResponseDto.setRetMsg("所选合同不存在");
+            return jpfResponseDto;
+        }
+        if(payShopCompanyCharge.getBalance().compareTo(new BigDecimal(0))==0){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10003");
+            jpfResponseDto.setRetMsg("所选合同已经没有余额");
+            return jpfResponseDto;
+        }
         // 添加批次
         PayShopBatch payShopBatch = new PayShopBatch();
         payShopBatch.setCompanyId(shopBatchRequest.getCompanyId());
@@ -139,7 +152,12 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("10001");
             jpfResponseDto.setRetMsg("商户余额不足");
-
+            return jpfResponseDto;
+        }
+        if(payShopCompanyCharge.getBalance().compareTo(new BigDecimal(totalMoney+""))<0){
+            JpfResponseDto jpfResponseDto = new JpfResponseDto();
+            jpfResponseDto.setRetCode("10004");
+            jpfResponseDto.setRetMsg("所选合同余额不足");
             return jpfResponseDto;
         }
         payShopBatch.setMoney(new BigDecimal(totalMoney));
@@ -168,12 +186,14 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         //根据订单号上的合同号 查询可用的合同
         payShopBatch.setCompanyChargeId(shopBatchRequest.getContractId());
         payShopBatch.setContractNo(shopBatchRequest.getContractNo());
-        PayShopCompanyCharge payShopCompanyCharge = payShopCompanyChargeMapper.selectByPrimaryKey(shopBatchRequest.getContractId());
         payShopBatch.setTransferRate(payShopCompanyCharge.getTransferRate());
         //--------此为支持前台系统新增-------- 还应增加保存前台数据的方法，后续在做
         payShopBatchCustomMapper.insertSelective(payShopBatch);
         String batchId = payShopBatch.getId();
         String batchNo = payShopBatch.getBatchNo();
+        //此处更新合同的余额
+        payShopCompanyCharge.setBalance(ArithmeticUtils.sub(payShopCompanyCharge.getBalance().toString(),payShopBatch.getMoney().toString()));
+        payShopCompanyChargeMapper.updateByPrimaryKeySelective(payShopCompanyCharge);
 
         // 添加券
         List<PayShopBatchCoupon> payShopBatchCouponsList = new ArrayList<>();
@@ -490,5 +510,10 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             payCouponInfos.add(payCouponInfo);
         }
         return payCouponInfos;
+    }
+
+    @Override
+    public void update(PayShopBatch payShopBatch) {
+        payShopBatchMapper.updateByPrimaryKeySelective(payShopBatch);
     }
 }

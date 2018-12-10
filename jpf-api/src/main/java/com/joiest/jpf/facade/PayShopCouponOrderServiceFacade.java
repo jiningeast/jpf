@@ -3,6 +3,8 @@ package com.joiest.jpf.facade;
 import com.joiest.jpf.common.po.PayShopCouponOrder;
 import com.joiest.jpf.common.po.PayShopCouponOrderInfo;
 import com.joiest.jpf.entity.CouponOrderList;
+import com.joiest.jpf.entity.PayShopCouponOrderInfoResultInfo;
+import com.joiest.jpf.entity.PayShopCouponOrderResultInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -25,14 +27,14 @@ public interface PayShopCouponOrderServiceFacade {
      * @param map
      * @return
      */
-    List<PayShopCouponOrder> getOrderList(Map<String, Object> map);
+    PayShopCouponOrderResultInfo getOrderList(Map<String, Object> map);
 
     /**
      * 查询订单的详情
      * @param map
      * @return
      */
-    List<PayShopCouponOrderInfo> getOrderInfo(Map<String, Object> map);
+    PayShopCouponOrderInfoResultInfo getOrderInfo(Map<String, Object> map);
 
     /**
      * 取消订单

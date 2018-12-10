@@ -79,6 +79,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             {
                 add("/market-manager/managerLogin/loginIn");                //绑定手机号
                 add("/market-manager/managerLogin/loginFail");
+                add("/market-manager/shopBatchController/downloadFile");
             }
         };
         System.out.println(ServletUtils.getIpAddr(request));

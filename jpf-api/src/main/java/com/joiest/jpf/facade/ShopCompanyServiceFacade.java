@@ -78,4 +78,11 @@ public interface ShopCompanyServiceFacade {
      * @param id
      */
     void openAccount(String id)  throws Exception;
+
+    /**
+     * 前台的扣款
+     * @param companyId
+     * @param totalMoney
+     */
+    void chargeSub(String companyId, String totalMoney);
 }

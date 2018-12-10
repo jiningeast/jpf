@@ -2,6 +2,7 @@ package com.joiest.jpf.facade;
 
 import com.joiest.jpf.common.po.PayShopBatchCoupon;
 import com.joiest.jpf.dto.ShopBatchCouponResponse;
+import com.joiest.jpf.entity.PayShopBatchCouponResultInfo;
 import com.joiest.jpf.entity.ShopBatchCouponInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 
@@ -51,5 +52,15 @@ public interface ShopBatchCouponServiceFacade {
      * @param map
      * @return
      */
-    List<PayShopBatchCoupon> getCouponsByOrderId(Map<String, Object> map);
+    PayShopBatchCouponResultInfo getCouponsByOrderId(Map<String, Object> map);
+
+    /**
+     * 获取所有发放人手机号，并且绑定欣券
+     * @param list
+     * @param companyId
+     * @param batchId
+     * @param excelLocalUrl
+     * @return
+     */
+    List<ShopBatchCouponInfo> getCouponsWeb(List<LinkedHashMap<String,Object>> list, String companyId, String batchId, String excelLocalUrl);
 }

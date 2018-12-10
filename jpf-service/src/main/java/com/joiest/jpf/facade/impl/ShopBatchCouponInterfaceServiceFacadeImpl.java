@@ -166,7 +166,7 @@ public class ShopBatchCouponInterfaceServiceFacadeImpl implements ShopBatchCoupo
         custoner.setDou(douAll);
         custoner.setSaleDou(douIssale);
         //充值校验码
-        String newCodeALL = ToolUtils.CreateCode(uid,douAll.toString());//Md5Encrypt.md5(uid+douAll+"test","UTF-8");
+        String newCodeALL = ToolUtils.CreateCode(douAll.toString(),uid);//Md5Encrypt.md5(uid+douAll+"test","UTF-8");
         custoner.setCode(newCodeALL);
         custoner.setUpdatetime(dNow);
         PayShopCustomerExample custexple=new PayShopCustomerExample();
