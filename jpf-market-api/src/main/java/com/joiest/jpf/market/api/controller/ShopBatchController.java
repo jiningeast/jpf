@@ -66,21 +66,25 @@ public class ShopBatchController {
         List<Map<String,Object>> list = new ArrayList<>();
         try {
             List<PayShopCompanyCharge> payShopCompanyCharges = shopCompanyChargeServiceFacade.getListByCompanyId(Base64CustomUtils.base64Decoder(companyId));
-            for (PayShopCompanyCharge payShopCompanyCharge:payShopCompanyCharges) {
-                Map<String,Object> map =new ConcurrentHashMap<>();
-                map.put("id",payShopCompanyCharge.getId());
-                map.put("contractNo",payShopCompanyCharge.getContractNo());
-                map.put("balance",payShopCompanyCharge.getBalance());
-                map.put("totalMoney",payShopCompanyCharge.getMoney());
-                map.put("date",payShopCompanyCharge.getAddtime());
-                list.add(map);
-            }
+            setParam(list, payShopCompanyCharges);
         } catch (Exception e) {
             logger.error("getUsableBatchNo："+e.getMessage());
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"获取失败",null);
         }
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功",list);
+    }
+
+    private void setParam(List<Map<String, Object>> list, List<PayShopCompanyCharge> payShopCompanyCharges) {
+        for (PayShopCompanyCharge payShopCompanyCharge : payShopCompanyCharges) {
+            Map<String, Object> map = new ConcurrentHashMap<>();
+            map.put("id", payShopCompanyCharge.getId());
+            map.put("contractNo", payShopCompanyCharge.getContractNo());
+            map.put("balance", payShopCompanyCharge.getBalance());
+            map.put("totalMoney", payShopCompanyCharge.getMoney());
+            map.put("date", payShopCompanyCharge.getAddtime());
+            list.add(map);
+        }
     }
 
     /**
@@ -107,15 +111,7 @@ public class ShopBatchController {
             map.put("pageSize",Base64CustomUtils.base64Decoder(pageSize));
             List<PayShopCompanyCharge> payShopCompanyCharges = shopCompanyChargeServiceFacade.getListByCompanyIdByPage(map);
             Integer total = shopCompanyChargeServiceFacade.getTotal(map);
-            for (PayShopCompanyCharge payShopCompanyCharge:payShopCompanyCharges) {
-                Map<String,Object> hashMap =new ConcurrentHashMap<>();
-                hashMap.put("id",payShopCompanyCharge.getId());
-                hashMap.put("contractNo",payShopCompanyCharge.getContractNo());
-                hashMap.put("balance",payShopCompanyCharge.getBalance());
-                hashMap.put("totalMoney",payShopCompanyCharge.getMoney());
-                hashMap.put("date",payShopCompanyCharge.getAddtime());
-                list.add(hashMap);
-            }
+            setParam(list, payShopCompanyCharges);
             payShopCompanyChargeInfo.setList(list);
             payShopCompanyChargeInfo.setTotal(total);
         } catch (Exception e) {
