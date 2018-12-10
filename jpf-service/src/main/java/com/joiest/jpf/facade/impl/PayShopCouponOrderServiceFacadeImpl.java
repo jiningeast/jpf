@@ -84,7 +84,7 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
     public PayShopCouponOrderResultInfo getOrderList(Map<String, Object> map) {
         PayShopCouponOrderExample example = new PayShopCouponOrderExample();
         PayShopCouponOrderExample.Criteria criteria = example.createCriteria();
-        example.setOrderByClause(" id asc ");
+        example.setOrderByClause(" id desc ");
         if (map.get("pageSize")==null||Long.valueOf(map.get("pageSize").toString())<= 0){
             example.setPageSize(10);
         }else{
