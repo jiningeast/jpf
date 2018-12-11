@@ -41,7 +41,7 @@
                     <tr>
                         <td>登录状态:</td>
                         <td>
-                            <select id="status" name="status" class="easyui-combobox">
+                            <select editable="false" id="status" name="status" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="0">已停用</option>
                                 <option value="1">已启用</option>

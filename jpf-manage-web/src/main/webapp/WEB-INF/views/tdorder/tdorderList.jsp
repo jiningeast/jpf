@@ -194,7 +194,7 @@
                 <tr>
                     <td>退单类型：</td>
                     <td>
-                        <select name="singletype" id="singletype" class="easyui-combobox">
+                        <select editable="false" name="singletype" id="singletype" class="easyui-combobox">
                             <option value="">全部</option>
                             <option value="1">支付后退单</option>
                             <option value="2">未支付退单</option>
@@ -202,7 +202,7 @@
                     </td>
                     <td>运营审核：</td>
                     <td>
-                        <select id="singlestatus" name="singlestatus" class="easyui-combobox">
+                        <select editable="false" id="singlestatus" name="singlestatus" class="easyui-combobox">
                             <option value="">全部</option>
                             <option value="0">未审核</option>
                             <option value="1">已审核</option>

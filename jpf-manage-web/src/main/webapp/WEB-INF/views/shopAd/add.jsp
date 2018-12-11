@@ -53,7 +53,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">广告类型：</td>
                     <td>
-                        <select id="type" name="type" data-options="required:true" class="easyui-combobox"   style="width:120px;">
+                        <select editable="false" id="type" name="type" data-options="required:true" class="easyui-combobox"   style="width:120px;">
                             <option value="0" selected="selected">首页图标</option>
                             <option value="1" >首页轮播图</option>
                             <option value="2" >首页banner图片</option>
@@ -63,7 +63,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">是否显示：</td>
                     <td>
-                        <select id="status" name="status" data-options="required:true" class="easyui-combobox"  style="width:120px;">
+                        <select editable="false" id="status" name="status" data-options="required:true" class="easyui-combobox"  style="width:120px;">
                             <option value="0" >不显示</option>
                             <option value="1" selected="selected">显示</option>
                         </select>

@@ -51,7 +51,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">是否冻结：</td>
                     <td>
-                        <select id="isFreeze" name="isFreeze" data-options="required:true" class="easyui-combobox"
+                        <select editable="false" id="isFreeze" name="isFreeze" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
                             <option value="0" <c:if  test="${chargeCompanyInfo.isFreeze == 0 }">selected</c:if> >未冻结</option>
                             <option value="1" <c:if  test="${chargeCompanyInfo.isFreeze == 1 }">selected</c:if> >冻结</option>
@@ -61,7 +61,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">是否删除：</td>
                     <td>
-                        <select id="isDel" name="isDel" data-options="required:true" class="easyui-combobox"
+                        <select editable="false" id="isDel" name="isDel" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
                             <option value="0" <c:if  test="${chargeCompanyInfo.isDel == 0 }">selected</c:if> >不删除</option>
                             <option value="1" <c:if  test="${chargeCompanyInfo.isDel == 1 }">selected</c:if> >删除</option>

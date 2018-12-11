@@ -39,7 +39,7 @@
                         <td style="text-align: right;background-color: #f1f1f1;">代理等级：</td>
                         <input type="hidden" name="tpid_curr" value="${merchantAgentInfo.tpid}">
                         <td>
-                            <select id="tpid" name="tpid" class="easyui-combobox" data-options="required:true" style="width:100px;">
+                            <select editable="false" id="tpid" name="tpid" class="easyui-combobox" data-options="required:true" style="width:100px;">
                             </select>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">添加时间：</td>

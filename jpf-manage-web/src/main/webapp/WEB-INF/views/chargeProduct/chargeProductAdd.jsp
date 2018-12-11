@@ -26,33 +26,33 @@
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">商品类型：</td>
                         <td width="100px">
-                            <select id="typeId" name="typeId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <select editable="false" id="typeId" name="typeId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
                             <input type="hidden" name="typeName" id="typeName" value="" />
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">品牌：</td>
                         <td width="100px">
-                            <select id="brandId" name="brandId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <select editable="false" id="brandId" name="brandId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
                             <input type="hidden" name="brandName" id="brandName" value="" />
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">供应商：</td>
                         <td width="100px">
-                            <select id="supplierId" name="supplierId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <select editable="false" id="supplierId" name="supplierId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
                             <input type="hidden" name="supplierName" id="supplierName" value="" />
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">状态:</td>
                         <td>
-                            <select id="isOnSale" name="isOnSale" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                            <select editable="false" id="isOnSale" name="isOnSale" data-options="required:true" class="easyui-combobox" style="width:120px;">
                                 <option value="0">下架</option>
                                 <option value="1">上架</option>
                             </select>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">运营商类型:</td>
                         <td>
-                            <select id="mobileType" name="mobileType" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                            <select editable="false" id="mobileType" name="mobileType" data-options="required:true" class="easyui-combobox" style="width:120px;">
                                 <option value="1">移动</option>
                                 <option value="2">联通</option>
                                 <option value="3">电信</option>

@@ -191,9 +191,9 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
         payShopBatchCustomMapper.insertSelective(payShopBatch);
         String batchId = payShopBatch.getId();
         String batchNo = payShopBatch.getBatchNo();
-        //此处更新合同的余额
-        payShopCompanyCharge.setBalance(ArithmeticUtils.sub(payShopCompanyCharge.getBalance().toString(),payShopBatch.getMoney().toString()));
-        payShopCompanyChargeMapper.updateByPrimaryKeySelective(payShopCompanyCharge);
+        //此处更新合同的余额 此处删除代码，是因为重复扣款的原因
+        /*payShopCompanyCharge.setBalance(ArithmeticUtils.sub(payShopCompanyCharge.getBalance().toString(),payShopBatch.getMoney().toString()));
+        payShopCompanyChargeMapper.updateByPrimaryKeySelective(payShopCompanyCharge);*/
 
         // 添加券
         List<PayShopBatchCoupon> payShopBatchCouponsList = new ArrayList<>();

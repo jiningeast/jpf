@@ -88,7 +88,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">审核用户类型：</td>
                     <td colspan="4">
-                        <select id="type_audit" name="type" class="easyui-combobox" style="width:120px;" data-options="">
+                        <select editable="false" id="type_audit" name="type" class="easyui-combobox" style="width:120px;" data-options="">
                             <option value="">请选择</option>
                             <option value="0">正常用户</option>
                             <option value="1">特殊用户</option>

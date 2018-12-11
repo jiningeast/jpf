@@ -51,7 +51,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">是否冻结：</td>
                     <td>
-                        <select id="isFreeze" name="isFreeze" data-options="required:true" class="easyui-combobox"
+                        <select editable="false" id="isFreeze" name="isFreeze" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
                             <option value="0" selected="selected">未冻结</option>
                             <option value="1">冻结</option>

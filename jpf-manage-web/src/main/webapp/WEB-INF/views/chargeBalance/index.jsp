@@ -95,7 +95,7 @@
                             <td><input id="alertPhone" name="alertPhone" class="easyui-textbox" type="text" /></td>
                             <td>接口商家：</td>
                             <td >
-                                <select id="type" name="type" class="easyui-combobox" style="width: 70px;">
+                                <select editable="false" id="type" name="type" class="easyui-combobox" style="width: 70px;">
                                     <option value="">全部</option>
                                     <option value="0">欧非</option>
                                     <option value="1">威能</option>
@@ -105,7 +105,7 @@
                         <tr>
                             <td>状态：</td>
                             <td style="width: 200px;">
-                                <select id="alertSwitch" name="alertSwitch" class="easyui-combobox" style="width: 70px;">
+                                <select editable="false" id="alertSwitch" name="alertSwitch" class="easyui-combobox" style="width: 70px;">
                                     <option value="">全部</option>
                                     <option value="0">关闭</option>
                                     <option value="1">打开</option>

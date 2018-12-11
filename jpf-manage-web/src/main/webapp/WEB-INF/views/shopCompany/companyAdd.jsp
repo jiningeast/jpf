@@ -44,7 +44,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">状态：</td>
                     <td>
-                        <select id="status" name="status" data-options="required:true" class="easyui-combobox"
+                        <select editable="false" id="status" name="status" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
 
                             <option value="0">停用</option>
@@ -87,7 +87,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">是否开通登录账号：</td>
                     <td>
-                        <select id="openAccent" name="openAccent" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                        <select  editable="false" id="openAccent" name="openAccent" data-options="required:true" class="easyui-combobox" style="width:120px;">
                             <option value="0" selected="selected">否</option>
                             <option value="1">是</option>
                         </select>

@@ -179,7 +179,7 @@
                     </tr>
                     <tr>
                         <td>状态:</td>
-                        <td><select id="status" name="status" class="easyui-combobox">
+                        <td><select editable="false" id="status" name="status" class="easyui-combobox">
                             <option value="">全部</option>
                             <option value="-1">已取消</option>
                             <option value="0">申请</option>
