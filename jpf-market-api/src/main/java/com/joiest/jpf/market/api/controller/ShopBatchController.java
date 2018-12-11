@@ -550,7 +550,7 @@ public class ShopBatchController {
         String content;
         for ( ShopBatchCouponInfo shopBatchCouponInfo:couponsList ){
             content = "您收到一个激活码："+shopBatchCouponInfo.getActiveCode()+"，请微信搜索“欣享爱生活”公众号登录使用。";
-            //sendToPersonsSms(shopBatchCouponInfo.getActivePhone(),content,payShopBatch.getBatchNo());
+            sendToPersonsSms(shopBatchCouponInfo.getActivePhone(),content,payShopBatch.getBatchNo());
         }
         return setReslt("10000","发放成功",null);
     }
@@ -559,7 +559,7 @@ public class ShopBatchController {
     public void sendToPersonsSms(String phone,String content,String batchNo){
         Map<String,String> smsResMap = SmsUtils.send(phone,content,"xinxiang");
         Map<String,String> responseMap = JsonUtils.toObject(smsResMap.get("response"),Map.class);
-        if ( responseMap.get("code").equals("10000") ){
+        if ("10000".equals(responseMap.get("code"))){
             // 添加短信流水
             ShopInterfaceStreamInfo shopInterfaceStreamInfo = new ShopInterfaceStreamInfo();
             shopInterfaceStreamInfo.setType((byte)1);
