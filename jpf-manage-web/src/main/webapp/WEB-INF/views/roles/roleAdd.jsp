@@ -26,7 +26,7 @@
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">角色状态：</td>
                         <td>
-                            <select id="status_p" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                            <select editable="false" id="status_p" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;">
                                 <option value=""></option>
                                 <option value="0">正常</option>
                                 <option value="1">禁用</option>

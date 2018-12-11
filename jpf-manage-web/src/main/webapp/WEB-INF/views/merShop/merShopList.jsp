@@ -96,7 +96,7 @@
                     <td><input id="pid" name="pid" class="easyui-textbox" type="text" /></td>
                     <td>层级筛选</td>
                     <td>
-                        <select name="type" id="type" class="easyui-combobox">
+                        <select editable="false" name="type" id="type" class="easyui-combobox">
                             <option value="0">总店</option>
                             <option value="1">分店</option>
                         </select>

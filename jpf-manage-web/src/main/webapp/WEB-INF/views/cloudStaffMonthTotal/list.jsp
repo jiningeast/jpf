@@ -131,7 +131,7 @@
                         </td>
                         <td>状态：</td>
                         <td >
-                            <select id="status" name="status" class="easyui-combobox" style="width: 70px;">
+                            <select editable="false" id="status" name="status" class="easyui-combobox" style="width: 70px;">
                                 <option value="">全部</option>
                                 <option value="0">未超额</option>
                                 <option value="1">已超额</option>

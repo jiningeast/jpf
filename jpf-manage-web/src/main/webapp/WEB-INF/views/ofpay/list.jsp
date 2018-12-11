@@ -95,7 +95,7 @@
                             </td>
                             <td>收支类型：</td>
                             <td style="width: 100px;">
-                                <select id="paymenttype" name="paymenttype" class="easyui-combobox" >
+                                <select editable="false" id="paymenttype" name="paymenttype" class="easyui-combobox" >
                                     <option value="">全部</option>
                                     <option value="0">收入</option>
                                     <option value="1">支出</option>

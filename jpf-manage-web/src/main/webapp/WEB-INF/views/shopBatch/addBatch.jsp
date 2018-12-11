@@ -61,7 +61,7 @@
                 <tr>
                     <td width="70" align="right">选择合同&nbsp;</td>
                     <td width="190">
-                        <select id="contractId" name="contractId" class="easyui-combobox" style="width: 150px">
+                        <select editable="false" id="contractId" name="contractId" class="easyui-combobox" style="width: 150px">
                         </select>
                     </td>
                     <td width="260" colspan="2"></td>
@@ -75,7 +75,7 @@
                 <tr>
                     <td width="70" align="right">有效期&nbsp;</td>
                     <td width="190">
-                        <select id="expireMonth" name="expireMonth" class="easyui-combobox" style="width: 150px">
+                        <select editable="false" id="expireMonth" name="expireMonth" class="easyui-combobox" style="width: 150px">
                             <option value="3" selected="selected">3个月</option>
                             <option value="6">6个月</option>
                             <option value="9">9个月</option>

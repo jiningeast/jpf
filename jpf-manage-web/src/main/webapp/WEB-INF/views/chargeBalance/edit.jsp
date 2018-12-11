@@ -51,7 +51,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">报警开关：</td>
                     <td>
-                        <select id="alertSwitch" name="alertSwitch" data-options="required:true" class="easyui-combobox"
+                        <select editable="false" id="alertSwitch" name="alertSwitch" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
                             <option value="0" <c:if  test="${chargeBalanceInfo.alertSwitch == 0 }">selected</c:if> >关闭</option>
                             <option value="1" <c:if  test="${chargeBalanceInfo.alertSwitch == 1 }">selected</c:if> >打开</option>
@@ -61,7 +61,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">接口商家：</td>
                     <td>
-                        <select id="type" name="type" data-options="required:true" class="easyui-combobox"
+                        <select editable="false" id="type" name="type" data-options="required:true" class="easyui-combobox"
                                 style="width:120px;">
                             <option value="0" <c:if  test="${chargeBalanceInfo.type == 0 }">selected</c:if> >欧非</option>
                             <option value="1" <c:if  test="${chargeBalanceInfo.type == 1 }">selected</c:if> >威能</option>

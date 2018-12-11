@@ -206,7 +206,7 @@
                     <tr>
                         <td>产品状态:</td>
                         <td>
-                            <select id="status_s" name="status" class="easyui-combobox">
+                            <select editable="false" id="status_s" name="status" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="1">上架</option>
                                 <option value="0">下架</option>

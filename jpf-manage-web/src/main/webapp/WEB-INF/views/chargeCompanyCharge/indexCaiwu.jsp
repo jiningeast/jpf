@@ -92,7 +92,7 @@
                         <td><input id="companyName" name="companyName" class="easyui-textbox" type="text" /></td>
                         <td>状态：</td>
                         <td>
-                            <select id="status" name="status" class="easyui-combobox">
+                            <select editable="false" id="status" name="status" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="0">新增待审核</option>
                                 <option value="1">审核通过已充值</option>

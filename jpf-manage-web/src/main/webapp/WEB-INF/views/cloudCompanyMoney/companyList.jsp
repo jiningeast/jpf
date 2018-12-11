@@ -129,7 +129,7 @@
                     <tr>
                         <td>充值状态:</td>
                         <td>
-                            <select id="status_s" name="montype" class="easyui-combobox">
+                            <select editable="false" id="status_s" name="montype" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="0">待锁定</option>
                                 <option value="1">待打款</option>

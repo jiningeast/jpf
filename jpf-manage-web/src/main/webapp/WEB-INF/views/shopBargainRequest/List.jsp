@@ -183,7 +183,7 @@
 
                         <td>状态:</td>
                         <td>
-                            <select id="status" name="status" class="easyui-combobox" style="width: 60px;">
+                            <select editable="false" id="status" name="status" class="easyui-combobox" style="width: 60px;">
                                 <option value="">全部</option>
                                 <option value="0">关闭</option>
                                 <option value="1">开启</option>
