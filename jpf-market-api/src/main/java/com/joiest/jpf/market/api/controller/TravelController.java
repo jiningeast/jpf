@@ -6,15 +6,12 @@ import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetShopProductRequest;
 import com.joiest.jpf.dto.GetShopProductResponse;
-import com.joiest.jpf.dto.ShopProductInfoRequest;
-import com.joiest.jpf.entity.ShopProductInfo;
-import com.joiest.jpf.entity.ShopProductInfoInfo;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.dto.ShopProductInfoResponse;
 import com.joiest.jpf.facade.ShopProductInfoServiceFacade;
 import com.joiest.jpf.facade.ShopProductServiceFacade;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +22,7 @@ import java.util.List;
 import java.util.*;
 
 /**
- * 商品旅游服务Controller
+ * 旅游服务、体检服务、洗车服务Controller
  * @author admin
  */
 @Controller
@@ -35,36 +32,46 @@ public class TravelController {
     @Autowired
     private ShopProductInfoServiceFacade shopAdInterfaceServiceFacade;
 
-    private ShopProductInfoServiceFacade shopProductInfoServiceFacade;
-
     @Autowired
     private ShopProductServiceFacade shopProductServiceFacade;
 
     /**
-     * 获取旅游商品服务列表
+     * 获取旅游、体检、洗车商品服务列表
      * @return
      */
     @RequestMapping(value = "/proInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String proInfo() {
-        String decoderPayShopSupplierId = ConfigUtil.getValue("travel_supplier_id");
-        System.out.println("获取的供应商Id为：" + decoderPayShopSupplierId);
-        List<PayShopProductInfo> shopProductInfoList = shopAdInterfaceServiceFacade.getProductInfoList(decoderPayShopSupplierId);
-        List<ShopProductInfoResponse> responseList = new ArrayList<>();
-        for(PayShopProductInfo payShopProductInfo:shopProductInfoList){
-            ShopProductInfoResponse response = new ShopProductInfoResponse();
-            response.setImgUrl(payShopProductInfo.getImgurl());
-            response.setId(payShopProductInfo.getId().toString());
-            response.setTitle(payShopProductInfo.getTitle());
-            response.setMoneyscope(payShopProductInfo.getMoneyscope());
-            responseList.add(response);
+    public String proInfo(String data) {
+        if(StringUtils.isBlank(data)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
         }
-        int shopProductInfoCount = shopAdInterfaceServiceFacade.getProductInfoCount(decoderPayShopSupplierId);
-        return toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),responseList,shopProductInfoCount);
+        String dataStr = data.replaceAll("\\\\","").replaceAll("\r","")
+                .replaceAll("\n","").replaceAll(" ","+");
+        JSONObject responseData = JSONObject.fromObject(Base64CustomUtils.base64Decoder(dataStr));
+        if(responseData != null && responseData.containsKey("payShopSupplierId")){
+            String decoderPayShopSupplierId = responseData.get("payShopSupplierId").toString();
+            if( StringUtils.isBlank(decoderPayShopSupplierId) ){
+                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "数据非法", null);
+            }
+            List<PayShopProductInfo> shopProductInfoList = shopAdInterfaceServiceFacade.getProductInfoList(decoderPayShopSupplierId);
+            List<ShopProductInfoResponse> responseList = new ArrayList<>();
+            for(PayShopProductInfo payShopProductInfo:shopProductInfoList){
+                ShopProductInfoResponse response = new ShopProductInfoResponse();
+                response.setImgUrl(payShopProductInfo.getImgurl());
+                response.setId(payShopProductInfo.getId().toString());
+                response.setTitle(payShopProductInfo.getTitle());
+                response.setMoneyscope(payShopProductInfo.getMoneyscope());
+                responseList.add(response);
+            }
+            int shopProductInfoCount = shopAdInterfaceServiceFacade.getProductInfoCount(decoderPayShopSupplierId);
+            return toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),JpfInterfaceErrorInfo.SUCCESS.getDesc(),responseList,shopProductInfoCount);
+        }else{
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误", null);
+        }
     }
 
     /**
-     * 旅游商品详情页接口
+     * 旅游、体检、洗车商品详情页接口
      * */
     @RequestMapping(value = "/proList", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody

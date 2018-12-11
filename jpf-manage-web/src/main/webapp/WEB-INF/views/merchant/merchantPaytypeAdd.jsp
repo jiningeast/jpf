@@ -55,7 +55,7 @@
             <div class="wrap" style="position: relative;">
                 <a id="addBtn" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
                 <span id="typeSelect" style="display: none;">
-                    <select id="tpid_a" name="tpid" class="easyui-combobox" style="width:100px;"></select>
+                    <select editable="false" id="tpid_a" name="tpid" class="easyui-combobox" style="width:100px;"></select>
                 </span>
             </div>
         </div>

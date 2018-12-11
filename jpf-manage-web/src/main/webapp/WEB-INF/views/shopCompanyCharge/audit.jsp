@@ -92,7 +92,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">审核状态：</td>
                     <td colspan="4">
-                        <select id="status_audit" name="status" class="easyui-combobox" style="width:120px;" data-options="">
+                        <select editable="false" id="status_audit" name="status" class="easyui-combobox" style="width:120px;" data-options="">
                             <option value="">请选择</option>
                             <c:if test="${auditPageType == 1 }">
                                 <option value=-1>已取消</option>

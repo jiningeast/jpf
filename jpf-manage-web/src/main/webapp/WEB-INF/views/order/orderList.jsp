@@ -184,7 +184,7 @@
                     </td>
                     <td>支付状态：</td>
                     <td>
-                        <select id="orderstatus" name="orderstatus" class="easyui-combobox">
+                        <select editable="false" id="orderstatus" name="orderstatus" class="easyui-combobox">
                             <option value="">全部</option>
                             <option value="0">未支付</option>
                             <option value="1">已支付</option>
@@ -193,7 +193,7 @@
                     </td>
                     <td>退单状态：</td>
                     <td>
-                        <select id="singlestatus" name="singlestatus" class="easyui-combobox">
+                        <select editable="false" id="singlestatus" name="singlestatus" class="easyui-combobox">
                             <option value="">全部</option>
                             <option value="1">正常订单</option>
                             <option value="2">用户申请退单</option>

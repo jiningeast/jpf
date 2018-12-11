@@ -151,7 +151,7 @@
                         <td>商品名称:</td>
                         <td><input id="name" name="name" class="easyui-textbox" type="text" /></td>
                         <td>
-                            <select id="isOnSale" name="isOnSale" class="easyui-combobox" style="width:120px;">
+                            <select editable="false" id="isOnSale" name="isOnSale" class="easyui-combobox" style="width:120px;">
                                 <option value="">全部</option>
                                 <option value="1">上架</option>
                                 <option value="0">下架</option>

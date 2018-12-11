@@ -22,7 +22,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品类型：</td>
                         <td width="300px">
-                            <select id="typeId" name="typeId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <select editable="false" id="typeId" name="typeId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
                             <input type="hidden" name="typeName" id="typeName" value="" />
                         </td>
                         <td width="100px;">
@@ -33,7 +33,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">供应商：</td>
                         <td>
-                            <select id="supplierId" name="supplierId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <select editable="false" id="supplierId" name="supplierId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
                             <input type="hidden" name="supplierName" id="supplierName" value="" />
                         </td>
                         <td>
@@ -44,7 +44,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">品牌：</td>
                         <td>
-                            <select id="brandId" name="brandId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <select editable="false" id="brandId" name="brandId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
                             <input type="hidden" name="brandName" id="brandName" value="" />
                         </td>
                         <td>

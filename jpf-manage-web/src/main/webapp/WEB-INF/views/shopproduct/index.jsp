@@ -225,7 +225,7 @@
                         <td>商品名称:</td>
                         <td><input id="product_name" name="name" class="easyui-textbox" type="text" /></td>
                         <td>
-                            <select id="status_s" name="status" class="easyui-combobox" style="width:120px;">
+                            <select id="status_s" name="status" class="easyui-combobox" style="width:120px;" editable="false">
                                 <option value="">全部</option>
                                 <option value="1">上架</option>
                                 <option value="0">下架</option>

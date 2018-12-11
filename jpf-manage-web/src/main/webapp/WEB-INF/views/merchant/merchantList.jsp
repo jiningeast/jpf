@@ -204,7 +204,7 @@
                     <tr>
                         <td>状态:</td>
                         <td>
-                            <select id="status_s" name="status" class="easyui-combobox">
+                            <select editable="false" id="status_s" name="status" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="0">正常</option>
                                 <option value="1">冻结金额</option>
@@ -212,7 +212,7 @@
                         </td>
                         <td>企业认证:</td>
                         <td>
-                            <select id="attestation_s" name="attestation" class="easyui-combobox">
+                            <select editable="false" id="attestation_s" name="attestation" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="0">未认证</option>
                                 <option value="1">已认证</option>

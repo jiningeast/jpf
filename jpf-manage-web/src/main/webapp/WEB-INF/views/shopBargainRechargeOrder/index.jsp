@@ -79,7 +79,7 @@
                             <td><input id="orderNo" name="orderNo" class="easyui-textbox" type="text" /></td>
                             <td>订单类型:</td>
                             <td>
-                                <select id="orderType" name="orderType" class="easyui-combobox" style="width: 80px;">
+                                <select editable="false" id="orderType" name="orderType" class="easyui-combobox" style="width: 80px;">
                                     <option value="">全部</option>
                                     <option value="1">中石化充值</option>
                                     <option value="2">中石油充值</option>
@@ -110,7 +110,7 @@
                             </td>
                             <td>订单状态:</td>
                             <td>
-                                <select id="infoStatus" name="infoStatus" class="easyui-combobox" style="width: 80px;">
+                                <select editable="false" id="infoStatus" name="infoStatus" class="easyui-combobox" style="width: 80px;">
                                     <option value="">全部</option>
                                     <option value="1">未绑定</option>
                                     <option value="2">已绑定</option>

@@ -96,7 +96,7 @@
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">是否为总店：</td>
                         <td>
-                            <select id="isHeadShop" name="isHeadShop" class="easyui-combobox " style="width:120px;">
+                            <select editable="false" id="isHeadShop" name="isHeadShop" class="easyui-combobox " style="width:120px;">
                                 <option value=""></option>
                                 <option value="1">是</option>
                                 <option value="0">否</option>
@@ -149,7 +149,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">开户银行类型：</td>
                         <td>
-                            <select id="banktype_m" name="banktype" class="easyui-combobox" data-options="required:true" style="width:100px;">
+                            <select editable="false" id="banktype_m" name="banktype" class="easyui-combobox" data-options="required:true" style="width:100px;">
                             </select>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">企业对公账户：</td>

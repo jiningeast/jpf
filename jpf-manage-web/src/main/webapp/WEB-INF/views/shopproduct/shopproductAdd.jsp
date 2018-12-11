@@ -32,11 +32,11 @@
                     <tr>
                         <td class="tdwitdh" style="text-align: right;background-color: #f1f1f1;">商品基础信息：</td>
                         <td>
-                            <select id="productInfoId" name="productInfoId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <select id="productInfoId" name="productInfoId" data-options="required:true" class="easyui-combobox" style="width:95%" editable="false" ></select>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">状态:</td>
                         <td>
-                            <select id="status_s" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                            <select id="status_s" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;" editable="false">
                                 <option value="0">下架</option>
                                 <option value="1">上架</option>
 
