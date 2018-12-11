@@ -545,7 +545,7 @@ public class ShopBatchController {
         }
         List<ShopBatchCouponInfo> couponsList  = shopBatchCouponServiceFacade.getCouponsWeb(list,companyId,payShopBatch.getId(),excelLocalUrl);
         // 扣款
-        shopCompanyServiceFacade.chargeSub(companyId,totalMoney);
+        //shopCompanyServiceFacade.chargeSub(companyId,totalMoney);
         // 开始发短信
         String content;
         for ( ShopBatchCouponInfo shopBatchCouponInfo:couponsList ){
@@ -572,6 +572,16 @@ public class ShopBatchController {
         }
     }
 
+    @RequestMapping(value = "/getCompanyMoney",method = RequestMethod.POST)
+    @ResponseBody
+    public String getCompanyMoney(HttpServletRequest request){
+        String companyId = request.getParameter("companyId");
+        if(StringUtils.isBlank(companyId)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
+        }
+        PayShopCompany company = shopCompanyServiceFacade.getById(Base64CustomUtils.base64Decoder(companyId));
+        return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功", company);
+    }
 
 
     public static void main(String[] args) {
