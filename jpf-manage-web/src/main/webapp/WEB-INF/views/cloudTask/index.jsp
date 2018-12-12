@@ -137,7 +137,7 @@
                 <tr>
                     <td>鉴权状态:</td>
                     <td>
-                        <select id="status" name="status" class="easyui-combobox">
+                        <select editable="false" id="status" name="status" class="easyui-combobox">
                             <option value="7" selected="selected">全部</option>
                             <option value="4">未处理</option>
                             <option value="1">部分失败</option>
@@ -147,7 +147,7 @@
                     </td>
                     <td>锁定状态:</td>
                     <td>
-                        <select id="isLock" name="isLock" class="easyui-combobox">
+                        <select editable="false" id="isLock" name="isLock" class="easyui-combobox">
                             <option value="7" selected="selected">全部</option>
                             <option value="4">未锁定</option>
                             <option value="1">已锁定</option>

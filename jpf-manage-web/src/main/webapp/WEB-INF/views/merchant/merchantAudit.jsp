@@ -179,7 +179,7 @@
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">审核：</td>
                     <td>
-                        <select name="attestation" class="easyui-combobox" style="width:120px;" data-options="required:true">
+                        <select editable="false" name="attestation" class="easyui-combobox" style="width:120px;" data-options="required:true">
                             <option value=""></option>
                             <option value="0">拒绝</option>
                             <option value="1">通过</option>

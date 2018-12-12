@@ -311,4 +311,19 @@ public class ShopBrangainRechargeOrderServiceFacadeImpl implements ShopBrangainR
         return randomInt;
     }
 
+    //数据入库
+    public JpfResponseDto getOne(ModifyBrangainRechargeorderRequest rechargeorderRequest)
+    {
+        PayShopBargainRechargeOrderExample example = new PayShopBargainRechargeOrderExample();
+        PayShopBargainRechargeOrderExample.Criteria c = example.createCriteria();
+
+        c.andForeignOrderNoEqualTo(rechargeorderRequest.getForeignOrderNo());
+
+        List<PayShopBargainRechargeOrder> list = payShopBargainRechargeOrderMapper.selectByExample(example);
+        if(list ==null || list.size() <= 0 ){
+            return null;
+        }
+        return new JpfResponseDto();
+    }
+
 }

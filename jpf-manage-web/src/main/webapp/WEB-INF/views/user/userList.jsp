@@ -265,7 +265,7 @@
                     <tr>
                         <td>状态:</td>
                         <td>
-                            <select id="status_s" name="status" class="easyui-combobox">
+                            <select editable="false" id="status_s" name="status" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="0">正常</option>
                                 <option value="1">禁用</option>

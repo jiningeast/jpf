@@ -128,7 +128,7 @@
                         <td><input id="title" name="title" class="easyui-textbox" type="text" /></td>
                         <td>广告类型:</td>
                         <td>
-                            <select id="type_s" name="type" class="easyui-combobox">
+                            <select editable="false" id="type_s" name="type" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="0">首页图标</option>
                                 <option value="1">首页轮播图</option>

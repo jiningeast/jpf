@@ -2,10 +2,7 @@ package com.joiest.jpf.market.api.controller;
 
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopCompany;
-import com.joiest.jpf.common.util.AESUtils;
-import com.joiest.jpf.common.util.Base64CustomUtils;
-import com.joiest.jpf.common.util.SHA1;
-import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -64,6 +61,7 @@ public class ManagerLoginController {
                 map.put("merchNo",company.getMerchNo());
                 map.put("money",company.getMoney());
                 map.put("token",token);
+                map.put("date", DateUtils.getCurDate());
                 map.put("isFirst",company.getIsFirstLogin());
                 redisCustomServiceFacade.set(ConfigUtil.getValue("MARKETMANGER_LOGIN_KEY") + token, value,30*60);
                 //更新登录的状态值

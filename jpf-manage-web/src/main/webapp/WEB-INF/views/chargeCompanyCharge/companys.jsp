@@ -26,7 +26,7 @@
                     <tr>
                         <td>是否冻结:</td>
                         <td>
-                            <select id="isFreeze" name="isFreeze" class="easyui-combobox">
+                            <select editable="false" id="isFreeze" name="isFreeze" class="easyui-combobox">
                                 <option value="">全部</option>
                                 <option value="1">未冻结</option>
                                 <option value="2">已冻结</option>

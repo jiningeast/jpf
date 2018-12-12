@@ -165,7 +165,7 @@
                         </tr>--%>
                         <td>订单来源:</td>
                         <td>
-                            <select id="source" name="source" class="easyui-combobox" style="width: 70px;">
+                            <select editable="false" id="source" name="source" class="easyui-combobox" style="width: 70px;">
                                 <option value="">全部</option>
                                 <option value="0">自平台</option>
                                 <option value="1">敬恒</option>
