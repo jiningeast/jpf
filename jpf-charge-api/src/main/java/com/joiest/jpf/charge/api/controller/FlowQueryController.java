@@ -310,7 +310,12 @@ public class FlowQueryController {
 
         //查询商品信息
         ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(orderInfo.getProductId());
+        if( chargeProductInfo ==null ){
+            responseMap.put("code",JpfInterfaceErrorInfo.GOODLIST_IS_EMPTY.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.GOODLIST_IS_EMPTY.getDesc());
 
+            return JsonUtils.toJson(responseMap);
+        }
         //返回指定字段信息
         Map<String,String> responData = new HashMap<>();
         responData.put("OrderNo",orderInfo.getOrderNo());
