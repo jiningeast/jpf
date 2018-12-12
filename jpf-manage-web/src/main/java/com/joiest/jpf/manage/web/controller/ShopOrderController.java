@@ -141,7 +141,7 @@ public class ShopOrderController {
             exportExcel.createCell(row, ++k, data.get(rownum-1).getAmount() == null ? "" : String.valueOf(data.get(rownum-1).getAmount()));
             exportExcel.createCell(row, ++k, data.get(rownum-1).getTotalMoney() == null ? "" : String.valueOf(data.get(rownum-1).getTotalMoney()));
             exportExcel.createCell(row, ++k, data.get(rownum-1).getTotalDou() == null ? "" :String.valueOf(data.get(rownum-1).getTotalDou()));
-            exportExcel.createCell(row, ++k, URLDecoder.decode(data.get(rownum-1).getCustomerName(),"UTF-8"));
+            exportExcel.createCell(row, ++k, URLDecoder.decode(StringUtils.isBlank(data.get(rownum-1).getCustomerName()) ? "" : data.get(rownum-1).getCustomerName(),"UTF-8"));
             exportExcel.createCell(row, ++k, data.get(rownum-1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime()));
             exportExcel.createCell(row, ++k, data.get(rownum-1).getPaytime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getPaytime()));
             if(data.get(rownum-1).getStatus() == null){
