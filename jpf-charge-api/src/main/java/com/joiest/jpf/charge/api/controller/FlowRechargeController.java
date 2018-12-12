@@ -422,6 +422,11 @@ public class FlowRechargeController {
                 LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
                 return "N";
             }
+            if(orderInfo.getStatus()!=1){
+                sbf.append("\n描述： 订单ID：" + request.getSporder_id() + "已处理");
+                LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+                return "N";
+            }
             //添加流水
             ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
             chargeInterfaceStreamInfo.setOrderId(orderInfo.getId());
