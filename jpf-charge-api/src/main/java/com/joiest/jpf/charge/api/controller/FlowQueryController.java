@@ -310,7 +310,12 @@ public class FlowQueryController {
 
         //查询商品信息
         ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(orderInfo.getProductId());
+        if( chargeProductInfo ==null ){
+            responseMap.put("code",JpfInterfaceErrorInfo.GOODLIST_IS_EMPTY.getCode());
+            responseMap.put("info",JpfInterfaceErrorInfo.GOODLIST_IS_EMPTY.getDesc());
 
+            return JsonUtils.toJson(responseMap);
+        }
         //返回指定字段信息
         Map<String,String> responData = new HashMap<>();
         responData.put("OrderNo",orderInfo.getOrderNo());
@@ -322,26 +327,40 @@ public class FlowQueryController {
         String statusCn = "";
         switch (orderInfo.getStatus()){
             case 0:
-                statusCn = "下单成功";
+                statusCn = "充值中";
+                orderInfo.setStatus((byte)1);
                 break;
             case 1:
                 statusCn = "充值中";
+                orderInfo.setStatus((byte)1);
                 break;
             case 2:
                 statusCn = "充值成功";
+                orderInfo.setStatus((byte)2);
                 break;
             case 3:
                 statusCn = "充值失败";
+                orderInfo.setStatus((byte)3);
                 break;
             case 4:
-                statusCn = "申请退款";
+                statusCn = "充值失败";
+                orderInfo.setStatus((byte)3);
                 break;
             case 5:
-                statusCn = "退款成功";
+                statusCn = "充值失败";
+                orderInfo.setStatus((byte)3);
                 break;
             case 6:
-                statusCn = "拒绝退款";
+                statusCn = "充值失败";
+                orderInfo.setStatus((byte)3);
                 break;
+            case 7:
+                statusCn = "充值失败";
+                orderInfo.setStatus((byte)3);
+                break;
+            default:
+                statusCn = "充值中";
+                orderInfo.setStatus((byte)1);
         }
         responData.put("status",""+orderInfo.getStatus());
         responData.put("statusCn",statusCn);
