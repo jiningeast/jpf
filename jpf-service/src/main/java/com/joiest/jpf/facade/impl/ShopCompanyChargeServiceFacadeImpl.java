@@ -133,14 +133,14 @@ public class ShopCompanyChargeServiceFacadeImpl implements ShopCompanyChargeServ
         if( request.getImgUrl().equals("") ||  request.getImgUrl()== null  ){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "图片不能为空");
         }
-        BigDecimal resultMoney;
+      /*  BigDecimal resultMoney;
         BigDecimal roteMoney;
         roteMoney=request.getContractMoney().multiply(request.getRate().divide(new BigDecimal("100")));
         resultMoney=request.getContractMoney().subtract(roteMoney).setScale(2,BigDecimal.ROUND_HALF_DOWN);
         //金额校验
         if(request.getMoney().compareTo(resultMoney)!=0){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "金额校验失败");
-        }
+        }*/
         Date curretDate = new Date();
         PayShopCompanyCharge payShopCompanyCharge = new PayShopCompanyCharge();
         payShopCompanyCharge.setCompanyId(request.getCompanyId());

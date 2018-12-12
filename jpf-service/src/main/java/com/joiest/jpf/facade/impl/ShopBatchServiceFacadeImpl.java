@@ -154,12 +154,12 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             jpfResponseDto.setRetMsg("商户余额不足");
             return jpfResponseDto;
         }
-        if(payShopCompanyCharge.getBalance().compareTo(new BigDecimal(totalMoney+""))<0){
+     /*   if(payShopCompanyCharge.getBalance().compareTo(new BigDecimal(totalMoney+""))<0){
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("10004");
             jpfResponseDto.setRetMsg("所选合同余额不足");
             return jpfResponseDto;
-        }
+        }*/
         payShopBatch.setMoney(new BigDecimal(totalMoney));
         payShopBatch.setScale(1.00);
         payShopBatch.setCount(totalCount);
