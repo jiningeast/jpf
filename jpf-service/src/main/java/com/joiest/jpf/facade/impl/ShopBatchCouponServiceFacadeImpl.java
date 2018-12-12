@@ -505,19 +505,21 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         }
 
         //查询订单的详情
-        PayShopCouponOrderInfoExample example1 = new PayShopCouponOrderInfoExample();
-        PayShopCouponOrderInfoExample.Criteria criteria1 = example1.createCriteria();
-        example1.setOrderByClause(" price asc");
-        criteria1.andOrderIdEqualTo(payShopBatchCoupons.get(0).getOrderId());
-        List<PayShopCouponOrderInfo> payShopCouponOrderInfos =payShopCouponOrderInfoMapper.selectByExample(example1);
-        StringBuilder stringBuilder = new StringBuilder("商户发送请求共"+payShopCouponOrderInfos.size()+"条记录;-");
-        for (PayShopCouponOrderInfo payShopCouponOrderInfo:payShopCouponOrderInfos) {
-            stringBuilder.append("面值"+payShopCouponOrderInfo.getPrice()+","+payShopCouponOrderInfo.getNumber()+"笔-");
-        }
         PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = new PayShopBatchCouponResultInfo();
-        payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCouponResult);
-        payShopBatchCouponResultInfo.setTotal(count);
-        payShopBatchCouponResultInfo.setMsg(stringBuilder.toString());
+        if(payShopBatchCoupons!=null&&payShopBatchCoupons.size()!=0){
+            PayShopCouponOrderInfoExample example1 = new PayShopCouponOrderInfoExample();
+            PayShopCouponOrderInfoExample.Criteria criteria1 = example1.createCriteria();
+            example1.setOrderByClause(" price asc");
+            criteria1.andOrderIdEqualTo(payShopBatchCoupons.get(0).getOrderId());
+            List<PayShopCouponOrderInfo> payShopCouponOrderInfos =payShopCouponOrderInfoMapper.selectByExample(example1);
+            StringBuilder stringBuilder = new StringBuilder("商户发送请求共"+payShopCouponOrderInfos.size()+"条记录;-");
+            for (PayShopCouponOrderInfo payShopCouponOrderInfo:payShopCouponOrderInfos) {
+                stringBuilder.append("面值"+payShopCouponOrderInfo.getPrice()+","+payShopCouponOrderInfo.getNumber()+"笔-");
+            }
+            payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCouponResult);
+            payShopBatchCouponResultInfo.setTotal(count);
+            payShopBatchCouponResultInfo.setMsg(stringBuilder.toString());
+        }
         return payShopBatchCouponResultInfo;
     }
 
