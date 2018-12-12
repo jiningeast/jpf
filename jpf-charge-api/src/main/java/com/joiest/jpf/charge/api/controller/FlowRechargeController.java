@@ -335,25 +335,27 @@ public class FlowRechargeController {
         rechargeMap.put("sporder_id", actParam.get("selfOrder"));
         rechargeMap.put("sporder_time", new Date());
         rechargeMap.put("game_userid", actParam.get("phone"));
-        rechargeMap.put("buyNum", "1");     //暂定为 1
+        //暂定为 1
+        rechargeMap.put("buyNum", "1");
         rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
         try {
             responseMap = new OfpayUtils().chargePhone(rechargeMap);
         } catch (Exception e) {
             logger.error("话费直充欧非接口报错"+e.getMessage());
-        } finally{
-            resultMap.put("orderid",responseMap.get("orderid"));//欧非订单号
-            resultMap.put("requestUrl",responseMap.get("requestUrl"));
-            resultMap.put("requestParam",responseMap.get("requestParam"));
-            resultMap.put("responseParam",responseMap.get("responseParam"));
-            // 欧飞接口返回处理
-            if (responseMap.containsKey("retcode") && "1".equals(responseMap.get("retcode"))) {
-                resultMap.put("code","10000");
-            } else {
-                resultMap.put("code","10008");
-            }
-            return resultMap;
         }
+        //欧非订单号
+        resultMap.put("orderid",responseMap.get("orderid"));
+        resultMap.put("requestUrl",responseMap.get("requestUrl"));
+        resultMap.put("requestParam",responseMap.get("requestParam"));
+        resultMap.put("responseParam",responseMap.get("responseParam"));
+        // 欧飞接口返回处理
+        if (responseMap.containsKey("retcode") && "1".equals(responseMap.get("retcode"))) {
+            resultMap.put("code","10000");
+        } else {
+            resultMap.put("code","10008");
+        }
+        return resultMap;
+
     }
     /**
      * 话费直充 微能
@@ -380,15 +382,14 @@ public class FlowRechargeController {
             resultMap.put("responseParam",actualDeal.get("responseParam")==null?"":actualDeal.get("responseParam").toString());
         } catch (Exception e) {
             logger.error("微能的话费直充接口报错了"+e.getMessage());
-        } finally {
-            if(responseDeal!=null&&"10000".equals(responseDeal.get("code"))&&actualDeal!=null){
-                resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
-                resultMap.put("code","10000");
-            }else{
-                resultMap.put("code","10008");
-            }
-            return resultMap;
         }
+        if(responseDeal!=null&&"10000".equals(responseDeal.get("code"))&&actualDeal!=null){
+            resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
+            resultMap.put("code","10000");
+        }else{
+            resultMap.put("code","10008");
+        }
+        return resultMap;
     }
     /**
      * 欧非话费充值异步回调接口
@@ -418,6 +419,11 @@ public class FlowRechargeController {
             ChargeOrderInfo orderInfo = chargeOrderServiceFacade.getOne(payChargeOrder);//request.getSporder_id()
             if (orderInfo == null){
                 sbf.append("\n描述： 订单ID：" + request.getSporder_id() + "不存在");
+                LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
+                return "N";
+            }
+            if(orderInfo.getStatus()!=1){
+                sbf.append("\n描述： 订单ID：" + request.getSporder_id() + "已处理");
                 LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
                 return "N";
             }
@@ -712,26 +718,27 @@ public class FlowRechargeController {
         rechargeMap.put("sporder_time", new Date());
         rechargeMap.put("game_userid", actParam.get("cardNo"));
         rechargeMap.put("chargeType", actParam.get("chargeType"));
-        rechargeMap.put("buyNum", "1");//暂定为 1
+        //暂定为 1
+        rechargeMap.put("buyNum", "1");
         rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
 
         try {
             responseMap = new OfpayUtils().chargeGas(rechargeMap);
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally{
-            resultMap.put("orderid",responseMap.get("orderid"));//欧非订单号
-            resultMap.put("requestUrl",responseMap.get("requestUrl"));
-            resultMap.put("requestParam",responseMap.get("requestParam"));
-            resultMap.put("responseParam",responseMap.get("responseParam"));
-            // 欧飞接口返回处理
-            if (responseMap.containsKey("retcode") && "1".equals(responseMap.get("retcode"))) {
-                resultMap.put("code","10000");
-            } else {
-                resultMap.put("code","10008");
-            }
-            return resultMap;
+          logger.error("油卡充值的接口报错了"+e.getMessage());
         }
+        //欧非订单号
+        resultMap.put("orderid",responseMap.get("orderid"));
+        resultMap.put("requestUrl",responseMap.get("requestUrl"));
+        resultMap.put("requestParam",responseMap.get("requestParam"));
+        resultMap.put("responseParam",responseMap.get("responseParam"));
+        // 欧飞接口返回处理
+        if (responseMap.containsKey("retcode") && "1".equals(responseMap.get("retcode"))) {
+            resultMap.put("code","10000");
+        } else {
+            resultMap.put("code","10008");
+        }
+        return resultMap;
     }
     public Boolean oilOrderVal(Map actParam){
 

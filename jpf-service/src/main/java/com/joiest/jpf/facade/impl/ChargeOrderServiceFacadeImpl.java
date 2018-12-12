@@ -294,10 +294,46 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         //example.setPageSize(1);
 
         PayChargeOrderExample.Criteria c =example.createCriteria();
-        //c.andStatusEqualTo((byte)request.getStatus());
+        c.andStatusEqualTo((byte)request.getStatus());
         //c.andInterfaceTypeEqualTo(request.getInterfaceType());
         //c.andPaytimeLessThanOrEqualTo(request.getPaytime());
-        c.andInterfaceOrderNoIsNull();
+        //c.andInterfaceOrderNoIsNull();
+       if( !StringUtils.isBlank(request.getCompanyId())){
+           c.andCompanyIdEqualTo(request.getCompanyId());
+       }
+
+        List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
+        if( list.size() <=0 || list == null){
+            return null;
+        }
+        List<ChargeOrderInfo> infoList = new ArrayList<>();
+
+        for (PayChargeOrder one : list)
+        {
+            ChargeOrderInfo info = new ChargeOrderInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
+            beanCopier.copy(one, info, null);
+            infoList.add(info);
+        }
+
+        return infoList;
+    }
+
+
+    /**
+     * 所有指定商户异常订单处理
+     */
+    @Override
+    public List<ChargeOrderInfo>  getAllAbnormalOrders(ChargeOrderInfo request)
+    {
+
+        PayChargeOrderExample example = new PayChargeOrderExample();
+        example.setOrderByClause("addtime ASC");
+        //example.setPageNo(1);
+        //example.setPageSize(1);
+
+        PayChargeOrderExample.Criteria c =example.createCriteria();
+        c.andCompanyIdEqualTo(request.getCompanyId());
 
         List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
         if( list.size() <=0 || list == null){

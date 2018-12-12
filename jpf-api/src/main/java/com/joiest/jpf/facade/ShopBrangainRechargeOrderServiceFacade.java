@@ -15,6 +15,11 @@ public interface ShopBrangainRechargeOrderServiceFacade {
     public JpfResponseDto insertInfo(ModifyBrangainRechargeorderRequest rechargeorderRequest);
 
     /**
+     * 数据入库
+     */
+    public JpfResponseDto getOne(ModifyBrangainRechargeorderRequest rechargeorderRequest);
+
+    /**
      * 获取未完成订单数据
      * @return
      */
