@@ -245,23 +245,6 @@ public class ChargeOrderController {
         request.setStatusParam(requestStatusMap);
         request.setPage(0);
         request.setRows(0);
-        boolean flag = StringUtils.isBlank(request.getAddtimeEnd()) 
-                    && StringUtils.isBlank(request.getAddtimeStart())
-                    && StringUtils.isBlank(request.getOrderNo())
-                    && StringUtils.isBlank(request.getForeignOrderNo())
-                    && StringUtils.isBlank(request.getCompanyId())
-                    && StringUtils.isBlank(request.getCompanyName())
-                    && StringUtils.isBlank(request.getMerchNo())
-                    && StringUtils.isBlank(request.getChargePhone())
-                    && StringUtils.isBlank(request.getProductId())
-                    && StringUtils.isBlank(request.getProductName())
-                    && request.getInterfaceType() == null
-                    && request.getStatus() == null
-                    && StringUtils.isBlank(request.getInterfaceOrderNo());
-        if(flag){
-            request.setAddtimeStart(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getBeforeDayTimeReturnDate(1)));
-            request.setAddtimeEnd(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        }
         GetChargeOrderResponse chargeOrderResponse = chargeOrderServiceFacade.getRecords(request);
         if(chargeOrderResponse.getList() == null || chargeOrderResponse.getList().isEmpty()){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");

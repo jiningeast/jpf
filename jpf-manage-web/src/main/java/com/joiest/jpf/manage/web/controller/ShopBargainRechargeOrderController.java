@@ -63,20 +63,6 @@ public class ShopBargainRechargeOrderController {
         request.setInfoStatusMap(requestInfoStatusMap);
         request.setPage(0);
         request.setRows(0);
-        
-        boolean flag = StringUtils.isBlank(request.getAddtimeEnd()) 
-                    && StringUtils.isBlank(request.getAddtimeStart())
-                    && StringUtils.isBlank(request.getOrderNo())
-                    && request.getOrderType() == null
-                    && StringUtils.isBlank(request.getForeignOrderNo())
-                    && StringUtils.isBlank(request.getItemName())
-                    && StringUtils.isBlank(String.valueOf(request.getFacePrice()))
-                    && request.getInfoStatus() == null;
-        
-        if(flag){
-            request.setAddtimeStart(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getBeforeDayTimeReturnDate(1)));
-            request.setAddtimeEnd(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        }
         GetShopBargainRechargeOrderResponse shopBargainRechargeOrderResponse = shopBargainRechargeOrderServiceFacade.getRecords(request);
         List<ShopBargainRechargeOrderInfo> list = shopBargainRechargeOrderResponse.getList();
         if(list == null || list.isEmpty()){

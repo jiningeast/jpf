@@ -87,19 +87,6 @@ public class ShopOrderController {
         request.setOrderStatusParam(requestOrderStatusMap);
         request.setPage(0);
         request.setRows(0);
-        
-        boolean flag = StringUtils.isBlank(request.getAddtimeEnd()) 
-                    && StringUtils.isBlank(request.getAddtimeStart())
-                    && StringUtils.isBlank(request.getProductName())
-                    && request.getSource() == null
-                    && StringUtils.isBlank(request.getOrderNo())
-                    && StringUtils.isBlank(request.getPaytimeStart())
-                    && StringUtils.isBlank(request.getPaytimeStart())
-                    && request.getStatus() == null;
-        if(flag){
-            request.setAddtimeStart(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getBeforeDayTimeReturnDate(1)));
-            request.setAddtimeEnd(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        }
         GetShopOrderResponse shopOrderResponse= shopOrderServiceFacade.getList(request);
         if(shopOrderResponse.getList() == null || shopOrderResponse.getList().isEmpty()){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
