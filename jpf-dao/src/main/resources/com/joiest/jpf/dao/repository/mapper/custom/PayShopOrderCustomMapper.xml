@@ -816,11 +816,13 @@
       a.interface_type,
       a.source
     from 
-      pay_shop_order a,pay_shop_product_info b 
-    where 
+      pay_shop_order a 
+    LEFT JOIN  
+      pay_shop_product_info b 
+    ON  
       a.product_info_id = b.id
     <if test="_parameter != null">
-    <include refid="Example_Where_Clause_Custom" />
+      <include refid="Example_Where_Clause_Custom" />
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
