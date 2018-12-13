@@ -18,4 +18,6 @@ public interface ShopOrderServiceFacade {
      */
 
     public ShopOrderInfo getOne(String orderNo);
+
+    GetShopOrderResponse getExcelList(GetShopOrderRequest request);
 }

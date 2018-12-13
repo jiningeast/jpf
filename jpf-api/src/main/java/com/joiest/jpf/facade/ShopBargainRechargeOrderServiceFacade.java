@@ -24,4 +24,5 @@ public interface ShopBargainRechargeOrderServiceFacade {
      */
     List<PayShopBargainRechargeOrder> pushDataToRedisTask(long querySize);
 
+    GetShopBargainRechargeOrderResponse getRecordsExcel(GetShopBargainRechargeOrderRequest request);
 }

@@ -83,4 +83,6 @@ public interface PayShopBargainRechargeOrderMapper {
      * @param record
      */
     int updateByPrimaryKey(PayShopBargainRechargeOrder record);
+    
+    List<PayShopBargainRechargeOrder> selectByExampleExcel(PayShopBargainRechargeOrderExample e);
 }

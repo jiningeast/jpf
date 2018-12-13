@@ -63,7 +63,7 @@ public class ShopBargainRechargeOrderController {
         request.setInfoStatusMap(requestInfoStatusMap);
         request.setPage(0);
         request.setRows(0);
-        GetShopBargainRechargeOrderResponse shopBargainRechargeOrderResponse = shopBargainRechargeOrderServiceFacade.getRecords(request);
+        GetShopBargainRechargeOrderResponse shopBargainRechargeOrderResponse = shopBargainRechargeOrderServiceFacade.getRecordsExcel(request);
         List<ShopBargainRechargeOrderInfo> list = shopBargainRechargeOrderResponse.getList();
         if(list == null || list.isEmpty()){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
@@ -126,7 +126,6 @@ public class ShopBargainRechargeOrderController {
                 infoStatus = "已绑定";
             }
             exportExcel.createCell(row, ++k, infoStatus);
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getModule());
         }
         String fileName = "敬恒充值订单列表-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx";
         return exportExcel.writeIntoExcel(fileName, response, xssfWorkbook, path, type, res);
@@ -150,7 +149,6 @@ public class ShopBargainRechargeOrderController {
         firstTitles.put(9, "充值号");
         firstTitles.put(10, "拉取时间");
         firstTitles.put(11, "绑定状态");
-        firstTitles.put(12, "敬恒返回信息");
         return firstTitles;
     }
 }

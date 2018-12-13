@@ -87,7 +87,7 @@ public class ShopOrderController {
         request.setOrderStatusParam(requestOrderStatusMap);
         request.setPage(0);
         request.setRows(0);
-        GetShopOrderResponse shopOrderResponse= shopOrderServiceFacade.getList(request);
+        GetShopOrderResponse shopOrderResponse= shopOrderServiceFacade.getExcelList(request);
         if(shopOrderResponse.getList() == null || shopOrderResponse.getList().isEmpty()){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
         }

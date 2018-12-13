@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -245,7 +246,7 @@ public class ChargeOrderController {
         request.setStatusParam(requestStatusMap);
         request.setPage(0);
         request.setRows(0);
-        GetChargeOrderResponse chargeOrderResponse = chargeOrderServiceFacade.getRecords(request);
+        GetChargeOrderResponse chargeOrderResponse = chargeOrderServiceFacade.getExcelRecords(request);
         if(chargeOrderResponse.getList() == null || chargeOrderResponse.getList().isEmpty()){
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
         }
@@ -312,10 +313,6 @@ public class ChargeOrderController {
                 }
             }
             exportExcel.createCell(row, ++k, status);
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getRequestParams());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getNotifyUrl());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getNotifyParams());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getNotifyTime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getNotifyTime()));
             exportExcel.createCell(row, ++k, data.get(rownum-1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime()));
             exportExcel.createCell(row, ++k, data.get(rownum-1).getUpdatetime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getUpdatetime()));
         }
@@ -341,12 +338,8 @@ public class ChargeOrderController {
         firstTitles.put(9, "接口类型");
         firstTitles.put(10, "上游订单号");
         firstTitles.put(11, "订单状态");
-        firstTitles.put(12, "下游请求参数");
-        firstTitles.put(13, "异步回调地址");
-        firstTitles.put(14, "异步回调参数");
-        firstTitles.put(15, "异步回调时间");
-        firstTitles.put(16, "添加时间");
-        firstTitles.put(17, "更新时间");
+        firstTitles.put(12, "添加时间");
+        firstTitles.put(13, "更新时间");
         return firstTitles;
     }
 }
