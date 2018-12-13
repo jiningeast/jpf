@@ -317,7 +317,7 @@ public class ShopBatchController {
             payShopBatchCouponResultInfo = shopBatchCouponServiceFacade.getCouponsByOrderId(map);
         } catch (Exception e) {
             logger.error("getCouponInfo "+e.getMessage());
-            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"删除失败", null);
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(),"查询失败", null);
         }
          return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"查询成功", payShopBatchCouponResultInfo);
      }
