@@ -116,6 +116,7 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("10001");
             jpfResponseDto.setRetMsg("商户已停用，无法继续操作");
+            logger.info("商户已停用，无法继续操作");
             return jpfResponseDto;
         }
         PayShopCompanyCharge payShopCompanyCharge = payShopCompanyChargeMapper.selectByPrimaryKey(shopBatchRequest.getContractId());
@@ -123,14 +124,16 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("10002");
             jpfResponseDto.setRetMsg("所选合同不存在");
+            logger.info("所选合同不存在");
             return jpfResponseDto;
         }
-        if(payShopCompanyCharge.getBalance().compareTo(new BigDecimal(0))==0){
+       /* if("0.00".equals(payShopCompanyCharge.getBalance().toString())){
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("10003");
             jpfResponseDto.setRetMsg("所选合同已经没有余额");
+            logger.info("所选合同已经没有余额");
             return jpfResponseDto;
-        }
+        }*/
         // 添加批次
         PayShopBatch payShopBatch = new PayShopBatch();
         payShopBatch.setCompanyId(shopBatchRequest.getCompanyId());
@@ -154,12 +157,12 @@ public class ShopBatchServiceFacadeImpl implements ShopBatchServiceFacade {
             jpfResponseDto.setRetMsg("商户余额不足");
             return jpfResponseDto;
         }
-        if(payShopCompanyCharge.getBalance().compareTo(new BigDecimal(totalMoney+""))<0){
+     /*   if(payShopCompanyCharge.getBalance().compareTo(new BigDecimal(totalMoney+""))<0){
             JpfResponseDto jpfResponseDto = new JpfResponseDto();
             jpfResponseDto.setRetCode("10004");
             jpfResponseDto.setRetMsg("所选合同余额不足");
             return jpfResponseDto;
-        }
+        }*/
         payShopBatch.setMoney(new BigDecimal(totalMoney));
         payShopBatch.setScale(1.00);
         payShopBatch.setCount(totalCount);
