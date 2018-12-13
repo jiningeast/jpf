@@ -505,19 +505,21 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         }
 
         //查询订单的详情
-        PayShopCouponOrderInfoExample example1 = new PayShopCouponOrderInfoExample();
-        PayShopCouponOrderInfoExample.Criteria criteria1 = example1.createCriteria();
-        example1.setOrderByClause(" price asc");
-        criteria1.andOrderIdEqualTo(payShopBatchCoupons.get(0).getOrderId());
-        List<PayShopCouponOrderInfo> payShopCouponOrderInfos =payShopCouponOrderInfoMapper.selectByExample(example1);
-        StringBuilder stringBuilder = new StringBuilder("商户发送请求共"+payShopCouponOrderInfos.size()+"条记录;-");
-        for (PayShopCouponOrderInfo payShopCouponOrderInfo:payShopCouponOrderInfos) {
-            stringBuilder.append("面值"+payShopCouponOrderInfo.getPrice()+","+payShopCouponOrderInfo.getNumber()+"笔-");
-        }
         PayShopBatchCouponResultInfo payShopBatchCouponResultInfo = new PayShopBatchCouponResultInfo();
-        payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCouponResult);
-        payShopBatchCouponResultInfo.setTotal(count);
-        payShopBatchCouponResultInfo.setMsg(stringBuilder.toString());
+        if(payShopBatchCoupons!=null&&payShopBatchCoupons.size()!=0){
+            PayShopCouponOrderInfoExample example1 = new PayShopCouponOrderInfoExample();
+            PayShopCouponOrderInfoExample.Criteria criteria1 = example1.createCriteria();
+            example1.setOrderByClause(" price asc");
+            criteria1.andOrderIdEqualTo(payShopBatchCoupons.get(0).getOrderId());
+            List<PayShopCouponOrderInfo> payShopCouponOrderInfos =payShopCouponOrderInfoMapper.selectByExample(example1);
+            StringBuilder stringBuilder = new StringBuilder("商户发送请求共"+payShopCouponOrderInfos.size()+"条记录;-");
+            for (PayShopCouponOrderInfo payShopCouponOrderInfo:payShopCouponOrderInfos) {
+                stringBuilder.append("面值"+payShopCouponOrderInfo.getPrice()+","+payShopCouponOrderInfo.getNumber()+"笔-");
+            }
+            payShopBatchCouponResultInfo.setPayShopBatchCoupons(payShopBatchCouponResult);
+            payShopBatchCouponResultInfo.setTotal(count);
+            payShopBatchCouponResultInfo.setMsg(stringBuilder.toString());
+        }
         return payShopBatchCouponResultInfo;
     }
 
@@ -562,14 +564,16 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
         couponCriteria.andIsActiveEqualTo((byte)0);
         couponCriteria.andIsExpiredEqualTo((byte)0);
         List<PayShopBatchCoupon> findCoupons = payShopBatchCouponMapper.selectByExample(couponExample);
+        Iterator<PayShopBatchCoupon> iterator = findCoupons.iterator();
         for (int i=0; i<list.size(); i++) {
-            for (PayShopBatchCoupon payShopBatchCoupon: findCoupons) {
-                LinkedHashMap<String,Object> singlePerson = list.get(i);
-                String name = singlePerson.get("name").toString();
-                String phone = singlePerson.get("phone").toString();
-                String value = singlePerson.get("dou").toString();
-                String idno = singlePerson.get("idno") == null ? "" : singlePerson.get("idno").toString();
-                if(payShopBatchCoupon.getDou().compareTo(new BigDecimal(value))==0){
+            LinkedHashMap<String,Object> singlePerson = list.get(i);
+            String name = singlePerson.get("name").toString();
+            String phone = singlePerson.get("phone").toString();
+            String value = singlePerson.get("dou").toString();
+            String idno = singlePerson.get("idno") == null ? "" : singlePerson.get("idno").toString();
+            while(iterator.hasNext()){
+                PayShopBatchCoupon payShopBatchCoupon =iterator.next();
+                if(payShopBatchCoupon.getDou().compareTo(new BigDecimal(value))==0&&payShopBatchCoupon.getSendType()==null){
                     ShopBatchCouponInfo shopBatchCouponInfo = new ShopBatchCouponInfo();
                     shopBatchCouponInfo.setActivePhone(list.get(i).get("phone").toString());
                     shopBatchCouponInfo.setActiveCode(payShopBatchCoupon.getActiveCode());
@@ -594,6 +598,8 @@ public class ShopBatchCouponServiceFacadeImpl implements ShopBatchCouponServiceF
                     //增加保留欣券的id
                     payShopConponExcel.setCouponId(payShopBatchCoupon.getId());
                     payShopConponExcelMapper.insertSelective(payShopConponExcel);
+                    iterator.remove();
+                    break;
                 }
             }
         }

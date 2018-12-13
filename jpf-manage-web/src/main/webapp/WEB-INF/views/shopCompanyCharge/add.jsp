@@ -12,7 +12,7 @@
 <body>
 <!-- 添加弹出窗口 -->
 <div class="easyui-layout" fit="true">
-    <div id="formDiv1" class="easyui-panel"  style="padding: 10px; background: #fff; border: 1px solid #ccc;">
+    <div id="formDiv1" class="easyui-panel"  style="padding: 10px; background: #fff; border: 1px solid #ccc;overflow-y:auto;height: 450px" >
         <form id="auditForm" method="post" enctype="multipart/form-data">
             <table cellpadding=3 class="table table-bordered">
                 <tr>
@@ -40,22 +40,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">合同金额：</td>
+                    <td style="text-align: right;background-color: #f1f1f1;">欣券金额：</td>
                     <td>
-                        <input id="contractMoney" name="contractMoney" type="text"   data-options="onChange:getRealMoney"  missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
+                        <input id="couponMoney" name="couponMoney" type="text"   data-options="required:true,onChange:getFuMoney"  missingMessage="请填写欣券金额"  width="120" class="easyui-numberbox" precision="2" />
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">费率：</td>
                     <td>
                         <input id="rate" name="rate" type="text"
-                               width="120" class="easyui-numberbox" precision="2"  value="0" data-options="required:true,onChange:getRealMoney"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;background-color: #f1f1f1;">欣券金额：</td>
-                    <td>
-                        <input id="couponMoney" name="couponMoney" type="text"   data-options="required:true" readonly="readonly" missingMessage="请填写欣券金额"  width="120" class="easyui-numberbox" precision="2" />
+                               width="120" class="easyui-numberbox" precision="2"  value="0" data-options="required:true,onChange:getFuMoney"/>&nbsp;&nbsp;<span style="color: #FF2F2F">%</span>
                     </td>
                 </tr>
                 <tr>
@@ -64,7 +58,12 @@
                         <input id="serviceMoney" name="serviceMoney" type="text"   data-options="required:true" readonly="readonly"  missingMessage="请填写服务费金额"  width="120" class="easyui-numberbox" precision="2" />
                     </td>
                 </tr>
-
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">合同金额：</td>
+                    <td>
+                        <input id="contractMoney" name="contractMoney" type="text"  readonly="readonly"   missingMessage=""  width="120" class="easyui-numberbox" precision="2" />
+                    </td>
+                </tr>
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">实际到帐金额：</td>
                     <td>
@@ -131,8 +130,19 @@
         });
     }
 
+    function getFuMoney(){
+        var fuMoney=$("#couponMoney").val();
+        var rote = ( $("#rate").val() );
+        var calculate = (fuMoney * rote)/100;
+        //设置服务费
+        $("#serviceMoney").textbox("setValue",calculate);
+        $("#contractMoney").textbox("setValue",(parseFloat(calculate)+parseFloat(fuMoney)).toFixed(2));
+        $("#moneyCopy").textbox("setValue",fuMoney);
+        $("#money").val(fuMoney);
+    }
+
     // 计算实际到帐金额
-    function getRealMoney() {
+ /*   function getRealMoney() {
 
         var moneyrel = parseInt( $("#contractMoney").val() );
         var rote = ( $("#rate").val() );
@@ -145,7 +155,7 @@
             $("#money").val(money);
 
         }
-    }
+    }*/
     $(function () {
         // 选取公司按钮
         $("#searchCompany").linkbutton({

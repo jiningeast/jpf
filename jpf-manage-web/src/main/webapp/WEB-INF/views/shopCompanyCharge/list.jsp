@@ -11,7 +11,7 @@
             $('#infoDiv').window({
                 title:'详情',
                 width:'80%',
-                height:'500px',
+                height:'600px',
                 closed:true,
                 modal:true
             });
