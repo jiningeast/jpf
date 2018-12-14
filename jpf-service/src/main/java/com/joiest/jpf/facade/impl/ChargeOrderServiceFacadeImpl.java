@@ -2,7 +2,9 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.util.WnpayUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeOrderMapper;
 import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
@@ -10,7 +12,10 @@ import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
 import com.joiest.jpf.entity.ChargeOrderInfo;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -20,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
+    private static final Logger logger = LogManager.getLogger(ChargeOrderServiceFacadeImpl.class);
 
     @Autowired
     private PayChargeOrderMapper payChargeOrderMapper;
@@ -382,6 +388,42 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         }
 
         return infoList;
+    }
+
+    @Override
+    public Map<String, String> phoneRechargeWn(Map<String, String> actParam) {
+        Map<String, String> resultMap = new HashMap<>();
+        //充值接口
+        JSONObject requestParam = new JSONObject();
+        requestParam.put("mobile",actParam.get("phone"));
+        requestParam.put("productId",actParam.get("forProductId"));
+        requestParam.put("outOrderId",actParam.get("selfOrder"));
+
+        String wnProduct = null;
+        JSONObject responseDeal=null;
+        JSONObject actualDeal=null;
+        try {
+            WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+            wnProduct = wnpayUtils.flowOrder(requestParam);
+            responseDeal = JSONObject.fromObject(wnProduct);
+            actualDeal = JSONObject.fromObject(responseDeal.get("data").toString());
+            resultMap.put("requestUrl",actualDeal.get("requestUrl")==null?"":actualDeal.get("requestUrl").toString());
+            resultMap.put("requestParam",actualDeal.get("requestParam")==null?"":actualDeal.get("requestParam").toString());
+            resultMap.put("responseParam",actualDeal.get("responseParam")==null?"":actualDeal.get("responseParam").toString());
+            resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
+        } catch (Exception e) {
+            logger.error("self单号"+actParam.get("selfOrder")+"微能的话费直充接口报错了"+e.getMessage(),e);
+            responseDeal=new JSONObject();
+            responseDeal.put("code","10001`");
+        }
+        if(responseDeal!=null&&"10000".equals(responseDeal.get("code"))){
+            resultMap.put("code","10000");
+        }else if(responseDeal!=null&&"10001".equals(responseDeal.get("code"))){
+            resultMap.put("code","10001");
+        }else{
+            resultMap.put("code","10008");
+        }
+        return resultMap;
     }
 
 }

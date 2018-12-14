@@ -223,7 +223,7 @@ public class FlowRechargeController {
             chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
             actParam.put("forProductId",chargeProductInfo.getWnProductId());
             //请求微能接口
-            map = phoneRechargeWn(actParam);
+            map = chargeOrderServiceFacade.phoneRechargeWn(actParam);
             logger.info("weineng"+map.get("orderid"));
         }
         //添加流水
@@ -365,44 +365,46 @@ public class FlowRechargeController {
         return resultMap;
 
     }
+
     /**
      * 话费直充 微能
      */
-    private Map<String, String> phoneRechargeWn(Map<String,String> actParam)
-    {
-        Map<String, String> resultMap = new HashMap<>();
-        //充值接口
-        JSONObject requestParam = new JSONObject();
-        requestParam.put("mobile",actParam.get("phone"));
-        requestParam.put("productId",actParam.get("forProductId"));
-        requestParam.put("outOrderId",actParam.get("selfOrder"));
+//    private Map<String, String> phoneRechargeWn(Map<String,String> actParam)
+//    {
+//        Map<String, String> resultMap = new HashMap<>();
+//        //充值接口
+//        JSONObject requestParam = new JSONObject();
+//        requestParam.put("mobile",actParam.get("phone"));
+//        requestParam.put("productId",actParam.get("forProductId"));
+//        requestParam.put("outOrderId",actParam.get("selfOrder"));
+//
+//        String wnProduct = null;
+//        JSONObject responseDeal=null;
+//        JSONObject actualDeal=null;
+//        try {
+//            WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+//            wnProduct = wnpayUtils.flowOrder(requestParam);
+//            responseDeal = JSONObject.fromObject(wnProduct);
+//            actualDeal = JSONObject.fromObject(responseDeal.get("data").toString());
+//            resultMap.put("requestUrl",actualDeal.get("requestUrl")==null?"":actualDeal.get("requestUrl").toString());
+//            resultMap.put("requestParam",actualDeal.get("requestParam")==null?"":actualDeal.get("requestParam").toString());
+//            resultMap.put("responseParam",actualDeal.get("responseParam")==null?"":actualDeal.get("responseParam").toString());
+//            resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
+//        } catch (Exception e) {
+//            logger.error("self单号"+actParam.get("selfOrder")+"微能的话费直充接口报错了"+e.getMessage(),e);
+//            responseDeal=new JSONObject();
+//            responseDeal.put("code","10001`");
+//        }
+//        if(responseDeal!=null&&"10000".equals(responseDeal.get("code"))){
+//            resultMap.put("code","10000");
+//        }else if(responseDeal!=null&&"10001".equals(responseDeal.get("code"))){
+//            resultMap.put("code","10001");
+//        }else{
+//            resultMap.put("code","10008");
+//        }
+//        return resultMap;
+//    }
 
-        String wnProduct = null;
-        JSONObject responseDeal=null;
-        JSONObject actualDeal=null;
-        try {
-            WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
-            wnProduct = wnpayUtils.flowOrder(requestParam);
-            responseDeal = JSONObject.fromObject(wnProduct);
-            actualDeal = JSONObject.fromObject(responseDeal.get("data").toString());
-            resultMap.put("requestUrl",actualDeal.get("requestUrl")==null?"":actualDeal.get("requestUrl").toString());
-            resultMap.put("requestParam",actualDeal.get("requestParam")==null?"":actualDeal.get("requestParam").toString());
-            resultMap.put("responseParam",actualDeal.get("responseParam")==null?"":actualDeal.get("responseParam").toString());
-            resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
-        } catch (Exception e) {
-            logger.error("self单号"+actParam.get("selfOrder")+"微能的话费直充接口报错了"+e.getMessage(),e);
-            responseDeal=new JSONObject();
-            responseDeal.put("code","10001`");
-        }
-        if(responseDeal!=null&&"10000".equals(responseDeal.get("code"))){
-            resultMap.put("code","10000");
-        }else if(responseDeal!=null&&"10001".equals(responseDeal.get("code"))){
-            resultMap.put("code","10001");
-        }else{
-            resultMap.put("code","10008");
-        }
-        return resultMap;
-    }
     /**
      * 欧非话费充值异步回调接口
      * */
