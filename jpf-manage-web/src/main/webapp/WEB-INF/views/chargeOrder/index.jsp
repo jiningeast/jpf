@@ -65,6 +65,7 @@
                     {field:'chargePhone',title:'充值号码',width:"5%"},
                     {field:'productId',title:'产品id',width:"5%"},
                     {field:'productName',title:'产品名称',width:"5%"},
+                    {field:'productValue',title:'产品面值',width:"5%"},
                     {field:'productPrice',title:'产品单价',width:"5%"},
                     {field:'interfaceType',title:'接口类型',width:"5%",
                         formatter:function (value,row,index) {

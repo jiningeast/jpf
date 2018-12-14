@@ -44,9 +44,9 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         e.setPageSize(request.getRows());
         e.setOrderByClause("id DESC");
 
-        if (StringUtils.isNotBlank(request.getOrderNo())){
-            c.andOrderNoEqualTo(request.getOrderNo());
-        }
+//        if (StringUtils.isNotBlank(request.getOrderNo())){
+//            c.andOrderNoEqualTo(request.getOrderNo());
+//        }
         if(StringUtils.isNotBlank(request.getPullOrderNo())){
             c.andPullOrderNoEqualTo(request.getPullOrderNo());
         }
@@ -71,8 +71,11 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         if (StringUtils.isNotBlank(request.getAddtimeEnd()) && request.getAddtimeEnd() !=null) {
             c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(), DateUtils.DATEFORMATLONG));
         }
-        if ( request.getInfoStatus() != null && StringUtils.isNotBlank(""+request.getInfoStatus()) ){
-            c.andInfoStatusEqualTo(request.getInfoStatus());
+//        if ( request.getInfoStatus() != null && StringUtils.isNotBlank(""+request.getInfoStatus()) ){
+//            c.andInfoStatusEqualTo(request.getInfoStatus());
+//        }
+        if ( request.getMatchingStatus() != null && StringUtils.isNotBlank(String.valueOf(request.getMatchingStatus())) ){
+            c.andMatchingStatusEqualTo(request.getMatchingStatus());
         }
         int count = payShopBargainRechargeOrderMapper.countByExample(e);
         List<PayShopBargainRechargeOrder> list = payShopBargainRechargeOrderMapper.selectByExample(e);
@@ -167,6 +170,9 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         }
         if ( request.getInfoStatus() != null && StringUtils.isNotBlank(""+request.getInfoStatus()) ){
             c.andInfoStatusEqualTo(request.getInfoStatus());
+        }
+        if ( request.getMatchingStatus() != null && StringUtils.isNotBlank(""+request.getMatchingStatus()) ){
+            c.andMatchingStatusEqualTo(request.getMatchingStatus());
         }
         int count = payShopBargainRechargeOrderMapper.countByExample(e);
         List<PayShopBargainRechargeOrder> list = payShopBargainRechargeOrderMapper.selectByExampleExcel(e);

@@ -98,8 +98,7 @@ public class ShopBargainRechargeOrderController {
         for (int rownum = 1; rownum <= data.size(); rownum++) {
             Row row = sheet.createRow(rownum);
             int k = -1;
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getBoid() == null ? "" : String.valueOf(data.get(rownum-1).getBoid()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getOrderNo());
+            exportExcel.createCell(row, ++k, data.get(rownum - 1).getPullOrderNo());
             if(data.get(rownum - 1).getOrderType() == null){
                 orderType = "";
             }else if(data.get(rownum - 1).getOrderType() == 1){
@@ -137,18 +136,17 @@ public class ShopBargainRechargeOrderController {
      */
     private Map<Integer, Object> generateTitle(){
         Map<Integer, Object> firstTitles = new HashMap<>(13);
-        firstTitles.put(0, "转让订单id");
-        firstTitles.put(1, "转让订单号");
-        firstTitles.put(2, "订单类型");
-        firstTitles.put(3, "敬恒订单号");
-        firstTitles.put(4, "商品名称");
-        firstTitles.put(5, "单价");
-        firstTitles.put(6, "面值");
-        firstTitles.put(7, "数量");
-        firstTitles.put(8, "订单总金额");
-        firstTitles.put(9, "充值号");
-        firstTitles.put(10, "拉取时间");
-        firstTitles.put(11, "绑定状态");
+        firstTitles.put(0, "转让订单号");
+        firstTitles.put(1, "订单类型");
+        firstTitles.put(2, "敬恒订单号");
+        firstTitles.put(3, "商品名称");
+        firstTitles.put(4, "单价");
+        firstTitles.put(5, "面值");
+        firstTitles.put(6, "数量");
+        firstTitles.put(7, "订单总金额");
+        firstTitles.put(8, "充值号");
+        firstTitles.put(9, "拉取时间");
+        firstTitles.put(10, "匹配状态");
         return firstTitles;
     }
 }

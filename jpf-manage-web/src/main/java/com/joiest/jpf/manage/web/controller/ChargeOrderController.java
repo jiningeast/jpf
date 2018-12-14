@@ -288,7 +288,8 @@ public class ChargeOrderController {
             exportExcel.createCell(row, ++k, data.get(rownum-1).getChargePhone());
             exportExcel.createCell(row, ++k, data.get(rownum-1).getProductId());
             exportExcel.createCell(row, ++k, data.get(rownum-1).getProductName());
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getProductPrice() == null ? "" : String.valueOf(data.get(rownum-1).getProductPrice()));
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductValue() == null ? "" : String.valueOf(data.get(rownum-1).getProductValue()));
+            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductPrice() == null ? "" : String.valueOf(data.get(rownum-1).getProductPrice()));
             if(data.get(rownum - 1).getInterfaceType() == null){
                 interfaceType = "";
             }else if(data.get(rownum-1).getInterfaceType() == 0){
@@ -334,12 +335,13 @@ public class ChargeOrderController {
         firstTitles.put(5, "充值号码");
         firstTitles.put(6, "产品id");
         firstTitles.put(7, "产品名称");
-        firstTitles.put(8, "产品单价");
-        firstTitles.put(9, "接口类型");
-        firstTitles.put(10, "上游订单号");
-        firstTitles.put(11, "订单状态");
-        firstTitles.put(12, "添加时间");
-        firstTitles.put(13, "更新时间");
+        firstTitles.put(8, "产品面值");
+        firstTitles.put(9, "产品单价");
+        firstTitles.put(10, "接口类型");
+        firstTitles.put(11, "上游订单号");
+        firstTitles.put(12, "订单状态");
+        firstTitles.put(13, "添加时间");
+        firstTitles.put(14, "更新时间");
         return firstTitles;
     }
 }

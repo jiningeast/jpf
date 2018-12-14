@@ -695,7 +695,7 @@
       distinct
     </if>
     order_no,foreign_order_no,company_id, company_name, merch_no, 
-    charge_phone, product_id, product_name,product_price,interface_type,
+    charge_phone, product_id, product_name,product_value,product_price,interface_type,
     interface_order_no,status,addtime, updatetime
     from pay_charge_order
     <if test="_parameter != null">

@@ -58,6 +58,13 @@
                         <input id="imgUrl" name="imgUrl" type="hidden" style="width:150px"  required="true" value="" />
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align:  right;background-color: #f1f1f1;width: 100px">备注：</td>
+                    <td>
+                        <textarea id="memo" name="memo" style="width:300px;height: 100px"></textarea>
+                        <font color="red">(限制100字以内)</font>
+                    </td>
+                </tr>
             </table>
         </form>
         <div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
@@ -140,6 +147,11 @@
                 var file = $("#imgUrl").val();
                 if( file == "" ){
                     $.messager.alert('提示', '请先选择要上传文件!', 'info');
+                    return false;
+                }
+                var memo = $("#memo").val();
+                if(memo.length >= 100){
+                    $.messager.alert('提示', '请将字数限制在100字以内！当前字数：' + memo.length, 'info');
                     return false;
                 }
                 var type = file.slice(file.lastIndexOf(".")+1,file.length);
