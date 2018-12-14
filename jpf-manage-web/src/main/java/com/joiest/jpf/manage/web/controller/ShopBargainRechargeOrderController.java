@@ -15,15 +15,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("shopBargainRechargeOrder")
@@ -64,9 +62,9 @@ public class ShopBargainRechargeOrderController {
         request.setPage(0);
         request.setRows(0);
         GetShopBargainRechargeOrderResponse shopBargainRechargeOrderResponse = shopBargainRechargeOrderServiceFacade.getRecordsExcel(request);
-        List<ShopBargainRechargeOrderInfo> list = shopBargainRechargeOrderResponse.getList();
-        if(list == null || list.isEmpty()){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
+        List list = new ArrayList();
+        if(shopBargainRechargeOrderResponse != null || shopBargainRechargeOrderResponse.getList().size() > 0){
+            list = shopBargainRechargeOrderResponse.getList();
         }
         try {
             JSONObject jsonObject = exportExcelByInfoNew(response,list, 1, "");
@@ -95,36 +93,38 @@ public class ShopBargainRechargeOrderController {
             sheet = xssfWorkbook.createSheet("sheet1");
         }
         exportExcel.genSheetHead(sheet, 0, generateTitle());
-        for (int rownum = 1; rownum <= data.size(); rownum++) {
-            Row row = sheet.createRow(rownum);
-            int k = -1;
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getPullOrderNo());
-            if(data.get(rownum - 1).getOrderType() == null){
-                orderType = "";
-            }else if(data.get(rownum - 1).getOrderType() == 1){
-                orderType = "中国石化";
-            }else if(data.get(rownum - 1).getOrderType() == 2){
-                orderType = "中国石油";
-            }else if(data.get(rownum - 1).getOrderType() == 3){
-                orderType = "话费充值";
+        if(!CollectionUtils.isEmpty(data)){
+            for (int rownum = 1; rownum <= data.size(); rownum++) {
+                Row row = sheet.createRow(rownum);
+                int k = -1;
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getPullOrderNo());
+                if(data.get(rownum - 1).getOrderType() == null){
+                    orderType = "";
+                }else if(data.get(rownum - 1).getOrderType() == 1){
+                    orderType = "中国石化";
+                }else if(data.get(rownum - 1).getOrderType() == 2){
+                    orderType = "中国石油";
+                }else if(data.get(rownum - 1).getOrderType() == 3){
+                    orderType = "话费充值";
+                }
+                exportExcel.createCell(row, ++k, orderType);
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getForeignOrderNo());
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getItemName());
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getPrice() == null ? "" : String.valueOf(data.get(rownum-1).getPrice()));
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getFacePrice() == null ? "" : String.valueOf(data.get(rownum-1).getFacePrice()));
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getAmt() == null ? "" : String.valueOf(data.get(rownum-1).getAmt()));
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getAmount() == null ? "" : String.valueOf(data.get(rownum-1).getAmount()));
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getChargeNo());
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum - 1).getAddtime()));
+                if (data.get(rownum - 1).getInfoStatus() == null) {
+                    infoStatus = "";
+                } else if(data.get(rownum - 1).getInfoStatus() == 1){
+                    infoStatus = "未绑定";
+                } else if(data.get(rownum - 1).getInfoStatus() == 2){
+                    infoStatus = "已绑定";
+                }
+                exportExcel.createCell(row, ++k, infoStatus);
             }
-            exportExcel.createCell(row, ++k, orderType);
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getForeignOrderNo());
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getItemName());
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getPrice() == null ? "" : String.valueOf(data.get(rownum-1).getPrice()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getFacePrice() == null ? "" : String.valueOf(data.get(rownum-1).getFacePrice()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getAmt() == null ? "" : String.valueOf(data.get(rownum-1).getAmt()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getAmount() == null ? "" : String.valueOf(data.get(rownum-1).getAmount()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getChargeNo());
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum - 1).getAddtime()));
-            if (data.get(rownum - 1).getInfoStatus() == null) {
-                infoStatus = "";
-            } else if(data.get(rownum - 1).getInfoStatus() == 1){
-                infoStatus = "未绑定";
-            } else if(data.get(rownum - 1).getInfoStatus() == 2){
-                infoStatus = "已绑定";
-            }
-            exportExcel.createCell(row, ++k, infoStatus);
         }
         String fileName = "敬恒充值订单列表-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx";
         return exportExcel.writeIntoExcel(fileName, response, xssfWorkbook, path, type, res);

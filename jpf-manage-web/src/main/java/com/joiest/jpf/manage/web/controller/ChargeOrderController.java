@@ -26,6 +26,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,10 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("chargeOrder")
@@ -247,11 +245,12 @@ public class ChargeOrderController {
         request.setPage(0);
         request.setRows(0);
         GetChargeOrderResponse chargeOrderResponse = chargeOrderServiceFacade.getExcelRecords(request);
-        if(chargeOrderResponse.getList() == null || chargeOrderResponse.getList().isEmpty()){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
+        List list = new ArrayList();
+        if(chargeOrderResponse != null || chargeOrderResponse.getList().size() > 0){
+            list = chargeOrderResponse.getList();
         }
         try {
-            JSONObject jsonObject = exportExcelByInfoNew(response, chargeOrderResponse.getList(), 1, "");
+            JSONObject jsonObject = exportExcelByInfoNew(response, list, 1, "");
         } catch (Exception e) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "数据导出异常");
         }
@@ -277,45 +276,47 @@ public class ChargeOrderController {
             sheet = xssfWorkbook.createSheet("sheet1");
         }
         exportExcel.genSheetHead(sheet, 0, generateTitle());
-        for (int rownum = 1; rownum <= data.size(); rownum++) {
-            Row row = sheet.createRow(rownum);
-            int k = -1;
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getOrderNo());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getForeignOrderNo());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyId());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyName());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getMerchNo());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getChargePhone());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductId());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductName());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductValue() == null ? "" : String.valueOf(data.get(rownum-1).getProductValue()));
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductPrice() == null ? "" : String.valueOf(data.get(rownum-1).getProductPrice()));
-            if(data.get(rownum - 1).getInterfaceType() == null){
-                interfaceType = "";
-            }else if(data.get(rownum-1).getInterfaceType() == 0){
-                interfaceType = "欧飞";
-            }else if(data.get(rownum-1).getInterfaceType() == 1){
-                interfaceType = "威能";
-            }
-            exportExcel.createCell(row, ++k, interfaceType);
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getInterfaceOrderNo());
-            if(data.get(rownum - 1).getStatus() == null){
-                status = "";
-            }else{
-                switch (data.get(rownum - 1).getStatus()){
-                    case 0: status = "下单成功";break;
-                    case 1: status = "充值中";break;
-                    case 2: status = "上游充值成功";break;
-                    case 3: status = "上游充值失败";break;
-                    case 4: status = "申请退款";break;
-                    case 5: status = "退款成功";break;
-                    case 6: status = "拒绝退款";break;
-                    case 7: status = "退款失败";break;
+        if(!CollectionUtils.isEmpty(data)){
+            for (int rownum = 1; rownum <= data.size(); rownum++) {
+                Row row = sheet.createRow(rownum);
+                int k = -1;
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getOrderNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getForeignOrderNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyId());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyName());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getMerchNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getChargePhone());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductId());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductName());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductValue() == null ? "" : String.valueOf(data.get(rownum-1).getProductValue()));
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductPrice() == null ? "" : String.valueOf(data.get(rownum-1).getProductPrice()));
+                if(data.get(rownum - 1).getInterfaceType() == null){
+                    interfaceType = "";
+                }else if(data.get(rownum-1).getInterfaceType() == 0){
+                    interfaceType = "欧飞";
+                }else if(data.get(rownum-1).getInterfaceType() == 1){
+                    interfaceType = "威能";
                 }
+                exportExcel.createCell(row, ++k, interfaceType);
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getInterfaceOrderNo());
+                if(data.get(rownum - 1).getStatus() == null){
+                    status = "";
+                }else{
+                    switch (data.get(rownum - 1).getStatus()){
+                        case 0: status = "下单成功";break;
+                        case 1: status = "充值中";break;
+                        case 2: status = "上游充值成功";break;
+                        case 3: status = "上游充值失败";break;
+                        case 4: status = "申请退款";break;
+                        case 5: status = "退款成功";break;
+                        case 6: status = "拒绝退款";break;
+                        case 7: status = "退款失败";break;
+                    }
+                }
+                exportExcel.createCell(row, ++k, status);
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime()));
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getUpdatetime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getUpdatetime()));
             }
-            exportExcel.createCell(row, ++k, status);
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime()));
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getUpdatetime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getUpdatetime()));
         }
         String fileName = "充值平台订单列表-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx";
         return exportExcel.writeIntoExcel(fileName, response, xssfWorkbook, path, type, res);
