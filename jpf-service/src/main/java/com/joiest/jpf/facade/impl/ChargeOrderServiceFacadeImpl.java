@@ -352,6 +352,38 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         return infoList;
     }
 
+    /**
+     * 所有威能异常订单处理
+     */
+    @Override
+    public List<ChargeOrderInfo>  getWeinengAbnormalOrders(ChargeOrderInfo request)
+    {
+
+        PayChargeOrderExample example = new PayChargeOrderExample();
+        example.setOrderByClause("addtime ASC");
+        //example.setPageNo(1);
+        //example.setPageSize(1);
+
+        PayChargeOrderExample.Criteria c =example.createCriteria();
+        c.andStatusEqualTo(request.getStatus());
+
+        List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
+        if( list.size() <=0 || list == null){
+            return null;
+        }
+        List<ChargeOrderInfo> infoList = new ArrayList<>();
+
+        for (PayChargeOrder one : list)
+        {
+            ChargeOrderInfo info = new ChargeOrderInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
+            beanCopier.copy(one, info, null);
+            infoList.add(info);
+        }
+
+        return infoList;
+    }
+
 }
 
 
