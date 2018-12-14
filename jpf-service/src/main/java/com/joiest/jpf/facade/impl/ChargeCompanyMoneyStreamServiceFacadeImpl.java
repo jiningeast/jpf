@@ -248,4 +248,17 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         return response;
     }
 
+    /**
+     * 更新流水
+     */
+    @Override
+    public int updateRecord(PayChargeCompanyMoneyStream record,String order_no){
+
+        PayChargeCompanyMoneyStreamExample explame = new PayChargeCompanyMoneyStreamExample();
+        PayChargeCompanyMoneyStreamExample.Criteria c = explame.createCriteria();
+        c.andOrderNoEqualTo(order_no);
+
+        return payChargeCompanyMoneyStreamMapper.updateByExampleSelective(record,explame);
+    }
+
 }

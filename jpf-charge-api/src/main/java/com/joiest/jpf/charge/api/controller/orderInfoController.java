@@ -58,6 +58,9 @@ public class orderInfoController {
         //存储日志记录
         Date date = new Date();
         SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) - 30);
+        Date preHalfHours = calendar.getTime();
         StringBuilder logContent = new StringBuilder();
 
         String logPath = "/logs/jpf-charge-api/log/";
@@ -67,6 +70,7 @@ public class orderInfoController {
         ChargeOrderInfo chargeOrderInfo = new ChargeOrderInfo();
         //充值中
         chargeOrderInfo.setStatus((byte)1);
+        chargeOrderInfo.setAddtime(preHalfHours);
         //chargeOrderInfo.setInterfaceType((byte)0); // 接口类型 0=欧非 1=威能
         List<ChargeOrderInfo> list = chargeOrderServiceFacade.getAbnormalOrders(chargeOrderInfo);
         if( list !=null && list.size() >0 ){
@@ -74,16 +78,16 @@ public class orderInfoController {
             LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
 
             for (int i = 0; i < list.size(); i++) {
+                String orderNo = list.get(i).getOrderNo();
+                String id = list.get(i).getId();
+                String status = list.get(i).getStatus().toString();
 
                 logContent = new StringBuilder(); //初始化日志变量
                 // 请求欧飞接口 0=欧非 1=威能
                 Byte type = list.get(i).getInterfaceType() == null ? (byte)0 : list.get(i).getInterfaceType();
                 if( type == 0 ){
-                    String orderNo = list.get(i).getOrderNo();
-                    String id = list.get(i).getId();
-                    String status = list.get(i).getStatus().toString();
 
-                    logContent.append("\n请求单号:"+orderNo+"\t ");
+                    logContent.append("\n请求欧飞单号:"+orderNo+"\t ");
                     Map<String,String> queryMap = new HashMap<>();
                     queryMap.put("sporder_id", orderNo);
                     queryMap.put("format", "json");
@@ -110,6 +114,12 @@ public class orderInfoController {
                                 chargeInterfaceStreamInfo.setResponse(queryPhoneResponseMap.get("responseParam"));
                                 chargeInterfaceStreamInfo.setAddtime(new Date());
                                 int res_addstream = chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
+
+                                // 资金流水记录更新 只更新接口类型和单号
+                                PayChargeCompanyMoneyStream record = new PayChargeCompanyMoneyStream();
+                                record.setInterfaceOrderNo(orderid);
+                                record.setInterfaceType((byte)0);
+                                chargeCompanyMoneyStreamServiceFacade.updateRecord(record,orderNo);
 
                                 ChargeOrderInfo info = new ChargeOrderInfo();
                                 info.setInterfaceOrderNo(orderid);
@@ -156,6 +166,17 @@ public class orderInfoController {
                                 }
 
                             }
+                        }else if( responseParam != null && responseParam.containsKey("retcode") && "1010".equals(responseParam.get("retcode").toString()) ){
+                            //未查询到欧飞订单 处理退款
+                            logContent.append("\n处理结果：未查询到欧飞订单号 ");
+                            //处理退款流程
+                            String response = this.autoTuikuan(list.get(i));
+                            JSONObject result = JSONObject.fromObject(response);
+                            if( result != null && "10000".equals(result.get("code").toString()) ){
+                                logContent.append("\t 订单更新为：已退款 退款结果："+response+"\t");
+                            }else{
+                                logContent.append("\t 订单更新为：已退款 退款结果："+response +"\t");
+                            }
                         }
 
                     }
@@ -163,6 +184,14 @@ public class orderInfoController {
                     LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
 
                 }
+                // 威能订单接口查询
+                if( type == 1){
+                    logContent.append("\n请求威能单号:"+orderNo+"\t ");
+
+                    LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+                }
+
+
             }
 
 
