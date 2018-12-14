@@ -486,8 +486,8 @@ public class orderInfoController {
                     Map<String, String> actParam = new HashMap<>();
                     actParam.put("mobile",list.get(i).getChargePhone());
                     //威能产品ID
-                    actParam.put("productId",chargeProductInfo.getWnProductId());
-                    actParam.put("outOrderId",orderNo);
+                    actParam.put("forProductId",chargeProductInfo.getWnProductId());
+                    actParam.put("selfOrder",orderNo);
                     Map<String, String> map = chargeOrderServiceFacade.phoneRechargeWn(actParam);
 
                     //威能接口流水
