@@ -1734,7 +1734,6 @@ public class OrdersController {
     @RequestMapping(value="weinengNotifyUrl",method = RequestMethod.POST)
     @ResponseBody
     public String weinengNotifyUrl(HttpServletRequest request)throws Exception{
-
         String infoErrorOrder = null;
         String sucOrder = "";
         String faildOrder = "";
@@ -1744,7 +1743,6 @@ public class OrdersController {
         String streamVal = null;
         char[] buff=new char[2048];
         while((length=reader.read(buff))!=-1){
-
             streamVal = new String(buff,0,length);
         }
         StringBuilder sbf = new StringBuilder();
@@ -1752,30 +1750,27 @@ public class OrdersController {
         sbf.append("\n接口名称：微能充值异步回调");
         sbf.append("\n接口参数：" + streamVal);
         LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnApi",true);
-
         Object json = new JSONTokener(streamVal).nextValue();
         if(json instanceof JSONObject){
-
             sbf.append("\n无可处理订单");
         }else if (json instanceof JSONArray){
-
             JSONArray dataDeal = JSONArray.fromObject(streamVal);
             if(dataDeal.size()>0){
-
                 for(int i=0;i<dataDeal.size();i++){
-
                     JSONObject job = dataDeal.getJSONObject(i);
-
                     String orderNo = job.get("outOrderId").toString();
                     String orderPrefix = job.get("outOrderId").toString().substring(0,2);
                     if(orderPrefix.equals("CH")){
-
                         //更新订单信息
                         PayChargeOrder payChargeOrder = new PayChargeOrder();
                         payChargeOrder.setOrderNo(orderNo);
                         ChargeOrderInfo orderInfo = chargeOrderServiceFacade.getOne(payChargeOrder);//request.getSporder_id()
                         if (orderInfo ==null){
                             infoErrorOrder+= orderNo+",";
+                            continue;
+                        }
+                        //只处理订单状态为下单成功，和下单异常单子的回调，其他状态的回调不在处理
+                        if(orderInfo.getStatus()!=1&&orderInfo.getStatus()!=8){
                             continue;
                         }
                         //添加流水
@@ -1788,10 +1783,8 @@ public class OrdersController {
                         //chargeInterfaceStreamInfo.setResponse(job.toString());
                         chargeInterfaceStreamInfo.setAddtime(new Date());
                         chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
-
                         // 查询商品信息
                         ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(orderInfo.getProductId());
-
                         //主动通知参数
                         Map<String,Object> sendParam = new HashMap<>();
                         sendParam.put("outOrderNo",orderInfo.getForeignOrderNo());
@@ -1800,35 +1793,26 @@ public class OrdersController {
                         sendParam.put("value",chargeProductInfo.getValue());
                         sendParam.put("salePrice",chargeProductInfo.getSalePrice());
                         sendParam.put("productId",orderInfo.getProductId());
-
                         //修改订单信息 【订单状态】
                         ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
                         if (job.get("reportStatus").toString().equals("1")){
-
                             sucOrder+=orderInfo.getOrderNo()+",";
                             upOrderInfo.setStatus((byte)2);
-
                             sendParam.put("code","10000");
                             sendParam.put("info","充值成功");
                         }else{
-
                             faildOrder+=orderInfo.getOrderNo()+",";
-
                             sendParam.put("code","10008");
                             sendParam.put("info","充值失败");
-
                             //充值失败返还商户资金
                             JSONObject isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
                             if(isRet.get("code").toString().equals("10000")){
-
                                 upOrderInfo.setStatus((byte)5);
                             }else{
-
                                 upOrderInfo.setStatus((byte)7);
                             }
                             String remark = orderInfo.getRemark()==null || orderInfo.getRemark()==""?"["+ DateUtils.getCurDate() + "]:"+isRet.get("info"):orderInfo.getRemark()+"&#13;&#10;["+ DateUtils.getCurDate() + "]:"+isRet.get("info");
                             upOrderInfo.setRemark(remark);
-
                             sbf.append("\n充值失败返还商户金额："+isRet.toString());
                         }
                         upOrderInfo.setId(orderInfo.getId());
@@ -1836,14 +1820,11 @@ public class OrdersController {
                         upOrderInfo.setNotifyTime(new Date());
                         upOrderInfo.setUpdatetime(new Date());
                         chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
-
                         sbf.append("\n请求下游地址："+orderInfo.getNotifyUrl());
                         sbf.append("\n\t请求下游参数："+JSONObject.fromObject(sendParam).toString());
-
                         //发起下游请求
                         OkHttpUtils.postForm(orderInfo.getNotifyUrl(),sendParam);
                     }else{
-
                         ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderByOrderNo(job.get("outOrderId").toString());
                         if (orderInfo ==null){
                             infoErrorOrder+= job.get("outOrderId").toString()+",";
@@ -1859,17 +1840,14 @@ public class OrdersController {
                         //chargeInterfaceStreamInfo.setResponse(map.get("responseParam"));
                         chargeInterfaceStreamInfo.setAddtime(new Date());
                         chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
-
                         // 查询订单
                         ShopOrderInterfaceInfo orderinfo = new ShopOrderInterfaceInfo();
                         orderinfo.setId(orderInfo.getId());
                         orderinfo.setUpdatetime(new Date());
                         if (job.get("reportStatus").toString().equals("1")){
-
                             sucOrder+=orderInfo.getOrderNo()+",";
                             orderinfo.setRechargeStatus("1");
                         }else{
-
                             faildOrder+=orderInfo.getOrderNo()+",";
                             orderinfo.setRechargeStatus("9");
                         }
