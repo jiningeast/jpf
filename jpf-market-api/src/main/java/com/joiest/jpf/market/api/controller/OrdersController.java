@@ -1861,7 +1861,7 @@ public class OrdersController {
             LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnReportApi",true);
 
         }else{}
-       return "Y";
+       return "0";
     }
     private Map<String,Object> _filter(String data)
     {
