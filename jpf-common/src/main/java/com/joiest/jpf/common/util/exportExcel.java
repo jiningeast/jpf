@@ -12,6 +12,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFCell;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import javax.servlet.http.HttpServletResponse;
@@ -242,11 +245,11 @@ public class exportExcel {
      * @param rowNum 第几行的行号
      * @param values key:第几列的列号  value:值
      */
-    public static void genSheetHead(Sheet sheet, int rowNum, Map<Integer, Object> values) {
+    public static void genSheetHead(SXSSFSheet sheet, int rowNum, Map<Integer, Object> values) {
 
-        Row row = sheet.createRow(rowNum);
+        SXSSFRow row = sheet.createRow(rowNum);
         for (Integer cellNum : values.keySet()) {
-            Cell cell = row.createCell(cellNum);
+            SXSSFCell cell = row.createCell(cellNum);
             Object value = values.get(cellNum);
             generateValue(value, cell);
         }
@@ -258,12 +261,12 @@ public class exportExcel {
      * @param cellNum 第几列的列号
      * @param value   值
      */
-    public static void createCell(Row row, int cellNum, Object value) {
-        Cell cell = row.createCell(cellNum);
+    public static void createCell(SXSSFRow row, int cellNum, Object value) {
+        SXSSFCell cell = row.createCell(cellNum);
         generateValue(value, cell);
     }
 
-    private static void generateValue(Object value, Cell cell) {
+    private static void generateValue(Object value, SXSSFCell cell) {
         if (value instanceof String) {
             cell.setCellValue((String) value);
         } else if (value instanceof Boolean) {

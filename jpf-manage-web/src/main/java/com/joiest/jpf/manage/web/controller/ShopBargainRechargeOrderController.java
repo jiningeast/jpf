@@ -3,16 +3,13 @@ package com.joiest.jpf.manage.web.controller;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
-import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderResponse;
-import com.joiest.jpf.entity.ShopBargainRechargeOrderInfo;
 import com.joiest.jpf.facade.ShopBargainRechargeOrderServiceFacade;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,14 +90,14 @@ public class ShopBargainRechargeOrderController {
         res.put("info","SUCCESS");
         SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
         String orderType = "", infoStatus = "";
-        Sheet sheet = xssfWorkbook.getSheet("sheet1");
+        SXSSFSheet sheet = xssfWorkbook.getSheet("sheet1");
         if (sheet == null) {
             sheet = xssfWorkbook.createSheet("sheet1");
         }
         exportExcel.genSheetHead(sheet, 0, generateTitle());
         if(!CollectionUtils.isEmpty(data)){
             for (int rownum = 1; rownum <= data.size(); rownum++) {
-                Row row = sheet.createRow(rownum);
+                SXSSFRow row = sheet.createRow(rownum);
                 int k = -1;
                 exportExcel.createCell(row, ++k, data.get(rownum - 1).getPullOrderNo());
                 if(data.get(rownum - 1).getOrderType() == null){

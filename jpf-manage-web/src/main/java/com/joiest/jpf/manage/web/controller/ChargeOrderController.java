@@ -6,7 +6,6 @@ import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeOrder;
-import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
@@ -19,9 +18,8 @@ import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -276,14 +274,14 @@ public class ChargeOrderController {
         res.put("info","SUCCESS");
         SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
         String interfaceType = "",status = "";
-        Sheet sheet = xssfWorkbook.getSheet("sheet1");
+        SXSSFSheet sheet = xssfWorkbook.getSheet("sheet1");
         if (sheet == null) {
             sheet = xssfWorkbook.createSheet("sheet1");
         }
         exportExcel.genSheetHead(sheet, 0, generateTitle());
         if(!CollectionUtils.isEmpty(data)){
             for (int rownum = 1; rownum <= data.size(); rownum++) {
-                Row row = sheet.createRow(rownum);
+                SXSSFRow row = sheet.createRow(rownum);
                 int k = -1;
                 exportExcel.createCell(row, ++k, data.get(rownum-1).getOrderNo());
                 exportExcel.createCell(row, ++k, data.get(rownum-1).getForeignOrderNo());
