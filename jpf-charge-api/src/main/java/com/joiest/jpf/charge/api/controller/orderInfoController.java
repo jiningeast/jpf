@@ -46,6 +46,9 @@ public class orderInfoController {
     @Autowired
     private ChargeCompanyMoneyStreamServiceFacade chargeCompanyMoneyStreamServiceFacade;
 
+    @Autowired
+    private ChargeProductServiceFacade chargeProductServiceFacade;
+
     /**
      * 查询欧飞异常订单1
      * @param
@@ -130,11 +133,12 @@ public class orderInfoController {
                                 logContent.append("\n处理结果：更新前上游订单号："+list.get(i).getInterfaceOrderNo()+"\t status:"+status+" \t 更新前状态：更新前上游订单号："+orderid+"\t status:"+status+" \t 操作结果： ");
                                 // 1充值成功、0充值中、9充值失败
                                 if( "1".equals(game_state) ){
+                                    info.setStatus((byte) 2);
                                     int upCount = chargeOrderServiceFacade.upOrderInfo(info);
                                     if( upCount != 1 ){
-                                        logContent.append("\t 状态不用操作 订单更新失败 \t");
+                                        logContent.append("\t 状态更新成功 订单更新失败 \t");
                                     }else{
-                                        logContent.append("\t 状态不用操作 订单更新成功 \t");
+                                        logContent.append("\t 状态更新失败 订单更新成功 \t");
                                     }
                                 }
                                 if( "0".equals(game_state) ){
@@ -183,12 +187,6 @@ public class orderInfoController {
 
                     LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
 
-                }
-                // 威能订单接口查询
-                if( type == 1){
-                    logContent.append("\n请求威能单号:"+orderNo+"\t ");
-
-                    LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
                 }
 
 
@@ -271,7 +269,7 @@ public class orderInfoController {
                                 //info.setForeignResponseContent(queryPhoneResponseMap.get("responseParam"));
                                 info.setUpdatetime(date);
                                 info.setId(id);
-                                logContent.append("\n处理结果：更新前上游订单号："+list.get(i).getInterfaceOrderNo()+"\t status:"+status+" \t 更新前状态：更新前上游订单号："+orderid+"\t status:"+status+" \t 操作结果： ");
+                                logContent.append("\n处理结果：更新前上游订单号："+list.get(i).getInterfaceOrderNo()+"\t status:"+status+" \t 更新前状态：接口上游订单号："+orderid+"\t status:"+status+" \t 操作结果： ");
                                 // 1充值成功、0充值中、9充值失败
                                 if( "1".equals(game_state) ){
                                     //非 2=上游充值成功
@@ -299,7 +297,7 @@ public class orderInfoController {
                                 }
                                 if("9".equals(game_state)){
                                     //非 3=上游充值失败 4=申请退款 5=退款成功 6=拒绝退款 7=退款失败
-                                    if( !"3".equals(status) && !"4".equals(status) && !"5".equals(status) && !"6".equals(status) && !"7".equals(status) ){
+                                    if( !"3".equals(status) && !"4".equals(status) && !"5".equals(status) && !"6".equals(status) && !"7".equals(status) && !"8".equals(status) ){
                                         //3=上游充值失败
                                         info.setStatus((byte)3);
                                         int upCount = chargeOrderServiceFacade.upOrderInfo(info);
@@ -438,5 +436,108 @@ public class orderInfoController {
 
     }
 
+    /**
+     * 威能异常订单重新下单
+     */
+    public void wnCreateOrder(){
+
+        //存储日志记录
+        Date date = new Date();
+        SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        StringBuilder logContent = new StringBuilder();
+        String logPath = "/logs/jpf-charge-api/log/";
+        String fileName = "SearchAllWeinengOrder";
+        logContent.append("\n\nTime: "+myfmt.format(date));
+
+        ChargeOrderInfo chargeOrderInfo = new ChargeOrderInfo();
+        //查询战远 数据ID：12 MC1542166750414621910   宁波站远科技有限公司（企鹅车务）
+        chargeOrderInfo.setStatus((byte)8); //威能异常订单
+        //chargeOrderInfo.setInterfaceType((byte)0); // 接口类型 0=欧非 1=威能
+        List<ChargeOrderInfo> list = chargeOrderServiceFacade.getWeinengAbnormalOrders(chargeOrderInfo);
+        if( list !=null && list.size() >0 ){
+            for (int i = 0; i < list.size(); i++) {
+                String orderNo = list.get(i).getOrderNo();
+                String id = list.get(i).getId();
+                String status = list.get(i).getStatus().toString();
+                String productId = list.get(i).getProductId();
+
+                logContent = new StringBuilder(); //初始化日志变量
+                // 订单类型 0=欧非 1=威能
+                logContent.append("\n请求单号:"+orderNo+"\t ");
+
+                if( list.get(i).getInterfaceType() == null || list.get(i).getInterfaceType() != 1 ){
+                    logContent.append("\n处理结果：非威能单号 不做处理");
+                    LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+                    continue;
+                }
+                // 处理威能订单并重新下单
+                if( list.get(i).getInterfaceType() == 1 ){
+
+                    //获取商品信息
+                    ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(productId);
+                    if(chargeProductInfo == null || (chargeProductInfo != null && StringUtils.isBlank(chargeProductInfo.getWnProductId()) )){
+                        logContent.append("\n处理结果：[产品："+productId+"]未获取到商品信息或[wn_product_id：未设置] ");
+                        LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+                        continue;
+                    }
+
+                    logContent.append("\n处理结果：更新前上游订单号："+list.get(i).getInterfaceOrderNo()+"\t status:"+status+" \t  操作结果： ");
+                    // 请求威能下单接口
+                    Map<String, String> actParam = new HashMap<>();
+                    actParam.put("mobile",list.get(i).getChargePhone());
+                    //威能产品ID
+                    actParam.put("forProductId",chargeProductInfo.getWnProductId());
+                    actParam.put("selfOrder",orderNo);
+                    Map<String, String> map = chargeOrderServiceFacade.phoneRechargeWn(actParam);
+
+                    //威能接口流水
+                    //添加流水
+                    ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
+                    chargeInterfaceStreamInfo.setOrderId(""+id);
+                    chargeInterfaceStreamInfo.setOrderNo(orderNo);
+                    chargeInterfaceStreamInfo.setType((byte) 1);
+                    chargeInterfaceStreamInfo.setRequestUrl(map.get("requestUrl"));
+                    chargeInterfaceStreamInfo.setRequestParam(map.get("requestParam"));
+                    chargeInterfaceStreamInfo.setResponse(map.get("responseParam"));
+                    chargeInterfaceStreamInfo.setAddtime(new Date());
+                    chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
+
+                    ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
+                    upOrderInfo.setId(id);
+                    upOrderInfo.setUpdatetime(date);
+                    if("10000".equals(map.get("code"))||"10001".equals(map.get("code"))){
+                        if("10000".equals(map.get("code"))){
+                            upOrderInfo.setStatus((byte)1);
+                            logContent.append("\n下单成功，充值中 ");
+                        }else{
+                            upOrderInfo.setStatus((byte)8);
+                            logContent.append("\n下单异常，充值中 ");
+                        }
+                        //upOrderInfo.setInterfaceOrderNo(map.get("orderid"));
+                        chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
+                    }else{
+                        // 充值失败
+                        if( "10008".equals(map.get("code")) ){
+                            //处理退款流程
+                            String response = this.autoTuikuan(list.get(i));
+                            JSONObject result = JSONObject.fromObject(response);
+                            if( result != null && "10000".equals(result.get("code").toString()) ){
+                                logContent.append("\t 订单更新为：已退款 退款结果："+response+"\t");
+                            }else{
+                                logContent.append("\t 订单更新为：已退款 退款结果："+response +"\t");
+                            }
+                        }
+                    }
+                    
+                    LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+                }
+            }
+        }else{
+            logContent.append("\n未匹配到订单信息 ");
+            LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+        }
+
+    }
 
 }
