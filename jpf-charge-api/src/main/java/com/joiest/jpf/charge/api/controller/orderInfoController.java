@@ -133,11 +133,12 @@ public class orderInfoController {
                                 logContent.append("\n处理结果：更新前上游订单号："+list.get(i).getInterfaceOrderNo()+"\t status:"+status+" \t 更新前状态：更新前上游订单号："+orderid+"\t status:"+status+" \t 操作结果： ");
                                 // 1充值成功、0充值中、9充值失败
                                 if( "1".equals(game_state) ){
+                                    info.setStatus((byte) 2);
                                     int upCount = chargeOrderServiceFacade.upOrderInfo(info);
                                     if( upCount != 1 ){
-                                        logContent.append("\t 状态不用操作 订单更新失败 \t");
+                                        logContent.append("\t 状态更新成功 订单更新失败 \t");
                                     }else{
-                                        logContent.append("\t 状态不用操作 订单更新成功 \t");
+                                        logContent.append("\t 状态更新失败 订单更新成功 \t");
                                     }
                                 }
                                 if( "0".equals(game_state) ){
