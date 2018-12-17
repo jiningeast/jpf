@@ -51,5 +51,5 @@ public interface ChargeOrderServiceFacade {
      */
     public List<ChargeOrderInfo> getAllAbnormalOrders(ChargeOrderInfo request);
 
-    GetChargeOrderResponse getExcelRecords(GetChargeOrderRequest request);
+    List<PayChargeOrder> getExcelRecords(GetChargeOrderRequest request);
 }

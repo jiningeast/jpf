@@ -1,5 +1,6 @@
 package com.joiest.jpf.manage.web.controller;
 
+import com.joiest.jpf.common.custom.PayShopOrderCustom;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.util.DateUtils;
@@ -13,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,6 +35,8 @@ import java.util.*;
 @RequestMapping("/shopOrder")
 public class ShopOrderController {
 
+    private Logger logger = LoggerFactory.getLogger(ShopOrderController.class);
+    
     @Autowired
     private ShopOrderServiceFacade shopOrderServiceFacade;
 
@@ -74,6 +79,7 @@ public class ShopOrderController {
     @RequestMapping("/exportExcel")
     @ResponseBody
     public void exportExcel(GetShopOrderRequest request, HttpServletResponse response){
+        long startProgramTime = System.currentTimeMillis();
         Map<String,String> requestOrderSourceMap = new HashMap<>(2);
         requestOrderSourceMap.put("0","自平台");
         requestOrderSourceMap.put("1","敬恒");
@@ -86,15 +92,14 @@ public class ShopOrderController {
 
         request.setSourceParam(requestOrderSourceMap);
         request.setOrderStatusParam(requestOrderStatusMap);
-        request.setPage(0);
-        request.setRows(0);
-        GetShopOrderResponse shopOrderResponse= shopOrderServiceFacade.getExcelList(request);
-        List list = new ArrayList();
-        if(shopOrderResponse != null || shopOrderResponse.getList().size() > 0){
-            list = shopOrderResponse.getList();
-        }
+        long startQueryTime = System.currentTimeMillis();
+        List<PayShopOrderCustom> excelList = shopOrderServiceFacade.getExcelList(request);
+        logger.info("欣豆市场订单数据查询时间:{} 秒",(System.currentTimeMillis() - startQueryTime) / 1000);
         try {
-            JSONObject jsonObject = exportExcelByInfoNew(response, list, 1, "");
+            long startExportTime = System.currentTimeMillis();
+            JSONObject jsonObject = exportExcelByInfoNew(response, excelList, 1, "");
+            logger.info("欣豆市场订单数据Excel导出时间:{} 秒" ,(System.currentTimeMillis() - startExportTime) / 1000);
+            logger.info("欣豆市场订单数据导出程序执行时间:{} 秒",(System.currentTimeMillis() - startProgramTime) / 1000);
         } catch (Exception e) {
             e.printStackTrace();
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER,"数据导出异常");
@@ -109,13 +114,13 @@ public class ShopOrderController {
      * @param path
      * @return
      */
-    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<ShopOrderInfo> data, int type, String path) throws UnsupportedEncodingException {
+    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<PayShopOrderCustom> data, int type, String path) throws UnsupportedEncodingException {
         type = type < 1 ? 1 : type;
         JSONObject res = new JSONObject();
         res.put("code","10000");
         res.put("info","SUCCESS");
         SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
-        String amount = "" ,totalMoney = "",totalDou = "" ,addTime = "",payTime = "",status = "",interfaceType = "",source = "";
+        String status = "",interfaceType = "",source = "";
         Sheet sheet = xssfWorkbook.getSheet("sheet1");
         if (sheet == null) {
             sheet = xssfWorkbook.createSheet("sheet1");

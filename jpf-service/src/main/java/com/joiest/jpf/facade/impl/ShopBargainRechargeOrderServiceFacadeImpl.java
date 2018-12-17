@@ -44,39 +44,7 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         e.setPageSize(request.getRows());
         e.setOrderByClause("id DESC");
 
-//        if (StringUtils.isNotBlank(request.getOrderNo())){
-//            c.andOrderNoEqualTo(request.getOrderNo());
-//        }
-        if(StringUtils.isNotBlank(request.getPullOrderNo())){
-            c.andPullOrderNoEqualTo(request.getPullOrderNo());
-        }
-        if(StringUtils.isNotBlank(request.getMerchNo()) && request.getMerchNo()!=null){
-            c.andPullMerchNoEqualTo(request.getMerchNo());
-        }
-        if ( request.getOrderType() != null && StringUtils.isNotBlank(""+request.getOrderType()) ){
-            c.andOrderTypeEqualTo(request.getOrderType());
-        }
-        if ( StringUtils.isNotBlank(request.getForeignOrderNo()) ){
-            c.andForeignOrderNoEqualTo(request.getForeignOrderNo());
-        }
-        if ( StringUtils.isNotBlank(request.getItemName()) ){
-            c.andItemNameLike('%'+request.getItemName()+'%');
-        }
-        if ( request.getFacePrice() != null && StringUtils.isNotBlank(""+request.getFacePrice()) ){
-            c.andFacePriceEqualTo(request.getFacePrice());
-        }
-        if (StringUtils.isNotBlank(request.getAddtimeStart())&& request.getAddtimeStart()!=null) {
-            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(), DateUtils.DATEFORMATSHORT));
-        }
-        if (StringUtils.isNotBlank(request.getAddtimeEnd()) && request.getAddtimeEnd() !=null) {
-            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(), DateUtils.DATEFORMATLONG));
-        }
-//        if ( request.getInfoStatus() != null && StringUtils.isNotBlank(""+request.getInfoStatus()) ){
-//            c.andInfoStatusEqualTo(request.getInfoStatus());
-//        }
-        if ( request.getMatchingStatus() != null && StringUtils.isNotBlank(String.valueOf(request.getMatchingStatus())) ){
-            c.andMatchingStatusEqualTo(request.getMatchingStatus());
-        }
+        matchCriteria(request,c);
         int count = payShopBargainRechargeOrderMapper.countByExample(e);
         List<PayShopBargainRechargeOrder> list = payShopBargainRechargeOrderMapper.selectByExample(e);
         for (PayShopBargainRechargeOrder one:list){
@@ -130,62 +98,49 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
     }
 
     @Override
-    public GetShopBargainRechargeOrderResponse getRecordsExcel(GetShopBargainRechargeOrderRequest request) {
-        GetShopBargainRechargeOrderResponse response = new GetShopBargainRechargeOrderResponse();
-        List<ShopBargainRechargeOrderInfo> infos = new ArrayList<>();
-
+    public List<PayShopBargainRechargeOrder> getRecordsExcel(GetShopBargainRechargeOrderRequest request) {
         PayShopBargainRechargeOrderExample e = new PayShopBargainRechargeOrderExample();
         PayShopBargainRechargeOrderExample.Criteria c = e.createCriteria();
-
-        e.setPageNo(request.getPage());
-        e.setPageSize(request.getRows());
         e.setOrderByClause("id DESC");
+        matchCriteria(request,c);
+        return payShopBargainRechargeOrderMapper.selectByExampleExcel(e);
+    }
 
-        if (StringUtils.isNotBlank(request.getOrderNo())){
-            c.andOrderNoEqualTo(request.getOrderNo());
-        }
+    /**
+     * 匹配搜索条件
+     * @param request
+     * @param c
+     */
+    private void matchCriteria(GetShopBargainRechargeOrderRequest request,PayShopBargainRechargeOrderExample.Criteria c){
         if(StringUtils.isNotBlank(request.getPullOrderNo())){
             c.andPullOrderNoEqualTo(request.getPullOrderNo());
         }
         if(StringUtils.isNotBlank(request.getMerchNo()) && request.getMerchNo()!=null){
             c.andPullMerchNoEqualTo(request.getMerchNo());
         }
-        if ( request.getOrderType() != null && StringUtils.isNotBlank(""+request.getOrderType()) ){
+        if(request.getOrderType() != null && StringUtils.isNotBlank(""+request.getOrderType()) ){
             c.andOrderTypeEqualTo(request.getOrderType());
         }
-        if ( StringUtils.isNotBlank(request.getForeignOrderNo()) ){
+        if(StringUtils.isNotBlank(request.getForeignOrderNo()) ){
             c.andForeignOrderNoEqualTo(request.getForeignOrderNo());
         }
-        if ( StringUtils.isNotBlank(request.getItemName()) ){
+        if(StringUtils.isNotBlank(request.getItemName()) ){
             c.andItemNameLike('%'+request.getItemName()+'%');
         }
-        if ( request.getFacePrice() != null && StringUtils.isNotBlank(""+request.getFacePrice()) ){
+        if(request.getFacePrice() != null && StringUtils.isNotBlank(""+request.getFacePrice()) ){
             c.andFacePriceEqualTo(request.getFacePrice());
         }
-        if (StringUtils.isNotBlank(request.getAddtimeStart())&& request.getAddtimeStart()!=null) {
+        if(StringUtils.isNotBlank(request.getAddtimeStart())&& request.getAddtimeStart()!=null) {
             c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(), DateUtils.DATEFORMATSHORT));
         }
-        if (StringUtils.isNotBlank(request.getAddtimeEnd()) && request.getAddtimeEnd() !=null) {
+        if(StringUtils.isNotBlank(request.getAddtimeEnd()) && request.getAddtimeEnd() !=null) {
             c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(), DateUtils.DATEFORMATLONG));
         }
-        if ( request.getInfoStatus() != null && StringUtils.isNotBlank(""+request.getInfoStatus()) ){
+        if(request.getInfoStatus() != null && StringUtils.isNotBlank(""+request.getInfoStatus()) ){
             c.andInfoStatusEqualTo(request.getInfoStatus());
         }
-        if ( request.getMatchingStatus() != null && StringUtils.isNotBlank(""+request.getMatchingStatus()) ){
+        if(request.getMatchingStatus() != null && StringUtils.isNotBlank(""+request.getMatchingStatus())){
             c.andMatchingStatusEqualTo(request.getMatchingStatus());
         }
-        int count = payShopBargainRechargeOrderMapper.countByExample(e);
-        List<PayShopBargainRechargeOrder> list = payShopBargainRechargeOrderMapper.selectByExampleExcel(e);
-        for (PayShopBargainRechargeOrder one:list){
-            ShopBargainRechargeOrderInfo shopBargainRechargeOrderInfo = new ShopBargainRechargeOrderInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayShopBargainRechargeOrder.class, ShopBargainRechargeOrderInfo.class, false);
-            beanCopier.copy(one, shopBargainRechargeOrderInfo, null);
-
-            infos.add(shopBargainRechargeOrderInfo);
-        }
-        response.setList(infos);
-        response.setCount(count);
-
-        return response;
     }
 }

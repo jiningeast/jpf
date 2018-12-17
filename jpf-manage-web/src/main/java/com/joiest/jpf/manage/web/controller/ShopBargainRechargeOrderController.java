@@ -2,6 +2,7 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderRequest;
@@ -13,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +30,8 @@ import java.util.*;
 @RequestMapping("shopBargainRechargeOrder")
 public class ShopBargainRechargeOrderController {
 
+    private Logger logger = LoggerFactory.getLogger(ShopBargainRechargeOrderController.class);
+    
     @Autowired
     private ShopBargainRechargeOrderServiceFacade shopBargainRechargeOrderServiceFacade;
 
@@ -54,20 +59,20 @@ public class ShopBargainRechargeOrderController {
     @RequestMapping("/exportExcel")
     @ResponseBody
     public void exportExcel(GetShopBargainRechargeOrderRequest request, HttpServletResponse response){
+        long startProgramTime = System.currentTimeMillis();
         Map<String,String> requestInfoStatusMap = new HashMap<>(2);
         requestInfoStatusMap.put("1","未绑定");
         requestInfoStatusMap.put("2","已绑定");
 
         request.setInfoStatusMap(requestInfoStatusMap);
-        request.setPage(0);
-        request.setRows(0);
-        GetShopBargainRechargeOrderResponse shopBargainRechargeOrderResponse = shopBargainRechargeOrderServiceFacade.getRecordsExcel(request);
-        List list = new ArrayList();
-        if(shopBargainRechargeOrderResponse != null || shopBargainRechargeOrderResponse.getList().size() > 0){
-            list = shopBargainRechargeOrderResponse.getList();
-        }
+        long startQueryTime = System.currentTimeMillis();
+        List<PayShopBargainRechargeOrder> recordsExcel = shopBargainRechargeOrderServiceFacade.getRecordsExcel(request);
+        logger.info("敬恒订单数据查询数据时间:{} 秒",(System.currentTimeMillis() - startQueryTime) / 1000);
         try {
-            JSONObject jsonObject = exportExcelByInfoNew(response,list, 1, "");
+            long startExportTime = System.currentTimeMillis();
+            JSONObject jsonObject = exportExcelByInfoNew(response,recordsExcel, 1, "");
+            logger.info("敬恒订单数据Excel导出时间:{} 秒",(System.currentTimeMillis() - startExportTime) / 1000);
+            logger.info("敬恒订单数据Excel导出程序执行时间:{} 秒",(System.currentTimeMillis() - startProgramTime) / 1000);
         } catch (Exception e) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "数据导出异常");
         }
@@ -81,7 +86,7 @@ public class ShopBargainRechargeOrderController {
      * @param path
      * @return
      */
-    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<ShopBargainRechargeOrderInfo> data, int type, String path){
+    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<PayShopBargainRechargeOrder> data, int type, String path){
         type = type < 1 ? 1 : type;
         JSONObject res = new JSONObject();
         res.put("code","10000");

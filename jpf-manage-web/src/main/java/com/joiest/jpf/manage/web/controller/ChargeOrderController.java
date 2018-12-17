@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,8 @@ import java.util.*;
 @RequestMapping("chargeOrder")
 public class ChargeOrderController {
 
+    private Logger logger = LoggerFactory.getLogger(ChargeOrderController.class);
+    
     @Autowired
     private ChargeOrderServiceFacade chargeOrderServiceFacade;
 
@@ -228,9 +232,11 @@ public class ChargeOrderController {
     @RequestMapping("exportExcel")
     @ResponseBody
     public void exportExcel(GetChargeOrderRequest request, HttpServletResponse response){
+        long startProgramTime = System.currentTimeMillis();
         Map<String,String> requestInterfaceTypeMap = new HashMap<>(2);
         requestInterfaceTypeMap.put("0","欧飞");
         requestInterfaceTypeMap.put("1","威能");
+        requestInterfaceTypeMap.put("2","敬恒");
         
         Map<String,String> requestStatusMap = new HashMap<>(6);
         requestStatusMap.put("0","订单生成");
@@ -242,15 +248,14 @@ public class ChargeOrderController {
 
         request.setInterfaceTypeParam(requestInterfaceTypeMap);
         request.setStatusParam(requestStatusMap);
-        request.setPage(0);
-        request.setRows(0);
-        GetChargeOrderResponse chargeOrderResponse = chargeOrderServiceFacade.getExcelRecords(request);
-        List list = new ArrayList();
-        if(chargeOrderResponse != null || chargeOrderResponse.getList().size() > 0){
-            list = chargeOrderResponse.getList();
-        }
+        long startQueryTime = System.currentTimeMillis();
+        List<PayChargeOrder> excelRecords = chargeOrderServiceFacade.getExcelRecords(request);
+        logger.info("充值平台订单数据查询时间:{} 秒",(System.currentTimeMillis() - startQueryTime) / 1000);
         try {
-            JSONObject jsonObject = exportExcelByInfoNew(response, list, 1, "");
+            long startExportTime = System.currentTimeMillis();
+            JSONObject jsonObject = exportExcelByInfoNew(response, excelRecords, 1, "");
+            logger.info("充值平台订单数据Excel导出时间:{} 秒",(System.currentTimeMillis() - startExportTime) / 1000);
+            logger.info("充值平台订单数据导出程序执行时间:{} 秒",(System.currentTimeMillis() - startProgramTime) / 1000);
         } catch (Exception e) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "数据导出异常");
         }
@@ -264,7 +269,7 @@ public class ChargeOrderController {
      * @param path
      * @return
      */
-    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<ChargeOrderInfo> data, int type, String path){
+    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<PayChargeOrder> data, int type, String path){
         type = type < 1 ? 1 : type;
         JSONObject res = new JSONObject();
         res.put("code","10000");

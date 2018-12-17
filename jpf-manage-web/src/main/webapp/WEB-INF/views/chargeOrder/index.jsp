@@ -71,6 +71,7 @@
                         formatter:function (value,row,index) {
                             if ( value == 0 ) { return "欧飞"; }
                             if ( value == 1 ) { return "威能"; }
+                            if ( value == 2 ) { return "敬恒"; }
                         }},
                     {field:'interfaceOrderNo',title:'上游订单号',width:"5%"},
                     {field:'status',title:'订单状态',width:"5%",
@@ -173,6 +174,7 @@
                                     <option value="">全部</option>
                                     <option value="0">欧飞</option>
                                     <option value="1">威能</option>
+                                    <option value="2">敬恒</option>
                                 </select>
                             </td>
                             <td>订单状态：</td>

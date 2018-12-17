@@ -83,47 +83,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
         PayChargeOrderExample e = new PayChargeOrderExample();
         PayChargeOrderExample.Criteria c = e.createCriteria();
-        if ( request.getOrderNo() != null && StringUtils.isNotBlank(request.getOrderNo()) ){
-            c.andOrderNoEqualTo(request.getOrderNo());
-        }
-        if ( request.getForeignOrderNo() != null && StringUtils.isNotBlank(request.getForeignOrderNo()) ){
-            c.andForeignOrderNoEqualTo(request.getForeignOrderNo());
-        }
-        if ( request.getCompanyId() != null && StringUtils.isNotBlank(request.getCompanyId()) ){
-            c.andCompanyIdEqualTo(request.getCompanyId());
-        }
-        if ( request.getCompanyName() != null && StringUtils.isNotBlank(request.getCompanyName()) ){
-            c.andCompanyNameEqualTo(request.getCompanyName());
-        }
-        if ( request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
-            c.andMerchNoEqualTo(request.getMerchNo());
-        }
-        if ( request.getChargePhone() != null && StringUtils.isNotBlank(request.getChargePhone()) ){
-            c.andChargePhoneEqualTo(request.getChargePhone());
-        }
-        if ( request.getProductId() != null && StringUtils.isNotBlank(request.getProductId()) ){
-            c.andProductIdEqualTo(request.getProductId());
-        }
-        if ( request.getProductName() != null && StringUtils.isNotBlank(request.getProductName()) ){
-            c.andProductNameEqualTo(request.getProductName());
-        }
-        if ( request.getInterfaceType() != null && StringUtils.isNotBlank(""+request.getInterfaceType()) ){
-            c.andInterfaceTypeEqualTo(request.getInterfaceType());
-        }
-        if ( request.getStatus() != null && StringUtils.isNotBlank(""+request.getStatus()) ){
-            c.andStatusEqualTo(request.getStatus());
-        }
-        if ( request.getInterfaceOrderNo() != null && StringUtils.isNotBlank(""+request.getInterfaceOrderNo())){
-            c.andInterfaceOrderNoEqualTo(request.getInterfaceOrderNo());
-        }
-        if (StringUtils.isNotBlank(request.getAddtimeStart()))
-        {
-            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
-        }
-        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
-        {
-            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
-        }
+        matchCriteria(request,c);
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
         e.setOrderByClause("id DESC");
@@ -354,74 +314,60 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
 
     @Override
-    public GetChargeOrderResponse getExcelRecords(GetChargeOrderRequest request){
-
-        GetChargeOrderResponse response = new GetChargeOrderResponse();
-
+    public List<PayChargeOrder> getExcelRecords(GetChargeOrderRequest request){
         PayChargeOrderExample e = new PayChargeOrderExample();
         PayChargeOrderExample.Criteria c = e.createCriteria();
-        if ( request.getOrderNo() != null && StringUtils.isNotBlank(request.getOrderNo()) ){
-            c.andOrderNoEqualTo(request.getOrderNo());
-        }
-        if ( request.getForeignOrderNo() != null && StringUtils.isNotBlank(request.getForeignOrderNo()) ){
-            c.andForeignOrderNoEqualTo(request.getForeignOrderNo());
-        }
-        if ( request.getCompanyId() != null && StringUtils.isNotBlank(request.getCompanyId()) ){
-            c.andCompanyIdEqualTo(request.getCompanyId());
-        }
-        if ( request.getCompanyName() != null && StringUtils.isNotBlank(request.getCompanyName()) ){
-            c.andCompanyNameEqualTo(request.getCompanyName());
-        }
-        if ( request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
-            c.andMerchNoEqualTo(request.getMerchNo());
-        }
-        if ( request.getChargePhone() != null && StringUtils.isNotBlank(request.getChargePhone()) ){
-            c.andChargePhoneEqualTo(request.getChargePhone());
-        }
-        if ( request.getProductId() != null && StringUtils.isNotBlank(request.getProductId()) ){
-            c.andProductIdEqualTo(request.getProductId());
-        }
-        if ( request.getProductName() != null && StringUtils.isNotBlank(request.getProductName()) ){
-            c.andProductNameEqualTo(request.getProductName());
-        }
-        if ( request.getInterfaceType() != null && StringUtils.isNotBlank(""+request.getInterfaceType()) ){
-            c.andInterfaceTypeEqualTo(request.getInterfaceType());
-        }
-        if ( request.getStatus() != null && StringUtils.isNotBlank(""+request.getStatus()) ){
-            c.andStatusEqualTo(request.getStatus());
-        }
-        if ( request.getInterfaceOrderNo() != null && StringUtils.isNotBlank(""+request.getInterfaceOrderNo())){
-            c.andInterfaceOrderNoEqualTo(request.getInterfaceOrderNo());
-        }
-        if (StringUtils.isNotBlank(request.getAddtimeStart()))
-        {
-            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
-        }
-        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
-        {
-            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
-        }
-        e.setPageNo(request.getPage());
-        e.setPageSize(request.getRows());
+        matchCriteria(request,c);
         e.setOrderByClause("id DESC");
         c.andIsDelEqualTo((byte)0);
-        //c.andInterfaceOrderNoIsNotNull();
-        List<ChargeOrderInfo> infos = new ArrayList<>();
-        List<PayChargeOrder> list = payChargeOrderMapper.selectByExcelExample(e);
-        int count = payChargeOrderMapper.countByExample(e);
-        if ( list != null && !list.isEmpty() ){
-            for ( PayChargeOrder one:list ){
-                ChargeOrderInfo info = new ChargeOrderInfo();
+        return payChargeOrderMapper.selectByExcelExample(e);
+    }
 
-                BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class,ChargeOrderInfo.class,false);
-                beanCopier.copy(one,info,null);
-                infos.add(info);
-            }
+    /**
+     * 充值订单查询条件匹配
+     * @param request
+     * @param c
+     */
+    private void matchCriteria(GetChargeOrderRequest request,PayChargeOrderExample.Criteria c){
+        if(request.getOrderNo() != null && StringUtils.isNotBlank(request.getOrderNo()) ){
+            c.andOrderNoEqualTo(request.getOrderNo());
         }
-        response.setList(infos);
-        response.setCount(count);
-
-        return response;
+        if(request.getForeignOrderNo() != null && StringUtils.isNotBlank(request.getForeignOrderNo()) ){
+            c.andForeignOrderNoEqualTo(request.getForeignOrderNo());
+        }
+        if(request.getCompanyId() != null && StringUtils.isNotBlank(request.getCompanyId()) ){
+            c.andCompanyIdEqualTo(request.getCompanyId());
+        }
+        if(request.getCompanyName() != null && StringUtils.isNotBlank(request.getCompanyName()) ){
+            c.andCompanyNameEqualTo(request.getCompanyName());
+        }
+        if(request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        if(request.getChargePhone() != null && StringUtils.isNotBlank(request.getChargePhone()) ){
+            c.andChargePhoneEqualTo(request.getChargePhone());
+        }
+        if(request.getProductId() != null && StringUtils.isNotBlank(request.getProductId()) ){
+            c.andProductIdEqualTo(request.getProductId());
+        }
+        if(request.getProductName() != null && StringUtils.isNotBlank(request.getProductName()) ){
+            c.andProductNameEqualTo(request.getProductName());
+        }
+        if(request.getInterfaceType() != null && StringUtils.isNotBlank("" + request.getInterfaceType()) ){
+            c.andInterfaceTypeEqualTo(request.getInterfaceType());
+        }
+        if(request.getStatus() != null && StringUtils.isNotBlank("" + request.getStatus()) ){
+            c.andStatusEqualTo(request.getStatus());
+        }
+        if(request.getInterfaceOrderNo() != null && StringUtils.isNotBlank("" + request.getInterfaceOrderNo())){
+            c.andInterfaceOrderNoEqualTo(request.getInterfaceOrderNo());
+        }
+        if(StringUtils.isNotBlank(request.getAddtimeStart())){
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if(StringUtils.isNotBlank(request.getAddtimeEnd())){ 
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
     }
 }
 

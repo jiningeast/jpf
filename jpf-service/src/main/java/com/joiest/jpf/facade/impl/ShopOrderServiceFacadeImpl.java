@@ -49,41 +49,7 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
 
         PayShopOrderCustomExample.Criteria c =example.createCriteria();
 
-        if ( StringUtils.isNotBlank(request.getProductName()))
-        {
-            c.andProductNameLike("%"+ request.getProductName() +"%" );
-        }
-     /*   if( StringUtils.isNotBlank(request.getCustomerName())){
-            c.andCustomerNameLike( "%"+ request.getCustomerName() +"%" );
-        }*/
-        if( StringUtils.isNotBlank(request.getOrderNo())){
-            c.andOrderNoEqualTo(request.getOrderNo());
-        }
-        if(request.getStatus()!=null && request.getStatus().toString()!=""){
-            c.andStatusEqualTo(request.getStatus());
-        }
-        if(request.getSource()!=null && request.getSource().toString()!=""){
-            c.andSourceEqualTo(request.getSource());
-        }
-        // 添加时间搜索
-        if (StringUtils.isNotBlank(request.getAddtimeStart()))
-        {
-            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
-        }
-        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
-        {
-            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
-        }
-
-        // 添加时间搜索
-        if (StringUtils.isNotBlank(request.getPaytimeStart()))
-        {
-            c.andPaytimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getPaytimeStart(),DateUtils.DATEFORMATSHORT));
-        }
-        if (StringUtils.isNotBlank(request.getPaytimeEnd()))
-        {
-            c.andPaytimeLessThanOrEqualTo(DateUtils.getFdate(request.getPaytimeEnd(),DateUtils.DATEFORMATLONG));
-        }
+        matchCriteria(request,c);
 
         List<PayShopOrderCustom> list = payShopOrderCustomMapper.selectByExampleJoin(example);
         List<ShopOrderInfo> infoList = new ArrayList<>();
@@ -136,62 +102,45 @@ public class ShopOrderServiceFacadeImpl implements ShopOrderServiceFacade {
     }
 
     @Override
-    public GetShopOrderResponse getExcelList(GetShopOrderRequest request) {
+    public List<PayShopOrderCustom> getExcelList(GetShopOrderRequest request) {
         PayShopOrderCustomExample example = new PayShopOrderCustomExample();
-        example.setPageNo(request.getPage());
-        example.setPageSize(request.getRows());
         example.setOrderByClause("id DESC");
-
         PayShopOrderCustomExample.Criteria c =example.createCriteria();
+        matchCriteria(request,c);
+        return payShopOrderCustomMapper.selectByExcelExampleJoin(example);
+    }
 
-        if ( StringUtils.isNotBlank(request.getProductName()))
-        {
-            c.andProductNameLike("%"+ request.getProductName() +"%" );
+    /**
+     * 欣豆市场订单查询搜索条件匹配
+     * @param request
+     * @param c
+     */
+    private void matchCriteria(GetShopOrderRequest request,PayShopOrderCustomExample.Criteria c){
+        if(StringUtils.isNotBlank(request.getProductName())){
+            c.andProductNameLike("%" + request.getProductName() + "%" );
         }
-
-        if( StringUtils.isNotBlank(request.getOrderNo())){
+        if(StringUtils.isNotBlank(request.getOrderNo())){
             c.andOrderNoEqualTo(request.getOrderNo());
         }
-        if(request.getStatus()!=null && request.getStatus().toString()!=""){
+        if(request.getStatus() != null && request.getStatus().toString() != ""){
             c.andStatusEqualTo(request.getStatus());
         }
-        if(request.getSource()!=null && request.getSource().toString()!=""){
+        if(request.getSource() != null && request.getSource().toString() != ""){
             c.andSourceEqualTo(request.getSource());
         }
         // 添加时间搜索
-        if (StringUtils.isNotBlank(request.getAddtimeStart()))
-        {
+        if(StringUtils.isNotBlank(request.getAddtimeStart())){
             c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
         }
-        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
-        {
+        if(StringUtils.isNotBlank(request.getAddtimeEnd())){
             c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
         }
-
         // 添加时间搜索
-        if (StringUtils.isNotBlank(request.getPaytimeStart()))
-        {
+        if(StringUtils.isNotBlank(request.getPaytimeStart())){
             c.andPaytimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getPaytimeStart(),DateUtils.DATEFORMATSHORT));
         }
-        if (StringUtils.isNotBlank(request.getPaytimeEnd()))
-        {
+        if(StringUtils.isNotBlank(request.getPaytimeEnd())){
             c.andPaytimeLessThanOrEqualTo(DateUtils.getFdate(request.getPaytimeEnd(),DateUtils.DATEFORMATLONG));
         }
-
-        List<PayShopOrderCustom> list = payShopOrderCustomMapper.selectByExcelExampleJoin(example);
-        List<ShopOrderInfo> infoList = new ArrayList<>();
-
-        for (PayShopOrderCustom one : list)
-        {
-            ShopOrderInfo info = new ShopOrderInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayShopOrderCustom.class, ShopOrderInfo.class, false);
-            beanCopier.copy(one, info, null);
-            infoList.add(info);
-        }
-        GetShopOrderResponse response = new GetShopOrderResponse();
-        response.setList(infoList);
-        int count = payShopOrderCustomMapper.countByExampleList(example);
-        response.setCount(count);
-        return response;
     }
 }
