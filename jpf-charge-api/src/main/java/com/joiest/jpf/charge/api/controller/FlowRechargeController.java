@@ -223,8 +223,9 @@ public class FlowRechargeController {
             chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
             actParam.put("forProductId",chargeProductInfo.getWnProductId());
             //请求微能接口
+            logger.info("weinengStart");
             map = phoneRechargeWn(actParam);
-            logger.info("weineng"+map.get("orderid"));
+            logger.info("weinengEnd"+map.get("orderid"));
         }
         //添加流水
         ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
