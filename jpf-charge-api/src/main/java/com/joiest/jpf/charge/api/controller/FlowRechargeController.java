@@ -352,6 +352,7 @@ public class FlowRechargeController {
             resultMap.put("requestUrl",responseMap.get("requestUrl"));
             resultMap.put("requestParam",responseMap.get("requestParam"));
             resultMap.put("responseParam",responseMap.get("responseParam"));
+            logger.info("欧非直充接口，充值返回数据 responseDeal"+responseMap.toString());
         } catch (Exception e) {
             logger.error("self单号:"+rechargeMap.get("selfOrder")+"--话费直充欧非接口报错"+e.getMessage(),e);
             responseMap.put("retcode","1");
@@ -389,6 +390,7 @@ public class FlowRechargeController {
             resultMap.put("requestParam",actualDeal.get("requestParam")==null?"":actualDeal.get("requestParam").toString());
             resultMap.put("responseParam",actualDeal.get("responseParam")==null?"":actualDeal.get("responseParam").toString());
             resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
+            logger.info("微能接口，充值返回数据 responseDeal"+responseDeal.toString());
         } catch (Exception e) {
             logger.error("self单号"+actParam.get("selfOrder")+"微能的话费直充接口报错了"+e.getMessage(),e);
             responseDeal=new JSONObject();
@@ -741,6 +743,7 @@ public class FlowRechargeController {
             resultMap.put("requestUrl",responseMap.get("requestUrl"));
             resultMap.put("requestParam",responseMap.get("requestParam"));
             resultMap.put("responseParam",responseMap.get("responseParam"));
+            logger.info("欧非油卡接口，充值返回数据 responseDeal"+responseMap.toString());
         } catch (Exception e) {
           logger.error("self单号:"+actParam.get("selfOrder")+":油卡充值的接口报错了"+e.getMessage(),e);
             responseMap.put("retcode","1");
