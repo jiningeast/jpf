@@ -2,7 +2,9 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.util.WnpayUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeOrderMapper;
 import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
@@ -10,7 +12,10 @@ import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
 import com.joiest.jpf.entity.ChargeOrderInfo;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -20,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
+    private static final Logger logger = LogManager.getLogger(ChargeOrderServiceFacadeImpl.class);
 
     @Autowired
     private PayChargeOrderMapper payChargeOrderMapper;
@@ -64,6 +70,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     /**
      * 生成订单
      * */
+    @Override
     public int placeOrder(ChargeOrderInfo placeOrderInfo){
 
         PayChargeOrder payChargeOrder = new PayChargeOrder();
@@ -83,7 +90,47 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
         PayChargeOrderExample e = new PayChargeOrderExample();
         PayChargeOrderExample.Criteria c = e.createCriteria();
-        matchCriteria(request,c);
+        if ( request.getOrderNo() != null && StringUtils.isNotBlank(request.getOrderNo()) ){
+            c.andOrderNoEqualTo(request.getOrderNo());
+        }
+        if ( request.getForeignOrderNo() != null && StringUtils.isNotBlank(request.getForeignOrderNo()) ){
+            c.andForeignOrderNoEqualTo(request.getForeignOrderNo());
+        }
+        if ( request.getCompanyId() != null && StringUtils.isNotBlank(request.getCompanyId()) ){
+            c.andCompanyIdEqualTo(request.getCompanyId());
+        }
+        if ( request.getCompanyName() != null && StringUtils.isNotBlank(request.getCompanyName()) ){
+            c.andCompanyNameEqualTo(request.getCompanyName());
+        }
+        if ( request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        if ( request.getChargePhone() != null && StringUtils.isNotBlank(request.getChargePhone()) ){
+            c.andChargePhoneEqualTo(request.getChargePhone());
+        }
+        if ( request.getProductId() != null && StringUtils.isNotBlank(request.getProductId()) ){
+            c.andProductIdEqualTo(request.getProductId());
+        }
+        if ( request.getProductName() != null && StringUtils.isNotBlank(request.getProductName()) ){
+            c.andProductNameEqualTo(request.getProductName());
+        }
+        if ( request.getInterfaceType() != null && StringUtils.isNotBlank(""+request.getInterfaceType()) ){
+            c.andInterfaceTypeEqualTo(request.getInterfaceType());
+        }
+        if ( request.getStatus() != null && StringUtils.isNotBlank(""+request.getStatus()) ){
+            c.andStatusEqualTo(request.getStatus());
+        }
+        if ( request.getInterfaceOrderNo() != null && StringUtils.isNotBlank(""+request.getInterfaceOrderNo())){
+            c.andInterfaceOrderNoEqualTo(request.getInterfaceOrderNo());
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeStart()))
+        {
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if (StringUtils.isNotBlank(request.getAddtimeEnd()))
+        {
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
         e.setPageNo(request.getPage());
         e.setPageSize(request.getRows());
         e.setOrderByClause("id DESC");
@@ -231,6 +278,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
      * 更新订单新
      * @param upOrderInfo 要更新的订单信息
      * */
+    @Override
     public int upOrderInfo(ChargeOrderInfo upOrderInfo){
 
         PayChargeOrder payChargeOrder = new PayChargeOrder();
@@ -369,6 +417,74 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
             c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
         }
     }
+    /**
+     * 所有威能异常订单处理
+     */
+    @Override
+    public List<ChargeOrderInfo>  getWeinengAbnormalOrders(ChargeOrderInfo request)
+    {
+
+        PayChargeOrderExample example = new PayChargeOrderExample();
+        example.setOrderByClause("addtime ASC");
+        //example.setPageNo(1);
+        //example.setPageSize(1);
+
+        PayChargeOrderExample.Criteria c =example.createCriteria();
+        c.andStatusEqualTo(request.getStatus());
+
+        List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
+        if( list.size() <=0 || list == null){
+            return null;
+        }
+        List<ChargeOrderInfo> infoList = new ArrayList<>();
+
+        for (PayChargeOrder one : list)
+        {
+            ChargeOrderInfo info = new ChargeOrderInfo();
+            BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
+            beanCopier.copy(one, info, null);
+            infoList.add(info);
+        }
+
+        return infoList;
+    }
+
+    @Override
+    public Map<String, String> phoneRechargeWn(Map<String, String> actParam) {
+        Map<String, String> resultMap = new HashMap<>();
+        //充值接口
+        JSONObject requestParam = new JSONObject();
+        requestParam.put("mobile",actParam.get("phone"));
+        requestParam.put("productId",actParam.get("forProductId"));
+        requestParam.put("outOrderId",actParam.get("selfOrder"));
+
+        String wnProduct = null;
+        JSONObject responseDeal=null;
+        JSONObject actualDeal=null;
+        try {
+            WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+            wnProduct = wnpayUtils.flowOrder(requestParam);
+            responseDeal = JSONObject.fromObject(wnProduct);
+            actualDeal = JSONObject.fromObject(responseDeal.get("data").toString());
+            resultMap.put("requestUrl",actualDeal.get("requestUrl")==null?"":actualDeal.get("requestUrl").toString());
+            resultMap.put("requestParam",actualDeal.get("requestParam")==null?"":actualDeal.get("requestParam").toString());
+            resultMap.put("responseParam",actualDeal.get("responseParam")==null?"":actualDeal.get("responseParam").toString());
+            resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
+        } catch (Exception e) {
+            logger.error("self单号"+actParam.get("selfOrder")+"微能的话费直充接口报错了"+e.getMessage(),e);
+            responseDeal=new JSONObject();
+            responseDeal.put("code","10001`");
+        }
+        if(responseDeal!=null&&"10000".equals(responseDeal.get("code"))){
+            resultMap.put("code","10000");
+        }else if(responseDeal!=null&&"10001".equals(responseDeal.get("code"))){
+            resultMap.put("code","10001");
+        }else{
+            resultMap.put("code","10008");
+        }
+        return resultMap;
+    }
+
 }
 
 

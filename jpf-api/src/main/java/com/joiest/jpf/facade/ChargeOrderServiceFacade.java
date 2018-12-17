@@ -52,4 +52,13 @@ public interface ChargeOrderServiceFacade {
     public List<ChargeOrderInfo> getAllAbnormalOrders(ChargeOrderInfo request);
 
     List<PayChargeOrder> getExcelRecords(GetChargeOrderRequest request);
+
+    /**
+     * 威能订单列表
+     */
+    public List<ChargeOrderInfo> getWeinengAbnormalOrders(ChargeOrderInfo request);
+
+    Map<String,String> phoneRechargeWn(Map<String, String> actParam);
+
+
 }

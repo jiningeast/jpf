@@ -207,7 +207,7 @@ public class FlowRechargeController {
         String lastNum = StringUtils.substring(String.valueOf(orderId),-1,String.valueOf(orderId).length());
         Map<String, String> map = null;
         Byte type=1;
-        if ( Integer.parseInt(lastNum) >= 0 ){
+        if (StringUtils.isBlank(ConfigUtil.getValue("OF_AND_WEINENG"))||(Integer.parseInt(lastNum)>=Integer.parseInt(ConfigUtil.getValue("OF_AND_WEINENG")))){
             type = 0;
             upOrderInfo.setInterfaceType(type);
             upOrderInfo.setProductType(0);
@@ -223,7 +223,7 @@ public class FlowRechargeController {
             chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
             actParam.put("forProductId",chargeProductInfo.getWnProductId());
             //请求微能接口
-            map = phoneRechargeWn(actParam);
+            map = chargeOrderServiceFacade.phoneRechargeWn(actParam);
             logger.info("weineng"+map.get("orderid"));
         }
         //添加流水
@@ -246,11 +246,18 @@ public class FlowRechargeController {
         merRespons.put("productId",actParam.get("productId"));//产品金额
         merRespons.put("foreignOrderNo",map.get("orderid"));//返回欧非或者威能订单号
 
-        if("10000".equals(map.get("code"))){
-            upOrderInfo.setStatus((byte)1);
+        if("10000".equals(map.get("code"))||"10001".equals(map.get("code"))){
+            if("10000".equals(map.get("code"))){
+                upOrderInfo.setStatus((byte)1);
+                responseParam.put("code","10000");
+                responseParam.put("info","下单成功，充值中");
+            }else{
+                upOrderInfo.setStatus((byte)8);
+                responseParam.put("code","10001");
+                responseParam.put("info","下单异常，充值中");
+            }
             upOrderInfo.setInterfaceOrderNo(map.get("orderid"));
-            responseParam.put("code","10000");
-            responseParam.put("info","下单成功，充值中");
+
             // 新增资金流水
             ChargeCompanyMoneyStreamInfo info = new ChargeCompanyMoneyStreamInfo();
             String streamNo = "MS"+System.currentTimeMillis()+ToolUtils.getRandomInt(100,999);
@@ -340,14 +347,15 @@ public class FlowRechargeController {
         rechargeMap.put("ret_url", ConfigUtil.getValue("notify_url"));
         try {
             responseMap = new OfpayUtils().chargePhone(rechargeMap);
+            //欧非订单号
+            resultMap.put("orderid",responseMap.get("orderid"));
+            resultMap.put("requestUrl",responseMap.get("requestUrl"));
+            resultMap.put("requestParam",responseMap.get("requestParam"));
+            resultMap.put("responseParam",responseMap.get("responseParam"));
         } catch (Exception e) {
-            logger.error("话费直充欧非接口报错"+e.getMessage());
+            logger.error("self单号:"+rechargeMap.get("selfOrder")+"--话费直充欧非接口报错"+e.getMessage(),e);
+            responseMap.put("retcode","1");
         }
-        //欧非订单号
-        resultMap.put("orderid",responseMap.get("orderid"));
-        resultMap.put("requestUrl",responseMap.get("requestUrl"));
-        resultMap.put("requestParam",responseMap.get("requestParam"));
-        resultMap.put("responseParam",responseMap.get("responseParam"));
         // 欧飞接口返回处理
         if (responseMap.containsKey("retcode") && "1".equals(responseMap.get("retcode"))) {
             resultMap.put("code","10000");
@@ -357,40 +365,46 @@ public class FlowRechargeController {
         return resultMap;
 
     }
+
     /**
      * 话费直充 微能
      */
-    private Map<String, String> phoneRechargeWn(Map<String,String> actParam)
-    {
-        Map<String, String> resultMap = new HashMap<>();
-        //充值接口
-        JSONObject requestParam = new JSONObject();
-        requestParam.put("mobile",actParam.get("phone"));
-        requestParam.put("productId",actParam.get("forProductId"));
-        requestParam.put("outOrderId",actParam.get("selfOrder"));
+//    private Map<String, String> phoneRechargeWn(Map<String,String> actParam)
+//    {
+//        Map<String, String> resultMap = new HashMap<>();
+//        //充值接口
+//        JSONObject requestParam = new JSONObject();
+//        requestParam.put("mobile",actParam.get("phone"));
+//        requestParam.put("productId",actParam.get("forProductId"));
+//        requestParam.put("outOrderId",actParam.get("selfOrder"));
+//
+//        String wnProduct = null;
+//        JSONObject responseDeal=null;
+//        JSONObject actualDeal=null;
+//        try {
+//            WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
+//            wnProduct = wnpayUtils.flowOrder(requestParam);
+//            responseDeal = JSONObject.fromObject(wnProduct);
+//            actualDeal = JSONObject.fromObject(responseDeal.get("data").toString());
+//            resultMap.put("requestUrl",actualDeal.get("requestUrl")==null?"":actualDeal.get("requestUrl").toString());
+//            resultMap.put("requestParam",actualDeal.get("requestParam")==null?"":actualDeal.get("requestParam").toString());
+//            resultMap.put("responseParam",actualDeal.get("responseParam")==null?"":actualDeal.get("responseParam").toString());
+//            resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
+//        } catch (Exception e) {
+//            logger.error("self单号"+actParam.get("selfOrder")+"微能的话费直充接口报错了"+e.getMessage(),e);
+//            responseDeal=new JSONObject();
+//            responseDeal.put("code","10001`");
+//        }
+//        if(responseDeal!=null&&"10000".equals(responseDeal.get("code"))){
+//            resultMap.put("code","10000");
+//        }else if(responseDeal!=null&&"10001".equals(responseDeal.get("code"))){
+//            resultMap.put("code","10001");
+//        }else{
+//            resultMap.put("code","10008");
+//        }
+//        return resultMap;
+//    }
 
-        String wnProduct = null;
-        JSONObject responseDeal=null;
-        JSONObject actualDeal=null;
-        try {
-            WnpayUtils wnpayUtils = new WnpayUtils(ConfigUtil.getValue("account"),ConfigUtil.getValue("password"),ConfigUtil.getValue("request_url"));
-            wnProduct = wnpayUtils.flowOrder(requestParam);
-            responseDeal = JSONObject.fromObject(wnProduct);
-            actualDeal = JSONObject.fromObject(responseDeal.get("data").toString());
-            resultMap.put("requestUrl",actualDeal.get("requestUrl")==null?"":actualDeal.get("requestUrl").toString());
-            resultMap.put("requestParam",actualDeal.get("requestParam")==null?"":actualDeal.get("requestParam").toString());
-            resultMap.put("responseParam",actualDeal.get("responseParam")==null?"":actualDeal.get("responseParam").toString());
-        } catch (Exception e) {
-            logger.error("微能的话费直充接口报错了"+e.getMessage());
-        }
-        if(responseDeal!=null&&"10000".equals(responseDeal.get("code"))&&actualDeal!=null){
-            resultMap.put("orderid",actualDeal.get("wnorderid")==null?"":actualDeal.get("wnorderid").toString());
-            resultMap.put("code","10000");
-        }else{
-            resultMap.put("code","10008");
-        }
-        return resultMap;
-    }
     /**
      * 欧非话费充值异步回调接口
      * */
@@ -724,14 +738,15 @@ public class FlowRechargeController {
 
         try {
             responseMap = new OfpayUtils().chargeGas(rechargeMap);
+            //欧非订单号
+            resultMap.put("orderid",responseMap.get("orderid"));
+            resultMap.put("requestUrl",responseMap.get("requestUrl"));
+            resultMap.put("requestParam",responseMap.get("requestParam"));
+            resultMap.put("responseParam",responseMap.get("responseParam"));
         } catch (Exception e) {
-          logger.error("油卡充值的接口报错了"+e.getMessage());
+          logger.error("self单号:"+actParam.get("selfOrder")+":油卡充值的接口报错了"+e.getMessage(),e);
+            responseMap.put("retcode","1");
         }
-        //欧非订单号
-        resultMap.put("orderid",responseMap.get("orderid"));
-        resultMap.put("requestUrl",responseMap.get("requestUrl"));
-        resultMap.put("requestParam",responseMap.get("requestParam"));
-        resultMap.put("responseParam",responseMap.get("responseParam"));
         // 欧飞接口返回处理
         if (responseMap.containsKey("retcode") && "1".equals(responseMap.get("retcode"))) {
             resultMap.put("code","10000");
