@@ -28,4 +28,9 @@ public interface ChargeCompanyMoneyStreamServiceFacade {
      */
     public int insRecord(ChargeCompanyMoneyStreamInfo info);
 
+    /**
+     * 更新流水
+     */
+    public int updateRecord(PayChargeCompanyMoneyStream record,String order_no);
+
 }
