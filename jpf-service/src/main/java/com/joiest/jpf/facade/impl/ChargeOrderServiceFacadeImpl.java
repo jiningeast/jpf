@@ -73,6 +73,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     /**
      * 生成订单
      * */
+    @Override
     public int placeOrder(ChargeOrderInfo placeOrderInfo){
 
         PayChargeOrder payChargeOrder = new PayChargeOrder();
@@ -280,6 +281,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
      * 更新订单新
      * @param upOrderInfo 要更新的订单信息
      * */
+    @Override
     public int upOrderInfo(ChargeOrderInfo upOrderInfo){
 
         PayChargeOrder payChargeOrder = new PayChargeOrder();
@@ -347,6 +349,63 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         return list;
     }
 
+
+    @Override
+    public List<PayChargeOrder> getExcelRecords(GetChargeOrderRequest request){
+        PayChargeOrderExample e = new PayChargeOrderExample();
+        PayChargeOrderExample.Criteria c = e.createCriteria();
+        matchCriteria(request,c);
+        e.setOrderByClause("id DESC");
+        c.andIsDelEqualTo((byte)0);
+        return payChargeOrderMapper.selectByExcelExample(e);
+    }
+
+    /**
+     * 充值订单查询条件匹配
+     * @param request
+     * @param c
+     */
+    private void matchCriteria(GetChargeOrderRequest request,PayChargeOrderExample.Criteria c){
+        if(request.getOrderNo() != null && StringUtils.isNotBlank(request.getOrderNo()) ){
+            c.andOrderNoEqualTo(request.getOrderNo());
+        }
+        if(request.getForeignOrderNo() != null && StringUtils.isNotBlank(request.getForeignOrderNo()) ){
+            c.andForeignOrderNoEqualTo(request.getForeignOrderNo());
+        }
+        if(request.getCompanyId() != null && StringUtils.isNotBlank(request.getCompanyId()) ){
+            c.andCompanyIdEqualTo(request.getCompanyId());
+        }
+        if(request.getCompanyName() != null && StringUtils.isNotBlank(request.getCompanyName()) ){
+            c.andCompanyNameEqualTo(request.getCompanyName());
+        }
+        if(request.getMerchNo() != null && StringUtils.isNotBlank(request.getMerchNo()) ){
+            c.andMerchNoEqualTo(request.getMerchNo());
+        }
+        if(request.getChargePhone() != null && StringUtils.isNotBlank(request.getChargePhone()) ){
+            c.andChargePhoneEqualTo(request.getChargePhone());
+        }
+        if(request.getProductId() != null && StringUtils.isNotBlank(request.getProductId()) ){
+            c.andProductIdEqualTo(request.getProductId());
+        }
+        if(request.getProductName() != null && StringUtils.isNotBlank(request.getProductName()) ){
+            c.andProductNameEqualTo(request.getProductName());
+        }
+        if(request.getInterfaceType() != null && StringUtils.isNotBlank("" + request.getInterfaceType()) ){
+            c.andInterfaceTypeEqualTo(request.getInterfaceType());
+        }
+        if(request.getStatus() != null && StringUtils.isNotBlank("" + request.getStatus()) ){
+            c.andStatusEqualTo(request.getStatus());
+        }
+        if(request.getInterfaceOrderNo() != null && StringUtils.isNotBlank("" + request.getInterfaceOrderNo())){
+            c.andInterfaceOrderNoEqualTo(request.getInterfaceOrderNo());
+        }
+        if(StringUtils.isNotBlank(request.getAddtimeStart())){
+            c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(request.getAddtimeStart(),DateUtils.DATEFORMATSHORT));
+        }
+        if(StringUtils.isNotBlank(request.getAddtimeEnd())){ 
+            c.andAddtimeLessThanOrEqualTo(DateUtils.getFdate(request.getAddtimeEnd(),DateUtils.DATEFORMATLONG));
+        }
+    }
     /**
      * 所有威能异常订单处理
      */

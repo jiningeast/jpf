@@ -52,6 +52,8 @@ public interface ChargeOrderServiceFacade {
      */
     public List<PayChargeOrder> getAllAbnormalOrders();
 
+    List<PayChargeOrder> getExcelRecords(GetChargeOrderRequest request);
+
     /**
      * 威能订单列表
      */

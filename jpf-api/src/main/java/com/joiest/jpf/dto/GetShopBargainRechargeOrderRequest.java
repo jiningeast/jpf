@@ -43,6 +43,8 @@ public class GetShopBargainRechargeOrderRequest {
      */
     private String pullOrderNo;
 
+    private Byte matchingStatus;
+    
     public String getOrderNo() {
         return orderNo;
     }
@@ -137,5 +139,13 @@ public class GetShopBargainRechargeOrderRequest {
 
     public void setPullOrderNo(String pullOrderNo) {
         this.pullOrderNo = pullOrderNo;
+    }
+
+    public Byte getMatchingStatus() {
+        return matchingStatus;
+    }
+
+    public void setMatchingStatus(Byte matchingStatus) {
+        this.matchingStatus = matchingStatus;
     }
 }
