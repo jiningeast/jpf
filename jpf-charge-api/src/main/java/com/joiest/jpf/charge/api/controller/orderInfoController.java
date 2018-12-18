@@ -487,7 +487,7 @@ public class orderInfoController {
                     logContent.append("\n处理结果：更新前上游订单号："+list.get(i).getInterfaceOrderNo()+"\t status:"+status+" \t  操作结果： ");
                     // 请求威能下单接口
                     Map<String, String> actParam = new HashMap<>();
-                    actParam.put("mobile",list.get(i).getChargePhone());
+                    actParam.put("phone",list.get(i).getChargePhone());
                     //威能产品ID
                     actParam.put("forProductId",chargeProductInfo.getWnProductId());
                     actParam.put("selfOrder",orderNo);
