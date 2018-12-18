@@ -104,7 +104,11 @@ public class ShopBargainRechargeOrderInfo {
      * 拉取数据时对应的订单号
      */
     private String pullOrderNo;
-
+    
+    /**
+     * 匹配的状态，0未匹配，1是匹配中，2已匹配
+     */
+    private Byte matchingStatus;
     public Long getId() {
         return id;
     }
@@ -263,5 +267,13 @@ public class ShopBargainRechargeOrderInfo {
 
     public void setPullOrderNo(String pullOrderNo) {
         this.pullOrderNo = pullOrderNo;
+    }
+
+    public Byte getMatchingStatus() {
+        return matchingStatus;
+    }
+
+    public void setMatchingStatus(Byte matchingStatus) {
+        this.matchingStatus = matchingStatus;
     }
 }

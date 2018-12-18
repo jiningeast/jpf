@@ -17,8 +17,8 @@
                 url:'list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
-                    {field:'boid',title:'转让订单id',width:'5%'},
-                    {field:'orderNo',title:'转让订单号',width:'10%'},
+                    // {field:'boid',title:'转让订单id',width:'5%'},
+                    {field:'pullOrderNo',title:'转让订单号',width:'10%'},
                     {field:'orderType',title:'订单类型',width:'5%',
                         formatter:function (value,row,index) {
                             if ( value == 1 ) { return "中石化充值"; }
@@ -33,10 +33,11 @@
                     {field:'amount',title:'订单总金额',width:'5%'},
                     {field:'chargeNo',title:'充值号',width:'10%'},
                     {field:'addtime',title:'拉取时间',width:'8%',formatter:formatDateStr},
-                    {field:'infoStatus',title:'绑定状态',width:'5%',
+                    {field:'matchingStatus',title:'匹配状态',width:'5%',
                         formatter:function (value,row,index) {
-                            if ( value == 1 ) { return "未绑定"; }
-                            if ( value == 2 ) { return "已绑定"; }
+                            if ( value == 0 ) { return "未匹配"; }
+                            if ( value == 1 ) { return "匹配中"; }
+                            if ( value == 2 ) { return "已匹配"; }
                         }
                     },
                     {field:'module',title:'敬恒返回信息',width:'19%',}
@@ -60,12 +61,28 @@
             //导出excel
             $('#importExcelShopBargainRecharge').linkbutton({
                 onClick: function(){
-                    var queryArray = $('#searchForm').serialize();
-                    var importExcelShopBargainRecharge = "./exportExcel?"+queryArray;
-                    window.location.href = importExcelShopBargainRecharge;
+                    ajaxLoading();
+                    $.ajax({
+                        url: "./exportExcel?" + $('#searchForm').serialize(),
+                        type:"GET",
+                        success:function () {
+                            window.location.href = "./exportExcel?" + $('#searchForm').serialize();
+                            ajaxLoadEnd();
+                        }
+                    });
                 }
             });
         })
+
+        function ajaxLoading(){
+            $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:"100%",height:$(window).height()}).appendTo("body");
+            $("<div class=\"datagrid-mask-msg\"></div>").html("正在导出...").appendTo("body").css({display:"block",left:($(document.body).outerWidth(true) - 190) / 2,top:($(window).height() - 45) / 2});
+        }
+
+        function ajaxLoadEnd(){
+            $(".datagrid-mask").remove();
+            $(".datagrid-mask-msg").remove();
+        }
     </script>
 </head>
 <body>
@@ -76,7 +93,7 @@
                     <table cellpadding="5" width="75%">
                         <tr>
                             <td>转让订单号:</td>
-                            <td><input id="orderNo" name="orderNo" class="easyui-textbox" type="text" /></td>
+                            <td><input id="pullOrderNo" name="pullOrderNo" class="easyui-textbox" type="text" /></td>
                             <td>订单类型:</td>
                             <td>
                                 <select editable="false" id="orderType" name="orderType" class="easyui-combobox" style="width: 80px;">
@@ -110,10 +127,11 @@
                             </td>
                             <td>订单状态:</td>
                             <td>
-                                <select editable="false" id="infoStatus" name="infoStatus" class="easyui-combobox" style="width: 80px;">
+                                <select editable="false" id="matchingStatus" name="matchingStatus" class="easyui-combobox" style="width: 80px;">
                                     <option value="">全部</option>
-                                    <option value="1">未绑定</option>
-                                    <option value="2">已绑定</option>
+                                    <option value="0">未匹配</option>
+                                    <option value="1">匹配中</option>
+                                    <option value="2">已匹配</option>
                                 </select>
                             </td>
                         </tr>

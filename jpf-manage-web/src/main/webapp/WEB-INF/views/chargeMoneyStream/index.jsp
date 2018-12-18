@@ -46,11 +46,12 @@
                 url:'list',
                 columns:[[
                     {field:'id',title:'ID',width:'3%'},
-                    {field:'orderNo',title:'流水号|交易号|订单号',width:'13%',
+                    {field:'orderNo',title:'订单号',width:'13%',
                         // formatter:function (value,row,index) {
                         //     return row["id"]+"<br/>"+row["orderId"]+"<br/>"+row["orderNo"]+"<br/>";
                         // }
                     },
+                    {field:'streamNo',title:'流水号',width:'13%',},
                     {field:'productName',title:'商品',width:'10%'},
                     {field:'merchNo',title:'代理商号',width:'10%',
                         formatter:function (value,row,index) {
