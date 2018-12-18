@@ -122,4 +122,6 @@ public interface PayShopOrderCustomMapper {
      */
     PayShopOrderCustom selectOrderInterfaceAll(PayShopOrderCustomExample example);
 
+
+    List<PayShopOrderCustom> selectByExcelExampleJoin(PayShopOrderCustomExample example);
 }
