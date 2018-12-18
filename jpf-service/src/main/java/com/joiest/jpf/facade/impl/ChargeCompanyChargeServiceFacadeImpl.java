@@ -20,6 +20,7 @@ import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Service("chargeCompanyChargeServiceFacade")
 public class ChargeCompanyChargeServiceFacadeImpl implements ChargeCompanyChargeServiceFacade {
 
     @Autowired
@@ -255,4 +257,21 @@ public class ChargeCompanyChargeServiceFacadeImpl implements ChargeCompanyCharge
         return new JpfResponseDto();
     }
 
+    /**
+     * 根据商户Id获取商户充值的总金额(费率折算后)
+     * @param companyId
+     * @return
+     */
+    @Override
+    public BigDecimal getCompanyTotalMoney(String companyId) {
+        PayChargeCompanyChargeExample example = new PayChargeCompanyChargeExample();
+        example.createCriteria().andCompanyIdEqualTo(companyId);
+        
+        BigDecimal totalMoney = new BigDecimal(0.00);
+        List<PayChargeCompanyCharge> payChargeCompanyChargeList = payChargeCompanyChargeMapper.selectByExample(example);
+        for(PayChargeCompanyCharge payChargeCompanyCharge : payChargeCompanyChargeList){
+            totalMoney = totalMoney.add(payChargeCompanyCharge.getMoney());
+        }
+        return totalMoney;
+    }
 }
