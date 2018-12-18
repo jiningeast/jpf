@@ -162,15 +162,21 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "此条记录不存在");
         }
         Byte defaultType =payShopCustomerList.get(0).getType();
+        Byte defaultIsBargainBuyer =payShopCustomerList.get(0).getIsBargainBuyer();
         PayShopCustomer payShopCustomer = new PayShopCustomer();
-        if(defaultType==request.getType()){
-            String word = defaultType == 1 ? "特殊用户":"正常用户";
-            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "不能更新状态为："+word);
-        }
+//        if(defaultType==request.getType()){
+//            String word = defaultType == 1 ? "特殊用户":"正常用户";
+//            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "不能更新状态为："+word);
+//        }
+//        if(defaultIsBargainBuyer==request.getIsBargainBuyer()){
+//            String word = defaultIsBargainBuyer == 1 ? "是":"不是";
+//            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "不能更新状态为："+word);
+//        }
 
         // 创建日期
         Date d = new Date();
         payShopCustomer.setType(request.getType());
+        payShopCustomer.setIsBargainBuyer(request.getIsBargainBuyer());
         payShopCustomer.setUpdatetime(d);
         int count = payShopCustomerMapper.updateByExampleSelective(payShopCustomer,example);
         if(count != 1 ){

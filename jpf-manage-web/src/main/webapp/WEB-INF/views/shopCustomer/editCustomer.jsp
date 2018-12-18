@@ -95,6 +95,16 @@
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">是否是欣豆交易的买家：</td>
+                    <td colspan="4">
+                        <select editable="false" id="isBargainBuyer_audit" name="isBargainBuyer" class="easyui-combobox" style="width:120px;" data-options="">
+                            <option value="">请选择</option>
+                            <option value="0">不是</option>
+                            <option value="1">是</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
         </form>
     </div>
@@ -112,6 +122,7 @@
     function initData() {
 
         $('#type_audit').combobox('select', '${payShopCustomer.type}');
+        $('#isBargainBuyer_audit').combobox('select', '${payShopCustomer.isBargainBuyer}');
         <%--$('#attestation_audit').combobox('select', '${payShopCustomer.attestation==true?0:1}');--%>
 
     }
@@ -133,6 +144,10 @@
                 }
                 if( $("#type_audit").combobox("getValue") == '' ){
                     $.messager.alert('消息提示', '请选择用户类型', 'error');
+                    return ;
+                }
+                if( $("#isBargainBuyer_audit").combobox("getValue") == '' ){
+                    $.messager.alert('消息提示', '请选择是否开启买家类型', 'error');
                     return ;
                 }
                 var queryArray = $('#auditForm').serializeArray();
