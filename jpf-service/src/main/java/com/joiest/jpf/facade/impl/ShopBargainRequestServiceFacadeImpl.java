@@ -139,11 +139,12 @@ public class ShopBargainRequestServiceFacadeImpl implements ShopBargainRequestSe
     /**
      * 获取买家信息
      * */
-    public List<ShopBargainRequestInfo> getBuyInfo(){
+    public List<ShopBargainRequestInfo> getBuyInfo(String uid){
 
         PayShopBargainRequestExample example = new PayShopBargainRequestExample();
         PayShopBargainRequestExample.Criteria c = example.createCriteria();
         c.andStatusEqualTo((byte)1);
+        c.andCustomerIdEqualTo(uid);
 
         List<PayShopBargainRequest> payShopBargainRequest = payShopBargainRequestMapper.selectByExample(example);
 

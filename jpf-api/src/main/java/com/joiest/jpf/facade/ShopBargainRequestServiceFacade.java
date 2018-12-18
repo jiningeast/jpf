@@ -31,7 +31,7 @@ public interface ShopBargainRequestServiceFacade {
     /**
      * 获取买家信息
      * */
-    public List<ShopBargainRequestInfo> getBuyInfo();
+    public List<ShopBargainRequestInfo> getBuyInfo(String uid);
 
     /*
      * 添加买家回收信息
