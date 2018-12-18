@@ -164,8 +164,7 @@ public class BargainBuyerController {
     @ResponseBody
     public String buyInfo(HttpServletRequest request){
 
-        String customId = uid;
-        List<ShopBargainRequestInfo> list = shopBargainRequestServiceFacade.getBuyInfo(customId);
+        List<ShopBargainRequestInfo> list = shopBargainRequestServiceFacade.getBuyInfo();
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"SUCCESS",list);
     }
 
