@@ -4,6 +4,7 @@ import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
+import com.joiest.jpf.entity.BalanceOrder;
 import com.joiest.jpf.entity.ChargeOrderInfo;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public interface ChargeOrderServiceFacade {
     /**
      * 订单列表
      */
-    public List<ChargeOrderInfo> getAllAbnormalOrders(ChargeOrderInfo request);
+    public List<PayChargeOrder> getAllAbnormalOrders();
 
     /**
      * 威能订单列表
@@ -59,4 +60,15 @@ public interface ChargeOrderServiceFacade {
     Map<String,String> phoneRechargeWn(Map<String, String> actParam);
 
 
+    /**
+     * 更新订单状态
+     * @param payChargeOrder
+     */
+    void updateOrder(PayChargeOrder payChargeOrder);
+
+    /**
+     * 对账单，如果存在异常订单，发送email
+     * @param balanceOrders
+     */
+    void sendEmailToManager(List<BalanceOrder> balanceOrders);
 }

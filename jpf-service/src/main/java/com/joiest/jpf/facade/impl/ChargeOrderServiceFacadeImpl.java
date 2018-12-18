@@ -1,15 +1,18 @@
 package com.joiest.jpf.facade.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.util.ExcelDealUtils;
 import com.joiest.jpf.common.util.WnpayUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeOrderMapper;
 import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
+import com.joiest.jpf.entity.BalanceOrder;
 import com.joiest.jpf.entity.ChargeOrderInfo;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import net.sf.json.JSONObject;
@@ -330,32 +333,18 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
      * 所有指定商户异常订单处理
      */
     @Override
-    public List<ChargeOrderInfo>  getAllAbnormalOrders(ChargeOrderInfo request)
+    public List<PayChargeOrder>  getAllAbnormalOrders()
     {
-
         PayChargeOrderExample example = new PayChargeOrderExample();
         example.setOrderByClause("addtime ASC");
-        //example.setPageNo(1);
-        //example.setPageSize(1);
 
         PayChargeOrderExample.Criteria c =example.createCriteria();
-        c.andCompanyIdEqualTo(request.getCompanyId());
 
         List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
         if( list.size() <=0 || list == null){
             return null;
         }
-        List<ChargeOrderInfo> infoList = new ArrayList<>();
-
-        for (PayChargeOrder one : list)
-        {
-            ChargeOrderInfo info = new ChargeOrderInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
-            beanCopier.copy(one, info, null);
-            infoList.add(info);
-        }
-
-        return infoList;
+        return list;
     }
 
     /**
@@ -424,6 +413,32 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
             resultMap.put("code","10008");
         }
         return resultMap;
+    }
+
+
+    @Override
+    public void updateOrder(PayChargeOrder payChargeOrder) {
+        payChargeOrderMapper.updateByPrimaryKeySelective(payChargeOrder);
+    }
+
+    @Override
+    public void sendEmailToManager(List<BalanceOrder> balanceOrders) {
+
+        ExcelDealUtils excelUtils = new ExcelDealUtils();
+        JSONArray titles = new JSONArray();
+        titles.add("欧非订单号");
+        titles.add("欧非订单状态");
+        titles.add("欣享订单号");
+        titles.add("欣享订单状态");
+        titles.add("金额");
+        titles.add("充值时间");
+
+        JSONArray fields = new JSONArray();
+        fields.add("interfaceOrderNo");
+        fields.add("money");
+        fields.add("dou");
+        fields.add("expireMonth");
+        fields.add("addtimeFormat");
     }
 
 }
