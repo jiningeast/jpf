@@ -122,13 +122,18 @@ public class WnpayUtils {
         actuParam.put("responseParam",resposePa);
         actuParam.put("wnorderid",flowOrder.get("data"));
 
-        if(flowOrder.get("status").toString().equals("0")){
+        if(flowOrder.get("status").toString().equals("0") || flowOrder.get("status").toString().equals("-11") ){
 
             responseParam.put("code","10000");
             responseParam.put("info",flowOrder.get("message"));
             responseParam.put("data",actuParam);
+        }else if(flowOrder.get("status").toString().equals("-100") ){
+            //其他异常
+            responseParam.put("code","10002");
+            responseParam.put("info",flowOrder.get("message"));
+            responseParam.put("data",actuParam);
         }else{
-
+            // 可退款状态码
             responseParam.put("code","10008");
             responseParam.put("info",flowOrder.get("message"));
             responseParam.put("data",actuParam);

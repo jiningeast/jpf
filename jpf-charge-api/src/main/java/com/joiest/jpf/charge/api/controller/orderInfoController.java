@@ -439,6 +439,8 @@ public class orderInfoController {
     /**
      * 威能异常订单重新下单
      */
+    @RequestMapping(value = "/wnCreateOrder", method = RequestMethod.GET, produces = "text/plain;charset=utf-8")
+    @ResponseBody
     public void wnCreateOrder(){
 
         //存储日志记录
@@ -490,7 +492,7 @@ public class orderInfoController {
                     actParam.put("forProductId",chargeProductInfo.getWnProductId());
                     actParam.put("selfOrder",orderNo);
                     Map<String, String> map = chargeOrderServiceFacade.phoneRechargeWn(actParam);
-
+                    logContent.append("\t 接口返回参数："+map.toString()+"\t");
                     //威能接口流水
                     //添加流水
                     ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
@@ -518,16 +520,16 @@ public class orderInfoController {
                         chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
                     }else{
                         // 充值失败
-                        if( "10008".equals(map.get("code")) ){
-                            //处理退款流程
-                            String response = this.autoTuikuan(list.get(i));
-                            JSONObject result = JSONObject.fromObject(response);
-                            if( result != null && "10000".equals(result.get("code").toString()) ){
-                                logContent.append("\t 订单更新为：已退款 退款结果："+response+"\t");
-                            }else{
-                                logContent.append("\t 订单更新为：已退款 退款结果："+response +"\t");
-                            }
-                        }
+//                        if( "10008".equals(map.get("code")) ){
+//                            //处理退款流程
+//                            String response = this.autoTuikuan(list.get(i));
+//                            JSONObject result = JSONObject.fromObject(response);
+//                            if( result != null && "10000".equals(result.get("code").toString()) ){
+//                                logContent.append("\t 订单更新为：已退款 退款结果："+response+"\t");
+//                            }else{
+//                                logContent.append("\t 订单更新为：已退款 退款结果："+response +"\t");
+//                            }
+//                        }
                     }
                     
                     LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
