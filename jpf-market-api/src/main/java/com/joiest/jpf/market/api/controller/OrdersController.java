@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayChargeOrder;
-import com.joiest.jpf.common.po.PayShopCouponRemain;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.*;
@@ -18,8 +17,9 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.util.JSONTokener;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
@@ -39,7 +38,7 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("orders")
 public class OrdersController {
-
+    private static final Logger logger = LogManager.getLogger(OrdersController.class);
     private String uid;
     private String openId;
     private ShopCustomerInterfaceInfo userInfo;
@@ -1860,6 +1859,7 @@ public class OrdersController {
             LogsCustomUtils.writeIntoFile(sbf.toString(),"/logs/jpf-market-api/log/", "WnReportApi",true);
 
         }else{}
+       logger.info("微能的回调返回值已经执行，返回的是0");
        return "0";
     }
     private Map<String,Object> _filter(String data)
