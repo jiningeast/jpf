@@ -527,8 +527,7 @@ public class OfpayUtils {
         requestMap.put("sporder_time", myfmt.format(rechargeMap.get("sporder_time")));
         requestMap.put("game_userid", rechargeMap.get("game_userid"));       // 手机号码
         String chargeType = rechargeMap.getOrDefault("chargeType","").toString();
-        if ( !chargeType.equals("") )
-        {
+        if (!"".equals(chargeType)){
             requestMap.put("chargeType", rechargeMap.get("chargeType") );               // 加油卡类型 （1:中石化、2:中石油；默认为1，不参与MD5校验）
         }
         requestMap.put("md5_str", getOilSign(requestMap));          // 签名串

@@ -835,6 +835,7 @@ public class FlowRechargeController {
             payChargeOrder = chargeOrderServiceFacade.savePayOrder(actParam, companyInfo, chargeProductInfo);
             payChargeOrder.setProductType(Integer.valueOf(actParam.get("oilType")));
             actParam.put("selfOrder", payChargeOrder.getOrderNo());
+            actParam.put("productId",chargeProductInfo.getOfProductId());
             payChargeOrder.setInterfaceType((byte)0);
             //请求欧非油卡充值
             Map<String, String> map = gasRecharge(actParam);
