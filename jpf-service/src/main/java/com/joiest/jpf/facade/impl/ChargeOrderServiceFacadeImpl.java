@@ -516,7 +516,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         order.setCompanyId(companyInfo.getId());
         order.setCompanyName(companyInfo.getCompanyName());
         order.setMerchNo(companyInfo.getMerchNo());
-        order.setChargePhone(actParam.get("phone")==null?actParam.get("cardNo"):"");
+        order.setChargePhone(actParam.get("phone")==null?actParam.get("cardNo"):actParam.get("phone"));
         order.setProductId(chargeProductInfo.getId());
         order.setProductName(chargeProductInfo.getName());
         order.setProductPrice(chargeProductInfo.getSalePrice());
