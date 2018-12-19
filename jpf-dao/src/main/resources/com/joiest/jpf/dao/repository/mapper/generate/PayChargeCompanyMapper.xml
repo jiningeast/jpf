@@ -444,7 +444,7 @@
   <update id="updateCompanyMoneyAdd" parameterType="map">
     update pay_charge_company
     set   money_code = MD5(concat(#{companyId},money+#{addMoney},#{companyKey})),
-    money = money+#{subMoney,jdbcType=DECIMAL},
+    money = money+#{addMoney,jdbcType=DECIMAL},
     updatetime = now()
     where id = #{companyId,jdbcType=BIGINT}
   </update>

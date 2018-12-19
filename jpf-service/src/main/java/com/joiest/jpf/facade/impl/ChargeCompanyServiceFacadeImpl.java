@@ -266,9 +266,9 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
             return retParam;
         }
         //退款
-        addCompanyMoney(companyInfo,orderInfo);
+        addCompanyMoney(chargeCompanyInfo,orderInfo);
         //增加退款流水
-        PayChargeCompany payChargeCompany = payChargeCompanyMapper.selectByPrimaryKey(companyInfo.getId());
+        PayChargeCompany payChargeCompany = payChargeCompanyMapper.selectByPrimaryKey(chargeCompanyInfo.getId());
         addStreamFail(orderInfo,payChargeCompany);
         return retParam;
     }
@@ -310,6 +310,7 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         streamData.setNewMoney(companyInfo.getMoney());//变动后的余额
         streamData.setMemo("");//流水备注
         streamData.setIsDel((byte)0);//删除标记 0=未删除 1=已删除
+        streamData.setAddtime(new Date());
         payChargeCompanyMoneyStreamMapper.insertSelective(streamData);
     }
 }
