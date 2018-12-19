@@ -91,11 +91,4 @@ public interface PayChargeOrderMapper {
      */
     List<PayChargeOrder> selectByExcelExample(PayChargeOrderExample example);
 
-
-    /**
-     * 根据条件分页查询订单
-     * @param pageNo
-     * @return
-     */
-    List<PayChargeOrder> selectOrdersByPage(Integer pageNo,Integer pageSize);
 }

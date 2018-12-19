@@ -66,7 +66,6 @@ public interface ChargeOrderServiceFacade {
      * @param pageSize
      * @return
      */
-    List<PayChargeOrder> getOrdersByPage(Integer pageNo,Integer pageSize);
-
+    List<PayChargeOrder> getOrdersByPage(Long pageNo,Long pageSize);
 
 }

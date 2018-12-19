@@ -486,8 +486,13 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     }
 
     @Override
-    public List<PayChargeOrder> getOrdersByPage(Integer pageNo, Integer pageSize) {
-        return payChargeOrderMapper.selectOrdersByPage(pageNo, pageSize);
+    public List<PayChargeOrder> getOrdersByPage(Long pageNo, Long pageSize) {
+        PayChargeOrderExample example =new PayChargeOrderExample();
+        PayChargeOrderExample.Criteria criteria =example.createCriteria();
+        example.setPageNo(pageNo);
+        example.setPageSize(pageSize);
+        example.setOrderByClause(" id asc ");
+        return payChargeOrderMapper.selectByExample(example);
     }
 
 }

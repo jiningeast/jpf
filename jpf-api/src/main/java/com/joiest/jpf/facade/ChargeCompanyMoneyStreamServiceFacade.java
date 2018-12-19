@@ -40,5 +40,5 @@ public interface ChargeCompanyMoneyStreamServiceFacade {
      * @param id
      * @return
      */
-    List<PayChargeCompanyMoneyStream> getChargeCompanyMoneyStreamByOrderId(Integer id);
+    List<PayChargeCompanyMoneyStream> getChargeCompanyMoneyStreamByOrderId(String id);
 }

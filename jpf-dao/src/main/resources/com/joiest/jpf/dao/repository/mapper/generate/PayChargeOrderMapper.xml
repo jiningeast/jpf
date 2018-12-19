@@ -702,14 +702,4 @@
     </if>
   </select>
 
-
-  <select id="selectOrdersByPage" parameterType="Integer" resultMap="BaseResultMap">
-
-    select
-      <include refid="Base_Column_List"></include>
-    from
-      pay_charge_order
-    limit #{pageNo},#{pageSize}
-  </select>
-
 </mapper>
