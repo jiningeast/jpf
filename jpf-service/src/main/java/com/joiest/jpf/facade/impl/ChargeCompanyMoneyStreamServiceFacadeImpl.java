@@ -277,10 +277,10 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
     }
 
     @Override
-    public List<PayChargeCompanyMoneyStream> getByOrderId(String orderId) {
+    public List<PayChargeCompanyMoneyStream> getByOrderNo(String orderNo) {
         PayChargeCompanyMoneyStreamExample example = new PayChargeCompanyMoneyStreamExample();
         PayChargeCompanyMoneyStreamExample.Criteria criteria = example.createCriteria();
-        criteria.andOrderIdEqualTo(orderId);
+        criteria.andOrderNoEqualTo(orderNo);
         return payChargeCompanyMoneyStreamMapper.selectByExample(example);
     }
 

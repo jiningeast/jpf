@@ -42,7 +42,7 @@ public interface ChargeCompanyMoneyStreamServiceFacade {
      * @param orderId
      * @return
      */
-    List<PayChargeCompanyMoneyStream> getByOrderId(String orderId);
+    List<PayChargeCompanyMoneyStream> getByOrderNo(String orderId);
 
     /**
      * 更新之前流水

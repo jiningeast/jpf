@@ -570,7 +570,7 @@ public class FlowRechargeController {
             sendParam.put("salePrice",orderInfo.getProductPrice().toString());
             sendParam.put("productId",orderInfo.getProductId());
             //更新订单的流水
-            List<PayChargeCompanyMoneyStream> streams = chargeCompanyMoneyStreamServiceFacade.getByOrderId(upOrderInfo.getId());
+            List<PayChargeCompanyMoneyStream> streams = chargeCompanyMoneyStreamServiceFacade.getByOrderNo(orderInfo.getOrderNo());
             if (streams!=null&&streams.size()!=0){
                 PayChargeCompanyMoneyStream payChargeCompanyMoneyStream = streams.get(0);
                 payChargeCompanyMoneyStream.setProductBidPrice(chargeProductInfo.getOfProductPrice());
@@ -585,12 +585,14 @@ public class FlowRechargeController {
                 sbf.append("\n订单状态：充值失败");
                 //充值失败返还商户资金
                 JSONObject isRet=new JSONObject();
-                try {
-                    isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
-                    upOrderInfo.setStatus((byte)5);
-                }catch (Exception e){
-                    logger.error(e.getMessage(),e);
-                    upOrderInfo.setStatus((byte)7);
+                if(orderInfo.getStatus()==1){
+                    try {
+                        isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
+                        upOrderInfo.setStatus((byte)5);
+                    }catch (Exception e){
+                        logger.error(e.getMessage(),e);
+                        upOrderInfo.setStatus((byte)7);
+                    }
                 }
                 String remark = StringUtils.isBlank(orderInfo.getRemark())?"["+ DateUtils.getCurDate() + "]:"+isRet.get("info"):orderInfo.getRemark()+"&#13;&#10;["+ DateUtils.getCurDate() + "]:"+isRet.get("info");
                 upOrderInfo.setRemark(remark);
