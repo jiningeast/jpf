@@ -56,7 +56,6 @@ public class OrderCompensationController {
             pageNo = Long.valueOf(pageNoStr);
         }
 
-
         //写到常量
         Long pageSize = 200L;
 
