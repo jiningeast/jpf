@@ -276,4 +276,17 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         return payChargeCompanyMoneyStreamMapper.updateByExampleSelective(record,explame);
     }
 
+    @Override
+    public List<PayChargeCompanyMoneyStream> getByOrderId(String orderId) {
+        PayChargeCompanyMoneyStreamExample example = new PayChargeCompanyMoneyStreamExample();
+        PayChargeCompanyMoneyStreamExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderIdEqualTo(orderId);
+        return payChargeCompanyMoneyStreamMapper.selectByExample(example);
+    }
+
+    @Override
+    public void updateStram(PayChargeCompanyMoneyStream payChargeCompanyMoneyStream) {
+        payChargeCompanyMoneyStreamMapper.updateByPrimaryKeySelective(payChargeCompanyMoneyStream);
+    }
+
 }

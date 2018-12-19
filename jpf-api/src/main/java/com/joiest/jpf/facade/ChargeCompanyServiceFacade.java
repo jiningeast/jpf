@@ -50,12 +50,17 @@ public interface ChargeCompanyServiceFacade {
     /**
      * 充值失败返还商户资金
      * */
-    public JSONObject returnComfunds(ChargeOrderInfo orderInfo);
+    public JSONObject returnComfunds(ChargeOrderInfo orderInfo)  throws Exception;
 
 
     /**
      * 用户修改密码
      */
     public JpfResponseDto updatePassword(String merchNo,String oldPass,String newPass);
-
+    /**
+        * 退款
+     * @param companyInfo
+     * @param orderInfo
+     */
+    void addCompanyMoney(ChargeCompanyInfo companyInfo, ChargeOrderInfo orderInfo) throws Exception;
 }

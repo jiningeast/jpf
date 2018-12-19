@@ -5,7 +5,9 @@ import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
 import com.joiest.jpf.entity.BalanceOrder;
+import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.entity.ChargeOrderInfo;
+import com.joiest.jpf.entity.ChargeProductInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -73,4 +75,21 @@ public interface ChargeOrderServiceFacade {
      * @param balanceOrders
      */
     void sendEmailToManager(List<BalanceOrder> balanceOrders);
+
+    /**
+     * 直充接口保存订单，并且保存流水，并且做相应的扣款操作
+     * @param actParam
+     * @param companyInfo
+     * @param chargeProductInfo
+     * @return
+     */
+    PayChargeOrder savePayOrder(Map<String, String> actParam, ChargeCompanyInfo companyInfo, ChargeProductInfo chargeProductInfo) throws Exception;
+
+    /**
+     * 扣款操作
+     * @param companyInfo
+     * @param chargeProductInfo
+     * @throws Exception
+     */
+    void subCompanyMoney(ChargeCompanyInfo companyInfo,ChargeProductInfo chargeProductInfo) throws Exception;
 }
