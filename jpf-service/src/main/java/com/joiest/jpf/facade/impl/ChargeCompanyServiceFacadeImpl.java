@@ -288,7 +288,7 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     public void addStreamFail(ChargeOrderInfo chargeOrderInfo,PayChargeCompany companyInfo) {
         PayChargeCompanyMoneyStream streamData = new PayChargeCompanyMoneyStream();
         streamData.setStreamNo("MS"+ToolUtils.createOrderid());//流水号
-        streamData.setCompanyId(chargeOrderInfo.getId());//商户id
+        streamData.setCompanyId(companyInfo.getId());//商户id
         streamData.setCompanyName(chargeOrderInfo.getCompanyName());//商户名称
         streamData.setMerchNo(chargeOrderInfo.getMerchNo());//商户号
         streamData.setOrderId(chargeOrderInfo.getId());//订单id 可能是消费订单、充值订单、退款订单

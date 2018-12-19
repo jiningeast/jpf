@@ -574,7 +574,7 @@ public class FlowRechargeController {
             if (streams!=null&&streams.size()!=0){
                 PayChargeCompanyMoneyStream payChargeCompanyMoneyStream = streams.get(0);
                 payChargeCompanyMoneyStream.setProductBidPrice(chargeProductInfo.getOfProductPrice());
-                payChargeCompanyMoneyStream.setInterfaceType((byte)1);
+                payChargeCompanyMoneyStream.setInterfaceType((byte)0);
                 payChargeCompanyMoneyStream.setInterfaceOrderNo(orderInfo.getInterfaceOrderNo());
                 chargeCompanyMoneyStreamServiceFacade.updateStram(payChargeCompanyMoneyStream);
             }
