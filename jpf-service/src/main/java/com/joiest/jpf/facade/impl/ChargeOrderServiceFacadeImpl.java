@@ -485,6 +485,11 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         return resultMap;
     }
 
+    @Override
+    public List<PayChargeOrder> getOrdersByPage(Integer pageNo, Integer pageSize) {
+        return payChargeOrderMapper.selectOrdersByPage(pageNo, pageSize);
+    }
+
 }
 
 

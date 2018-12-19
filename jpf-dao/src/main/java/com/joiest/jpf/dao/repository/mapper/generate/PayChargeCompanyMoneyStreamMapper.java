@@ -83,4 +83,11 @@ public interface PayChargeCompanyMoneyStreamMapper {
      * @param record
      */
     int updateByPrimaryKey(PayChargeCompanyMoneyStream record);
+
+    /**
+     * 根据订单id查询流水
+     * @param id
+     * @return
+     */
+    List<PayChargeCompanyMoneyStream> selectChargeCompanyMoneyStreamByOrderId(Integer id);
 }

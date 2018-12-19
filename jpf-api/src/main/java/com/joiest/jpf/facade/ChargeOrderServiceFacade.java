@@ -60,5 +60,13 @@ public interface ChargeOrderServiceFacade {
 
     Map<String,String> phoneRechargeWn(Map<String, String> actParam);
 
+    /**
+     * 根据条件分页查询订单
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    List<PayChargeOrder> getOrdersByPage(Integer pageNo,Integer pageSize);
+
 
 }

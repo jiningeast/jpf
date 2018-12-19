@@ -276,4 +276,14 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         return payChargeCompanyMoneyStreamMapper.updateByExampleSelective(record,explame);
     }
 
+    /**
+     * 根据订单id查询流水
+     * @param id
+     * @return
+     */
+    @Override
+    public List<PayChargeCompanyMoneyStream> getChargeCompanyMoneyStreamByOrderId(Integer id) {
+        return payChargeCompanyMoneyStreamMapper.selectChargeCompanyMoneyStreamByOrderId(id);
+    }
+
 }
