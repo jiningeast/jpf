@@ -1733,9 +1733,7 @@ public class OrdersController {
     @RequestMapping(value="weinengNotifyUrl",method = RequestMethod.POST)
     @ResponseBody
     public Integer weinengNotifyUrl(HttpServletRequest request)throws Exception{
-        logger.error("不知道为啥一直执行");
-        return 0;
-       /* String infoErrorOrder = null;
+       String infoErrorOrder = null;
         String sucOrder = "";
         String faildOrder = "";
         //后台接收
@@ -1862,7 +1860,7 @@ public class OrdersController {
 
         }else{}
        logger.info("微能的回调返回值已经执行，返回的是0");
-       return 0;*/
+       return 0;
     }
     private Map<String,Object> _filter(String data)
     {
