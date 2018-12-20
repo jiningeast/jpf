@@ -1734,7 +1734,6 @@ public class OrdersController {
     @RequestMapping(value="weinengNotifyUrl",method = RequestMethod.POST)
     @ResponseBody
     public Integer weinengNotifyUrl(HttpServletRequest request)throws Exception{
-        logger.error("为什么");
         return 0;
        /* String infoErrorOrder = null;
         String sucOrder = "";
