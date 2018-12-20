@@ -504,7 +504,7 @@ public class ShopBatchController {
                 e.printStackTrace();
             }
         }
-        return response;
+        return null;
     }
 
     /**
