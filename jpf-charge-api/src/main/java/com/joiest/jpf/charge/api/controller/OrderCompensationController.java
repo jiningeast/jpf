@@ -1,11 +1,13 @@
 package com.joiest.jpf.charge.api.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.LogsCustomUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
+import com.joiest.jpf.facade.ChargeCompanyChargeServiceFacade;
 import com.joiest.jpf.facade.ChargeCompanyMoneyStreamServiceFacade;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
@@ -17,11 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author zhangmeng
@@ -41,7 +41,10 @@ public class OrderCompensationController {
     @Autowired
     private ChargeCompanyServiceFacade chargeCompanyServiceFacade;
 
-    @RequestMapping(value = "/start", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @Autowired
+    private ChargeCompanyChargeServiceFacade chargeCompanyChargeServiceFacade;
+
+    @RequestMapping(value = "/compensation", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String orderCompensation(HttpServletRequest request){
 
@@ -56,8 +59,8 @@ public class OrderCompensationController {
             pageNo = Long.valueOf(pageNoStr);
         }
 
-        //写到常量
-        Long pageSize = 200L;
+        //每次查询订单的条数
+        Long pageSize = Long.parseLong(ConfigUtil.getValue("PAGE_SIZE"));
 
         //存储日志记录
         Date date = new Date();
@@ -115,42 +118,7 @@ public class OrderCompensationController {
                    //无流水记录
                    logContent.append("\n 无流水记录,订单号为:"+order.getOrderNo()+"\t");
 
-                   logContent.append("\t 开始新增流水... \t");
-
-                   payChargeCompanyMoneyStream.setStreamNo("MS" + ToolUtils.createOrderid());
-                   payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
-                   payChargeCompanyMoneyStream.setCompanyId(order.getCompanyId());
-                   payChargeCompanyMoneyStream.setCompanyName(order.getCompanyName());
-                   payChargeCompanyMoneyStream.setMerchNo(order.getMerchNo());
-                   payChargeCompanyMoneyStream.setOrderId(order.getId());
-                   payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
-                   payChargeCompanyMoneyStream.setProductName(order.getProductName());
-                   payChargeCompanyMoneyStream.setProductValue(order.getProductValue());
-                   payChargeCompanyMoneyStream.setProductId(order.getProductId());
-                   payChargeCompanyMoneyStream.setProductBidPrice(order.getProductBidPrice());
-                   payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
-                   payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
-                   payChargeCompanyMoneyStream.setInterfaceType(order.getInterfaceType());
-                   payChargeCompanyMoneyStream.setInterfaceOrderNo(order.getInterfaceOrderNo());
-                   payChargeCompanyMoneyStream.setIsDel(new Byte("0"));
-                   payChargeCompanyMoneyStream.setAddtime(new Date());
-
-                   //查询当前用户的余额
-                   ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
-
-                   //扣钱
-                   payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
-                   payChargeCompanyMoneyStream.setStatus(new Byte("2"));
-                   payChargeCompanyMoneyStream.setStreamType(new Byte("1"));
-
-
-                   if (chargeCompanyMoneyStreamServiceFacade.create(payChargeCompanyMoneyStream) == 1){
-                       logContent.append("\t 新增下单流水记录成功 \t");
-                   }else{
-                       logContent.append("\t 新增下单流水记录失败 \t");
-                   }
-
-
+                   addStream(payChargeCompanyMoneyStream, order, logContent, "2", "1");
                }
                //订单状态为5
             }else if(order.getStatus() == 5){
@@ -158,48 +126,14 @@ public class OrderCompensationController {
                 //有一条流水记录
                 if (payChargeCompanyMoneyStreamList.size() == 1){
                     logContent.append("\n 只有一条流水记录,订单号为:"+order.getOrderNo()+"\t");
-                    logContent.append("\t 开始新增流水记录... \t");
 
-                    payChargeCompanyMoneyStream.setStreamNo("MS" + ToolUtils.createOrderid());
-                    payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
-                    payChargeCompanyMoneyStream.setCompanyId(order.getCompanyId());
-                    payChargeCompanyMoneyStream.setCompanyName(order.getCompanyName());
-                    payChargeCompanyMoneyStream.setMerchNo(order.getMerchNo());
-                    payChargeCompanyMoneyStream.setOrderId(order.getId());
-                    payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
-                    payChargeCompanyMoneyStream.setProductId(order.getProductId());
-                    payChargeCompanyMoneyStream.setProductName(order.getProductName());
-                    payChargeCompanyMoneyStream.setProductValue(order.getProductValue());
-                    payChargeCompanyMoneyStream.setProductBidPrice(order.getProductBidPrice());
-                    payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
-                    payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
-                    payChargeCompanyMoneyStream.setInterfaceType(order.getInterfaceType());
-                    payChargeCompanyMoneyStream.setInterfaceOrderNo(order.getInterfaceOrderNo());
-                    payChargeCompanyMoneyStream.setIsDel(new Byte("0"));
-                    payChargeCompanyMoneyStream.setAddtime(new Date());
-
-                    //查询当前用户的余额
-                    ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
 
                     //判断此条流水记录的状态 流水类型 1=充值 2=下单 3=退款
                     if (payChargeCompanyMoneyStreamList.get(0).getStatus() == 2){
-                        //扣钱
-                        payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
-                        payChargeCompanyMoneyStream.setStatus(new Byte("3"));
-                        payChargeCompanyMoneyStream.setStreamType(new Byte("1"));
+                        addStream(payChargeCompanyMoneyStream, order, logContent, "3", "0");
                     }else if (payChargeCompanyMoneyStreamList.get(0).getStatus() == 3){
-                        //加钱
-                        payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().add(order.getTotalMoney()));
-                        payChargeCompanyMoneyStream.setStatus(new Byte("2"));
-                        payChargeCompanyMoneyStream.setStreamType(new Byte("0"));
+                        addStream(payChargeCompanyMoneyStream, order, logContent, "2", "1");
                     }
-
-                    if (chargeCompanyMoneyStreamServiceFacade.create(payChargeCompanyMoneyStream) == 1){
-                        logContent.append("\t 新增流水记录成功 \t");
-                    }else{
-                        logContent.append("\t 新增流水记录失败 \t");
-                    }
-
 
                 //有两条流水记录
                 }else if(payChargeCompanyMoneyStreamList.size() == 2){
@@ -227,66 +161,135 @@ public class OrderCompensationController {
                 //无流水记录
                 }else if(payChargeCompanyMoneyStreamList.size() == 0){
                     logContent.append("\n 无流水记录,订单号为:"+order.getOrderNo()+"\t");
-
-                    logContent.append("\t 开始新增流水... \t");
-
-                    payChargeCompanyMoneyStream.setStreamNo("MS" + ToolUtils.createOrderid());
-                    payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
-                    payChargeCompanyMoneyStream.setCompanyId(order.getCompanyId());
-                    payChargeCompanyMoneyStream.setCompanyName(order.getCompanyName());
-                    payChargeCompanyMoneyStream.setMerchNo(order.getMerchNo());
-                    payChargeCompanyMoneyStream.setOrderId(order.getId());
-                    payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
-                    payChargeCompanyMoneyStream.setProductId(order.getProductId());
-                    payChargeCompanyMoneyStream.setProductName(order.getProductName());
-                    payChargeCompanyMoneyStream.setProductValue(order.getProductValue());
-                    payChargeCompanyMoneyStream.setProductBidPrice(order.getProductBidPrice());
-                    payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
-                    payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
-                    payChargeCompanyMoneyStream.setInterfaceType(order.getInterfaceType());
-                    payChargeCompanyMoneyStream.setInterfaceOrderNo(order.getInterfaceOrderNo());
-                    payChargeCompanyMoneyStream.setIsDel(new Byte("0"));
-                    payChargeCompanyMoneyStream.setAddtime(new Date());
-
-                    //查询当前用户的余额
-                    ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
-
-                    //扣钱
-                    payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
-                    payChargeCompanyMoneyStream.setStatus(new Byte("2"));
-                    payChargeCompanyMoneyStream.setStreamType(new Byte("1"));
-
-
-                    if (chargeCompanyMoneyStreamServiceFacade.create(payChargeCompanyMoneyStream) == 1){
-                        logContent.append("\t 新增下单流水记录成功 \t");
-                    }else{
-                        logContent.append("\t 新增下单流水记录失败 \t");
-                    }
-
-                    //加钱
-                    payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
-                    payChargeCompanyMoneyStream.setStatus(new Byte("3"));
-                    payChargeCompanyMoneyStream.setStreamType(new Byte("0"));
-
-
-                    if (chargeCompanyMoneyStreamServiceFacade.create(payChargeCompanyMoneyStream) == 1){
-                        logContent.append("\t 新增退款流水记录成功 \t");
-                    }else{
-                        logContent.append("\t 新增退款流水记录失败 \t");
-                    }
-
-
+                    addStream(payChargeCompanyMoneyStream,order,logContent,"2","1");
+                    addStream(payChargeCompanyMoneyStream,order,logContent,"3","0");
                 }
 
             }
         }
 
+        //生成日志
         LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
 
         resultMap.put("code", "200");
         resultMap.put("message", "订单补偿完成");
 
         return JSONObject.toJSONString(resultMap);
+    }
+
+
+    @RequestMapping(value = "/revise", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String  reviseCompanyCharge(){
+        Map<String,String> resultMap = new HashMap<>();
+
+        //存储日志记录
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        StringBuilder logContent = new StringBuilder();
+
+        String logPath = "/logs/jpf-charge-api/log/";
+        String fileName = "OrderCompensationRevise";
+        logContent.append("\nTime: "+ format.format(date) + "开始校正...");
+
+        //获取所有商户列表
+        List<PayChargeCompany> payChargeCompanyList = chargeCompanyServiceFacade.getCompanyList();
+
+        //遍历商户
+        for (PayChargeCompany company:payChargeCompanyList){
+            chargeCompanyServiceFacade.reviseCompanyCharge(company);
+        }
+
+        logContent.append("\t 校正完成...");
+
+        //生成日志
+        LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+
+        resultMap.put("code", "200");
+        resultMap.put("message", "余额校正完成");
+
+        return JSONObject.toJSONString(resultMap);
+    }
+
+
+
+
+    public void addStream(PayChargeCompanyMoneyStream payChargeCompanyMoneyStream,PayChargeOrder order,
+                            StringBuilder logContent,String status,String streamType){
+
+        logContent.append("\t 开始新增流水记录... \t");
+
+        payChargeCompanyMoneyStream.setStreamNo("MS" + ToolUtils.createOrderid());
+        payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
+        payChargeCompanyMoneyStream.setCompanyId(order.getCompanyId());
+        payChargeCompanyMoneyStream.setCompanyName(order.getCompanyName());
+        payChargeCompanyMoneyStream.setMerchNo(order.getMerchNo());
+        payChargeCompanyMoneyStream.setOrderId(order.getId());
+        payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
+        payChargeCompanyMoneyStream.setProductId(order.getProductId());
+        payChargeCompanyMoneyStream.setProductName(order.getProductName());
+        payChargeCompanyMoneyStream.setProductValue(order.getProductValue());
+        payChargeCompanyMoneyStream.setProductBidPrice(order.getProductBidPrice());
+        payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
+        payChargeCompanyMoneyStream.setProductAmount(order.getProductAmount());
+        payChargeCompanyMoneyStream.setInterfaceType(order.getInterfaceType());
+        payChargeCompanyMoneyStream.setInterfaceOrderNo(order.getInterfaceOrderNo());
+        payChargeCompanyMoneyStream.setIsDel(Byte.valueOf("0"));
+        payChargeCompanyMoneyStream.setStatus(Byte.valueOf(status));
+        payChargeCompanyMoneyStream.setStreamType(Byte.valueOf(streamType));
+
+        //查询当前用户的余额
+//        ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
+//
+//        //根据状态判断是收入还是支出 先支出才会有收入 支出时创建时间取订单的创建时间 收入时间取订单的更新时间
+//        if ("0".equals(streamType)){
+//            //收入
+//            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().add(order.getTotalMoney()));
+//            //*************测试专用***************
+//            if (order.getUpdatetime() != null){
+//                payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
+//            }else{
+//                //如果更新时间为null
+//                Date date = order.getAddtime();
+//                System.out.println("获取的addTime:" + date);
+//                date.setHours(order.getAddtime().getHours() + 1);
+//                System.out.println("+1后的addTime:" + date);
+//                payChargeCompanyMoneyStream.setAddtime(date);
+//            }
+//
+//        }else if ("1".equals(streamType)){
+//            //支出
+//            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
+//            //*************测试专用***************
+//            if (order.getUpdatetime() != null){
+//                payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
+//            }else{
+//                //如果更新时间为null
+//                Date date = order.getAddtime();
+//                System.out.println("获取的addTime:" + date);
+//                date.setHours(order.getAddtime().getHours() + 1);
+//                System.out.println("+1后的addTime:" + date);
+//                payChargeCompanyMoneyStream.setAddtime(date);
+//            }
+//        }
+
+        if (order.getUpdatetime() != null){
+            payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
+        }else{
+            //如果更新时间为null
+            Date date = order.getAddtime();
+            System.out.println("获取的addTime:" + date);
+            date.setHours(order.getAddtime().getHours() + 1);
+            System.out.println("+1后的addTime:" + date);
+            payChargeCompanyMoneyStream.setAddtime(date);
+        }
+
+        if (chargeCompanyMoneyStreamServiceFacade.addStream(payChargeCompanyMoneyStream) == 1){
+            logContent.append("\t 新增流水记录成功 \t");
+        }else{
+            logContent.append("\t 新增流水记录失败 \t");
+        }
+
     }
 
 }

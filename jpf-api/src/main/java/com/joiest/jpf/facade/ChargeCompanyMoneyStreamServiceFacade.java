@@ -41,4 +41,10 @@ public interface ChargeCompanyMoneyStreamServiceFacade {
      * @return
      */
     List<PayChargeCompanyMoneyStream> getChargeCompanyMoneyStreamByOrderId(String id);
+
+
+    /**
+     * 添加流水记录(订单补偿)
+     */
+    int addStream(PayChargeCompanyMoneyStream record);
 }

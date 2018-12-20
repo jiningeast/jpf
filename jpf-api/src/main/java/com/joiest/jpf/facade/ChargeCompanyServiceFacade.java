@@ -58,4 +58,15 @@ public interface ChargeCompanyServiceFacade {
      */
     public JpfResponseDto updatePassword(String merchNo,String oldPass,String newPass);
 
+    /**
+     * 获取用户列表
+     */
+
+    List<PayChargeCompany> getCompanyList();
+
+    /**
+     * 校正商户余额
+     * @param company
+     */
+    void reviseCompanyCharge(PayChargeCompany company);
 }

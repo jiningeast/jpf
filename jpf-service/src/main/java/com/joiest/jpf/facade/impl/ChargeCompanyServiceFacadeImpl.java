@@ -3,14 +3,14 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayChargeCompany;
-import com.joiest.jpf.common.po.PayChargeCompanyExample;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeCompanyCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyChargeMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
@@ -33,6 +33,12 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
     @Autowired
     private PayChargeCompanyCustomMapper payChargeCompanyCustomMapper;
+
+    @Autowired
+    private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
+
+    @Autowired
+    private PayChargeCompanyChargeMapper payChargeCompanyChargeMapper;
 
     /**
      * 获取商户列表
@@ -237,6 +243,7 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
         return new JpfResponseDto();
     }
+
     /**
      * 充值失败返还商户资金
      * */
@@ -274,4 +281,82 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         }
         return retParam;
     }
+
+
+    /**
+     * 查询商户列表
+     * @return
+     */
+    @Override
+    public List<PayChargeCompany> getCompanyList() {
+        PayChargeCompanyExample example = new PayChargeCompanyExample();
+        example.setOrderByClause("id asc");
+
+        return payChargeCompanyMapper.selectByExample(example);
+    }
+
+    /**
+     * 校正商户余额
+     * @param company
+     */
+    @Override
+    public void reviseCompanyCharge(PayChargeCompany company) {
+        BigDecimal companyMoney = BigDecimal.valueOf(0);
+
+        PayChargeCompanyChargeExample example = new PayChargeCompanyChargeExample();
+        example.setOrderByClause("id asc");
+        PayChargeCompanyChargeExample.Criteria criteria = example.createCriteria();
+        criteria.andCompanyIdEqualTo(company.getId());
+
+        //查询某个商家所有充值记录
+        List<PayChargeCompanyCharge> payChargeCompanyChargeList = payChargeCompanyChargeMapper.selectByExample(example);
+
+        //根据两次充值记录分段校正余额  先加上充值的钱
+        for (int i= 0;i<payChargeCompanyChargeList.size();i++){
+            Date beginDate = null;
+            Date endDate = null;
+
+            PayChargeCompanyMoneyStreamExample streamExample = new PayChargeCompanyMoneyStreamExample();
+            streamExample.setOrderByClause("id asc");
+            PayChargeCompanyMoneyStreamExample.Criteria streamCriteria = streamExample.createCriteria();
+            streamCriteria.andCompanyIdEqualTo(company.getId());
+
+            beginDate = payChargeCompanyChargeList.get(i).getAddtime();
+
+            if (i < payChargeCompanyChargeList.size() - 1){
+                endDate = payChargeCompanyChargeList.get(i+1).getAddtime();
+                streamCriteria.andAddtimeBetween(beginDate, endDate);
+            }else if(i == payChargeCompanyChargeList.size()){
+                endDate = new Date();
+                streamCriteria.andAddtimeBetween(beginDate, endDate);
+            }
+
+            //先把本次充值的钱加进去
+            companyMoney = companyMoney.add(payChargeCompanyChargeList.get(i).getMoney());
+
+
+            //查询两次充值时间段内的所有流水(更新流水的钱+更新用户的钱)
+            List<PayChargeCompanyMoneyStream> payChargeCompanyMoneyStreamList = payChargeCompanyMoneyStreamMapper.selectByExample(streamExample);
+
+            for (PayChargeCompanyMoneyStream stream : payChargeCompanyMoneyStreamList){
+                if (stream.getStreamType() == 0){
+                    //如果状态是收入 加钱
+                    companyMoney = companyMoney.add(stream.getTotalMoney());
+                }else if (stream.getStreamType() == 1){
+                    //如果状态是中支出 扣钱
+                    companyMoney = companyMoney.subtract(stream.getTotalMoney());
+                }
+
+                stream.setNewMoney(companyMoney);
+                payChargeCompanyMoneyStreamMapper.updateByPrimaryKey(stream);
+            }
+
+
+        }
+
+        company.setMoney(companyMoney);
+        payChargeCompanyMapper.updateByPrimaryKeySelective(company);
+
+    }
+
 }

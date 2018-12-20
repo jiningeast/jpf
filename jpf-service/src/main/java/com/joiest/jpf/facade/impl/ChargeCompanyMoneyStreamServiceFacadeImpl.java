@@ -3,6 +3,7 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStreamExample;
+import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamInterfaceRequest;
@@ -292,4 +293,38 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         return payChargeCompanyMoneyStreamMapper.selectByExample(example);
     }
 
+    @Override
+    public int addStream(PayChargeCompanyMoneyStream record) {
+        //记录资金流水日志
+        BigDecimal zeroNum = new BigDecimal("0");
+        Date curretDate = new Date();
+        PayChargeCompanyMoneyStream streamData = new PayChargeCompanyMoneyStream();
+        streamData.setStreamNo(record.getStreamNo());//流水号
+        streamData.setCompanyId(record.getCompanyId());//商户id
+        streamData.setCompanyName(record.getCompanyName());//商户名称
+        streamData.setMerchNo(record.getMerchNo());//商户号
+        streamData.setOrderId(record.getOrderId());//订单id 可能是消费订单、充值订单、退款订单
+        streamData.setOrderNo(record.getOrderNo()); // 订单号可能是消费订单、充值订单、退款订单
+        streamData.setProductId(record.getProductId());//产品Id
+        streamData.setProductName(record.getProductName());//产品名称
+        streamData.setProductValue(record.getProductValue()); //产品面值
+        streamData.setProductBidPrice(record.getProductBidPrice());//产品成本价
+        streamData.setProductSalePrice(record.getProductSalePrice());//产品标准售价 默认null
+        streamData.setProductInterfacePrice(record.getProductInterfacePrice());//产品接口价
+        streamData.setProductAmount(record.getProductAmount());//产品数量
+        streamData.setTotalMoney(record.getTotalMoney());//总价
+        streamData.setInterfaceType(record.getInterfaceType());//接口类型 0=欧非 1=威能 默认null
+        streamData.setInterfaceOrderNo(record.getInterfaceOrderNo());//接口订单号 默认null
+        streamData.setStatus(record.getStatus());//流水类型 1=充值 2=下单 3=退款
+        streamData.setStreamType(record.getStreamType());//流水类型 0=收入 1=支出
+        streamData.setNewMoney(record.getNewMoney());//变动后的余额
+        streamData.setMemo(record.getMemo());//流水备注
+        streamData.setIsDel(record.getIsDel());//删除标记 0=未删除 1=已删除
+        streamData.setAddtime(record.getAddtime());//添加时间
+        streamData.setUpdatetime(record.getUpdatetime());//更新时间
+
+        int streamCount = payChargeCompanyMoneyStreamMapper.insertSelective(streamData);
+
+        return streamCount;
+    }
 }
