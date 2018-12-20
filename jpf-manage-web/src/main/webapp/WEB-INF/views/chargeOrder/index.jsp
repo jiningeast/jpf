@@ -65,11 +65,13 @@
                     {field:'chargePhone',title:'充值号码',width:"5%"},
                     {field:'productId',title:'产品id',width:"5%"},
                     {field:'productName',title:'产品名称',width:"5%"},
+                    {field:'productValue',title:'产品面值',width:"5%"},
                     {field:'productPrice',title:'产品单价',width:"5%"},
                     {field:'interfaceType',title:'接口类型',width:"5%",
                         formatter:function (value,row,index) {
                             if ( value == 0 ) { return "欧飞"; }
                             if ( value == 1 ) { return "威能"; }
+                            if ( value == 2 ) { return "敬恒"; }
                         }},
                     {field:'interfaceOrderNo',title:'上游订单号',width:"5%"},
                     {field:'status',title:'订单状态',width:"5%",
@@ -115,12 +117,28 @@
             //导出excel
             $('#importChargeOrder').linkbutton({
                 onClick: function(){
-                    var queryArray = $('#searchForm').serialize();
-                    var importChargeOrder = "./exportExcel?"+queryArray;
-                    window.location.href = importChargeOrder;
+                    ajaxLoading();
+                    $.ajax({
+                        url: "./exportExcel?" + $('#searchForm').serialize(),
+                        type:"GET",
+                        success:function () {
+                            window.location.href = "./exportExcel?" + $('#searchForm').serialize();
+                            ajaxLoadEnd();
+                        },
+                    });
                 }
             });
         })
+
+        function ajaxLoading(){
+            $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:"100%",height:$(window).height()}).appendTo("body");
+            $("<div class=\"datagrid-mask-msg\"></div>").html("正在导出...").appendTo("body").css({display:"block",left:($(document.body).outerWidth(true) - 190) / 2,top:($(window).height() - 45) / 2});
+        }
+
+        function ajaxLoadEnd(){
+            $(".datagrid-mask").remove();
+            $(".datagrid-mask-msg").remove();
+        }
     </script>
 </head>
 <body>
@@ -156,6 +174,7 @@
                                     <option value="">全部</option>
                                     <option value="0">欧飞</option>
                                     <option value="1">威能</option>
+                                    <option value="2">敬恒</option>
                                 </select>
                             </td>
                             <td>订单状态：</td>

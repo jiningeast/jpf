@@ -1,8 +1,11 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.common.custom.PayShopOrderCustom;
 import com.joiest.jpf.dto.GetShopOrderRequest;
 import com.joiest.jpf.dto.GetShopOrderResponse;
 import com.joiest.jpf.entity.ShopOrderInfo;
+
+import java.util.List;
 
 public interface ShopOrderServiceFacade {
 
@@ -18,4 +21,6 @@ public interface ShopOrderServiceFacade {
      */
 
     public ShopOrderInfo getOne(String orderNo);
+
+    List<PayShopOrderCustom> getExcelList(GetShopOrderRequest request);
 }

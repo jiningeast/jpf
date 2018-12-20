@@ -72,7 +72,7 @@ public class ChargeCompanyMoneyStreamController {
         {
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "参数错误！", null);
         }
-        request.setMerchNo(merchNo);
+        // request.setMerchNo(merchNo);
         ChargeCompanyMoneyStreamResponse response = chargeCompanyMoneyStreamServiceFacade.getStreamList(request);
 
         if( response == null ||response.getList().size()<1 ){

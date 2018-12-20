@@ -5,6 +5,8 @@ import com.joiest.jpf.dto.GetChargeCompanyChargeRequest;
 import com.joiest.jpf.dto.GetChargeCompanyChargeResponse;
 import com.joiest.jpf.entity.ChargeCompanyChargeInfo;
 
+import java.math.BigDecimal;
+
 public interface ChargeCompanyChargeServiceFacade {
 
     /**
@@ -27,4 +29,11 @@ public interface ChargeCompanyChargeServiceFacade {
      * 财务审核充值---后台
      */
     public JpfResponseDto caiWuCompanyCharge(GetChargeCompanyChargeRequest request);
+
+    /**
+     * 根据商户Id获取商户充值的总金额(费率折算后)
+     * @param companyId
+     * @return
+     */
+    BigDecimal getCompanyTotalMoney(String companyId);
 }

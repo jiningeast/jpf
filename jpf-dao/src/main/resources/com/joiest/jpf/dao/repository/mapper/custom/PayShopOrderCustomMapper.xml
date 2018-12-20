@@ -798,4 +798,34 @@
       updatetime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--自定义连表查询数据-->
+  <select id="selectByExcelExampleJoin" parameterType="com.joiest.jpf.common.po.PayShopOrderExample" resultMap="BaseResultMap">
+    select 
+      a.id,
+      a.order_no,
+      a.product_name,
+      b.type_name,
+      a.amount,
+      a.total_money,
+      a.total_dou,
+      a.customer_name,
+      a.addtime,
+      a.paytime,
+      a.status,
+      a.interface_type,
+      a.source
+    from 
+      pay_shop_order a 
+    LEFT JOIN  
+      pay_shop_product_info b 
+    ON  
+      a.product_info_id = b.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause_Custom" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
 </mapper>

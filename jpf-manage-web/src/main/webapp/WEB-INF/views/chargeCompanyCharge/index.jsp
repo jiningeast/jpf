@@ -35,7 +35,7 @@
                     text : '新增',
                     iconCls : 'icon-add',
                     handler : function(){
-                        $("#addWindow").window("open").window('refresh', 'addPage').window('setTitle','新增');
+                        $("#addWindow").window("open").window('refresh', 'addPage').window('setTitle','新增').height(600);
                     }
                 }
             ];

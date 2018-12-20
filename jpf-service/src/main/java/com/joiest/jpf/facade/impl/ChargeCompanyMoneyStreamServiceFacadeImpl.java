@@ -8,7 +8,9 @@ import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStream
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamInterfaceRequest;
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamRequest;
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamResponse;
+import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.entity.ChargeCompanyMoneyStreamInfo;
+import com.joiest.jpf.facade.ChargeCompanyChargeServiceFacade;
 import com.joiest.jpf.facade.ChargeCompanyMoneyStreamServiceFacade;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,9 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
 
     private ChargeCompanyServiceFacade chargeCompanyServiceFacade;
 
+    @Autowired
+    private ChargeCompanyChargeServiceFacade chargeCompanyChargeServiceFacade;
+    
     /**
      * 获取充值订单
      */
@@ -241,6 +246,16 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
 
                 infos.add(chargeCompanyMoneyStreamInfo);
             }
+            ChargeCompanyInfo recordByMerchNo = chargeCompanyServiceFacade.getRecordByMerchNo(list.get(0).getMerchNo());
+            if(recordByMerchNo != null){
+                response.setBalance(recordByMerchNo.getMoney());
+                BigDecimal companyTotalMoney = chargeCompanyChargeServiceFacade.getCompanyTotalMoney(recordByMerchNo.getId());
+                if(companyTotalMoney != null){
+                    response.setTotalMoney(companyTotalMoney);
+                }else{
+                    response.setTotalMoney(null);
+                }
+            }
         }
         response.setList(infos);
         response.setCount(count);
@@ -259,6 +274,19 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
         c.andOrderNoEqualTo(order_no);
 
         return payChargeCompanyMoneyStreamMapper.updateByExampleSelective(record,explame);
+    }
+
+    @Override
+    public List<PayChargeCompanyMoneyStream> getByOrderNo(String orderNo) {
+        PayChargeCompanyMoneyStreamExample example = new PayChargeCompanyMoneyStreamExample();
+        PayChargeCompanyMoneyStreamExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderNoEqualTo(orderNo);
+        return payChargeCompanyMoneyStreamMapper.selectByExample(example);
+    }
+
+    @Override
+    public void updateStram(PayChargeCompanyMoneyStream payChargeCompanyMoneyStream) {
+        payChargeCompanyMoneyStreamMapper.updateByPrimaryKeySelective(payChargeCompanyMoneyStream);
     }
 
 }
