@@ -92,4 +92,11 @@ public interface ChargeOrderServiceFacade {
      * @throws Exception
      */
     void subCompanyMoney(ChargeCompanyInfo companyInfo,ChargeProductInfo chargeProductInfo) throws Exception;
+
+    /**
+     * 查询订单
+     * @param id
+     * @return
+     */
+    ChargeOrderInfo getById(String id);
 }

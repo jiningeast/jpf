@@ -18,6 +18,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.util.JSONTokener;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -39,7 +42,7 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("orders")
 public class OrdersController {
-
+    private static final Logger logger = LogManager.getLogger(OrdersController.class);
     private String uid;
     private String openId;
     private ShopCustomerInterfaceInfo userInfo;
@@ -1804,32 +1807,42 @@ public class OrdersController {
                         //修改订单信息 【订单状态】
                         ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
                         if (job.get("reportStatus").toString().equals("1")){
-
                             sucOrder+=orderInfo.getOrderNo()+",";
                             upOrderInfo.setStatus((byte)2);
 
                             sendParam.put("code","10000");
                             sendParam.put("info","充值成功");
                         }else{
-
                             faildOrder+=orderInfo.getOrderNo()+",";
-
                             sendParam.put("code","10008");
                             sendParam.put("info","充值失败");
-
-                            //充值失败返还商户资金
-                            JSONObject isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
-                            if(isRet.get("code").toString().equals("10000")){
-
-                                upOrderInfo.setStatus((byte)5);
-                            }else{
-
-                                upOrderInfo.setStatus((byte)7);
+                            JSONObject isRet=new JSONObject();
+                            String remark ="["+ DateUtils.getCurDate() + "]:退款成功";
+                            if(orderInfo.getStatus()==1){
+                                try {
+                                    isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
+                                    upOrderInfo.setStatus((byte)5);
+                                }catch (SQLException e){
+                                    logger.error(e.getMessage(),e);
+                                }catch (NullPointerException e){
+                                    remark="["+ DateUtils.getCurDate() + "]:退款失败";
+                                    logger.error(e.getMessage(),e);
+                                    upOrderInfo.setStatus((byte)7);
+                                }catch (NumberFormatException e){
+                                    remark="["+ DateUtils.getCurDate() + "]:退款失败";
+                                    logger.error(e.getMessage(),e);
+                                    upOrderInfo.setStatus((byte)7);
+                                }
                             }
-                            String remark = orderInfo.getRemark()==null || orderInfo.getRemark()==""?"["+ DateUtils.getCurDate() + "]:"+isRet.get("info"):orderInfo.getRemark()+"&#13;&#10;["+ DateUtils.getCurDate() + "]:"+isRet.get("info");
+                            if(!"10000".equals(isRet.get("code"))){
+                                remark="["+ DateUtils.getCurDate() + "]"+isRet.get("info");
+                            }
                             upOrderInfo.setRemark(remark);
-
-                            sbf.append("\n充值失败返还商户金额："+isRet.toString());
+                            if(upOrderInfo.getStatus()==7){
+                                sbf.append("\n充值失败返还商户金额："+isRet.toString());
+                            }else{
+                                sbf.append("\n已经退还给商户，不能重复退款："+isRet.toString());
+                            }
                         }
                         upOrderInfo.setId(orderInfo.getId());
                         upOrderInfo.setNotifyParams(JSONObject.fromObject(sendParam).toString());
@@ -1865,11 +1878,9 @@ public class OrdersController {
                         orderinfo.setId(orderInfo.getId());
                         orderinfo.setUpdatetime(new Date());
                         if (job.get("reportStatus").toString().equals("1")){
-
                             sucOrder+=orderInfo.getOrderNo()+",";
                             orderinfo.setRechargeStatus("1");
                         }else{
-
                             faildOrder+=orderInfo.getOrderNo()+",";
                             orderinfo.setRechargeStatus("9");
                         }

@@ -250,8 +250,8 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     public JSONObject returnComfunds(ChargeOrderInfo orderInfo)  throws Exception{
 
         JSONObject retParam = new JSONObject();
-        retParam.put("code","10008");
-        retParam.put("info","返还商户金额失败");
+        retParam.put("code","10000");
+        retParam.put("info","返还商户金额成功");
 
         ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
         companyInfo.setMerchNo(orderInfo.getMerchNo());
@@ -299,7 +299,7 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         streamData.setProductValue(chargeOrderInfo.getProductValue()); //产品面值
         streamData.setProductBidPrice(chargeOrderInfo.getProductBidPrice());//产品成本价
         streamData.setProductSalePrice(chargeOrderInfo.getProductPrice());//产品标准售价 默认null
-        streamData.setProductInterfacePrice(chargeOrderInfo.getProductBidPrice());//产品接口价同成本价
+        //streamData.setProductInterfacePrice(chargeOrderInfo.getProductBidPrice());//产品接口价同成本价
         streamData.setProductAmount(chargeOrderInfo.getProductAmount());//产品数量
         streamData.setTotalMoney(chargeOrderInfo.getTotalMoney());//总价
 

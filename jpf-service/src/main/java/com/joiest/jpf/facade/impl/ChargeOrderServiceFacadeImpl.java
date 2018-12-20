@@ -526,14 +526,31 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         order.setRequestParams(JSONObject.fromObject(actParam).toString());
         order.setStatus((byte)0);
         order.setAddtime(new Date());
-        order.setProductType(actParam.get("oilType")==null?0:Integer.valueOf(actParam.get("oilType")));
+        order.setProductValue(chargeProductInfo.getValue());
+        //判断是否是油卡服务
+        if(actParam.get("cardNo")!=null){
+            order.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+            order.setProductType(Integer.valueOf(actParam.get("oilType")));
+            order.setInterfaceType((byte)0);
+        }else{
+            //此处是直充业务，判断走谁的接口
+            String lastNum = org.apache.commons.lang.StringUtils.substring(orderno,-1,orderno.length());
+            if (org.apache.commons.lang.StringUtils.isBlank(ConfigUtil.getValue("OF_AND_WEINENG"))||(Integer.parseInt(lastNum)>=Integer.parseInt(ConfigUtil.getValue("OF_AND_WEINENG")))) {
+                order.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+                order.setInterfaceType((byte)0);
+                order.setProductType(0);
+            }else{
+                order.setProductBidPrice(chargeProductInfo.getWnProductPrice());
+                order.setInterfaceType((byte)1);
+                order.setProductType(1);
+            }
+        }
         payChargeOrderCustomMapper.insertSelective(order);
-        String orderId= order.getId();
         //扣除商户金额
         subCompanyMoney(companyInfo,chargeProductInfo);
         PayChargeCompany chargeCompany = payChargeCompanyMapper.selectByPrimaryKey(companyInfo.getId());
         // 新增资金流水
-        saveMoneyStream(chargeCompany, chargeProductInfo, orderno, orderId);
+        saveMoneyStream(chargeCompany, chargeProductInfo,order);
 
         return order;
     }
@@ -550,28 +567,37 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         }
     }
 
-    public void saveMoneyStream(PayChargeCompany companyInfo, ChargeProductInfo chargeProductInfo, String orderno, String orderId) {
+    @Override
+    public ChargeOrderInfo getById(String id) {
+        PayChargeOrder one = payChargeOrderMapper.selectByPrimaryKey(id);
+        ChargeOrderInfo info = new ChargeOrderInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
+        beanCopier.copy(one, info, null);
+        return info;
+    }
+
+    public void saveMoneyStream(PayChargeCompany companyInfo, ChargeProductInfo chargeProductInfo, PayChargeOrder order) {
         PayChargeCompanyMoneyStream stream = new PayChargeCompanyMoneyStream();
         String streamNo = "MS"+System.currentTimeMillis()+ ToolUtils.getRandomInt(100,999);
         stream.setStreamNo(streamNo);
         stream.setCompanyId(companyInfo.getId());
         stream.setCompanyName(companyInfo.getCompanyName());
         stream.setMerchNo(companyInfo.getMerchNo());
-        stream.setOrderId(""+orderId);
-        stream.setOrderNo(orderno);
+        stream.setOrderId(""+order.getId());
+        stream.setOrderNo(order.getOrderNo());
         stream.setProductId(chargeProductInfo.getId());
         stream.setProductName(chargeProductInfo.getName());
         stream.setProductValue(chargeProductInfo.getValue());
-     /*   if(type.equals((byte)1)){
-            info.setProductBidPrice(chargeProductInfo.getWnProductPrice());
+        if(order.getInterfaceType()==1){
+            stream.setProductBidPrice(chargeProductInfo.getWnProductPrice());
         }else{
-            info.setProductBidPrice(chargeProductInfo.getOfProductPrice());
-        }*/
+            stream.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+        }
         stream.setProductSalePrice(chargeProductInfo.getSalePrice());
-        stream.setProductInterfacePrice(chargeProductInfo.getBidPrice());
+       // stream.setProductInterfacePrice(stream.getProductBidPrice());
         stream.setProductAmount(1);
         stream.setTotalMoney(chargeProductInfo.getSalePrice());
-        //info.setInterfaceType(type);
+        stream.setInterfaceType(order.getInterfaceType());
         //info.setInterfaceOrderNo(map.get("orderid"));
         stream.setStatus((byte)2);
         stream.setStreamType((byte)1);
