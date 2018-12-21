@@ -82,7 +82,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeConsumerOrder.setOrderNo(orderNo);
         payChargeConsumerOrder.setCompanyId(result.getId());
         payChargeConsumerOrder.setMerchNo(result.getMerchNo());
-        payChargeConsumerOrder.setStatus((byte)2);
+        payChargeConsumerOrder.setStatus((byte)0);
         payChargeConsumerOrder.setAddtime(new Date());
         payChargeConsumerOrder.setMoney(new BigDecimal(money));
         payChargeConsumerOrderMapper.insertSelective(payChargeConsumerOrder);
@@ -219,7 +219,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
             order.setProductType(4);
         }
         order.setProductValue(payShopBargainRechargeOrder.getFacePrice());
-        order.setStatus((byte)0);
+        order.setStatus((byte)2);
         order.setTotalMoney(payShopBargainRechargeOrder.getAmount());
         order.setConsumerOrderNo(orderNo);
         payChargeOrderCustomMapper.insertSelective(order);
