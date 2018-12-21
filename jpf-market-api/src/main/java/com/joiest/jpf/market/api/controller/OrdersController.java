@@ -1843,8 +1843,7 @@ public class OrdersController {
                             sbf.append("\n请求下游地址："+orderInfo.getNotifyUrl());
                             sbf.append("\n\t请求下游参数："+JSONObject.fromObject(sendParam).toString());
                             //发起下游请求
-                            logger.info("站远回调");
-                            //OkHttpUtils.postForm(orderInfo.getNotifyUrl(),sendParam);
+                            OkHttpUtils.postForm(orderInfo.getNotifyUrl(),sendParam);
                         }
                     }else{
                         ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderByOrderNo(job.get("outOrderId").toString());

@@ -13,10 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -1000,6 +997,12 @@ public class FlowRechargeController {
         return validate;
     }
 
+
+    @RequestMapping(value = "/goBackZhanyuan",method = RequestMethod.POST)
+    @ResponseBody
+    public void goBackZhanyuan(){
+        logger.info("回调站远成功");
+    }
     public static void main(String[] args) {
         //merchNo=MC15411265483241688&service=placeOrderVa&productId=1007&outOrderNo=111111&phone=18801147519&dateTime=201811260022&notifyUrl=http://www.baidu.com&sign=508900BDA3F42200BDBBFDD19133F390
         System.out.println(Md5Encrypt.md5("Md5(dateTime=201811260022&merchNo=MC15411265483241688&notifyUrl=http://www.baidu.com&outOrderNo=111111&phone=18801147519&productId=1007&service=placeOrderValimyHcZOzMmhukCqB").toUpperCase());
