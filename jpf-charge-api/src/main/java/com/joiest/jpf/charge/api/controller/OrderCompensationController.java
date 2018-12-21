@@ -79,7 +79,7 @@ public class OrderCompensationController {
         for (PayChargeOrder order : payChargeOrderList){
             List<PayChargeCompanyMoneyStream> payChargeCompanyMoneyStreamList = chargeCompanyMoneyStreamServiceFacade.getChargeCompanyMoneyStreamByOrderId(order.getId());
             //判断订单状态是否为1或2 3 5 7 订单状态 目前只有12357 1=充值中 2=上游充值成功 5=退款成功
-            if (order.getStatus() == 1 || order.getStatus() == 2 || order.getStatus() == 3 || order.getStatus() == 5 || order.getStatus() == 7){
+            if (order.getStatus() == 1 || order.getStatus() == 2 || order.getStatus() == 7){
                //有一条流水记录
                if (payChargeCompanyMoneyStreamList.size() == 1){
 
