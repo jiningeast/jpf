@@ -257,11 +257,13 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         companyInfo.setMerchNo(orderInfo.getMerchNo());
         ChargeCompanyInfo chargeCompanyInfo = getOne(companyInfo);
         if(chargeCompanyInfo == null){
+            retParam.put("code","100008");
             retParam.put("info","订单信息未匹配到商户信息");
             return retParam;
         }
         Boolean newCode = ToolUtils.ValidateCode(chargeCompanyInfo.getMoneyCode(),chargeCompanyInfo.getId(),chargeCompanyInfo.getMoney().toString(), ConfigUtil.getValue("MERCH_VALIDE_CODE"));
         if(newCode.equals(false)){
+            retParam.put("code","10008");
             retParam.put("info","商户金额校验错误");
             return retParam;
         }
