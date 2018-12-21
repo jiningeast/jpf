@@ -250,18 +250,20 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     public JSONObject returnComfunds(ChargeOrderInfo orderInfo)  throws Exception{
 
         JSONObject retParam = new JSONObject();
-        retParam.put("code","10008");
-        retParam.put("info","返还商户金额失败");
+        retParam.put("code","10000");
+        retParam.put("info","返还商户金额成功");
 
         ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
         companyInfo.setMerchNo(orderInfo.getMerchNo());
         ChargeCompanyInfo chargeCompanyInfo = getOne(companyInfo);
         if(chargeCompanyInfo == null){
+            retParam.put("code","100008");
             retParam.put("info","订单信息未匹配到商户信息");
             return retParam;
         }
         Boolean newCode = ToolUtils.ValidateCode(chargeCompanyInfo.getMoneyCode(),chargeCompanyInfo.getId(),chargeCompanyInfo.getMoney().toString(), ConfigUtil.getValue("MERCH_VALIDE_CODE"));
         if(newCode.equals(false)){
+            retParam.put("code","10008");
             retParam.put("info","商户金额校验错误");
             return retParam;
         }
