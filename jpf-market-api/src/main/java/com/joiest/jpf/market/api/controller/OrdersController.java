@@ -1781,8 +1781,10 @@ public class OrdersController {
                             //chargeInterfaceStreamInfo.setResponse(job.toString());
                             chargeInterfaceStreamInfo.setAddtime(new Date());
                             chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
+
                             // 查询商品信息
                             ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(orderInfo.getProductId());
+
                             //主动通知参数
                             Map<String,Object> sendParam = new HashMap<>();
                             sendParam.put("outOrderNo",orderInfo.getForeignOrderNo());
@@ -1791,113 +1793,59 @@ public class OrdersController {
                             sendParam.put("value",chargeProductInfo.getValue());
                             sendParam.put("salePrice",chargeProductInfo.getSalePrice());
                             sendParam.put("productId",orderInfo.getProductId());
+
                             //修改订单信息 【订单状态】
                             ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
                             if (job.get("reportStatus").toString().equals("1")){
                                 sucOrder+=orderInfo.getOrderNo()+",";
                                 upOrderInfo.setStatus((byte)2);
+
                                 sendParam.put("code","10000");
                                 sendParam.put("info","充值成功");
                             }else{
                                 faildOrder+=orderInfo.getOrderNo()+",";
                                 sendParam.put("code","10008");
                                 sendParam.put("info","充值失败");
-                                //充值失败返还商户资金
-                                JSONObject isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
-                                if(isRet.get("code").toString().equals("10000")){
-                                    upOrderInfo.setStatus((byte)5);
-                                }else{
-                                    upOrderInfo.setStatus((byte)7);
+                                JSONObject isRet=new JSONObject();
+                                String remark ="["+ DateUtils.getCurDate() + "]:退款成功";
+                                if(orderInfo.getStatus()==1){
+                                    try {
+                                        isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
+                                        upOrderInfo.setStatus((byte)5);
+                                    }catch (SQLException e){
+                                        logger.error(e.getMessage(),e);
+                                    }catch (NullPointerException e){
+                                        remark="["+ DateUtils.getCurDate() + "]:退款失败";
+                                        logger.error(e.getMessage(),e);
+                                        upOrderInfo.setStatus((byte)7);
+                                    }catch (NumberFormatException e){
+                                        remark="["+ DateUtils.getCurDate() + "]:退款失败";
+                                        logger.error(e.getMessage(),e);
+                                        upOrderInfo.setStatus((byte)7);
+                                    }
                                 }
-                                String remark = orderInfo.getRemark()==null || orderInfo.getRemark()==""?"["+ DateUtils.getCurDate() + "]:"+isRet.get("info"):orderInfo.getRemark()+"&#13;&#10;["+ DateUtils.getCurDate() + "]:"+isRet.get("info");
+                                if(!"10000".equals(isRet.get("code"))){
+                                    remark="["+ DateUtils.getCurDate() + "]"+isRet.get("info");
+                                }
                                 upOrderInfo.setRemark(remark);
-                                sbf.append("\n充值失败返还商户金额："+isRet.toString());
+                                if(upOrderInfo.getStatus()==7){
+                                    sbf.append("\n充值失败返还商户金额："+isRet.toString());
+                                }else{
+                                    sbf.append("\n已经退还给商户，不能重复退款："+isRet.toString());
+                                }
                             }
                             upOrderInfo.setId(orderInfo.getId());
                             upOrderInfo.setNotifyParams(JSONObject.fromObject(sendParam).toString());
                             upOrderInfo.setNotifyTime(new Date());
                             upOrderInfo.setUpdatetime(new Date());
                             chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
+
                             sbf.append("\n请求下游地址："+orderInfo.getNotifyUrl());
                             sbf.append("\n\t请求下游参数："+JSONObject.fromObject(sendParam).toString());
-                            //发起下游请求logger.info("回答站远start");
-                            logger.info("回答站远start");
+                            //发起下游请求
+                            logger.info("站远回调");
                             //OkHttpUtils.postForm(orderInfo.getNotifyUrl(),sendParam);
                         }
-                        //添加流水
-                        ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
-                        chargeInterfaceStreamInfo.setOrderId(""+orderInfo.getId());
-                        chargeInterfaceStreamInfo.setOrderNo(orderInfo.getOrderNo());
-                        chargeInterfaceStreamInfo.setType((byte)1);
-                        chargeInterfaceStreamInfo.setRequestUrl(request.getRequestURL().toString());
-                        chargeInterfaceStreamInfo.setRequestParam(job.toString());
-                        //chargeInterfaceStreamInfo.setResponse(job.toString());
-                        chargeInterfaceStreamInfo.setAddtime(new Date());
-                        chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
-
-                        // 查询商品信息
-                        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(orderInfo.getProductId());
-
-                        //主动通知参数
-                        Map<String,Object> sendParam = new HashMap<>();
-                        sendParam.put("outOrderNo",orderInfo.getForeignOrderNo());
-                        sendParam.put("orderNo",orderInfo.getOrderNo());
-                        sendParam.put("phone",orderInfo.getChargePhone());
-                        sendParam.put("value",chargeProductInfo.getValue());
-                        sendParam.put("salePrice",chargeProductInfo.getSalePrice());
-                        sendParam.put("productId",orderInfo.getProductId());
-
-                        //修改订单信息 【订单状态】
-                        ChargeOrderInfo upOrderInfo = new ChargeOrderInfo();
-                        if (job.get("reportStatus").toString().equals("1")){
-                            sucOrder+=orderInfo.getOrderNo()+",";
-                            upOrderInfo.setStatus((byte)2);
-
-                            sendParam.put("code","10000");
-                            sendParam.put("info","充值成功");
-                        }else{
-                            faildOrder+=orderInfo.getOrderNo()+",";
-                            sendParam.put("code","10008");
-                            sendParam.put("info","充值失败");
-                            JSONObject isRet=new JSONObject();
-                            String remark ="["+ DateUtils.getCurDate() + "]:退款成功";
-                            if(orderInfo.getStatus()==1){
-                                try {
-                                    isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
-                                    upOrderInfo.setStatus((byte)5);
-                                }catch (SQLException e){
-                                    logger.error(e.getMessage(),e);
-                                }catch (NullPointerException e){
-                                    remark="["+ DateUtils.getCurDate() + "]:退款失败";
-                                    logger.error(e.getMessage(),e);
-                                    upOrderInfo.setStatus((byte)7);
-                                }catch (NumberFormatException e){
-                                    remark="["+ DateUtils.getCurDate() + "]:退款失败";
-                                    logger.error(e.getMessage(),e);
-                                    upOrderInfo.setStatus((byte)7);
-                                }
-                            }
-                            if(!"10000".equals(isRet.get("code"))){
-                                remark="["+ DateUtils.getCurDate() + "]"+isRet.get("info");
-                            }
-                            upOrderInfo.setRemark(remark);
-                            if(upOrderInfo.getStatus()==7){
-                                sbf.append("\n充值失败返还商户金额："+isRet.toString());
-                            }else{
-                                sbf.append("\n已经退还给商户，不能重复退款："+isRet.toString());
-                            }
-                        }
-                        upOrderInfo.setId(orderInfo.getId());
-                        upOrderInfo.setNotifyParams(JSONObject.fromObject(sendParam).toString());
-                        upOrderInfo.setNotifyTime(new Date());
-                        upOrderInfo.setUpdatetime(new Date());
-                        chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
-
-                        sbf.append("\n请求下游地址："+orderInfo.getNotifyUrl());
-                        sbf.append("\n\t请求下游参数："+JSONObject.fromObject(sendParam).toString());
-
-                        //发起下游请求
-                        OkHttpUtils.postForm(orderInfo.getNotifyUrl(),sendParam);
                     }else{
                         ShopOrderInterfaceInfo orderInfo = shopOrderInterfaceServiceFacade.getOrderByOrderNo(job.get("outOrderId").toString());
                         if (orderInfo ==null){
