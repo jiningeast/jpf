@@ -214,7 +214,9 @@ public class OrderCompensationController {
 
         logContent.append("\t 开始新增流水记录... \t");
 
-        payChargeCompanyMoneyStream.setStreamNo("MS" + ToolUtils.createOrderid());
+        String streamNo = "MS" + ToolUtils.createOrderid();
+
+        payChargeCompanyMoneyStream.setStreamNo(streamNo);
         payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
         payChargeCompanyMoneyStream.setCompanyId(order.getCompanyId());
         payChargeCompanyMoneyStream.setCompanyName(order.getCompanyName());
@@ -244,12 +246,22 @@ public class OrderCompensationController {
             payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().add(order.getTotalMoney()));
             //*************测试专用***************
             if (order.getUpdatetime() != null){
+                Date date = order.getUpdatetime();
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.set(Calendar.HOUR_OF_DAY,calendar.get(calendar.HOUR_OF_DAY)+1);
+
                 payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
+                payChargeCompanyMoneyStream.setUpdatetime(calendar.getTime());
             }else{
                 //如果更新时间为null
                 Date date = order.getAddtime();
-                date.setHours(order.getAddtime().getHours() + 2);
-                payChargeCompanyMoneyStream.setAddtime(date);
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.set(Calendar.HOUR_OF_DAY,calendar.get(calendar.HOUR_OF_DAY)+2);
+
+                payChargeCompanyMoneyStream.setAddtime(calendar.getTime());
+                payChargeCompanyMoneyStream.setUpdatetime(calendar.getTime());
             }
 
         }else if ("1".equals(streamType)){
@@ -258,11 +270,15 @@ public class OrderCompensationController {
             //*************测试专用***************
             if (order.getUpdatetime() != null){
                 payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
+                payChargeCompanyMoneyStream.setUpdatetime(order.getUpdatetime());
             }else{
                 //如果更新时间为null
                 Date date = order.getAddtime();
-                date.setHours(order.getAddtime().getHours() + 1);
+//                Calendar calendar=Calendar.getInstance();
+//                calendar.setTime(date);
+//                calendar.set(Calendar.HOUR_OF_DAY,calendar.get(calendar.HOUR_OF_DAY));
                 payChargeCompanyMoneyStream.setAddtime(date);
+                payChargeCompanyMoneyStream.setUpdatetime(date);
             }
         }
 
@@ -281,7 +297,12 @@ public class OrderCompensationController {
 //        }
 
         if (chargeCompanyMoneyStreamServiceFacade.addStream(payChargeCompanyMoneyStream) == 1){
-            logContent.append("\t 新增流水记录成功 \t");
+            if ("3".equals(status)){
+                logContent.append("\t 新增退款流水记录成功 流水号为:"+ streamNo +"\t");
+            }else if ("2".equals(status)){
+                logContent.append("\t 新增下单流水记录成功 流水号为:"+ streamNo +"\t");
+            }
+
         }else{
             logContent.append("\t 新增流水记录失败 \t");
         }
