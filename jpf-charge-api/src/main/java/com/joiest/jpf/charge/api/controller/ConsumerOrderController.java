@@ -437,13 +437,13 @@ public class ConsumerOrderController {
         //查询列表数据
         GetChargeOrderResponse responseRecharge=chargeOrderServiceFacade.getRecordsInterface(requstRecgarge);
 
-        if( responseRecharge.getList() == null || responseRecharge.getList().size() < 1 ){
+        /*if( responseRecharge.getList() == null || responseRecharge.getList().size() < 1 ){
 
             responseMap.put("code",JpfInterfaceErrorInfo.ORDER_STATUS.getCode());
             responseMap.put("info",JpfInterfaceErrorInfo.ORDER_STATUS.getDesc());
 
             return JsonUtils.toJson(responseMap);
-        }
+        }*/
         List<ChargeOrderInfo> listRecharge=responseRecharge.getList();
 
         JSONArray arrayRecharge=new JSONArray();
