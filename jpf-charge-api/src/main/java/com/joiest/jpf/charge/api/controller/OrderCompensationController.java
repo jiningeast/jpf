@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -79,8 +78,8 @@ public class OrderCompensationController {
 
         for (PayChargeOrder order : payChargeOrderList){
             List<PayChargeCompanyMoneyStream> payChargeCompanyMoneyStreamList = chargeCompanyMoneyStreamServiceFacade.getChargeCompanyMoneyStreamByOrderId(order.getId());
-            //判断订单状态是否为1或2 订单状态  1=充值中 2=上游充值成功 5=退款成功
-            if (order.getStatus() == 1 || order.getStatus() == 2){
+            //判断订单状态是否为1或2 3 5 7 订单状态 目前只有12357 1=充值中 2=上游充值成功 5=退款成功
+            if (order.getStatus() == 1 || order.getStatus() == 2 || order.getStatus() == 3 || order.getStatus() == 5 || order.getStatus() == 7){
                //有一条流水记录
                if (payChargeCompanyMoneyStreamList.size() == 1){
 
@@ -92,7 +91,6 @@ public class OrderCompensationController {
 
                         //更新流水
                         payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
-                        payChargeCompanyMoneyStream.setUpdatetime(new Date());
 
                         if (chargeCompanyMoneyStreamServiceFacade.updateRecord(payChargeCompanyMoneyStream, order.getOrderNo()) > 0){
                             logContent.append("\t 更新流水记录成功 \t");
@@ -106,7 +104,6 @@ public class OrderCompensationController {
 
                         //更新流水
                         payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
-                        payChargeCompanyMoneyStream.setUpdatetime(new Date());
 
                         if (chargeCompanyMoneyStreamServiceFacade.updateRecord(payChargeCompanyMoneyStream, order.getOrderNo()) > 0){
                             logContent.append("\t 更新流水记录成功 \t");
@@ -117,11 +114,10 @@ public class OrderCompensationController {
                }else{
                    //无流水记录
                    logContent.append("\n 无流水记录,订单号为:"+order.getOrderNo()+"\t");
-
                    addStream(payChargeCompanyMoneyStream, order, logContent, "2", "1");
                }
-               //订单状态为5
-            }else if(order.getStatus() == 5){
+               //订单状态为 3 5 给商户退钱
+            }else if(order.getStatus() == 3 || order.getStatus() == 5){
 
                 //有一条流水记录
                 if (payChargeCompanyMoneyStreamList.size() == 1){
@@ -147,7 +143,6 @@ public class OrderCompensationController {
 
                             //更新流水
                             payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
-                            payChargeCompanyMoneyStream.setUpdatetime(new Date());
 
                             if (chargeCompanyMoneyStreamServiceFacade.updateRecord(payChargeCompanyMoneyStream, order.getOrderNo()) > 0){
                                 logContent.append("\t 更新流水记录成功 \t");
@@ -238,51 +233,52 @@ public class OrderCompensationController {
         payChargeCompanyMoneyStream.setStatus(Byte.valueOf(status));
         payChargeCompanyMoneyStream.setStreamType(Byte.valueOf(streamType));
 
-        //查询当前用户的余额
-//        ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
-//
-//        //根据状态判断是收入还是支出 先支出才会有收入 支出时创建时间取订单的创建时间 收入时间取订单的更新时间
-//        if ("0".equals(streamType)){
-//            //收入
-//            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().add(order.getTotalMoney()));
-//            //*************测试专用***************
-//            if (order.getUpdatetime() != null){
-//                payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
-//            }else{
-//                //如果更新时间为null
-//                Date date = order.getAddtime();
-//                System.out.println("获取的addTime:" + date);
-//                date.setHours(order.getAddtime().getHours() + 1);
-//                System.out.println("+1后的addTime:" + date);
-//                payChargeCompanyMoneyStream.setAddtime(date);
-//            }
-//
-//        }else if ("1".equals(streamType)){
-//            //支出
-//            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
-//            //*************测试专用***************
-//            if (order.getUpdatetime() != null){
-//                payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
-//            }else{
-//                //如果更新时间为null
-//                Date date = order.getAddtime();
-//                System.out.println("获取的addTime:" + date);
-//                date.setHours(order.getAddtime().getHours() + 1);
-//                System.out.println("+1后的addTime:" + date);
-//                payChargeCompanyMoneyStream.setAddtime(date);
-//            }
-//        }
+        //以下部分可注释掉,如果正式库数据正常的话,不会改变,如果不正常,在余额校正时会更新new_money
 
-        if (order.getUpdatetime() != null){
-            payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
-        }else{
-            //如果更新时间为null
-            Date date = order.getAddtime();
-            System.out.println("获取的addTime:" + date);
-            date.setHours(order.getAddtime().getHours() + 1);
-            System.out.println("+1后的addTime:" + date);
-            payChargeCompanyMoneyStream.setAddtime(date);
+        //查询当前用户的余额
+        ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
+
+        //根据状态判断是收入还是支出 先支出才会有收入 支出时创建时间取订单的创建时间 收入时间取订单的更新时间
+        if ("0".equals(streamType)){
+            //收入
+            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().add(order.getTotalMoney()));
+            //*************测试专用***************
+            if (order.getUpdatetime() != null){
+                payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
+            }else{
+                //如果更新时间为null
+                Date date = order.getAddtime();
+                date.setHours(order.getAddtime().getHours() + 2);
+                payChargeCompanyMoneyStream.setAddtime(date);
+            }
+
+        }else if ("1".equals(streamType)){
+            //支出
+            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
+            //*************测试专用***************
+            if (order.getUpdatetime() != null){
+                payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
+            }else{
+                //如果更新时间为null
+                Date date = order.getAddtime();
+                date.setHours(order.getAddtime().getHours() + 1);
+                payChargeCompanyMoneyStream.setAddtime(date);
+            }
         }
+
+        //以上若注释,放开下面的注释
+
+
+//        if (order.getUpdatetime() != null){
+//            payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
+//        }else{
+//            //如果更新时间为null
+//            Date date = order.getAddtime();
+//            System.out.println("获取的addTime:" + date);
+//            date.setHours(order.getAddtime().getHours() + 1);
+//            System.out.println("+1后的addTime:" + date);
+//            payChargeCompanyMoneyStream.setAddtime(date);
+//        }
 
         if (chargeCompanyMoneyStreamServiceFacade.addStream(payChargeCompanyMoneyStream) == 1){
             logContent.append("\t 新增流水记录成功 \t");

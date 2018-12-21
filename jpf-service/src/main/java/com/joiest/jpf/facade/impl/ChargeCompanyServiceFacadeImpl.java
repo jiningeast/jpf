@@ -292,6 +292,14 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         PayChargeCompanyExample example = new PayChargeCompanyExample();
         example.setOrderByClause("id asc");
 
+        //只查询张猛的公司 id:17
+        PayChargeCompanyExample.Criteria criteria = example.createCriteria();
+//        criteria.andIdEqualTo("17");
+        List<String> list = new ArrayList<>();
+        list.add("17");
+        list.add("18");
+        criteria.andIdIn(list);
+
         return payChargeCompanyMapper.selectByExample(example);
     }
 
@@ -353,9 +361,6 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
 
         }
-
-        company.setMoney(companyMoney);
-        payChargeCompanyMapper.updateByPrimaryKeySelective(company);
 
     }
 
