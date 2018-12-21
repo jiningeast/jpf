@@ -3,7 +3,6 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStreamExample;
-import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamInterfaceRequest;
@@ -327,4 +326,17 @@ public class ChargeCompanyMoneyStreamServiceFacadeImpl implements ChargeCompanyM
 
         return streamCount;
     }
+    @Override
+    public List<PayChargeCompanyMoneyStream> getByOrderNo(String orderNo) {
+        PayChargeCompanyMoneyStreamExample example = new PayChargeCompanyMoneyStreamExample();
+        PayChargeCompanyMoneyStreamExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderNoEqualTo(orderNo);
+        return payChargeCompanyMoneyStreamMapper.selectByExample(example);
+    }
+
+    @Override
+    public void updateStram(PayChargeCompanyMoneyStream payChargeCompanyMoneyStream) {
+        payChargeCompanyMoneyStreamMapper.updateByPrimaryKeySelective(payChargeCompanyMoneyStream);
+    }
+
 }

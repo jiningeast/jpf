@@ -82,7 +82,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeConsumerOrder.setOrderNo(orderNo);
         payChargeConsumerOrder.setCompanyId(result.getId());
         payChargeConsumerOrder.setMerchNo(result.getMerchNo());
-        payChargeConsumerOrder.setStatus((byte)0);
+        payChargeConsumerOrder.setStatus((byte)2);
         payChargeConsumerOrder.setAddtime(new Date());
         payChargeConsumerOrder.setMoney(new BigDecimal(money));
         payChargeConsumerOrderMapper.insertSelective(payChargeConsumerOrder);

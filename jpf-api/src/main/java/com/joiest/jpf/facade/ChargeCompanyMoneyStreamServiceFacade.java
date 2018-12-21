@@ -4,7 +4,11 @@ import com.joiest.jpf.dto.ChargeCompanyMoneyStreamInterfaceRequest;
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamRequest;
 import com.joiest.jpf.dto.ChargeCompanyMoneyStreamResponse;
+import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.entity.ChargeCompanyMoneyStreamInfo;
+import com.joiest.jpf.entity.ChargeOrderInfo;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -47,4 +51,18 @@ public interface ChargeCompanyMoneyStreamServiceFacade {
      * 添加流水记录(订单补偿)
      */
     int addStream(PayChargeCompanyMoneyStream record);
+    /**
+     * 根据订单号查询订单流水
+     * @param orderId
+     * @return
+     */
+    List<PayChargeCompanyMoneyStream> getByOrderNo(String orderId);
+
+    /**
+     * 更新之前流水
+     * @param payChargeCompanyMoneyStream
+     */
+    void updateStram(PayChargeCompanyMoneyStream payChargeCompanyMoneyStream);
+
+
 }
