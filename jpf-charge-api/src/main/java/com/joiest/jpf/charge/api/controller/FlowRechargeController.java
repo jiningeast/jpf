@@ -579,7 +579,7 @@ public class FlowRechargeController {
                 sendParam.put("code","10001");
                 sendParam.put("info","充值失败");
                 sbf.append("\n订单状态：充值失败");
-                String remark="退款成功";
+                String remark="[\"+ DateUtils.getCurDate() + \"]:退款成功";
                 //充值失败返还商户资金
                 JSONObject isRet=new JSONObject();
                 if(orderInfo.getStatus()==1){
