@@ -208,7 +208,7 @@ public class orderInfoController {
      */
     @RequestMapping(value = "/balanceOfAccount", method = RequestMethod.GET, produces = "text/plain;charset=utf-8")
     @ResponseBody
-    public void balanceOfAccount() throws DocumentException  {
+    public void balanceOfAccount(HttpServletResponse response) throws DocumentException  {
         //存储日志记录
         StringBuilder logContent = new StringBuilder();
         String logPath = "/logs/jpf-charge-api/log/";
@@ -238,23 +238,23 @@ public class orderInfoController {
                 if(responseParam != null && responseParam.containsKey("retcode") &&"1".equals(responseParam.get("retcode").toString())){
                     String retcode = responseParam.get("retcode").toString();
                     String game_state = responseParam.get("game_state").toString();
-                    if("1".equals(retcode)&&payChargeOrder.getStatus()!=2 ){ //欧非成功，欣享不是成功
-                        logContent.append("\t欧非充值成功，欣享充值失败");
-                        addBalanceOrder(balanceOrders, payChargeOrder, orderId, "充值成功");
-                    }else if("9".equals(retcode)&&("2".equals(status))){
-                        logContent.append("\t欧非充值失败，欣享充值成功");
-                        payChargeOrder.setStatus((byte)1);
-                        addBalanceOrder(balanceOrders, payChargeOrder, orderId, "充值失败");
+                    if("0".equals(game_state)&&payChargeOrder.getStatus()!=1 ){
+                        addBalanceOrder(balanceOrders, payChargeOrder, orderId, interfaceStatus(Byte.parseByte(game_state)));
+                    }else if("9".equals(game_state)&&(payChargeOrder.getStatus()!=5)){
+                        addBalanceOrder(balanceOrders, payChargeOrder, orderId, interfaceStatus(Byte.parseByte(game_state)));
+                    }else if("1".equals(game_state)&&(payChargeOrder.getStatus()!=2)){
+                        addBalanceOrder(balanceOrders, payChargeOrder, orderId, interfaceStatus(Byte.parseByte(game_state)));
                     }else{
                         logContent.append("\t正常订单");
                     }
+                    logContent.append("\t欧非充值中，欣享"+getStatusInfo(payChargeOrder.getStatus()));
                     LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
                 }
             }
         }
 
         if(balanceOrders!=null&&balanceOrders.size()!=0){
-            chargeOrderServiceFacade.sendEmailToManager(balanceOrders);
+            chargeOrderServiceFacade.sendEmailToManager(balanceOrders,response);
         }
     }
 
@@ -289,10 +289,20 @@ public class orderInfoController {
             case 5 : statusInfo = "退款成功" ; break;
             case 6 : statusInfo = "拒绝退款" ; break;
             case 7 : statusInfo = "退款失败" ; break;
-            default: statusInfo = "下单成功";
         }
         return  statusInfo;
     }
+
+    private String interfaceStatus(Byte status) {
+        String statusInfo="";
+        switch (status){
+            case 0 : statusInfo = "充值中" ; break;
+            case 1 : statusInfo = "充值成功" ; break;
+            case 9 : statusInfo = "充值失败" ; break;
+        }
+        return  statusInfo;
+    }
+
 
 
     // 退款操作

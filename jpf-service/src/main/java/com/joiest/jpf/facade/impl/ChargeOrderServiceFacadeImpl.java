@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -344,10 +345,12 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     public List<PayChargeOrder>  getAllAbnormalOrders()
     {
         PayChargeOrderExample example = new PayChargeOrderExample();
-        example.setOrderByClause("addtime ASC");
-
+        example.setOrderByClause(" addtime ASC");
         PayChargeOrderExample.Criteria c =example.createCriteria();
-
+        //查询昨天的数据
+        c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(DateUtils.dateToString(DateUtils.getYesterday()),DateUtils.DATEFORMATSHORT));
+        c.andAddtimeLessThan(DateUtils.getFdate(DateUtils.getCurDate(),DateUtils.DATEFORMATSHORT));
+        c.andInterfaceTypeEqualTo((byte)0);
         List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
         if( list.size() <=0 || list == null){
             return null;
@@ -487,7 +490,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     }
 
     @Override
-    public void sendEmailToManager(List<BalanceOrder> balanceOrders) {
+    public void sendEmailToManager(List<BalanceOrder> balanceOrders, HttpServletResponse response) {
 
         ExcelDealUtils excelUtils = new ExcelDealUtils();
         JSONArray titles = new JSONArray();
@@ -496,14 +499,30 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         titles.add("欣享订单号");
         titles.add("欣享订单状态");
         titles.add("金额");
+        titles.add("手机号");
+        titles.add("订单id");
         titles.add("充值时间");
-
         JSONArray fields = new JSONArray();
         fields.add("interfaceOrderNo");
+        fields.add("interfaceOrderStatus");
+        fields.add("selfOrderNo");
+        fields.add("selfOrderStatus");
         fields.add("money");
-        fields.add("dou");
-        fields.add("expireMonth");
-        fields.add("addtimeFormat");
+        fields.add("phone");
+        fields.add("orderId");
+        fields.add("addtime");
+        String excelPath = ConfigUtil.getValue("EXCEL_PATH");
+        JSONObject exExcelResponse = null;
+        try {
+            logger.info("excelPath"+excelPath);
+            exExcelResponse = excelUtils.exportExcel(response,titles.toString(),fields.toString(),balanceOrders,2,excelPath);
+            JSONObject data = JSONObject.fromObject( exExcelResponse.get("data"));
+            String uploadPath = data.get("localUrl").toString();    // excel文件的本地地址
+            String html=DateUtils.getYesterday()+"欧非订单的对账数据";
+            SendMailUtil.sendMultipleEmail(html,"manager",ConfigUtil.getValue("balance_Of_Account_Email"),ConfigUtil.getValue("balance_Of_Account_Name"),uploadPath,"欧非对账错误数据.xls",html);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
