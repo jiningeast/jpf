@@ -305,6 +305,9 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     public void reviseCompanyCharge(PayChargeCompany company) {
         BigDecimal companyMoney = BigDecimal.valueOf(0);
 
+        Date beginDate;
+        Date endDate;
+
         PayChargeCompanyChargeExample example = new PayChargeCompanyChargeExample();
         example.setOrderByClause("id asc");
         PayChargeCompanyChargeExample.Criteria criteria = example.createCriteria();
@@ -315,8 +318,6 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
         //根据两次充值记录分段校正余额  先加上充值的钱
         for (int i= 0;i<payChargeCompanyChargeList.size();i++){
-            Date beginDate = null;
-            Date endDate = null;
 
             PayChargeCompanyMoneyStreamExample streamExample = new PayChargeCompanyMoneyStreamExample();
             streamExample.setOrderByClause("id asc");
