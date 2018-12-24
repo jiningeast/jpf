@@ -286,13 +286,13 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         PayChargeCompanyExample example = new PayChargeCompanyExample();
         example.setOrderByClause("id asc");
 
-        //只查询id:17的公司
-        PayChargeCompanyExample.Criteria criteria = example.createCriteria();
-//        criteria.andIdEqualTo("17");
-        List<String> list = new ArrayList<>();
-        list.add("17");
-        list.add("18");
-        criteria.andIdIn(list);
+        //只查询id:17 18的公司
+//        PayChargeCompanyExample.Criteria criteria = example.createCriteria();
+
+//        List<String> list = new ArrayList<>();
+//        list.add("17");
+//        list.add("18");
+//        criteria.andIdIn(list);
 
         return payChargeCompanyMapper.selectByExample(example);
     }
