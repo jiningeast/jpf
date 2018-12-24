@@ -219,7 +219,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
             order.setProductType(4);
         }
         order.setProductValue(payShopBargainRechargeOrder.getFacePrice());
-        order.setStatus((byte)0);
+        order.setStatus((byte)2);
         order.setTotalMoney(payShopBargainRechargeOrder.getAmount());
         order.setConsumerOrderNo(orderNo);
         payChargeOrderCustomMapper.insertSelective(order);
@@ -250,7 +250,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setProductName(order.getProductName());
         payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
         payChargeCompanyMoneyStream.setProductValue(order.getProductValue());
-        payChargeCompanyMoneyStream.setStatus((byte)1);
+        payChargeCompanyMoneyStream.setStatus((byte)2);
         payChargeCompanyMoneyStream.setStreamType((byte)1);
         payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
         payChargeCompanyMoneyStream.setConsumerOrderNo(order.getConsumerOrderNo());

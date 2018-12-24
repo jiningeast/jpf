@@ -13,14 +13,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -340,9 +338,11 @@ public class FlowRechargeController {
                 responseParam.put("info","下单成功，充值中");
                 payChargeOrder.setInterfaceOrderNo(map.get("orderid"));
             }else{
-                payChargeOrder.setStatus((byte)3);
+                payChargeOrder.setStatus((byte)5);
                 responseParam.put("code","10025");
-                responseParam.put("info","充值失败");
+                responseParam.put("info","充值失败,退款成功");
+                //进行退款
+                backCompanyMoney(payChargeOrder);
             }
             merRespons.put("outOrderNo",actParam.get("outOrderNo"));//上游接口订单号
             merRespons.put("phone",actParam.get("phone"));//充值手机号
@@ -368,18 +368,13 @@ public class FlowRechargeController {
         //添加流水
         ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
         Map<String, String> map=new HashMap<>();
-        String lastNum = StringUtils.substring(String.valueOf(payChargeOrder.getId()),-1,String.valueOf(payChargeOrder.getId()).length());
-        if (StringUtils.isBlank(ConfigUtil.getValue("OF_AND_WEINENG"))||(Integer.parseInt(lastNum)>=Integer.parseInt(ConfigUtil.getValue("OF_AND_WEINENG")))){
-            payChargeOrder.setInterfaceType((byte)0);
-            payChargeOrder.setProductType(0);
+        if (payChargeOrder.getInterfaceType()==0){
             chargeInterfaceStreamInfo.setType((byte)0);
             //更新订单接口类型 防止请求接口异常 订单没有类型
             chargeOrderServiceFacade.updateOrder(payChargeOrder);
             //请求欧非
             map = phoneRechargeOf(actParam);
         }else {
-            payChargeOrder.setInterfaceType((byte)1);
-            payChargeOrder.setProductType(1);
             chargeInterfaceStreamInfo.setType((byte)1);
             //更新订单接口类型 防止请求接口异常 订单没有类型
             chargeOrderServiceFacade.updateOrder(payChargeOrder);
@@ -573,30 +568,45 @@ public class FlowRechargeController {
             List<PayChargeCompanyMoneyStream> streams = chargeCompanyMoneyStreamServiceFacade.getByOrderNo(orderInfo.getOrderNo());
             if (streams!=null&&streams.size()!=0){
                 PayChargeCompanyMoneyStream payChargeCompanyMoneyStream = streams.get(0);
-                payChargeCompanyMoneyStream.setProductBidPrice(chargeProductInfo.getOfProductPrice());
-                payChargeCompanyMoneyStream.setInterfaceType((byte)0);
-                payChargeCompanyMoneyStream.setInterfaceOrderNo(orderInfo.getInterfaceOrderNo());
-                chargeCompanyMoneyStreamServiceFacade.updateStram(payChargeCompanyMoneyStream);
+                if(StringUtils.isBlank(payChargeCompanyMoneyStream.getInterfaceOrderNo())){
+                    payChargeCompanyMoneyStream.setInterfaceOrderNo(orderInfo.getInterfaceOrderNo());
+                    payChargeCompanyMoneyStream.setUpdatetime(new Date());
+                    chargeCompanyMoneyStreamServiceFacade.updateStram(payChargeCompanyMoneyStream);
+                }
             }
 
             if ("9".equals(request.getRet_code())){    //1成功 9失败
                 sendParam.put("code","10001");
                 sendParam.put("info","充值失败");
                 sbf.append("\n订单状态：充值失败");
+                String remark="[\"+ DateUtils.getCurDate() + \"]:退款成功";
                 //充值失败返还商户资金
                 JSONObject isRet=new JSONObject();
                 if(orderInfo.getStatus()==1){
                     try {
                         isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
                         upOrderInfo.setStatus((byte)5);
-                    }catch (Exception e){
+                    }catch (SQLException e){
+                        logger.error(e.getMessage(),e);
+                    }catch (NullPointerException e){
+                        remark="["+ DateUtils.getCurDate() + "]:退款失败";
+                        logger.error(e.getMessage(),e);
+                        upOrderInfo.setStatus((byte)7);
+                    }catch (NumberFormatException e){
+                        remark="["+ DateUtils.getCurDate() + "]:退款失败";
                         logger.error(e.getMessage(),e);
                         upOrderInfo.setStatus((byte)7);
                     }
                 }
-                String remark = StringUtils.isBlank(orderInfo.getRemark())?"["+ DateUtils.getCurDate() + "]:"+isRet.get("info"):orderInfo.getRemark()+"&#13;&#10;["+ DateUtils.getCurDate() + "]:"+isRet.get("info");
+                if(!"10000".equals(isRet.get("code"))){
+                    remark="["+ DateUtils.getCurDate() + "]"+isRet.get("info");
+                }
                 upOrderInfo.setRemark(remark);
-                sbf.append("\n充值失败返还商户金额："+isRet.toString());
+                if(upOrderInfo.getStatus()==7){
+                    sbf.append("\n充值失败返还商户金额："+isRet.toString());
+                }else{
+                    sbf.append("\n已经退还给商户，不能重复退款："+isRet.toString());
+                }
             }else{
                 upOrderInfo.setStatus((byte)2);
                 sendParam.put("code","10000");
@@ -604,7 +614,6 @@ public class FlowRechargeController {
                 sbf.append("\n订单状态：充值成功");
 
             }
-
             sbf.append("\n通知商户地址："+orderInfo.getNotifyUrl());
             sbf.append("\n通知商户参数："+sendParam.toString());
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
@@ -858,9 +867,10 @@ public class FlowRechargeController {
                 responseParam.put("code","10000");
                 responseParam.put("info","充值中");
             }else{
-                payChargeOrder.setStatus((byte)3);
+                payChargeOrder.setStatus((byte)5);
                 responseParam.put("code","10025");
-                responseParam.put("info","充值失败");
+                responseParam.put("info","充值失败,退款成功");
+                backCompanyMoney(payChargeOrder);
             }
             merRespons.put("phone",actParam.get("phone"));//充值手机号
             merRespons.put("value",chargeProductInfo.getValue());//充值面值
@@ -877,6 +887,31 @@ public class FlowRechargeController {
             logger.error(e.getMessage(),e);
         }
         return responseParam.toString();
+    }
+
+    private void backCompanyMoney(PayChargeOrder payChargeOrder) throws Exception {
+        //进行退款
+        JSONObject isRet = new JSONObject();
+        ChargeOrderInfo orderInfo = chargeOrderServiceFacade.getById(payChargeOrder.getId());
+        orderInfo.setProductBidPrice(payChargeOrder.getProductBidPrice());
+        String remark = "上游接口充值失败，退款成功";
+        try {
+            isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        } catch (NullPointerException e) {
+            remark = "[" + DateUtils.getCurDate() + "]:退款失败";
+            logger.error(e.getMessage(), e);
+            payChargeOrder.setStatus((byte) 7);
+        } catch (NumberFormatException e) {
+            remark = "[" + DateUtils.getCurDate() + "]:退款失败";
+            logger.error(e.getMessage(), e);
+            payChargeOrder.setStatus((byte) 7);
+        }
+        if (!"10000".equals(isRet.get("code"))) {
+            remark = "[" + DateUtils.getCurDate() + "]" + isRet.get("info");
+        }
+        payChargeOrder.setRemark(remark);
     }
 
     /**
@@ -962,9 +997,17 @@ public class FlowRechargeController {
         return validate;
     }
 
+
+    @RequestMapping(value = "/goBackZhanyuan",method = RequestMethod.POST)
+    @ResponseBody
+    public void goBackZhanyuan(){
+        logger.info("回调站远成功");
+    }
     public static void main(String[] args) {
         //merchNo=MC15411265483241688&service=placeOrderVa&productId=1007&outOrderNo=111111&phone=18801147519&dateTime=201811260022&notifyUrl=http://www.baidu.com&sign=508900BDA3F42200BDBBFDD19133F390
         System.out.println(Md5Encrypt.md5("Md5(dateTime=201811260022&merchNo=MC15411265483241688&notifyUrl=http://www.baidu.com&outOrderNo=111111&phone=18801147519&productId=1007&service=placeOrderValimyHcZOzMmhukCqB").toUpperCase());
+        System.out.println(StringUtils.substring("CH9179334994217434",-1,"CH9179334994217434".length()));
+        System.out.println(Md5Encrypt.md5("11100000.00Pwztib3qtekopERJ"));
     }
 
 }

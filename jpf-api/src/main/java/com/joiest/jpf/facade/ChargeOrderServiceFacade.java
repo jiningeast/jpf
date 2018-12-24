@@ -9,6 +9,7 @@ import com.joiest.jpf.entity.ChargeCompanyInfo;
 import com.joiest.jpf.entity.ChargeOrderInfo;
 import com.joiest.jpf.entity.ChargeProductInfo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -74,7 +75,7 @@ public interface ChargeOrderServiceFacade {
      * 对账单，如果存在异常订单，发送email
      * @param balanceOrders
      */
-    void sendEmailToManager(List<BalanceOrder> balanceOrders);
+    void sendEmailToManager(List<BalanceOrder> balanceOrders, HttpServletResponse response);
 
     /**
      * 直充接口保存订单，并且保存流水，并且做相应的扣款操作
@@ -92,4 +93,11 @@ public interface ChargeOrderServiceFacade {
      * @throws Exception
      */
     void subCompanyMoney(ChargeCompanyInfo companyInfo,ChargeProductInfo chargeProductInfo) throws Exception;
+
+    /**
+     * 查询订单
+     * @param id
+     * @return
+     */
+    ChargeOrderInfo getById(String id);
 }
