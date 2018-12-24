@@ -302,6 +302,9 @@ public class OrderCompensationController {
             }else if ("2".equals(status)){
                 logContent.append("\t 新增下单流水记录成功 流水号为:"+ streamNo +"\t");
             }
+//            else if ("1".equals(status)){
+//                logContent.append("\t 新增充值流水记录成功 流水号为:"+ streamNo +"\t");
+//            }
 
         }else{
             logContent.append("\t 新增流水记录失败 \t");

@@ -328,25 +328,28 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
             if (i < payChargeCompanyChargeList.size() - 1){
                 endDate = payChargeCompanyChargeList.get(i+1).getAddtime();
                 streamCriteria.andAddtimeBetween(beginDate, endDate);
-            }else if(i == payChargeCompanyChargeList.size()){
+            }else if(i == payChargeCompanyChargeList.size() - 1){
                 endDate = new Date();
                 streamCriteria.andAddtimeBetween(beginDate, endDate);
             }
 
             //先把本次充值的钱加进去
-            companyMoney = companyMoney.add(payChargeCompanyChargeList.get(i).getMoney());
+//            companyMoney = companyMoney.add(payChargeCompanyChargeList.get(i).getMoney());
 
 
             //查询两次充值时间段内的所有流水(更新流水的钱+更新用户的钱)
             List<PayChargeCompanyMoneyStream> payChargeCompanyMoneyStreamList = payChargeCompanyMoneyStreamMapper.selectByExample(streamExample);
 
             for (PayChargeCompanyMoneyStream stream : payChargeCompanyMoneyStreamList){
-                if (stream.getStreamType() == 0){
-                    //如果状态是收入 加钱
+                if (stream.getStatus() == 3){
+                    //如果状态是退款 加钱
                     companyMoney = companyMoney.add(stream.getTotalMoney());
-                }else if (stream.getStreamType() == 1){
-                    //如果状态是中支出 扣钱
+                }else if (stream.getStatus() == 2){
+                    //如果状态是下单 扣钱
                     companyMoney = companyMoney.subtract(stream.getTotalMoney());
+                }else if(stream.getStatus() == 1){
+                    //充值 加钱
+                    companyMoney = companyMoney.add(payChargeCompanyChargeList.get(i).getMoney());
                 }
 
                 stream.setNewMoney(companyMoney);
