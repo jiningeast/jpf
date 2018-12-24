@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -237,14 +238,15 @@ public class OrderCompensationController {
 
         //以下部分可注释掉,如果正式库数据正常的话,不会改变,如果不正常,在余额校正时会更新new_money
 
-        //查询当前用户的余额
-        ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
+        //查询当前用户的余额 不更新余额时不需要查询
+        //ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
 
         //根据状态判断是收入还是支出 先支出才会有收入 支出时创建时间取订单的创建时间 收入时间取订单的更新时间
         if ("0".equals(streamType)){
             //收入
-            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().add(order.getTotalMoney()));
-            //*************测试专用***************
+//            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().add(order.getTotalMoney()));
+            payChargeCompanyMoneyStream.setNewMoney(BigDecimal.valueOf(0));
+            // *************测试专用***************
             if (order.getUpdatetime() != null){
                 Date date = order.getUpdatetime();
                 Calendar calendar=Calendar.getInstance();
@@ -266,8 +268,9 @@ public class OrderCompensationController {
 
         }else if ("1".equals(streamType)){
             //支出
-            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
-            //*************测试专用***************
+//            payChargeCompanyMoneyStream.setNewMoney(chargeCompanyInfo.getMoney().subtract(order.getTotalMoney()));
+            payChargeCompanyMoneyStream.setNewMoney(BigDecimal.valueOf(0));
+            // *************测试专用***************
             if (order.getUpdatetime() != null){
                 payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
                 payChargeCompanyMoneyStream.setUpdatetime(order.getUpdatetime());

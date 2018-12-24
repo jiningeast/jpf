@@ -286,7 +286,7 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         PayChargeCompanyExample example = new PayChargeCompanyExample();
         example.setOrderByClause("id asc");
 
-        //只查询张猛的公司 id:17
+        //只查询id:17的公司
         PayChargeCompanyExample.Criteria criteria = example.createCriteria();
 //        criteria.andIdEqualTo("17");
         List<String> list = new ArrayList<>();
