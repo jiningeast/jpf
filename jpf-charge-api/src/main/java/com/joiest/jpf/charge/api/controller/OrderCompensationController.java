@@ -236,8 +236,6 @@ public class OrderCompensationController {
         payChargeCompanyMoneyStream.setStatus(Byte.valueOf(status));
         payChargeCompanyMoneyStream.setStreamType(Byte.valueOf(streamType));
 
-        //以下部分可注释掉,如果正式库数据正常的话,不会改变,如果不正常,在余额校正时会更新new_money
-
         //查询当前用户的余额 不更新余额时不需要查询
         //ChargeCompanyInfo chargeCompanyInfo = chargeCompanyServiceFacade.getRecordByPrimaryKey(order.getCompanyId());
 
@@ -284,20 +282,6 @@ public class OrderCompensationController {
                 payChargeCompanyMoneyStream.setUpdatetime(date);
             }
         }
-
-        //以上若注释,放开下面的注释
-
-
-//        if (order.getUpdatetime() != null){
-//            payChargeCompanyMoneyStream.setAddtime(order.getUpdatetime());
-//        }else{
-//            //如果更新时间为null
-//            Date date = order.getAddtime();
-//            System.out.println("获取的addTime:" + date);
-//            date.setHours(order.getAddtime().getHours() + 1);
-//            System.out.println("+1后的addTime:" + date);
-//            payChargeCompanyMoneyStream.setAddtime(date);
-//        }
 
         if (chargeCompanyMoneyStreamServiceFacade.addStream(payChargeCompanyMoneyStream) == 1){
             if ("3".equals(status)){
