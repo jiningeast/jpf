@@ -352,9 +352,6 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         c.andAddtimeLessThan(DateUtils.getFdate(DateUtils.getCurDate(),DateUtils.DATEFORMATSHORT));
         c.andInterfaceTypeEqualTo((byte)0);
         List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
-        if( list.size() <=0 || list == null){
-            return null;
-        }
         return list;
     }
 
