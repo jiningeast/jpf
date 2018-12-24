@@ -2,33 +2,33 @@ package com.joiest.jpf.manage.web.controller;
 
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.util.DateUtils;
+import com.joiest.jpf.common.po.PayShopBargainRechargeOrder;
 import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderRequest;
 import com.joiest.jpf.dto.GetShopBargainRechargeOrderResponse;
-import com.joiest.jpf.entity.ShopBargainRechargeOrderInfo;
 import com.joiest.jpf.facade.ShopBargainRechargeOrderServiceFacade;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("shopBargainRechargeOrder")
 public class ShopBargainRechargeOrderController {
 
+    private Logger logger = LoggerFactory.getLogger(ShopBargainRechargeOrderController.class);
+    
     @Autowired
     private ShopBargainRechargeOrderServiceFacade shopBargainRechargeOrderServiceFacade;
 
@@ -56,34 +56,20 @@ public class ShopBargainRechargeOrderController {
     @RequestMapping("/exportExcel")
     @ResponseBody
     public void exportExcel(GetShopBargainRechargeOrderRequest request, HttpServletResponse response){
+        long startProgramTime = System.currentTimeMillis();
         Map<String,String> requestInfoStatusMap = new HashMap<>(2);
         requestInfoStatusMap.put("1","未绑定");
         requestInfoStatusMap.put("2","已绑定");
 
         request.setInfoStatusMap(requestInfoStatusMap);
-        request.setPage(0);
-        request.setRows(0);
-        
-        boolean flag = StringUtils.isBlank(request.getAddtimeEnd()) 
-                    && StringUtils.isBlank(request.getAddtimeStart())
-                    && StringUtils.isBlank(request.getOrderNo())
-                    && request.getOrderType() == null
-                    && StringUtils.isBlank(request.getForeignOrderNo())
-                    && StringUtils.isBlank(request.getItemName())
-                    && StringUtils.isBlank(String.valueOf(request.getFacePrice()))
-                    && request.getInfoStatus() == null;
-        
-        if(flag){
-            request.setAddtimeStart(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getBeforeDayTimeReturnDate(1)));
-            request.setAddtimeEnd(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        }
-        GetShopBargainRechargeOrderResponse shopBargainRechargeOrderResponse = shopBargainRechargeOrderServiceFacade.getRecords(request);
-        List<ShopBargainRechargeOrderInfo> list = shopBargainRechargeOrderResponse.getList();
-        if(list == null || list.isEmpty()){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
-        }
+        long startQueryTime = System.currentTimeMillis();
+        List<PayShopBargainRechargeOrder> recordsExcel = shopBargainRechargeOrderServiceFacade.getRecordsExcel(request);
+        logger.info("敬恒订单数据查询数据时间:{} 秒",(System.currentTimeMillis() - startQueryTime) / 1000);
         try {
-            JSONObject jsonObject = exportExcelByInfoNew(response,list, 1, "");
+            long startExportTime = System.currentTimeMillis();
+            JSONObject jsonObject = exportExcelByInfoNew(response,recordsExcel, 1, "");
+            logger.info("敬恒订单数据Excel导出时间:{} 秒",(System.currentTimeMillis() - startExportTime) / 1000);
+            logger.info("敬恒订单数据Excel导出程序执行时间:{} 秒",(System.currentTimeMillis() - startProgramTime) / 1000);
         } catch (Exception e) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "数据导出异常");
         }
@@ -97,50 +83,50 @@ public class ShopBargainRechargeOrderController {
      * @param path
      * @return
      */
-    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<ShopBargainRechargeOrderInfo> data, int type, String path){
+    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<PayShopBargainRechargeOrder> data, int type, String path){
         type = type < 1 ? 1 : type;
         JSONObject res = new JSONObject();
         res.put("code","10000");
         res.put("info","SUCCESS");
         SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
         String orderType = "", infoStatus = "";
-        Sheet sheet = xssfWorkbook.getSheet("sheet1");
+        SXSSFSheet sheet = xssfWorkbook.getSheet("sheet1");
         if (sheet == null) {
             sheet = xssfWorkbook.createSheet("sheet1");
         }
         exportExcel.genSheetHead(sheet, 0, generateTitle());
-        for (int rownum = 1; rownum <= data.size(); rownum++) {
-            Row row = sheet.createRow(rownum);
-            int k = -1;
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getBoid() == null ? "" : String.valueOf(data.get(rownum-1).getBoid()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getOrderNo());
-            if(data.get(rownum - 1).getOrderType() == null){
-                orderType = "";
-            }else if(data.get(rownum - 1).getOrderType() == 1){
-                orderType = "中国石化";
-            }else if(data.get(rownum - 1).getOrderType() == 2){
-                orderType = "中国石油";
-            }else if(data.get(rownum - 1).getOrderType() == 3){
-                orderType = "话费充值";
+        if(!CollectionUtils.isEmpty(data)){
+            for (int rownum = 1; rownum <= data.size(); rownum++) {
+                SXSSFRow row = sheet.createRow(rownum);
+                int k = -1;
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getPullOrderNo());
+                if(data.get(rownum - 1).getOrderType() == null){
+                    orderType = "";
+                }else if(data.get(rownum - 1).getOrderType() == 1){
+                    orderType = "中国石化";
+                }else if(data.get(rownum - 1).getOrderType() == 2){
+                    orderType = "中国石油";
+                }else if(data.get(rownum - 1).getOrderType() == 3){
+                    orderType = "话费充值";
+                }
+                exportExcel.createCell(row, ++k, orderType);
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getForeignOrderNo());
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getItemName());
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getPrice() == null ? "" : String.valueOf(data.get(rownum-1).getPrice()));
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getFacePrice() == null ? "" : String.valueOf(data.get(rownum-1).getFacePrice()));
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getAmt() == null ? "" : String.valueOf(data.get(rownum-1).getAmt()));
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getAmount() == null ? "" : String.valueOf(data.get(rownum-1).getAmount()));
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getChargeNo());
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum - 1).getAddtime()));
+                if (data.get(rownum - 1).getInfoStatus() == null) {
+                    infoStatus = "";
+                } else if(data.get(rownum - 1).getInfoStatus() == 1){
+                    infoStatus = "未绑定";
+                } else if(data.get(rownum - 1).getInfoStatus() == 2){
+                    infoStatus = "已绑定";
+                }
+                exportExcel.createCell(row, ++k, infoStatus);
             }
-            exportExcel.createCell(row, ++k, orderType);
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getForeignOrderNo());
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getItemName());
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getPrice() == null ? "" : String.valueOf(data.get(rownum-1).getPrice()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getFacePrice() == null ? "" : String.valueOf(data.get(rownum-1).getFacePrice()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getAmt() == null ? "" : String.valueOf(data.get(rownum-1).getAmt()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getAmount() == null ? "" : String.valueOf(data.get(rownum-1).getAmount()));
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getChargeNo());
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum - 1).getAddtime()));
-            if (data.get(rownum - 1).getInfoStatus() == null) {
-                infoStatus = "";
-            } else if(data.get(rownum - 1).getInfoStatus() == 1){
-                infoStatus = "未绑定";
-            } else if(data.get(rownum - 1).getInfoStatus() == 2){
-                infoStatus = "已绑定";
-            }
-            exportExcel.createCell(row, ++k, infoStatus);
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getModule());
         }
         String fileName = "敬恒充值订单列表-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx";
         return exportExcel.writeIntoExcel(fileName, response, xssfWorkbook, path, type, res);
@@ -152,19 +138,17 @@ public class ShopBargainRechargeOrderController {
      */
     private Map<Integer, Object> generateTitle(){
         Map<Integer, Object> firstTitles = new HashMap<>(13);
-        firstTitles.put(0, "转让订单id");
-        firstTitles.put(1, "转让订单号");
-        firstTitles.put(2, "订单类型");
-        firstTitles.put(3, "敬恒订单号");
-        firstTitles.put(4, "商品名称");
-        firstTitles.put(5, "单价");
-        firstTitles.put(6, "面值");
-        firstTitles.put(7, "数量");
-        firstTitles.put(8, "订单总金额");
-        firstTitles.put(9, "充值号");
-        firstTitles.put(10, "拉取时间");
-        firstTitles.put(11, "绑定状态");
-        firstTitles.put(12, "敬恒返回信息");
+        firstTitles.put(0, "转让订单号");
+        firstTitles.put(1, "订单类型");
+        firstTitles.put(2, "敬恒订单号");
+        firstTitles.put(3, "商品名称");
+        firstTitles.put(4, "单价");
+        firstTitles.put(5, "面值");
+        firstTitles.put(6, "数量");
+        firstTitles.put(7, "订单总金额");
+        firstTitles.put(8, "充值号");
+        firstTitles.put(9, "拉取时间");
+        firstTitles.put(10, "匹配状态");
         return firstTitles;
     }
 }

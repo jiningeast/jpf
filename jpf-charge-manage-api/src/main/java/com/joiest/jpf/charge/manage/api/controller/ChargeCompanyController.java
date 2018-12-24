@@ -79,6 +79,7 @@ public class ChargeCompanyController {
         String val = chargeCompanyInfo.getMerchNo();//value值
         person.put("token",token);
         person.put("userName",chargeCompanyInfo.getCompanyName());
+        person.put("merchNo",chargeCompanyInfo.getMerchNo());
         redisCustomServiceFacade.set(ConfigUtil.getValue("MANAGE_LOGIN_KEY") + token, val, Long.parseLong(ConfigUtil.getValue("WEIXIN_LOGIN_EXPIRE_30")) );
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "请求数据成功",person );
     }

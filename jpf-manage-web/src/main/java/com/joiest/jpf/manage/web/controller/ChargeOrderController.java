@@ -6,7 +6,6 @@ import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeOrder;
-import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.common.util.exportExcel;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
@@ -19,29 +18,31 @@ import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import com.joiest.jpf.manage.web.constant.ManageConstants;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("chargeOrder")
 public class ChargeOrderController {
 
+    private Logger logger = LoggerFactory.getLogger(ChargeOrderController.class);
+    
     @Autowired
     private ChargeOrderServiceFacade chargeOrderServiceFacade;
 
@@ -229,9 +230,11 @@ public class ChargeOrderController {
     @RequestMapping("exportExcel")
     @ResponseBody
     public void exportExcel(GetChargeOrderRequest request, HttpServletResponse response){
+        long startProgramTime = System.currentTimeMillis();
         Map<String,String> requestInterfaceTypeMap = new HashMap<>(2);
         requestInterfaceTypeMap.put("0","欧飞");
         requestInterfaceTypeMap.put("1","威能");
+        requestInterfaceTypeMap.put("2","敬恒");
         
         Map<String,String> requestStatusMap = new HashMap<>(6);
         requestStatusMap.put("0","订单生成");
@@ -243,31 +246,14 @@ public class ChargeOrderController {
 
         request.setInterfaceTypeParam(requestInterfaceTypeMap);
         request.setStatusParam(requestStatusMap);
-        request.setPage(0);
-        request.setRows(0);
-        boolean flag = StringUtils.isBlank(request.getAddtimeEnd()) 
-                    && StringUtils.isBlank(request.getAddtimeStart())
-                    && StringUtils.isBlank(request.getOrderNo())
-                    && StringUtils.isBlank(request.getForeignOrderNo())
-                    && StringUtils.isBlank(request.getCompanyId())
-                    && StringUtils.isBlank(request.getCompanyName())
-                    && StringUtils.isBlank(request.getMerchNo())
-                    && StringUtils.isBlank(request.getChargePhone())
-                    && StringUtils.isBlank(request.getProductId())
-                    && StringUtils.isBlank(request.getProductName())
-                    && request.getInterfaceType() == null
-                    && request.getStatus() == null
-                    && StringUtils.isBlank(request.getInterfaceOrderNo());
-        if(flag){
-            request.setAddtimeStart(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(DateUtils.getBeforeDayTimeReturnDate(1)));
-            request.setAddtimeEnd(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        }
-        GetChargeOrderResponse chargeOrderResponse = chargeOrderServiceFacade.getRecords(request);
-        if(chargeOrderResponse.getList() == null || chargeOrderResponse.getList().isEmpty()){
-            throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "未匹配到记录");
-        }
+        long startQueryTime = System.currentTimeMillis();
+        List<PayChargeOrder> excelRecords = chargeOrderServiceFacade.getExcelRecords(request);
+        logger.info("充值平台订单数据查询时间:{} 秒",(System.currentTimeMillis() - startQueryTime) / 1000);
         try {
-            JSONObject jsonObject = exportExcelByInfoNew(response, chargeOrderResponse.getList(), 1, "");
+            long startExportTime = System.currentTimeMillis();
+            JSONObject jsonObject = exportExcelByInfoNew(response, excelRecords, 1, "");
+            logger.info("充值平台订单数据Excel导出时间:{} 秒",(System.currentTimeMillis() - startExportTime) / 1000);
+            logger.info("充值平台订单数据导出程序执行时间:{} 秒",(System.currentTimeMillis() - startProgramTime) / 1000);
         } catch (Exception e) {
             throw new JpfException(JpfErrorInfo.INVALID_PARAMETER, "数据导出异常");
         }
@@ -281,60 +267,59 @@ public class ChargeOrderController {
      * @param path
      * @return
      */
-    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<ChargeOrderInfo> data, int type, String path){
+    private JSONObject exportExcelByInfoNew(HttpServletResponse response, List<PayChargeOrder> data, int type, String path){
         type = type < 1 ? 1 : type;
         JSONObject res = new JSONObject();
         res.put("code","10000");
         res.put("info","SUCCESS");
         SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
         String interfaceType = "",status = "";
-        Sheet sheet = xssfWorkbook.getSheet("sheet1");
+        SXSSFSheet sheet = xssfWorkbook.getSheet("sheet1");
         if (sheet == null) {
             sheet = xssfWorkbook.createSheet("sheet1");
         }
         exportExcel.genSheetHead(sheet, 0, generateTitle());
-        for (int rownum = 1; rownum <= data.size(); rownum++) {
-            Row row = sheet.createRow(rownum);
-            int k = -1;
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getOrderNo());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getForeignOrderNo());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyId());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyName());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getMerchNo());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getChargePhone());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductId());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getProductName());
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getProductPrice() == null ? "" : String.valueOf(data.get(rownum-1).getProductPrice()));
-            if(data.get(rownum - 1).getInterfaceType() == null){
-                interfaceType = "";
-            }else if(data.get(rownum-1).getInterfaceType() == 0){
-                interfaceType = "欧飞";
-            }else if(data.get(rownum-1).getInterfaceType() == 1){
-                interfaceType = "威能";
-            }
-            exportExcel.createCell(row, ++k, interfaceType);
-            exportExcel.createCell(row, ++k, data.get(rownum - 1).getInterfaceOrderNo());
-            if(data.get(rownum - 1).getStatus() == null){
-                status = "";
-            }else{
-                switch (data.get(rownum - 1).getStatus()){
-                    case 0: status = "下单成功";break;
-                    case 1: status = "充值中";break;
-                    case 2: status = "上游充值成功";break;
-                    case 3: status = "上游充值失败";break;
-                    case 4: status = "申请退款";break;
-                    case 5: status = "退款成功";break;
-                    case 6: status = "拒绝退款";break;
-                    case 7: status = "退款失败";break;
+        if(!CollectionUtils.isEmpty(data)){
+            for (int rownum = 1; rownum <= data.size(); rownum++) {
+                SXSSFRow row = sheet.createRow(rownum);
+                int k = -1;
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getOrderNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getForeignOrderNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyId());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getCompanyName());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getMerchNo());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getChargePhone());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductId());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductName());
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductValue() == null ? "" : String.valueOf(data.get(rownum-1).getProductValue()));
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getProductPrice() == null ? "" : String.valueOf(data.get(rownum-1).getProductPrice()));
+                if(data.get(rownum - 1).getInterfaceType() == null){
+                    interfaceType = "";
+                }else if(data.get(rownum-1).getInterfaceType() == 0){
+                    interfaceType = "欧飞";
+                }else if(data.get(rownum-1).getInterfaceType() == 1){
+                    interfaceType = "威能";
                 }
+                exportExcel.createCell(row, ++k, interfaceType);
+                exportExcel.createCell(row, ++k, data.get(rownum - 1).getInterfaceOrderNo());
+                if(data.get(rownum - 1).getStatus() == null){
+                    status = "";
+                }else{
+                    switch (data.get(rownum - 1).getStatus()){
+                        case 0: status = "下单成功";break;
+                        case 1: status = "充值中";break;
+                        case 2: status = "上游充值成功";break;
+                        case 3: status = "上游充值失败";break;
+                        case 4: status = "申请退款";break;
+                        case 5: status = "退款成功";break;
+                        case 6: status = "拒绝退款";break;
+                        case 7: status = "退款失败";break;
+                    }
+                }
+                exportExcel.createCell(row, ++k, status);
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime()));
+                exportExcel.createCell(row, ++k, data.get(rownum-1).getUpdatetime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getUpdatetime()));
             }
-            exportExcel.createCell(row, ++k, status);
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getRequestParams());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getNotifyUrl());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getNotifyParams());
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getNotifyTime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getNotifyTime()));
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getAddtime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getAddtime()));
-            exportExcel.createCell(row, ++k, data.get(rownum-1).getUpdatetime() == null ? "" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(data.get(rownum-1).getUpdatetime()));
         }
         String fileName = "充值平台订单列表-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx";
         return exportExcel.writeIntoExcel(fileName, response, xssfWorkbook, path, type, res);
@@ -354,16 +339,13 @@ public class ChargeOrderController {
         firstTitles.put(5, "充值号码");
         firstTitles.put(6, "产品id");
         firstTitles.put(7, "产品名称");
-        firstTitles.put(8, "产品单价");
-        firstTitles.put(9, "接口类型");
-        firstTitles.put(10, "上游订单号");
-        firstTitles.put(11, "订单状态");
-        firstTitles.put(12, "下游请求参数");
-        firstTitles.put(13, "异步回调地址");
-        firstTitles.put(14, "异步回调参数");
-        firstTitles.put(15, "异步回调时间");
-        firstTitles.put(16, "添加时间");
-        firstTitles.put(17, "更新时间");
+        firstTitles.put(8, "产品面值");
+        firstTitles.put(9, "产品单价");
+        firstTitles.put(10, "接口类型");
+        firstTitles.put(11, "上游订单号");
+        firstTitles.put(12, "订单状态");
+        firstTitles.put(13, "添加时间");
+        firstTitles.put(14, "更新时间");
         return firstTitles;
     }
 }
