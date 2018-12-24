@@ -83,4 +83,5 @@ public interface PayChargeCompanyMoneyStreamMapper {
      * @param record
      */
     int updateByPrimaryKey(PayChargeCompanyMoneyStream record);
+
 }

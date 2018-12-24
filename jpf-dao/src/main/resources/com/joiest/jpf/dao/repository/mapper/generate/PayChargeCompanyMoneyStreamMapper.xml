@@ -588,4 +588,13 @@
       consumer_order_no = #{consumerOrderNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectChargeCompanyMoneyStreamByOrderId" parameterType="Integer" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"></include>
+    from
+      pay_charge_company_money_stream
+    where
+      order_id = #{id}
+  </select>
 </mapper>

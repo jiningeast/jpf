@@ -10,6 +10,8 @@ import com.joiest.jpf.entity.ChargeOrderInfo;
 
 import java.util.List;
 
+import java.util.List;
+
 public interface ChargeCompanyMoneyStreamServiceFacade {
 
     /**
@@ -37,6 +39,18 @@ public interface ChargeCompanyMoneyStreamServiceFacade {
      */
     public int updateRecord(PayChargeCompanyMoneyStream record,String order_no);
 
+    /**
+     * 根据订单id查询流水
+     * @param id
+     * @return
+     */
+    List<PayChargeCompanyMoneyStream> getChargeCompanyMoneyStreamByOrderId(String id);
+
+
+    /**
+     * 添加流水记录(订单补偿)
+     */
+    int addStream(PayChargeCompanyMoneyStream record);
     /**
      * 根据订单号查询订单流水
      * @param orderId
