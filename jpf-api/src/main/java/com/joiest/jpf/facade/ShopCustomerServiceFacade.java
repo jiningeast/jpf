@@ -6,6 +6,8 @@ import com.joiest.jpf.dto.GetShopCustomerRequest;
 import com.joiest.jpf.dto.GetShopCustomerResponse;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 
+import java.util.Map;
+
 public interface ShopCustomerServiceFacade {
 
     /**
@@ -43,4 +45,9 @@ public interface ShopCustomerServiceFacade {
      */
     public Boolean updateCode();
 
+    /**
+     * 商户扣款操作
+     * @param map
+     */
+    void pay(Map<String, Object> map);
 }

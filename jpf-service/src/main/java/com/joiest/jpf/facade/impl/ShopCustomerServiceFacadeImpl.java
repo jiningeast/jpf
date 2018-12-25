@@ -24,6 +24,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade {
 
@@ -247,5 +248,15 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
             }
         }
         return true;
+    }
+
+    /**
+     * 商户扣款操作
+     * @param map
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void pay(Map<String, Object> map) {
+
     }
 }
