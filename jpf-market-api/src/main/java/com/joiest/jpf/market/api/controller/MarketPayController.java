@@ -9,7 +9,10 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerServiceFacade;
+import com.joiest.jpf.market.api.util.AesShopUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +32,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/marketPayController")
 public class MarketPayController {
-
+    private static final Logger logger = LogManager.getLogger(MarketPayController.class);
     @Autowired
     private ShopCustomerServiceFacade shopCustomerServiceFacade;
     @Autowired
@@ -43,7 +46,7 @@ public class MarketPayController {
         if(StringUtils.isBlank(payParam)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
         }
-        Map<String, Object> map = JsonUtils.toCollection(Base64CustomUtils.base64Decoder(payParam), new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> map = JsonUtils.toCollection(AesShopUtils.AES_Decrypt(payParam,ConfigUtil.getValue("XinShop_AES_KEY")), new TypeReference<Map<String, Object>>() {});
         //验证商户信息,并且验证商户金额是否够
         responseMap = checkPayInfo(map);
         if("10000".equals(responseMap.get("code").toString())){
@@ -56,9 +59,11 @@ public class MarketPayController {
             resultMap.put("msg","success");
             responseMap.put("data",resultMap);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("付费失败"+e.getMessage(),e);
+            resultMap.put("code","10008");
+            resultMap.put("msg","fail");
         }
-        return JsonUtils.toJson(responseMap);
+        return AesShopUtils.AES_Encrypt(JsonUtils.toJson(responseMap),ConfigUtil.getValue("XinShop_AES_KEY")) ;
     }
 
     /**
