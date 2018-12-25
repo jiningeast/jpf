@@ -1,16 +1,20 @@
 package com.joiest.jpf.facade.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.joiest.jpf.common.po.PayChargeCompany;
+import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
-import com.joiest.jpf.common.util.ConfigUtil;
-import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.WnpayUtils;
+import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeOrderMapper;
 import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
-import com.joiest.jpf.entity.ChargeOrderInfo;
+import com.joiest.jpf.entity.*;
+import com.joiest.jpf.facade.ChargeCompanyMoneyStreamServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -18,11 +22,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     private static final Logger logger = LogManager.getLogger(ChargeOrderServiceFacadeImpl.class);
@@ -32,6 +35,12 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
     @Autowired
     private PayChargeOrderCustomMapper payChargeOrderCustomMapper;
+
+    @Autowired
+    private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
+
+    @Autowired
+    private PayChargeCompanyMapper payChargeCompanyMapper;
     /**
      * 获取订单信息
      * 查询单条信息
@@ -332,32 +341,18 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
      * 所有指定商户异常订单处理
      */
     @Override
-    public List<ChargeOrderInfo>  getAllAbnormalOrders(ChargeOrderInfo request)
+    public List<PayChargeOrder>  getAllAbnormalOrders()
     {
-
         PayChargeOrderExample example = new PayChargeOrderExample();
         example.setOrderByClause("addtime ASC");
-        //example.setPageNo(1);
-        //example.setPageSize(1);
 
         PayChargeOrderExample.Criteria c =example.createCriteria();
-        c.andCompanyIdEqualTo(request.getCompanyId());
 
         List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
         if( list.size() <=0 || list == null){
             return null;
         }
-        List<ChargeOrderInfo> infoList = new ArrayList<>();
-
-        for (PayChargeOrder one : list)
-        {
-            ChargeOrderInfo info = new ChargeOrderInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
-            beanCopier.copy(one, info, null);
-            infoList.add(info);
-        }
-
-        return infoList;
+        return list;
     }
 
 
@@ -485,6 +480,107 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
             resultMap.put("code","10008");
         }
         return resultMap;
+    }
+
+
+    @Override
+    public void updateOrder(PayChargeOrder payChargeOrder) {
+        payChargeOrderMapper.updateByPrimaryKeySelective(payChargeOrder);
+    }
+
+    @Override
+    public void sendEmailToManager(List<BalanceOrder> balanceOrders) {
+
+        ExcelDealUtils excelUtils = new ExcelDealUtils();
+        JSONArray titles = new JSONArray();
+        titles.add("欧非订单号");
+        titles.add("欧非订单状态");
+        titles.add("欣享订单号");
+        titles.add("欣享订单状态");
+        titles.add("金额");
+        titles.add("充值时间");
+
+        JSONArray fields = new JSONArray();
+        fields.add("interfaceOrderNo");
+        fields.add("money");
+        fields.add("dou");
+        fields.add("expireMonth");
+        fields.add("addtimeFormat");
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public PayChargeOrder savePayOrder(Map<String, String> actParam, ChargeCompanyInfo companyInfo, ChargeProductInfo chargeProductInfo)  throws Exception{
+        PayChargeOrder order = new PayChargeOrder();
+        String orderno = "CH"+ ToolUtils.createOrderid();
+        order.setOrderNo(orderno);
+        order.setForeignOrderNo(actParam.get("outOrderNo"));
+        order.setCompanyId(companyInfo.getId());
+        order.setCompanyName(companyInfo.getCompanyName());
+        order.setMerchNo(companyInfo.getMerchNo());
+        order.setChargePhone(actParam.get("phone")==null?actParam.get("cardNo"):actParam.get("phone"));
+        order.setProductId(chargeProductInfo.getId());
+        order.setProductName(chargeProductInfo.getName());
+        order.setProductPrice(chargeProductInfo.getSalePrice());
+        order.setProductAmount((Integer) 1);
+        order.setTotalMoney(chargeProductInfo.getSalePrice());
+        order.setNotifyUrl(actParam.get("notifyUrl"));
+        order.setRequestParams(JSONObject.fromObject(actParam).toString());
+        order.setStatus((byte)0);
+        order.setAddtime(new Date());
+        order.setProductType(actParam.get("oilType")==null?0:Integer.valueOf(actParam.get("oilType")));
+        payChargeOrderCustomMapper.insertSelective(order);
+        String orderId= order.getId();
+        //扣除商户金额
+        subCompanyMoney(companyInfo,chargeProductInfo);
+        PayChargeCompany chargeCompany = payChargeCompanyMapper.selectByPrimaryKey(companyInfo.getId());
+        // 新增资金流水
+        saveMoneyStream(chargeCompany, chargeProductInfo, orderno, orderId);
+
+        return order;
+    }
+
+    public void subCompanyMoney(ChargeCompanyInfo companyInfo,ChargeProductInfo chargeProductInfo) throws Exception {
+        //调用接口之前，先扣钱 更新商户信息  金额验证
+        Map<String,Object> map = new HashMap<>();
+        map.put("companyId",companyInfo.getId());
+        map.put("subMoney",chargeProductInfo.getSalePrice());
+        map.put("companyKey",ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        int count = payChargeCompanyMapper.updateCompanyMoneySub(map);
+        if(count==0){
+            throw new Exception("余额不足");
+        }
+    }
+
+    public void saveMoneyStream(PayChargeCompany companyInfo, ChargeProductInfo chargeProductInfo, String orderno, String orderId) {
+        PayChargeCompanyMoneyStream stream = new PayChargeCompanyMoneyStream();
+        String streamNo = "MS"+System.currentTimeMillis()+ ToolUtils.getRandomInt(100,999);
+        stream.setStreamNo(streamNo);
+        stream.setCompanyId(companyInfo.getId());
+        stream.setCompanyName(companyInfo.getCompanyName());
+        stream.setMerchNo(companyInfo.getMerchNo());
+        stream.setOrderId(""+orderId);
+        stream.setOrderNo(orderno);
+        stream.setProductId(chargeProductInfo.getId());
+        stream.setProductName(chargeProductInfo.getName());
+        stream.setProductValue(chargeProductInfo.getValue());
+     /*   if(type.equals((byte)1)){
+            info.setProductBidPrice(chargeProductInfo.getWnProductPrice());
+        }else{
+            info.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+        }*/
+        stream.setProductSalePrice(chargeProductInfo.getSalePrice());
+        stream.setProductInterfacePrice(chargeProductInfo.getBidPrice());
+        stream.setProductAmount(1);
+        stream.setTotalMoney(chargeProductInfo.getSalePrice());
+        //info.setInterfaceType(type);
+        //info.setInterfaceOrderNo(map.get("orderid"));
+        stream.setStatus((byte)2);
+        stream.setStreamType((byte)1);
+        stream.setNewMoney(companyInfo.getMoney());
+        stream.setIsDel((byte)0);
+        stream.setAddtime(new Date());
+        payChargeCompanyMoneyStreamMapper.insertSelective(stream);
     }
 
 }

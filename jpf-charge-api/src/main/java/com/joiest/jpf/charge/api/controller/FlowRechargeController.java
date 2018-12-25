@@ -1,6 +1,7 @@
 package com.joiest.jpf.charge.api.controller;
 
 import com.joiest.jpf.charge.api.util.ServletUtils;
+import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.OfpayRequest;
@@ -45,7 +46,7 @@ public class FlowRechargeController {
     private ChargeInterfaceStreamFacade chargeInterfaceStreamFacade;
 
     @Autowired
-    private ChargeCompanyMoneyStreamServiceFacade ChargeCompanyMoneyStreamServiceFacade;
+    private ChargeCompanyMoneyStreamServiceFacade chargeCompanyMoneyStreamServiceFacade;
 
     private static final Logger logger = LogManager.getLogger(FlowRechargeController.class);
 
@@ -134,7 +135,7 @@ public class FlowRechargeController {
         return "1";
     }
 
-    @RequestMapping(value = "telPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+   /* @RequestMapping(value = "telPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     public String telPlaceOrder(){
         if(validate.equals(false)){
             return respond;
@@ -144,6 +145,8 @@ public class FlowRechargeController {
         PayChargeOrder record = new PayChargeOrder();
         record.setForeignOrderNo(actParam.get("outOrderNo"));
         ChargeOrderInfo chargeOrderInfo = chargeOrderServiceFacade.getOne(record);
+        //获取商品信息
+        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(actParam.get("productId"));
         if(chargeOrderInfo!=null){
             responseParam.put("code","10021");
             responseParam.put("info","订单号请保持唯一");
@@ -158,8 +161,7 @@ public class FlowRechargeController {
             responseParam.put("info","商户金额校验错误");
             return responseParam.toString();
         }
-        //获取商品信息
-        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(actParam.get("productId"));
+
         if(chargeProductInfo == null){
             responseParam.put("code","10023");
             responseParam.put("info","未获取到商品信息");
@@ -299,7 +301,137 @@ public class FlowRechargeController {
         chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
         logger.info("backLogInfo="+responseParam.toString());
         return responseParam.toString();
+    }*/
+    @RequestMapping(value = "telPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    public String telPlaceOrderNew(){
+        if(validate.equals(false)){
+             return respond;
+         }
+        //商户订单验证
+        PayChargeOrder record = new PayChargeOrder();
+        record.setForeignOrderNo(actParam.get("outOrderNo"));
+        ChargeOrderInfo chargeOrderInfo = chargeOrderServiceFacade.getOne(record);
+        //获取商品信息
+        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(actParam.get("productId"));
+        //验证基本信息
+        JSONObject responseParam  = checkOrderInfo(chargeOrderInfo, chargeProductInfo);
+        if(responseParam.get("code")!=null){
+            return responseParam.toString();
+        }
+        PayChargeOrder payChargeOrder;
+        JSONObject merRespons = new JSONObject();
+
+        try{
+            actParam.put("money",chargeProductInfo.getValue().toString());//充值面值
+            actParam.put("salePrice",chargeProductInfo.getValue().toString());//标准售价
+            //保存订单号和流水，并且做扣款操作 返回订单的id
+            payChargeOrder= chargeOrderServiceFacade.savePayOrder(actParam,companyInfo,chargeProductInfo);
+            actParam.put("selfOrder",payChargeOrder.getOrderNo());
+            //请求欧非或者微能
+            Map<String, String> map = payMoney(chargeProductInfo, payChargeOrder);
+            //判断是否支付成功
+            if("10000".equals(map.get("code"))||"10001".equals(map.get("code"))){
+                if("10000".equals(map.get("code"))){
+                    payChargeOrder.setStatus((byte)1);
+                }else{
+                    payChargeOrder.setStatus((byte)8);
+                }
+                responseParam.put("code","10000");
+                responseParam.put("info","下单成功，充值中");
+                payChargeOrder.setInterfaceOrderNo(map.get("orderid"));
+            }else{
+                payChargeOrder.setStatus((byte)3);
+                responseParam.put("code","10025");
+                responseParam.put("info","充值失败");
+            }
+            merRespons.put("outOrderNo",actParam.get("outOrderNo"));//上游接口订单号
+            merRespons.put("phone",actParam.get("phone"));//充值手机号
+            merRespons.put("productId",actParam.get("productId"));//产品金额
+            merRespons.put("orderNo",payChargeOrder.getOrderNo());//自己平台的订单号
+            merRespons.put("value",chargeProductInfo.getValue());//充值面值
+            merRespons.put("salePrice",chargeProductInfo.getSalePrice());//扣商户的钱
+            merRespons.put("foreignOrderNo",map.get("orderid"));//返回欧非或者威能订单号
+            responseParam.put("data",merRespons);
+            //修改订单信息
+            payChargeOrder.setUpdatetime(new Date());
+            chargeOrderServiceFacade.updateOrder(payChargeOrder);
+        }catch (Exception e){
+            responseParam.put("code","10025");
+            responseParam.put("info","充值失败");
+            logger.error(e.getMessage(),e);
+        }
+        logger.info("backLogInfo="+responseParam.toString());
+        return responseParam.toString();
     }
+
+    private  Map<String, String> payMoney(ChargeProductInfo chargeProductInfo, PayChargeOrder payChargeOrder) {
+        //添加流水
+        ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
+        Map<String, String> map=new HashMap<>();
+        String lastNum = StringUtils.substring(String.valueOf(payChargeOrder.getId()),-1,String.valueOf(payChargeOrder.getId()).length());
+        if (StringUtils.isBlank(ConfigUtil.getValue("OF_AND_WEINENG"))||(Integer.parseInt(lastNum)>=Integer.parseInt(ConfigUtil.getValue("OF_AND_WEINENG")))){
+            payChargeOrder.setInterfaceType((byte)0);
+            payChargeOrder.setProductType(0);
+            chargeInterfaceStreamInfo.setType((byte)0);
+            //更新订单接口类型 防止请求接口异常 订单没有类型
+            chargeOrderServiceFacade.updateOrder(payChargeOrder);
+            //请求欧非
+            map = phoneRechargeOf(actParam);
+        }else {
+            payChargeOrder.setInterfaceType((byte)1);
+            payChargeOrder.setProductType(1);
+            chargeInterfaceStreamInfo.setType((byte)1);
+            //更新订单接口类型 防止请求接口异常 订单没有类型
+            chargeOrderServiceFacade.updateOrder(payChargeOrder);
+            actParam.put("forProductId",chargeProductInfo.getWnProductId());
+            //请求微能接口
+            map = chargeOrderServiceFacade.phoneRechargeWn(actParam);
+        }
+
+        chargeInterfaceStreamInfo.setOrderId(""+payChargeOrder.getId());
+        chargeInterfaceStreamInfo.setOrderNo(payChargeOrder.getOrderNo());
+        chargeInterfaceStreamInfo.setRequestUrl(map.get("requestUrl"));
+        chargeInterfaceStreamInfo.setRequestParam(map.get("requestParam"));
+        chargeInterfaceStreamInfo.setResponse(map.get("responseParam"));
+        chargeInterfaceStreamInfo.setAddtime(new Date());
+        chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
+        return map;
+    }
+
+    /**
+     * 做订单信息的验证
+     * @param chargeOrderInfo
+     * @param chargeProductInfo
+     * @return
+     */
+    private JSONObject checkOrderInfo( ChargeOrderInfo chargeOrderInfo, ChargeProductInfo chargeProductInfo) {
+        JSONObject responseParam = new JSONObject();
+        if(chargeOrderInfo!=null){
+            responseParam.put("code","10021");
+            responseParam.put("info","订单号请保持唯一");
+            return responseParam;
+        }
+        Boolean newCode = ToolUtils.ValidateCode(companyInfo.getMoneyCode(),companyInfo.getId(),companyInfo.getMoney().toString(), ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        if(!newCode.booleanValue()){
+            responseParam.put("code","10022");
+            responseParam.put("info","商户金额校验错误");
+            return responseParam;
+        }
+
+        if(chargeProductInfo == null){
+            responseParam.put("code","10023");
+            responseParam.put("info","未获取到商品信息");
+            return responseParam;
+        }
+        if(chargeProductInfo.getValue().compareTo(companyInfo.getMoney())>0){
+            responseParam.put("code","10024");
+            responseParam.put("info","商户余额不足，请尽快充值");
+            return responseParam;
+        }
+        return new JSONObject();
+    }
+
+
     /**
      * 话费直充 欧非
      */
@@ -307,34 +439,6 @@ public class FlowRechargeController {
     {
 
         Map<String, String> resultMap = new HashMap<>();
-       /*
-        //查询
-        Map<String,String> queryMap = new HashMap<>();
-        queryMap.put("phoneno", actParam.get("phone"));
-        queryMap.put("pervalue", actParam.get("money"));
-        Map<String, String> queryPhoneResponseMap = new OfpayUtils().telquery(queryMap);
-
-        //流水
-        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
-        stream.setType((byte)3);
-        stream.setOrderNo(actParam.get("selfOrder"));
-        stream.setRequestUrl(queryPhoneResponseMap.get("requestUrl"));
-        stream.setRequestContent(queryPhoneResponseMap.get("requestParam"));
-        String requestUrl = queryPhoneResponseMap.get("requestUrl");
-        String requestParam = queryPhoneResponseMap.get("requestParam");
-        queryPhoneResponseMap.remove("requestUrl");
-        queryPhoneResponseMap.remove("requestParam");
-        String responseJson = JsonUtils.toJson(queryPhoneResponseMap);
-        stream.setResponseContent(responseJson);
-        stream.setAddtime(new Date());
-        int res_addstream = shopInterfaceStreamServiceFacade.addStream(stream);
-        if ( queryPhoneResponseMap.getOrDefault("retcode","").equals("1") )
-        {
-            responseMap.put("code",JpfInterfaceErrorInfo.GOODLIST_IS_MATCH.getCode());
-            responseMap.put("info",JpfInterfaceErrorInfo.GOODLIST_IS_MATCH.getDesc());
-
-            return responseMap;
-        }*/
         //话费充值
         Map<String, Object> rechargeMap = new HashMap<>();
         Map<String, String> responseMap = new HashMap<>();
@@ -465,17 +569,30 @@ public class FlowRechargeController {
             sendParam.put("value",chargeProductInfo.getValue());
             sendParam.put("salePrice",orderInfo.getProductPrice().toString());
             sendParam.put("productId",orderInfo.getProductId());
+            //更新订单的流水
+            List<PayChargeCompanyMoneyStream> streams = chargeCompanyMoneyStreamServiceFacade.getByOrderNo(orderInfo.getOrderNo());
+            if (streams!=null&&streams.size()!=0){
+                PayChargeCompanyMoneyStream payChargeCompanyMoneyStream = streams.get(0);
+                payChargeCompanyMoneyStream.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+                payChargeCompanyMoneyStream.setInterfaceType((byte)0);
+                payChargeCompanyMoneyStream.setInterfaceOrderNo(orderInfo.getInterfaceOrderNo());
+                chargeCompanyMoneyStreamServiceFacade.updateStram(payChargeCompanyMoneyStream);
+            }
 
             if ("9".equals(request.getRet_code())){    //1成功 9失败
                 sendParam.put("code","10001");
                 sendParam.put("info","充值失败");
                 sbf.append("\n订单状态：充值失败");
                 //充值失败返还商户资金
-                JSONObject isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
-                if(isRet.get("code").toString().equals("10000")){
-                    upOrderInfo.setStatus((byte)5);
-                }else{
-                    upOrderInfo.setStatus((byte)7);
+                JSONObject isRet=new JSONObject();
+                if(orderInfo.getStatus()==1){
+                    try {
+                        isRet = chargeCompanyServiceFacade.returnComfunds(orderInfo);
+                        upOrderInfo.setStatus((byte)5);
+                    }catch (Exception e){
+                        logger.error(e.getMessage(),e);
+                        upOrderInfo.setStatus((byte)7);
+                    }
                 }
                 String remark = StringUtils.isBlank(orderInfo.getRemark())?"["+ DateUtils.getCurDate() + "]:"+isRet.get("info"):orderInfo.getRemark()+"&#13;&#10;["+ DateUtils.getCurDate() + "]:"+isRet.get("info");
                 upOrderInfo.setRemark(remark);
@@ -485,7 +602,9 @@ public class FlowRechargeController {
                 sendParam.put("code","10000");
                 sendParam.put("info","充值成功");
                 sbf.append("\n订单状态：充值成功");
+
             }
+
             sbf.append("\n通知商户地址："+orderInfo.getNotifyUrl());
             sbf.append("\n通知商户参数："+sendParam.toString());
             LogsCustomUtils.writeIntoFile(sbf.toString(),path, fileName, true);
@@ -504,6 +623,7 @@ public class FlowRechargeController {
         }
         return "Y";
     }
+
     @RequestMapping(value = "/ofpayNotifyTest")
     public String ofpayNotifyTest(HttpServletRequest request)
     {
@@ -546,7 +666,7 @@ public class FlowRechargeController {
      * 油卡充值
      * @return
      */
-    @RequestMapping(value = "oilPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+   /* @RequestMapping(value = "oilPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
     public String oilPlaceOrder(){
         if(validate.equals(false))
             return respond;
@@ -674,7 +794,7 @@ public class FlowRechargeController {
             info.setNewMoney(companyMoney);
             info.setIsDel((byte)0);
             info.setAddtime(new Date());
-            ChargeCompanyMoneyStreamServiceFacade.insRecord(info);
+            chargeCompanyMoneyStreamServiceFacade.insRecord(info);
         }else{
             upOrderInfo.setStatus((byte)3);
             responseParam.put("code","10025");
@@ -687,6 +807,76 @@ public class FlowRechargeController {
         chargeOrderServiceFacade.upOrderInfo(upOrderInfo);
 
         return responseParam.toString();
+    }*/
+    /**
+     * 油卡充值
+     * @return
+     */
+    @RequestMapping(value = "oilPlaceOrder",method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    public String oilPlaceOrder() {
+        //商户订单验证
+        PayChargeOrder record = new PayChargeOrder();
+        record.setForeignOrderNo(actParam.get("outOrderNo"));
+        ChargeOrderInfo chargeOrderInfo = chargeOrderServiceFacade.getOne(record);
+        //获取商品信息
+        ChargeProductInfo chargeProductInfo = chargeProductServiceFacade.getProductById(actParam.get("productId"));
+        //验证基本信息
+        JSONObject responseParam  = checkOrderInfo(chargeOrderInfo, chargeProductInfo);
+        if(responseParam.get("code")!=null){
+            return responseParam.toString();
+        }
+        PayChargeOrder payChargeOrder;
+        JSONObject merRespons = new JSONObject();
+        merRespons.put("outOrderNo",actParam.get("outOrderNo"));//上游接口订单号
+        merRespons.put("phone",actParam.get("phone"));//充值手机号
+        merRespons.put("productId",actParam.get("productId"));//产品金额
+        try {
+            actParam.put("money", chargeProductInfo.getValue().toString());//充值面值
+            actParam.put("salePrice", chargeProductInfo.getValue().toString());//标准售价
+            //保存订单号和流水，并且做扣款操作 返回订单的id
+            payChargeOrder = chargeOrderServiceFacade.savePayOrder(actParam, companyInfo, chargeProductInfo);
+            payChargeOrder.setProductType(Integer.valueOf(actParam.get("oilType")));
+            actParam.put("selfOrder", payChargeOrder.getOrderNo());
+            actParam.put("productId",chargeProductInfo.getOfProductId());
+            payChargeOrder.setInterfaceType((byte)0);
+            //请求欧非油卡充值
+            Map<String, String> map = gasRecharge(actParam);
+            //添加流水
+            ChargeInterfaceStreamInfo chargeInterfaceStreamInfo = new ChargeInterfaceStreamInfo();
+            chargeInterfaceStreamInfo.setOrderId(""+payChargeOrder.getId());
+            chargeInterfaceStreamInfo.setOrderNo(payChargeOrder.getOrderNo());
+            chargeInterfaceStreamInfo.setType((byte)0);
+            chargeInterfaceStreamInfo.setRequestUrl(map.get("requestUrl"));
+            chargeInterfaceStreamInfo.setRequestParam(map.get("requestParam"));
+            chargeInterfaceStreamInfo.setResponse(map.get("responseParam"));
+            chargeInterfaceStreamInfo.setAddtime(new Date());
+            chargeInterfaceStreamFacade.addStream(chargeInterfaceStreamInfo);
+            merRespons.put("orderNo",payChargeOrder.getOrderNo());//自己平台的订单号
+            merRespons.put("foreignOrderNo",map.get("orderid"));//返回欧非或者威能订单号
+            if("10000".equals(map.get("code"))){
+                payChargeOrder.setStatus((byte)1);
+                responseParam.put("code","10000");
+                responseParam.put("info","充值中");
+            }else{
+                payChargeOrder.setStatus((byte)3);
+                responseParam.put("code","10025");
+                responseParam.put("info","充值失败");
+            }
+            merRespons.put("phone",actParam.get("phone"));//充值手机号
+            merRespons.put("value",chargeProductInfo.getValue());//充值面值
+            merRespons.put("salePrice",chargeProductInfo.getSalePrice());//扣商户的钱
+            merRespons.put("productId",chargeProductInfo.getId());//产品id
+            responseParam.put("data",merRespons);
+            //修改订单信息
+            payChargeOrder.setInterfaceOrderNo(map.get("orderid"));
+            payChargeOrder.setUpdatetime(new Date());
+            chargeOrderServiceFacade.updateOrder(payChargeOrder);
+        }catch (Exception e){
+            responseParam.put("code","10025");
+            responseParam.put("info","充值失败");
+            logger.error(e.getMessage(),e);
+        }
+        return responseParam.toString();
     }
 
     /**
@@ -694,32 +884,6 @@ public class FlowRechargeController {
      */
     private Map<String, String> gasRecharge(Map actParam)
     {
-
-        /*
-        //查询
-        Map<String,String> queryMap = new HashMap<>();
-        queryMap.put("game_userid", actParam.get("chargeNo").toString());
-        String chargeType = orderInfo.getOrderType() != null ? orderInfo.getOrderType().toString() : "";
-        queryMap.put("chargeType", chargeType );
-        Map<String, String> queryGasResponseMap = new OfpayUtils().gasQuery(queryMap);
-        //流水
-        ShopInterfaceStreamInfo stream = new ShopInterfaceStreamInfo();
-        stream.setType((byte)5);    //油卡充值
-        stream.setOrderNo(actParam.get("selfOrder").toString());
-        stream.setRequestUrl(queryGasResponseMap.get("requestUrl"));
-        stream.setRequestContent(queryGasResponseMap.get("requestParam"));
-        String requestUrl = queryGasResponseMap.get("requestUrl");
-        String requestParam = queryGasResponseMap.get("requestParam");
-        queryGasResponseMap.remove("requestUrl");
-        queryGasResponseMap.remove("requestParam");
-        String responseJson = JsonUtils.toJson(queryGasResponseMap);
-        stream.setResponseContent(responseJson);
-        stream.setAddtime(new Date());
-        int res_addstream = ShopInterfaceStreamServiceFacade.addStream(stream);
-        if ( !queryGasResponseMap.getOrDefault("retcode","").equals("1") )
-        {
-            throw new JpfInterfaceException( JpfInterfaceErrorInfo.FAIL.getCode(), queryGasResponseMap.get("err_msg"));
-        }*/
         //油卡直充
         Map<String, Object> rechargeMap = new HashMap<>();
         Map<String, String> resultMap = new HashMap<>();
