@@ -474,6 +474,8 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
             resultMap.put("code","10000");
         }else if(responseDeal!=null&&"10001".equals(responseDeal.get("code"))){
             resultMap.put("code","10001");
+        }else if(responseDeal!=null&&"10002".equals(responseDeal.get("code"))){
+            resultMap.put("code","10002");
         }else{
             resultMap.put("code","10008");
         }

@@ -147,12 +147,42 @@ public class OkHttpUtils {
         return postForm(url, UTF_8, false, parmsMap);
     }
 
+    // 请求商城数据接口加密
+    public static String postForm(String url, String paramStr) {
+        return postForm(url, UTF_8, false, paramStr);
+    }
+
     public static String postForm(String url, String charset, Map<String, Object> parmsMap) {
         return postForm(url, charset, false, parmsMap);
     }
 
     public static String postForm(String url, String charset, boolean isEncoded, Map<String, Object> parmsMap) {
         String content = getContent(charset, isEncoded, parmsMap);
+        logger.info("提交form表单, 请求url:{}, 请求数据:{}", url, content);
+        MediaType mediaType
+                = MediaType.parse("application/x-www-form-urlencoded; charset="+charset);
+        RequestBody formBody = FormBody.create(mediaType, content);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+        String text = null;
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            if (!response.isSuccessful()) {
+                new JpfException(JpfErrorInfo.CHANNEL_ERROR, "远程响应异常");
+            }
+            text = response.body().string();
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            new JpfException(JpfErrorInfo.CHANNEL_ERROR, "通讯异常");
+        }
+        logger.info("提交form表单, 请求url:{}, 返回数据:{}", url, text);
+        return text;
+    }
+
+    public static String postForm(String url, String charset, boolean isEncoded, String paramStr) {
+        String content = paramStr;
         logger.info("提交form表单, 请求url:{}, 请求数据:{}", url, content);
         MediaType mediaType
                 = MediaType.parse("application/x-www-form-urlencoded; charset="+charset);
