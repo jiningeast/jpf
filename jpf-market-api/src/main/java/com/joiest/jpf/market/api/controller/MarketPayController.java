@@ -28,11 +28,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.plaf.multi.MultiLabelUI;
-import java.text.ParseException;
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,7 +50,7 @@ public class MarketPayController {
     @RequestMapping(value = "pay",method = RequestMethod.POST)
     @ResponseBody
     public  String  pay(HttpServletRequest request){
-        Map<String,Object> responseMap=new HashMap<>();
+        Map<String,Object> responseMap= new HashMap<>();
         String payParam = request.getParameter("payParam");
         if(StringUtils.isBlank(payParam)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
@@ -84,17 +81,17 @@ public class MarketPayController {
     public String refund(HttpServletRequest request){
         Map<String,Object> resMap = new HashMap<>();
 
-        String reqParam = request.getParameter("payParam");
+        String responseMap = request.getParameter("payParam");
 
-        if(StringUtils.isBlank(reqParam)){
+        if(StringUtils.isBlank(responseMap)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
         }
 
-        ShopRefundInfo shopRefundInfo = JsonUtils.toObject(Base64CustomUtils.base64Decoder(reqParam), ShopRefundInfo.class);
-        Map<String,Object> responseMap = checkRefundInfo(shopRefundInfo);
+        ShopRefundInfo shopRefundInfo = JsonUtils.toObject(AesShopUtils.AES_Decrypt(responseMap,ConfigUtil.getValue("XinShop_AES_KEY")), ShopRefundInfo.class);
+        Map<String,Object> map = checkRefundInfo(shopRefundInfo);
 
-        if (responseMap.size() > 0 && !"200".equals(responseMap.get("code"))){
-            return JSONObject.toJSONString(responseMap);
+        if (map.size() > 0 && !"200".equals(map.get("code"))){
+            return JsonUtils.toJson(map);
         }
 
         try {
@@ -103,12 +100,12 @@ public class MarketPayController {
                resMap.put("msg", "退款成功");
            }
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("退款失败"+e.getMessage(),e);
             resMap.put("key", "201");
             resMap.put("msg", "退款失败");
         }
 
-        return JSONObject.toJSONString(resMap);
+        return AesShopUtils.AES_Encrypt(JsonUtils.toJson(responseMap),ConfigUtil.getValue("XinShop_AES_KEY"));
     }
 
     /**

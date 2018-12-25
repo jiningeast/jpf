@@ -927,15 +927,6 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         return returnMap;
     }
 
-    /**
-     * 根据id查询券信息
-     * @param id
-     * @return
-     */
-//    @Override
-//    public PayShopCouponRemain getCouponById(String id) {
-//        return payShopCouponRemainMapper.selectByPrimaryKey(id);
-//    }
 
     /**
      * 根据退款信息退款(更新券)
@@ -946,116 +937,92 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
     @Transactional(rollbackFor = Exception.class)
     public boolean refundByShopRefundInfo(ShopRefundInfo shopRefundInfo) throws Exception{
 
-            List<CouponListInfo> couponList = shopRefundInfo.getCouponList();
+        List<CouponListInfo> couponList = shopRefundInfo.getCouponList();
 
-            for (CouponListInfo couponInfo : couponList) {
-                PayShopCouponRemain coupon = payShopCouponRemainMapper.selectByPrimaryKey(couponInfo.getId());
+        for (CouponListInfo couponInfo : couponList) {
+            PayShopCouponRemain coupon = payShopCouponRemainMapper.selectByPrimaryKey(couponInfo.getId());
 
-                if (coupon.getExpireTime().compareTo(new Date()) <= 0) {
-                    //过期 有效期延长一个月
-                    Calendar rightNow = Calendar.getInstance();
-                    rightNow.setTime(coupon.getExpireTime());
-                    rightNow.add(Calendar.MONTH, 1);
-                    coupon.setExpireTime(rightNow.getTime());
-                }
-
-                if (!"0".equals(couponInfo.getTotalSaleDouYes())){
-                    coupon.setCouponDouLeft(new BigDecimal(couponInfo.getTotalSaleDouYes()));
-                    coupon.setStatus((byte)0);
-                }
-
-                if (!"0".equals(couponInfo.getTotalSaleDouNo())){
-                    coupon.setSaleDouLeft(new BigDecimal(couponInfo.getTotalSaleDouNo()));
-                    coupon.setSalestatus((byte)0);
-                }
-
-                PayShopCouponRemainExample example = new PayShopCouponRemainExample();
-                PayShopCouponRemainExample.Criteria criteria = example.createCriteria();
-                criteria.andIdEqualTo(couponInfo.getId());
-
-                //更新券操作
-//                if (coupon.getStatus() == 1) {
-//                    //非转让豆用完了
-//                    if (coupon.getSalestatus() == 1) {
-//                        //可转让豆也用完了  整张券都用完了  更新状态
-//
-//                        //非转让豆额度加回去
-//                        coupon.setCouponDouLeft(new BigDecimal(couponInfo.getTotalSaleDouNo()));
-//                        //可转让豆额度加回去
-//                        coupon.setSaleDouLeft(new BigDecimal(couponInfo.getTotalSaleDouYes()));
-//
-//                        coupon.setSalestatus((byte) 0);
-//                        coupon.setStatus((byte) 0);
-//
-//                    } else if (coupon.getSalestatus() == 0) {
-//                        //可转让豆没用完
-//                        //可转让豆额度加回去
-//                        coupon.setSaleDouLeft(new BigDecimal(couponInfo.getTotalSaleDouYes()));
-//
-//                    }
-//                } else if (coupon.getStatus() == 0) {
-//                    //非转让豆没用完
-//                    //非转让豆额度加回去
-//                    coupon.setCouponDouLeft(new BigDecimal(couponInfo.getTotalSaleDouNo()));
-//                }
-
-                coupon.setUpdatetime(new Date());
-
-                int res_remain = payShopCouponRemainMapper.updateByExampleSelective(coupon, example);
-                if (res_remain < 1) {
-                    throw new Exception("更新券信息失败");
-                }
-
-                // 新增日志表一条记录pay_shop_coupon_active
-                PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
-
-                PayShopCustomer payShopCustomer = payShopCustomerMapper.selectByPrimaryKey(shopRefundInfo.getCustomerId());
-                PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(coupon.getCouponId());
-//                PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(payShopBatchCoupon.getCompanyId());
-                PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(payShopBatchCoupon.getBatchId());
-                PayShopOrder payShopOrder = payShopOrderMapper.selectByPrimaryKey(shopRefundInfo.getOrderId());
-
-                payShopCouponActive.setCustomerId(shopRefundInfo.getCustomerId());
-                payShopCouponActive.setCustomerName(payShopCustomer.getNickname());
-                payShopCouponActive.setCompanyId(Integer.parseInt(payShopCustomer.getId()));
-                payShopCouponActive.setCompanyName(payShopCustomer.getCompanyName());
-                payShopCouponActive.setBatchId(Integer.parseInt(payShopBatch.getId()));
-                payShopCouponActive.setBatchNo(payShopBatch.getBatchNo());
-                payShopCouponActive.setCouponNo(payShopBatchCoupon.getCouponNo());
-                payShopCouponActive.setActiveCode(payShopBatchCoupon.getActiveCode());
-                payShopCouponActive.setPayWay(payShopOrder.getPayWay());
-                payShopCouponActive.setMoney(coupon.getCouponDou());
-
-                BigDecimal total = new BigDecimal(shopRefundInfo.getTotalSaleDouYes()).add(new BigDecimal(shopRefundInfo.getTotalSaleDouNo()));
-
-                payShopCouponActive.setDou(total);     //退还豆总数量
-                payShopCouponActive.setContent("行为:退款;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";退豆:" + total + ";orderId:" + shopRefundInfo.getOrderId());
-                payShopCouponActive.setType("2");
-                payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
-                payShopCouponActive.setAddtime(new Date());
-                payShopCouponActive.setOrderId(shopRefundInfo.getOrderId());
-                payShopCouponActive.setOrderNo(payShopOrder.getOrderNo());
-
-                int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
-                if ( res_couponActive < 1 ){
-                    throw new Exception("添加券流水失败");
-                }
-
+            if (coupon.getExpireTime().compareTo(new Date()) <= 0) {
+                //过期 有效期延长一个月
+                Calendar rightNow = Calendar.getInstance();
+                rightNow.setTime(coupon.getExpireTime());
+                rightNow.add(Calendar.MONTH, 1);
+                coupon.setExpireTime(rightNow.getTime());
             }
 
-            //订单状态更新
-            PayShopOrder payShopOrder = new PayShopOrder();
-            payShopOrder.setId(shopRefundInfo.getOrderId());
-            payShopOrder.setStatus((byte)2);
-            payShopOrder.setUpdatetime(new Date());
+            //更新券操作
 
-            int res_order = payShopOrderMapper.updateByPrimaryKey(payShopOrder);
+//            if (!"0".equals(couponInfo.getTotalSaleDouYes())){
+//                coupon.setCouponDouLeft(new BigDecimal(couponInfo.getTotalSaleDouYes()));
+//                coupon.setStatus((byte)0);
+//            }
+//
+//            if (!"0".equals(couponInfo.getTotalSaleDouNo())){
+//                coupon.setSaleDouLeft(new BigDecimal(couponInfo.getTotalSaleDouNo()));
+//                coupon.setSalestatus((byte)0);
+//            }
 
-            if ( res_order < 1 ){
-                throw new Exception("更新订单状态失败");
+            PayShopCouponRemainExample example = new PayShopCouponRemainExample();
+            PayShopCouponRemainExample.Criteria criteria = example.createCriteria();
+            criteria.andIdEqualTo(couponInfo.getId());
+
+            coupon.setUpdatetime(new Date());
+
+            int res_remain = payShopCouponRemainMapper.updateByExampleSelective(coupon, example);
+            if (res_remain < 1) {
+                throw new Exception("更新券信息失败");
             }
 
-            return true;
+            // 新增日志表一条记录pay_shop_coupon_active
+            PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+
+            PayShopCustomer payShopCustomer = payShopCustomerMapper.selectByPrimaryKey(shopRefundInfo.getCustomerId());
+            PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(coupon.getCouponId());
+//           PayShopCompany payShopCompany = payShopCompanyMapper.selectByPrimaryKey(payShopBatchCoupon.getCompanyId());
+            PayShopBatch payShopBatch = payShopBatchMapper.selectByPrimaryKey(payShopBatchCoupon.getBatchId());
+            PayShopOrder payShopOrder = payShopOrderMapper.selectByPrimaryKey(shopRefundInfo.getOrderId());
+
+            payShopCouponActive.setCustomerId(shopRefundInfo.getCustomerId());
+            payShopCouponActive.setCustomerName(payShopCustomer.getNickname());
+            payShopCouponActive.setCompanyId(Integer.parseInt(payShopCustomer.getId()));
+            payShopCouponActive.setCompanyName(payShopCustomer.getCompanyName());
+            payShopCouponActive.setBatchId(Integer.parseInt(payShopBatch.getId()));
+            payShopCouponActive.setBatchNo(payShopBatch.getBatchNo());
+            payShopCouponActive.setCouponNo(payShopBatchCoupon.getCouponNo());
+            payShopCouponActive.setActiveCode(payShopBatchCoupon.getActiveCode());
+            payShopCouponActive.setPayWay(payShopOrder.getPayWay());
+            payShopCouponActive.setMoney(coupon.getCouponDou());
+
+            BigDecimal total = new BigDecimal(shopRefundInfo.getTotalSaleDouYes()).add(new BigDecimal(shopRefundInfo.getTotalSaleDouNo()));
+
+            payShopCouponActive.setDou(total);     //退还豆总数量
+            payShopCouponActive.setContent("行为:退款;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";退豆:" + total + ";orderId:" + shopRefundInfo.getOrderId());
+            payShopCouponActive.setType("2");
+            payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
+            payShopCouponActive.setAddtime(new Date());
+            payShopCouponActive.setOrderId(shopRefundInfo.getOrderId());
+            payShopCouponActive.setOrderNo(payShopOrder.getOrderNo());
+
+            int res_couponActive = payShopCouponActiveMapper.insertSelective(payShopCouponActive);
+            if ( res_couponActive < 1 ){
+                throw new Exception("添加券流水失败");
+            }
+
+        }
+
+        //订单状态更新
+        PayShopOrder payShopOrder = new PayShopOrder();
+        payShopOrder.setId(shopRefundInfo.getOrderId());
+        payShopOrder.setStatus((byte)2);
+        payShopOrder.setUpdatetime(new Date());
+
+        int res_order = payShopOrderMapper.updateByPrimaryKey(payShopOrder);
+
+        if ( res_order < 1 ){
+            throw new Exception("更新订单状态失败");
+        }
+
+        return true;
 
     }
 
