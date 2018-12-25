@@ -5,6 +5,7 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.exception.JpfInterfaceException;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.util.*;
 import com.joiest.jpf.dto.GetShopStockCardResponse;
@@ -14,6 +15,7 @@ import com.joiest.jpf.facade.RedisCustomServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerInterfaceServiceFacade;
 import com.joiest.jpf.facade.ShopStockCardServiceFacade;
 import com.joiest.jpf.facade.WeixinUserServiceFacade;
+import com.joiest.jpf.market.api.util.AesShopUtils;
 import com.joiest.jpf.market.api.util.SmsUtils;
 import com.joiest.jpf.market.api.util.ToolsUtils;
 import net.sf.json.JSONArray;
@@ -31,6 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +71,7 @@ public class CustomController {
     @RequestMapping(value = "/bind", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     @Transactional(rollbackFor = { Exception.class, RuntimeException.class })
-    public String bind(String data){
+    public String bind(String data) throws Exception{
         if( StringUtils.isBlank(data) ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "信息不能为空", null);
         }
@@ -144,7 +148,56 @@ public class CustomController {
             retInfo.setCode(customCode);
             JpfResponseDto responseDto =shopCustomerInterfaceServiceFacade.updateCustomerByOpenId(retInfo,weixinUserInfo.getOpenid());
             if(responseDto.getRetCode().equals("0000")){
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "更新成功", null);
+                // 同步注册趣商城用户
+                Map<String,String> customRecord = new HashMap<>();
+                customRecord.put("username",mobile);
+                customRecord.put("userId",shopCustomId);
+                //customRecord.put("money",dou);
+                customRecord.put("type","3"); // 来源 3=欣享
+                customRecord.put("acctype","1"); //账号类型 1普通 2=企业 3=员工
+                String opentime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+                customRecord.put("opentime",opentime);
+
+                String respos = JsonUtils.toJson(customRecord);
+                String resposAesEncrypt = AesShopUtils.AES_Encrypt(ConfigUtil.getValue("xinShop_AES_KEY"),respos);
+                // 请求参数 url编码后字符串
+                String resposPpst = "jsondata="+ URLEncoder.encode(resposAesEncrypt,"UTF-8");
+                String resposAesDecrypt = AesShopUtils.AES_Decrypt(ConfigUtil.getValue("xinShop_AES_KEY"),resposAesEncrypt);
+                String requestUrl = ConfigUtil.getValue("xinShop_registerUrl")+"index.php?r=site/xinRegister";
+
+                //存储日志记录
+                SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                StringBuilder logContent = new StringBuilder();
+                String logPath = "/logs/jpf-market-api/log/";
+                String fileName = "custom-bind";
+                logContent.append("\n\nTime:" + myfmt.format(date));
+                logContent.append("\nrequestUrl:" + requestUrl);
+                logContent.append("\n明文:" + respos+"\t 加密后："+resposAesEncrypt+"\n urlencode加密后："+resposPpst);
+                LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+
+
+                String resultXml = null;
+                try {
+                    resultXml = OkHttpUtils.postForm(requestUrl,resposPpst);
+                } catch (Exception e) {
+                    logContent = new StringBuilder();
+                    logContent.append("\n返回数据:接口响应异常" );
+                    LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+                    throw new JpfInterfaceException("1101", "用户绑定异常");
+                }
+                logContent = new StringBuilder();
+                logContent.append("\n返回数据:" + resultXml);
+                LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+
+                JSONObject response = JSONObject.fromObject(resultXml);
+                // 10001=用户已注册  10000=注册成功
+                if(response != null && response.containsKey("code") && ("10000".equals(response.get("code").toString()) || "10001".equals(response.get("code").toString()))  ){
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "更新成功", null);
+                }else{
+                    throw new JpfInterfaceException("1101", "用户绑定异常");
+                }
+
+                //return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "更新成功", null);
             }else{
                 return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.FAIL.getCode(), "更新失败", null);
             }
