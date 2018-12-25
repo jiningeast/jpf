@@ -208,7 +208,7 @@ public class orderInfoController {
      */
     @RequestMapping(value = "/balanceOfAccount", method = RequestMethod.GET, produces = "text/plain;charset=utf-8")
     @ResponseBody
-    public void balanceOfAccount(HttpServletResponse response) throws DocumentException  {
+    public String balanceOfAccount(HttpServletResponse response) throws DocumentException  {
         //存储日志记录
         StringBuilder logContent = new StringBuilder();
         String logPath = "/logs/jpf-charge-api/log/";
@@ -256,6 +256,7 @@ public class orderInfoController {
         if(balanceOrders!=null&&balanceOrders.size()!=0){
             chargeOrderServiceFacade.sendEmailToManager(balanceOrders,response);
         }
+        return "执行完毕";
     }
 
     /**
