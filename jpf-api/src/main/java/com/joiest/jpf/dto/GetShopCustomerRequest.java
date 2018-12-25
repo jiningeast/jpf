@@ -51,6 +51,11 @@ public class GetShopCustomerRequest {
     private Byte isVerify;
 
     /**
+     * 是否是欣豆交易的买家 0=不是 1=是
+     */
+    private Byte isBargainBuyer;
+
+    /**
      * 用户类型 0=正常用户 1=特殊用户
      */
     private Byte type;
@@ -327,5 +332,13 @@ public class GetShopCustomerRequest {
 
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    public Byte getIsBargainBuyer() {
+        return isBargainBuyer;
+    }
+
+    public void setIsBargainBuyer(Byte isBargainBuyer) {
+        this.isBargainBuyer = isBargainBuyer;
     }
 }

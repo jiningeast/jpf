@@ -3,15 +3,19 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
-import com.joiest.jpf.common.po.PayShopBargainOrder;
-import com.joiest.jpf.common.po.PayShopCustomer;
-import com.joiest.jpf.common.po.PayShopCustomerExample;
+import com.joiest.jpf.common.po.*;
+import com.joiest.jpf.common.util.ArithmeticUtils;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopCouponRemainCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchCouponMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponActiveMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponRemainMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
-import com.joiest.jpf.dto.GetShopCustomerRequest;
-import com.joiest.jpf.dto.GetShopCustomerResponse;
+import com.joiest.jpf.dto.*;
+import com.joiest.jpf.entity.ShopCouponRemainInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
+import com.joiest.jpf.facade.ShopBatchCouponServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +23,21 @@ import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade {
 
     @Autowired
     private PayShopCustomerMapper payShopCustomerMapper;
+    @Autowired
+    private PayShopCouponRemainMapper payShopCouponRemainMapper;
+    @Autowired
+    private PayShopBatchCouponMapper payShopBatchCouponMapper;
+    @Autowired
+    private PayShopCouponActiveMapper payShopCouponActiveMapper;
 
     /**
      * 公司列表---后台
@@ -163,15 +171,21 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "此条记录不存在");
         }
         Byte defaultType =payShopCustomerList.get(0).getType();
+        Byte defaultIsBargainBuyer =payShopCustomerList.get(0).getIsBargainBuyer();
         PayShopCustomer payShopCustomer = new PayShopCustomer();
-        if(defaultType==request.getType()){
-            String word = defaultType == 1 ? "特殊用户":"正常用户";
-            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "不能更新状态为："+word);
-        }
+//        if(defaultType==request.getType()){
+//            String word = defaultType == 1 ? "特殊用户":"正常用户";
+//            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "不能更新状态为："+word);
+//        }
+//        if(defaultIsBargainBuyer==request.getIsBargainBuyer()){
+//            String word = defaultIsBargainBuyer == 1 ? "是":"不是";
+//            throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "不能更新状态为："+word);
+//        }
 
         // 创建日期
         Date d = new Date();
         payShopCustomer.setType(request.getType());
+        payShopCustomer.setIsBargainBuyer(request.getIsBargainBuyer());
         payShopCustomer.setUpdatetime(d);
         int count = payShopCustomerMapper.updateByExampleSelective(payShopCustomer,example);
         if(count != 1 ){
@@ -256,7 +270,138 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void pay(Map<String, Object> map) {
+    public Map<String, Object> pay(Map<String, Object> map) {
+        Map<String,Object> resMap = new HashMap<>();
+        Map<String,Object> data = new HashMap<>();
+        List<CouponActive> couponNolist =new ArrayList<>();
+        List<CouponActive> couponYeslist =new ArrayList<>();
+        resMap.put("customerId",map.get("customerId").toString());
+        resMap.put("orderNo",map.get("orderNo").toString());
+        //查出当前用户的可转让金额总数
+        PayShopCouponRemainExample exampleNo=new PayShopCouponRemainExample();
+        PayShopCouponRemainExample.Criteria cNo=exampleNo.createCriteria();
+        cNo.andCustomerIdEqualTo(map.get("customerId").toString());
+        exampleNo.setOrderByClause(" expire_time ASC");
+        cNo.andStatusEqualTo((byte)0);
+        List<PayShopCouponRemain> saleNo= payShopCouponRemainMapper.selectByExample(exampleNo);
+        BigDecimal totalMoney = new BigDecimal(map.get("money").toString());
+        //不可转让订单扣除豆
+        BigDecimal couponDou = new BigDecimal(0.00);
+        //可转让豆扣除情况
+        BigDecimal saleDou = new BigDecimal(0.00);
+        //每次消耗的豆
+        BigDecimal dou;
+        for (PayShopCouponRemain payShopCouponRemain:saleNo) {
+            CouponActive couponActive = new CouponActive();
+            couponActive.setId(payShopCouponRemain.getId());
+            dou = new BigDecimal(0.00);
+            //证明券商不可转让金额小于总额
+            if(totalMoney.compareTo(new BigDecimal(0.00))==0){
+                break;
+            }
+            if(totalMoney.compareTo(payShopCouponRemain.getCouponDouLeft())>=0){
+                totalMoney = ArithmeticUtils.sub(totalMoney.toString(),payShopCouponRemain.getCouponDouLeft().toString());
+                couponDou =ArithmeticUtils.add(couponDou.toString(),payShopCouponRemain.getCouponDouLeft().toString());
+                dou = ArithmeticUtils.add(dou.toString(),payShopCouponRemain.getCouponDouLeft().toString());
+                payShopCouponRemain.setCouponDouLeft(new BigDecimal(0.00));
+                payShopCouponRemain.setStatus((byte)1);
+            }else{
+                //证明欣券的剩余额度大于剩余需扣除的额度
+                payShopCouponRemain.setCouponDouLeft(ArithmeticUtils.sub(payShopCouponRemain.getCouponDouLeft().toString(),totalMoney.toString()));
+                couponDou =ArithmeticUtils.add(couponDou.toString(),totalMoney.toString());
+                dou = ArithmeticUtils.add(dou.toString(),totalMoney.toString());
+                totalMoney = new BigDecimal(0.00);
+            }
+            saveCouponActive(payShopCouponRemain,map,dou);
+            payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
+            couponActive.setTotalSaleDouNo(dou.toString());
+            couponNolist.add(couponActive);
+        }
 
+        //如果上面的循环执行完毕，最终金额仍然大于0，此时扣减可转让豆
+        if(totalMoney.compareTo(new BigDecimal(0.00))>0){
+            //查出当前用户的非转让金额总数
+            PayShopCouponRemainExample exampleYes=new PayShopCouponRemainExample();
+            PayShopCouponRemainExample.Criteria cYes=exampleYes.createCriteria();
+            cYes.andCustomerIdEqualTo(map.get("customerId").toString());
+            cYes.andSalestatusEqualTo((byte)0);
+            //可转换列表
+            List<PayShopCouponRemain> saleYes=payShopCouponRemainMapper.selectByExample(exampleYes);
+            for (PayShopCouponRemain payShopCouponRemain:saleYes) {
+                CouponActive couponActive = new CouponActive();
+                //证明券商不可转让金额小于总额
+                dou = new BigDecimal(0.00);
+                if(totalMoney.compareTo(new BigDecimal(0.00))==0){
+                    break;
+                }
+                if(totalMoney.compareTo(payShopCouponRemain.getSaleDouLeft())>=0){
+                    totalMoney = ArithmeticUtils.sub(totalMoney.toString(),payShopCouponRemain.getSaleDouLeft().toString());
+                    saleDou =ArithmeticUtils.add(saleDou.toString(),payShopCouponRemain.getSaleDouLeft().toString());
+                    dou = ArithmeticUtils.add(dou.toString(),payShopCouponRemain.getSaleDouLeft().toString());
+                    payShopCouponRemain.setSaleDouLeft(new BigDecimal(0.00));
+                    payShopCouponRemain.setStatus((byte)1);
+                }else{
+                    payShopCouponRemain.setSaleDouLeft(ArithmeticUtils.sub(saleDou.toString(),payShopCouponRemain.getSaleDouLeft().toString()));
+                    saleDou =ArithmeticUtils.add(saleDou.toString(),totalMoney.toString());
+                    dou = ArithmeticUtils.add(dou.toString(),totalMoney.toString());
+                    totalMoney = new BigDecimal(0.00);
+
+                }
+                saveCouponActive(payShopCouponRemain,map,dou);
+                payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
+                couponActive.setTotalSaleDouNo(dou.toString());
+                couponNolist.add(couponActive);
+            }
+        }
+        //扣减用户的豆
+        subCustomerDou(map,couponDou,saleDou);
+        resMap.put("totalSaleDouNo",couponDou);
+        resMap.put("totalSaleDouYes",saleDou);
+        resMap.put("subDate",DateUtils.getFdate(DateUtils.getCurDate(),DateUtils.DATEFORMATSHORT));
+        data.put("couponNolist",couponNolist);
+        data.put("couponYeslist",couponYeslist);
+        resMap.put("couponList",data);
+        return resMap;
+    }
+
+    /**
+     * 扣减用户的豆
+     * @param map
+     * @param couponDou
+     * @param saleDou
+     */
+    private void subCustomerDou(Map<String, Object> map, BigDecimal couponDou, BigDecimal saleDou) {
+
+    }
+
+    /**
+     *
+     * @param payShopCouponRemain
+     * @param map
+     * @param dou
+     */
+    private void saveCouponActive(PayShopCouponRemain payShopCouponRemain, Map<String, Object> map,BigDecimal dou) {
+        PayShopCustomer customer = payShopCustomerMapper.selectByPrimaryKey(map.get("customerId").toString());
+        PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+        payShopCouponActive.setCustomerId(customer.getId());
+        payShopCouponActive.setCustomerName(customer.getName());
+        payShopCouponActive.setCompanyId(Integer.parseInt(customer.getCompanyId().toString()));
+        payShopCouponActive.setCompanyName(customer.getCompanyName());
+        //查询一下券
+        PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(payShopCouponRemain.getCouponId());
+        payShopCouponActive.setBatchId(Integer.parseInt(payShopBatchCoupon.getBatchId()));
+        payShopCouponActive.setBatchNo(payShopBatchCoupon.getBatchNo());
+        payShopCouponActive.setCouponNo(payShopBatchCoupon.getCouponNo());
+        payShopCouponActive.setActiveCode(payShopBatchCoupon.getActiveCode());
+        payShopCouponActive.setPayWay((byte)0);
+        payShopCouponActive.setMoney(new BigDecimal("0.00"));
+        payShopCouponActive.setDou(dou);     //消费豆数量
+        payShopCouponActive.setContent("行为:消费;用户ID:" + customer.getId() + ";用户名称:" + customer.getNickname() + ";豆消费:" + dou + ";订单号:" +map.get("orderNo").toString() + ";" );
+        payShopCouponActive.setType("1");
+        payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
+        payShopCouponActive.setAddtime(new Date());
+        payShopCouponActive.setOrderId(map.get("orderId")!=null?map.get("orderId").toString():"");
+        payShopCouponActive.setOrderNo(map.get("orderNo").toString());
+        payShopCouponActiveMapper.insertSelective(payShopCouponActive);
     }
 }
