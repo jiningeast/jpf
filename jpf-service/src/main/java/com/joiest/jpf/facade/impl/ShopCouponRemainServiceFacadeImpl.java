@@ -229,8 +229,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         example.or(cOr);
 
         List<PayShopCouponRemain> list = payShopCouponRemainMapper.selectByExample(example);
-        if ( list.isEmpty() || list == null )
-        {
+        if ( list.isEmpty() || list == null ){
             return null;
         }
         List<ShopCouponRemainInfo> resultList = new ArrayList<>();
@@ -242,8 +241,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             BeanCopier beanCopier = BeanCopier.create(PayShopCouponRemain.class, ShopCouponRemainInfo.class, false);
             beanCopier.copy(one, info, null);
             resultList.add(info);
-
-            douTotal = new BigDecimal(ArithmeticUtils.add(one.getCouponDouLeft().toString(),one.getSaleDouLeft().toString(),2));
+            douTotal =ArithmeticUtils.add(ArithmeticUtils.add(one.getCouponDouLeft().toString(),one.getSaleDouLeft().toString()).toString(),douTotal.toString());
         }
         GetCouponRemainResponse response = new GetCouponRemainResponse();
         response.setList(resultList);
