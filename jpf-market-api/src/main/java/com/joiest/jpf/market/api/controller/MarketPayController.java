@@ -1,11 +1,19 @@
 package com.joiest.jpf.market.api.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
+import com.joiest.jpf.common.po.PayChargeCompany;
+import com.joiest.jpf.common.po.PayShopCouponRemain;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.util.Base64CustomUtils;
+import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.entity.CouponListInfo;
+import com.joiest.jpf.entity.PayCouponInfo;
+import com.joiest.jpf.entity.ShopRefundInfo;
+import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerServiceFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +23,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.plaf.multi.MultiLabelUI;
+import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +40,9 @@ public class MarketPayController {
 
     @Autowired
     private ShopCustomerServiceFacade shopCustomerServiceFacade;
+
+    @Autowired
+    private ShopCouponRemainServiceFacade shopCouponRemainServiceFacade;
 
     @RequestMapping(value = "pay",method = RequestMethod.POST)
     @ResponseBody
@@ -46,6 +60,39 @@ public class MarketPayController {
             e.printStackTrace();
         }
         return "";
+    }
+
+
+    @RequestMapping(value = "refund",method = RequestMethod.POST)
+    @ResponseBody
+    public String refund(HttpServletRequest request){
+        Map<String,Object> resMap = new HashMap<>();
+
+        String reqParam = request.getParameter("payParam");
+
+        if(StringUtils.isBlank(reqParam)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
+        }
+
+        ShopRefundInfo shopRefundInfo = JsonUtils.toObject(Base64CustomUtils.base64Decoder(reqParam), ShopRefundInfo.class);
+        Map<String,Object> responseMap = checkRefundInfo(shopRefundInfo);
+
+        if (responseMap.size() > 0 && !"200".equals(responseMap.get("code"))){
+            return JSONObject.toJSONString(responseMap);
+        }
+
+        try {
+           if (shopCouponRemainServiceFacade.refundByShopRefundInfo(shopRefundInfo)){
+               resMap.put("key", "200");
+               resMap.put("msg", "退款成功");
+           }
+        }catch (Exception e){
+            e.printStackTrace();
+            resMap.put("key", "201");
+            resMap.put("msg", "退款失败");
+        }
+
+        return JSONObject.toJSONString(resMap);
     }
 
     /**
@@ -73,4 +120,37 @@ public class MarketPayController {
        }
        return result;
     }
+
+    /**
+     * 验证退款信息参数
+     * @param shopRefundInfo
+     * @return
+     */
+    private Map<String,Object> checkRefundInfo(ShopRefundInfo shopRefundInfo){
+        Map<String,Object> map = new HashMap<>();
+
+        if (StringUtils.isBlank(shopRefundInfo.getCustomerId())){
+            map.put("code", "201");
+            map.put("msg", "用户id不能为空");
+        }else{
+            PayShopCustomer shopCustomer = shopCustomerServiceFacade.getCustomerById(shopRefundInfo.getCustomerId());
+            if (shopCustomer == null){
+                map.put("code", "202");
+                map.put("msg", "用户不存在");
+            }
+        }
+
+        if (shopRefundInfo.getCouponList().size() == 0){
+            map.put("code", "203");
+            map.put("msg", "欣券信息不能为空");
+        }
+
+        if (StringUtils.isBlank(shopRefundInfo.getTotalSaleDouNo()) || StringUtils.isBlank(shopRefundInfo.getTotalSaleDouYes())){
+            map.put("code", "204");
+            map.put("msg", "欣豆信息不能为空");
+        }
+
+        return map;
+    }
+
 }

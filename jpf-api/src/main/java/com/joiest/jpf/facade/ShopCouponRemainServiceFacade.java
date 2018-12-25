@@ -1,11 +1,9 @@
 package com.joiest.jpf.facade;
 
+import com.joiest.jpf.common.po.PayShopCouponRemain;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.dto.GetShopCouponRemainResponse;
-import com.joiest.jpf.entity.ShopBargainOrderInfo;
-import com.joiest.jpf.entity.ShopCouponRemainInfo;
-import com.joiest.jpf.entity.ShopCustomerInterfaceInfo;
-import com.joiest.jpf.entity.ShopOrderInterfaceInfo;
+import com.joiest.jpf.entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -50,4 +48,9 @@ public interface ShopCouponRemainServiceFacade {
      */
     public GetShopCouponRemainResponse getSum(String customerId);
 
+
+    /**
+     * 根据退款信息退款
+     */
+    boolean refundByShopRefundInfo(ShopRefundInfo shopRefundInfo) throws Exception;
 }
