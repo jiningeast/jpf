@@ -447,10 +447,10 @@
     balance = #{balance,jdbcType=DECIMAL}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="subShopCouponOrder">
+  <update id="subShopCouponOrder" parameterType="map">
     update pay_shop_coupon_order set  balance = balance - #{subDou,jdbcType=DECIMAL} where id = #{orderId,jdbcType=BIGINT} and balance >=#{subDou,jdbcType=DECIMAL};
   </update>
-  <update id="addShopCouponOrder">
+  <update id="addShopCouponOrder" parameterType="map">
       update pay_shop_coupon_order set  balance = balance + #{subDou,jdbcType=DECIMAL} where id = #{orderId,jdbcType=BIGINT}
   </update>
 

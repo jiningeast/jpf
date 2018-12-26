@@ -438,20 +438,20 @@
         status = #{status,jdbcType=TINYINT}
       where id = #{id,jdbcType=BIGINT} and status = 0
   </update>
-  <update id="addCouponDouNo">
+  <update id="addCouponDouNo" parameterType="map">
      update pay_shop_coupon_remain
      set coupon_dou_left = coupon_dou_left+#{subDou,jdbcType=DECIMAL},
         status = #{status,jdbcType=TINYINT}
       where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <update id="subCouponDouYes">
+  <update id="subCouponDouYes" parameterType="map">
      update pay_shop_coupon_remain
      set sale_dou_left = sale_dou_left-#{subDouYes,jdbcType=DECIMAL},
         status = #{status,jdbcType=TINYINT}
       where id = #{id,jdbcType=BIGINT} and status = 0
   </update>
-  <update id="addCouponDouYes">
+  <update id="addCouponDouYes" parameterType="map">
   update pay_shop_coupon_remain
      set sale_dou_left = sale_dou_left+#{subDouYes,jdbcType=DECIMAL},
         status = #{status,jdbcType=TINYINT}
