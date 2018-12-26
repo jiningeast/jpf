@@ -49,5 +49,5 @@ public interface ShopCustomerServiceFacade {
      * 商户扣款操作
      * @param map
      */
-    Map<String, Object> pay(Map<String, Object> map) ;
+    Map<String, Object> pay(Map<String, Object> map) throws  Exception ;
 }

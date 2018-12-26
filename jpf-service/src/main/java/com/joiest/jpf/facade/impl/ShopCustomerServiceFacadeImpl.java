@@ -38,6 +38,8 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
     private PayShopBatchCouponMapper payShopBatchCouponMapper;
     @Autowired
     private PayShopCouponActiveMapper payShopCouponActiveMapper;
+    @Autowired
+    private PayShopCouponRemainCustomMapper payShopCouponRemainCustomMapper;
 
     /**
      * 公司列表---后台
@@ -270,9 +272,8 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Map<String, Object> pay(Map<String, Object> map) {
+    public Map<String, Object> pay(Map<String, Object> map) throws  Exception {
         Map<String,Object> resMap = new HashMap<>();
-        Map<String,Object> data = new HashMap<>();
         List<CouponActive> couponNolist =new ArrayList<>();
         List<CouponActive> couponYeslist =new ArrayList<>();
         resMap.put("customerId",map.get("customerId").toString());
@@ -313,6 +314,10 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
                 totalMoney = new BigDecimal(0.00);
             }
             saveCouponActive(payShopCouponRemain,map,dou);
+            int count =subCouponDouNo(payShopCouponRemain,dou);
+            if (count==0){
+                throw new Exception("扣款失败");
+            }
             payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
             couponActive.setTotalSaleDouNo(dou.toString());
             couponNolist.add(couponActive);
@@ -348,7 +353,10 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
 
                 }
                 saveCouponActive(payShopCouponRemain,map,dou);
-                payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
+                int count =subCouponDouYes(payShopCouponRemain,dou);
+                if (count==0){
+                    throw new Exception("扣款失败");
+                }
                 couponActive.setTotalSaleDouNo(dou.toString());
                 couponNolist.add(couponActive);
             }
@@ -358,10 +366,39 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         resMap.put("totalSaleDouNo",couponDou);
         resMap.put("totalSaleDouYes",saleDou);
         resMap.put("subDate",DateUtils.getFdate(DateUtils.getCurDate(),DateUtils.DATEFORMATSHORT));
-        data.put("couponNolist",couponNolist);
-        data.put("couponYeslist",couponYeslist);
-        resMap.put("couponList",data);
+        resMap.put("couponNolist",couponNolist);
+        resMap.put("couponYeslist",couponYeslist);
         return resMap;
+    }
+
+    /**
+     * 更新可转让豆
+     * @param payShopCouponRemain
+     * @param dou
+     * @return
+     */
+    private int subCouponDouYes(PayShopCouponRemain payShopCouponRemain, BigDecimal dou) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",payShopCouponRemain.getId());
+        map.put("status",payShopCouponRemain.getStatus());
+        map.put("subDouYes",dou);
+        int count = payShopCouponRemainCustomMapper.subCouponDouYes(map);
+        return count;
+    }
+
+    /**
+     * 更新不可转让券豆
+     * @param payShopCouponRemain
+     * @param dou
+     * @return
+     */
+    private int subCouponDouNo(PayShopCouponRemain payShopCouponRemain, BigDecimal dou) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",payShopCouponRemain.getId());
+        map.put("status",payShopCouponRemain.getStatus());
+        map.put("subDou",dou);
+        int count = payShopCouponRemainCustomMapper.subCouponDouNo(map);
+        return count;
     }
 
     /**
@@ -371,6 +408,10 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
      * @param saleDou
      */
     private void subCustomerDou(Map<String, Object> map, BigDecimal couponDou, BigDecimal saleDou) {
+        Map<String,Object> mapParam = new HashMap<>();
+        mapParam.put("customerId",map.get("customerId"));
+        mapParam.put("customerId",map.get("customerId"));
+        mapParam.put("customerId",map.get("customerId"));
 
     }
 
