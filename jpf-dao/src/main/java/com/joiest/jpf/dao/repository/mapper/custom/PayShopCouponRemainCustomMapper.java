@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public interface PayShopCouponRemainCustomMapper {
     /**
@@ -96,4 +97,18 @@ public interface PayShopCouponRemainCustomMapper {
      * 查询不可转让转让总金额
      */
     BigDecimal SaleNoSum(PayShopCouponRemainExample example);
+
+    /**
+     * 扣减欣豆的余额
+     * @param map
+     * @return
+     */
+    int subCouponDouNo(Map<String, Object> map);
+
+    /**
+     * 扣减欣豆的余额
+     * @param map
+     * @return
+     */
+    int subCouponDouYes(Map<String, Object> map);
 }

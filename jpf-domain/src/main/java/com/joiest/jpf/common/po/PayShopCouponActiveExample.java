@@ -1526,6 +1526,186 @@ public class PayShopCouponActiveExample {
             return (Criteria) this;
         }
 
+        public Criteria andSourceIsNull() {
+            addCriterion("source is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceIsNotNull() {
+            addCriterion("source is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceEqualTo(String value) {
+            addCriterion("source =", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotEqualTo(String value) {
+            addCriterion("source <>", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceGreaterThan(String value) {
+            addCriterion("source >", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceGreaterThanOrEqualTo(String value) {
+            addCriterion("source >=", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceLessThan(String value) {
+            addCriterion("source <", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceLessThanOrEqualTo(String value) {
+            addCriterion("source <=", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceIn(List<String> values) {
+            addCriterion("source in", values, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotIn(List<String> values) {
+            addCriterion("source not in", values, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceBetween(String value1, String value2) {
+            addCriterion("source between", value1, value2, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotBetween(String value1, String value2) {
+            addCriterion("source not between", value1, value2, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusIsNull() {
+            addCriterion("contract_surplus is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusIsNotNull() {
+            addCriterion("contract_surplus is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusEqualTo(BigDecimal value) {
+            addCriterion("contract_surplus =", value, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusNotEqualTo(BigDecimal value) {
+            addCriterion("contract_surplus <>", value, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusGreaterThan(BigDecimal value) {
+            addCriterion("contract_surplus >", value, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("contract_surplus >=", value, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusLessThan(BigDecimal value) {
+            addCriterion("contract_surplus <", value, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("contract_surplus <=", value, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusIn(List<BigDecimal> values) {
+            addCriterion("contract_surplus in", values, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusNotIn(List<BigDecimal> values) {
+            addCriterion("contract_surplus not in", values, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("contract_surplus between", value1, value2, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractSurplusNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("contract_surplus not between", value1, value2, "contractSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusIsNull() {
+            addCriterion("coupon_surplus is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusIsNotNull() {
+            addCriterion("coupon_surplus is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusEqualTo(BigDecimal value) {
+            addCriterion("coupon_surplus =", value, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusNotEqualTo(BigDecimal value) {
+            addCriterion("coupon_surplus <>", value, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusGreaterThan(BigDecimal value) {
+            addCriterion("coupon_surplus >", value, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("coupon_surplus >=", value, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusLessThan(BigDecimal value) {
+            addCriterion("coupon_surplus <", value, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("coupon_surplus <=", value, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusIn(List<BigDecimal> values) {
+            addCriterion("coupon_surplus in", values, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusNotIn(List<BigDecimal> values) {
+            addCriterion("coupon_surplus not in", values, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("coupon_surplus between", value1, value2, "couponSurplus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponSurplusNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("coupon_surplus not between", value1, value2, "couponSurplus");
+            return (Criteria) this;
+        }
+
         public Criteria andCustomerNameLikeInsensitive(String value) {
             addCriterion("upper(customer_name) like", value.toUpperCase(), "customerName");
             return (Criteria) this;

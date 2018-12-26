@@ -86,17 +86,4 @@ public interface PayChargeCompanyMapper {
      */
     int updateByPrimaryKey(PayChargeCompany record);
 
-    /**
-     * 扣减金额
-     * @param map
-     * @return
-     */
-    int updateCompanyMoneySub(Map<String, Object> map);
-
-    /**
-     * 退款金额
-     * @param map
-     * @return
-     */
-    int updateCompanyMoneyAdd(Map<String, Object> map);
 }

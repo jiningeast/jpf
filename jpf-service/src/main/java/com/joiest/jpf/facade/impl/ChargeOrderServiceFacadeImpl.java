@@ -6,6 +6,7 @@ import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
 import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dao.repository.mapper.custom.PayChargeCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
@@ -42,6 +43,9 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
     @Autowired
     private PayChargeCompanyMapper payChargeCompanyMapper;
+
+    @Autowired
+    private PayChargeCompanyCustomMapper payChargeCompanyCustomMapper;
     /**
      * 获取订单信息
      * 查询单条信息
@@ -579,7 +583,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         map.put("companyId",companyInfo.getId());
         map.put("subMoney",chargeProductInfo.getSalePrice());
         map.put("companyKey",ConfigUtil.getValue("MERCH_VALIDE_CODE"));
-        int count = payChargeCompanyMapper.updateCompanyMoneySub(map);
+        int count = payChargeCompanyCustomMapper.updateCompanyMoneySub(map);
         if(count==0){
             throw new Exception("余额不足");
         }

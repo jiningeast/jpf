@@ -49,14 +49,14 @@ public class MarketPayController {
     @RequestMapping(value = "pay",method = RequestMethod.POST)
     @ResponseBody
     public  String  pay(HttpServletRequest request){
-        Map<String,Object> responseMap= new HashMap<>();
+
         String payParam = request.getParameter("payParam");
         if(StringUtils.isBlank(payParam)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
         }
         Map<String, Object> map = JsonUtils.toCollection(AesShopUtils.AES_Decrypt(payParam,ConfigUtil.getValue("XinShop_AES_KEY")), new TypeReference<Map<String, Object>>() {});
         //验证商户信息,并且验证商户金额是否够
-        responseMap = checkPayInfo(map);
+        Map<String,Object> responseMap = checkPayInfo(map);
         if("10000".equals(responseMap.get("code").toString())){
             return JsonUtils.toJson(responseMap);
         }

@@ -371,7 +371,7 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
         map.put("companyId",companyInfo.getId());
         map.put("addMoney",orderInfo.getTotalMoney());
         map.put("companyKey",ConfigUtil.getValue("MERCH_VALIDE_CODE"));
-        int count = payChargeCompanyMapper.updateCompanyMoneyAdd(map);
+        int count = payChargeCompanyCustomMapper.updateCompanyMoneyAdd(map);
         if(count!=1){
             throw new Exception("退款失败了"+orderInfo.getOrderNo());
         }

@@ -2,7 +2,11 @@ package com.joiest.jpf.dao.repository.mapper.generate;
 
 import com.joiest.jpf.common.po.PayShopCouponRemain;
 import com.joiest.jpf.common.po.PayShopCouponRemainExample;
+
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface PayShopCouponRemainMapper {
@@ -83,4 +87,10 @@ public interface PayShopCouponRemainMapper {
      * @param record
      */
     int updateByPrimaryKey(PayShopCouponRemain record);
+
+    /**
+     * 更新券的信息
+     * @param map
+     * @return
+     */
 }
