@@ -368,6 +368,10 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
                 if (count==0){
                     throw new Exception("扣款失败");
                 }
+                int subCount=subShopCouponOrder(payShopCouponRemain,dou);
+                if (subCount==0){
+                    throw new Exception("欣券所属订余额更新失败");
+                }
                 saveCouponActive(payShopCouponRemain,map,dou);
                 couponActive.setTotalSaleDouNo(dou.toString());
                 couponNolist.add(couponActive);
@@ -383,6 +387,12 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         return resMap;
     }
 
+    /**
+     * 扣除合同的余额
+     * @param payShopCouponRemain
+     * @param dou
+     * @return
+     */
     private int subShopCouponOrder(PayShopCouponRemain payShopCouponRemain, BigDecimal dou) {
         //查询欣券
         PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(payShopCouponRemain.getCouponId());
@@ -390,8 +400,25 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         Map<String,Object> map = new HashMap<>();
         map.put("orderId",payShopBatchCoupon.getOrderId());
         map.put("subDou",dou);
-       // int count =payShopCouponOrderCustomMapper.subShopCouponOrder(map);
-        return 1;
+        int count =payShopCouponOrderCustomMapper.subShopCouponOrder(map);
+        return count;
+    }
+
+    /**
+     * 增加合同的余额
+     * @param payShopCouponRemain
+     * @param dou
+     * @return
+     */
+    public int addShopCouponOrder(PayShopCouponRemain payShopCouponRemain, BigDecimal dou) {
+        //查询欣券
+        PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(payShopCouponRemain.getCouponId());
+        //查询订单的信息
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",payShopBatchCoupon.getOrderId());
+        map.put("addDou",dou);
+        int count =payShopCouponOrderCustomMapper.addShopCouponOrder(map);
+        return count;
     }
 
     /**
@@ -410,6 +437,21 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
     }
 
     /**
+     * 退还可转让豆
+     * @param payShopCouponRemain
+     * @param dou
+     * @return
+     */
+    private int addCouponDouYes(PayShopCouponRemain payShopCouponRemain, BigDecimal dou) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",payShopCouponRemain.getId());
+        map.put("status",payShopCouponRemain.getStatus());
+        map.put("addDouYes",dou);
+        int count = payShopCouponRemainCustomMapper.addCouponDouYes(map);
+        return count;
+    }
+
+    /**
      * 更新不可转让券豆
      * @param payShopCouponRemain
      * @param dou
@@ -421,6 +463,20 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         map.put("status",payShopCouponRemain.getStatus());
         map.put("subDou",dou);
         int count = payShopCouponRemainCustomMapper.subCouponDouNo(map);
+        return count;
+    }
+    /**
+     * 退还不可转让券豆
+     * @param payShopCouponRemain
+     * @param dou
+     * @return
+     */
+    private int addCouponDouNo(PayShopCouponRemain payShopCouponRemain, BigDecimal dou) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",payShopCouponRemain.getId());
+        map.put("status",payShopCouponRemain.getStatus());
+        map.put("addDou",dou);
+        int count = payShopCouponRemainCustomMapper.addCouponDouNo(map);
         return count;
     }
 
@@ -438,6 +494,23 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         int count = payShopCustomerCustomMapper.subCustomerDou(mapParam);
         if(count==0){
             throw  new Exception("扣款失败");
+        }
+    }
+
+    /**
+     * 扣减用户的豆
+     * @param map
+     * @param couponDou
+     * @param saleDou
+     */
+    private void addCustomerDou(Map<String, Object> map, BigDecimal couponDou, BigDecimal saleDou) throws Exception {
+        Map<String,Object> mapParam = new HashMap<>();
+        mapParam.put("couponDouNo",couponDou);
+        mapParam.put("saleDouYes",saleDou);
+        mapParam.put("customerId",map.get("customerId"));
+        int count = payShopCustomerCustomMapper.addCustomerDou(mapParam);
+        if(count==0){
+            throw  new Exception("退还客户欣豆失败");
         }
     }
 

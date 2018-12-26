@@ -91,4 +91,12 @@ public interface PayShopCouponOrderCustomMapper {
      * @param map
      * @return
      */
+    int subShopCouponOrder(Map<String, Object> map);
+
+    /**
+     * 退还合同金额
+     * @param map
+     * @return
+     */
+    int addShopCouponOrder(Map<String, Object> map);
 }

@@ -93,9 +93,16 @@ public interface PayShopCustomerCustomMapper {
     List<PayShopCustomerCustom> selectWxByExample(PayShopCustomerExample example);
 
     /**
-     *
+     * 扣减客户欣豆
      * @param mapParam
      * @return
      */
     int subCustomerDou(Map<String, Object> mapParam);
+
+    /**
+     * 退还客户欣豆
+     * @param mapParam
+     * @return
+     */
+    int addCustomerDou(Map<String, Object> mapParam);
 }

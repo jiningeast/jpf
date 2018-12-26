@@ -111,4 +111,18 @@ public interface PayShopCouponRemainCustomMapper {
      * @return
      */
     int subCouponDouYes(Map<String, Object> map);
+
+    /**
+     * 退还可转让豆
+     * @param map
+     * @return
+     */
+    int addCouponDouYes(Map<String, Object> map);
+
+    /**
+     * 退还不可转让豆
+     * @param map
+     * @return
+     */
+    int addCouponDouNo(Map<String, Object> map);
 }
