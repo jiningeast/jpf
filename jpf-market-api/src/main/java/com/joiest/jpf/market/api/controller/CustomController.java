@@ -159,10 +159,10 @@ public class CustomController {
                 customRecord.put("opentime",opentime);
 
                 String respos = JsonUtils.toJson(customRecord);
-                String resposAesEncrypt = AesShopUtils.AES_Encrypt(ConfigUtil.getValue("xinShop_AES_KEY"),respos);
+                String resposAesEncrypt = AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),respos);
                 // 请求参数 url编码后字符串
                 String resposPpst = "jsondata="+ URLEncoder.encode(resposAesEncrypt,"UTF-8");
-                String resposAesDecrypt = AesShopUtils.AES_Decrypt(ConfigUtil.getValue("xinShop_AES_KEY"),resposAesEncrypt);
+                String resposAesDecrypt = AesShopUtils.AES_Decrypt(ConfigUtil.getValue("XinShop_AES_KEY"),resposAesEncrypt);
                 String requestUrl = ConfigUtil.getValue("xinShop_registerUrl")+"index.php?r=site/xinRegister";
 
                 //存储日志记录
