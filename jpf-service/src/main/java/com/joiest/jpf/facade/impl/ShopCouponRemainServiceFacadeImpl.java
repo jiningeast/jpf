@@ -952,10 +952,17 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
                 if (coupon.getExpireTime().compareTo(new Date()) <= 0) {
                     //过期 有效期延长一个月
-                    Calendar rightNow = Calendar.getInstance();
-                    rightNow.setTime(coupon.getExpireTime());
-                    rightNow.add(Calendar.MONTH, 1);
-                    coupon.setExpireTime(rightNow.getTime());
+//                    Calendar rightNow = Calendar.getInstance();
+//                    rightNow.setTime(coupon.getExpireTime());
+//                    rightNow.add(Calendar.MONTH, 1);
+//                    coupon.setExpireTime(rightNow.getTime());
+
+                    int updateExpireTime = payShopCouponRemainCustomMapper.updateExpireTimeById(coupon.getId());
+
+                    if (updateExpireTime < 1 ){
+                        throw new Exception("延长券有效期失败");
+                    }
+
                 }
 
                 if (!"0".equals(couponNoInfo.getTotalSaleDouNo())){

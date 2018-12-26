@@ -125,4 +125,11 @@ public interface PayShopCouponRemainCustomMapper {
      * @return
      */
     int addCouponDouNo(Map<String, Object> map);
+
+    /**
+     * 延长过期时间一个月
+     * @param id
+     * @return
+     */
+    int updateExpireTimeById(String id);
 }

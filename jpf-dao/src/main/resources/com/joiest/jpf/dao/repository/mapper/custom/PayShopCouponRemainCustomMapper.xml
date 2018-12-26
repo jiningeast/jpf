@@ -471,4 +471,9 @@
     </if>
 
   </select>
+  <update id="updateExpireTimeById" parameterType="string">
+    update pay_shop_coupon_remain
+      set expire_time = date_add(expire_time, interval 1 month)
+    where id=#{id,jdbcType=BIGINT} and expire_time &lt;= now();
+  </update>
 </mapper>
