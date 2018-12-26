@@ -50,6 +50,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
     @Autowired
     private PayShopBargainOrderMapper payShopBargainOrderMapper;
+
     @Autowired
     private PayShopCouponRemainCustomMapper payShopCouponRemainCustomMapper;
 
