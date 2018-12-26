@@ -11,16 +11,15 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCouponOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCouponRemainCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCustomerCustomMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchCouponMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponActiveMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponRemainMapper;
-import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.*;
 import com.joiest.jpf.dto.*;
 import com.joiest.jpf.entity.ShopCouponRemainInfo;
 import com.joiest.jpf.entity.ShopCustomerInfo;
 import com.joiest.jpf.facade.ShopBatchCouponServiceFacade;
 import com.joiest.jpf.facade.ShopCustomerServiceFacade;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +31,7 @@ import java.net.URLEncoder;
 import java.util.*;
 
 public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade {
-
+    private static final Logger logger = LogManager.getLogger(ShopCustomerServiceFacadeImpl.class);
     @Autowired
     private PayShopCustomerMapper payShopCustomerMapper;
     @Autowired
@@ -47,6 +46,8 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
     private PayShopCouponRemainCustomMapper payShopCouponRemainCustomMapper;
     @Autowired
     private PayShopCouponOrderCustomMapper payShopCouponOrderCustomMapper;
+    @Autowired
+    private PayShopCouponOrderMapper payShopCouponOrderMapper;
 
     /**
      * 公司列表---后台
@@ -540,13 +541,15 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         payShopCouponActive.setType("1");
         payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
         payShopCouponActive.setAddtime(new Date());
-        payShopCouponActive.setOrderId(map.get("orderId")!=null?map.get("orderId").toString():"");
+        payShopCouponActive.setOrderId(map.get("orderId")!=null?map.get("orderId").toString():"0");
         payShopCouponActive.setOrderNo(map.get("orderNo").toString());
         payShopCouponActive.setSource(map.get("source").toString());
         //重新查询券的余额
+        PayShopCouponRemain payShopCoupon = payShopCouponRemainMapper.selectByPrimaryKey(payShopCouponRemain.getId());
+        payShopCouponActive.setCouponSurplus(ArithmeticUtils.add(payShopCoupon.getCouponDouLeft().toString(),payShopCoupon.getSaleDouLeft().toString()));
         //重新查询券所属订单的余额
-        //payShopCouponActive.setContractSurplus();
-        //payShopCouponActive.setCouponSurplus();
+        PayShopCouponOrder payShopCouponOrder =payShopCouponOrderCustomMapper.selectByPrimaryKey(payShopBatchCoupon.getOrderId());
+        payShopCouponActive.setContractSurplus(payShopCouponOrder.getBalance());
         payShopCouponActiveMapper.insertSelective(payShopCouponActive);
     }
 }

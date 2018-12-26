@@ -435,26 +435,30 @@
   <update id="subCouponDouNo" parameterType="map">
      update pay_shop_coupon_remain
      set coupon_dou_left = coupon_dou_left-#{subDou,jdbcType=DECIMAL},
-        status = #{status,jdbcType=TINYINT}
+        status = #{status,jdbcType=TINYINT},
+        updatetime = now()
       where id = #{id,jdbcType=BIGINT} and status = 0
   </update>
   <update id="addCouponDouNo" parameterType="map">
      update pay_shop_coupon_remain
-     set coupon_dou_left = coupon_dou_left+#{subDou,jdbcType=DECIMAL},
-        status = #{status,jdbcType=TINYINT}
+     set coupon_dou_left = coupon_dou_left+#{addDou,jdbcType=DECIMAL},
+        status = #{status,jdbcType=TINYINT},
+        updatetime = now()
       where id = #{id,jdbcType=BIGINT}
   </update>
 
   <update id="subCouponDouYes" parameterType="map">
      update pay_shop_coupon_remain
      set sale_dou_left = sale_dou_left-#{subDouYes,jdbcType=DECIMAL},
-        status = #{status,jdbcType=TINYINT}
-      where id = #{id,jdbcType=BIGINT} and status = 0
+        saleStatus = #{status,jdbcType=TINYINT},
+        updatetime = now()
+      where id = #{id,jdbcType=BIGINT} and saleStatus = 0
   </update>
   <update id="addCouponDouYes" parameterType="map">
   update pay_shop_coupon_remain
-     set sale_dou_left = sale_dou_left+#{subDouYes,jdbcType=DECIMAL},
-        status = #{status,jdbcType=TINYINT}
+     set sale_dou_left = sale_dou_left+#{addDouYes,jdbcType=DECIMAL},
+        saleStatus = #{status,jdbcType=TINYINT},
+        updatetime = now()
       where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="SaleYesSum" parameterType="com.joiest.jpf.common.po.PayShopCouponRemainExample" resultType="java.math.BigDecimal">
