@@ -966,8 +966,17 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
                 coupon.setUpdatetime(new Date());
 
 
-                //更新券操作 添加非转让豆
-//                payShopCouponRemainCustomMapper.addCouponNoLeft(coupon);
+                //添加非转让豆
+                Map<String,Object> couponNoMap = new HashMap<>();
+                couponNoMap.put("id",coupon.getId());
+                couponNoMap.put("status",coupon.getStatus());
+                couponNoMap.put("addDouNo",couponNoInfo.getTotalSaleDouNo());
+
+                int addCouponDouNo = payShopCouponRemainCustomMapper.addCouponDouNo(couponNoMap);
+
+                if (addCouponDouNo < 1 ){
+                    throw new Exception("添加非转让豆失败");
+                }
 
 
                 //新增流水
@@ -977,31 +986,19 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
                     throw new Exception("添加券流水失败");
                 }
 
-               // int res_remain = payShopCouponRemainMapper.updateByExampleSelective(coupon, example);
-
-                //更新流水
-//                Map<String,Object> map = new HashMap<>();
-//                map.put("couponId", couponNoInfo.getId());
-//                map.put("couponNo", couponNoInfo.getTotalSaleDouNo());
-//                map.put("couponYes", couponNoInfo.getTotalSaleDouYes());
-
-//                int add_couponNo = payShopCouponRemainCustomerMapper.addCouponNo(map);
-//                if(add_couponNo < 0 ){
-//                     throw new Exception("更新流水失败");
-//                }
-
-
                 //更新订单余额 pay_shop_coupon_order
 
-                //根据券id(couponNoInfo.getId())查询其所属的订单,更新该订单金额
+                //根据券id查询其所属的订单,更新该订单金额
                 PayShopCouponOrder order = payShopCouponOrderCustomMapper.selectByPrimaryKey(couponNoInfo.getId());
 
-                Map<String,Object> orderMap = new HashMap<>();
-                orderMap.put("orderId", order.getId());
-                orderMap.put("couponId", couponNoInfo.getId());
-                orderMap.put("couponNo", couponNoInfo.getTotalSaleDouNo());
-                orderMap.put("couponYes", couponNoInfo.getTotalSaleDouYes());
-//                payShopCouponOrderCustomMapper.updateOrder(orderMap);
+                Map<String,Object> addShopCouponOrderMap = new HashMap<>();
+                addShopCouponOrderMap.put("orderId", order.getId());
+                addShopCouponOrderMap.put("balance", couponNoInfo.getTotalSaleDouNo());
+
+                int addShopCouponOrder = payShopCouponOrderCustomMapper.addShopCouponOrder(addShopCouponOrderMap);
+                if (addShopCouponOrder < 1){
+                    throw new Exception("更新合同金额失败");
+                }
 
         }
 
@@ -1017,28 +1014,42 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
             coupon.setUpdatetime(new Date());
 
+            //添加可转让豆
+            Map<String,Object> couponNoMap = new HashMap<>();
+            couponNoMap.put("id",coupon.getId());
+            couponNoMap.put("status",coupon.getStatus());
+            couponNoMap.put("addDouNo",couponYesInfo.getTotalSaleDouYes());
+            int addCouponDouYes = payShopCouponRemainCustomMapper.addCouponDouNo(couponNoMap);
 
-
-           //更新
+            if (addCouponDouYes < 1 ){
+                throw new Exception("添加可转让豆失败");
+            }
 
 
             //新增流水
             int res_couponActive = addCouponNoActive(coupon,shopRefundInfo,new BigDecimal(couponYesInfo.getTotalSaleDouNo()),"1");
 
+            if ( res_couponActive < 1 ){
+                throw new Exception("添加券流水失败");
+            }
+
+
+            //更新订单余额 pay_shop_coupon_order
+
+            //根据券id查询其所属的订单,更新该订单金额
+            PayShopCouponOrder order = payShopCouponOrderCustomMapper.selectByPrimaryKey(couponYesInfo.getId());
+
+            Map<String,Object> addShopCouponOrderMap = new HashMap<>();
+            addShopCouponOrderMap.put("orderId", order.getId());
+            addShopCouponOrderMap.put("balance", couponYesInfo.getTotalSaleDouNo());
+
+            int addShopCouponOrder = payShopCouponOrderCustomMapper.addShopCouponOrder(addShopCouponOrderMap);
+
+            if (addShopCouponOrder < 1){
+                throw new Exception("更新合同金额失败");
+            }
 
         }
-
-        //订单状态更新
-//        PayShopOrder payShopOrder = new PayShopOrder();
-//        payShopOrder.setId(shopRefundInfo.getOrderId());
-//        payShopOrder.setStatus((byte)2);
-//        payShopOrder.setUpdatetime(new Date());
-//
-//        int res_order = payShopOrderMapper.updateByPrimaryKey(payShopOrder);
-//
-//        if ( res_order < 1 ){
-//            throw new Exception("更新订单状态失败");
-//        }
 
         return true;
 
