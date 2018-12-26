@@ -970,7 +970,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
                 Map<String,Object> couponNoMap = new HashMap<>();
                 couponNoMap.put("id",coupon.getId());
                 couponNoMap.put("status",coupon.getStatus());
-                couponNoMap.put("subNo",couponNoInfo.getTotalSaleDouNo());
+                couponNoMap.put("addDou",couponNoInfo.getTotalSaleDouNo());
 
                 int addCouponDouNo = payShopCouponRemainCustomMapper.addCouponDouNo(couponNoMap);
 
@@ -1018,7 +1018,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
             Map<String,Object> couponNoMap = new HashMap<>();
             couponNoMap.put("id",coupon.getId());
             couponNoMap.put("status",coupon.getStatus());
-            couponNoMap.put("subDouYes",couponYesInfo.getTotalSaleDouYes());
+            couponNoMap.put("addDouYes",couponYesInfo.getTotalSaleDouYes());
             int addCouponDouYes = payShopCouponRemainCustomMapper.addCouponDouNo(couponNoMap);
 
             if (addCouponDouYes < 1 ){
