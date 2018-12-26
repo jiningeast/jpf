@@ -1,7 +1,7 @@
 package com.joiest.jpf.entity;
 
+
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author zhangmeng
@@ -15,7 +15,8 @@ public class ShopRefundInfo {
     private String totalSaleDouYes;
     private String source;
     private String subDate;
-    private List<CouponListInfo> CouponList;
+    private List<CouponNoList> couponNoList;
+    private List<CouponYesList> couponYesList;
 
 
     public String getSource() {
@@ -66,11 +67,19 @@ public class ShopRefundInfo {
         this.subDate = subDate;
     }
 
-    public List<CouponListInfo> getCouponList() {
-        return CouponList;
+    public List<CouponNoList> getCouponNoList() {
+        return couponNoList;
     }
 
-    public void setCouponList(List<CouponListInfo> couponList) {
-        CouponList = couponList;
+    public void setCouponNoList(List<CouponNoList> couponNoList) {
+        this.couponNoList = couponNoList;
+    }
+
+    public List<CouponYesList> getCouponYesList() {
+        return couponYesList;
+    }
+
+    public void setCouponYesList(List<CouponYesList> couponYesList) {
+        this.couponYesList = couponYesList;
     }
 }

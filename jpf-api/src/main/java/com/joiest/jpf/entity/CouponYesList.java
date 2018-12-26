@@ -5,7 +5,7 @@ package com.joiest.jpf.entity;
  * @Create 2018/12/25
  * @Description
  */
-public class CouponListInfo {
+public class CouponYesList {
     private String id;
     private String totalSaleDouNo;
     private String totalSaleDouYes;
