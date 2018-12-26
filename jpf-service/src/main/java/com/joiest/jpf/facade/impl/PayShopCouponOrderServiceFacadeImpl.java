@@ -56,7 +56,7 @@ public class PayShopCouponOrderServiceFacadeImpl implements PayShopCouponOrderSe
         payShopCouponOrder.setStatus((byte)0);
         payShopCouponOrder.setAddtime(new Date());
         payShopCouponOrder.setTotalMoney(new BigDecimal(couponOrderList.getTotalMoney()));
-
+        payShopCouponOrder.setBalance(new BigDecimal(couponOrderList.getTotalMoney()));
         //查询企业信息
         PayShopCompany company = payShopCompanyMapper.selectByPrimaryKey(couponOrderList.getCompanyId());
         payShopCouponOrder.setCompanyName(company.getCompanyName());
