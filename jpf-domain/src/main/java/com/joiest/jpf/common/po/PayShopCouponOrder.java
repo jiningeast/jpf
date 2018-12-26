@@ -21,7 +21,7 @@ public class PayShopCouponOrder implements Serializable {
     private BigDecimal totalMoney;
 
     /**
-     * 状态
+     * 状态 0 已申请  1 已完成  2 已取消 3 已删除
      */
     private Byte status;
 
@@ -79,6 +79,11 @@ public class PayShopCouponOrder implements Serializable {
      * 订单总的条数
      */
     private Integer totalNum;
+
+    /**
+     * 订单的余额
+     */
+    private BigDecimal balance;
 
     private static final long serialVersionUID = 1L;
 
@@ -202,6 +207,14 @@ public class PayShopCouponOrder implements Serializable {
         this.totalNum = totalNum;
     }
 
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     /**
      *
      */
@@ -226,6 +239,7 @@ public class PayShopCouponOrder implements Serializable {
         sb.append(", companyName=").append(companyName);
         sb.append(", personNum=").append(personNum);
         sb.append(", totalNum=").append(totalNum);
+        sb.append(", balance=").append(balance);
         sb.append("]");
         return sb.toString();
     }
@@ -260,7 +274,8 @@ public class PayShopCouponOrder implements Serializable {
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getPersonNum() == null ? other.getPersonNum() == null : this.getPersonNum().equals(other.getPersonNum()))
-            && (this.getTotalNum() == null ? other.getTotalNum() == null : this.getTotalNum().equals(other.getTotalNum()));
+            && (this.getTotalNum() == null ? other.getTotalNum() == null : this.getTotalNum().equals(other.getTotalNum()))
+            && (this.getBalance() == null ? other.getBalance() == null : this.getBalance().equals(other.getBalance()));
     }
 
     /**
@@ -285,6 +300,7 @@ public class PayShopCouponOrder implements Serializable {
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getPersonNum() == null) ? 0 : getPersonNum().hashCode());
         result = prime * result + ((getTotalNum() == null) ? 0 : getTotalNum().hashCode());
+        result = prime * result + ((getBalance() == null) ? 0 : getBalance().hashCode());
         return result;
     }
 }
