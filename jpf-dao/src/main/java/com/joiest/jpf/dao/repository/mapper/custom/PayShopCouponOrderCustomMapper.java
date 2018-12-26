@@ -5,6 +5,7 @@ import com.joiest.jpf.common.po.PayShopCouponOrderExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PayShopCouponOrderCustomMapper {
     /**
@@ -84,4 +85,10 @@ public interface PayShopCouponOrderCustomMapper {
      * @param record
      */
     int updateByPrimaryKey(PayShopCouponOrder record);
+
+    /**
+     * 扣减合同的余额
+     * @param map
+     * @return
+     */
 }

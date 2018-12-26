@@ -3,7 +3,6 @@ package com.joiest.jpf.market.api.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayShopCustomer;
-import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dto.GetCouponRemainResponse;

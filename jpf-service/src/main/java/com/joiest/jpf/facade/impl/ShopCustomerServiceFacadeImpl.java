@@ -5,9 +5,12 @@ import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.ArithmeticUtils;
+import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopCouponOrderCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopCouponRemainCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.custom.PayShopCustomerCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopBatchCouponMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponActiveMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopCouponRemainMapper;
@@ -33,6 +36,8 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
     @Autowired
     private PayShopCustomerMapper payShopCustomerMapper;
     @Autowired
+    private PayShopCustomerCustomMapper payShopCustomerCustomMapper;
+    @Autowired
     private PayShopCouponRemainMapper payShopCouponRemainMapper;
     @Autowired
     private PayShopBatchCouponMapper payShopBatchCouponMapper;
@@ -40,6 +45,8 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
     private PayShopCouponActiveMapper payShopCouponActiveMapper;
     @Autowired
     private PayShopCouponRemainCustomMapper payShopCouponRemainCustomMapper;
+    @Autowired
+    private PayShopCouponOrderCustomMapper payShopCouponOrderCustomMapper;
 
     /**
      * 公司列表---后台
@@ -304,21 +311,26 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
                 totalMoney = ArithmeticUtils.sub(totalMoney.toString(),payShopCouponRemain.getCouponDouLeft().toString());
                 couponDou =ArithmeticUtils.add(couponDou.toString(),payShopCouponRemain.getCouponDouLeft().toString());
                 dou = ArithmeticUtils.add(dou.toString(),payShopCouponRemain.getCouponDouLeft().toString());
-                payShopCouponRemain.setCouponDouLeft(new BigDecimal(0.00));
+                //payShopCouponRemain.setCouponDouLeft(new BigDecimal(0.00));
                 payShopCouponRemain.setStatus((byte)1);
             }else{
                 //证明欣券的剩余额度大于剩余需扣除的额度
-                payShopCouponRemain.setCouponDouLeft(ArithmeticUtils.sub(payShopCouponRemain.getCouponDouLeft().toString(),totalMoney.toString()));
+                //payShopCouponRemain.setCouponDouLeft(ArithmeticUtils.sub(payShopCouponRemain.getCouponDouLeft().toString(),totalMoney.toString()));
                 couponDou =ArithmeticUtils.add(couponDou.toString(),totalMoney.toString());
                 dou = ArithmeticUtils.add(dou.toString(),totalMoney.toString());
                 totalMoney = new BigDecimal(0.00);
             }
-            saveCouponActive(payShopCouponRemain,map,dou);
             int count =subCouponDouNo(payShopCouponRemain,dou);
             if (count==0){
                 throw new Exception("扣款失败");
             }
-            payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
+            //扣除欣券对应订单的余额
+            int subCount=subShopCouponOrder(payShopCouponRemain,dou);
+            if (subCount==0){
+                throw new Exception("欣券所属订余额更新失败");
+            }
+            saveCouponActive(payShopCouponRemain,map,dou);
+            // payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
             couponActive.setTotalSaleDouNo(dou.toString());
             couponNolist.add(couponActive);
         }
@@ -343,20 +355,20 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
                     totalMoney = ArithmeticUtils.sub(totalMoney.toString(),payShopCouponRemain.getSaleDouLeft().toString());
                     saleDou =ArithmeticUtils.add(saleDou.toString(),payShopCouponRemain.getSaleDouLeft().toString());
                     dou = ArithmeticUtils.add(dou.toString(),payShopCouponRemain.getSaleDouLeft().toString());
-                    payShopCouponRemain.setSaleDouLeft(new BigDecimal(0.00));
+                    //payShopCouponRemain.setSaleDouLeft(new BigDecimal(0.00));
                     payShopCouponRemain.setStatus((byte)1);
                 }else{
-                    payShopCouponRemain.setSaleDouLeft(ArithmeticUtils.sub(saleDou.toString(),payShopCouponRemain.getSaleDouLeft().toString()));
+                    //payShopCouponRemain.setSaleDouLeft(ArithmeticUtils.sub(saleDou.toString(),payShopCouponRemain.getSaleDouLeft().toString()));
                     saleDou =ArithmeticUtils.add(saleDou.toString(),totalMoney.toString());
                     dou = ArithmeticUtils.add(dou.toString(),totalMoney.toString());
                     totalMoney = new BigDecimal(0.00);
 
                 }
-                saveCouponActive(payShopCouponRemain,map,dou);
                 int count =subCouponDouYes(payShopCouponRemain,dou);
                 if (count==0){
                     throw new Exception("扣款失败");
                 }
+                saveCouponActive(payShopCouponRemain,map,dou);
                 couponActive.setTotalSaleDouNo(dou.toString());
                 couponNolist.add(couponActive);
             }
@@ -369,6 +381,17 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         resMap.put("couponNolist",couponNolist);
         resMap.put("couponYeslist",couponYeslist);
         return resMap;
+    }
+
+    private int subShopCouponOrder(PayShopCouponRemain payShopCouponRemain, BigDecimal dou) {
+        //查询欣券
+        PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(payShopCouponRemain.getCouponId());
+        //查询订单的信息
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",payShopBatchCoupon.getOrderId());
+        map.put("subDou",dou);
+       // int count =payShopCouponOrderCustomMapper.subShopCouponOrder(map);
+        return 1;
     }
 
     /**
@@ -407,12 +430,15 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
      * @param couponDou
      * @param saleDou
      */
-    private void subCustomerDou(Map<String, Object> map, BigDecimal couponDou, BigDecimal saleDou) {
+    private void subCustomerDou(Map<String, Object> map, BigDecimal couponDou, BigDecimal saleDou) throws Exception {
         Map<String,Object> mapParam = new HashMap<>();
+        mapParam.put("couponDouNo",couponDou);
+        mapParam.put("saleDouYes",saleDou);
         mapParam.put("customerId",map.get("customerId"));
-        mapParam.put("customerId",map.get("customerId"));
-        mapParam.put("customerId",map.get("customerId"));
-
+        int count = payShopCustomerCustomMapper.subCustomerDou(mapParam);
+        if(count==0){
+            throw  new Exception("扣款失败");
+        }
     }
 
     /**
@@ -443,6 +469,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         payShopCouponActive.setAddtime(new Date());
         payShopCouponActive.setOrderId(map.get("orderId")!=null?map.get("orderId").toString():"");
         payShopCouponActive.setOrderNo(map.get("orderNo").toString());
+        payShopCouponActive.setSource(map.get("source").toString());
         payShopCouponActiveMapper.insertSelective(payShopCouponActive);
     }
 }

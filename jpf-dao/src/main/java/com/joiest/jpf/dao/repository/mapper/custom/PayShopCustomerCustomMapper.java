@@ -6,6 +6,7 @@ import com.joiest.jpf.common.po.PayShopCustomerExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PayShopCustomerCustomMapper {
     /**
@@ -90,4 +91,11 @@ public interface PayShopCustomerCustomMapper {
      * 获取用户数据时联合查询微信表获取微信头像
      */
     List<PayShopCustomerCustom> selectWxByExample(PayShopCustomerExample example);
+
+    /**
+     *
+     * @param mapParam
+     * @return
+     */
+    int subCustomerDou(Map<String, Object> mapParam);
 }
