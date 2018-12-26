@@ -10,7 +10,6 @@ import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
-import com.joiest.jpf.entity.CouponListInfo;
 import com.joiest.jpf.entity.PayCouponInfo;
 import com.joiest.jpf.entity.ShopRefundInfo;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
@@ -173,7 +172,12 @@ public class MarketPayController {
             }
         }
 
-        if (shopRefundInfo.getCouponList().size() == 0){
+        if (shopRefundInfo.getTotalSaleDouYes().length() == 0){
+            map.put("code", "203");
+            map.put("msg", "欣券信息不能为空");
+        }
+
+        if (shopRefundInfo.getTotalSaleDouNo().length() == 0){
             map.put("code", "203");
             map.put("msg", "欣券信息不能为空");
         }
