@@ -543,6 +543,10 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         payShopCouponActive.setOrderId(map.get("orderId")!=null?map.get("orderId").toString():"");
         payShopCouponActive.setOrderNo(map.get("orderNo").toString());
         payShopCouponActive.setSource(map.get("source").toString());
+        //重新查询券的余额
+        //重新查询券所属订单的余额
+        //payShopCouponActive.setContractSurplus();
+        //payShopCouponActive.setCouponSurplus();
         payShopCouponActiveMapper.insertSelective(payShopCouponActive);
     }
 }

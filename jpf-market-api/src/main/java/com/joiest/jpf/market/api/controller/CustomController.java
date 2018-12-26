@@ -163,7 +163,7 @@ public class CustomController {
                 // 请求参数 url编码后字符串
                 String resposPpst = "jsondata="+ URLEncoder.encode(resposAesEncrypt,"UTF-8");
                 String resposAesDecrypt = AesShopUtils.AES_Decrypt(ConfigUtil.getValue("XinShop_AES_KEY"),resposAesEncrypt);
-                String requestUrl = ConfigUtil.getValue("xinShop_registerUrl")+"index.php?r=site/xinRegister";
+                String requestUrl = ConfigUtil.getValue("xinShop_registerUrl")+"/index.php?r=site/xinRegister";
 
                 //存储日志记录
                 SimpleDateFormat myfmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
