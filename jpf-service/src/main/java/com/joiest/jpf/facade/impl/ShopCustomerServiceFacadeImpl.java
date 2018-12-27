@@ -300,6 +300,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         BigDecimal saleDou = new BigDecimal(0.00);
         //每次消耗的豆
         BigDecimal dou;
+        Byte type=0;
         for (PayShopCouponRemain payShopCouponRemain:saleNo) {
             CouponActive couponActive = new CouponActive();
             couponActive.setId(payShopCouponRemain.getId());
@@ -330,7 +331,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
             if (subCount==0){
                 throw new Exception("欣券所属订余额更新失败");
             }
-            saveCouponActive(payShopCouponRemain,map,dou);
+            saveCouponActive(payShopCouponRemain,map,dou,type);
             // payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
             couponActive.setTotalSaleDouNo(dou.toString());
             couponActive.setTotalSaleDouYes("0");
@@ -374,7 +375,8 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
                 if (subCount==0){
                     throw new Exception("欣券所属订余额更新失败");
                 }
-                saveCouponActive(payShopCouponRemain,map,dou);
+                type=1;
+                saveCouponActive(payShopCouponRemain,map,dou,type);
                 couponActive.setTotalSaleDouYes(dou.toString());
                 couponActive.setTotalSaleDouNo("0");
                 couponNolist.add(couponActive);
@@ -542,7 +544,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
      * @param map
      * @param dou
      */
-    private void saveCouponActive(PayShopCouponRemain payShopCouponRemain, Map<String, Object> map,BigDecimal dou) {
+    private void saveCouponActive(PayShopCouponRemain payShopCouponRemain, Map<String, Object> map,BigDecimal dou,Byte type) {
         PayShopCustomer customer = payShopCustomerMapper.selectByPrimaryKey(map.get("customerId").toString());
         PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
         payShopCouponActive.setCustomerId(customer.getId());
@@ -571,6 +573,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         //重新查询券所属订单的余额
         PayShopCouponOrder payShopCouponOrder =payShopCouponOrderCustomMapper.selectByPrimaryKey(payShopBatchCoupon.getOrderId());
         payShopCouponActive.setContractSurplus(payShopCouponOrder.getBalance());
+        payShopCouponActive.setSubCouponType(type);
         payShopCouponActiveMapper.insertSelective(payShopCouponActive);
     }
 }
