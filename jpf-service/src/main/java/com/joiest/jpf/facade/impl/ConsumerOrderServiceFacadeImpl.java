@@ -242,7 +242,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setStreamNo(moneyStramNo);//流水号
         payChargeCompanyMoneyStream.setCompanyId(order.getCompanyId());
         payChargeCompanyMoneyStream.setCompanyName(order.getCompanyName());
-        payChargeCompanyMoneyStream.setAddtime(new Date());
+        payChargeCompanyMoneyStream.setAddtime(order.getAddtime());
         payChargeCompanyMoneyStream.setOrderId(order.getId());
         payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
         payChargeCompanyMoneyStream.setInterfaceType((byte)2);
