@@ -360,21 +360,64 @@ public class CustomController {
         }else{
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(), "邮件发送成功", null);
         }
+    }
 
+    /*
+    * 云市场商城获取用户手机号
+    * */
+    @RequestMapping("userInfo")
+    @ResponseBody
+    public String getUserInfoByToken(HttpServletRequest request){
+
+
+        JSONObject jsonObject = new JSONObject();
+
+        //为不和现有逻辑混淆，故用户判断信息重写一遍
+        String token = request.getHeader("Token");
+        String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+        if (StringUtils.isNotBlank(openId_encrypt)) {
+
+            openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
+            List<ShopCustomerInterfaceInfo> info = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
+            if( info != null && !info.isEmpty()  ){
+
+                userInfo = info.get(0);
+                jsonObject.put("code","10000");
+                jsonObject.put("info","SUCCESS");
+                jsonObject.put("data",JSONObject.fromObject(userInfo));
+
+            }else{
+
+                jsonObject.put("code","10008");
+                jsonObject.put("info","未获取到相关用户信息");
+            }
+        }else{
+
+            jsonObject.put("code","10008");
+            jsonObject.put("info","未获取到相关redis信息");
+        }
+        String res = jsonObject.toString();
+        return res;
     }
     @ModelAttribute
     public void beforAction(HttpServletRequest request)
     {
-        String token = request.getHeader("Token");
-        String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
-        if (StringUtils.isNotBlank(openId_encrypt)) {
-            openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
-            List<ShopCustomerInterfaceInfo> info = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
-            if( info != null && !info.isEmpty()  ){
-                userInfo = info.get(0);
-                uid = userInfo.getId();
-            }
+        //前置方法过滤掉
+        String requestURI = request.getRequestURI();
+        String method_name = requestURI.substring(requestURI.lastIndexOf("/") + 1);
+        if ( !method_name.equals("getUserInfoByToken"))
+        {
+            String token = request.getHeader("Token");
+            String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + token);
+            if (StringUtils.isNotBlank(openId_encrypt)) {
 
+                openId = AESUtils.decrypt(openId_encrypt, ConfigUtil.getValue("AES_KEY"));
+                List<ShopCustomerInterfaceInfo> info = shopCustomerInterfaceServiceFacade.getCustomerByOpenId(openId);
+                if( info != null && !info.isEmpty()  ){
+                    userInfo = info.get(0);
+                    uid = userInfo.getId();
+                }
+            }
         }
     }
 
