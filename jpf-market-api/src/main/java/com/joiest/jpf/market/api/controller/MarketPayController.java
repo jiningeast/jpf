@@ -10,6 +10,7 @@ import com.joiest.jpf.common.util.Base64CustomUtils;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.common.util.JsonUtils;
 import com.joiest.jpf.common.util.ToolUtils;
+import com.joiest.jpf.entity.CouponNoList;
 import com.joiest.jpf.entity.PayCouponInfo;
 import com.joiest.jpf.entity.ShopRefundInfo;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
@@ -31,6 +32,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -93,18 +95,18 @@ public class MarketPayController {
         ShopRefundInfo shopRefundInfo = JsonUtils.toObject(AesShopUtils.AES_Decrypt(responseMap,ConfigUtil.getValue("XinShop_AES_KEY")), ShopRefundInfo.class);
         Map<String,Object> map = checkRefundInfo(shopRefundInfo);
 
-        if (map.size() > 0 && !"200".equals(map.get("code"))){
-            return JsonUtils.toJson(map);
+        if (!"10000".equals(map.get("code"))){
+            return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(map)));
         }
 
         try {
            if (shopCouponRemainServiceFacade.refundByShopRefundInfo(shopRefundInfo)){
-               resMap.put("key", "200");
+               resMap.put("key", "10000");
                resMap.put("msg", "退款成功");
            }
         }catch (Exception e){
             logger.error("退款失败"+e.getMessage(),e);
-            resMap.put("key", "201");
+            resMap.put("key", "10001");
             resMap.put("msg", "退款失败");
         }
 
@@ -163,37 +165,22 @@ public class MarketPayController {
      * @return
      */
     private Map<String,Object> checkRefundInfo(ShopRefundInfo shopRefundInfo){
-        Map<String,Object> map = new HashMap<>();
 
         if (StringUtils.isBlank(shopRefundInfo.getCustomerId())){
-            map.put("code", "201");
-            map.put("msg", "用户id不能为空");
+            return setResult("10001", "用户id不能为空");
         }else{
             PayShopCustomer shopCustomer = shopCustomerServiceFacade.getCustomerById(shopRefundInfo.getCustomerId());
             if (shopCustomer == null){
-                map.put("code", "202");
-                map.put("msg", "用户不存在");
+                return setResult("10002", "用户不存在");
             }
         }
 
-        if (shopRefundInfo.getTotalSaleDouYes().length() == 0){
-            map.put("code", "203");
-            map.put("msg", "欣券信息不能为空");
+        if ("0".equals(shopRefundInfo.getTotalSaleDouYes()) && "0".equals(shopRefundInfo.getTotalSaleDouNo())){
+            return setResult("10003", "欣豆信息不能都为空");
         }
 
-        if (shopRefundInfo.getTotalSaleDouNo().length() == 0){
-            map.put("code", "203");
-            map.put("msg", "欣券信息不能为空");
-        }
-
-        if (StringUtils.isBlank(shopRefundInfo.getTotalSaleDouNo()) || StringUtils.isBlank(shopRefundInfo.getTotalSaleDouYes())){
-            map.put("code", "204");
-            map.put("msg", "欣豆信息不能为空");
-        }
-
-        return map;
+        return setResult("10000", "success");
     }
-
 
 
     /**
