@@ -125,6 +125,11 @@ public class PayShopCouponActive implements Serializable {
      */
     private BigDecimal couponSurplus;
 
+    /**
+     * 欣券扣除类型 0扣除不可转让豆 1扣除可转让豆
+     */
+    private Byte subCouponType;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -319,6 +324,14 @@ public class PayShopCouponActive implements Serializable {
         this.couponSurplus = couponSurplus;
     }
 
+    public Byte getSubCouponType() {
+        return subCouponType;
+    }
+
+    public void setSubCouponType(Byte subCouponType) {
+        this.subCouponType = subCouponType;
+    }
+
     /**
      *
      */
@@ -352,6 +365,7 @@ public class PayShopCouponActive implements Serializable {
         sb.append(", source=").append(source);
         sb.append(", contractSurplus=").append(contractSurplus);
         sb.append(", couponSurplus=").append(couponSurplus);
+        sb.append(", subCouponType=").append(subCouponType);
         sb.append("]");
         return sb.toString();
     }
@@ -395,7 +409,8 @@ public class PayShopCouponActive implements Serializable {
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
             && (this.getSource() == null ? other.getSource() == null : this.getSource().equals(other.getSource()))
             && (this.getContractSurplus() == null ? other.getContractSurplus() == null : this.getContractSurplus().equals(other.getContractSurplus()))
-            && (this.getCouponSurplus() == null ? other.getCouponSurplus() == null : this.getCouponSurplus().equals(other.getCouponSurplus()));
+            && (this.getCouponSurplus() == null ? other.getCouponSurplus() == null : this.getCouponSurplus().equals(other.getCouponSurplus()))
+            && (this.getSubCouponType() == null ? other.getSubCouponType() == null : this.getSubCouponType().equals(other.getSubCouponType()));
     }
 
     /**
@@ -429,6 +444,7 @@ public class PayShopCouponActive implements Serializable {
         result = prime * result + ((getSource() == null) ? 0 : getSource().hashCode());
         result = prime * result + ((getContractSurplus() == null) ? 0 : getContractSurplus().hashCode());
         result = prime * result + ((getCouponSurplus() == null) ? 0 : getCouponSurplus().hashCode());
+        result = prime * result + ((getSubCouponType() == null) ? 0 : getSubCouponType().hashCode());
         return result;
     }
 }

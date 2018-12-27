@@ -2176,6 +2176,66 @@ public class PayChargeOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andRechargeOrderIdIsNull() {
+            addCriterion("recharge_order_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdIsNotNull() {
+            addCriterion("recharge_order_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdEqualTo(String value) {
+            addCriterion("recharge_order_id =", value, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdNotEqualTo(String value) {
+            addCriterion("recharge_order_id <>", value, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdGreaterThan(String value) {
+            addCriterion("recharge_order_id >", value, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdGreaterThanOrEqualTo(String value) {
+            addCriterion("recharge_order_id >=", value, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdLessThan(String value) {
+            addCriterion("recharge_order_id <", value, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdLessThanOrEqualTo(String value) {
+            addCriterion("recharge_order_id <=", value, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdIn(List<String> values) {
+            addCriterion("recharge_order_id in", values, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdNotIn(List<String> values) {
+            addCriterion("recharge_order_id not in", values, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdBetween(String value1, String value2) {
+            addCriterion("recharge_order_id between", value1, value2, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeOrderIdNotBetween(String value1, String value2) {
+            addCriterion("recharge_order_id not between", value1, value2, "rechargeOrderId");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNoLikeInsensitive(String value) {
             addCriterion("upper(order_no) like", value.toUpperCase(), "orderNo");
             return (Criteria) this;

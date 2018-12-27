@@ -1706,6 +1706,66 @@ public class PayShopCouponActiveExample {
             return (Criteria) this;
         }
 
+        public Criteria andSubCouponTypeIsNull() {
+            addCriterion("sub_coupon_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeIsNotNull() {
+            addCriterion("sub_coupon_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeEqualTo(Byte value) {
+            addCriterion("sub_coupon_type =", value, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeNotEqualTo(Byte value) {
+            addCriterion("sub_coupon_type <>", value, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeGreaterThan(Byte value) {
+            addCriterion("sub_coupon_type >", value, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("sub_coupon_type >=", value, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeLessThan(Byte value) {
+            addCriterion("sub_coupon_type <", value, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("sub_coupon_type <=", value, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeIn(List<Byte> values) {
+            addCriterion("sub_coupon_type in", values, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeNotIn(List<Byte> values) {
+            addCriterion("sub_coupon_type not in", values, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeBetween(Byte value1, Byte value2) {
+            addCriterion("sub_coupon_type between", value1, value2, "subCouponType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubCouponTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("sub_coupon_type not between", value1, value2, "subCouponType");
+            return (Criteria) this;
+        }
+
         public Criteria andCustomerNameLikeInsensitive(String value) {
             addCriterion("upper(customer_name) like", value.toUpperCase(), "customerName");
             return (Criteria) this;
