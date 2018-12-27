@@ -367,7 +367,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         matchCriteria(request,c);
         e.setOrderByClause("id DESC");
         c.andIsDelEqualTo((byte)0);
-        return payChargeOrderMapper.selectByExcelExample(e);
+        return payChargeOrderCustomMapper.selectByExcelExample(e);
     }
 
     /**
