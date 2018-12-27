@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,11 +47,12 @@ public class MarketPayController {
         if(StringUtils.isBlank(payParam)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
         }
+        String ret="";
         Map<String, Object> map = JsonUtils.toCollection(AesShopUtils.AES_Decrypt(ConfigUtil.getValue("XinShop_AES_KEY"),payParam), new TypeReference<Map<String, Object>>() {});
         //验证商户信息,并且验证商户金额是否够
         Map<String,Object> responseMap = checkPayInfo(map);
         if(!"10000".equals(responseMap.get("code").toString())){
-            return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),JsonUtils.toJson(responseMap));
+            return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap))) ;
         }
         Map<String, Object> resultMap = new HashMap<>();
         try {
@@ -62,7 +65,8 @@ public class MarketPayController {
             responseMap.put("code","10008");
             responseMap.put("msg","fail");
         }
-        return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),JsonUtils.toJson(responseMap)) ;
+
+        return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap))) ;
     }
 
     /**
@@ -109,5 +113,20 @@ public class MarketPayController {
         result.put("code", s);
         result.put("msg", msg);
         return result;
+    }
+
+    /**
+     * 加密
+     * @param str
+     * @return
+     */
+    public  String  urlEncoder (String str){
+        String ret="";
+        try {
+            ret = URLEncoder.encode(str,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            ret="加密异常";
+        }
+        return ret;
     }
 }

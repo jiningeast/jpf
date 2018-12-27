@@ -333,6 +333,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
             saveCouponActive(payShopCouponRemain,map,dou);
             // payShopCouponRemainMapper.updateByPrimaryKeySelective(payShopCouponRemain);
             couponActive.setTotalSaleDouNo(dou.toString());
+            couponActive.setTotalSaleDouYes("0");
             couponNolist.add(couponActive);
         }
 
@@ -374,7 +375,8 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
                     throw new Exception("欣券所属订余额更新失败");
                 }
                 saveCouponActive(payShopCouponRemain,map,dou);
-                couponActive.setTotalSaleDouNo(dou.toString());
+                couponActive.setTotalSaleDouYes(dou.toString());
+                couponActive.setTotalSaleDouNo("0");
                 couponNolist.add(couponActive);
             }
         }
@@ -538,7 +540,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         payShopCouponActive.setMoney(new BigDecimal("0.00"));
         payShopCouponActive.setDou(dou);     //消费豆数量
         payShopCouponActive.setContent("行为:消费;用户ID:" + customer.getId() + ";用户名称:" + customer.getNickname() + ";豆消费:" + dou + ";订单号:" +map.get("orderNo").toString() + ";" );
-        payShopCouponActive.setType("1");
+        payShopCouponActive.setType(customer.getType().toString());
         payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
         payShopCouponActive.setAddtime(new Date());
         payShopCouponActive.setOrderId(map.get("orderId")!=null?map.get("orderId").toString():"0");
