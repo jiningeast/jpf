@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,24 +56,26 @@ public class MarketPayController {
         if(StringUtils.isBlank(payParam)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
         }
-        Map<String, Object> map = JsonUtils.toCollection(AesShopUtils.AES_Decrypt(payParam,ConfigUtil.getValue("XinShop_AES_KEY")), new TypeReference<Map<String, Object>>() {});
+        String ret="";
+        Map<String, Object> map = JsonUtils.toCollection(AesShopUtils.AES_Decrypt(ConfigUtil.getValue("XinShop_AES_KEY"),payParam), new TypeReference<Map<String, Object>>() {});
         //验证商户信息,并且验证商户金额是否够
         Map<String,Object> responseMap = checkPayInfo(map);
-        if("10000".equals(responseMap.get("code").toString())){
-            return JsonUtils.toJson(responseMap);
+        if(!"10000".equals(responseMap.get("code").toString())){
+            return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap))) ;
         }
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap = shopCustomerServiceFacade.pay(map);
-            resultMap.put("code","10000");
-            resultMap.put("msg","success");
+            responseMap.put("code","10000");
+            responseMap.put("msg","success");
             responseMap.put("data",resultMap);
         } catch (Exception e) {
             logger.error("付费失败"+e.getMessage(),e);
-            resultMap.put("code","10008");
-            resultMap.put("msg","fail");
+            responseMap.put("code","10008");
+            responseMap.put("msg","fail");
         }
-        return AesShopUtils.AES_Encrypt(JsonUtils.toJson(responseMap),ConfigUtil.getValue("XinShop_AES_KEY")) ;
+
+        return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap))) ;
     }
 
 
@@ -104,7 +108,7 @@ public class MarketPayController {
             resMap.put("msg", "退款失败");
         }
 
-        return AesShopUtils.AES_Encrypt(JsonUtils.toJson(responseMap),ConfigUtil.getValue("XinShop_AES_KEY"));
+        return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap)));
     }
 
     /**
@@ -124,13 +128,13 @@ public class MarketPayController {
                return setResult("10002", "该账户状态异常");
            }
         }
-        if (map.get("orderNo")!=null){
+        if (map.get("orderNo")==null){
             return setResult("10003", "订单号不能为空");
         }
-        if (map.get("money")!=null){
+        if (map.get("money")==null){
             return setResult("10004", "金额不能为空");
         }
-        if (map.get("source")!=null){
+        if (map.get("source")==null){
             return setResult("10004", "来源不能为空");
         }
         //用户可用券列表
@@ -190,4 +194,50 @@ public class MarketPayController {
         return map;
     }
 
+
+
+    /**
+     * 根据订单号查询是否扣款
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/getByOrderNo",method =RequestMethod.POST)
+    public String getByOrderNo(HttpServletRequest request){
+        String orderNo = request.getParameter("orderNo");
+        if(StringUtils.isBlank(orderNo)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
+        }
+        Map<String,Object> responseMap = shopCustomerServiceFacade.getByOrderNo(urlDncoder(AesShopUtils.AES_Decrypt(ConfigUtil.getValue("XinShop_AES_KEY"),orderNo)));
+        return  AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap))) ;
+    }
+
+
+    /**
+     * 加密
+     * @param str
+     * @return
+     */
+    public  String  urlEncoder (String str){
+        String ret="";
+        try {
+            ret = URLEncoder.encode(str,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            ret="加密异常";
+        }
+        return ret;
+    }   /**
+     * 加密
+     * @param str
+     * @return
+     */
+    public  String  urlDncoder (String str){
+        String ret="";
+        try {
+            ret = URLEncoder.encode(str,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            ret="解密异常";
+        }
+        return ret;
+    }
 }

@@ -50,4 +50,11 @@ public interface ShopCustomerServiceFacade {
      * @param map
      */
     Map<String, Object> pay(Map<String, Object> map) throws  Exception ;
+
+    /**
+     * 根据订单查询订单是否已经支付
+     * @param orderNo
+     * @return
+     */
+    Map<String, Object> getByOrderNo(String orderNo);
 }
