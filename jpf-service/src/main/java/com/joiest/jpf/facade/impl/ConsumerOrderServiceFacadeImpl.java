@@ -134,6 +134,9 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         //记录余额
         String newCompanyMoney=chargeCompany.getMoney().toString();
         String money = payChargeConsumerOrder.getMoney().toString();
+        if(new BigDecimal(money).compareTo(new BigDecimal(newCompanyMoney))>0){//如果订单的钱大于商户余额的钱
+            money=chargeCompany.getMoney().toString();
+        }
         long start = System.currentTimeMillis();
         long end = 0L ;
         while (true){
@@ -199,7 +202,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
     private String savePayChargeOrder(String companyName,PayShopBargainRechargeOrder payShopBargainRechargeOrder, PayChargeOrder order,String orderNo) {
         String payChargeOrderNo="CH"+ ToolUtils.getRandomInt(100,999)+System.currentTimeMillis()+ToolUtils.getRandomInt(100,999);
         order.setOrderNo(payChargeOrderNo);
-        order.setAddtime(new Date());
+        order.setAddtime(payShopBargainRechargeOrder.getAddtime());
         order.setChargePhone(payShopBargainRechargeOrder.getChargeNo());
         order.setCompanyId(payShopBargainRechargeOrder.getPullCompanyId());
         order.setCompanyName(companyName);
@@ -220,7 +223,8 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         }
         order.setProductValue(payShopBargainRechargeOrder.getFacePrice());
         order.setStatus((byte)2);
-        order.setTotalMoney(payShopBargainRechargeOrder.getAmount());
+        //更改订单的金额为面值
+        order.setTotalMoney(payShopBargainRechargeOrder.getFacePrice());
         order.setConsumerOrderNo(orderNo);
         payChargeOrderCustomMapper.insertSelective(order);
         return order.getId();
