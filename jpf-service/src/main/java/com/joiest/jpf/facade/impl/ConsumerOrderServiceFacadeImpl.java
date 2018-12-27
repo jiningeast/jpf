@@ -135,6 +135,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         String newCompanyMoney=chargeCompany.getMoney().toString();
         String money = payChargeConsumerOrder.getMoney().toString();
         if(new BigDecimal(money).compareTo(new BigDecimal(newCompanyMoney))>0){//如果订单的钱大于商户余额的钱
+            logger.info("当前订单的金额大于账户剩余额，匹配的额度为剩余额");
             money=chargeCompany.getMoney().toString();
         }
         long start = System.currentTimeMillis();
@@ -226,6 +227,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         //更改订单的金额为面值
         order.setTotalMoney(payShopBargainRechargeOrder.getFacePrice());
         order.setConsumerOrderNo(orderNo);
+        order.setRechargeOrderId(payShopBargainRechargeOrder.getId()+"");
         payChargeOrderCustomMapper.insertSelective(order);
         return order.getId();
     }
