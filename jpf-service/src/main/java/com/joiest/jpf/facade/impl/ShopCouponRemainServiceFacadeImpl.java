@@ -1102,14 +1102,17 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         payShopCouponActive.setDou(douNum);     //退还豆总数量
         if ("0".equals(type)){
             payShopCouponActive.setContent("行为:退款;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";退非转让豆:" + douNum );
+            payShopCouponActive.setSubCouponType((byte)0);
         }else if("1".equals(type)){
             payShopCouponActive.setContent("行为:退款;用户ID:" + payShopCustomer.getId() + ";用户名称:" + payShopCustomer.getNickname() + ";退转让豆:" + douNum );
+            payShopCouponActive.setSubCouponType((byte)1);
         }
         payShopCouponActive.setType("2");
         payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
         payShopCouponActive.setAddtime(new Date());
         payShopCouponActive.setOrderId("0");
         payShopCouponActive.setOrderNo(shopRefundInfo.getOrderNo());
+
 
         return payShopCouponActiveMapper.insertSelective(payShopCouponActive);
     }
