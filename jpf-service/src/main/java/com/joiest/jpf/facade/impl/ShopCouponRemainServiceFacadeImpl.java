@@ -1061,7 +1061,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
 
         //更新商户余额
         Map<String,Object> map = new HashMap<>();
-        map.put("id", shopRefundInfo.getCustomerId());
+        map.put("customerId", shopRefundInfo.getCustomerId());
         map.put("couponDouNo",shopRefundInfo.getTotalSaleDouNo());
         map.put("SaleDouYes",shopRefundInfo.getTotalSaleDouYes());
         int addDou = payShopCustomerCustomMapper.addCustomerDou(map);
