@@ -115,6 +115,24 @@ public class MarketPayController {
         return result;
     }
 
+
+    /**
+     * 根据订单号查询是否扣款
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/getByOrderNo",method =RequestMethod.POST)
+    public String getByOrderNo(HttpServletRequest request){
+        String orderNo = request.getParameter("orderNo");
+        if(StringUtils.isBlank(orderNo)){
+            return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
+        }
+        Map<String,Object> responseMap = shopCustomerServiceFacade.getByOrderNo(urlDncoder(AesShopUtils.AES_Decrypt(ConfigUtil.getValue("XinShop_AES_KEY"),orderNo)));
+        return  AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap))) ;
+    }
+
+
     /**
      * 加密
      * @param str
@@ -126,6 +144,19 @@ public class MarketPayController {
             ret = URLEncoder.encode(str,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             ret="加密异常";
+        }
+        return ret;
+    }   /**
+     * 加密
+     * @param str
+     * @return
+     */
+    public  String  urlDncoder (String str){
+        String ret="";
+        try {
+            ret = URLEncoder.encode(str,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            ret="解密异常";
         }
         return ret;
     }

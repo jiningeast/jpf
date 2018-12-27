@@ -390,6 +390,25 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         return resMap;
     }
 
+    @Override
+    public Map<String, Object> getByOrderNo(String orderNo) {
+        Map<String, Object> map =new HashMap<>();
+        PayShopCouponActiveExample example = new PayShopCouponActiveExample();
+        PayShopCouponActiveExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderNoEqualTo(orderNo);
+        criteria.andTypeEqualTo("1");
+        criteria.andSourceEqualTo("1");
+        List<PayShopCouponActive> payShopCouponActives = payShopCouponActiveMapper.selectByExample(example);
+        if(payShopCouponActives!=null&&payShopCouponActives.size()!=0){
+            map.put("code","10000");
+            map.put("msg","已支付成功");
+        }else{
+            map.put("code","10008");
+            map.put("msg","支付失败");
+        }
+        return map;
+    }
+
     /**
      * 扣除合同的余额
      * @param payShopCouponRemain
@@ -540,7 +559,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         payShopCouponActive.setMoney(new BigDecimal("0.00"));
         payShopCouponActive.setDou(dou);     //消费豆数量
         payShopCouponActive.setContent("行为:消费;用户ID:" + customer.getId() + ";用户名称:" + customer.getNickname() + ";豆消费:" + dou + ";订单号:" +map.get("orderNo").toString() + ";" );
-        payShopCouponActive.setType(customer.getType().toString());
+        payShopCouponActive.setType("1");
         payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
         payShopCouponActive.setAddtime(new Date());
         payShopCouponActive.setOrderId(map.get("orderId")!=null?map.get("orderId").toString():"0");
