@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class ShopRefundInfo {
     private String customerId;
-    private String orderId;
+    private String orderNo;
     private String totalSaleDouNo;
     private String totalSaleDouYes;
     private String source;
@@ -35,12 +35,12 @@ public class ShopRefundInfo {
         this.customerId = customerId;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderId(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public String getTotalSaleDouNo() {
