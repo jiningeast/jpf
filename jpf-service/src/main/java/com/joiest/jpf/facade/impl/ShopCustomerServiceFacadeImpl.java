@@ -425,6 +425,9 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
     private int subShopCouponOrder(PayShopCouponRemain payShopCouponRemain, BigDecimal dou) {
         //查询欣券
         PayShopBatchCoupon payShopBatchCoupon = payShopBatchCouponMapper.selectByPrimaryKey(payShopCouponRemain.getCouponId());
+        if(StringUtils.isBlank(payShopBatchCoupon.getOrderId())){
+            return 1;
+        }
         //查询订单的信息
         Map<String,Object> map = new HashMap<>();
         map.put("orderId",payShopBatchCoupon.getOrderId());
@@ -576,8 +579,10 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         PayShopCouponRemain payShopCoupon = payShopCouponRemainMapper.selectByPrimaryKey(payShopCouponRemain.getId());
         payShopCouponActive.setCouponSurplus(ArithmeticUtils.add(payShopCoupon.getCouponDouLeft().toString(),payShopCoupon.getSaleDouLeft().toString()));
         //重新查询券所属订单的余额
-        PayShopCouponOrder payShopCouponOrder =payShopCouponOrderCustomMapper.selectByPrimaryKey(payShopBatchCoupon.getOrderId());
-        payShopCouponActive.setContractSurplus(payShopCouponOrder.getBalance());
+        if(StringUtils.isNotBlank(payShopBatchCoupon.getOrderId())){
+            PayShopCouponOrder payShopCouponOrder =payShopCouponOrderCustomMapper.selectByPrimaryKey(payShopBatchCoupon.getOrderId());
+            payShopCouponActive.setContractSurplus(payShopCouponOrder.getBalance());
+        }
         payShopCouponActive.setSubCouponType(type);
         payShopCouponActiveMapper.insertSelective(payShopCouponActive);
     }
