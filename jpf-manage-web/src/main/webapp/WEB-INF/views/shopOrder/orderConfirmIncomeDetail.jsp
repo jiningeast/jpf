@@ -86,45 +86,50 @@
 </div>
 <script>
     $(function () {
-        $("#productView").datagrid({
-            title:'订单欣券列表',
-            // toolbar:toolbar,
-            // rownumbers:true,//如果为true，则显示一个行号列。
-            //pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
-            // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
-            singleSelect:true,
-            multiselect:true,
-            selectOnCheck:true,
-            remoteSort: false, // 服务端排序
-            // width:500,
-            url:'orderConfirmIncomeCouponDetailList?orderNo='+"${shopOrderInfo.orderNo}",
-            columns:[[
-                {field:'dou',title:'欣豆',width:"5%",align:"center"},
-                {field:'couponNo',title:'欣券号',width:"15%",align:"center"},
-                {field:'couponBanlance',title:'欣券余额',width:"10%",align:"center",formatter: function (value, row, index) {
-                    if (value != null) {
-                        return parseFloat(value).toFixed(2);
-                    }
-                }},
-                {field:'contractNo',title:'合同编号',width:"10%",align:"center"},
-                {field:'merchCouponOrderNo',title:'商户端欣券订单号',width:"15%",align:"center"},
-                {field:'merchCouponOrderBanlance',title:'商户端欣券订单内余额',width:"10%",align:"center",formatter: function (value, row, index) {
-                    if (value != null) {
-                        return parseFloat(value).toFixed(2);
-                    }
-                }},
-                {field:'companyName',title:'公司',width:"30%",align:"center"},
-                {field:'rate',title:'费率(%)',width:"5%",align:"center",formatter: function (value, row, index) {
-                    if (row != null) {
-                        if(value == null){
-                            return "";
-                        }else{
-                            return parseFloat(value).toFixed(2);
-                        }
-                    }
-                }}
-            ]]
-        });
+        var status = ${shopOrderInfo.status};
+        if(status == 1){
+            $("#productView").datagrid({
+                title:'订单欣券列表',
+                // toolbar:toolbar,
+                // rownumbers:true,//如果为true，则显示一个行号列。
+                //pagination:true,//如果为true，则在DataGrid控件底部显示分页工具栏。
+                // fitColumns:true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
+                singleSelect:true,
+                multiselect:true,
+                selectOnCheck:true,
+                remoteSort: false, // 服务端排序
+                // width:500,
+                url:'orderConfirmIncomeCouponDetailList?orderNo='+"${shopOrderInfo.orderNo}",
+                columns:[[
+                    {field:'dou',title:'欣豆',width:"5%",align:"center"},
+                    {field:'couponNo',title:'欣券号',width:"15%",align:"center"},
+                    {field:'couponBanlance',title:'欣券余额',width:"10%",align:"center",formatter: function (value, row, index) {
+                            if (value != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
+                    {field:'contractNo',title:'合同编号',width:"10%",align:"center"},
+                    {field:'merchCouponOrderNo',title:'商户端欣券订单号',width:"15%",align:"center"},
+                    {field:'merchCouponOrderBanlance',title:'商户端欣券订单内余额',width:"10%",align:"center",formatter: function (value, row, index) {
+                            if (value != null) {
+                                return parseFloat(value).toFixed(2);
+                            }
+                        }},
+                    {field:'companyName',title:'公司',width:"30%",align:"center"},
+                    {field:'rate',title:'费率(%)',width:"5%",align:"center",formatter: function (value, row, index) {
+                            if (row != null) {
+                                if(value == null){
+                                    return "";
+                                }else{
+                                    return parseFloat(value).toFixed(2);
+                                }
+                            }
+                        }}
+                ]]
+            });
+        }else{
+            return false;
+        }
     })
 </script>
 </body>
