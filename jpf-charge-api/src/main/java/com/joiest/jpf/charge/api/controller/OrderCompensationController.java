@@ -58,9 +58,9 @@ public class OrderCompensationController {
 
         String pageNoStr = request.getParameter("pageNo");
 
-        //String companyId = request.getParameter("companyId");
+        String companyId = request.getParameter("companyId");
         //仅查询站远
-        String companyId = "12";
+//        String companyId = "12";
 
         //不传参默认第一页
         long pageNo = 1L;
