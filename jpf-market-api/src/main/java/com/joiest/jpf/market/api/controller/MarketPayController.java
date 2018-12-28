@@ -189,8 +189,22 @@ public class MarketPayController {
             }
         }
 
+        if (shopRefundInfo.getOrderNo() == null){
+            return setResult("10003", "订单号不能为空");
+        }else{
+            //判断订单号是否已经支付成功，防止二次支付
+            PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+            payShopCouponActive.setOrderNo(shopRefundInfo.getOrderNo());
+            payShopCouponActive.setType("2");
+            payShopCouponActive.setSource("1");
+            List<PayShopCouponActive> payShopCouponActives  = shopCouponActiveServiceFacade.getCouponActive(payShopCouponActive);
+            if(payShopCouponActives!=null&&payShopCouponActives.size()!=0){
+                return setResult("10004", "流水已存在,不能重复添加");
+            }
+        }
+
         if ("0".equals(shopRefundInfo.getTotalSaleDouYes()) && "0".equals(shopRefundInfo.getTotalSaleDouNo())){
-            return setResult("10003", "欣豆信息不能都为空");
+            return setResult("10005", "欣豆信息不能都为空");
         }
 
         return setResult("10000", "success");
