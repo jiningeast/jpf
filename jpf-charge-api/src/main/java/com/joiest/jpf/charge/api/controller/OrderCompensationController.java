@@ -57,24 +57,27 @@ public class OrderCompensationController {
         Map<String,String> resultMap = new HashMap<>();
 
         String pageNoStr = request.getParameter("pageNo");
-        String companyId = request.getParameter("companyId");
+
+        //String companyId = request.getParameter("companyId");
+        //仅查询站远
+        String companyId = "12";
 
         //不传参默认第一页
-        Long pageNo = 1L;
+        long pageNo = 1L;
 
         if (StringUtils.isNotBlank(pageNoStr)){
             pageNo = Long.valueOf(pageNoStr);
         }
 
         //每次查询订单的条数
-        Long pageSize = Long.parseLong(ConfigUtil.getValue("PAGE_SIZE"));
+        long pageSize = Long.parseLong(ConfigUtil.getValue("PAGE_SIZE"));
 
         //存储日志记录
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         StringBuilder logContent = new StringBuilder();
 
-        Long count = 0L;
+        long count = 0L;
 
         String logPath = "/logs/jpf-charge-api/log/";
         String fileName = "OrderCompensation" + pageNo +"-";
