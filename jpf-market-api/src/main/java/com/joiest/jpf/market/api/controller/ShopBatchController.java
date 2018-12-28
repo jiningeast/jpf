@@ -377,50 +377,52 @@ public class ShopBatchController {
         List<ShopCustomerInfo> personsList = new ArrayList<>();    // 新建校验人数组
         Map<String,Integer> valueCount = new LinkedHashMap<>();
         BigDecimal totalValue =new BigDecimal(0) ;
-        for ( int i=2; i<list.size(); i++){
+        for ( int i=2; i<list.size(); i++) {
             // 获取每条信息详情
-            Map<Integer,String> singlePerson = (Map<Integer,String>)list.get(i);
+            Map<Integer, String> singlePerson = (Map<Integer, String>) list.get(i);
             // 判断手机号合法性
-            if (!ToolUtils.checkPhone(singlePerson.get(1))){
-                return setReslt("10006","用户"+singlePerson.get(0)+"的手机号有误，请检查后重新上传",null);
-            }
-            // 姓名、手机号和面值必填
-            String name = singlePerson.get(0);
-            String phone = singlePerson.get(1);
-            String value = singlePerson.get(2);
-            String idno = StringUtils.isNotBlank(singlePerson.get(3)) ? singlePerson.get(3) : null;
-            if (!StringUtils.isNotBlank(name) ||!StringUtils.isNotBlank(phone)||!StringUtils.isNotBlank(value) ){
-                return setReslt("10007","Excel第"+i+"行的数据不完整，请修改后重新上传",null);
-            }
-            // 判断所有人的状态是不是已冻结
-            PayShopCustomer existCustomer = shopCustomerServiceFacade.getCustomerByPhone(singlePerson.get(1));
-            ShopCustomerInfo failCustomer = new ShopCustomerInfo();
-            failCustomer.setName(singlePerson.get(0));
-            failCustomer.setPhone(singlePerson.get(1));
-            failCustomer.setDou(new BigDecimal(value));
-            if ( StringUtils.isNotBlank(idno) ){
-                failCustomer.setIdno(idno);
-            }
-            if(existCustomer!=null){
-                if (existCustomer.getStatus()== 0){
-                    failCustomer.setStatus((byte)0); // 账户已冻结
+            if (singlePerson.size() != 1) {
+                if (!ToolUtils.checkPhone(singlePerson.get(1))) {
+                    return setReslt("10006", "用户" + singlePerson.get(0) + "的手机号有误，请检查后重新上传", null);
                 }
-                // 检查校验码
-                String checkCode = ToolUtils.CreateCode(existCustomer.getDou().toString(),existCustomer.getId());
-                if ( !existCustomer.getCode().equals(checkCode) ){
-                    failCustomer.setIsVerify((byte)0); // 校验码错误
+                // 姓名、手机号和面值必填
+                String name = singlePerson.get(0);
+                String phone = singlePerson.get(1);
+                String value = singlePerson.get(2);
+                String idno = StringUtils.isNotBlank(singlePerson.get(3)) ? singlePerson.get(3) : null;
+                if (!StringUtils.isNotBlank(name) || !StringUtils.isNotBlank(phone) || !StringUtils.isNotBlank(value)) {
+                    return setReslt("10007", "Excel第" + i + "行的数据不完整，请修改后重新上传", null);
                 }
-            }
-            // 将校验过的人添加到数组中
-            personsList.add(failCustomer);
-            // 统计总金额
-            totalValue =ArithmeticUtils.add(totalValue.toString(),value);
-            // 统计各面值的数量
-            if ( valueCount.get(value) == null ){
-                valueCount.put( value,1);
-            }else{
-                valueCount.put( value,valueCount.get(value) + 1);
-            }
+                // 判断所有人的状态是不是已冻结
+                PayShopCustomer existCustomer = shopCustomerServiceFacade.getCustomerByPhone(singlePerson.get(1));
+                ShopCustomerInfo failCustomer = new ShopCustomerInfo();
+                failCustomer.setName(singlePerson.get(0));
+                failCustomer.setPhone(singlePerson.get(1));
+                failCustomer.setDou(new BigDecimal(value));
+                if (StringUtils.isNotBlank(idno)) {
+                    failCustomer.setIdno(idno);
+                }
+                if (existCustomer != null) {
+                    if (existCustomer.getStatus() == 0) {
+                        failCustomer.setStatus((byte) 0); // 账户已冻结
+                    }
+                    // 检查校验码
+                    String checkCode = ToolUtils.CreateCode(existCustomer.getDou().toString(), existCustomer.getId());
+                    if (!existCustomer.getCode().equals(checkCode)) {
+                        failCustomer.setIsVerify((byte) 0); // 校验码错误
+                    }
+                }
+                // 将校验过的人添加到数组中
+                personsList.add(failCustomer);
+                // 统计总金额
+                totalValue = ArithmeticUtils.add(totalValue.toString(), value);
+                // 统计各面值的数量
+                if (valueCount.get(value) == null) {
+                    valueCount.put(value, 1);
+                } else {
+                    valueCount.put(value, valueCount.get(value) + 1);
+                }
+         }
         }
         // 判断总面值和各人员面值的总和是不是统一
         if (new BigDecimal(totalMoney).compareTo(totalValue)!=0){
