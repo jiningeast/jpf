@@ -53,7 +53,7 @@
                     },
                     {field:'streamNo',title:'流水号',width:'13%',},
                     {field:'productName',title:'商品',width:'10%'},
-                    {field:'merchNo',title:'代理商号',width:'10%',
+                    {field:'merchNo',title:'商户号',width:'10%',
                         formatter:function (value,row,index) {
                             return row["merchNo"];
                         }
@@ -119,7 +119,7 @@
                 <form id="searchForm" method="post">
                     <table cellpadding="5" width="75%">
                         <tr>
-                            <td>商户号:</td>
+                            <td>交易时间:</td>
                             <td><input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
                                        name="addtimeStart"
                                        onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'addtimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>

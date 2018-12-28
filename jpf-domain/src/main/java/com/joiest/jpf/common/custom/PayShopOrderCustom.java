@@ -3,6 +3,7 @@ package com.joiest.jpf.common.custom;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class PayShopOrderCustom implements Serializable {
     /**
@@ -256,6 +257,11 @@ public class PayShopOrderCustom implements Serializable {
      */
     private String image;
 
+    /**
+     * 存放欣券详情的List
+     */
+    private List<ShopIncomeConfirmationDetailResponse> shopIncomeConfirmationDetailResponseList;
+    
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -652,5 +658,13 @@ public class PayShopOrderCustom implements Serializable {
 
     public void setTotalDou(BigDecimal totalDou) {
         this.totalDou = totalDou;
+    }
+
+    public List<ShopIncomeConfirmationDetailResponse> getList() {
+        return shopIncomeConfirmationDetailResponseList;
+    }
+
+    public void setList(List<ShopIncomeConfirmationDetailResponse> list) {
+        this.shopIncomeConfirmationDetailResponseList = list;
     }
 }

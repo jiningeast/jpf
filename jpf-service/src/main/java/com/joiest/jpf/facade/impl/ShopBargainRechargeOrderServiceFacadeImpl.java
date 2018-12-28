@@ -103,7 +103,7 @@ public class ShopBargainRechargeOrderServiceFacadeImpl implements ShopBargainRec
         PayShopBargainRechargeOrderExample.Criteria c = e.createCriteria();
         e.setOrderByClause("id DESC");
         matchCriteria(request,c);
-        return payShopBargainRechargeOrderMapper.selectByExampleExcel(e);
+        return payShopBargainRechargeOrderCustomMapper.selectByExampleExcel(e);
     }
 
     /**

@@ -264,6 +264,11 @@
                         "icon" : "icon-nav",
                         "url" : "shopBargainOrder/indexCaiwu"
                     },{
+                        "menuid" : "612",
+                        "menuname" : "欣豆市场确认收入",
+                        "icon" : "icon-nav",
+                        "url" : "shopIncomeConfirm/index"
+                    },{
                         "menuid" : "609",
                         "menuname" : "充值平台充值审核",
                         "icon" : "icon-nav",

@@ -8,10 +8,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.RichTextString;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -291,7 +288,7 @@ public class exportExcel {
      * @param res
      * @return
      */
-    public static JSONObject writeIntoExcel(String fileName,HttpServletResponse response, SXSSFWorkbook xssfWorkbook,String path,int type,JSONObject res){
+    public static JSONObject writeIntoExcel(String fileName, HttpServletResponse response, Workbook xssfWorkbook, String path, int type, JSONObject res){
         OutputStream output= null;
         try {
             if(type == 1){

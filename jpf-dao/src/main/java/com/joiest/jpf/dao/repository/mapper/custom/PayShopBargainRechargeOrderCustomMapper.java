@@ -105,4 +105,11 @@ public interface PayShopBargainRechargeOrderCustomMapper {
      * @param matchaingList
      */
     void batchUpdatePayShopBro(List<PayShopBargainRechargeOrder> matchaingList);
+
+    /**
+     * 查询要导出的Excel数据
+     * @param e
+     * @return
+     */
+    List<PayShopBargainRechargeOrder> selectByExampleExcel(PayShopBargainRechargeOrderExample e);
 }

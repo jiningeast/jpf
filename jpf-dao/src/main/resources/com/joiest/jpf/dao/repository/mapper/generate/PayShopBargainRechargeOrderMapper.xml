@@ -555,19 +555,4 @@
       matching_status = #{matchingStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-  <select id="selectByExampleExcel" parameterType="com.joiest.jpf.common.po.PayShopBargainRechargeOrderExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    pull_order_no,order_no,order_type,foreign_order_no, item_name, price, face_price, amt,amount,charge_no,addtime,matching_status
-    from pay_shop_bargain_recharge_order
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
 </mapper>
