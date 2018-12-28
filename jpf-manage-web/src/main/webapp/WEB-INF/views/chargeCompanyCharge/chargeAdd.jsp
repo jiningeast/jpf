@@ -22,7 +22,7 @@
                     <td style="text-align: right;background-color: #f1f1f1;width: 30%">充值公司：</td>
                     <td>
                         <input id="companyNames" name="companyName" type="text"  data-options="required:true"
-                               width="120" class="easyui-textbox"/>
+                               width="120" class="easyui-textbox" disabled="disabled"/>
                         <input id="companyIds" name="companyId" type="hidden"  />
                         <a id="searchCompany" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">选取商户</a>
                     </td>
