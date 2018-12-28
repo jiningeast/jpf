@@ -11,15 +11,15 @@
     <result column="coupon_no" jdbcType="VARCHAR" property="couponNo" />
     <result column="coupon_active_code" jdbcType="VARCHAR" property="couponActiveCode" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
-    <result column="coupon_dou" jdbcType="INTEGER" property="couponDou" />
-    <result column="coupon_dou_left" jdbcType="INTEGER" property="couponDouLeft" />
+    <result column="coupon_dou" jdbcType="DECIMAL" property="couponDou" />
+    <result column="coupon_dou_left" jdbcType="DECIMAL" property="couponDouLeft" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
-    <result column="sale_dou_yes" jdbcType="INTEGER" property="saleDouYes" />
-    <result column="sale_dou_left" jdbcType="INTEGER" property="saleDouLeft" />
-    <result column="sale_dou_no" jdbcType="INTEGER" property="saleDouNo" />
+    <result column="sale_dou_yes" jdbcType="DECIMAL" property="saleDouYes" />
+    <result column="sale_dou_left" jdbcType="DECIMAL" property="saleDouLeft" />
+    <result column="sale_dou_no" jdbcType="DECIMAL" property="saleDouNo" />
     <result column="percent" jdbcType="DECIMAL" property="percent" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -158,10 +158,10 @@
       sale_dou_left, sale_dou_no, percent
       )
     values (#{id,jdbcType=BIGINT}, #{couponId,jdbcType=BIGINT}, #{couponNo,jdbcType=VARCHAR}, 
-      #{couponActiveCode,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{couponDou,jdbcType=INTEGER}, 
-      #{couponDouLeft,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{expireTime,jdbcType=TIMESTAMP}, 
-      #{addtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{saleDouYes,jdbcType=INTEGER}, 
-      #{saleDouLeft,jdbcType=INTEGER}, #{saleDouNo,jdbcType=INTEGER}, #{percent,jdbcType=DECIMAL}
+      #{couponActiveCode,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{couponDou,jdbcType=DECIMAL},
+      #{couponDouLeft,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{expireTime,jdbcType=TIMESTAMP},
+      #{addtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{saleDouYes,jdbcType=DECIMAL},
+      #{saleDouLeft,jdbcType=DECIMAL}, #{saleDouNo,jdbcType=DECIMAL}, #{percent,jdbcType=DECIMAL}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.joiest.jpf.common.po.PayShopCouponRemain">
@@ -234,10 +234,10 @@
         #{customerId,jdbcType=BIGINT},
       </if>
       <if test="couponDou != null">
-        #{couponDou,jdbcType=INTEGER},
+        #{couponDou,jdbcType=DECIMAL},
       </if>
       <if test="couponDouLeft != null">
-        #{couponDouLeft,jdbcType=INTEGER},
+        #{couponDouLeft,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
@@ -252,19 +252,20 @@
         #{updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="saleDouYes != null">
-        #{saleDouYes,jdbcType=INTEGER},
+        #{saleDouYes,jdbcType=DECIMAL},
       </if>
       <if test="saleDouLeft != null">
-        #{saleDouLeft,jdbcType=INTEGER},
+        #{saleDouLeft,jdbcType=DECIMAL},
       </if>
       <if test="saleDouNo != null">
-        #{saleDouNo,jdbcType=INTEGER},
+        #{saleDouNo,jdbcType=DECIMAL},
       </if>
       <if test="percent != null">
         #{percent,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
+
   <select id="countByExample" parameterType="com.joiest.jpf.common.po.PayShopCouponRemainExample" resultType="java.lang.Integer">
     <!--
       @mbggenerated
@@ -298,10 +299,10 @@
         customer_id = #{record.customerId,jdbcType=BIGINT},
       </if>
       <if test="record.couponDou != null">
-        coupon_dou = #{record.couponDou,jdbcType=INTEGER},
+        coupon_dou = #{record.couponDou,jdbcType=DECIMAL},
       </if>
       <if test="record.couponDouLeft != null">
-        coupon_dou_left = #{record.couponDouLeft,jdbcType=INTEGER},
+        coupon_dou_left = #{record.couponDouLeft,jdbcType=DECIMAL},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
@@ -316,13 +317,13 @@
         updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.saleDouYes != null">
-        sale_dou_yes = #{record.saleDouYes,jdbcType=INTEGER},
+        sale_dou_yes = #{record.saleDouYes,jdbcType=DECIMAL},
       </if>
       <if test="record.saleDouLeft != null">
-        sale_dou_left = #{record.saleDouLeft,jdbcType=INTEGER},
+        sale_dou_left = #{record.saleDouLeft,jdbcType=DECIMAL},
       </if>
       <if test="record.saleDouNo != null">
-        sale_dou_no = #{record.saleDouNo,jdbcType=INTEGER},
+        sale_dou_no = #{record.saleDouNo,jdbcType=DECIMAL},
       </if>
       <if test="record.percent != null">
         percent = #{record.percent,jdbcType=DECIMAL},
@@ -343,15 +344,15 @@
       coupon_no = #{record.couponNo,jdbcType=VARCHAR},
       coupon_active_code = #{record.couponActiveCode,jdbcType=VARCHAR},
       customer_id = #{record.customerId,jdbcType=BIGINT},
-      coupon_dou = #{record.couponDou,jdbcType=INTEGER},
-      coupon_dou_left = #{record.couponDouLeft,jdbcType=INTEGER},
+      coupon_dou = #{record.couponDou,jdbcType=DECIMAL},
+      coupon_dou_left = #{record.couponDouLeft,jdbcType=DECIMAL},
       status = #{record.status,jdbcType=TINYINT},
       expire_time = #{record.expireTime,jdbcType=TIMESTAMP},
       addtime = #{record.addtime,jdbcType=TIMESTAMP},
       updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
-      sale_dou_yes = #{record.saleDouYes,jdbcType=INTEGER},
-      sale_dou_left = #{record.saleDouLeft,jdbcType=INTEGER},
-      sale_dou_no = #{record.saleDouNo,jdbcType=INTEGER},
+      sale_dou_yes = #{record.saleDouYes,jdbcType=DECIMAL},
+      sale_dou_left = #{record.saleDouLeft,jdbcType=DECIMAL},
+      sale_dou_no = #{record.saleDouNo,jdbcType=DECIMAL},
       percent = #{record.percent,jdbcType=DECIMAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -377,10 +378,10 @@
         customer_id = #{customerId,jdbcType=BIGINT},
       </if>
       <if test="couponDou != null">
-        coupon_dou = #{couponDou,jdbcType=INTEGER},
+        coupon_dou = #{couponDou,jdbcType=DECIMAL},
       </if>
       <if test="couponDouLeft != null">
-        coupon_dou_left = #{couponDouLeft,jdbcType=INTEGER},
+        coupon_dou_left = #{couponDouLeft,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
@@ -395,13 +396,13 @@
         updatetime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="saleDouYes != null">
-        sale_dou_yes = #{saleDouYes,jdbcType=INTEGER},
+        sale_dou_yes = #{saleDouYes,jdbcType=DECIMAL},
       </if>
       <if test="saleDouLeft != null">
-        sale_dou_left = #{saleDouLeft,jdbcType=INTEGER},
+        sale_dou_left = #{saleDouLeft,jdbcType=DECIMAL},
       </if>
       <if test="saleDouNo != null">
-        sale_dou_no = #{saleDouNo,jdbcType=INTEGER},
+        sale_dou_no = #{saleDouNo,jdbcType=DECIMAL},
       </if>
       <if test="percent != null">
         percent = #{percent,jdbcType=DECIMAL},
@@ -419,17 +420,46 @@
       coupon_no = #{couponNo,jdbcType=VARCHAR},
       coupon_active_code = #{couponActiveCode,jdbcType=VARCHAR},
       customer_id = #{customerId,jdbcType=BIGINT},
-      coupon_dou = #{couponDou,jdbcType=INTEGER},
-      coupon_dou_left = #{couponDouLeft,jdbcType=INTEGER},
+      coupon_dou = #{couponDou,jdbcType=DECIMAL},
+      coupon_dou_left = #{couponDouLeft,jdbcType=DECIMAL},
       status = #{status,jdbcType=TINYINT},
       expire_time = #{expireTime,jdbcType=TIMESTAMP},
       addtime = #{addtime,jdbcType=TIMESTAMP},
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
-      sale_dou_yes = #{saleDouYes,jdbcType=INTEGER},
-      sale_dou_left = #{saleDouLeft,jdbcType=INTEGER},
-      sale_dou_no = #{saleDouNo,jdbcType=INTEGER},
+      sale_dou_yes = #{saleDouYes,jdbcType=DECIMAL},
+      sale_dou_left = #{saleDouLeft,jdbcType=DECIMAL},
+      sale_dou_no = #{saleDouNo,jdbcType=DECIMAL},
       percent = #{percent,jdbcType=DECIMAL}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="subCouponDouNo" parameterType="map">
+     update pay_shop_coupon_remain
+     set coupon_dou_left = coupon_dou_left-#{subDou,jdbcType=DECIMAL},
+        status = #{status,jdbcType=TINYINT},
+        updatetime = now()
+      where id = #{id,jdbcType=BIGINT} and status = 0
+  </update>
+  <update id="addCouponDouNo" parameterType="map">
+     update pay_shop_coupon_remain
+     set coupon_dou_left = coupon_dou_left+#{addDou,jdbcType=DECIMAL},
+        status = #{status,jdbcType=TINYINT},
+        updatetime = now()
+      where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="subCouponDouYes" parameterType="map">
+     update pay_shop_coupon_remain
+     set sale_dou_left = sale_dou_left-#{subDouYes,jdbcType=DECIMAL},
+        saleStatus = #{status,jdbcType=TINYINT},
+        updatetime = now()
+      where id = #{id,jdbcType=BIGINT} and saleStatus = 0
+  </update>
+  <update id="addCouponDouYes" parameterType="map">
+  update pay_shop_coupon_remain
+     set sale_dou_left = sale_dou_left+#{addDouYes,jdbcType=DECIMAL},
+        saleStatus = #{status,jdbcType=TINYINT},
+        updatetime = now()
+      where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="SaleYesSum" parameterType="com.joiest.jpf.common.po.PayShopCouponRemainExample" resultType="java.math.BigDecimal">
     SELECT SUM(sale_dou_left) FROM pay_shop_coupon_remain
@@ -445,4 +475,9 @@
     </if>
 
   </select>
+  <update id="updateExpireTimeById" parameterType="string">
+    update pay_shop_coupon_remain
+      set expire_time = date_add(expire_time, interval 1 month)
+    where id=#{id,jdbcType=BIGINT} and expire_time &lt;= now();
+  </update>
 </mapper>

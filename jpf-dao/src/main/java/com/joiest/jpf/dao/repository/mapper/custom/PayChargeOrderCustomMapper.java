@@ -91,4 +91,10 @@ public interface PayChargeOrderCustomMapper {
      */
     BigDecimal SuccessCount(PayChargeOrderExample example);
 
+    /**
+     * 增加方法
+     * @param e
+     * @return
+     */
+    List<PayChargeOrder> selectByExcelExample(PayChargeOrderExample e);
 }

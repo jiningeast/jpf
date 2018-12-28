@@ -3,14 +3,17 @@ package com.joiest.jpf.facade.impl;
 import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.exception.JpfErrorInfo;
 import com.joiest.jpf.common.exception.JpfException;
+import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyExample;
+import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.util.Md5Encrypt;
-import com.joiest.jpf.common.po.PayShopCompany;
 import com.joiest.jpf.common.util.ConfigUtil;
 import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeCompanyCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyChargeMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
 import com.joiest.jpf.dto.GetChargeCompanyRequest;
 import com.joiest.jpf.dto.GetChargeCompanyResponse;
 import com.joiest.jpf.entity.ChargeCompanyInfo;
@@ -20,11 +23,10 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacade {
 
@@ -33,6 +35,12 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
 
     @Autowired
     private PayChargeCompanyCustomMapper payChargeCompanyCustomMapper;
+
+    @Autowired
+    private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
+
+    @Autowired
+    private PayChargeCompanyChargeMapper payChargeCompanyChargeMapper;
 
     /**
      * 获取商户列表
@@ -240,38 +248,161 @@ public class ChargeCompanyServiceFacadeImpl implements ChargeCompanyServiceFacad
     /**
      * 充值失败返还商户资金
      * */
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public JSONObject returnComfunds(ChargeOrderInfo orderInfo){
+    public JSONObject returnComfunds(ChargeOrderInfo orderInfo)  throws Exception{
 
         JSONObject retParam = new JSONObject();
-        retParam.put("code","10008");
-        retParam.put("info","返还商户金额失败");
+        retParam.put("code","10000");
+        retParam.put("info","返还商户金额成功");
 
         ChargeCompanyInfo companyInfo = new ChargeCompanyInfo();
         companyInfo.setMerchNo(orderInfo.getMerchNo());
         ChargeCompanyInfo chargeCompanyInfo = getOne(companyInfo);
         if(chargeCompanyInfo == null){
+            retParam.put("code","100008");
             retParam.put("info","订单信息未匹配到商户信息");
             return retParam;
         }
         Boolean newCode = ToolUtils.ValidateCode(chargeCompanyInfo.getMoneyCode(),chargeCompanyInfo.getId(),chargeCompanyInfo.getMoney().toString(), ConfigUtil.getValue("MERCH_VALIDE_CODE"));
         if(newCode.equals(false)){
+            retParam.put("code","10008");
             retParam.put("info","商户金额校验错误");
             return retParam;
         }
-        //充值失败将失败金额返回商户金额
-        BigDecimal companyMoney = chargeCompanyInfo.getMoney().add(orderInfo.getProductPrice());
-        String moneyCode = ToolUtils.CreateCode(companyMoney.toString(),chargeCompanyInfo.getId(),ConfigUtil.getValue("MERCH_VALIDE_CODE"));
-
-        ChargeCompanyInfo comInfo = new ChargeCompanyInfo();
-        comInfo.setId(chargeCompanyInfo.getId());
-        comInfo.setMoneyCode(moneyCode);
-        comInfo.setMoney(companyMoney);
-        int isUp = updateColumnByPrimaryKey(comInfo);
-        if(isUp == 1){
-            retParam.put("code","10000");
-            retParam.put("info","返还商户金额成功");
-        }
+        //退款
+        addCompanyMoney(chargeCompanyInfo,orderInfo);
+        //增加退款流水
+        PayChargeCompany payChargeCompany = payChargeCompanyMapper.selectByPrimaryKey(chargeCompanyInfo.getId());
+        addStreamFail(orderInfo,payChargeCompany);
         return retParam;
+    }
+
+
+    /**
+     * 查询商户列表
+     * @return
+     */
+    @Override
+    public List<PayChargeCompany> getCompanyList() {
+        PayChargeCompanyExample example = new PayChargeCompanyExample();
+        example.setOrderByClause("id asc");
+
+        //只查询id:17 18的公司
+//        PayChargeCompanyExample.Criteria criteria = example.createCriteria();
+
+//        List<String> list = new ArrayList<>();
+//        list.add("17");
+//        list.add("18");
+//        criteria.andIdIn(list);
+
+        return payChargeCompanyMapper.selectByExample(example);
+    }
+
+    /**
+     * 校正商户余额
+     * @param company
+     */
+    @Override
+    public void reviseCompanyCharge(PayChargeCompany company) {
+        BigDecimal companyMoney = BigDecimal.valueOf(0);
+
+        Date beginDate;
+        Date endDate;
+
+        PayChargeCompanyChargeExample example = new PayChargeCompanyChargeExample();
+        example.setOrderByClause("id asc");
+        PayChargeCompanyChargeExample.Criteria criteria = example.createCriteria();
+        criteria.andCompanyIdEqualTo(company.getId());
+
+        //查询某个商家所有充值记录
+        List<PayChargeCompanyCharge> payChargeCompanyChargeList = payChargeCompanyChargeMapper.selectByExample(example);
+
+        //根据两次充值记录分段校正余额  先加上充值的钱
+        for (int i= 0;i<payChargeCompanyChargeList.size();i++){
+
+            PayChargeCompanyMoneyStreamExample streamExample = new PayChargeCompanyMoneyStreamExample();
+            streamExample.setOrderByClause("id asc");
+            PayChargeCompanyMoneyStreamExample.Criteria streamCriteria = streamExample.createCriteria();
+            streamCriteria.andCompanyIdEqualTo(company.getId());
+
+            beginDate = payChargeCompanyChargeList.get(i).getAddtime();
+
+            if (i < payChargeCompanyChargeList.size() - 1){
+                endDate = payChargeCompanyChargeList.get(i+1).getAddtime();
+                streamCriteria.andAddtimeBetween(beginDate, endDate);
+            }else if(i == payChargeCompanyChargeList.size() - 1){
+                endDate = new Date();
+                streamCriteria.andAddtimeBetween(beginDate, endDate);
+            }
+
+            //先把本次充值的钱加进去
+//            companyMoney = companyMoney.add(payChargeCompanyChargeList.get(i).getMoney());
+
+
+            //查询两次充值时间段内的所有流水(更新流水的钱+更新用户的钱)
+            List<PayChargeCompanyMoneyStream> payChargeCompanyMoneyStreamList = payChargeCompanyMoneyStreamMapper.selectByExample(streamExample);
+
+            for (PayChargeCompanyMoneyStream stream : payChargeCompanyMoneyStreamList){
+                if (stream.getStatus() == 3){
+                    //如果状态是退款 加钱
+                    companyMoney = companyMoney.add(stream.getTotalMoney());
+                }else if (stream.getStatus() == 2){
+                    //如果状态是下单 扣钱
+                    companyMoney = companyMoney.subtract(stream.getTotalMoney());
+                }else if(stream.getStatus() == 1){
+                    //充值 加钱
+                    companyMoney = companyMoney.add(payChargeCompanyChargeList.get(i).getMoney());
+                }
+
+                stream.setNewMoney(companyMoney);
+                payChargeCompanyMoneyStreamMapper.updateByPrimaryKey(stream);
+            }
+
+
+        }
+
+    }
+
+
+    @Override
+    public void addCompanyMoney(ChargeCompanyInfo companyInfo, ChargeOrderInfo orderInfo) throws Exception {
+        Map<String,Object> map =new HashMap<>();
+        map.put("companyId",companyInfo.getId());
+        map.put("addMoney",orderInfo.getTotalMoney());
+        map.put("companyKey",ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        int count = payChargeCompanyCustomMapper.updateCompanyMoneyAdd(map);
+        if(count!=1){
+            throw new Exception("退款失败了"+orderInfo.getOrderNo());
+        }
+    }
+
+    public void addStreamFail(ChargeOrderInfo chargeOrderInfo,PayChargeCompany companyInfo) {
+        PayChargeCompanyMoneyStream streamData = new PayChargeCompanyMoneyStream();
+        streamData.setStreamNo("MS"+ToolUtils.createOrderid());//流水号
+        streamData.setCompanyId(companyInfo.getId());//商户id
+        streamData.setCompanyName(chargeOrderInfo.getCompanyName());//商户名称
+        streamData.setMerchNo(chargeOrderInfo.getMerchNo());//商户号
+        streamData.setOrderId(chargeOrderInfo.getId());//订单id 可能是消费订单、充值订单、退款订单
+        streamData.setOrderNo(chargeOrderInfo.getOrderNo()); // 订单号可能是消费订单、充值订单、退款订单
+        streamData.setProductId(chargeOrderInfo.getProductId());//产品Id
+        streamData.setProductName(chargeOrderInfo.getProductName());//产品名称
+
+        streamData.setProductValue(chargeOrderInfo.getProductValue()); //产品面值
+        streamData.setProductBidPrice(chargeOrderInfo.getProductBidPrice());//产品成本价
+        streamData.setProductSalePrice(chargeOrderInfo.getProductPrice());//产品标准售价 默认null
+        //streamData.setProductInterfacePrice(chargeOrderInfo.getProductBidPrice());//产品接口价同成本价
+        streamData.setProductAmount(chargeOrderInfo.getProductAmount());//产品数量
+        streamData.setTotalMoney(chargeOrderInfo.getTotalMoney());//总价
+
+        streamData.setInterfaceType(chargeOrderInfo.getInterfaceType());//接口类型 0=欧非 1=威能 默认null
+        streamData.setInterfaceOrderNo(chargeOrderInfo.getInterfaceOrderNo());//接口订单号 默认null
+        streamData.setStatus((byte)3);//流水类型 1=充值 2=下单 3=退款
+        streamData.setStreamType((byte)0);//流水类型 0=收入 1=支出
+        streamData.setNewMoney(companyInfo.getMoney());//变动后的余额
+        streamData.setMemo("");//流水备注
+        streamData.setIsDel((byte)0);//删除标记 0=未删除 1=已删除
+        streamData.setAddtime(new Date());
+        payChargeCompanyMoneyStreamMapper.insertSelective(streamData);
     }
 }

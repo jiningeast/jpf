@@ -3,6 +3,8 @@ package com.joiest.jpf.dao.repository.mapper.generate;
 import com.joiest.jpf.common.po.PayChargeCompany;
 import com.joiest.jpf.common.po.PayChargeCompanyExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface PayChargeCompanyMapper {
@@ -83,4 +85,5 @@ public interface PayChargeCompanyMapper {
      * @param record
      */
     int updateByPrimaryKey(PayChargeCompany record);
+
 }

@@ -83,11 +83,4 @@ public interface PayChargeOrderMapper {
      * @param record
      */
     int updateByPrimaryKey(PayChargeOrder record);
-
-    /**
-     * 根据条件查询列表
-     *
-     * @param example
-     */
-    List<PayChargeOrder> selectByExcelExample(PayChargeOrderExample example);
 }

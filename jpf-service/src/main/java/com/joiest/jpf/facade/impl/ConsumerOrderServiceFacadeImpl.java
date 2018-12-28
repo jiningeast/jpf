@@ -134,6 +134,10 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         //记录余额
         String newCompanyMoney=chargeCompany.getMoney().toString();
         String money = payChargeConsumerOrder.getMoney().toString();
+        if(new BigDecimal(money).compareTo(new BigDecimal(newCompanyMoney))>0){//如果订单的钱大于商户余额的钱
+            logger.info("当前订单的金额大于账户剩余额，匹配的额度为剩余额");
+            money=chargeCompany.getMoney().toString();
+        }
         long start = System.currentTimeMillis();
         long end = 0L ;
         while (true){
@@ -199,7 +203,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
     private String savePayChargeOrder(String companyName,PayShopBargainRechargeOrder payShopBargainRechargeOrder, PayChargeOrder order,String orderNo) {
         String payChargeOrderNo="CH"+ ToolUtils.getRandomInt(100,999)+System.currentTimeMillis()+ToolUtils.getRandomInt(100,999);
         order.setOrderNo(payChargeOrderNo);
-        order.setAddtime(new Date());
+        order.setAddtime(payShopBargainRechargeOrder.getAddtime());
         order.setChargePhone(payShopBargainRechargeOrder.getChargeNo());
         order.setCompanyId(payShopBargainRechargeOrder.getPullCompanyId());
         order.setCompanyName(companyName);
@@ -219,9 +223,11 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
             order.setProductType(4);
         }
         order.setProductValue(payShopBargainRechargeOrder.getFacePrice());
-        order.setStatus((byte)0);
-        order.setTotalMoney(payShopBargainRechargeOrder.getAmount());
+        order.setStatus((byte)2);
+        //更改订单的金额为面值
+        order.setTotalMoney(payShopBargainRechargeOrder.getFacePrice());
         order.setConsumerOrderNo(orderNo);
+        order.setRechargeOrderId(payShopBargainRechargeOrder.getId()+"");
         payChargeOrderCustomMapper.insertSelective(order);
         return order.getId();
     }
@@ -238,7 +244,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setStreamNo(moneyStramNo);//流水号
         payChargeCompanyMoneyStream.setCompanyId(order.getCompanyId());
         payChargeCompanyMoneyStream.setCompanyName(order.getCompanyName());
-        payChargeCompanyMoneyStream.setAddtime(new Date());
+        payChargeCompanyMoneyStream.setAddtime(order.getAddtime());
         payChargeCompanyMoneyStream.setOrderId(order.getId());
         payChargeCompanyMoneyStream.setOrderNo(order.getOrderNo());
         payChargeCompanyMoneyStream.setInterfaceType((byte)2);
@@ -250,7 +256,7 @@ public class ConsumerOrderServiceFacadeImpl implements ConsumerOrderServiceFacad
         payChargeCompanyMoneyStream.setProductName(order.getProductName());
         payChargeCompanyMoneyStream.setProductSalePrice(order.getProductPrice());
         payChargeCompanyMoneyStream.setProductValue(order.getProductValue());
-        payChargeCompanyMoneyStream.setStatus((byte)1);
+        payChargeCompanyMoneyStream.setStatus((byte)2);
         payChargeCompanyMoneyStream.setStreamType((byte)1);
         payChargeCompanyMoneyStream.setTotalMoney(order.getTotalMoney());
         payChargeCompanyMoneyStream.setConsumerOrderNo(order.getConsumerOrderNo());

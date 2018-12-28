@@ -167,6 +167,13 @@
                         },styler: function (value, row, index) {
                             return 'color:red';
                         }
+                    },{field:'isBargainBuyer',title:'是否为买家',width:'7%',
+                        formatter : function(value,row,index){
+                            if(value=='1'){return '是买家'}
+                            else{return '不是买家'}
+                        },styler: function (value, row, index) {
+                            return 'color:red';
+                        }
                     },
                     {field:'addtime',title:'注册时间',width:'12%',formatter: formatDateStr},
 

@@ -41,7 +41,7 @@ public class PayChargeOrder implements Serializable {
     private String chargePhone;
 
     /**
-     * 产品类型 0=欧飞话费充值 1=微能话费充值 2=中石化油卡充值 3=中石油油卡充值
+     * 产品类型 0=欧飞话费充值 1=微能话费充值 2=中石化油卡充值 3=中石油油卡充值 4飞翰（敬恒）
      */
     private Integer productType;
 
@@ -159,6 +159,11 @@ public class PayChargeOrder implements Serializable {
      * pay_charge_consumer_order表中的订单号
      */
     private String consumerOrderNo;
+
+    /**
+     * 敬恒记录id
+     */
+    private String rechargeOrderId;
 
     private static final long serialVersionUID = 1L;
 
@@ -410,6 +415,14 @@ public class PayChargeOrder implements Serializable {
         this.consumerOrderNo = consumerOrderNo == null ? null : consumerOrderNo.trim();
     }
 
+    public String getRechargeOrderId() {
+        return rechargeOrderId;
+    }
+
+    public void setRechargeOrderId(String rechargeOrderId) {
+        this.rechargeOrderId = rechargeOrderId == null ? null : rechargeOrderId.trim();
+    }
+
     /**
      *
      */
@@ -450,6 +463,7 @@ public class PayChargeOrder implements Serializable {
         sb.append(", updatetime=").append(updatetime);
         sb.append(", remark=").append(remark);
         sb.append(", consumerOrderNo=").append(consumerOrderNo);
+        sb.append(", rechargeOrderId=").append(rechargeOrderId);
         sb.append("]");
         return sb.toString();
     }
@@ -500,7 +514,8 @@ public class PayChargeOrder implements Serializable {
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getConsumerOrderNo() == null ? other.getConsumerOrderNo() == null : this.getConsumerOrderNo().equals(other.getConsumerOrderNo()));
+            && (this.getConsumerOrderNo() == null ? other.getConsumerOrderNo() == null : this.getConsumerOrderNo().equals(other.getConsumerOrderNo()))
+            && (this.getRechargeOrderId() == null ? other.getRechargeOrderId() == null : this.getRechargeOrderId().equals(other.getRechargeOrderId()));
     }
 
     /**
@@ -541,6 +556,7 @@ public class PayChargeOrder implements Serializable {
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getConsumerOrderNo() == null) ? 0 : getConsumerOrderNo().hashCode());
+        result = prime * result + ((getRechargeOrderId() == null) ? 0 : getRechargeOrderId().hashCode());
         return result;
     }
 }

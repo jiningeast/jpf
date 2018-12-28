@@ -1,16 +1,21 @@
 package com.joiest.jpf.facade.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.joiest.jpf.common.po.PayChargeCompany;
+import com.joiest.jpf.common.po.PayChargeCompanyMoneyStream;
 import com.joiest.jpf.common.po.PayChargeOrder;
 import com.joiest.jpf.common.po.PayChargeOrderExample;
-import com.joiest.jpf.common.util.ConfigUtil;
-import com.joiest.jpf.common.util.DateUtils;
-import com.joiest.jpf.common.util.WnpayUtils;
+import com.joiest.jpf.common.util.*;
+import com.joiest.jpf.dao.repository.mapper.custom.PayChargeCompanyCustomMapper;
 import com.joiest.jpf.dao.repository.mapper.custom.PayChargeOrderCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayChargeCompanyMoneyStreamMapper;
 import com.joiest.jpf.dao.repository.mapper.generate.PayChargeOrderMapper;
 import com.joiest.jpf.dto.ChargeOrderInterfaceRequest;
 import com.joiest.jpf.dto.GetChargeOrderRequest;
 import com.joiest.jpf.dto.GetChargeOrderResponse;
-import com.joiest.jpf.entity.ChargeOrderInfo;
+import com.joiest.jpf.entity.*;
+import com.joiest.jpf.facade.ChargeCompanyMoneyStreamServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -18,11 +23,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
     private static final Logger logger = LogManager.getLogger(ChargeOrderServiceFacadeImpl.class);
@@ -32,6 +37,15 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
 
     @Autowired
     private PayChargeOrderCustomMapper payChargeOrderCustomMapper;
+
+    @Autowired
+    private PayChargeCompanyMoneyStreamMapper payChargeCompanyMoneyStreamMapper;
+
+    @Autowired
+    private PayChargeCompanyMapper payChargeCompanyMapper;
+
+    @Autowired
+    private PayChargeCompanyCustomMapper payChargeCompanyCustomMapper;
     /**
      * 获取订单信息
      * 查询单条信息
@@ -332,32 +346,17 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
      * 所有指定商户异常订单处理
      */
     @Override
-    public List<ChargeOrderInfo>  getAllAbnormalOrders(ChargeOrderInfo request)
+    public List<PayChargeOrder>  getAllAbnormalOrders()
     {
-
         PayChargeOrderExample example = new PayChargeOrderExample();
-        example.setOrderByClause("addtime ASC");
-        //example.setPageNo(1);
-        //example.setPageSize(1);
-
+        example.setOrderByClause(" addtime ASC");
         PayChargeOrderExample.Criteria c =example.createCriteria();
-        c.andCompanyIdEqualTo(request.getCompanyId());
-
+        //查询昨天的数据
+        c.andAddtimeGreaterThanOrEqualTo(DateUtils.getFdate(DateUtils.dateToString(DateUtils.getYesterday()),DateUtils.DATEFORMATSHORT));
+        c.andAddtimeLessThan(DateUtils.getFdate(DateUtils.getCurDate(),DateUtils.DATEFORMATSHORT));
+        c.andInterfaceTypeEqualTo((byte)0);
         List<PayChargeOrder> list = payChargeOrderMapper.selectByExample(example);
-        if( list.size() <=0 || list == null){
-            return null;
-        }
-        List<ChargeOrderInfo> infoList = new ArrayList<>();
-
-        for (PayChargeOrder one : list)
-        {
-            ChargeOrderInfo info = new ChargeOrderInfo();
-            BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
-            beanCopier.copy(one, info, null);
-            infoList.add(info);
-        }
-
-        return infoList;
+        return list;
     }
 
 
@@ -368,7 +367,7 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
         matchCriteria(request,c);
         e.setOrderByClause("id DESC");
         c.andIsDelEqualTo((byte)0);
-        return payChargeOrderMapper.selectByExcelExample(e);
+        return payChargeOrderCustomMapper.selectByExcelExample(e);
     }
 
     /**
@@ -479,10 +478,165 @@ public class ChargeOrderServiceFacadeImpl implements ChargeOrderServiceFacade {
             resultMap.put("code","10000");
         }else if(responseDeal!=null&&"10001".equals(responseDeal.get("code"))){
             resultMap.put("code","10001");
+        }else if(responseDeal!=null&&"10002".equals(responseDeal.get("code"))){
+            resultMap.put("code","10002");
         }else{
             resultMap.put("code","10008");
         }
         return resultMap;
+    }
+
+
+    @Override
+    public void updateOrder(PayChargeOrder payChargeOrder) {
+        payChargeOrderMapper.updateByPrimaryKeySelective(payChargeOrder);
+    }
+
+    @Override
+    public void sendEmailToManager(List<BalanceOrder> balanceOrders, HttpServletResponse response) {
+
+        ExcelDealUtils excelUtils = new ExcelDealUtils();
+        JSONArray titles = new JSONArray();
+        titles.add("欧非订单号");
+        titles.add("欧非订单状态");
+        titles.add("欣享订单号");
+        titles.add("欣享订单状态");
+        titles.add("金额");
+        titles.add("手机号");
+        titles.add("订单id");
+        titles.add("充值时间");
+        JSONArray fields = new JSONArray();
+        fields.add("interfaceOrderNo");
+        fields.add("interfaceOrderStatus");
+        fields.add("selfOrderNo");
+        fields.add("selfOrderStatus");
+        fields.add("money");
+        fields.add("phone");
+        fields.add("orderId");
+        fields.add("addtime");
+        String excelPath = ConfigUtil.getValue("EXCEL_PATH");
+        JSONObject exExcelResponse = null;
+        try {
+            logger.info("excelPath"+excelPath);
+            exExcelResponse = excelUtils.exportExcel(response,titles.toString(),fields.toString(),balanceOrders,2,excelPath);
+            JSONObject data = JSONObject.fromObject( exExcelResponse.get("data"));
+            String uploadPath = data.get("localUrl").toString();    // excel文件的本地地址
+            String html=DateUtils.getYesterday()+"欧非订单的对账数据";
+            SendMailUtil.sendMultipleEmail(html,"manager",ConfigUtil.getValue("balance_Of_Account_Email"),ConfigUtil.getValue("balance_Of_Account_Name"),uploadPath,"欧非对账错误数据.xls",html);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public PayChargeOrder savePayOrder(Map<String, String> actParam, ChargeCompanyInfo companyInfo, ChargeProductInfo chargeProductInfo)  throws Exception{
+        PayChargeOrder order = new PayChargeOrder();
+        String orderno = "CH"+ ToolUtils.createOrderid();
+        order.setOrderNo(orderno);
+        order.setForeignOrderNo(actParam.get("outOrderNo"));
+        order.setCompanyId(companyInfo.getId());
+        order.setCompanyName(companyInfo.getCompanyName());
+        order.setMerchNo(companyInfo.getMerchNo());
+        order.setChargePhone(actParam.get("phone")==null?actParam.get("cardNo"):actParam.get("phone"));
+        order.setProductId(chargeProductInfo.getId());
+        order.setProductName(chargeProductInfo.getName());
+        order.setProductPrice(chargeProductInfo.getSalePrice());
+        order.setProductAmount((Integer) 1);
+        order.setTotalMoney(chargeProductInfo.getSalePrice());
+        order.setNotifyUrl(actParam.get("notifyUrl"));
+        order.setRequestParams(JSONObject.fromObject(actParam).toString());
+        order.setStatus((byte)0);
+        order.setAddtime(new Date());
+        order.setProductValue(chargeProductInfo.getValue());
+        //判断是否是油卡服务
+        if(actParam.get("cardNo")!=null){
+            order.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+            order.setProductType(Integer.valueOf(actParam.get("oilType")));
+            order.setInterfaceType((byte)0);
+        }else{
+            //此处是直充业务，判断走谁的接口
+            String lastNum = org.apache.commons.lang.StringUtils.substring(orderno,-1,orderno.length());
+            if (org.apache.commons.lang.StringUtils.isBlank(ConfigUtil.getValue("OF_AND_WEINENG"))||(Integer.parseInt(lastNum)>=Integer.parseInt(ConfigUtil.getValue("OF_AND_WEINENG")))) {
+                order.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+                order.setInterfaceType((byte)0);
+                order.setProductType(0);
+            }else{
+                order.setProductBidPrice(chargeProductInfo.getWnProductPrice());
+                order.setInterfaceType((byte)1);
+                order.setProductType(1);
+            }
+        }
+        payChargeOrderCustomMapper.insertSelective(order);
+        //扣除商户金额
+        subCompanyMoney(companyInfo,chargeProductInfo);
+        PayChargeCompany chargeCompany = payChargeCompanyMapper.selectByPrimaryKey(companyInfo.getId());
+        // 新增资金流水
+        saveMoneyStream(chargeCompany, chargeProductInfo,order);
+
+        return order;
+    }
+
+    public void subCompanyMoney(ChargeCompanyInfo companyInfo,ChargeProductInfo chargeProductInfo) throws Exception {
+        //调用接口之前，先扣钱 更新商户信息  金额验证
+        Map<String,Object> map = new HashMap<>();
+        map.put("companyId",companyInfo.getId());
+        map.put("subMoney",chargeProductInfo.getSalePrice());
+        map.put("companyKey",ConfigUtil.getValue("MERCH_VALIDE_CODE"));
+        int count = payChargeCompanyCustomMapper.updateCompanyMoneySub(map);
+        if(count==0){
+            throw new Exception("余额不足");
+        }
+    }
+
+    @Override
+    public ChargeOrderInfo getById(String id) {
+        PayChargeOrder one = payChargeOrderMapper.selectByPrimaryKey(id);
+        ChargeOrderInfo info = new ChargeOrderInfo();
+        BeanCopier beanCopier = BeanCopier.create(PayChargeOrder.class, ChargeOrderInfo.class, false);
+        beanCopier.copy(one, info, null);
+        return info;
+    }
+
+    public void saveMoneyStream(PayChargeCompany companyInfo, ChargeProductInfo chargeProductInfo, PayChargeOrder order) {
+        PayChargeCompanyMoneyStream stream = new PayChargeCompanyMoneyStream();
+        String streamNo = "MS"+System.currentTimeMillis()+ ToolUtils.getRandomInt(100,999);
+        stream.setStreamNo(streamNo);
+        stream.setCompanyId(companyInfo.getId());
+        stream.setCompanyName(companyInfo.getCompanyName());
+        stream.setMerchNo(companyInfo.getMerchNo());
+        stream.setOrderId(""+order.getId());
+        stream.setOrderNo(order.getOrderNo());
+        stream.setProductId(chargeProductInfo.getId());
+        stream.setProductName(chargeProductInfo.getName());
+        stream.setProductValue(chargeProductInfo.getValue());
+        if(order.getInterfaceType()==1){
+            stream.setProductBidPrice(chargeProductInfo.getWnProductPrice());
+        }else{
+            stream.setProductBidPrice(chargeProductInfo.getOfProductPrice());
+        }
+        stream.setProductSalePrice(chargeProductInfo.getSalePrice());
+       // stream.setProductInterfacePrice(stream.getProductBidPrice());
+        stream.setProductAmount(1);
+        stream.setTotalMoney(chargeProductInfo.getSalePrice());
+        stream.setInterfaceType(order.getInterfaceType());
+        //info.setInterfaceOrderNo(map.get("orderid"));
+        stream.setStatus((byte)2);
+        stream.setStreamType((byte)1);
+        stream.setNewMoney(companyInfo.getMoney());
+        stream.setIsDel((byte)0);
+        stream.setAddtime(new Date());
+        payChargeCompanyMoneyStreamMapper.insertSelective(stream);
+    }
+
+    @Override
+    public List<PayChargeOrder> getOrdersByPage(Long pageNo, Long pageSize) {
+        PayChargeOrderExample example =new PayChargeOrderExample();
+        PayChargeOrderExample.Criteria criteria =example.createCriteria();
+        example.setPageNo(pageNo);
+        example.setPageSize(pageSize);
+        example.setOrderByClause(" id asc ");
+        return payChargeOrderMapper.selectByExample(example);
     }
 
 }

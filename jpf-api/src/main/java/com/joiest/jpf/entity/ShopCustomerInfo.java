@@ -54,6 +54,12 @@ public class ShopCustomerInfo {
     /**
      * 用户类型 0=正常用户 1=特殊用户
      */
+
+    /**
+     * 是否是欣豆交易的买家 0=不是 1=是
+     */
+    private Byte isBargainBuyer;
+
     private Byte type;
 
     /**
@@ -226,5 +232,13 @@ public class ShopCustomerInfo {
 
     public void setSaleDou(BigDecimal saleDou) {
         this.saleDou = saleDou;
+    }
+
+    public Byte getIsBargainBuyer() {
+        return isBargainBuyer;
+    }
+
+    public void setIsBargainBuyer(Byte isBargainBuyer) {
+        this.isBargainBuyer = isBargainBuyer;
     }
 }
