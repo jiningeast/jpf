@@ -81,6 +81,7 @@ public class OrderCompensationController {
         logContent.append("\n\n当前查询条件为第: "+ pageNo +"页,每页查询" + pageSize + "条订单");
         logContent.append("\n\n当前商户id:" + companyId);
         logContent.append("\n开始时间: "+ format.format(date));
+        long startTime = System.currentTimeMillis();
 
         List<PayChargeOrder> payChargeOrderList = chargeOrderServiceFacade.getOrdersByPage(companyId, pageNo, pageSize);
         logContent.append("\nSize: "+payChargeOrderList.size());
@@ -182,7 +183,7 @@ public class OrderCompensationController {
         }
 
         //生成日志
-        logContent.append("\n 更新流水记录完成,共:"+count+"条数据\t");
+        logContent.append("\n 更新流水记录完成,共:"+count+"条数据,用时: "+ (System.currentTimeMillis() - startTime) / 1000 +"秒 \t");
         logContent.append("\n结束时间: "+ format.format(new Date()));
         LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
         logger.info(logContent);
@@ -207,6 +208,7 @@ public class OrderCompensationController {
         String logPath = "/logs/jpf-charge-api/log/";
         String fileName = "OrderCompensationRevise";
         logContent.append("\n开始时间: "+ format.format(date) + "开始校正...");
+        long startTime = System.currentTimeMillis();
 
         //获取所有商户列表
         List<PayChargeCompany> payChargeCompanyList = chargeCompanyServiceFacade.getCompanyList();
@@ -216,10 +218,13 @@ public class OrderCompensationController {
             chargeCompanyServiceFacade.reviseCompanyCharge(company);
         }
 
+        logContent.append("\t 共用时: "+ (System.currentTimeMillis() - startTime) / 1000 +"秒");
         logContent.append("\t 结束时间: "+ format.format(new Date()) +"校正完成...");
+
 
         //生成日志
         LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+        logger.info(logContent);
 
         resultMap.put("code", "200");
         resultMap.put("message", "余额校正完成");
