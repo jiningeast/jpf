@@ -104,6 +104,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         String Token = request.getHeader("Token");
         logger.info("========Token：" + Token);
         if(NOTLOGINURL.contains(requestUri)){ // 不需要过滤的地址
+            logger.info("不需要验证权限"+requestUri);
             return super.preHandle(request, response, handler);
         }else if(!NOTLOGINURL.contains(requestUri)&&StringUtils.isBlank(login_type)){//微信端的验证
             String openId_encrypt = redisCustomServiceFacade.get(ConfigUtil.getValue("WEIXIN_LOGIN_KEY") + Token);
