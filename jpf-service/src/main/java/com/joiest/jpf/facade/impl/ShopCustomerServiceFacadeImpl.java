@@ -404,11 +404,36 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         if(payShopCouponActives!=null&&payShopCouponActives.size()!=0){
             map.put("code","10000");
             map.put("msg","已支付成功");
-            map.put("customerId",payShopCouponActives.get(0).getCustomerId());
-            Map<String,Object> data = new HashMap<>();
+            Map<String,Object> dataNo = new HashMap<>();
+            Map<String,Object> dataYes = new HashMap<>();
+            BigDecimal yesDou = new BigDecimal(0);
+            BigDecimal noDou = new BigDecimal(0);
+            List<CouponActive> couponNolist =new ArrayList<>();
+            List<CouponActive> couponYeslist =new ArrayList<>();
             for (PayShopCouponActive payShopCouponActive: payShopCouponActives) {
-
+                CouponActive couponActive = new CouponActive();
+                if(payShopCouponActive.getSubCouponType()==0){
+                    couponActive.setId(payShopCouponActive.getId());
+                    couponActive.setTotalSaleDouNo(payShopCouponActive.getDou().toString());
+                    couponActive.setTotalSaleDouYes("0");
+                    noDou=ArithmeticUtils.add(noDou.toString(),payShopCouponActive.getDou().toString());
+                    couponNolist.add(couponActive);
+                }else{
+                    couponActive.setId(payShopCouponActive.getId());
+                    couponActive.setTotalSaleDouNo("0");
+                    couponActive.setTotalSaleDouYes(payShopCouponActive.getDou().toString());
+                    yesDou=ArithmeticUtils.add(yesDou.toString(),payShopCouponActive.getDou().toString());
+                    couponYeslist.add(couponActive);
+                }
             }
+            map.put("orderNo",orderNo);
+            map.put("customerId",payShopCouponActives.get(0).getCustomerId());
+            map.put("totalSaleDouNo",noDou);
+            map.put("totalSaleDouYes",yesDou);
+            map.put("subDate",payShopCouponActives.get(0).getAddtime());
+            map.put("couponNolist",couponNolist);
+            map.put("couponYeslist",couponYeslist);
+
         }else{
             map.put("code","10008");
             map.put("msg","支付失败");
