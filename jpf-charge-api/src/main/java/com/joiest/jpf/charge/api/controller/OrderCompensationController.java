@@ -128,6 +128,7 @@ public class OrderCompensationController {
                    //无流水记录
                    logContent.append("\n 无流水记录,订单号为:"+order.getOrderNo()+"\t");
                    addStream(payChargeCompanyMoneyStream, order, logContent, "2", "1");
+                   count += 1;
                }
                //订单状态为 3 5 给商户退钱
             }else if(order.getStatus() == 3 || order.getStatus() == 5){
@@ -140,8 +141,10 @@ public class OrderCompensationController {
                     //判断此条流水记录的状态 流水类型 1=充值 2=下单 3=退款
                     if (payChargeCompanyMoneyStreamList.get(0).getStatus() == 2){
                         addStream(payChargeCompanyMoneyStream, order, logContent, "3", "0");
+                        count += 1;
                     }else if (payChargeCompanyMoneyStreamList.get(0).getStatus() == 3){
                         addStream(payChargeCompanyMoneyStream, order, logContent, "2", "1");
+                        count += 1;
                     }
 
                 //有两条流水记录
