@@ -103,7 +103,9 @@ public class ShopIncomeConfirmationServiceFacadeImpl implements ShopIncomeConfir
                 PayShopCouponActiveExample payShopCouponActiveExample = new PayShopCouponActiveExample();
                 payShopCouponActiveExample.createCriteria().andOrderIdEqualTo(payShopOrderCustom.getId());
                 List<PayShopCouponActive> payShopCouponActiveList = payShopCouponActiveMapper.selectByExample(payShopCouponActiveExample);
-                // TODO 添加欣券商户订单内余额字段赋值
+                if(!CollectionUtils.isEmpty(payShopCouponActiveList)){
+                    merchCouponOrderBanlance = payShopCouponActiveList.get(0).getContractSurplus();
+                }
                 
                 PayShopBatchCouponExample payShopBatchCouponExample = new PayShopBatchCouponExample();
                 payShopBatchCouponExample.createCriteria().andCouponNoEqualTo(couponNo);
