@@ -53,7 +53,7 @@ public class MarketPayController {
     @RequestMapping(value = "pay",method = RequestMethod.POST)
     @ResponseBody
     public  String  pay(HttpServletRequest request){
-
+        logger.info("进入支付程序了");
         String payParam = request.getParameter("payParam");
         if(StringUtils.isBlank(payParam)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
@@ -76,7 +76,7 @@ public class MarketPayController {
             responseMap.put("code","10008");
             responseMap.put("msg","fail");
         }
-
+        logger.info("支付程序完成");
         return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap))) ;
     }
 

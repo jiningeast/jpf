@@ -404,6 +404,11 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         if(payShopCouponActives!=null&&payShopCouponActives.size()!=0){
             map.put("code","10000");
             map.put("msg","已支付成功");
+            map.put("customerId",payShopCouponActives.get(0).getCustomerId());
+            Map<String,Object> data = new HashMap<>();
+            for (PayShopCouponActive payShopCouponActive: payShopCouponActives) {
+
+            }
         }else{
             map.put("code","10008");
             map.put("msg","支付失败");
