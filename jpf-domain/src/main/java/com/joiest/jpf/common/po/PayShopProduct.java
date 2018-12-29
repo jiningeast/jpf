@@ -120,6 +120,11 @@ public class PayShopProduct implements Serializable {
      */
     private String productContentId;
 
+    /**
+     * 商品类型  0 电子类商品  1.实体类商品
+     */
+    private Byte productCategory;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -306,6 +311,14 @@ public class PayShopProduct implements Serializable {
         this.productContentId = productContentId == null ? null : productContentId.trim();
     }
 
+    public Byte getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(Byte productCategory) {
+        this.productCategory = productCategory;
+    }
+
     /**
      *
      */
@@ -338,6 +351,7 @@ public class PayShopProduct implements Serializable {
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append(", productContentId=").append(productContentId);
+        sb.append(", productCategory=").append(productCategory);
         sb.append("]");
         return sb.toString();
     }
@@ -380,7 +394,8 @@ public class PayShopProduct implements Serializable {
             && (this.getCtcProductId() == null ? other.getCtcProductId() == null : this.getCtcProductId().equals(other.getCtcProductId()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getProductContentId() == null ? other.getProductContentId() == null : this.getProductContentId().equals(other.getProductContentId()));
+            && (this.getProductContentId() == null ? other.getProductContentId() == null : this.getProductContentId().equals(other.getProductContentId()))
+            && (this.getProductCategory() == null ? other.getProductCategory() == null : this.getProductCategory().equals(other.getProductCategory()));
     }
 
     /**
@@ -413,6 +428,7 @@ public class PayShopProduct implements Serializable {
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getProductContentId() == null) ? 0 : getProductContentId().hashCode());
+        result = prime * result + ((getProductCategory() == null) ? 0 : getProductCategory().hashCode());
         return result;
     }
 }
