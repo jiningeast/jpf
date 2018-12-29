@@ -105,6 +105,11 @@ public class PayShopCustomer implements Serializable {
      */
     private String mpid;
 
+    /**
+     * 用户类型 0 正常用户 1销售用户
+     */
+    private Byte userType;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -267,6 +272,14 @@ public class PayShopCustomer implements Serializable {
         this.mpid = mpid == null ? null : mpid.trim();
     }
 
+    public Byte getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Byte userType) {
+        this.userType = userType;
+    }
+
     /**
      *
      */
@@ -296,6 +309,7 @@ public class PayShopCustomer implements Serializable {
         sb.append(", addtime=").append(addtime);
         sb.append(", updatetime=").append(updatetime);
         sb.append(", mpid=").append(mpid);
+        sb.append(", userType=").append(userType);
         sb.append("]");
         return sb.toString();
     }
@@ -335,7 +349,8 @@ public class PayShopCustomer implements Serializable {
             && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
             && (this.getAddtime() == null ? other.getAddtime() == null : this.getAddtime().equals(other.getAddtime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
-            && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()));
+            && (this.getMpid() == null ? other.getMpid() == null : this.getMpid().equals(other.getMpid()))
+            && (this.getUserType() == null ? other.getUserType() == null : this.getUserType().equals(other.getUserType()));
     }
 
     /**
@@ -365,6 +380,7 @@ public class PayShopCustomer implements Serializable {
         result = prime * result + ((getAddtime() == null) ? 0 : getAddtime().hashCode());
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getMpid() == null) ? 0 : getMpid().hashCode());
+        result = prime * result + ((getUserType() == null) ? 0 : getUserType().hashCode());
         return result;
     }
 }
