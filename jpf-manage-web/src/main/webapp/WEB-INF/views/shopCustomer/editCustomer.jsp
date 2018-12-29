@@ -73,6 +73,7 @@
                         </c:if>
                     </td>
                 </tr>
+
                 <tr>
                     <td style="text-align: right;background-color: #f1f1f1;">注册时间：</td>
                     <td>
@@ -105,6 +106,16 @@
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td style="text-align: right;background-color: #f1f1f1;">是否为中欣卡买家：</td>
+                    <td colspan="4">
+                        <select editable="false" id="user_type" name="userType" class="easyui-combobox" style="width:120px;" data-options="">
+                            <option value="">请选择</option>
+                            <option value="0">不是</option>
+                            <option value="1">是</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
         </form>
     </div>
@@ -123,6 +134,7 @@
 
         $('#type_audit').combobox('select', '${payShopCustomer.type}');
         $('#isBargainBuyer_audit').combobox('select', '${payShopCustomer.isBargainBuyer}');
+        $('#user_type').combobox('select', '${payShopCustomer.userType}');
         <%--$('#attestation_audit').combobox('select', '${payShopCustomer.attestation==true?0:1}');--%>
 
     }

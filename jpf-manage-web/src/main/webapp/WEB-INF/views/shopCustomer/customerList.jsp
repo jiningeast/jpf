@@ -175,6 +175,14 @@
                             return 'color:red';
                         }
                     },
+                   {field:'userType',title:'是否为中欣卡买家',width:'7%',
+                        formatter : function(value,row,index){
+                            if(value=='1'){return '是'}
+                            else{return '否'}
+                        },styler: function (value, row, index) {
+                            return 'color:red';
+                        }
+                    } ,
                     {field:'addtime',title:'注册时间',width:'12%',formatter: formatDateStr},
 
                     {field:'updatetime',title:'修改时间',width:'12%',formatter: formatDateStr},

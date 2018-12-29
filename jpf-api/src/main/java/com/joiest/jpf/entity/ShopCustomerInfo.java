@@ -95,6 +95,12 @@ public class ShopCustomerInfo {
     /**
      * 可转让豆
      */
+
+    /**
+     * 用户类型 0 正常用户 1销售用户
+     */
+    private Byte userType;
+
     private BigDecimal saleDou;
 
     public String getId() {
@@ -240,5 +246,13 @@ public class ShopCustomerInfo {
 
     public void setIsBargainBuyer(Byte isBargainBuyer) {
         this.isBargainBuyer = isBargainBuyer;
+    }
+
+    public Byte getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Byte userType) {
+        this.userType = userType;
     }
 }

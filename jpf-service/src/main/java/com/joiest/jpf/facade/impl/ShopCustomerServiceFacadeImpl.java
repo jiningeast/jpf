@@ -197,6 +197,7 @@ public class ShopCustomerServiceFacadeImpl implements ShopCustomerServiceFacade 
         payShopCustomer.setType(request.getType());
         payShopCustomer.setIsBargainBuyer(request.getIsBargainBuyer());
         payShopCustomer.setUpdatetime(d);
+        payShopCustomer.setUserType(request.getUserType());
         int count = payShopCustomerMapper.updateByExampleSelective(payShopCustomer,example);
         if(count != 1 ){
             throw new JpfException(JpfErrorInfo.RECORD_ALREADY_EXIST, "更新失败");

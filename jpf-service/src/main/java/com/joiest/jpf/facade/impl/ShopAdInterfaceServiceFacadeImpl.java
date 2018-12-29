@@ -2,8 +2,11 @@ package com.joiest.jpf.facade.impl;
 
 import com.joiest.jpf.common.po.PayShopAd;
 import com.joiest.jpf.common.po.PayShopAdExample;
+import com.joiest.jpf.common.po.PayShopCustomer;
+import com.joiest.jpf.common.po.PayShopCustomerExample;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.generate.PayShopAdMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopCustomerMapper;
 import com.joiest.jpf.dto.GetShopAdInterfaceRequest;
 import com.joiest.jpf.dto.GetShopAdInterfaceResponse;
 import com.joiest.jpf.dto.GetShopAdResponse;
@@ -21,6 +24,8 @@ public class ShopAdInterfaceServiceFacadeImpl implements ShopAdInterfaceServiceF
 
     @Autowired
     private PayShopAdMapper payShopAdMapper;
+    @Autowired
+    private PayShopCustomerMapper payShopCustomerMapper;
 
 
     @Override
@@ -33,7 +38,14 @@ public class ShopAdInterfaceServiceFacadeImpl implements ShopAdInterfaceServiceF
         if ( GetShopAdRequest.getType() != null &&  StringUtils.isNotBlank(GetShopAdRequest.getType()) ){
             c.andTypeEqualTo(Byte.parseByte(GetShopAdRequest.getType()));
         }
-        c.andStatusEqualTo((byte)1);
+        if(StringUtils.isNotBlank(GetShopAdRequest.getCustomerId())){
+            PayShopCustomer customer = payShopCustomerMapper.selectByPrimaryKey(GetShopAdRequest.getCustomerId());
+            if(customer.getUserType()==2){
+                c.andStatusNotEqualTo((byte)0);
+            }else{
+                c.andStatusEqualTo((byte)1);
+            }
+        }
 
         //e.setPageSize(Long.parseLong(GetShopAdRequest.getPageSize()));
         //e.setPageNo(Long.parseLong(GetShopAdRequest.getPage()));

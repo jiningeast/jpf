@@ -22,6 +22,11 @@ public class GetShopAdInterfaceRequest {
      */
     private String page;
 
+    /**当前用户的id
+     *
+     */
+    private String customerId;
+
     /**
      * 分页条数
      */
@@ -57,5 +62,13 @@ public class GetShopAdInterfaceRequest {
 
     public void setPageSize(String pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 }

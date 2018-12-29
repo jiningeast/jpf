@@ -39,7 +39,6 @@
                             <select id="status_s" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;" editable="false">
                                 <option value="0">下架</option>
                                 <option value="1">上架</option>
-                                <option value="2">上架(特殊产品)</option>
                             </select>
                         </td>
                     </tr>
@@ -62,6 +61,24 @@
                         <%--</td>--%>
                     </tr>
                     <tr>
+                        <td style="text-align: right;background-color: #f1f1f1;">商品类型：</td>
+                        <td>
+                            <select id="productCategory" name="productCategory" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                                <option value="0" selected>电子类商品</option>
+                                <option value="1">实体类商品</option>
+                            </select>
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">充值类型：</td>
+                        <td>
+                            <select id="type" name="type" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                                <option value="0" selected>直充</option>
+                                <option value="1">代充</option>
+                                <option value="2">卡密</option>
+                                <option value="3">混合</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="hide-lever">
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">标准进价：</td>
                         <td>
@@ -73,7 +90,7 @@
                         </td>
 
                     </tr>
-                    <tr>
+                    <tr class="hide-lever">
                         <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
                         <td>
                             <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
@@ -83,7 +100,7 @@
                             <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="hide-lever">
                         <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
                         <td>
                             <input id="stored_safe" name="storedSafe" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
@@ -91,17 +108,6 @@
                         <td style="text-align: right;background-color: #f1f1f1;">当前库存：</td>
                         <td>
                             <input id="stored" name="stored" type="text" style="width:220px" class="easyui-numberbox" value="" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">充值类型：</td>
-                        <td>
-                            <select id="type" name="type" data-options="required:true" class="easyui-combobox" style="width:100px;">
-                                <option value="0" selected>直充</option>
-                                <option value="1">代充</option>
-                                <option value="2">卡密</option>
-                                <option value="3">混合</option>
-                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -166,6 +172,28 @@
     }
 
     $(function () {
+        $("#productCategory").combobox({
+            onChange: function (n, o) {
+               var  v = $('#productCategory').combobox('getValue');
+                if(v==1){
+                    $.each($(".hide-lever"), function(){
+                        bid
+                       $(this).hide();
+                        $("#bid").attr("data-options", "required:false");
+                        $("#money").attr("data-options", "required:false");
+                        $("#rechargeMoney").attr("data-options", "required:false");
+                        $("#dou").attr("data-options", "required:false");
+                        $("#stored_safe").attr("data-options", "required:false");
+                        $("#stored").attr("data-options", "required:false");
+
+                    });
+                }else{
+                    $.each($(".hide-lever"), function(){
+                        $(this).show();
+                    });
+                }
+            }
+        });
 
         // //实例化编辑器
         // //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
