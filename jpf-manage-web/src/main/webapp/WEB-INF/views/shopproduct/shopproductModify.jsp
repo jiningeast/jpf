@@ -41,6 +41,7 @@
                             <select id="status_p" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;">
                                 <option value=""></option>
                                 <option value="1">上架</option>
+                                <option value="2">上架(特殊产品)</option>
                                 <option value="0">下架</option>
                             </select>
                         </td>

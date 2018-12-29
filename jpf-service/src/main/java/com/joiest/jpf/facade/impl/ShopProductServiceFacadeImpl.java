@@ -125,20 +125,13 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         PayShopProductInfoExample example = new PayShopProductInfoExample();
         example.setOrderByClause("addtime DESC");
         PayShopProductInfoExample.Criteria c = example.createCriteria();
-        c.andStatusEqualTo((byte)1);
+        c.andStatusNotEqualTo((byte)1);
         List<PayShopProductInfo> list = payShopProductInfoMapper.selectByExample(example);
-        if ( list.isEmpty() || list == null )
-        {
-            return null;
-        }
         List<ShopProductInfoInfo> resultList = new ArrayList<>();
-        for (PayShopProductInfo one : list)
-        {
+        for (PayShopProductInfo one : list){
             ShopProductInfoInfo info = new ShopProductInfoInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopProductInfo.class, ShopProductInfoInfo.class, false);
             beanCopier.copy(one, info, null);
-            Map<String,String> resultMap = new HashMap<>();
-            resultMap.put("id", one.getId().toString());
             StringBuilder sb = new StringBuilder();
             sb.append("商品类型:");
             sb.append(one.getTypeName());
@@ -146,7 +139,6 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
             sb.append(one.getSupplierName());
             sb.append(";品牌:");
             sb.append(one.getBrandName());
-            resultMap.put("str", sb.toString());
             info.setContent(sb.toString());
             info.setContentId(one.getId().toString());
             resultList.add(info);

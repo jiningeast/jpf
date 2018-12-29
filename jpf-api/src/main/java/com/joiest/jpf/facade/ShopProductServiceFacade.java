@@ -28,7 +28,7 @@ public interface ShopProductServiceFacade {
     /**
      * 获取商品基础信息列表
      */
-    public List<ShopProductInfoInfo> getProductInfoList();
+    List<ShopProductInfoInfo> getProductInfoList();
 
     /**
      * 添加商品

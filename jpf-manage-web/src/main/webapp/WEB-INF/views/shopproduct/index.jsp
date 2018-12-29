@@ -137,12 +137,14 @@
                     // {field:'pdpicture',title:'产品图片',width:150,
                     //     formatter:function(value,row,index){return '<img style="height:80px;width:100px;" src="'+ value +'" />';}
                     // },
-                    {field:'status',title:'商品状态',width:50,
+                    {field:'status',title:'商品状态',width:100,
                         formatter: function(value,row,index){
                             if (value == 0){
                                 return "下架";
                             } else if (value == 1) {
                                 return "上架";
+                            }else if(value == 2){
+                                return "上架(特殊产品)";
                             }
                         }
                     },
@@ -229,6 +231,7 @@
                                 <option value="">全部</option>
                                 <option value="1">上架</option>
                                 <option value="0">下架</option>
+                                <option value="2">上架(特殊产品)</option>
                             </select>
                         </td>
                     </tr>
