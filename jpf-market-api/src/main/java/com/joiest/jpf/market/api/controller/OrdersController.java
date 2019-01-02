@@ -110,9 +110,7 @@ public class OrdersController {
         }
         Map<String, Object>requestMap = _filter(data);
         String requestJson = JsonUtils.toJson(requestMap);
-        if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) )
-
-        {
+        if ( !requestMap.get("code").equals(JpfInterfaceErrorInfo.SUCCESS.getCode()) ){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.INVALID_PARAMETER.getCode(), requestMap.get("info").toString(), "");
         }
         CreateOrderInterfaceRequest request = new CreateOrderInterfaceRequest();
@@ -143,17 +141,19 @@ public class OrdersController {
         if(requestMap.containsKey("source")){
             source = requestMap.get("source").toString();
         }
-        if(source.equals("2")){
-            // 卡密订单，判断库存
-            int amount = Integer.parseInt(request.getAmount());
-            List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,amount);
-            if( list == null || list.isEmpty() || productInfo.getStored()<amount || list.size()<amount ) {
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
-            }
-            //if ( list.size() <= productInfo.getStoredSafe() ){
-            // 实际库存修改 2018-11-22
-            if ( productInfo.getStored() <= productInfo.getStoredSafe() ){
-                return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
+        if("2".equals(source)){
+            if("0".equals(productInfo.getProductCategory())){//排除实体卡的仓储验证
+                // 卡密订单，判断库存
+                int amount = Integer.parseInt(request.getAmount());
+                List<ShopStockCardInfo> list = shopStockCardServiceFacade.getShopCard(productInfo.getId(),(byte)0,amount);
+                if( list == null || list.isEmpty() || productInfo.getStored()<amount || list.size()<amount ) {
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getDesc(), "");
+                }
+                //if ( list.size() <= productInfo.getStoredSafe() ){
+                // 实际库存修改 2018-11-22
+                if ( productInfo.getStored() <= productInfo.getStoredSafe() ){
+                    return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PRODUCT_CARD_TYPE.getCode(), "实际库存量已少于安全库存，无法交易","");
+                }
             }
         }else{
             // 油卡充值
@@ -301,6 +301,8 @@ public class OrdersController {
         info.setRequestedContent(requestJson);
         info.setSource((byte)0);    // 0=自平台 1=敬恒
         info.setUpdatetime(new Date());
+        info.setCompanyName(request.getCompanyName());
+        info.setContractNo(request.getContractNo());
         int res = shopOrderInterfaceServiceFacade.updateOrder(info);
         if ( res >= 0 )
         {

@@ -116,6 +116,19 @@ public class ShopProductInterfaceInfo {
      */
     private Date updatetime;
 
+    /**
+     * 商品类型  0 电子类商品  1.实体类商品
+     */
+    private Byte productCategory;
+
+    public Byte getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(Byte productCategory) {
+        this.productCategory = productCategory;
+    }
+
     public String getId() {
         return id;
     }
