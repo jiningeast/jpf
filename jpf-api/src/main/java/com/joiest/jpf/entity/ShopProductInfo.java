@@ -111,6 +111,16 @@ public class ShopProductInfo {
      */
     private String productContent;
 
+    private String productCategory;
+
+    public String getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
+    }
+
     public String getId() {
         return id;
     }

@@ -34,14 +34,13 @@
                     <tr>
                         <td class="tdwitdh" style="text-align: right;background-color: #f1f1f1;">商品基础信息：</td>
                         <td>
-                            <select id="productInfoId" name="productInfoId" data-options="required:true" class="easyui-combobox" style="width:95%" ></select>
+                            <select id="productInfoId" name="productInfoId" class="easyui-combobox" style="width:95%" ></select><span style="color: red"> *</span>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">状态:</td>
                         <td>
-                            <select id="status_p" name="status" data-options="required:true" class="easyui-combobox" style="width:120px;">
+                            <select id="status_p" name="status"  class="easyui-combobox" style="width:120px;">
                                 <option value=""></option>
                                 <option value="1">上架</option>
-                                <option value="2">上架(特殊产品)</option>
                                 <option value="0">下架</option>
                             </select>
                         </td>
@@ -49,7 +48,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品名称：</td>
                         <td>
-                            <input id="product_name" name="name" type="text" style="width:220px" class="easyui-textbox" value="${productOne.name}" data-options="required:true"/>
+                            <input id="name" name="name" type="text" style="width:220px" class="easyui-textbox" value="${productOne.name}"/><span style="color: red"> *</span>
                         </td>
                         <td style="text-align: right;background-color: #f1f1f1;">商品编号：</td>
                         <td>
@@ -64,53 +63,62 @@
                         <%--</td>--%>
                     </tr>
                     <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">标准进价：</td>
+                        <td style="text-align: right;background-color: #f1f1f1;">商品类型：</td>
                         <td>
-                            <input id="bid" name="bid" type="text" style="width:220px" class="easyui-textbox" value="${productOne.bid}" data-options="required:true,validType:'floatNumber'" />
+                            <select id="productCategory" name="productCategory" class="easyui-combobox" style="width:100px;">
+                                <option value="0" <c:if test="${productOne.productCategory =='0'}">selected</c:if>>电子类商品</option>
+                                <option value="1" <c:if test="${productOne.productCategory =='1'}">selected</c:if>>实体类商品</option>
+                            </select>
+                            <span style="color: red"> *</span>
                         </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">商品售价：</td>
-                        <td>
-                            <input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" value="${productOne.money}" data-options="required:true,validType:'floatNumber'" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
-                        <td>
-                            <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.rechargeMoney}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
-                        </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">欣豆：</td>
-                        <td>
-                            <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.dou}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
-                        <td>
-                            <input id="stored_safe" name="storedSafe" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.storedSafe}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
-                        </td>
-                        <td style="text-align: right;background-color: #f1f1f1;">当前库存：</td>
-                        <td>
-                            <input id="stored" name="stored" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.stored}" data-options="required:true,min:0,precision:0,prompt:'请输入数字'" />
-                        </td>
-                        <td style="text-align: right;background-color: #f1f1f1;"></td>
-                        <td> </td>
-                    </tr>
-                    <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">充值类型：</td>
                         <td>
-                            <select id="type" name="type" data-options="required:true" class="easyui-combobox" style="width:100px;">
+                            <select id="type" name="type"  class="easyui-combobox" style="width:100px;">
                                 <option value="0" <c:if test="${productOne.type =='0'}">selected</c:if> >直充</option>
                                 <option value="1" <c:if test="${productOne.type =='1'}">selected</c:if> >代充</option>
                                 <option value="2" <c:if test="${productOne.type =='2'}">selected</c:if> >卡密</option>
                                 <option value="3" <c:if test="${productOne.type =='3'}">selected</c:if> >混合</option>
                             </select>
+                            <span style="color: red"> *</span>
                         </td>
+                </tr>
+                    <tr class="hide-lever">
+                        <td style="text-align: right;background-color: #f1f1f1;">标准进价：</td>
+                        <td>
+                            <input id="bid" name="bid" type="text" style="width:220px" class="easyui-textbox" value="${productOne.bid}" data-options="validType:'floatNumber'" /><span style="color: red"> *</span>
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">商品售价：</td>
+                        <td>
+                            <input id="money" name="money" type="text" style="width:220px" class="easyui-textbox" value="${productOne.money}" data-options="validType:'floatNumber'" /><span style="color: red"> *</span>
+                        </td>
+                    </tr>
+                    <tr class="hide-lever">
+                        <td style="text-align: right;background-color: #f1f1f1;">充值面额：</td>
+                        <td>
+                            <input id="rechargeMoney" name="rechargeMoney" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.rechargeMoney}" data-options="min:0,precision:0,prompt:'请输入数字'" /><span style="color: red"> *</span>
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">欣豆：</td>
+                        <td>
+                            <input id="dou" name="dou" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.dou}" data-options="min:0,precision:0,prompt:'请输入数字'" /><span style="color: red"> *</span>
+                        </td>
+
+                    </tr>
+                    <tr class="hide-lever">
+                        <td style="text-align: right;background-color: #f1f1f1;">安全库存：</td>
+                        <td>
+                            <input id="stored_safe" name="storedSafe" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.storedSafe}" data-options="min:0,precision:0,prompt:'请输入数字'" /><span style="color: red"> *</span>
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;">当前库存：</td>
+                        <td>
+                            <input id="stored" name="stored" type="text" style="width:220px" class="easyui-numberbox" value="${productOne.stored}" data-options="min:0,precision:0,prompt:'请输入数字'" /><span style="color: red"> *</span>
+                        </td>
+                        <td style="text-align: right;background-color: #f1f1f1;"></td>
+                        <td> </td>
                     </tr>
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品描述：</td>
                         <td colspan="3">
-                            <input id="intro" value="${productOne.intro}" name="intro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="required:true,multiline:true"/>
+                            <input id="intro" value="${productOne.intro}" name="intro" type="text" style="width:90%;height: 60px;" class="easyui-textbox" data-options="multiline:true"/><span style="color: red"> *</span>
                         </td>
                     </tr>
                     <tr>
@@ -119,9 +127,9 @@
                             <%--<input id="uploadfile" class="easyui-filebox" name="uploadfile" style="width: 238px;" data-options="required:true">--%>
                             <p>
                                 上传文件： <input type="file" name="file" id="uploadfile">
-                                <input type="button" value="上传" onclick="doUploadImg()"/>
+                                <input type="button" value="上传" onclick="doUploadImg()"/><span style="color: red"> *</span>
                             </p>
-                            <input id="imgurl" name="image" type="hidden" style="width:150px" data-options="required:true" value=""/>
+                            <input id="imgurl" name="image" type="hidden" style="width:150px"  value=""/>
                                 <%--https://yifuka.oss-cn-beijing.aliyuncs.com/clouds/1533103063417.jpg--%>
                             <div id="imgDiv"></div>
                         </td>
@@ -129,7 +137,7 @@
                     <tr>
                         <td style="text-align: right;background-color: #f1f1f1;">商品详情：</td>
                         <td colspan="3">
-                            <textarea id="content_m" name="productContent" class="easyui-validatebox" style="width: 95%;height: 350px;">${productOne.productContent}</textarea>
+                            <textarea id="content_m" name="productContent"  style="width: 95%;height: 350px;">${productOne.productContent}</textarea>
                         </td>
                     </tr>
                 </table>
@@ -176,7 +184,27 @@
     }
 
     $(function () {
-
+        $("#productCategory").combobox({
+            onChange: function (n, o) {
+                var  v = $('#productCategory').combobox('getValue');
+                if(v==1){
+                    $.each($(".hide-lever"), function(){
+                        $(this).hide();
+                    });
+                }else{
+                    $.each($(".hide-lever"), function(){
+                        $(this).show();
+                    });
+                }
+            }
+        });
+        //判断隐藏
+        var  v = $('#productCategory').combobox('getValue');
+        if(v!=0){
+            $.each($(".hide-lever"), function(){
+                $(this).hide();
+            });
+        }
         // //实例化编辑器
         // //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
         var ue = UE.getEditor('content_m');
@@ -222,6 +250,32 @@
                 // var stored_safe = $("#stored_safe").numberbox("getValue");
                 // console.log(postData)
                 // alert(isValid);return false;
+                var productInfoId=$("#productInfoId").combobox("getValues");
+                if(productInfoId==null||productInfoId==""){$.messager.alert('提示信息','请选择商品基本信息','info'); return false};
+                var name=$("#name").textbox("getValue");
+                if(name==null||name==""){$.messager.alert('提示信息','请填写商品名称','info'); return false};
+                //判断是否是电子券
+                var productCategory=$("#productCategory").combobox("getValues");
+                if(productCategory==0){
+                    var bid=$("#bid").numberbox("getValue");
+                    if(bid==null||bid==""){$.messager.alert('提示信息','请填写标准进价','info'); return false};
+                    var money=$("#money").numberbox("getValue");
+                    if(money==null||money==""){$.messager.alert('提示信息','请填写商品售价','info'); return false};
+                    var rechargeMoney=$("#rechargeMoney").numberbox("getValue");
+                    if(rechargeMoney==null||rechargeMoney==""){$.messager.alert('提示信息','请填写充值面额','info'); return false};
+                    var dou=$("#dou").numberbox("getValue");
+                    if(dou==null||dou==""){$.messager.alert('提示信息','请填写欣豆','info'); return false};
+                    var stored_safe=$("#stored_safe").numberbox("getValue");
+                    if(stored_safe==null||stored_safe==""){$.messager.alert('提示信息','请填写安全库存','info'); return false};
+                    var stored=$("#stored").numberbox("getValue");
+                    if(stored==null||stored==""){$.messager.alert('提示信息','请填写当前库存','info'); return false};
+                };
+                var intro=$("#intro").textbox("getValue");
+                if(intro==null||intro==""){$.messager.alert('提示信息','请填写商品描述','info'); return false};
+                var imgurl=$("#imgurl").val();
+                // if(imgurl==null||imgurl==""){$.messager.alert('提示信息','请上传商品图片','info'); return false};
+                var content_m=ue.getContentTxt();
+                if(content_m==null||content_m==""){$.messager.alert('提示信息','请填写商品详情','info'); return false};
                 $.ajax({
                     type: 'post',
                     url: 'modify/action',

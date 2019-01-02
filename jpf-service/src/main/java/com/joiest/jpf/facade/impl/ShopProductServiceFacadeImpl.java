@@ -153,34 +153,35 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setProductInfoId(Integer.valueOf(request.getProductInfoId()));
         payShopProduct.setName(request.getName());
         payShopProduct.setImage(request.getImage());
-        payShopProduct.setDou(new BigDecimal(request.getDou()));
-        payShopProduct.setIntro(request.getIntro());
-        payShopProduct.setStored(Integer.parseInt(request.getStored()));
-        payShopProduct.setStoredSafe(Integer.parseInt(request.getStoredSafe()));
         payShopProduct.setAddtime(new Date());
         payShopProduct.setOperatorId(request.getOperatorId());
         payShopProduct.setOperatorName(request.getOperatorName());
-        payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
         payShopProduct.setCardid(request.getCardid());
         payShopProduct.setStatus(request.getStatus());
-        BigDecimal bid=new BigDecimal(request.getBid());
-        BigDecimal money=new BigDecimal(request.getMoney());
-        payShopProduct.setBid(bid);
-        payShopProduct.setMoney(money);
         payShopProduct.setType(request.getType());
         payShopProduct.setProductContentId("0"); //内容ID
+        payShopProduct.setProductCategory(Byte.valueOf(request.getProductCategory()));
+        payShopProduct.setIntro(request.getIntro());
+        if("0".equals(request.getProductCategory())){
+            payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
+            payShopProduct.setDou(new BigDecimal(request.getDou()));
+            payShopProduct.setStored(Integer.parseInt(request.getStored()));
+            payShopProduct.setStoredSafe(Integer.parseInt(request.getStoredSafe()));
+            BigDecimal bid=new BigDecimal(request.getBid());
+            BigDecimal money=new BigDecimal(request.getMoney());
+            payShopProduct.setBid(bid);
+            payShopProduct.setMoney(money);
+        }
 
         //int res = payShopProductMapper.insertSelective(payShopProduct);
         payShopProductCustomMapper.insertSelective(payShopProduct);
         if( Integer.valueOf(payShopProduct.getId()) > 0 ){
-
             //是否添加详情内容
             if( !StringUtils.isBlank(request.getProductContent())){
                 PayShopProductContent productContent = new PayShopProductContent();
                 productContent.setContent(request.getProductContent());
                 payShopProductContentCustomMapper.insertSelective(productContent);
                 if( Integer.valueOf(productContent.getId()) > 0 ){
-
                     PayShopProduct shopProduct = new PayShopProduct();
                     shopProduct.setProductContentId(productContent.getId());
                     shopProduct.setId(payShopProduct.getId());
