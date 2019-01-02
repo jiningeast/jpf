@@ -8,7 +8,7 @@ public interface ShopAdInterfaceServiceFacade {
     /**
      * 获取图片信息
      */
-    public GetShopAdInterfaceResponse getList(GetShopAdInterfaceRequest request);
+    GetShopAdInterfaceResponse getList(GetShopAdInterfaceRequest request);
 
 
 
