@@ -88,6 +88,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
             info.setSupplierName(pInfo.getSupplierName());
             info.setTypeId(pInfo.getTypeId());
             info.setTypeName(pInfo.getTypeName());
+            info.setProductCategory(one.getProductCategory()+"");
             resultList.add(info);
         }
         response.setList(resultList);
