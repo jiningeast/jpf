@@ -124,4 +124,11 @@ public interface PayShopOrderCustomMapper {
 
 
     List<PayShopOrderCustom> selectByExcelExampleJoin(PayShopOrderCustomExample example);
+
+    /**
+     * 查询所有中欣卡订单
+     * @param example
+     * @return
+     */
+    List<PayShopOrderCustom> selectJoiestCardProductId(@Param("example") PayShopOrderCustomExample example);
 }

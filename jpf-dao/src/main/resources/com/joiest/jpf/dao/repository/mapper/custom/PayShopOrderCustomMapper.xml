@@ -828,4 +828,31 @@
       order by ${orderByClause}
     </if>
   </select>
+
+
+  <select id="selectJoiestCardProductId" parameterType="com.joiest.jpf.common.po.PayShopOrderExample" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+    pay_shop_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause_Custom" />
+    </if>
+    and product_id
+    in
+    (
+    SELECT
+    id
+    FROM
+    pay_shop_product
+    where
+    product_category = '1'
+    )
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="pageNo &gt; 0 and pageSize &gt; 0">
+      limit ${(pageNo-1) * pageSize}, ${pageSize}
+    </if>
+  </select>
 </mapper>
