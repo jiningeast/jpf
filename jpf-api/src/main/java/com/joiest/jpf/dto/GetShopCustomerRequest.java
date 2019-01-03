@@ -85,6 +85,11 @@ public class GetShopCustomerRequest {
      */
     private Date updatetime;
 
+    /**
+     * 用户类型 0 正常用户 1销售用户
+     */
+    private Byte userType;
+
 
     private long rows;
 
@@ -340,5 +345,13 @@ public class GetShopCustomerRequest {
 
     public void setIsBargainBuyer(Byte isBargainBuyer) {
         this.isBargainBuyer = isBargainBuyer;
+    }
+
+    public Byte getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Byte userType) {
+        this.userType = userType;
     }
 }

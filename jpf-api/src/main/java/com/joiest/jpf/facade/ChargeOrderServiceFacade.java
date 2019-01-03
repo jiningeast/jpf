@@ -70,7 +70,7 @@ public interface ChargeOrderServiceFacade {
      * @param pageSize
      * @return
      */
-    List<PayChargeOrder> getOrdersByPage(Long pageNo,Long pageSize);
+    List<PayChargeOrder> getOrdersByPage(String companyId,Long pageNo,Long pageSize);
 
     /**
      * 更新订单状态

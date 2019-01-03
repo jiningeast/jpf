@@ -29,6 +29,7 @@
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
     <result column="product_content_id" jdbcType="BIGINT" property="productContentId" />
+    <result column="product_category" jdbcType="TINYINT" property="productCategory" />
 
     <result column="content" jdbcType="BIGINT" property="productContent" />
     <result column="type_id" jdbcType="INTEGER" property="typeId" />
@@ -255,6 +256,9 @@
       <if test="productContentId != null">
         product_content_id,
       </if>
+      <if test="productCategory != null">
+        product_category,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -325,6 +329,9 @@
       </if>
       <if test="productContentId != null">
         #{productContentId,jdbcType=BIGINT},
+      </if>
+      <if test="productCategory != null">
+        #{productCategory,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>

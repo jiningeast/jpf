@@ -130,6 +130,16 @@ public class PayShopProductCustom implements Serializable {
      */
     private Integer typeId;
 
+    private String productCategory;
+
+    public String getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {

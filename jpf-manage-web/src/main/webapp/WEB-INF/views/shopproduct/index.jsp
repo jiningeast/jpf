@@ -126,6 +126,13 @@
                 columns:[[
                     {field:'id',title:'商品ID',width:80},
                     {field:'name',title:'商品名称',width:200},
+                    {field:'productCategory',title:'商品类型',width:85,formatter: function(value,row,index){
+                            if (value == 0){
+                                return "电子类产品";
+                            } else if (value == 1) {
+                                return "实体类产品";
+                            }
+                        }},
                     {field:'bid',title:'商品进价',width:65},
                     {field:'money',title:'商品售价',width:65},
                     {field:'rechargeMoney',title:'充值面额(元)',width:90},
@@ -137,7 +144,7 @@
                     // {field:'pdpicture',title:'产品图片',width:150,
                     //     formatter:function(value,row,index){return '<img style="height:80px;width:100px;" src="'+ value +'" />';}
                     // },
-                    {field:'status',title:'商品状态',width:50,
+                    {field:'status',title:'商品状态',width:100,
                         formatter: function(value,row,index){
                             if (value == 0){
                                 return "下架";

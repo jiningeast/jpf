@@ -16,7 +16,7 @@ public class PayShopOrder implements Serializable {
     private String orderNo;
 
     /**
-     * 充值类型 0=直充 1=代充 2=卡密
+     * 充值类型 0=直充 1=代充 2=卡密 3=混合  4=实体商品(中欣卡)
      */
     private Byte chargeType;
 
@@ -26,7 +26,7 @@ public class PayShopOrder implements Serializable {
     private String stockCardId;
 
     /**
-     * 订单类型 1:中国石化; 2中国石油; 3话费充值 4=携程商品
+     * 订单类型 1:中国石化; 2中国石油; 3话费充值 4=携程商品 5.中欣卡订单
      */
     private Byte orderType;
 
@@ -161,7 +161,7 @@ public class PayShopOrder implements Serializable {
     private Byte source;
 
     /**
-     * 接口类型 0=欧非 1=威能
+     * 接口类型 0=欧非 1=威能 2=中欣
      */
     private Byte interfaceType;
 
@@ -199,6 +199,16 @@ public class PayShopOrder implements Serializable {
      * 商品类型
      */
     private Integer productType;
+
+    /**
+     * 企业名称
+     */
+    private String companyName;
+
+    /**
+     * 合同号
+     */
+    private String contractNo;
 
     private static final long serialVersionUID = 1L;
 
@@ -514,6 +524,22 @@ public class PayShopOrder implements Serializable {
         this.productType = productType;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo == null ? null : contractNo.trim();
+    }
+
     /**
      *
      */
@@ -562,6 +588,8 @@ public class PayShopOrder implements Serializable {
         sb.append(", updatetime=").append(updatetime);
         sb.append(", couponDetailSale=").append(couponDetailSale);
         sb.append(", productType=").append(productType);
+        sb.append(", companyName=").append(companyName);
+        sb.append(", contractNo=").append(contractNo);
         sb.append("]");
         return sb.toString();
     }
@@ -620,7 +648,9 @@ public class PayShopOrder implements Serializable {
             && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
             && (this.getUpdatetime() == null ? other.getUpdatetime() == null : this.getUpdatetime().equals(other.getUpdatetime()))
             && (this.getCouponDetailSale() == null ? other.getCouponDetailSale() == null : this.getCouponDetailSale().equals(other.getCouponDetailSale()))
-            && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()));
+            && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
+            && (this.getContractNo() == null ? other.getContractNo() == null : this.getContractNo().equals(other.getContractNo()));
     }
 
     /**
@@ -669,6 +699,8 @@ public class PayShopOrder implements Serializable {
         result = prime * result + ((getUpdatetime() == null) ? 0 : getUpdatetime().hashCode());
         result = prime * result + ((getCouponDetailSale() == null) ? 0 : getCouponDetailSale().hashCode());
         result = prime * result + ((getProductType() == null) ? 0 : getProductType().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
+        result = prime * result + ((getContractNo() == null) ? 0 : getContractNo().hashCode());
         return result;
     }
 }

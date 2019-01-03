@@ -12,7 +12,11 @@ import com.joiest.jpf.facade.ChargeCompanyMoneyStreamServiceFacade;
 import com.joiest.jpf.facade.ChargeCompanyServiceFacade;
 import com.joiest.jpf.facade.ChargeOrderServiceFacade;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +35,8 @@ import java.util.*;
 @Controller
 @RequestMapping("orderCompensation")
 public class OrderCompensationController {
+
+    static Logger logger = LogManager.getLogger(OrderCompensationController.class.getName());
 
     @Autowired
     private ChargeOrderServiceFacade chargeOrderServiceFacade;
@@ -52,27 +58,35 @@ public class OrderCompensationController {
 
         String pageNoStr = request.getParameter("pageNo");
 
+        String companyId = request.getParameter("companyId");
+        //仅查询站远
+//        String companyId = "12";
+
         //不传参默认第一页
-        Long pageNo = 1L;
+        long pageNo = 1L;
 
         if (StringUtils.isNotBlank(pageNoStr)){
             pageNo = Long.valueOf(pageNoStr);
         }
 
         //每次查询订单的条数
-        Long pageSize = Long.parseLong(ConfigUtil.getValue("PAGE_SIZE"));
+        long pageSize = Long.parseLong(ConfigUtil.getValue("PAGE_SIZE"));
 
         //存储日志记录
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         StringBuilder logContent = new StringBuilder();
 
+        long count = 0L;
+
         String logPath = "/logs/jpf-charge-api/log/";
         String fileName = "OrderCompensation" + pageNo +"-";
         logContent.append("\n\n当前查询条件为第: "+ pageNo +"页,每页查询" + pageSize + "条订单");
-        logContent.append("\nTime: "+ format.format(date));
+        logContent.append("\n\n当前商户id:" + companyId);
+        logContent.append("\n开始时间: "+ format.format(date));
+        long startTime = System.currentTimeMillis();
 
-        List<PayChargeOrder> payChargeOrderList = chargeOrderServiceFacade.getOrdersByPage(pageNo, pageSize);
+        List<PayChargeOrder> payChargeOrderList = chargeOrderServiceFacade.getOrdersByPage(companyId, pageNo, pageSize);
         logContent.append("\nSize: "+payChargeOrderList.size());
 
         PayChargeCompanyMoneyStream payChargeCompanyMoneyStream = new PayChargeCompanyMoneyStream();
@@ -95,6 +109,7 @@ public class OrderCompensationController {
 
                         if (chargeCompanyMoneyStreamServiceFacade.updateRecord(payChargeCompanyMoneyStream, order.getOrderNo()) > 0){
                             logContent.append("\t 更新流水记录成功 \t");
+                            count += 1;
                         }else{
                             logContent.append("\t 更新流水记录失败 \t");
                         }
@@ -108,6 +123,7 @@ public class OrderCompensationController {
 
                         if (chargeCompanyMoneyStreamServiceFacade.updateRecord(payChargeCompanyMoneyStream, order.getOrderNo()) > 0){
                             logContent.append("\t 更新流水记录成功 \t");
+                            count += 1;
                         }else{
                             logContent.append("\t 更新流水记录失败 \t");
                         }
@@ -116,6 +132,7 @@ public class OrderCompensationController {
                    //无流水记录
                    logContent.append("\n 无流水记录,订单号为:"+order.getOrderNo()+"\t");
                    addStream(payChargeCompanyMoneyStream, order, logContent, "2", "1");
+                   count += 1;
                }
                //订单状态为 3 5 给商户退钱
             }else if(order.getStatus() == 3 || order.getStatus() == 5){
@@ -128,8 +145,10 @@ public class OrderCompensationController {
                     //判断此条流水记录的状态 流水类型 1=充值 2=下单 3=退款
                     if (payChargeCompanyMoneyStreamList.get(0).getStatus() == 2){
                         addStream(payChargeCompanyMoneyStream, order, logContent, "3", "0");
+                        count += 1;
                     }else if (payChargeCompanyMoneyStreamList.get(0).getStatus() == 3){
                         addStream(payChargeCompanyMoneyStream, order, logContent, "2", "1");
+                        count += 1;
                     }
 
                 //有两条流水记录
@@ -147,6 +166,7 @@ public class OrderCompensationController {
 
                             if (chargeCompanyMoneyStreamServiceFacade.updateRecord(payChargeCompanyMoneyStream, order.getOrderNo()) > 0){
                                 logContent.append("\t 更新流水记录成功 \t");
+                                count += 1;
                             }else{
                                 logContent.append("\t 更新流水记录失败 \t");
                             }
@@ -159,13 +179,17 @@ public class OrderCompensationController {
                     logContent.append("\n 无流水记录,订单号为:"+order.getOrderNo()+"\t");
                     addStream(payChargeCompanyMoneyStream,order,logContent,"2","1");
                     addStream(payChargeCompanyMoneyStream,order,logContent,"3","0");
+                    count += 2;
                 }
 
             }
         }
 
         //生成日志
+        logContent.append("\n 更新流水记录完成,共:"+count+"条数据,用时: "+ (System.currentTimeMillis() - startTime) / 1000 +"秒 \t");
+        logContent.append("\n结束时间: "+ format.format(new Date()));
         LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+        logger.info(logContent);
 
         resultMap.put("code", "200");
         resultMap.put("message", "订单补偿完成");
@@ -186,7 +210,8 @@ public class OrderCompensationController {
 
         String logPath = "/logs/jpf-charge-api/log/";
         String fileName = "OrderCompensationRevise";
-        logContent.append("\nTime: "+ format.format(date) + "开始校正...");
+        logContent.append("\n开始时间: "+ format.format(date) + "开始校正...");
+        long startTime = System.currentTimeMillis();
 
         //获取所有商户列表
         List<PayChargeCompany> payChargeCompanyList = chargeCompanyServiceFacade.getCompanyList();
@@ -196,10 +221,13 @@ public class OrderCompensationController {
             chargeCompanyServiceFacade.reviseCompanyCharge(company);
         }
 
-        logContent.append("\t 校正完成...");
+        logContent.append("\t 共用时: "+ (System.currentTimeMillis() - startTime) / 1000 +"秒");
+        logContent.append("\t 结束时间: "+ format.format(new Date()) +"校正完成...");
+
 
         //生成日志
         LogsCustomUtils.writeIntoFile(logContent.toString(),logPath,fileName,true);
+        logger.info(logContent);
 
         resultMap.put("code", "200");
         resultMap.put("message", "余额校正完成");

@@ -89,14 +89,8 @@ public class ShopProductController {
      */
     @RequestMapping("/getProductInfo")
     @ResponseBody
-    public List<ShopProductInfoInfo> getProductInfoList()
-    {
-        List<ShopProductInfoInfo> list = shopProductServiceFacade.getProductInfoList();
-        if ( list.isEmpty() || list == null )
-        {
-            return null;
-        }
-        return list;
+    public List<ShopProductInfoInfo> getProductInfoList(){
+        return shopProductServiceFacade.getProductInfoList();
     }
 
     /**

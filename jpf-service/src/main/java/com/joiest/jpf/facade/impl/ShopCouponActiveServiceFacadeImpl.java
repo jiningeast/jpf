@@ -106,5 +106,26 @@ public class ShopCouponActiveServiceFacadeImpl implements ShopCouponActiveServic
         return payShopCouponActiveMapper.insertSelective(payShopCouponActive);
     }
 
+    /**
+     *
+     * @param payShopCouponActive
+     * @return
+     */
+    @Override
+    public List<PayShopCouponActive> getCouponActive(PayShopCouponActive payShopCouponActive) {
+        PayShopCouponActiveExample example = new PayShopCouponActiveExample();
+        PayShopCouponActiveExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(payShopCouponActive.getOrderNo())){
+            criteria.andOrderNoEqualTo(payShopCouponActive.getOrderNo());
+        }
+        if(StringUtils.isNotBlank(payShopCouponActive.getSource())){
+            criteria.andSourceEqualTo(payShopCouponActive.getSource());
+        }
+        if(StringUtils.isNotBlank(payShopCouponActive.getType())){
+            criteria.andTypeEqualTo(payShopCouponActive.getType());
+        }
+        return payShopCouponActiveMapper.selectByExample(example);
+    }
+
 
 }

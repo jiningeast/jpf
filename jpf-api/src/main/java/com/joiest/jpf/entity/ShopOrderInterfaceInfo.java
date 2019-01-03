@@ -230,6 +230,32 @@ public class ShopOrderInterfaceInfo implements Serializable {
      */
     private Date currentSystemTime;
 
+    /**
+     * 企业名称
+     */
+    private String companyName;
+
+    /**
+     * 合同号
+     */
+    private String contractNo;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
     public Date getCurrentSystemTime() {
         return currentSystemTime;
     }

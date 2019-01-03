@@ -273,6 +273,7 @@ public class CustomController {
         // 构建返回+
         Map<String, Object> responseDataMap = new HashMap<>();
         responseDataMap.put("type", userInfo.getType());
+        responseDataMap.put("customerId", userInfo.getId());
         String responseDataJson = JsonUtils.toJson(responseDataMap);
 
         return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.SUCCESS.getCode(),"获取用户身份成功",responseDataJson);

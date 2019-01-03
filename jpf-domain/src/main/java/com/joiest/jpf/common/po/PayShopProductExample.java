@@ -1606,6 +1606,66 @@ public class PayShopProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductCategoryIsNull() {
+            addCriterion("product_category is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryIsNotNull() {
+            addCriterion("product_category is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryEqualTo(Byte value) {
+            addCriterion("product_category =", value, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryNotEqualTo(Byte value) {
+            addCriterion("product_category <>", value, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryGreaterThan(Byte value) {
+            addCriterion("product_category >", value, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryGreaterThanOrEqualTo(Byte value) {
+            addCriterion("product_category >=", value, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryLessThan(Byte value) {
+            addCriterion("product_category <", value, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryLessThanOrEqualTo(Byte value) {
+            addCriterion("product_category <=", value, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryIn(List<Byte> values) {
+            addCriterion("product_category in", values, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryNotIn(List<Byte> values) {
+            addCriterion("product_category not in", values, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryBetween(Byte value1, Byte value2) {
+            addCriterion("product_category between", value1, value2, "productCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCategoryNotBetween(Byte value1, Byte value2) {
+            addCriterion("product_category not between", value1, value2, "productCategory");
+            return (Criteria) this;
+        }
+
         public Criteria andNameLikeInsensitive(String value) {
             addCriterion("upper(name) like", value.toUpperCase(), "name");
             return (Criteria) this;

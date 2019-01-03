@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.joiest.jpf.common.exception.JpfInterfaceErrorInfo;
 import com.joiest.jpf.common.po.PayChargeCompany;
+import com.joiest.jpf.common.po.PayShopCouponActive;
 import com.joiest.jpf.common.po.PayShopCouponRemain;
 import com.joiest.jpf.common.po.PayShopCustomer;
 import com.joiest.jpf.common.util.Base64CustomUtils;
@@ -13,6 +14,7 @@ import com.joiest.jpf.common.util.ToolUtils;
 import com.joiest.jpf.entity.CouponNoList;
 import com.joiest.jpf.entity.PayCouponInfo;
 import com.joiest.jpf.entity.ShopRefundInfo;
+import com.joiest.jpf.facade.ShopCouponActiveServiceFacade;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
 import com.joiest.jpf.dto.GetCouponRemainResponse;
 import com.joiest.jpf.facade.ShopCouponRemainServiceFacade;
@@ -46,14 +48,16 @@ public class MarketPayController {
     private static final Logger logger = LogManager.getLogger(MarketPayController.class);
     @Autowired
     private ShopCustomerServiceFacade shopCustomerServiceFacade;
-
     @Autowired
     private ShopCouponRemainServiceFacade shopCouponRemainServiceFacade;
+    @Autowired
+    private ShopCouponActiveServiceFacade shopCouponActiveServiceFacade;
+
 
     @RequestMapping(value = "pay",method = RequestMethod.POST)
     @ResponseBody
     public  String  pay(HttpServletRequest request){
-
+        logger.info("进入支付程序了");
         String payParam = request.getParameter("payParam");
         if(StringUtils.isBlank(payParam)){
             return ToolUtils.toJsonBase64(JpfInterfaceErrorInfo.PARAMNOTNULL.getCode(),"参数不能为空",null);
@@ -76,7 +80,7 @@ public class MarketPayController {
             responseMap.put("code","10008");
             responseMap.put("msg","fail");
         }
-
+        logger.info("支付程序完成");
         return AesShopUtils.AES_Encrypt(ConfigUtil.getValue("XinShop_AES_KEY"),urlEncoder(JsonUtils.toJson(responseMap))) ;
     }
 
@@ -132,22 +136,32 @@ public class MarketPayController {
         }
         if (map.get("orderNo")==null){
             return setResult("10003", "订单号不能为空");
+        }else{
+            //判断订单号是否已经支付成功，防止二次支付
+            PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+            payShopCouponActive.setOrderNo(map.get("orderNo").toString());
+            payShopCouponActive.setType("1");
+            payShopCouponActive.setSource("1");
+            List<PayShopCouponActive> payShopCouponActives  = shopCouponActiveServiceFacade.getCouponActive(payShopCouponActive);
+            if(payShopCouponActives!=null&&payShopCouponActives.size()!=0){
+                return setResult("10007", "订单已经支付成功，不能重复支付");
+            }
         }
         if (map.get("money")==null){
             return setResult("10004", "金额不能为空");
         }
         if (map.get("source")==null){
-            return setResult("10004", "来源不能为空");
+            return setResult("10005", "来源不能为空");
         }
         //用户可用券列表
         GetCouponRemainResponse userCouponList = shopCouponRemainServiceFacade.getCouponRemainByUidForInterface(map.get("customerId").toString());
         if ( userCouponList == null || userCouponList.getCount() == 0) {
-            return setResult("10005", "剩余豆不足");
+            return setResult("10006", "剩余豆不足");
         }
         //正常用户总豆数，应该等于总券的都输，除非bug
         if (new BigDecimal(map.get("money").toString()).compareTo(shopCustomer.getDou())>0
                 ||new BigDecimal(map.get("money").toString()).compareTo(userCouponList.getDouTotal())>0){
-            return setResult("10005", "剩余豆不足");
+            return setResult("10006", "剩余豆不足");
         }
        return setResult("10000", "success");
     }
@@ -175,8 +189,22 @@ public class MarketPayController {
             }
         }
 
+        if (shopRefundInfo.getOrderNo() == null){
+            return setResult("10003", "订单号不能为空");
+        }else{
+            //判断订单号是否已经支付成功，防止二次支付
+            PayShopCouponActive payShopCouponActive = new PayShopCouponActive();
+            payShopCouponActive.setOrderNo(shopRefundInfo.getOrderNo());
+            payShopCouponActive.setType("2");
+            payShopCouponActive.setSource("1");
+            List<PayShopCouponActive> payShopCouponActives  = shopCouponActiveServiceFacade.getCouponActive(payShopCouponActive);
+            if(payShopCouponActives!=null&&payShopCouponActives.size()!=0){
+                return setResult("10004", "流水已存在,不能重复添加");
+            }
+        }
+
         if ("0".equals(shopRefundInfo.getTotalSaleDouYes()) && "0".equals(shopRefundInfo.getTotalSaleDouNo())){
-            return setResult("10003", "欣豆信息不能都为空");
+            return setResult("10005", "欣豆信息不能都为空");
         }
 
         return setResult("10000", "success");

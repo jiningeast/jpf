@@ -88,6 +88,7 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
             info.setSupplierName(pInfo.getSupplierName());
             info.setTypeId(pInfo.getTypeId());
             info.setTypeName(pInfo.getTypeName());
+            info.setProductCategory(one.getProductCategory()+"");
             resultList.add(info);
         }
         response.setList(resultList);
@@ -125,20 +126,13 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         PayShopProductInfoExample example = new PayShopProductInfoExample();
         example.setOrderByClause("addtime DESC");
         PayShopProductInfoExample.Criteria c = example.createCriteria();
-        c.andStatusEqualTo((byte)1);
+        c.andStatusNotEqualTo((byte)1);
         List<PayShopProductInfo> list = payShopProductInfoMapper.selectByExample(example);
-        if ( list.isEmpty() || list == null )
-        {
-            return null;
-        }
         List<ShopProductInfoInfo> resultList = new ArrayList<>();
-        for (PayShopProductInfo one : list)
-        {
+        for (PayShopProductInfo one : list){
             ShopProductInfoInfo info = new ShopProductInfoInfo();
             BeanCopier beanCopier = BeanCopier.create(PayShopProductInfo.class, ShopProductInfoInfo.class, false);
             beanCopier.copy(one, info, null);
-            Map<String,String> resultMap = new HashMap<>();
-            resultMap.put("id", one.getId().toString());
             StringBuilder sb = new StringBuilder();
             sb.append("商品类型:");
             sb.append(one.getTypeName());
@@ -146,7 +140,6 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
             sb.append(one.getSupplierName());
             sb.append(";品牌:");
             sb.append(one.getBrandName());
-            resultMap.put("str", sb.toString());
             info.setContent(sb.toString());
             info.setContentId(one.getId().toString());
             resultList.add(info);
@@ -161,34 +154,35 @@ public class ShopProductServiceFacadeImpl implements ShopProductServiceFacade {
         payShopProduct.setProductInfoId(Integer.valueOf(request.getProductInfoId()));
         payShopProduct.setName(request.getName());
         payShopProduct.setImage(request.getImage());
-        payShopProduct.setDou(new BigDecimal(request.getDou()));
-        payShopProduct.setIntro(request.getIntro());
-        payShopProduct.setStored(Integer.parseInt(request.getStored()));
-        payShopProduct.setStoredSafe(Integer.parseInt(request.getStoredSafe()));
         payShopProduct.setAddtime(new Date());
         payShopProduct.setOperatorId(request.getOperatorId());
         payShopProduct.setOperatorName(request.getOperatorName());
-        payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
         payShopProduct.setCardid(request.getCardid());
         payShopProduct.setStatus(request.getStatus());
-        BigDecimal bid=new BigDecimal(request.getBid());
-        BigDecimal money=new BigDecimal(request.getMoney());
-        payShopProduct.setBid(bid);
-        payShopProduct.setMoney(money);
         payShopProduct.setType(request.getType());
         payShopProduct.setProductContentId("0"); //内容ID
+        payShopProduct.setProductCategory(Byte.valueOf(request.getProductCategory()));
+        payShopProduct.setIntro(request.getIntro());
+        if("0".equals(request.getProductCategory())){
+            payShopProduct.setRechargeMoney(Integer.parseInt(request.getRechargeMoney()));
+            payShopProduct.setDou(new BigDecimal(request.getDou()));
+            payShopProduct.setStored(Integer.parseInt(request.getStored()));
+            payShopProduct.setStoredSafe(Integer.parseInt(request.getStoredSafe()));
+            BigDecimal bid=new BigDecimal(request.getBid());
+            BigDecimal money=new BigDecimal(request.getMoney());
+            payShopProduct.setBid(bid);
+            payShopProduct.setMoney(money);
+        }
 
         //int res = payShopProductMapper.insertSelective(payShopProduct);
         payShopProductCustomMapper.insertSelective(payShopProduct);
         if( Integer.valueOf(payShopProduct.getId()) > 0 ){
-
             //是否添加详情内容
             if( !StringUtils.isBlank(request.getProductContent())){
                 PayShopProductContent productContent = new PayShopProductContent();
                 productContent.setContent(request.getProductContent());
                 payShopProductContentCustomMapper.insertSelective(productContent);
                 if( Integer.valueOf(productContent.getId()) > 0 ){
-
                     PayShopProduct shopProduct = new PayShopProduct();
                     shopProduct.setProductContentId(productContent.getId());
                     shopProduct.setId(payShopProduct.getId());

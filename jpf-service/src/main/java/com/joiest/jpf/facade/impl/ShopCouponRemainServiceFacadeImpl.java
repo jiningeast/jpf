@@ -1111,6 +1111,7 @@ public class ShopCouponRemainServiceFacadeImpl implements ShopCouponRemainServic
         payShopCouponActive.setExpireTime(payShopBatchCoupon.getExpireTime());
         payShopCouponActive.setAddtime(new Date());
         payShopCouponActive.setOrderId("0");
+        payShopCouponActive.setSource("1");
         payShopCouponActive.setOrderNo(shopRefundInfo.getOrderNo());
 
 
