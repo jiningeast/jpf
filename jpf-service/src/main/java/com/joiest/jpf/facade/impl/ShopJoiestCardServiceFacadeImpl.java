@@ -6,7 +6,7 @@ import com.joiest.jpf.common.dto.JpfResponseDto;
 import com.joiest.jpf.common.po.*;
 import com.joiest.jpf.common.util.DateUtils;
 import com.joiest.jpf.dao.repository.mapper.custom.PayShopOrderCustomMapper;
-import com.joiest.jpf.dao.repository.mapper.custom.PayShopProductCustomMapper;
+import com.joiest.jpf.dao.repository.mapper.generate.PayShopProductMapper;
 import com.joiest.jpf.dto.GetShopOrderRequest;
 import com.joiest.jpf.dto.GetShopOrderResponse;
 import com.joiest.jpf.entity.ShopOrderInfo;
@@ -36,7 +36,7 @@ public class ShopJoiestCardServiceFacadeImpl implements ShopJoiestCardServiceFac
     private PayShopOrderCustomMapper payShopOrderCustomMapper;
 
     @Autowired
-    private PayShopProductCustomMapper payShopProductCustomMapper;
+    private PayShopProductMapper payShopProductMapper;
 
     /**
      * 获取中欣卡订单列表
@@ -47,15 +47,23 @@ public class ShopJoiestCardServiceFacadeImpl implements ShopJoiestCardServiceFac
     public GetShopOrderResponse getJoiestCardList(GetShopOrderRequest request) {
         GetShopOrderResponse response = new GetShopOrderResponse();
 
-        PayShopOrderCustomExample payShopOrderCustomExample = new PayShopOrderCustomExample();
-        payShopOrderCustomExample.setPageNo(request.getPage());
-        payShopOrderCustomExample.setPageSize(request.getRows());
-        payShopOrderCustomExample.setOrderByClause("id DESC");
+        PayShopProductExample payShopProductExample = new PayShopProductExample();
+        payShopProductExample.createCriteria().andProductCategoryEqualTo((byte)1);
+        List<PayShopProduct> payShopProductList = payShopProductMapper.selectByExample(payShopProductExample);
+        List<String> productIdList = new ArrayList<>();
+        for(PayShopProduct payShopProduct : payShopProductList){
+            productIdList.add(payShopProduct.getId());
+        }
 
-        PayShopOrderCustomExample.Criteria c = payShopOrderCustomExample.createCriteria();
-        matchCriteria(request,c);
+        long pageNo = request.getPage();
+        long pageSize = request.getRows();
+        String orderNo = request.getOrderNo();
+        if(StringUtils.isBlank(orderNo)){
+            orderNo = null;
+        }
         
-        List<PayShopOrderCustom> joiestCardShopOrderList = payShopOrderCustomMapper.selectJoiestCardProductId(payShopOrderCustomExample);
+        List<PayShopOrderCustom> joiestCardShopOrderList = payShopOrderCustomMapper.selectJoiestCardProductId(pageNo,
+                pageSize,orderNo,productIdList);
         List<ShopOrderInfo> shopOrderInfoList = new ArrayList<>();
         for (PayShopOrderCustom payShopOrderCustom : joiestCardShopOrderList){
             ShopOrderInfo shopOrderInfo = new ShopOrderInfo();

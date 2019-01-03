@@ -3,6 +3,7 @@ package com.joiest.jpf.dao.repository.mapper.custom;
 import com.joiest.jpf.common.custom.PayShopOrderCustom;
 import com.joiest.jpf.common.custom.PayShopOrderCustomExample;
 import com.joiest.jpf.common.po.PayShopOrder;
+import com.joiest.jpf.common.po.PayShopProduct;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -127,8 +128,15 @@ public interface PayShopOrderCustomMapper {
 
     /**
      * 查询所有中欣卡订单
-     * @param example
+     * @param pageNo
+     * @param pageSize
+     * @param orderNo
+     * @param payShopProductList
+     * @param status 
      * @return
      */
-    List<PayShopOrderCustom> selectJoiestCardProductId(@Param("example") PayShopOrderCustomExample example);
+    List<PayShopOrderCustom> selectJoiestCardProductId(@Param("pageNo")long pageNo,
+                                                       @Param("pageSize")long pageSize,
+                                                       @Param("orderNo")String orderNo,
+                                                       @Param("payShopProductList") List<String> payShopProductList);
 }

@@ -195,38 +195,6 @@
                         <td>
                             <input id="orderNo" name="orderNo" class="easyui-textbox" type="text" />
                         </td>
-                        <td>订单状态:</td>
-                        <td>
-                            <select id="status" name="status" class="easyui-combobox">
-                                <option value="">全部</option>
-                                <option value="0">待支付</option>
-                                <option value="1">已支付</option>
-                                <option value="2">支付失败</option>
-                                <option value="3">已取消</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>下单时间:</td>
-                        <td>
-                            <input type="text" class="Wdate" style="width:100px;" id="addtimeStart"
-                                   name="addtimeStart"
-                                   onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'addtimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                            -
-                            <input type="text" class="Wdate" style="width:100px;" id="addtimeEnd"
-                                   name="addtimeEnd"
-                                   onfocus="WdatePicker({minDate:'#F{$dp.$D(\'addtimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                        </td>
-                        <td>支付时间:</td>
-                        <td>
-                            <input type="text" class="Wdate" style="width:100px;" id="paytimeStart"
-                                   name="paytimeStart"
-                                   onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'paytimeStart\');}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                            -
-                            <input type="text" class="Wdate" style="width:100px;" id="paytimeEnd"
-                                   name="paytimeEnd"
-                                   onfocus="WdatePicker({minDate:'#F{$dp.$D(\'paytimeEnd\');}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-                        </td>
                     </tr>
                 </table>
             </form>
